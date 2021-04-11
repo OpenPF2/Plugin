@@ -63,9 +63,23 @@ void URPGAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 
 	DOREPLIFETIME(URPGAttributeSet, HitPoints);
 	DOREPLIFETIME(URPGAttributeSet, MaxHitPoints);
+	DOREPLIFETIME(URPGAttributeSet, AbStrengthModifier);
+	DOREPLIFETIME(URPGAttributeSet, AbDexterityModifier);
+	DOREPLIFETIME(URPGAttributeSet, AbConstitutionModifier);
+	DOREPLIFETIME(URPGAttributeSet, AbIntelligenceModifier);
+	DOREPLIFETIME(URPGAttributeSet, AbWisdomModifier);
+	DOREPLIFETIME(URPGAttributeSet, AbCharismaModifier);
+	DOREPLIFETIME(URPGAttributeSet, CdcDifficultyClass);
+	DOREPLIFETIME(URPGAttributeSet, Speed);
+	DOREPLIFETIME(URPGAttributeSet, MaxSpeed);
+	DOREPLIFETIME(URPGAttributeSet, ArmorClass);
+	DOREPLIFETIME(URPGAttributeSet, StFortitudeModifier);
+	DOREPLIFETIME(URPGAttributeSet, StReflexModifier);
+	DOREPLIFETIME(URPGAttributeSet, StWillModifier);
+	DOREPLIFETIME(URPGAttributeSet, PcpPerceptionModifier);
+
 	DOREPLIFETIME(URPGAttributeSet, AttackPower);
 	DOREPLIFETIME(URPGAttributeSet, DefensePower);
-	DOREPLIFETIME(URPGAttributeSet, Speed);
 }
 
 void URPGAttributeSet::OnRep_HitPoints(const FGameplayAttributeData& OldValue)
