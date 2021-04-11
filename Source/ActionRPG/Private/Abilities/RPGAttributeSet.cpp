@@ -9,8 +9,6 @@
 URPGAttributeSet::URPGAttributeSet()
 	: Health(1.f)
 	, MaxHealth(1.f)
-	, Mana(0.f)
-	, MaxMana(0.f)
 	, AttackPower(1.0f)
 	, DefensePower(1.0f)
 	, MoveSpeed(1.0f)
@@ -24,8 +22,6 @@ void URPGAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 
 	DOREPLIFETIME(URPGAttributeSet, Health);
 	DOREPLIFETIME(URPGAttributeSet, MaxHealth);
-	DOREPLIFETIME(URPGAttributeSet, Mana);
-	DOREPLIFETIME(URPGAttributeSet, MaxMana);
 	DOREPLIFETIME(URPGAttributeSet, AttackPower);
 	DOREPLIFETIME(URPGAttributeSet, DefensePower);
 	DOREPLIFETIME(URPGAttributeSet, MoveSpeed);
@@ -39,16 +35,6 @@ void URPGAttributeSet::OnRep_Health(const FGameplayAttributeData& OldValue)
 void URPGAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, MaxHealth, OldValue);
-}
-
-void URPGAttributeSet::OnRep_Mana(const FGameplayAttributeData& OldValue)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, Mana, OldValue);
-}
-
-void URPGAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldValue)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, MaxMana, OldValue);
 }
 
 void URPGAttributeSet::OnRep_AttackPower(const FGameplayAttributeData& OldValue)
@@ -82,16 +68,12 @@ void URPGAttributeSet::AdjustAttributeForMaxChange(FGameplayAttributeData& Affec
 
 void URPGAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
 {
-	// This is called whenever attributes change, so for max health/mana we want to scale the current totals to match
+	// This is called whenever attributes change, so for max health we want to scale the current totals to match
 	Super::PreAttributeChange(Attribute, NewValue);
 
 	if (Attribute == GetMaxHealthAttribute())
 	{
 		AdjustAttributeForMaxChange(Health, MaxHealth, NewValue, GetHealthAttribute());
-	}
-	else if (Attribute == GetMaxManaAttribute())
-	{
-		AdjustAttributeForMaxChange(Mana, MaxMana, NewValue, GetManaAttribute());
 	}
 }
 
@@ -194,17 +176,6 @@ void URPGAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 		{
 			// Call for all health changes
 			TargetCharacter->HandleHealthChanged(DeltaValue, SourceTags);
-		}
-	}
-	else if (Data.EvaluatedData.Attribute == GetManaAttribute())
-	{
-		// Clamp mana
-		SetMana(FMath::Clamp(GetMana(), 0.0f, GetMaxMana()));
-
-		if (TargetCharacter)
-		{
-			// Call for all mana changes
-			TargetCharacter->HandleManaChanged(DeltaValue, SourceTags);
 		}
 	}
 	else if (Data.EvaluatedData.Attribute == GetMoveSpeedAttribute())

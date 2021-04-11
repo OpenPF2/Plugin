@@ -1,4 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright 2021 Teen Wolf RPG. All Rights Reserved.
 
 #pragma once
 
@@ -37,16 +38,6 @@ public:
 	FGameplayAttributeData MaxHealth;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, MaxHealth)
 
-	/** Current Mana, used to execute special abilities. Capped by MaxMana */
-	UPROPERTY(BlueprintReadOnly, Category = "Mana", ReplicatedUsing=OnRep_Mana)
-	FGameplayAttributeData Mana;
-	ATTRIBUTE_ACCESSORS(URPGAttributeSet, Mana)
-
-	/** MaxMana is its own attribute, since GameplayEffects may modify it */
-	UPROPERTY(BlueprintReadOnly, Category = "Mana", ReplicatedUsing=OnRep_MaxMana)
-	FGameplayAttributeData MaxMana;
-	ATTRIBUTE_ACCESSORS(URPGAttributeSet, MaxMana)
-
 	/** AttackPower of the attacker is multiplied by the base Damage to reduce health, so 1.0 means no bonus */
 	UPROPERTY(BlueprintReadOnly, Category = "Damage", ReplicatedUsing = OnRep_AttackPower)
 	FGameplayAttributeData AttackPower;
@@ -77,12 +68,6 @@ protected:
 
 	UFUNCTION()
 	virtual void OnRep_MaxHealth(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
-	virtual void OnRep_Mana(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
-	virtual void OnRep_MaxMana(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
 	virtual void OnRep_AttackPower(const FGameplayAttributeData& OldValue);
