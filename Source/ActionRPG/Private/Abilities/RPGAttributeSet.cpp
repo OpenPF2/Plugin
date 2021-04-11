@@ -5,6 +5,7 @@
 #include "RPGCharacterBase.h"
 #include "GameplayEffect.h"
 #include "GameplayEffectExtension.h"
+#include "TeenWolfRpg.h"
 
 URPGAttributeSet::URPGAttributeSet()
 	: Health(1.f)
@@ -156,6 +157,16 @@ void URPGAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 			const float OldHealth = GetHealth();
 			SetHealth(FMath::Clamp(OldHealth - LocalDamageDone, 0.0f, GetMaxHealth()));
 
+			UE_LOG(
+				LogTwRpgStatsDebug,
+				VeryVerbose,
+				TEXT("Damage: %s - Old Health: %f, Damage: %f, New Health: %f"),
+				*(SourceActor->GetName()),
+				OldHealth,
+				LocalDamageDone,
+				OldHealth - LocalDamageDone
+			);
+		
 			if (TargetCharacter)
 			{
 				// This is proper damage
