@@ -158,15 +158,21 @@ void URPGAttributeSet::OnRep_DefensePower(const FGameplayAttributeData& OldValue
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, DefensePower, OldValue);
 }
 
-void URPGAttributeSet::AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute, const FGameplayAttributeData& MaxAttribute, float NewMaxValue, const FGameplayAttribute& AffectedAttributeProperty)
+void URPGAttributeSet::AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute,
+												   const FGameplayAttributeData& MaxAttribute,
+												   float NewMaxValue,
+												   const FGameplayAttribute& AffectedAttributeProperty)
 {
-	UAbilitySystemComponent* AbilityComp = GetOwningAbilitySystemComponent();
-	const float CurrentMaxValue = MaxAttribute.GetCurrentValue();
+	UAbilitySystemComponent* AbilityComp	 = GetOwningAbilitySystemComponent();
+	const float				 CurrentMaxValue = MaxAttribute.GetCurrentValue();
+
 	if (!FMath::IsNearlyEqual(CurrentMaxValue, NewMaxValue) && AbilityComp)
 	{
 		// Change current value to maintain the current Val / Max percent
 		const float CurrentValue = AffectedAttribute.GetCurrentValue();
-		float NewDelta = (CurrentMaxValue > 0.f) ? (CurrentValue * NewMaxValue / CurrentMaxValue) - CurrentValue : NewMaxValue;
+
+		float NewDelta =
+			(CurrentMaxValue > 0.0f) ? (CurrentValue * NewMaxValue / CurrentMaxValue) - CurrentValue : NewMaxValue;
 
 		AbilityComp->ApplyModToAttributeUnsafe(AffectedAttributeProperty, EGameplayModOp::Additive, NewDelta);
 	}
@@ -179,7 +185,12 @@ void URPGAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, f
 
 	if (Attribute == GetMaxHitPointsAttribute())
 	{
-		AdjustAttributeForMaxChange(HitPoints, MaxHitPoints, NewValue, GetHitPointsAttribute());
+		AdjustAttributeForMaxChange(
+			HitPoints,
+			MaxHitPoints,
+			NewValue,
+			GetHitPointsAttribute()
+		);
 	}
 }
 
@@ -187,12 +198,13 @@ void URPGAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 {
 	Super::PostGameplayEffectExecute(Data);
 
-	FGameplayEffectContextHandle Context = Data.EffectSpec.GetContext();
-	UAbilitySystemComponent* Source = Context.GetOriginalInstigatorAbilitySystemComponent();
-	const FGameplayTagContainer& SourceTags = *Data.EffectSpec.CapturedSourceTags.GetAggregatedTags();
+	FGameplayEffectContextHandle	Context	   = Data.EffectSpec.GetContext();
+	UAbilitySystemComponent*		Source	   = Context.GetOriginalInstigatorAbilitySystemComponent();
+	const FGameplayTagContainer&	SourceTags = *Data.EffectSpec.CapturedSourceTags.GetAggregatedTags();
 
 	// Compute the delta between old and new, if it is available
 	float DeltaValue = 0;
+
 	if (Data.EvaluatedData.ModifierOp == EGameplayModOp::Type::Additive)
 	{
 		// If this was additive, store the raw delta value to be passed along later
@@ -200,26 +212,29 @@ void URPGAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 	}
 
 	// Get the Target actor, which should be our owner
-	AActor* TargetActor = nullptr;
-	AController* TargetController = nullptr;
-	ARPGCharacterBase* TargetCharacter = nullptr;
+	AActor*				TargetActor		 = nullptr;
+	AController*		TargetController = nullptr;
+	ARPGCharacterBase*	TargetCharacter	 = nullptr;
+
 	if (Data.Target.AbilityActorInfo.IsValid() && Data.Target.AbilityActorInfo->AvatarActor.IsValid())
 	{
-		TargetActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
+		TargetActor		 = Data.Target.AbilityActorInfo->AvatarActor.Get();
 		TargetController = Data.Target.AbilityActorInfo->PlayerController.Get();
-		TargetCharacter = Cast<ARPGCharacterBase>(TargetActor);
+		TargetCharacter  = Cast<ARPGCharacterBase>(TargetActor);
 	}
 
 	if (Data.EvaluatedData.Attribute == GetDamageAttribute())
 	{
 		// Get the Source actor
-		AActor* SourceActor = nullptr;
-		AController* SourceController = nullptr;
-		ARPGCharacterBase* SourceCharacter = nullptr;
+		AActor*				SourceActor		 = nullptr;
+		AController*		SourceController = nullptr;
+		ARPGCharacterBase*	SourceCharacter  = nullptr;
+		
 		if (Source && Source->AbilityActorInfo.IsValid() && Source->AbilityActorInfo->AvatarActor.IsValid())
 		{
-			SourceActor = Source->AbilityActorInfo->AvatarActor.Get();
+			SourceActor		 = Source->AbilityActorInfo->AvatarActor.Get();
 			SourceController = Source->AbilityActorInfo->PlayerController.Get();
+
 			if (SourceController == nullptr && SourceActor != nullptr)
 			{
 				if (APawn* Pawn = Cast<APawn>(SourceActor))
@@ -247,6 +262,7 @@ void URPGAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 
 		// Try to extract a hit result
 		FHitResult HitResult;
+
 		if (Context.GetHitResult())
 		{
 			HitResult = *Context.GetHitResult();
@@ -254,12 +270,13 @@ void URPGAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 
 		// Store a local copy of the amount of damage done and clear the damage attribute
 		const float LocalDamageDone = GetDamage();
-		SetDamage(0.f);
+		SetDamage(0.0f);
 
 		if (LocalDamageDone > 0)
 		{
 			// Apply the health change and then clamp it
 			const float OldHitPoints = GetHitPoints();
+
 			SetHitPoints(FMath::Clamp(OldHitPoints - LocalDamageDone, 0.0f, GetMaxHitPoints()));
 
 			UE_LOG(

@@ -176,16 +176,29 @@ public:
 	FGameplayAttributeData DefensePower;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, DefensePower)
 
-	/** Damage is a 'temporary' attribute used by the DamageExecution to calculate final damage, which then turns into -HitPoints */
+	/**
+	 * Damage is a 'temporary' attribute used by the DamageExecution to calculate final damage.
+	 *
+	 * This turns into -HitPoints.
+	 */
 	UPROPERTY(BlueprintReadOnly, Category = "Damage")
 	FGameplayAttributeData Damage;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, Damage)
 
 protected:
-	/** Helper function to proportionally adjust the value of an attribute when it's associated max attribute changes. (i.e. When MaxHitPoints increases, HitPoints increases by an amount that maintains the same percentage as before) */
-	void AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute, const FGameplayAttributeData& MaxAttribute, float NewMaxValue, const FGameplayAttribute& AffectedAttributeProperty);
+	/**
+	 * Helper function to proportionally adjust the value of an attribute when it's associated max attribute changes.
+	 *
+	 * (i.e. When MaxHitPoints increases, HitPoints increases by an amount that maintains the same percentage as
+	 * before).
+	 */
+	void AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute,
+									 const FGameplayAttributeData& MaxAttribute,
+									 float NewMaxValue,
+									 const FGameplayAttribute& AffectedAttributeProperty);
 
-	// These OnRep functions exist to make sure that the ability system internal representations are synchronized properly during replication
+	// These OnRep functions exist to make sure that the ability system internal representations are synchronized
+	// properly during replication.
 	UFUNCTION()
 	virtual void OnRep_HitPoints(const FGameplayAttributeData& OldValue);
 
