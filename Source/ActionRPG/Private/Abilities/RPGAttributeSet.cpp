@@ -1,4 +1,13 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Based on "Action RPG Sample", Copyright 2020, Epic Games, Inc. All Rights Reserved.
+// Teen Wolf RPG game logic, Copyright 2021, Teen Wolf RPG. All Rights Reserved.
+// Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
+//	 - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
+//	 - System Reference Document, Copyright 2000, Wizards of the Coast, Inc.
+//	 - Pathfinder Core Rulebook (Second Edition), Copyright 2019, Paizo Inc.
+// Except for material designated as Product Identity or External Tools, the game mechanics of this Teen Wolf RPG
+// product are Open Game Content, as defined in the Open Game License version 1.0a, Section 1(d) (see accompanying
+// LICENSE.TXT). No portion of this work other than the material designated as Open Game Content may be reproduced in
+// any form without written permission.
 
 #include "Abilities/RPGAttributeSet.h"
 #include "Abilities/RPGAbilitySystemComponent.h"
@@ -8,11 +17,42 @@
 #include "TeenWolfRpg.h"
 
 URPGAttributeSet::URPGAttributeSet()
-	: Health(1.f)
-	, MaxHealth(1.f)
+	: HitPoints(1.0f)
+	, MaxHitPoints(1.0f)
+	, AbStrengthModifier(0.0f)
+	, AbDexterityModifier(0.0f)
+	, AbConstitutionModifier(0.0f)
+	, AbIntelligenceModifier(0.0f)
+	, AbWisdomModifier(0.0f)
+	, AbCharismaModifier(0.0f)
+	, CdcDifficultyClass(10.0f)
+	, Speed(1.0f)
+	, MaxSpeed(1.0f)
+	, ArmorClass(10.0f)
+	, StFortitudeModifier(0.0f)
+	, StReflexModifier(0.0f)
+	, StWillModifier(0.0f)
+	, PcpPerceptionModifier(0.0f)
+	, SkAcrobaticsModifier(0.0f)
+	, SkArcanaModifier(0.0f)
+	, SkAthleticsModifier(0.0f)
+	, SkCraftingModifier(0.0f)
+	, SkDeceptionModifier(0.0f)
+	, SkDiplomacyModifier(0.0f)
+	, SkIntimidationModifier(0.0f)
+	, SkLore1Modifier(0.0f)
+	, SkLore2Modifier(0.0f)
+	, SkMedicineModifier(0.0f)
+	, SkNatureModifier(0.0f)
+	, SkOccultismModifier(0.0f)
+	, SkPerformanceModifier(0.0f)
+	, SkReligionModifier(0.0f)
+	, SkSocietyModifier(0.0f)
+	, SkStealthModifier(0.0f)
+	, SkSurvivalModifier(0.0f)
+	, SkThieveryModifier(0.0f)
 	, AttackPower(1.0f)
 	, DefensePower(1.0f)
-	, MoveSpeed(1.0f)
 	, Damage(0.0f)
 {
 }
@@ -21,21 +61,91 @@ void URPGAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(URPGAttributeSet, Health);
-	DOREPLIFETIME(URPGAttributeSet, MaxHealth);
+	DOREPLIFETIME(URPGAttributeSet, HitPoints);
+	DOREPLIFETIME(URPGAttributeSet, MaxHitPoints);
 	DOREPLIFETIME(URPGAttributeSet, AttackPower);
 	DOREPLIFETIME(URPGAttributeSet, DefensePower);
-	DOREPLIFETIME(URPGAttributeSet, MoveSpeed);
+	DOREPLIFETIME(URPGAttributeSet, Speed);
 }
 
-void URPGAttributeSet::OnRep_Health(const FGameplayAttributeData& OldValue)
+void URPGAttributeSet::OnRep_HitPoints(const FGameplayAttributeData& OldValue)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, Health, OldValue);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, HitPoints, OldValue);
 }
 
-void URPGAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldValue)
+void URPGAttributeSet::OnRep_MaxHitPoints(const FGameplayAttributeData& OldValue)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, MaxHealth, OldValue);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, MaxHitPoints, OldValue);
+}
+
+void URPGAttributeSet::OnRep_AbStrengthModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AbStrengthModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_AbDexterityModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AbDexterityModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_AbConstitutionModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AbConstitutionModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_AbIntelligenceModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AbIntelligenceModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_AbWisdomModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AbWisdomModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_AbCharismaModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AbCharismaModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_CdcDifficultyClass(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, CdcDifficultyClass, OldValue);
+}
+
+void URPGAttributeSet::OnRep_Speed(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, Speed, OldValue);
+}
+
+void URPGAttributeSet::OnRep_MaxSpeed(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, MaxSpeed, OldValue);
+}
+
+void URPGAttributeSet::OnRep_ArmorClass(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ArmorClass, OldValue);
+}
+
+void URPGAttributeSet::OnRep_StFortitudeModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, StFortitudeModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_StReflexModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, StReflexModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_StWillModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, StWillModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_PcpPerceptionModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, PcpPerceptionModifier, OldValue);
 }
 
 void URPGAttributeSet::OnRep_AttackPower(const FGameplayAttributeData& OldValue)
@@ -46,11 +156,6 @@ void URPGAttributeSet::OnRep_AttackPower(const FGameplayAttributeData& OldValue)
 void URPGAttributeSet::OnRep_DefensePower(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, DefensePower, OldValue);
-}
-
-void URPGAttributeSet::OnRep_MoveSpeed(const FGameplayAttributeData& OldValue)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, MoveSpeed, OldValue);
 }
 
 void URPGAttributeSet::AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute, const FGameplayAttributeData& MaxAttribute, float NewMaxValue, const FGameplayAttribute& AffectedAttributeProperty)
@@ -72,9 +177,9 @@ void URPGAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, f
 	// This is called whenever attributes change, so for max health we want to scale the current totals to match
 	Super::PreAttributeChange(Attribute, NewValue);
 
-	if (Attribute == GetMaxHealthAttribute())
+	if (Attribute == GetMaxHitPointsAttribute())
 	{
-		AdjustAttributeForMaxChange(Health, MaxHealth, NewValue, GetHealthAttribute());
+		AdjustAttributeForMaxChange(HitPoints, MaxHitPoints, NewValue, GetHitPointsAttribute());
 	}
 }
 
@@ -154,17 +259,17 @@ void URPGAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 		if (LocalDamageDone > 0)
 		{
 			// Apply the health change and then clamp it
-			const float OldHealth = GetHealth();
-			SetHealth(FMath::Clamp(OldHealth - LocalDamageDone, 0.0f, GetMaxHealth()));
+			const float OldHitPoints = GetHitPoints();
+			SetHitPoints(FMath::Clamp(OldHitPoints - LocalDamageDone, 0.0f, GetMaxHitPoints()));
 
 			UE_LOG(
 				LogTwRpgStatsDebug,
 				VeryVerbose,
-				TEXT("Damage: %s - Old Health: %f, Damage: %f, New Health: %f"),
+				TEXT("Damage: %s - Old HitPoints: %f, Damage: %f, New HitPoints: %f"),
 				*(SourceActor->GetName()),
-				OldHealth,
+				OldHitPoints,
 				LocalDamageDone,
-				OldHealth - LocalDamageDone
+				OldHitPoints - LocalDamageDone
 			);
 		
 			if (TargetCharacter)
@@ -173,27 +278,27 @@ void URPGAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 				TargetCharacter->HandleDamage(LocalDamageDone, HitResult, SourceTags, SourceCharacter, SourceActor);
 
 				// Call for all health changes
-				TargetCharacter->HandleHealthChanged(-LocalDamageDone, SourceTags);
+				TargetCharacter->HandleHitPointsChanged(-LocalDamageDone, SourceTags);
 			}
 		}
 	}
-	else if (Data.EvaluatedData.Attribute == GetHealthAttribute())
+	else if (Data.EvaluatedData.Attribute == GetHitPointsAttribute())
 	{
 		// Handle other health changes such as from healing or direct modifiers
 		// First clamp it
-		SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
+		SetHitPoints(FMath::Clamp(GetHitPoints(), 0.0f, GetMaxHitPoints()));
 
 		if (TargetCharacter)
 		{
 			// Call for all health changes
-			TargetCharacter->HandleHealthChanged(DeltaValue, SourceTags);
+			TargetCharacter->HandleHitPointsChanged(DeltaValue, SourceTags);
 		}
 	}
-	else if (Data.EvaluatedData.Attribute == GetMoveSpeedAttribute())
+	else if (Data.EvaluatedData.Attribute == GetSpeedAttribute())
 	{
 		if (TargetCharacter)
 		{
-			// Call for all movespeed changes
+			// Call for all speed changes
 			TargetCharacter->HandleMoveSpeedChanged(DeltaValue, SourceTags);
 		}
 	}
