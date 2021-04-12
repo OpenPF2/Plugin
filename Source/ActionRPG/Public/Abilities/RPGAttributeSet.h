@@ -39,6 +39,15 @@ public:
 	// =================================================================================================================
 
 	/**
+	 * Experience Points (XP) track the knowledge a character has earned from facing beasts and traps.
+	 *
+	 * Each time a character reaches 1,000 XP, their level increases by 1.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Experience", ReplicatedUsing=OnRep_Experience)
+	FGameplayAttributeData Experience;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, Experience)
+	
+	/**
 	 * All creatures and objects have Hit Points (HP).
 	 *
 	 * Creatures cannot be reduced to fewer than 0 Hit Points. When most creatures reach 0 Hit Points, they die and are
@@ -328,6 +337,9 @@ protected:
 
 	// These OnRep functions exist to make sure that the ability system internal representations are synchronized
 	// properly during replication.
+	UFUNCTION()
+    virtual void OnRep_Experience(const FGameplayAttributeData& OldValue);
+
 	UFUNCTION()
 	virtual void OnRep_HitPoints(const FGameplayAttributeData& OldValue);
 

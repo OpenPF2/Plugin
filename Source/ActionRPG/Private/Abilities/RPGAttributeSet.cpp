@@ -17,7 +17,8 @@
 #include "TeenWolfRpg.h"
 
 URPGAttributeSet::URPGAttributeSet()
-	: HitPoints(1.0f)
+	: Experience(0.0f)
+	, HitPoints(1.0f)
 	, MaxHitPoints(1.0f)
 	, AbStrengthModifier(0.0f)
 	, AbDexterityModifier(0.0f)
@@ -61,6 +62,7 @@ void URPGAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	DOREPLIFETIME(URPGAttributeSet, Experience);
 	DOREPLIFETIME(URPGAttributeSet, HitPoints);
 	DOREPLIFETIME(URPGAttributeSet, MaxHitPoints);
 	DOREPLIFETIME(URPGAttributeSet, AbStrengthModifier);
@@ -98,6 +100,11 @@ void URPGAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 
 	DOREPLIFETIME(URPGAttributeSet, AttackPower);
 	DOREPLIFETIME(URPGAttributeSet, DefensePower);
+}
+
+void URPGAttributeSet::OnRep_Experience(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, Experience, OldValue);
 }
 
 void URPGAttributeSet::OnRep_HitPoints(const FGameplayAttributeData& OldValue)
