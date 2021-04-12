@@ -162,6 +162,135 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Perception", ReplicatedUsing = OnRep_PcpPerceptionModifier)
 	FGameplayAttributeData PcpPerceptionModifier;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, PcpPerceptionModifier)
+
+	/**
+	 * Acrobatics measures a character's ability to perform tasks requiring coordination and grace.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkAcrobaticsModifier)
+	FGameplayAttributeData SkAcrobaticsModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkAcrobaticsModifier)
+
+	/**
+	 * Arcana measures how much a character knows about arcane magic and creatures.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkArcanaModifier)
+	FGameplayAttributeData SkArcanaModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkArcanaModifier)
+
+	/**
+	 * Athletics allows a character to perform deeds of physical prowess.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkAthleticsModifier)
+	FGameplayAttributeData SkAthleticsModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkAthleticsModifier)
+
+	/**
+	 * Crafting allows a character to create and repair items.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkCraftingModifier)
+	FGameplayAttributeData SkCraftingModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkCraftingModifier)
+
+	/**
+	 * Deception allows a character to trick and mislead others using disguises, lies, and other forms of subterfuge.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkDeceptionModifier)
+	FGameplayAttributeData SkDeceptionModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkDeceptionModifier)
+
+	/**
+	 * Diplomacy allows a character to influence others through negotiation and flattery.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkDiplomacyModifier)
+	FGameplayAttributeData SkDiplomacyModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkDiplomacyModifier)
+
+	/**
+	 * Intimidation allows a character to bend others to their will using threats.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkIntimidationModifier)
+	FGameplayAttributeData SkIntimidationModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkIntimidationModifier)
+
+	/**
+	 * Lore gives a character specialized information on a narrow topic.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkLore1Modifier)
+	FGameplayAttributeData SkLore1Modifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkLore1Modifier)
+
+	/**
+	 * Lore gives a character specialized information on a narrow topic.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkLore2Modifier)
+	FGameplayAttributeData SkLore2Modifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkLore2Modifier)
+
+	/**
+	 * Medicine allows a character to patch up wounds and help people recover from diseases and poisons.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkMedicineModifier)
+	FGameplayAttributeData SkMedicineModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkMedicineModifier)
+
+	/**
+	 * Nature gives a character knowledge about the natural world, including commanding and training animals and beasts.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkNatureModifier)
+	FGameplayAttributeData SkNatureModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkNatureModifier)
+	
+	/**
+	 * Occultism gives a character knowledge about ancient philosophies, esoteric lore, obscure mysticism, and
+	 * supernatural creatures.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkOccultismModifier)
+	FGameplayAttributeData SkOccultismModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkOccultismModifier)
+	
+	/**
+	 * Performance gives a character skill impressing crowds by performing live.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkPerformanceModifier)
+	FGameplayAttributeData SkPerformanceModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkPerformanceModifier)
+	
+	/**
+	 * Religion gives a character knowledge of the secrets of deities, dogma, faith, and the realms of divine
+	 * creatures -- both sublime and sinister.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkReligionModifier)
+	FGameplayAttributeData SkReligionModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkReligionModifier)
+	
+	/**
+	 * Society gives a character an understanding of the people and systems that make civilization run, including the
+	 * historical events that make societies what they are today.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkSocietyModifier)
+	FGameplayAttributeData SkSocietyModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkSocietyModifier)
+	
+	/**
+	 * Stealth gives a character the ability to avoid detection, slip past foes, hide, and conceal items.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkStealthModifier)
+	FGameplayAttributeData SkStealthModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkStealthModifier)
+	
+	/**
+	 * Survival gives a character aptitude to live in the wilderness, foraging for food, and building shelter.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkSurvivalModifier)
+	FGameplayAttributeData SkSurvivalModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkSurvivalModifier)
+	
+	/**
+	 * Thievery gives a character training in the particular set of skills favored by thieves and miscreants.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkThieveryModifier)
+	FGameplayAttributeData SkThieveryModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkThieveryModifier)
 	
 	// =================================================================================================================
 	// Legacy Code from Epic (TODO: Remove)
@@ -206,47 +335,101 @@ protected:
 	virtual void OnRep_MaxHitPoints(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_AbStrengthModifier(const FGameplayAttributeData& OldValue);
+	virtual void OnRep_AbStrengthModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_AbDexterityModifier(const FGameplayAttributeData& OldValue);
+	virtual void OnRep_AbDexterityModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_AbConstitutionModifier(const FGameplayAttributeData& OldValue);
+	virtual void OnRep_AbConstitutionModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_AbIntelligenceModifier(const FGameplayAttributeData& OldValue);
+	virtual void OnRep_AbIntelligenceModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_AbWisdomModifier(const FGameplayAttributeData& OldValue);
+	virtual void OnRep_AbWisdomModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_AbCharismaModifier(const FGameplayAttributeData& OldValue);
+	virtual void OnRep_AbCharismaModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_CdcDifficultyClass(const FGameplayAttributeData& OldValue);
+	virtual void OnRep_CdcDifficultyClass(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_Speed(const FGameplayAttributeData& OldValue);
+	virtual void OnRep_Speed(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_MaxSpeed(const FGameplayAttributeData& OldValue);
+	virtual void OnRep_MaxSpeed(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_ArmorClass(const FGameplayAttributeData& OldValue);
+	virtual void OnRep_ArmorClass(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_StFortitudeModifier(const FGameplayAttributeData& OldValue);
+	virtual void OnRep_StFortitudeModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_StReflexModifier(const FGameplayAttributeData& OldValue);
+	virtual void OnRep_StReflexModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_StWillModifier(const FGameplayAttributeData& OldValue);
+	virtual void OnRep_StWillModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_PcpPerceptionModifier(const FGameplayAttributeData& OldValue);
+	virtual void OnRep_PcpPerceptionModifier(const FGameplayAttributeData& OldValue);
 
+	UFUNCTION()
+    virtual void OnRep_SkAcrobaticsModifier(const FGameplayAttributeData& OldValue);
+	
+	UFUNCTION()
+    virtual void OnRep_SkArcanaModifier(const FGameplayAttributeData& OldValue);
+	
+	UFUNCTION()
+    virtual void OnRep_SkAthleticsModifier(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+    virtual void OnRep_SkCraftingModifier(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+    virtual void OnRep_SkDeceptionModifier(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+    virtual void OnRep_SkDiplomacyModifier(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+    virtual void OnRep_SkIntimidationModifier(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+    virtual void OnRep_SkLore1Modifier(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+    virtual void OnRep_SkLore2Modifier(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+    virtual void OnRep_SkMedicineModifier(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+    virtual void OnRep_SkNatureModifier(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+    virtual void OnRep_SkOccultismModifier(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+    virtual void OnRep_SkPerformanceModifier(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+    virtual void OnRep_SkReligionModifier(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+    virtual void OnRep_SkSocietyModifier(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+    virtual void OnRep_SkStealthModifier(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+    virtual void OnRep_SkSurvivalModifier(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+    virtual void OnRep_SkThieveryModifier(const FGameplayAttributeData& OldValue);
+	
 	UFUNCTION()
 	virtual void OnRep_AttackPower(const FGameplayAttributeData& OldValue);
 

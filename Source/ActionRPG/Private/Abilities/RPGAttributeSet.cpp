@@ -77,6 +77,24 @@ void URPGAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(URPGAttributeSet, StReflexModifier);
 	DOREPLIFETIME(URPGAttributeSet, StWillModifier);
 	DOREPLIFETIME(URPGAttributeSet, PcpPerceptionModifier);
+	DOREPLIFETIME(URPGAttributeSet, SkAcrobaticsModifier);
+	DOREPLIFETIME(URPGAttributeSet, SkArcanaModifier);
+	DOREPLIFETIME(URPGAttributeSet, SkAthleticsModifier);
+	DOREPLIFETIME(URPGAttributeSet, SkCraftingModifier);
+	DOREPLIFETIME(URPGAttributeSet, SkDeceptionModifier);
+	DOREPLIFETIME(URPGAttributeSet, SkDiplomacyModifier);
+	DOREPLIFETIME(URPGAttributeSet, SkIntimidationModifier);
+	DOREPLIFETIME(URPGAttributeSet, SkLore1Modifier);
+	DOREPLIFETIME(URPGAttributeSet, SkLore2Modifier);
+	DOREPLIFETIME(URPGAttributeSet, SkMedicineModifier);
+	DOREPLIFETIME(URPGAttributeSet, SkNatureModifier);
+	DOREPLIFETIME(URPGAttributeSet, SkOccultismModifier);
+	DOREPLIFETIME(URPGAttributeSet, SkPerformanceModifier);
+	DOREPLIFETIME(URPGAttributeSet, SkReligionModifier);
+	DOREPLIFETIME(URPGAttributeSet, SkSocietyModifier);
+	DOREPLIFETIME(URPGAttributeSet, SkStealthModifier);
+	DOREPLIFETIME(URPGAttributeSet, SkSurvivalModifier);
+	DOREPLIFETIME(URPGAttributeSet, SkThieveryModifier);	
 
 	DOREPLIFETIME(URPGAttributeSet, AttackPower);
 	DOREPLIFETIME(URPGAttributeSet, DefensePower);
@@ -160,6 +178,96 @@ void URPGAttributeSet::OnRep_StWillModifier(const FGameplayAttributeData& OldVal
 void URPGAttributeSet::OnRep_PcpPerceptionModifier(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, PcpPerceptionModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_SkAcrobaticsModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, SkAcrobaticsModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_SkArcanaModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, SkArcanaModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_SkAthleticsModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, SkAthleticsModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_SkCraftingModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, SkCraftingModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_SkDeceptionModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, SkDeceptionModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_SkDiplomacyModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, SkDiplomacyModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_SkIntimidationModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, SkIntimidationModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_SkLore1Modifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, SkLore1Modifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_SkLore2Modifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, SkLore2Modifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_SkMedicineModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, SkMedicineModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_SkNatureModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, SkNatureModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_SkOccultismModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, SkOccultismModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_SkPerformanceModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, SkPerformanceModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_SkReligionModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, SkReligionModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_SkSocietyModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, SkSocietyModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_SkStealthModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, SkStealthModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_SkSurvivalModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, SkSurvivalModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_SkThieveryModifier(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, SkThieveryModifier, OldValue);
 }
 
 void URPGAttributeSet::OnRep_AttackPower(const FGameplayAttributeData& OldValue)
