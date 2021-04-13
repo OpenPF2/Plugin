@@ -412,7 +412,7 @@ void URPGAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 				LogTwRpgStatsDebug,
 				VeryVerbose,
 				TEXT("Damage: %s - Old HitPoints: %f, Damage: %f, New HitPoints: %f"),
-				*(SourceActor->GetName()),
+				*(TargetCharacter->GetName()),
 				OldHitPoints,
 				LocalDamageDone,
 				OldHitPoints - LocalDamageDone
