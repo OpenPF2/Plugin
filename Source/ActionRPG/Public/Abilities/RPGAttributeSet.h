@@ -28,16 +28,21 @@ class ACTIONRPG_API URPGAttributeSet : public UAttributeSet
 	GENERATED_BODY()
 public:
 
-	// Constructor and overrides
+	// =================================================================================================================
+	// Constructors
+	// =================================================================================================================
 	URPGAttributeSet();
+
+	// =================================================================================================================
+	// Callbacks
+	// =================================================================================================================
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	// =================================================================================================================
-	// Pathfinder 2e Stats Shared by Both PCs and NPCs
+	// Attributes - Pathfinder 2e Stats Shared by Both PCs and NPCs
 	// =================================================================================================================
-
 	/**
 	 * Experience Points (XP) track the knowledge a character has earned from facing beasts and traps.
 	 *
