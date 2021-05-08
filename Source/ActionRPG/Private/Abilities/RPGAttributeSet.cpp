@@ -20,11 +20,17 @@ URPGAttributeSet::URPGAttributeSet()
 	: Experience(0.0f)
 	, HitPoints(1.0f)
 	, MaxHitPoints(1.0f)
+	, AbStrength(0.0f)
 	, AbStrengthModifier(0.0f)
+	, AbDexterity(10.0f)
 	, AbDexterityModifier(0.0f)
+	, AbConstitution(10.0f)
 	, AbConstitutionModifier(0.0f)
+	, AbIntelligence(10.0f)
 	, AbIntelligenceModifier(0.0f)
+	, AbWisdom(10.0f)
 	, AbWisdomModifier(0.0f)
+	, AbCharisma(10.0f)
 	, AbCharismaModifier(0.0f)
 	, CdcDifficultyClass(10.0f)
 	, Speed(1.0f)
@@ -65,11 +71,17 @@ void URPGAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(URPGAttributeSet, Experience);
 	DOREPLIFETIME(URPGAttributeSet, HitPoints);
 	DOREPLIFETIME(URPGAttributeSet, MaxHitPoints);
+	DOREPLIFETIME(URPGAttributeSet, AbStrength);
 	DOREPLIFETIME(URPGAttributeSet, AbStrengthModifier);
+	DOREPLIFETIME(URPGAttributeSet, AbDexterity);
 	DOREPLIFETIME(URPGAttributeSet, AbDexterityModifier);
+	DOREPLIFETIME(URPGAttributeSet, AbConstitution);
 	DOREPLIFETIME(URPGAttributeSet, AbConstitutionModifier);
+	DOREPLIFETIME(URPGAttributeSet, AbIntelligence);
 	DOREPLIFETIME(URPGAttributeSet, AbIntelligenceModifier);
+	DOREPLIFETIME(URPGAttributeSet, AbWisdom);
 	DOREPLIFETIME(URPGAttributeSet, AbWisdomModifier);
+	DOREPLIFETIME(URPGAttributeSet, AbCharisma);
 	DOREPLIFETIME(URPGAttributeSet, AbCharismaModifier);
 	DOREPLIFETIME(URPGAttributeSet, CdcDifficultyClass);
 	DOREPLIFETIME(URPGAttributeSet, Speed);
@@ -117,9 +129,19 @@ void URPGAttributeSet::OnRep_MaxHitPoints(const FGameplayAttributeData& OldValue
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, MaxHitPoints, OldValue);
 }
 
+void URPGAttributeSet::OnRep_AbStrength(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AbStrength, OldValue);
+}
+
 void URPGAttributeSet::OnRep_AbStrengthModifier(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AbStrengthModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_AbDexterity(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AbDexterity, OldValue);
 }
 
 void URPGAttributeSet::OnRep_AbDexterityModifier(const FGameplayAttributeData& OldValue)
@@ -127,9 +149,19 @@ void URPGAttributeSet::OnRep_AbDexterityModifier(const FGameplayAttributeData& O
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AbDexterityModifier, OldValue);
 }
 
+void URPGAttributeSet::OnRep_AbConstitution(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AbConstitution, OldValue);
+}
+
 void URPGAttributeSet::OnRep_AbConstitutionModifier(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AbConstitutionModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_AbIntelligence(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AbIntelligence, OldValue);
 }
 
 void URPGAttributeSet::OnRep_AbIntelligenceModifier(const FGameplayAttributeData& OldValue)
@@ -137,9 +169,19 @@ void URPGAttributeSet::OnRep_AbIntelligenceModifier(const FGameplayAttributeData
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AbIntelligenceModifier, OldValue);
 }
 
+void URPGAttributeSet::OnRep_AbWisdom(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AbWisdom, OldValue);
+}
+
 void URPGAttributeSet::OnRep_AbWisdomModifier(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AbWisdomModifier, OldValue);
+}
+
+void URPGAttributeSet::OnRep_AbCharisma(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AbCharisma, OldValue);
 }
 
 void URPGAttributeSet::OnRep_AbCharismaModifier(const FGameplayAttributeData& OldValue)

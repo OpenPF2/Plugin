@@ -74,9 +74,29 @@ public:
 	 * Strength is important for characters who engage in hand-to-hand combat. The Strength modifier gets added to melee
 	 * damage rolls and determines how much a character can carry.
 	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbStrength)
+	FGameplayAttributeData AbStrength;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, AbStrength)
+
+	/**
+	 * Strength measures a character’s physical power.
+	 *
+	 * Strength is important for characters who engage in hand-to-hand combat. The Strength modifier gets added to melee
+	 * damage rolls and determines how much a character can carry.
+	 */
 	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbStrengthModifier)
 	FGameplayAttributeData AbStrengthModifier;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, AbStrengthModifier)
+
+	/**
+	 * Dexterity measures a character’s agility, balance, and reflexes.
+	 *
+	 * Dexterity is important if a character makes attacks with ranged weapons or uses stealth to surprise others. The
+	 * Dexterity modifier is also added to a character’s AC and Reflex saving throws.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbDexterity)
+	FGameplayAttributeData AbDexterity;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, AbDexterity)
 
 	/**
 	 * Dexterity measures a character’s agility, balance, and reflexes.
@@ -94,9 +114,29 @@ public:
 	 * Constitution is an important statistic for all characters, especially those who fight in close combat. The
 	 * Constitution modifier is added to its Hit Points and Fortitude saving throws.
 	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbConstitution)
+	FGameplayAttributeData AbConstitution;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, AbConstitution)
+
+	/**
+	 * Constitution measures a character’s overall health and stamina.
+	 *
+	 * Constitution is an important statistic for all characters, especially those who fight in close combat. The
+	 * Constitution modifier is added to its Hit Points and Fortitude saving throws.
+	 */
 	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbConstitutionModifier)
 	FGameplayAttributeData AbConstitutionModifier;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, AbConstitutionModifier)
+
+	/**
+	* Intelligence measures how well a character can learn and reason.
+	*
+	* A high Intelligence allows a character to analyze situations and understand patterns, and unlocks the ability to
+	* become trained in additional skills and the ability to master additional languages.
+	*/
+	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbIntelligence)
+	FGameplayAttributeData AbIntelligence;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, AbIntelligence)
 
 	/**
 	* Intelligence measures how well a character can learn and reason.
@@ -113,9 +153,27 @@ public:
 	 *
 	 * The Wisdom modifier is added to its Perception and Will saving throws.
 	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbWisdom)
+	FGameplayAttributeData AbWisdom;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, AbWisdom)
+
+	/**
+	 * Wisdom measures a character’s common sense, awareness, and intuition.
+	 *
+	 * The Wisdom modifier is added to its Perception and Will saving throws.
+	 */
 	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbWisdomModifier)
 	FGameplayAttributeData AbWisdomModifier;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, AbWisdomModifier)
+
+	/**
+	 * Charisma measures a character’s personal magnetism and strength of personality.
+	 *
+	 * A high Charisma score helps a character influence the thoughts and moods of others.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbCharisma)
+	FGameplayAttributeData AbCharisma;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, AbCharisma)
 
 	/**
 	 * Charisma measures a character’s personal magnetism and strength of personality.
@@ -347,19 +405,37 @@ protected:
 	virtual void OnRep_MaxHitPoints(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
+	virtual void OnRep_AbStrength(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
 	virtual void OnRep_AbStrengthModifier(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+    virtual void OnRep_AbDexterity(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
 	virtual void OnRep_AbDexterityModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
+    virtual void OnRep_AbConstitution(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
 	virtual void OnRep_AbConstitutionModifier(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+    virtual void OnRep_AbIntelligence(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
 	virtual void OnRep_AbIntelligenceModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
+    virtual void OnRep_AbWisdom(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
 	virtual void OnRep_AbWisdomModifier(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+    virtual void OnRep_AbCharisma(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
 	virtual void OnRep_AbCharismaModifier(const FGameplayAttributeData& OldValue);
