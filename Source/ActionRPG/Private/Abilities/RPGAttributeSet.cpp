@@ -12,9 +12,10 @@
 #include "Abilities/RPGAttributeSet.h"
 #include "Abilities/RPGAbilitySystemComponent.h"
 #include "RPGCharacterBase.h"
-#include "GameplayEffect.h"
-#include "GameplayEffectExtension.h"
+#include <GameplayEffect.h>
+#include <GameplayEffectExtension.h>
 #include "TeenWolfRpg.h"
+#include <Kismet/KismetMathLibrary.h>
 
 URPGAttributeSet::URPGAttributeSet()
 	: Experience(0.0f)

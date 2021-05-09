@@ -10,8 +10,8 @@
 // any form without written permission.
 #pragma once
 
-#include "AttributeSet.h"
-#include "AbilitySystemComponent.h"
+#include <AttributeSet.h>
+#include <AbilitySystemComponent.h>
 #include "RPGAttributeSet.generated.h"
 
 // Uses macros from AttributeSet.h
