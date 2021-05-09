@@ -21,7 +21,9 @@ public class TeenWolfRpg : ModuleRules
 			new string[] {
 				"Core",
 				"CoreUObject",
-				"Engine"
+				"Engine",
+				"GameplayAbilities",
+				"ActionRPG",
 			}
 		);
 	}
