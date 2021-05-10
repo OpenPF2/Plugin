@@ -39,7 +39,7 @@ float URPGAbilityModifierCalculation::CalculateBaseMagnitude_Implementation(cons
 			CapturedAttributeCount
 		);
 	}
-	
+
 	return Modifier;
 }
 
@@ -52,13 +52,13 @@ float URPGAbilityModifierCalculation::CalculateAbilityModifier(const FGameplayEf
 	FAggregatorEvaluateParameters					EvaluationParameters;
 	float											AbilityScore		  = 0.0f,
 													AbilityModifier;
-	
+
 	EvaluationParameters.SourceTags = SourceTags;
 	EvaluationParameters.TargetTags = TargetTags;
-		
+
 	GetCapturedAttributeMagnitude(CapturedAttributeDef, Spec, EvaluationParameters, AbilityScore);
 
-	// Source: Pathfinder 2E Core Rulebook, page 20, Table 1-1: Ability Modifiers 
+	// Source: Pathfinder 2E Core Rulebook, page 20, Table 1-1: Ability Modifiers.
 	AbilityModifier = FMath::FloorToFloat(AbilityScore / 2.0f) - 5.0f;
 
 	UE_LOG(
@@ -67,7 +67,7 @@ float URPGAbilityModifierCalculation::CalculateAbilityModifier(const FGameplayEf
 		TEXT("Calculated ability modifier for attribute ('%s': %f): %f"),
 		*(CapturedAttribute.GetName()),
 		AbilityScore,
-		AbilityModifier	
+		AbilityModifier
 	);
 
 	return AbilityModifier;

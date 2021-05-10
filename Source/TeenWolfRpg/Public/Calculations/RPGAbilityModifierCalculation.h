@@ -27,7 +27,7 @@ class TEENWOLFRPG_API URPGAbilityModifierCalculation : public UGameplayModMagnit
 
 public:
 	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
-	
+
 protected:
 	/**
 	 * Calculates an ability modifier based on the attribute captured by the specified GE specification.
