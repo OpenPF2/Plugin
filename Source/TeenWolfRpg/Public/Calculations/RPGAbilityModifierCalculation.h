@@ -12,6 +12,8 @@
 
 #include <GameplayModMagnitudeCalculation.h>
 #include <CoreMinimal.h>
+
+#include "RPGAbilityCalculationBase.h"
 #include "RPGAbilityModifierCalculation.generated.h"
 
 /**
@@ -21,12 +23,9 @@
  * which the modifier is being calculated *must* be the ONLY attribute being captured.
  */
 UCLASS()
-class TEENWOLFRPG_API URPGAbilityModifierCalculation : public UGameplayModMagnitudeCalculation
+class TEENWOLFRPG_API URPGAbilityModifierCalculation : public URPGAbilityCalculationBase
 {
 	GENERATED_BODY()
-
-public:
-	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
 
 protected:
 	/**
@@ -48,12 +47,13 @@ protected:
 	 *
 	 * ... and so on.
 	 *
-	 * @param Spec
-	 *   The Gameplay Effect (GE) specification that provides information about the ability score for which
-	 *   an ability modifier is desired.
+	 * @param AbilityAttribute
+	 *   The type of ability score for which an ability modifier is desired.
+	 * @param AbilityScore
+	 *   The current base value of the ability attribute.
 	 *
 	 * @return
 	 *   The ability modifier.
 	 */
-	float CalculateAbilityModifier(const FGameplayEffectSpec& Spec) const;
+	virtual float DoCalculation(const FGameplayAttribute AbilityAttribute, const float AbilityScore) const override;
 };
