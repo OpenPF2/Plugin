@@ -51,7 +51,7 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Experience", ReplicatedUsing=OnRep_Experience)
 	FGameplayAttributeData Experience;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, Experience)
-	
+
 	/**
 	 * All creatures and objects have Hit Points (HP).
 	 *
@@ -311,7 +311,7 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkNatureModifier)
 	FGameplayAttributeData SkNatureModifier;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkNatureModifier)
-	
+
 	/**
 	 * Occultism gives a character knowledge about ancient philosophies, esoteric lore, obscure mysticism, and
 	 * supernatural creatures.
@@ -319,14 +319,14 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkOccultismModifier)
 	FGameplayAttributeData SkOccultismModifier;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkOccultismModifier)
-	
+
 	/**
 	 * Performance gives a character skill impressing crowds by performing live.
 	 */
 	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkPerformanceModifier)
 	FGameplayAttributeData SkPerformanceModifier;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkPerformanceModifier)
-	
+
 	/**
 	 * Religion gives a character knowledge of the secrets of deities, dogma, faith, and the realms of divine
 	 * creatures -- both sublime and sinister.
@@ -334,7 +334,7 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkReligionModifier)
 	FGameplayAttributeData SkReligionModifier;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkReligionModifier)
-	
+
 	/**
 	 * Society gives a character an understanding of the people and systems that make civilization run, including the
 	 * historical events that make societies what they are today.
@@ -342,28 +342,28 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkSocietyModifier)
 	FGameplayAttributeData SkSocietyModifier;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkSocietyModifier)
-	
+
 	/**
 	 * Stealth gives a character the ability to avoid detection, slip past foes, hide, and conceal items.
 	 */
 	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkStealthModifier)
 	FGameplayAttributeData SkStealthModifier;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkStealthModifier)
-	
+
 	/**
 	 * Survival gives a character aptitude to live in the wilderness, foraging for food, and building shelter.
 	 */
 	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkSurvivalModifier)
 	FGameplayAttributeData SkSurvivalModifier;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkSurvivalModifier)
-	
+
 	/**
 	 * Thievery gives a character training in the particular set of skills favored by thieves and miscreants.
 	 */
 	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkThieveryModifier)
 	FGameplayAttributeData SkThieveryModifier;
 	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkThieveryModifier)
-	
+
 	// =================================================================================================================
 	// Legacy Code from Epic (TODO: Remove)
 	// =================================================================================================================
@@ -471,10 +471,10 @@ protected:
 
 	UFUNCTION()
     virtual void OnRep_SkAcrobaticsModifier(const FGameplayAttributeData& OldValue);
-	
+
 	UFUNCTION()
     virtual void OnRep_SkArcanaModifier(const FGameplayAttributeData& OldValue);
-	
+
 	UFUNCTION()
     virtual void OnRep_SkAthleticsModifier(const FGameplayAttributeData& OldValue);
 
@@ -522,7 +522,7 @@ protected:
 
 	UFUNCTION()
     virtual void OnRep_SkThieveryModifier(const FGameplayAttributeData& OldValue);
-	
+
 	UFUNCTION()
 	virtual void OnRep_AttackPower(const FGameplayAttributeData& OldValue);
 

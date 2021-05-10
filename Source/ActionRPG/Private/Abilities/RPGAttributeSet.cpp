@@ -109,7 +109,7 @@ void URPGAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(URPGAttributeSet, SkSocietyModifier);
 	DOREPLIFETIME(URPGAttributeSet, SkStealthModifier);
 	DOREPLIFETIME(URPGAttributeSet, SkSurvivalModifier);
-	DOREPLIFETIME(URPGAttributeSet, SkThieveryModifier);	
+	DOREPLIFETIME(URPGAttributeSet, SkThieveryModifier);
 
 	DOREPLIFETIME(URPGAttributeSet, AttackPower);
 	DOREPLIFETIME(URPGAttributeSet, DefensePower);
@@ -401,7 +401,7 @@ void URPGAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 		AActor*				SourceActor		 = nullptr;
 		AController*		SourceController = nullptr;
 		ARPGCharacterBase*	SourceCharacter  = nullptr;
-		
+
 		if (Source && Source->AbilityActorInfo.IsValid() && Source->AbilityActorInfo->AvatarActor.IsValid())
 		{
 			SourceActor		 = Source->AbilityActorInfo->AvatarActor.Get();
@@ -460,7 +460,7 @@ void URPGAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 				LocalDamageDone,
 				OldHitPoints - LocalDamageDone
 			);
-		
+
 			if (TargetCharacter)
 			{
 				// This is proper damage
