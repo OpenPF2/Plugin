@@ -15,7 +15,7 @@
 #include "RPGAbilityModifierCalculation.generated.h"
 
 /**
- * Custom MMC used for determining ability modifiers from normal ability scores.
+ * An MMC used for determining ability modifiers from normal ability scores.
  *
  * This is expected to have one blueprint for each ability (Strength, Dexterity, Constitution, etc). The ability for
  * which the modifier is being calculated *must* be the ONLY attribute being captured.
