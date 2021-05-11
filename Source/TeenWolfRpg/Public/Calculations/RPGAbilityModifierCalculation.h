@@ -29,7 +29,7 @@ class TEENWOLFRPG_API URPGAbilityModifierCalculation : public URPGAbilityCalcula
 
 protected:
 	/**
-	 * Calculates an ability modifier based on the attribute captured by the specified GE specification.
+	 * Calculates an ability modifier based on the attribute captured by the provided GE specification.
 	 *
 	 * According to "Table 1-1: Ability Modifiers" in the Pathfinder 2E Core Rulebook, the ability modifier for an
 	 * ability is equal to:

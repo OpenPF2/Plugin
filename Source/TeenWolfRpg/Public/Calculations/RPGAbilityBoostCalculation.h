@@ -39,7 +39,8 @@ class TEENWOLFRPG_API URPGAbilityBoostCalculation : public URPGAbilityCalculatio
 	 *   The current base value of the ability attribute.
 	 *
 	 * @return
-	 *   The boost to apply to the ability score. (This method does not add the ability score to the boost).
+	 *   The boost to apply to the ability score. (This is just the boost; the ability score has not been added to the
+	 *   result).
 	 */
 	virtual float DoCalculation(const FGameplayAttribute AbilityAttribute, const float AbilityScore) const override;
 };
