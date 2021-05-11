@@ -27,7 +27,7 @@ public:
 
 protected:
 	/**
-	 * Calculates an ability-based modifier value based on the attribute captured by the specified GE specification.
+	 * Calculates an ability-based modifier value based on the attribute captured by the provided GE specification.
 	 *
 	 * Most sub-classes should not need to override this implementation. Instead, this implementation does most of the
 	 * hard work of extracting the ability score value and then calling DoCalculation(FGameplayAttribute, float).
