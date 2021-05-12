@@ -12,7 +12,6 @@
 #include "Abilities/RPGAttributeSet.h"
 #include "Abilities/RPGAbilitySystemComponent.h"
 #include "RPGCharacterBase.h"
-#include "TeenWolfRpg.h"
 
 #include <GameplayEffect.h>
 #include <GameplayEffectExtension.h>
@@ -453,7 +452,8 @@ void URPGAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 			SetHitPoints(FMath::Clamp(OldHitPoints - LocalDamageDone, 0.0f, GetMaxHitPoints()));
 
 			UE_LOG(
-				LogTwRpgStatsDebug,
+				// TODO: Change to LogTwRpgStatsDebug after moving this code into the TW RPG module.
+				LogActionRPGStatsDebug,
 				VeryVerbose,
 				TEXT("Damage: %s - Old HitPoints: %f, Damage: %f, New HitPoints: %f"),
 				*(TargetCharacter->GetName()),
