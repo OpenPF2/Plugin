@@ -10,11 +10,9 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include <CoreMinimal.h>
 
-#include "GameplayModMagnitudeCalculation.h"
 #include "RPGAbilityCalculationBase.h"
-
 #include "RPGAbilityBoostCalculation.generated.h"
 
 /**
