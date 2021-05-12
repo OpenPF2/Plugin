@@ -16,12 +16,6 @@ public class TeenWolfRpg : ModuleRules
 		PrivatePCHHeaderFile = "Public/TeenWolfRpg.h";
 
 		PCHUsage = PCHUsageMode.UseSharedPCHs;
-		
-		PublicIncludePathModuleNames.AddRange(
-			new string[] {
-				"ActionRPG",
-			}
-		);
 
 		PublicDependencyModuleNames.AddRange(
 			new string[] {
@@ -29,6 +23,8 @@ public class TeenWolfRpg : ModuleRules
 				"CoreUObject",
 				"Engine",
 				"GameplayAbilities",
+				"GameplayTags",
+				"ActionRPG",
 			}
 		);
 	}
