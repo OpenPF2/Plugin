@@ -9,12 +9,12 @@
 // any form without written permission.
 
 #include "Abilities/RPGAttributeSet.h"
-#include "Calculations/SkillProficiencies/RPGAthleticsSkillProficiencyCalculation.h"
+#include "Calculations/Proficiencies/Skills/RPGAcrobaticsProficiencyCalculation.h"
 
-URPGAthleticsSkillProficiencyCalculation::URPGAthleticsSkillProficiencyCalculation() :
-	URPGSkillProficiencyCalculationBase(
-		URPGAttributeSet::GetAbStrengthAttribute(),
-		FString("Skill.Athletics")
+URPGAcrobaticsProficiencyCalculation::URPGAcrobaticsProficiencyCalculation() :
+	URPGProficiencyCalculationBase(
+		URPGAttributeSet::GetAbDexterityAttribute(),
+		FString("Skill.Acrobatics")
 	)
 {
 }
