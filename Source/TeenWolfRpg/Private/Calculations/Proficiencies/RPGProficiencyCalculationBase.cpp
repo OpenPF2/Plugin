@@ -10,9 +10,9 @@
 
 #include "TeenWolfRpg.h"
 #include "Abilities/RPGAttributeSet.h"
-#include "Calculations/SkillProficiencies/RPGSkillProficiencyCalculationBase.h"
+#include "Calculations/Proficiencies/RPGProficiencyCalculationBase.h"
 
-URPGSkillProficiencyCalculationBase::URPGSkillProficiencyCalculationBase(const FGameplayAttribute SkillAbilityAttribute,
+URPGProficiencyCalculationBase::URPGProficiencyCalculationBase(const FGameplayAttribute SkillAbilityAttribute,
 																		 const FString SkillGameplayTagPrefix) :
 	UGameplayModMagnitudeCalculation()
 {
@@ -25,7 +25,7 @@ URPGSkillProficiencyCalculationBase::URPGSkillProficiencyCalculationBase(const F
 	this->SkillGameplayTagPrefix = SkillGameplayTagPrefix;
 }
 
-float URPGSkillProficiencyCalculationBase::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
+float URPGProficiencyCalculationBase::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
 {
 	float							AbilityScore			= 0.0f,
 									ProficiencyBonus;

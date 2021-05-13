@@ -12,13 +12,13 @@
 
 #include <CoreMinimal.h>
 #include <GameplayModMagnitudeCalculation.h>
-#include "RPGSkillProficiencyCalculationBase.generated.h"
+#include "RPGProficiencyCalculationBase.generated.h"
 
 /**
  * Base class for MMCs that calculate the proficiency a character has in a particular skill.
  */
 UCLASS(Abstract)
-class TEENWOLFRPG_API URPGSkillProficiencyCalculationBase : public UGameplayModMagnitudeCalculation
+class TEENWOLFRPG_API URPGProficiencyCalculationBase : public UGameplayModMagnitudeCalculation
 {
 	GENERATED_BODY()
 
@@ -27,15 +27,15 @@ public:
 	 * Default constructor UE4 invokes for objects of this type.
 	 *
 	 * Sub-classes must implement their own version of this constructor that calls
-	 * URPGSkillProficiencyCalculationBase(FGameplayAttribute, FString) instead of calling this
+	 * URPGProficiencyCalculationBase(FGameplayAttribute, FString) instead of calling this
 	 * constructor overload.
 	 */
-	explicit URPGSkillProficiencyCalculationBase() : UGameplayModMagnitudeCalculation()
+	explicit URPGProficiencyCalculationBase() : UGameplayModMagnitudeCalculation()
 	{
 	};
 
 	/**
-	 * Constructor for URPGSkillProficiencyCalculationBase.
+	 * Constructor for URPGProficiencyCalculationBase.
 	 *
 	 * The skill proficiency calculation is initialized so that the specified attribute is factored-in to the
 	 * proficiency bonus, and TEML tags on the character that have the specified prefix determine the magnitude of the
@@ -49,7 +49,7 @@ public:
 	 *   The tag prefix to use for checking a character's training in the skill. For example, "Skill.Acrobatics" or
 	 *   "Skill.Arcana".
 	 */
-	explicit URPGSkillProficiencyCalculationBase(const FGameplayAttribute SkillAbilityAttribute,
+	explicit URPGProficiencyCalculationBase(const FGameplayAttribute SkillAbilityAttribute,
 												 const FString SkillGameplayTagPrefix);
 
 	/**

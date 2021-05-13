@@ -9,10 +9,10 @@
 // any form without written permission.
 
 #include "Abilities/RPGAttributeSet.h"
-#include "Calculations/SkillProficiencies/RPGArcanaSkillProficiencyCalculation.h"
+#include "Calculations/Proficiencies/Skills/RPGArcanaProficiencyCalculation.h"
 
-URPGArcanaSkillProficiencyCalculation::URPGArcanaSkillProficiencyCalculation() :
-	URPGSkillProficiencyCalculationBase(
+URPGArcanaProficiencyCalculation::URPGArcanaProficiencyCalculation() :
+	URPGProficiencyCalculationBase(
 		URPGAttributeSet::GetAbIntelligenceAttribute(),
 		FString("Skill.Arcana")
 	)
