@@ -13,7 +13,7 @@
 
 URPGCraftingProficiencyCalculation::URPGCraftingProficiencyCalculation() :
 	URPGProficiencyCalculationBase(
-		URPGAttributeSet::GetAbIntelligenceAttribute(),
+		URPGAttributeSet::GetAbIntelligenceModifierAttribute(),
 		FString("Skill.Crafting")
 	)
 {

@@ -13,7 +13,7 @@
 
 URPGIntimidationProficiencyCalculation::URPGIntimidationProficiencyCalculation() :
 	URPGProficiencyCalculationBase(
-		URPGAttributeSet::GetAbCharismaAttribute(),
+		URPGAttributeSet::GetAbCharismaModifierAttribute(),
 		FString("Skill.Intimidation")
 	)
 {

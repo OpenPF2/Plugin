@@ -13,7 +13,7 @@
 
 URPGSurvivalProficiencyCalculation::URPGSurvivalProficiencyCalculation() :
 	URPGProficiencyCalculationBase(
-		URPGAttributeSet::GetAbWisdomAttribute(),
+		URPGAttributeSet::GetAbWisdomModifierAttribute(),
 		FString("Skill.Survival")
 	)
 {

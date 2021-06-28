@@ -13,7 +13,7 @@
 
 URPGAcrobaticsProficiencyCalculation::URPGAcrobaticsProficiencyCalculation() :
 	URPGProficiencyCalculationBase(
-		URPGAttributeSet::GetAbDexterityAttribute(),
+		URPGAttributeSet::GetAbDexterityModifierAttribute(),
 		FString("Skill.Acrobatics")
 	)
 {

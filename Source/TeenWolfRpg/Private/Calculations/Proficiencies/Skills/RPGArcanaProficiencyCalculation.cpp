@@ -13,7 +13,7 @@
 
 URPGArcanaProficiencyCalculation::URPGArcanaProficiencyCalculation() :
 	URPGProficiencyCalculationBase(
-		URPGAttributeSet::GetAbIntelligenceAttribute(),
+		URPGAttributeSet::GetAbIntelligenceModifierAttribute(),
 		FString("Skill.Arcana")
 	)
 {

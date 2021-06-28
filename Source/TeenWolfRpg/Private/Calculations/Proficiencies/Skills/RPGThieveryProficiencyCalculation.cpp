@@ -13,7 +13,7 @@
 
 URPGThieveryProficiencyCalculation::URPGThieveryProficiencyCalculation() :
 	URPGProficiencyCalculationBase(
-		URPGAttributeSet::GetAbDexterityAttribute(),
+		URPGAttributeSet::GetAbDexterityModifierAttribute(),
 		FString("Skill.Thievery")
 	)
 {

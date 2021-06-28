@@ -43,14 +43,14 @@ public:
 	 *
 	 * @param SkillAbilityAttribute
 	 *   The RPG attribute for the character ability that contributes to proficiency in the skill. For example,
-	 *   "URPGAttributeSet::GetAbDexterityAttribute()" for Acrobatics, "URPGAttributeSet::GetAbIntelligenceAttribute()"
-	 *   for Arcana, etc.)
+	 *   "URPGAttributeSet::GetAbDexterityModifierAttribute()" for Acrobatics,
+	 *   "URPGAttributeSet::GetAbIntelligenceModifierAttribute()" for Arcana, etc.)
 	 * @param SkillGameplayTagPrefix
 	 *   The tag prefix to use for checking a character's training in the skill. For example, "Skill.Acrobatics" or
 	 *   "Skill.Arcana".
 	 */
 	explicit URPGProficiencyCalculationBase(const FGameplayAttribute SkillAbilityAttribute,
-												 const FString SkillGameplayTagPrefix);
+											const FString SkillGameplayTagPrefix);
 
 	/**
 	 * Calculates a skill proficiency based on the attributes captured by the provided GE specification.

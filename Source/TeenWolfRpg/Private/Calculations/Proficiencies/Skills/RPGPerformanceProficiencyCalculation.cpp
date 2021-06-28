@@ -13,7 +13,7 @@
 
 URPGPerformanceProficiencyCalculation::URPGPerformanceProficiencyCalculation() :
 	URPGProficiencyCalculationBase(
-		URPGAttributeSet::GetAbCharismaAttribute(),
+		URPGAttributeSet::GetAbCharismaModifierAttribute(),
 		FString("Skill.Performance")
 	)
 {

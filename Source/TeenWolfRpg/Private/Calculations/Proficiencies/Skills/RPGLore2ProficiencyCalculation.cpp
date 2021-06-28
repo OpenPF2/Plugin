@@ -13,7 +13,7 @@
 
 URPGLore2ProficiencyCalculation::URPGLore2ProficiencyCalculation() :
 	URPGProficiencyCalculationBase(
-		URPGAttributeSet::GetAbIntelligenceAttribute(),
+		URPGAttributeSet::GetAbIntelligenceModifierAttribute(),
 		FString("Skill.Lore2")
 	)
 {

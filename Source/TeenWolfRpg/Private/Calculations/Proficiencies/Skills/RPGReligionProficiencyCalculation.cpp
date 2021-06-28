@@ -13,7 +13,7 @@
 
 URPGReligionProficiencyCalculation::URPGReligionProficiencyCalculation() :
 	URPGProficiencyCalculationBase(
-		URPGAttributeSet::GetAbWisdomAttribute(),
+		URPGAttributeSet::GetAbWisdomModifierAttribute(),
 		FString("Skill.Religion")
 	)
 {
