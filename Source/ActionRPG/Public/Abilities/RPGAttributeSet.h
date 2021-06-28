@@ -238,51 +238,51 @@ public:
 	/**
 	 * Acrobatics measures a character's ability to perform tasks requiring coordination and grace.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkAcrobaticsProficiency)
-	FGameplayAttributeData SkAcrobaticsProficiency;
-	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkAcrobaticsProficiency)
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkAcrobaticsModifier)
+	FGameplayAttributeData SkAcrobaticsModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkAcrobaticsModifier)
 
 	/**
 	 * Arcana measures how much a character knows about arcane magic and creatures.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkArcanaProficiency)
-	FGameplayAttributeData SkArcanaProficiency;
-	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkArcanaProficiency)
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkArcanaModifier)
+	FGameplayAttributeData SkArcanaModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkArcanaModifier)
 
 	/**
 	 * Athletics allows a character to perform deeds of physical prowess.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkAthleticsProficiency)
-	FGameplayAttributeData SkAthleticsProficiency;
-	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkAthleticsProficiency)
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkAthleticsModifier)
+	FGameplayAttributeData SkAthleticsModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkAthleticsModifier)
 
 	/**
 	 * Crafting allows a character to create and repair items.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkCraftingProficiency)
-	FGameplayAttributeData SkCraftingProficiency;
-	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkCraftingProficiency)
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkCraftingModifier)
+	FGameplayAttributeData SkCraftingModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkCraftingModifier)
 
 	/**
 	 * Deception allows a character to trick and mislead others using disguises, lies, and other forms of subterfuge.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkDeceptionProficiency)
-	FGameplayAttributeData SkDeceptionProficiency;
-	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkDeceptionProficiency)
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkDeceptionModifier)
+	FGameplayAttributeData SkDeceptionModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkDeceptionModifier)
 
 	/**
 	 * Diplomacy allows a character to influence others through negotiation and flattery.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkDiplomacyProficiency)
-	FGameplayAttributeData SkDiplomacyProficiency;
-	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkDiplomacyProficiency)
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkDiplomacyModifier)
+	FGameplayAttributeData SkDiplomacyModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkDiplomacyModifier)
 
 	/**
 	 * Intimidation allows a character to bend others to their will using threats.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkIntimidationProficiency)
-	FGameplayAttributeData SkIntimidationProficiency;
-	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkIntimidationProficiency)
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkIntimidationModifier)
+	FGameplayAttributeData SkIntimidationModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkIntimidationModifier)
 
 	/**
 	 * Lore gives a character specialized information on a narrow topic.
@@ -301,68 +301,68 @@ public:
 	/**
 	 * Medicine allows a character to patch up wounds and help people recover from diseases and poisons.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkMedicineProficiency)
-	FGameplayAttributeData SkMedicineProficiency;
-	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkMedicineProficiency)
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkMedicineModifier)
+	FGameplayAttributeData SkMedicineModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkMedicineModifier)
 
 	/**
 	 * Nature gives a character knowledge about the natural world, including commanding and training animals and beasts.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkNatureProficiency)
-	FGameplayAttributeData SkNatureProficiency;
-	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkNatureProficiency)
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkNatureModifier)
+	FGameplayAttributeData SkNatureModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkNatureModifier)
 
 	/**
 	 * Occultism gives a character knowledge about ancient philosophies, esoteric lore, obscure mysticism, and
 	 * supernatural creatures.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkOccultismProficiency)
-	FGameplayAttributeData SkOccultismProficiency;
-	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkOccultismProficiency)
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkOccultismModifier)
+	FGameplayAttributeData SkOccultismModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkOccultismModifier)
 
 	/**
 	 * Performance gives a character skill impressing crowds by performing live.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkPerformanceProficiency)
-	FGameplayAttributeData SkPerformanceProficiency;
-	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkPerformanceProficiency)
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkPerformanceModifier)
+	FGameplayAttributeData SkPerformanceModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkPerformanceModifier)
 
 	/**
 	 * Religion gives a character knowledge of the secrets of deities, dogma, faith, and the realms of divine
 	 * creatures -- both sublime and sinister.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkReligionProficiency)
-	FGameplayAttributeData SkReligionProficiency;
-	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkReligionProficiency)
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkReligionModifier)
+	FGameplayAttributeData SkReligionModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkReligionModifier)
 
 	/**
 	 * Society gives a character an understanding of the people and systems that make civilization run, including the
 	 * historical events that make societies what they are today.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkSocietyProficiency)
-	FGameplayAttributeData SkSocietyProficiency;
-	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkSocietyProficiency)
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkSocietyModifier)
+	FGameplayAttributeData SkSocietyModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkSocietyModifier)
 
 	/**
 	 * Stealth gives a character the ability to avoid detection, slip past foes, hide, and conceal items.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkStealthProficiency)
-	FGameplayAttributeData SkStealthProficiency;
-	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkStealthProficiency)
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkStealthModifier)
+	FGameplayAttributeData SkStealthModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkStealthModifier)
 
 	/**
 	 * Survival gives a character aptitude to live in the wilderness, foraging for food, and building shelter.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkSurvivalProficiency)
-	FGameplayAttributeData SkSurvivalProficiency;
-	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkSurvivalProficiency)
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkSurvivalModifier)
+	FGameplayAttributeData SkSurvivalModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkSurvivalModifier)
 
 	/**
 	 * Thievery gives a character training in the particular set of skills favored by thieves and miscreants.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkThieveryProficiency)
-	FGameplayAttributeData SkThieveryProficiency;
-	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkThieveryProficiency)
+	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkThieveryModifier)
+	FGameplayAttributeData SkThieveryModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, SkThieveryModifier)
 
 	// =================================================================================================================
 	// Legacy Code from Epic (TODO: Remove)
@@ -470,25 +470,25 @@ protected:
 	virtual void OnRep_PcpPerceptionModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_SkAcrobaticsProficiency(const FGameplayAttributeData& OldValue);
+    virtual void OnRep_SkAcrobaticsModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_SkArcanaProficiency(const FGameplayAttributeData& OldValue);
+    virtual void OnRep_SkArcanaModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_SkAthleticsProficiency(const FGameplayAttributeData& OldValue);
+    virtual void OnRep_SkAthleticsModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_SkCraftingProficiency(const FGameplayAttributeData& OldValue);
+    virtual void OnRep_SkCraftingModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_SkDeceptionProficiency(const FGameplayAttributeData& OldValue);
+    virtual void OnRep_SkDeceptionModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_SkDiplomacyProficiency(const FGameplayAttributeData& OldValue);
+    virtual void OnRep_SkDiplomacyModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_SkIntimidationProficiency(const FGameplayAttributeData& OldValue);
+    virtual void OnRep_SkIntimidationModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
     virtual void OnRep_SkLore1Modifier(const FGameplayAttributeData& OldValue);
@@ -497,31 +497,31 @@ protected:
     virtual void OnRep_SkLore2Modifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_SkMedicineProficiency(const FGameplayAttributeData& OldValue);
+    virtual void OnRep_SkMedicineModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_SkNatureProficiency(const FGameplayAttributeData& OldValue);
+    virtual void OnRep_SkNatureModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_SkOccultismProficiency(const FGameplayAttributeData& OldValue);
+    virtual void OnRep_SkOccultismModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_SkPerformanceProficiency(const FGameplayAttributeData& OldValue);
+    virtual void OnRep_SkPerformanceModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_SkReligionProficiency(const FGameplayAttributeData& OldValue);
+    virtual void OnRep_SkReligionModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_SkSocietyProficiency(const FGameplayAttributeData& OldValue);
+    virtual void OnRep_SkSocietyModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_SkStealthProficiency(const FGameplayAttributeData& OldValue);
+    virtual void OnRep_SkStealthModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_SkSurvivalProficiency(const FGameplayAttributeData& OldValue);
+    virtual void OnRep_SkSurvivalModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-    virtual void OnRep_SkThieveryProficiency(const FGameplayAttributeData& OldValue);
+    virtual void OnRep_SkThieveryModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
 	virtual void OnRep_AttackPower(const FGameplayAttributeData& OldValue);
