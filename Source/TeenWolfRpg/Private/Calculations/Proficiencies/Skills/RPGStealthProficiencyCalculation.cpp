@@ -13,7 +13,7 @@
 
 URPGStealthProficiencyCalculation::URPGStealthProficiencyCalculation() :
 	URPGProficiencyCalculationBase(
-		URPGAttributeSet::GetAbDexterityAttribute(),
+		URPGAttributeSet::GetAbDexterityModifierAttribute(),
 		FString("Skill.Stealth")
 	)
 {

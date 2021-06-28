@@ -13,7 +13,7 @@
 
 URPGDeceptionProficiencyCalculation::URPGDeceptionProficiencyCalculation() :
 	URPGProficiencyCalculationBase(
-		URPGAttributeSet::GetAbCharismaAttribute(),
+		URPGAttributeSet::GetAbCharismaModifierAttribute(),
 		FString("Skill.Deception")
 	)
 {

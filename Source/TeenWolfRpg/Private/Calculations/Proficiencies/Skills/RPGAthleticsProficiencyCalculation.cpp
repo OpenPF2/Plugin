@@ -13,7 +13,7 @@
 
 URPGAthleticsProficiencyCalculation::URPGAthleticsProficiencyCalculation() :
 	URPGProficiencyCalculationBase(
-		URPGAttributeSet::GetAbStrengthAttribute(),
+		URPGAttributeSet::GetAbStrengthModifierAttribute(),
 		FString("Skill.Athletics")
 	)
 {

@@ -13,7 +13,7 @@
 
 URPGNatureProficiencyCalculation::URPGNatureProficiencyCalculation() :
 	URPGProficiencyCalculationBase(
-		URPGAttributeSet::GetAbWisdomAttribute(),
+		URPGAttributeSet::GetAbWisdomModifierAttribute(),
 		FString("Skill.Nature")
 	)
 {

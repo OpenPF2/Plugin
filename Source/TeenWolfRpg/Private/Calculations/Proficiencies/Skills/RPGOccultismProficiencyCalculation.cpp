@@ -13,7 +13,7 @@
 
 URPGOccultismProficiencyCalculation::URPGOccultismProficiencyCalculation() :
 	URPGProficiencyCalculationBase(
-		URPGAttributeSet::GetAbIntelligenceAttribute(),
+		URPGAttributeSet::GetAbIntelligenceModifierAttribute(),
 		FString("Skill.Occultism")
 	)
 {

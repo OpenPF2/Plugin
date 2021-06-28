@@ -13,7 +13,7 @@
 
 URPGDiplomacyProficiencyCalculation::URPGDiplomacyProficiencyCalculation() :
 	URPGProficiencyCalculationBase(
-		URPGAttributeSet::GetAbCharismaAttribute(),
+		URPGAttributeSet::GetAbCharismaModifierAttribute(),
 		FString("Skill.Diplomacy")
 	)
 {

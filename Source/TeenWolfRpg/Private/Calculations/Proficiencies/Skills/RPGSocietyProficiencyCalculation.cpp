@@ -13,7 +13,7 @@
 
 URPGSocietyProficiencyCalculation::URPGSocietyProficiencyCalculation() :
 	URPGProficiencyCalculationBase(
-		URPGAttributeSet::GetAbIntelligenceAttribute(),
+		URPGAttributeSet::GetAbIntelligenceModifierAttribute(),
 		FString("Skill.Society")
 	)
 {

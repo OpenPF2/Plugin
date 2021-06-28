@@ -13,7 +13,7 @@
 
 URPGMedicineProficiencyCalculation::URPGMedicineProficiencyCalculation() :
 	URPGProficiencyCalculationBase(
-		URPGAttributeSet::GetAbWisdomAttribute(),
+		URPGAttributeSet::GetAbWisdomModifierAttribute(),
 		FString("Skill.Medicine")
 	)
 {

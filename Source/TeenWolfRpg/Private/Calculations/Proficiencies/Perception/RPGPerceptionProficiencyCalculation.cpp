@@ -13,7 +13,7 @@
 
 URPGPerceptionProficiencyCalculation::URPGPerceptionProficiencyCalculation() :
 	URPGProficiencyCalculationBase(
-		URPGAttributeSet::GetAbWisdomAttribute(),
+		URPGAttributeSet::GetAbWisdomModifierAttribute(),
 		FString("Perception")
 	)
 {
