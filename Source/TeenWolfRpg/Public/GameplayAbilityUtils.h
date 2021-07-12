@@ -14,6 +14,17 @@
 namespace GameplayAbilityUtils
 {
 	/**
+	 * Creates an attribute capture definition for the specified Gameplay Attribute.
+	 *
+	 * @param Attribute
+	 *   The Gameplay Attribute that should be captured.
+	 *
+	 * @return
+	 *   The capture definition for the specified attribute.
+	 */
+	FGameplayEffectAttributeCaptureDefinition BuildSourceCaptureFor(const FGameplayAttribute Attribute);
+
+	/**
 	 * Checks if a tag with the given name or prefix is present.
 	 *
 	 * @param Tags
