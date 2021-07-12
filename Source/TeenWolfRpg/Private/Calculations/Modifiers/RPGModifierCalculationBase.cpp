@@ -9,6 +9,7 @@
 // any form without written permission.
 
 #include "TeenWolfRpg.h"
+#include "GameplayAbilityUtils.h"
 #include "Abilities/RPGAttributeSet.h"
 #include "Calculations/Modifiers/RPGModifierCalculationBase.h"
 
@@ -47,26 +48,26 @@ float URPGModifierCalculationBase::CalculateBaseMagnitude_Implementation(const F
 
 	// Bypass additional checks if the character has no proficiency with this skill, to avoid checking every TEML
 	// option.
-	if (HasSkillTag(SourceTags, this->SkillGameplayTagPrefix))
+	if (GameplayAbilityUtils::HasTag(SourceTags, this->SkillGameplayTagPrefix))
 	{
 		const float CharacterLevel = Spec.GetLevel();
 
-		if (HasSkillTag(SourceTags, this->SkillGameplayTagPrefix + ".Legendary"))
+		if (GameplayAbilityUtils::HasTag(SourceTags, this->SkillGameplayTagPrefix + ".Legendary"))
 		{
 			// Legendary -> Your level + 8
 			ProficiencyBonus += CharacterLevel + 8;
 		}
-		else if (HasSkillTag(SourceTags, this->SkillGameplayTagPrefix + ".Master"))
+		else if (GameplayAbilityUtils::HasTag(SourceTags, this->SkillGameplayTagPrefix + ".Master"))
 		{
 			// Master -> Your level + 6
 			ProficiencyBonus += CharacterLevel + 6;
 		}
-		else if (HasSkillTag(SourceTags, this->SkillGameplayTagPrefix + ".Expert"))
+		else if (GameplayAbilityUtils::HasTag(SourceTags, this->SkillGameplayTagPrefix + ".Expert"))
 		{
 			// Expert -> Your level + 4
 			ProficiencyBonus += CharacterLevel + 4;
 		}
-		else if (HasSkillTag(SourceTags, this->SkillGameplayTagPrefix + ".Trained"))
+		else if (GameplayAbilityUtils::HasTag(SourceTags, this->SkillGameplayTagPrefix + ".Trained"))
 		{
 			// Trained -> Your level + 2
 			ProficiencyBonus += CharacterLevel + 2;

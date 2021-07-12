@@ -68,11 +68,6 @@ public:
 	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
 
 protected:
-	FORCEINLINE static bool HasSkillTag(const FGameplayTagContainer *Tags, const FString SkillGameplayTag)
-	{
-		return Tags->HasTag(FGameplayTag::RequestGameplayTag(FName(SkillGameplayTag)));
-	}
-
 	/**
 	 * Capture definition for the RPG character attribute that contributes to proficiency in the skill.
 	 */
