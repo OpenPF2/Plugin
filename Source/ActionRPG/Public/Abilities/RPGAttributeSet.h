@@ -194,9 +194,9 @@ public:
 	 *
 	 * This controls how hard or easy certain types of tasks are for this character.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Class DC", ReplicatedUsing=OnRep_CdcDifficultyModifier)
-	FGameplayAttributeData CdcDifficultyModifier;
-	ATTRIBUTE_ACCESSORS(URPGAttributeSet, CdcDifficultyModifier)
+	UPROPERTY(BlueprintReadOnly, Category = "Class DC", ReplicatedUsing=OnRep_ClassDifficultyClassModifier)
+	FGameplayAttributeData ClassDifficultyClassModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, ClassDifficultyClassModifier)
 
 	/** How fast this character can move. */
 	UPROPERTY(BlueprintReadOnly, Category = "Speed", ReplicatedUsing = OnRep_Speed)
@@ -446,7 +446,7 @@ protected:
 	virtual void OnRep_AbCharismaModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-	virtual void OnRep_CdcDifficultyModifier(const FGameplayAttributeData& OldValue);
+	virtual void OnRep_ClassDifficultyClassModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
 	virtual void OnRep_Speed(const FGameplayAttributeData& OldValue);
