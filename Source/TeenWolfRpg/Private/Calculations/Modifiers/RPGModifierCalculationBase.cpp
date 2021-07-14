@@ -52,6 +52,12 @@ float URPGModifierCalculationBase::CalculateBaseMagnitude_Implementation(const F
 	{
 		const float CharacterLevel = Spec.GetLevel();
 
+		// "When attempting a check that involves something you have some training in, you will also add your
+		// proficiency bonus. This bonus depends on your proficiency rank: untrained, trained, expert, master, or
+		// legendary. If you’re untrained, your bonus is +0—you must rely on raw talent and any bonuses from the
+		// situation. Otherwise, the bonus equals your character’s level plus a certain amount depending on your rank.
+		// If your proficiency rank is trained, this bonus is equal to your level + 2, and higher proficiency ranks
+		// further increase the amount you add to your level."
 		if (GameplayAbilityUtils::HasTag(SourceTags, this->SkillGameplayTagPrefix + ".Legendary"))
 		{
 			// Legendary -> Your level + 8
