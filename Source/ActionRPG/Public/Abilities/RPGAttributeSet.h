@@ -231,9 +231,9 @@ public:
 	/**
 	 * Perception measures a character's ability to notice hidden objects or unusual situations and affects initiative.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Perception", ReplicatedUsing = OnRep_PcpPerceptionModifier)
-	FGameplayAttributeData PcpPerceptionModifier;
-	ATTRIBUTE_ACCESSORS(URPGAttributeSet, PcpPerceptionModifier)
+	UPROPERTY(BlueprintReadOnly, Category = "Perception", ReplicatedUsing = OnRep_PerceptionModifier)
+	FGameplayAttributeData PerceptionModifier;
+	ATTRIBUTE_ACCESSORS(URPGAttributeSet, PerceptionModifier)
 
 	/**
 	 * Acrobatics measures a character's ability to perform tasks requiring coordination and grace.
@@ -467,7 +467,7 @@ protected:
 	virtual void OnRep_StWillModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-	virtual void OnRep_PcpPerceptionModifier(const FGameplayAttributeData& OldValue);
+	virtual void OnRep_PerceptionModifier(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
     virtual void OnRep_SkAcrobaticsModifier(const FGameplayAttributeData& OldValue);
