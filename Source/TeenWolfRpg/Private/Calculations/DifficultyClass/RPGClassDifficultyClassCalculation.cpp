@@ -11,9 +11,9 @@
 #include "TeenWolfRpg.h"
 #include "GameplayAbilityUtils.h"
 #include "Abilities/RPGAttributeSet.h"
-#include "Calculations/Modifiers/DifficultyClass/RPGClassDifficultyClassModifierCalculation.h"
+#include "Calculations/DifficultyClass/RPGClassDifficultyClassCalculation.h"
 
-URPGClassDifficultyClassModifierCalculation::URPGClassDifficultyClassModifierCalculation() :
+URPGClassDifficultyClassCalculation::URPGClassDifficultyClassCalculation() :
 	UGameplayModMagnitudeCalculation()
 {
 	this->DefineKeyAbilityCapture(
@@ -47,7 +47,7 @@ URPGClassDifficultyClassModifierCalculation::URPGClassDifficultyClassModifierCal
 	);
 }
 
-float URPGClassDifficultyClassModifierCalculation::CalculateProficiencyBonus(const FGameplayEffectSpec& Spec)
+float URPGClassDifficultyClassCalculation::CalculateProficiencyBonus(const FGameplayEffectSpec& Spec)
 {
 	float						ProficiencyBonus    = 0;
 	const FGameplayTagContainer	*SourceTags			= Spec.CapturedSourceTags.GetAggregatedTags();
@@ -87,7 +87,7 @@ float URPGClassDifficultyClassModifierCalculation::CalculateProficiencyBonus(con
 	return ProficiencyBonus;
 }
 
-float URPGClassDifficultyClassModifierCalculation::CalculateBaseMagnitude_Implementation(
+float URPGClassDifficultyClassCalculation::CalculateBaseMagnitude_Implementation(
 																				const FGameplayEffectSpec& Spec) const
 {
 	// Source for all that follows: Pathfinder 2E Core Rulebook, page 29, "Class DC".
@@ -98,7 +98,7 @@ float URPGClassDifficultyClassModifierCalculation::CalculateBaseMagnitude_Implem
 	return 10.0f + CalculateProficiencyBonus(Spec) + CalculateKeyAbilityModifier(Spec);
 }
 
-float URPGClassDifficultyClassModifierCalculation::CalculateKeyAbilityModifier(const FGameplayEffectSpec& Spec) const
+float URPGClassDifficultyClassCalculation::CalculateKeyAbilityModifier(const FGameplayEffectSpec& Spec) const
 {
 	float											KeyAbilityModifier			= 0.0f;
 	const FGameplayTagContainer						*SourceTags					= Spec.CapturedSourceTags.GetAggregatedTags();
@@ -118,7 +118,7 @@ float URPGClassDifficultyClassModifierCalculation::CalculateKeyAbilityModifier(c
 	return KeyAbilityModifier;
 }
 
-FGameplayEffectAttributeCaptureDefinition URPGClassDifficultyClassModifierCalculation::DetermineKeyAbility(
+FGameplayEffectAttributeCaptureDefinition URPGClassDifficultyClassCalculation::DetermineKeyAbility(
 																		const FGameplayTagContainer* SourceTags) const
 {
 	FGameplayEffectAttributeCaptureDefinition KeyAbilityCaptureDefinition;

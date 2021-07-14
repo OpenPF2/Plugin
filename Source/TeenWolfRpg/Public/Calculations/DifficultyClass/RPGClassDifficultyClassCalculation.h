@@ -14,10 +14,10 @@
 #include <GameplayModMagnitudeCalculation.h>
 
 #include "GameplayAbilityUtils.h"
-#include "RPGClassDifficultyClassModifierCalculation.generated.h"
+#include "RPGClassDifficultyClassCalculation.generated.h"
 
 /**
- * MMC that calculates the modifier for the "Class DC".
+ * MMC that calculates the "Class DC" stat.
  *
  * From the Pathfinder 2E Core Rulebook, page 29:
  * "A class DC sets the difficulty for certain abilities granted by your character’s class. This DC equals 10 plus their
@@ -25,15 +25,15 @@
  * score."
  */
 UCLASS()
-class TEENWOLFRPG_API URPGClassDifficultyClassModifierCalculation : public UGameplayModMagnitudeCalculation
+class TEENWOLFRPG_API URPGClassDifficultyClassCalculation : public UGameplayModMagnitudeCalculation
 {
 	GENERATED_BODY()
 
 public:
 	/**
-	 * Constructor for URPGClassDifficultyClassModifierCalculation.
+	 * Constructor for URPGClassDifficultyClassCalculation.
 	 */
-	explicit URPGClassDifficultyClassModifierCalculation();
+	explicit URPGClassDifficultyClassCalculation();
 
 	/**
 	 * Calculates the class difficulty class modifier based on the attributes captured by the provided GE specification.

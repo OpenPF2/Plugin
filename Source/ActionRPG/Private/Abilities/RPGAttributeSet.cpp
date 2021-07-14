@@ -33,7 +33,7 @@ URPGAttributeSet::URPGAttributeSet()
 	, AbWisdomModifier(0.0f)
 	, AbCharisma(10.0f)
 	, AbCharismaModifier(0.0f)
-	, ClassDifficultyClassModifier(0.0f)
+	, ClassDifficultyClass(0.0f)
 	, Speed(1.0f)
 	, MaxSpeed(1.0f)
 	, ArmorClass(10.0f)
@@ -84,7 +84,7 @@ void URPGAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(URPGAttributeSet, AbWisdomModifier);
 	DOREPLIFETIME(URPGAttributeSet, AbCharisma);
 	DOREPLIFETIME(URPGAttributeSet, AbCharismaModifier);
-	DOREPLIFETIME(URPGAttributeSet, ClassDifficultyClassModifier);
+	DOREPLIFETIME(URPGAttributeSet, ClassDifficultyClass);
 	DOREPLIFETIME(URPGAttributeSet, Speed);
 	DOREPLIFETIME(URPGAttributeSet, MaxSpeed);
 	DOREPLIFETIME(URPGAttributeSet, ArmorClass);
@@ -190,9 +190,9 @@ void URPGAttributeSet::OnRep_AbCharismaModifier(const FGameplayAttributeData& Ol
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, AbCharismaModifier, OldValue);
 }
 
-void URPGAttributeSet::OnRep_ClassDifficultyClassModifier(const FGameplayAttributeData& OldValue)
+void URPGAttributeSet::OnRep_ClassDifficultyClass(const FGameplayAttributeData& OldValue)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ClassDifficultyClassModifier, OldValue);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, ClassDifficultyClass, OldValue);
 }
 
 void URPGAttributeSet::OnRep_Speed(const FGameplayAttributeData& OldValue)
