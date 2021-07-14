@@ -43,11 +43,16 @@ public:
 	 * @param StatGameplayTagPrefix
 	 *   The tag prefix to use for checking a character's training in the stat. For example, "ClassDc", "SpellAttack",
 	 *   or "SpellDc".
+	 * @param KeyAbilityGameplayTagPrefix
+	 *   The tag prefix to use to determine the key ability for this stat.  For the Class DC, this is "KeyAbility". For
+	 *   Spell Attack and Spell DC, this is "SpellcastingKeyAbility".
 	 * @param BaseValue
 	 *   The base value for this stat. For DC stats, this is usually "10". For other stats (e.g. Spell Attack Roll),
 	 *   this is 0.
 	 */
-	explicit URPGKeyAbilityCalculationBase(const FString StatGameplayTagPrefix, const float BaseValue = 0.0f);
+	explicit URPGKeyAbilityCalculationBase(const FString StatGameplayTagPrefix,
+										   const FString KeyAbilityGameplayTagPrefix,
+										   const float BaseValue = 0.0f);
 
 	/**
 	 * Calculates this stat based on the Key Attribute captured by the provided GE specification.
@@ -99,8 +104,9 @@ protected:
 	FString StatGameplayTagPrefix;
 
 	/**
-	 * The base value for this stat. For DC stats, this is usually "10". For other stats (e.g. Spell Attack Roll), this
-	 * is 0.
+	 * The base value for this stat.
+	 *
+	 * For DC stats, this is usually "10". For other stats (e.g. Spell Attack Roll), this is 0.
 	 */
 	float BaseValue;
 

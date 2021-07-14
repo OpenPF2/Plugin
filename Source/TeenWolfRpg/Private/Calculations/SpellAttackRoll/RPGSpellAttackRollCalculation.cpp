@@ -11,6 +11,6 @@
 #include "Calculations/SpellAttackRoll/RPGSpellAttackRollCalculation.h"
 
 URPGSpellAttackRollCalculation::URPGSpellAttackRollCalculation() :
-	URPGKeyAbilityCalculationBase("SpellAttack")
+	URPGKeyAbilityCalculationBase(TEXT("SpellAttack"), TEXT("SpellcastingKeyAbility"))
 {
 }

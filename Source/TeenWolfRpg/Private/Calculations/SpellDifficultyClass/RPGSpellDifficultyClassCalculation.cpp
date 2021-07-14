@@ -11,6 +11,6 @@
 #include "Calculations/SpellDifficultyClass/RPGSpellDifficultyClassCalculation.h"
 
 URPGSpellDifficultyClassCalculation::URPGSpellDifficultyClassCalculation() :
-	URPGKeyAbilityCalculationBase("SpellDc", 10.0f)
+	URPGKeyAbilityCalculationBase(TEXT("SpellDc"), TEXT("SpellcastingKeyAbility"), 10.0f)
 {
 }
