@@ -41,8 +41,8 @@ public:
 	 * boost.
 	 *
 	 * @param StatGameplayTagPrefix
-	 *   The tag prefix to use for checking a character's training in the stat. For example, "ClassDc",
-	 *   "SpellAttackRoll", or "SpellDc".
+	 *   The tag prefix to use for checking a character's training in the stat. For example, "ClassDc", "SpellAttack",
+	 *   or "SpellDc".
 	 * @param BaseValue
 	 *   The base value for this stat. For DC stats, this is usually "10". For other stats (e.g. Spell Attack Roll),
 	 *   this is 0.
