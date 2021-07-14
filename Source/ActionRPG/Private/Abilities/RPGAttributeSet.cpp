@@ -40,7 +40,7 @@ URPGAttributeSet::URPGAttributeSet()
 	, StFortitudeModifier(0.0f)
 	, StReflexModifier(0.0f)
 	, StWillModifier(0.0f)
-	, PcpPerceptionModifier(0.0f)
+	, PerceptionModifier(0.0f)
 	, SkAcrobaticsModifier(0.0f)
 	, SkArcanaModifier(0.0f)
 	, SkAthleticsModifier(0.0f)
@@ -91,7 +91,7 @@ void URPGAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(URPGAttributeSet, StFortitudeModifier);
 	DOREPLIFETIME(URPGAttributeSet, StReflexModifier);
 	DOREPLIFETIME(URPGAttributeSet, StWillModifier);
-	DOREPLIFETIME(URPGAttributeSet, PcpPerceptionModifier);
+	DOREPLIFETIME(URPGAttributeSet, PerceptionModifier);
 	DOREPLIFETIME(URPGAttributeSet, SkAcrobaticsModifier);
 	DOREPLIFETIME(URPGAttributeSet, SkArcanaModifier);
 	DOREPLIFETIME(URPGAttributeSet, SkAthleticsModifier);
@@ -225,9 +225,9 @@ void URPGAttributeSet::OnRep_StWillModifier(const FGameplayAttributeData& OldVal
 	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, StWillModifier, OldValue);
 }
 
-void URPGAttributeSet::OnRep_PcpPerceptionModifier(const FGameplayAttributeData& OldValue)
+void URPGAttributeSet::OnRep_PerceptionModifier(const FGameplayAttributeData& OldValue)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, PcpPerceptionModifier, OldValue);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(URPGAttributeSet, PerceptionModifier, OldValue);
 }
 
 void URPGAttributeSet::OnRep_SkAcrobaticsModifier(const FGameplayAttributeData& OldValue)
