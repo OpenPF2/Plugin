@@ -27,11 +27,8 @@
  * d20 roll + ability modifier used for spellcasting + proficiency bonus + other bonuses + penalties"
  *
  * TODO: Figure out if we need to accommodate this, and how:
- * "The ability modifier for a spell attack roll depends on how you gained access to your spells. If your class grants
- * you spellcasting, use your key ability modifier. Innate spells use your Charisma modifier unless the ability that
- * granted them states otherwise. Focus spells and other sources of spells specify which ability modifier you use for
- * spell attack rolls in the ability that granted them. If you have spells from multiple sources or traditions, you
- * might use different ability modifiers for spell attack rolls for these different sources of spells."
+ * "If you have spells from multiple sources or traditions, you might use different ability modifiers for spell attack
+ * rolls for these different sources of spells."
  */
 UCLASS()
 class TEENWOLFRPG_API URPGSpellAttackRollCalculation : public URPGKeyAbilityCalculationBase

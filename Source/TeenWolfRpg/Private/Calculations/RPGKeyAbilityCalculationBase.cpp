@@ -13,43 +13,48 @@
 #include "Abilities/RPGAttributeSet.h"
 #include "Calculations/RPGKeyAbilityCalculationBase.h"
 
-URPGKeyAbilityCalculationBase::URPGKeyAbilityCalculationBase() : URPGKeyAbilityCalculationBase(TEXT(""))
+URPGKeyAbilityCalculationBase::URPGKeyAbilityCalculationBase() :
+	URPGKeyAbilityCalculationBase(
+		TEXT(""),
+		TEXT("KeyAbility")
+	)
 {
 }
 
 URPGKeyAbilityCalculationBase::URPGKeyAbilityCalculationBase(const FString StatGameplayTagPrefix,
+															 const FString KeyAbilityGameplayTagPrefix,
 															 const float BaseValue) :
 	UGameplayModMagnitudeCalculation(),
 	StatGameplayTagPrefix(StatGameplayTagPrefix),
 	BaseValue(BaseValue)
 {
 	this->DefineKeyAbilityCapture(
-		TEXT("KeyAbility.Strength"),
+		KeyAbilityGameplayTagPrefix + ".Strength",
 		URPGAttributeSet::GetAbStrengthModifierAttribute()
 	);
 
 	this->DefineKeyAbilityCapture(
-		TEXT("KeyAbility.Dexterity"),
+		KeyAbilityGameplayTagPrefix + ".Dexterity",
 		URPGAttributeSet::GetAbDexterityModifierAttribute()
 	);
 
 	this->DefineKeyAbilityCapture(
-		TEXT("KeyAbility.Constitution"),
+		KeyAbilityGameplayTagPrefix + ".Constitution",
 		URPGAttributeSet::GetAbConstitutionModifierAttribute()
 	);
 
 	this->DefineKeyAbilityCapture(
-		TEXT("KeyAbility.Intelligence"),
+		KeyAbilityGameplayTagPrefix + ".Intelligence",
 		URPGAttributeSet::GetAbIntelligenceModifierAttribute()
 	);
 
 	this->DefineKeyAbilityCapture(
-		TEXT("KeyAbility.Wisdom"),
+		KeyAbilityGameplayTagPrefix + ".Wisdom",
 		URPGAttributeSet::GetAbWisdomModifierAttribute()
 	);
 
 	this->DefineKeyAbilityCapture(
-		TEXT("KeyAbility.Charisma"),
+		KeyAbilityGameplayTagPrefix + ".Charisma",
 		URPGAttributeSet::GetAbCharismaModifierAttribute()
 	);
 }
@@ -58,10 +63,10 @@ float URPGKeyAbilityCalculationBase::CalculateProficiencyBonus(const FGameplayEf
 {
 	float						ProficiencyBonus    = 0;
 	const FGameplayTagContainer	*SourceTags			= Spec.CapturedSourceTags.GetAggregatedTags();
-	const FString				TagPrefix			= this->StatGameplayTagPrefix;
+	const FString				StatTagPrefix		= this->StatGameplayTagPrefix;
 
 	// Bypass additional checks if the character has no proficiency in this stat, to avoid checking every TEML option.
-	if (GameplayAbilityUtils::HasTag(SourceTags, TagPrefix))
+	if (GameplayAbilityUtils::HasTag(SourceTags, StatTagPrefix))
 	{
 		const float CharacterLevel = Spec.GetLevel();
 
@@ -74,22 +79,22 @@ float URPGKeyAbilityCalculationBase::CalculateProficiencyBonus(const FGameplayEf
 		// situation. Otherwise, the bonus equals your character’s level plus a certain amount depending on your rank.
 		// If your proficiency rank is trained, this bonus is equal to your level + 2, and higher proficiency ranks
 		// further increase the amount you add to your level."
-		if (GameplayAbilityUtils::HasTag(SourceTags, TagPrefix + ".Legendary"))
+		if (GameplayAbilityUtils::HasTag(SourceTags, StatTagPrefix + ".Legendary"))
 		{
 			// Legendary -> Your level + 8
 			ProficiencyBonus += CharacterLevel + 8;
 		}
-		else if (GameplayAbilityUtils::HasTag(SourceTags, TagPrefix + ".Master"))
+		else if (GameplayAbilityUtils::HasTag(SourceTags, StatTagPrefix + ".Master"))
 		{
 			// Master -> Your level + 6
 			ProficiencyBonus += CharacterLevel + 6;
 		}
-		else if (GameplayAbilityUtils::HasTag(SourceTags, TagPrefix + ".Expert"))
+		else if (GameplayAbilityUtils::HasTag(SourceTags, StatTagPrefix + ".Expert"))
 		{
 			// Expert -> Your level + 4
 			ProficiencyBonus += CharacterLevel + 4;
 		}
-		else if (GameplayAbilityUtils::HasTag(SourceTags, TagPrefix + ".Trained"))
+		else if (GameplayAbilityUtils::HasTag(SourceTags, StatTagPrefix + ".Trained"))
 		{
 			// Trained -> Your level + 2
 			ProficiencyBonus += CharacterLevel + 2;

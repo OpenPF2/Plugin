@@ -11,6 +11,6 @@
 #include "Calculations/DifficultyClass/RPGClassDifficultyClassCalculation.h"
 
 URPGClassDifficultyClassCalculation::URPGClassDifficultyClassCalculation() :
-	URPGKeyAbilityCalculationBase("ClassDc", 10.0f)
+	URPGKeyAbilityCalculationBase(TEXT("ClassDc"), TEXT("KeyAbility"), 10.0f)
 {
 }
