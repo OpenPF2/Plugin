@@ -140,16 +140,5 @@ protected:
 	 * @param Attribute
 	 *   The definition of the attribute to capture.
 	 */
-	void DefineKeyAbilityCapture(const FString KeyAbilityTagName, const FGameplayAttribute Attribute)
-	{
-		const FGameplayEffectAttributeCaptureDefinition CaptureDefinition =
-			GameplayAbilityUtils::BuildSourceCaptureFor(Attribute);
-
-		this->KeyAbilityCaptureDefinitions.Add(
-			KeyAbilityTagName,
-			CaptureDefinition
-		);
-
-		this->RelevantAttributesToCapture.Add(CaptureDefinition);
-	}
+	void DefineKeyAbilityCapture(const FString KeyAbilityTagName, const FGameplayAttribute Attribute);
 };

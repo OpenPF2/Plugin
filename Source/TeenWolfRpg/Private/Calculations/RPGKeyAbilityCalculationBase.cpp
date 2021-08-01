@@ -59,6 +59,20 @@ URPGKeyAbilityCalculationBase::URPGKeyAbilityCalculationBase(const FString StatG
 	);
 }
 
+void URPGKeyAbilityCalculationBase::DefineKeyAbilityCapture(const FString KeyAbilityTagName,
+															const FGameplayAttribute Attribute)
+{
+	const FGameplayEffectAttributeCaptureDefinition CaptureDefinition =
+		GameplayAbilityUtils::BuildSourceCaptureFor(Attribute);
+
+	this->KeyAbilityCaptureDefinitions.Add(
+		KeyAbilityTagName,
+		CaptureDefinition
+	);
+
+	this->RelevantAttributesToCapture.Add(CaptureDefinition);
+}
+
 float URPGKeyAbilityCalculationBase::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
 {
 	// Logic shared by the "Class DC", "Spell Attack Roll", and "Spell DC" calculations.
