@@ -61,7 +61,22 @@ URPGKeyAbilityCalculationBase::URPGKeyAbilityCalculationBase(const FString StatG
 
 float URPGKeyAbilityCalculationBase::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
 {
-	return this->BaseValue + CalculateProficiencyBonus(Spec) + CalculateKeyAbilityModifier(Spec);
+	const float	ProficiencyBonus	= CalculateProficiencyBonus(Spec),
+				KeyAbilityModifier	= CalculateKeyAbilityModifier(Spec),
+				AbilityScore		= this->BaseValue + ProficiencyBonus + KeyAbilityModifier;
+
+	UE_LOG(
+		LogTwRpg,
+		VeryVerbose,
+		TEXT("Calculated key ability score ('%s'): %f + %f + %f = %f"),
+		*(this->StatGameplayTagPrefix),
+		this->BaseValue,
+		ProficiencyBonus,
+		KeyAbilityModifier,
+		AbilityScore
+	);
+
+	return AbilityScore;
 }
 
 float URPGKeyAbilityCalculationBase::CalculateProficiencyBonus(const FGameplayEffectSpec& Spec) const
