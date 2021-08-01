@@ -13,10 +13,13 @@
 #include "Abilities/RPGAttributeSet.h"
 #include "Calculations/RPGAbilityBoostCalculation.h"
 
-float URPGAbilityBoostCalculation::DoCalculation(const FGameplayAttribute AbilityAttribute, const float AbilityScore) const
+float URPGAbilityBoostCalculation::DoCalculation(const FGameplayAttribute AbilityAttribute,
+												 const float AbilityScore) const
 {
 	float BoostedScore;
 
+	// From the Pathfinder 2E Core Rulebook, page 68, "Ability Boosts":
+	// "Boosting an ability score increases it by 1 if it's already 18 or above, or by 2 if it starts out below 18."
 	if (AbilityScore < 18.0f)
 	{
 		BoostedScore = 2.0f;
