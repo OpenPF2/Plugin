@@ -26,7 +26,6 @@ float URPGAbilityBoostCalculation::DoCalculation(const FGameplayAttribute Abilit
 		BoostedScore = 1.0f;
 	}
 
-
 	UE_LOG(
 		LogTwRpg,
 		VeryVerbose,
