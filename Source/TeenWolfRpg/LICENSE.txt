@@ -23,6 +23,17 @@ For the purposes of the OGL, the following definitions apply:
   -- not even under the MPL -- without a separate, corresponding license from
   its respective owners).
 
+- "Identification": As required by the Open Game License version 1.0a, Section
+  8, all Open Game Content shall be clearly indicated by the presence of BOTH
+  of the following:
+  - A source file header that identifies that the file contains content licensed
+    under the OGL.
+  - A comment above source code lines that implement or otherwise make use of
+    Open Game Content that provides an inline citation to note the: 1) name;
+    2) page number; 3) section name; and 4) optional excerpt from the source
+    material upon which the code is based; so that there is no ambiguity as to
+    what portion of the material is Open Game Content.
+
 No portion of this work other than the material designated as Open Game Content
 may be reproduced in any form without written permission, except under the MPL.
 
