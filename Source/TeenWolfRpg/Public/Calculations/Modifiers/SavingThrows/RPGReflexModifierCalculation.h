@@ -11,8 +11,8 @@
 #include "RPGReflexModifierCalculation.generated.h"
 
 /**
-* MMC that calculates the modifier a character has in Reflex Saving Throws.
-*/
+ * MMC that calculates the modifier a character has in Reflex Saving Throws.
+ */
 UCLASS()
 class TEENWOLFRPG_API URPGReflexModifierCalculation : public URPGModifierCalculationBase
 {

@@ -11,8 +11,8 @@
 #include "RPGWillModifierCalculation.generated.h"
 
 /**
-* MMC that calculates the modifier a character has in Will Saving Throws.
-*/
+ * MMC that calculates the modifier a character has in Will Saving Throws.
+ */
 UCLASS()
 class TEENWOLFRPG_API URPGWillModifierCalculation : public URPGModifierCalculationBase
 {

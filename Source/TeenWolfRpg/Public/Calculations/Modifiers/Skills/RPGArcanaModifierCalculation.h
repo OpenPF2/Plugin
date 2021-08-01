@@ -11,8 +11,8 @@
 #include "RPGArcanaModifierCalculation.generated.h"
 
 /**
-* MMC that calculates the proficiency a character has in Arcana skill.
-*/
+ * MMC that calculates the proficiency a character has in Arcana skill.
+ */
 UCLASS()
 class TEENWOLFRPG_API URPGArcanaModifierCalculation : public URPGModifierCalculationBase
 {

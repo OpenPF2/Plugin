@@ -11,8 +11,8 @@
 #include "RPGAthleticsModifierCalculation.generated.h"
 
 /**
-* MMC that calculates the proficiency a character has in Athletics skill.
-*/
+ * MMC that calculates the proficiency a character has in Athletics skill.
+ */
 UCLASS()
 class TEENWOLFRPG_API URPGAthleticsModifierCalculation : public URPGModifierCalculationBase
 {
