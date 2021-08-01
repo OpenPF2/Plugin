@@ -1,12 +1,7 @@
-﻿// Teen Wolf RPG game logic, Copyright 2021, Teen Wolf RPG. All Rights Reserved.
-// Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
-//	 - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
-//	 - System Reference Document, Copyright 2000, Wizards of the Coast, Inc.
-//	 - Pathfinder Core Rulebook (Second Edition), Copyright 2019, Paizo Inc.
-// Except for material designated as Product Identity or External Tools, the game mechanics of this Teen Wolf RPG
-// product are Open Game Content, as defined in the Open Game License version 1.0a, Section 1(d) (see accompanying
-// LICENSE.TXT). No portion of this work other than the material designated as Open Game Content may be reproduced in
-// any form without written permission.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
+// distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "Abilities/RPGAttributeSet.h"
 #include "Calculations/Modifiers/Skills/RPGLore2ModifierCalculation.h"
