@@ -59,6 +59,11 @@ URPGKeyAbilityCalculationBase::URPGKeyAbilityCalculationBase(const FString StatG
 	);
 }
 
+float URPGKeyAbilityCalculationBase::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
+{
+	return this->BaseValue + CalculateProficiencyBonus(Spec) + CalculateKeyAbilityModifier(Spec);
+}
+
 float URPGKeyAbilityCalculationBase::CalculateProficiencyBonus(const FGameplayEffectSpec& Spec) const
 {
 	float						ProficiencyBonus    = 0;
@@ -107,11 +112,6 @@ float URPGKeyAbilityCalculationBase::CalculateProficiencyBonus(const FGameplayEf
 	}
 
 	return ProficiencyBonus;
-}
-
-float URPGKeyAbilityCalculationBase::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
-{
-	return this->BaseValue + CalculateProficiencyBonus(Spec) + CalculateKeyAbilityModifier(Spec);
 }
 
 float URPGKeyAbilityCalculationBase::CalculateKeyAbilityModifier(const FGameplayEffectSpec& Spec) const
