@@ -11,8 +11,8 @@
 #include "RPGAcrobaticsModifierCalculation.generated.h"
 
 /**
-* MMC that calculates the proficiency a character has in Acrobatics skill.
-*/
+ * MMC that calculates the proficiency a character has in Acrobatics skill.
+ */
 UCLASS()
 class TEENWOLFRPG_API URPGAcrobaticsModifierCalculation : public URPGModifierCalculationBase
 {
