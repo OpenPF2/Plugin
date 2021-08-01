@@ -85,5 +85,14 @@ float URPGModifierCalculationBase::CalculateBaseMagnitude_Implementation(const F
 		}
 	}
 
+	UE_LOG(
+		LogTwRpg,
+		VeryVerbose,
+		TEXT("Calculated skill proficiency/modifier ('%s': %f): %f"),
+		*(this->SkillGameplayTagPrefix),
+		AbilityScore,
+		ProficiencyBonus
+	);
+
 	return ProficiencyBonus;
 }
