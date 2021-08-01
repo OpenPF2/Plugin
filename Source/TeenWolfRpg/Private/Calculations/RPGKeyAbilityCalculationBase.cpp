@@ -24,7 +24,7 @@ URPGKeyAbilityCalculationBase::URPGKeyAbilityCalculationBase() :
 URPGKeyAbilityCalculationBase::URPGKeyAbilityCalculationBase(const FString StatGameplayTagPrefix,
 															 const FString KeyAbilityGameplayTagPrefix,
 															 const float BaseValue) :
-	UGameplayModMagnitudeCalculation(),
+	URPGTemlCalculationBase(),
 	StatGameplayTagPrefix(StatGameplayTagPrefix),
 	BaseValue(BaseValue)
 {
@@ -61,7 +61,18 @@ URPGKeyAbilityCalculationBase::URPGKeyAbilityCalculationBase(const FString StatG
 
 float URPGKeyAbilityCalculationBase::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
 {
-	const float	ProficiencyBonus	= CalculateProficiencyBonus(Spec),
+	// Logic shared by the "Class DC", "Spell Attack Roll", and "Spell DC" calculations.
+	// "A class DC ... equals 10 plus their proficiency bonus for their class DC (+3 for most 1st-level characters) plus
+	// the modifier for the class’s key ability score."
+	//
+	// Source: Pathfinder 2E Core Rulebook, page 29, "Class DC".
+	//
+	//
+	// "Spell attack roll = your spellcasting ability modifier + proficiency bonus + other bonuses + penalties
+	// Spell DC = 10 + your spellcasting ability modifier + proficiency bonus + other bonuses + penalties"
+	//
+	// Source: Pathfinder 2E Core Rulebook, page 298, "Spell Attack Roll and Spell DC".
+	const float	ProficiencyBonus	= CalculateProficiencyBonus(this->StatGameplayTagPrefix, Spec),
 				KeyAbilityModifier	= CalculateKeyAbilityModifier(Spec),
 				AbilityScore		= this->BaseValue + ProficiencyBonus + KeyAbilityModifier;
 
@@ -77,56 +88,6 @@ float URPGKeyAbilityCalculationBase::CalculateBaseMagnitude_Implementation(const
 	);
 
 	return AbilityScore;
-}
-
-float URPGKeyAbilityCalculationBase::CalculateProficiencyBonus(const FGameplayEffectSpec& Spec) const
-{
-	float						ProficiencyBonus    = 0;
-	const FGameplayTagContainer	*SourceTags			= Spec.CapturedSourceTags.GetAggregatedTags();
-	const FString				StatTagPrefix		= this->StatGameplayTagPrefix;
-
-	// Bypass additional checks if the character has no proficiency in this stat, to avoid checking every TEML option.
-	if (GameplayAbilityUtils::HasTag(SourceTags, StatTagPrefix))
-	{
-		const float CharacterLevel = Spec.GetLevel();
-
-		// Source for all that follows: Pathfinder 2E Core Rulebook, page 444,
-		// "Step 1: Roll D20 and Identify The Modifiers, Bonuses, and Penalties That Apply".
-		//
-		// "When attempting a check that involves something you have some training in, you will also add your
-		// proficiency bonus. This bonus depends on your proficiency rank: untrained, trained, expert, master, or
-		// legendary. If you’re untrained, your bonus is +0—you must rely on raw talent and any bonuses from the
-		// situation. Otherwise, the bonus equals your character’s level plus a certain amount depending on your rank.
-		// If your proficiency rank is trained, this bonus is equal to your level + 2, and higher proficiency ranks
-		// further increase the amount you add to your level."
-		if (GameplayAbilityUtils::HasTag(SourceTags, StatTagPrefix + ".Legendary"))
-		{
-			// Legendary -> Your level + 8
-			ProficiencyBonus += CharacterLevel + 8;
-		}
-		else if (GameplayAbilityUtils::HasTag(SourceTags, StatTagPrefix + ".Master"))
-		{
-			// Master -> Your level + 6
-			ProficiencyBonus += CharacterLevel + 6;
-		}
-		else if (GameplayAbilityUtils::HasTag(SourceTags, StatTagPrefix + ".Expert"))
-		{
-			// Expert -> Your level + 4
-			ProficiencyBonus += CharacterLevel + 4;
-		}
-		else if (GameplayAbilityUtils::HasTag(SourceTags, StatTagPrefix + ".Trained"))
-		{
-			// Trained -> Your level + 2
-			ProficiencyBonus += CharacterLevel + 2;
-		}
-		else
-		{
-			// Untrained -> No bonus at all, no matter what level.
-			ProficiencyBonus += 0;
-		}
-	}
-
-	return ProficiencyBonus;
 }
 
 float URPGKeyAbilityCalculationBase::CalculateKeyAbilityModifier(const FGameplayEffectSpec& Spec) const

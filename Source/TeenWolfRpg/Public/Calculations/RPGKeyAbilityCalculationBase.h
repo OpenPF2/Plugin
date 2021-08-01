@@ -14,13 +14,15 @@
 #include <GameplayModMagnitudeCalculation.h>
 
 #include "GameplayAbilityUtils.h"
+#include "RPGTemlCalculationBase.h"
+
 #include "RPGKeyAbilityCalculationBase.generated.h"
 
 /**
  * Base class for MMCs that are based on a character's "Key Ability" (Class DC, Spell Attack Roll, Spell DC, etc.).
  */
 UCLASS(Abstract)
-class TEENWOLFRPG_API URPGKeyAbilityCalculationBase : public UGameplayModMagnitudeCalculation
+class TEENWOLFRPG_API URPGKeyAbilityCalculationBase : public URPGTemlCalculationBase
 {
 	GENERATED_BODY()
 
@@ -65,14 +67,6 @@ public:
 	 *   The calculated stat value.
 	 */
 	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
-
-	/**
-	 * Calculates the character's TEML proficiency in this stat.
-	 *
-	 * @param Spec
-	 *   The Gameplay Effect (GE) specification that provides information about the character and their proficiencies.
-	 */
-	float CalculateProficiencyBonus(const FGameplayEffectSpec& Spec) const;
 
 	/**
 	 * Calculates the Key Ability modifier for the character.

@@ -12,13 +12,15 @@
 
 #include <CoreMinimal.h>
 #include <GameplayModMagnitudeCalculation.h>
+
+#include "Calculations/RPGTemlCalculationBase.h"
 #include "RPGModifierCalculationBase.generated.h"
 
 /**
  * Base class for MMCs that calculate the proficiency a character has in a particular skill.
  */
 UCLASS(Abstract)
-class TEENWOLFRPG_API URPGModifierCalculationBase : public UGameplayModMagnitudeCalculation
+class TEENWOLFRPG_API URPGModifierCalculationBase : public URPGTemlCalculationBase
 {
 	GENERATED_BODY()
 
@@ -30,7 +32,7 @@ public:
 	 * URPGModifierCalculationBase(FGameplayAttribute, FString) instead of calling this
 	 * constructor overload.
 	 */
-	explicit URPGModifierCalculationBase() : UGameplayModMagnitudeCalculation()
+	explicit URPGModifierCalculationBase() : URPGTemlCalculationBase()
 	{
 	};
 
