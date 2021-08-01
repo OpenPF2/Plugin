@@ -23,6 +23,6 @@ class TEENWOLFRPG_API URPGWillModifierCalculation : public URPGModifierCalculati
 {
 	GENERATED_BODY()
 
-	public:
+public:
 	explicit URPGWillModifierCalculation();
 };
