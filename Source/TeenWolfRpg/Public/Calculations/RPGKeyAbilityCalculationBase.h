@@ -68,29 +68,6 @@ public:
 	 */
 	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
 
-	/**
-	 * Calculates the Key Ability modifier for the character.
-	 *
-	 * @param Spec
-	 *   The Gameplay Effect (GE) specification that provides information about the character attribute upon which a
-	 *   Key Ability modifier is desired.
-	 */
-	float CalculateKeyAbilityModifier(const FGameplayEffectSpec& Spec) const;
-
-	/**
-	 * Determines which ability is the character's key modifier.
-	 *
-	 * @param SourceTags
-	 *   The tags on the character. A tag in this list should indicate the character's Key Ability (e.g.
-	 *   "KeyAbility.Strength").
-	 *
-	 * @return
-	 *   Either a capture definition that has a valid source attribute that can be used to capture the Key Ability
-	 *   modifier that corresponds to the character's Key Ability; or, a capture definition that has an invalid source
-	 *   attribute, signifying that the character is missing a key attribute tag.
-	 */
-	FGameplayEffectAttributeCaptureDefinition DetermineKeyAbility(const FGameplayTagContainer* SourceTags) const;
-
 protected:
 	/**
 	 * The tag prefix to use for checking a character's training in this stat.
@@ -141,4 +118,27 @@ protected:
 	 *   The definition of the attribute to capture.
 	 */
 	void DefineKeyAbilityCapture(const FString KeyAbilityTagName, const FGameplayAttribute Attribute);
+
+	/**
+	 * Calculates the Key Ability modifier for the character.
+	 *
+	 * @param Spec
+	 *   The Gameplay Effect (GE) specification that provides information about the character attribute upon which a
+	 *   Key Ability modifier is desired.
+	 */
+	float CalculateKeyAbilityModifier(const FGameplayEffectSpec& Spec) const;
+
+	/**
+	 * Determines which ability is the character's key modifier.
+	 *
+	 * @param SourceTags
+	 *   The tags on the character. A tag in this list should indicate the character's Key Ability (e.g.
+	 *   "KeyAbility.Strength").
+	 *
+	 * @return
+	 *   Either a capture definition that has a valid source attribute that can be used to capture the Key Ability
+	 *   modifier that corresponds to the character's Key Ability; or, a capture definition that has an invalid source
+	 *   attribute, signifying that the character is missing a key attribute tag.
+	 */
+	FGameplayEffectAttributeCaptureDefinition DetermineKeyAbility(const FGameplayTagContainer* SourceTags) const;
 };
