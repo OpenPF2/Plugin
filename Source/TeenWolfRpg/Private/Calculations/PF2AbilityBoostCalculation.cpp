@@ -33,7 +33,7 @@ float UPF2AbilityBoostCalculation::DoCalculation(const FGameplayAttribute Abilit
 	UE_LOG(
 		LogTwRpg,
 		VeryVerbose,
-		TEXT("Calculated boost for ability score attribute ('%s': %f): %f"),
+		TEXT("Calculated boost for ability score attribute ('%s'): %f + %f"),
 		*(AbilityAttribute.GetName()),
 		AbilityScore,
 		BoostedScore
