@@ -33,13 +33,13 @@ class TEENWOLFRPG_API UPF2AbilityBoostCalculation : public UPF2AbilityCalculatio
 	 * never have any ability score that’s higher than 18."
 	 *
 	 * @param AbilityAttribute
-	 *   The type of ability score for which an ability boost is desired.
+	 *	The type of ability score for which an ability boost is desired.
 	 * @param AbilityScore
-	 *   The current base value of the ability attribute.
+	 *	The current base value of the ability attribute.
 	 *
 	 * @return
-	 *   The boost to apply to the ability score. (This is just the boost; the ability score has not been added to the
-	 *   result).
+	 *	The boost to apply to the ability score. (This is just the boost; the ability score has not been added to the
+	 *	result).
 	 */
 	virtual float DoCalculation(const FGameplayAttribute AbilityAttribute, const float AbilityScore) const override;
 };
