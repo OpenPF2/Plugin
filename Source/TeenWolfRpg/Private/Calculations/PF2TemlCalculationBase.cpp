@@ -14,7 +14,17 @@
 #include "Abilities/RPGAttributeSet.h"
 #include "Calculations/PF2TemlCalculationBase.h"
 
-float UPF2TemlCalculationBase::CalculateProficiencyBonus(const FString TagPrefix, const FGameplayEffectSpec& Spec) const
+float UPF2TemlCalculationBase::CalculateProficiencyBonus(const FGameplayTag TagPrefix, const FGameplayEffectSpec& Spec)
+{
+	return CalculateProficiencyBonus(TagPrefix.GetTagName(), Spec);
+}
+
+float UPF2TemlCalculationBase::CalculateProficiencyBonus(const FName TagPrefix, const FGameplayEffectSpec& Spec)
+{
+	return CalculateProficiencyBonus(TagPrefix.GetPlainNameString(), Spec);
+}
+
+float UPF2TemlCalculationBase::CalculateProficiencyBonus(const FString TagPrefix, const FGameplayEffectSpec& Spec)
 {
 	float						ProficiencyBonus	= 0.0f;
 	const FGameplayTagContainer	*SourceTags			= Spec.CapturedSourceTags.GetAggregatedTags();

@@ -33,7 +33,25 @@ namespace GameplayAbilityUtils
 	 * @param Tags
 	 *   The list of tags in which to search.
 	 * @param TagNameOrPrefix
-	 *   The name of the tag or the prefix.
+	 *   The name of the tag or the prefix; as an FName.
+	 *
+	 * @return
+	 *   - TRUE if given a tag name, and a tag with the specified name is present in the tag list.
+	 *   - TRUE if given a tag prefix, and there is a tag present in the tag list that starts with that prefix.
+	 *   - FALSE, otherwise.
+	 */
+	FORCEINLINE static bool HasTag(const FGameplayTagContainer *Tags, const FName TagNameOrPrefix)
+	{
+		return Tags->HasTag(FGameplayTag::RequestGameplayTag(TagNameOrPrefix));
+	}
+
+	/**
+	 * Checks if a tag with the given name or prefix is present.
+	 *
+	 * @param Tags
+	 *   The list of tags in which to search.
+	 * @param TagNameOrPrefix
+	 *   The name of the tag or the prefix; as a string.
 	 *
 	 * @return
 	 *   - TRUE if given a tag name, and a tag with the specified name is present in the tag list.
