@@ -22,10 +22,10 @@ protected:
 	 * Calculates the character's TEML proficiency in this stat.
 	 *
 	 * @param TagPrefix
-	 *   The prefix of the TEML proficiency to examine; as tag.
+	 *	The prefix of the TEML proficiency to examine; as tag.
 	 *
 	 * @param Spec
-	 *   The Gameplay Effect (GE) specification that provides information about the character and their proficiencies.
+	 *	The Gameplay Effect (GE) specification that provides information about the character and their proficiencies.
 	 */
 	static float CalculateProficiencyBonus(const FGameplayTag TagPrefix, const FGameplayEffectSpec& Spec);
 
@@ -33,10 +33,10 @@ protected:
 	 * Calculates the character's TEML proficiency in this stat.
 	 *
 	 * @param TagPrefix
-	 *   The prefix of the TEML proficiency to examine; as a tag name.
+	 *	The prefix of the TEML proficiency to examine; as a tag name.
 	 *
 	 * @param Spec
-	 *   The Gameplay Effect (GE) specification that provides information about the character and their proficiencies.
+	 *	The Gameplay Effect (GE) specification that provides information about the character and their proficiencies.
 	 */
 	static float CalculateProficiencyBonus(const FName TagPrefix, const FGameplayEffectSpec& Spec);
 
@@ -44,10 +44,10 @@ protected:
 	 * Calculates the character's TEML proficiency in this stat.
 	 *
 	 * @param TagPrefix
-	 *   The prefix of the TEML proficiency to examine; as a string.
+	 *	The prefix of the TEML proficiency to examine; as a string.
 	 *
 	 * @param Spec
-	 *   The Gameplay Effect (GE) specification that provides information about the character and their proficiencies.
+	 *	The Gameplay Effect (GE) specification that provides information about the character and their proficiencies.
 	 */
 	static float CalculateProficiencyBonus(const FString TagPrefix, const FGameplayEffectSpec& Spec);
 };

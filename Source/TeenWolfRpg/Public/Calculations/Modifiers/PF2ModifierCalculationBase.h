@@ -39,12 +39,12 @@ public:
 	 * boost.
 	 *
 	 * @param SkillAbilityAttribute
-	 *   The RPG attribute for the character ability that contributes to proficiency in the skill. For example,
-	 *   "URPGAttributeSet::GetAbDexterityModifierAttribute()" for Acrobatics,
-	 *   "URPGAttributeSet::GetAbIntelligenceModifierAttribute()" for Arcana, etc.)
+	 *	The RPG attribute for the character ability that contributes to proficiency in the skill. For example,
+	 *	"URPGAttributeSet::GetAbDexterityModifierAttribute()" for Acrobatics,
+	 *	"URPGAttributeSet::GetAbIntelligenceModifierAttribute()" for Arcana, etc.)
 	 * @param SkillGameplayTagPrefix
-	 *   The tag prefix to use for checking a character's training in the skill. For example, "Skill.Acrobatics" or
-	 *   "Skill.Arcana".
+	 *	The tag prefix to use for checking a character's training in the skill. For example, "Skill.Acrobatics" or
+	 *	"Skill.Arcana".
 	 */
 	explicit UPF2ModifierCalculationBase(const FGameplayAttribute SkillAbilityAttribute,
 										 const FString SkillGameplayTagPrefix);
@@ -56,11 +56,11 @@ public:
 	 * methods to provide the source skill and skill tags.
 	 *
 	 * @param Spec
-	 *   The Gameplay Effect (GE) specification that provides information about the character attributes for which a
-	 *   calculated skill proficiency is desired.
+	 *	The Gameplay Effect (GE) specification that provides information about the character attributes for which a
+	 *	calculated skill proficiency is desired.
 	 *
 	 * @return
-	 *   The calculated skill proficiency.
+	 *	The calculated skill proficiency.
 	 */
 	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
 

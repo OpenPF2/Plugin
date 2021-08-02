@@ -49,12 +49,12 @@ protected:
 	 * ... and so on.
 	 *
 	 * @param AbilityAttribute
-	 *   The type of ability score for which an ability modifier is desired.
+	 *	The type of ability score for which an ability modifier is desired.
 	 * @param AbilityScore
-	 *   The current base value of the ability attribute.
+	 *	The current base value of the ability attribute.
 	 *
 	 * @return
-	 *   The ability modifier.
+	 *	The ability modifier.
 	 */
 	virtual float DoCalculation(const FGameplayAttribute AbilityAttribute, const float AbilityScore) const override;
 };

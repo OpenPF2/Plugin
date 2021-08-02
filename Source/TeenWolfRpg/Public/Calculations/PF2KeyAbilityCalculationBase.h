@@ -44,14 +44,14 @@ public:
 	 * boost.
 	 *
 	 * @param StatGameplayTagPrefix
-	 *   The tag prefix to use for checking a character's training in the stat. For example, "ClassDc", "SpellAttack",
-	 *   or "SpellDc".
+	 *	The tag prefix to use for checking a character's training in the stat. For example, "ClassDc", "SpellAttack",
+	 *	or "SpellDc".
 	 * @param KeyAbilityGameplayTagPrefix
-	 *   The tag prefix to use to determine the key ability for this stat.  For the Class DC, this is "KeyAbility". For
-	 *   Spell Attack and Spell DC, this is "SpellcastingKeyAbility".
+	 *	The tag prefix to use to determine the key ability for this stat.  For the Class DC, this is "KeyAbility". For
+	 *	Spell Attack and Spell DC, this is "SpellcastingKeyAbility".
 	 * @param BaseValue
-	 *   The base value for this stat. For DC stats, this is usually "10". For other stats (e.g. Spell Attack Roll),
-	 *   this is 0.
+	 *	The base value for this stat. For DC stats, this is usually "10". For other stats (e.g. Spell Attack Roll),
+	 *	this is 0.
 	 */
 	explicit UPF2KeyAbilityCalculationBase(const FString StatGameplayTagPrefix,
 										   const FString KeyAbilityGameplayTagPrefix,
@@ -61,11 +61,11 @@ public:
 	 * Calculates this stat based on the Key Attribute captured by the provided GE specification.
 	 *
 	 * @param Spec
-	 *   The Gameplay Effect (GE) specification that provides information about the character attributes for which a
-	 *   calculated stat is desired.
+	 *	The Gameplay Effect (GE) specification that provides information about the character attributes for which a
+	 *	calculated stat is desired.
 	 *
 	 * @return
-	 *   The calculated stat value.
+	 *	The calculated stat value.
 	 */
 	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
 
@@ -114,9 +114,9 @@ protected:
 	 * This is used to ensure we can retrieve the modifier for the specified ability later in the calculation phase.
 	 *
 	 * @param KeyAbilityTagName
-	 *   The name of the gameplay tag that a character must have for the ability to be considered "key".
+	 *	The name of the gameplay tag that a character must have for the ability to be considered "key".
 	 * @param Attribute
-	 *   The definition of the attribute to capture.
+	 *	The definition of the attribute to capture.
 	 */
 	void DefineKeyAbilityCapture(const FString KeyAbilityTagName, const FGameplayAttribute Attribute);
 
@@ -124,8 +124,8 @@ protected:
 	 * Calculates the Key Ability modifier for the character.
 	 *
 	 * @param Spec
-	 *   The Gameplay Effect (GE) specification that provides information about the character attribute upon which a
-	 *   Key Ability modifier is desired.
+	 *	The Gameplay Effect (GE) specification that provides information about the character attribute upon which a
+	 *	Key Ability modifier is desired.
 	 */
 	float CalculateKeyAbilityModifier(const FGameplayEffectSpec& Spec) const;
 
@@ -133,13 +133,13 @@ protected:
 	 * Determines which ability is the character's key modifier.
 	 *
 	 * @param SourceTags
-	 *   The tags on the character. A tag in this list should indicate the character's Key Ability (e.g.
-	 *   "KeyAbility.Strength").
+	 *	The tags on the character. A tag in this list should indicate the character's Key Ability (e.g.
+	 *	"KeyAbility.Strength").
 	 *
 	 * @return
-	 *   Either a capture definition that has a valid source attribute that can be used to capture the Key Ability
-	 *   modifier that corresponds to the character's Key Ability; or, a capture definition that has an invalid source
-	 *   attribute, signifying that the character is missing a key attribute tag.
+	 *	Either a capture definition that has a valid source attribute that can be used to capture the Key Ability
+	 *	modifier that corresponds to the character's Key Ability; or, a capture definition that has an invalid source
+	 *	attribute, signifying that the character is missing a key attribute tag.
 	 */
 	FGameplayEffectAttributeCaptureDefinition DetermineKeyAbility(const FGameplayTagContainer* SourceTags) const;
 };
