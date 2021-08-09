@@ -1,0 +1,146 @@
+﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+//
+// Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
+//	 - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
+//	 - System Reference Document, Copyright 2000, Wizards of the Coast, Inc.
+//	 - Pathfinder Core Rulebook (Second Edition), Copyright 2019, Paizo Inc.
+// Except for material designated as Product Identity, the game mechanics and logic in this file are Open Game Content,
+// as defined in the Open Game License version 1.0a, Section 1(d) (see accompanying LICENSE.TXT). No portion of this
+// file other than the material designated as Open Game Content may be reproduced in any form without written
+// permission.
+
+#include "Calculations/PF2KeyAbilityCalculationBase.h"
+
+#include "OpenPF2Core.h"
+#include "GameplayAbilityUtils.h"
+#include "Abilities/PF2AttributeSet.h"
+
+UPF2KeyAbilityCalculationBase::UPF2KeyAbilityCalculationBase() :
+	UPF2KeyAbilityCalculationBase(
+		TEXT(""),
+		TEXT("KeyAbility")
+	)
+{
+}
+
+UPF2KeyAbilityCalculationBase::UPF2KeyAbilityCalculationBase(const FString StatGameplayTagPrefix,
+															 const FString KeyAbilityGameplayTagPrefix,
+															 const float BaseValue) :
+	UPF2TemlCalculationBase(),
+	StatGameplayTagPrefix(StatGameplayTagPrefix),
+	BaseValue(BaseValue)
+{
+	this->DefineKeyAbilityCapture(
+		KeyAbilityGameplayTagPrefix + ".Strength",
+		UPF2AttributeSet::GetAbStrengthModifierAttribute()
+	);
+
+	this->DefineKeyAbilityCapture(
+		KeyAbilityGameplayTagPrefix + ".Dexterity",
+		UPF2AttributeSet::GetAbDexterityModifierAttribute()
+	);
+
+	this->DefineKeyAbilityCapture(
+		KeyAbilityGameplayTagPrefix + ".Constitution",
+		UPF2AttributeSet::GetAbConstitutionModifierAttribute()
+	);
+
+	this->DefineKeyAbilityCapture(
+		KeyAbilityGameplayTagPrefix + ".Intelligence",
+		UPF2AttributeSet::GetAbIntelligenceModifierAttribute()
+	);
+
+	this->DefineKeyAbilityCapture(
+		KeyAbilityGameplayTagPrefix + ".Wisdom",
+		UPF2AttributeSet::GetAbWisdomModifierAttribute()
+	);
+
+	this->DefineKeyAbilityCapture(
+		KeyAbilityGameplayTagPrefix + ".Charisma",
+		UPF2AttributeSet::GetAbCharismaModifierAttribute()
+	);
+}
+
+void UPF2KeyAbilityCalculationBase::DefineKeyAbilityCapture(const FString KeyAbilityTagName,
+															const FGameplayAttribute Attribute)
+{
+	const FGameplayEffectAttributeCaptureDefinition CaptureDefinition =
+		GameplayAbilityUtils::BuildSourceCaptureFor(Attribute);
+
+	this->KeyAbilityCaptureDefinitions.Add(
+		KeyAbilityTagName,
+		CaptureDefinition
+	);
+
+	this->RelevantAttributesToCapture.Add(CaptureDefinition);
+}
+
+float UPF2KeyAbilityCalculationBase::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
+{
+	// Logic shared by the "Class DC", "Spell Attack Roll", and "Spell DC" calculations.
+	// "A class DC ... equals 10 plus their proficiency bonus for their class DC (+3 for most 1st-level characters) plus
+	// the modifier for the class’s key ability score."
+	//
+	// Source: Pathfinder 2E Core Rulebook, page 29, "Class DC".
+	//
+	//
+	// "Spell attack roll = your spellcasting ability modifier + proficiency bonus + other bonuses + penalties
+	// Spell DC = 10 + your spellcasting ability modifier + proficiency bonus + other bonuses + penalties"
+	//
+	// Source: Pathfinder 2E Core Rulebook, page 298, "Spell Attack Roll and Spell DC".
+	const float	ProficiencyBonus	= CalculateProficiencyBonus(this->StatGameplayTagPrefix, Spec),
+				KeyAbilityModifier	= CalculateKeyAbilityModifier(Spec),
+				AbilityScore		= this->BaseValue + ProficiencyBonus + KeyAbilityModifier;
+
+	UE_LOG(
+		LogPf2Core,
+		VeryVerbose,
+		TEXT("Calculated key ability score ('%s'): %f + %f + %f = %f"),
+		*(this->StatGameplayTagPrefix),
+		this->BaseValue,
+		ProficiencyBonus,
+		KeyAbilityModifier,
+		AbilityScore
+	);
+
+	return AbilityScore;
+}
+
+float UPF2KeyAbilityCalculationBase::CalculateKeyAbilityModifier(const FGameplayEffectSpec& Spec) const
+{
+	float											KeyAbilityModifier			= 0.0f;
+	const FGameplayTagContainer						*SourceTags					= Spec.CapturedSourceTags.GetAggregatedTags();
+	const FGameplayEffectAttributeCaptureDefinition	KeyAbilityCaptureDefinition	= DetermineKeyAbility(SourceTags);
+
+	if (KeyAbilityCaptureDefinition.AttributeToCapture.IsValid())
+	{
+		const FGameplayTagContainer		*TargetTags				= Spec.CapturedTargetTags.GetAggregatedTags();
+		FAggregatorEvaluateParameters	EvaluationParameters;
+
+		EvaluationParameters.SourceTags = SourceTags;
+		EvaluationParameters.TargetTags = TargetTags;
+
+		GetCapturedAttributeMagnitude(KeyAbilityCaptureDefinition, Spec, EvaluationParameters, KeyAbilityModifier);
+	}
+
+	return KeyAbilityModifier;
+}
+
+FGameplayEffectAttributeCaptureDefinition UPF2KeyAbilityCalculationBase::DetermineKeyAbility(
+																		const FGameplayTagContainer* SourceTags) const
+{
+	FGameplayEffectAttributeCaptureDefinition KeyAbilityCaptureDefinition;
+
+	for (auto PairIterator = this->KeyAbilityCaptureDefinitions.CreateConstIterator(); PairIterator; ++PairIterator)
+	{
+		const FString TagName = PairIterator.Key();
+
+		if (GameplayAbilityUtils::HasTag(SourceTags, TagName))
+		{
+			KeyAbilityCaptureDefinition = PairIterator.Value();
+			break;
+		}
+	}
+
+	return KeyAbilityCaptureDefinition;
+}
