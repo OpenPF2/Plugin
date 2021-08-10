@@ -24,6 +24,7 @@ public class OpenPF2Core: ModuleRules
 			{
 				"CoreUObject",
 				"Engine",
+				"GameplayAbilities",
 				"Slate",
 				"SlateCore",
 			}
