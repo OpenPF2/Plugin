@@ -80,7 +80,7 @@ public:
 	FGameplayAttributeData HitPoints;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, HitPoints)
 
-	/** The maximum number of hit points for this character (for modification via GameplayEffects). */
+	/** The maximum number of hit points for this character. */
 	UPROPERTY(BlueprintReadOnly, Category = "HitPoints", ReplicatedUsing=OnRep_MaxHitPoints)
 	FGameplayAttributeData MaxHitPoints;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, MaxHitPoints)
@@ -221,12 +221,12 @@ public:
 	FGameplayAttributeData ClassDifficultyClass;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, ClassDifficultyClass)
 
-	/** How fast this character can move. */
+	/** How fast this character can move (in centimeters per second). */
 	UPROPERTY(BlueprintReadOnly, Category = "Speed", ReplicatedUsing = OnRep_Speed)
 	FGameplayAttributeData Speed;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, Speed)
 
-	/** The maximum speed of this character (for modification via GameplayEffects). */
+	/** The maximum speed of this character (in centimeters per second). */
 	UPROPERTY(BlueprintReadOnly, Category = "Speed", ReplicatedUsing = OnRep_MaxSpeed)
 	FGameplayAttributeData MaxSpeed;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, MaxSpeed)
