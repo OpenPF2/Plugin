@@ -86,6 +86,25 @@ public:
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, MaxHitPoints)
 
 	/**
+	 * The number of ability boosts that this character currently has applied.
+	 *
+	 * Capped by AbBoostLimit.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbBoostCount)
+	FGameplayAttributeData AbBoostCount;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbBoostCount)
+
+	/**
+	 * The limit on how many ability boosts this character can apply.
+	 *
+	 * This caps AbBoostCount, but can be a larger number than AbBoostCount if the character is eligible for additional
+	 * ability boosts that the player or story (for NPCs) has not yet applied.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbBoostLimit)
+	FGameplayAttributeData AbBoostLimit;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbBoostLimit)
+
+	/**
 	 * Strength measures a character’s physical power.
 	 *
 	 * Strength is important for characters who engage in hand-to-hand combat. The Strength modifier gets added to melee
@@ -438,6 +457,12 @@ public:
 
 	UFUNCTION()
 	virtual void OnRep_MaxHitPoints(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_AbBoostCount(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_AbBoostLimit(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
 	virtual void OnRep_AbStrength(const FGameplayAttributeData& OldValue);

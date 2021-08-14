@@ -1,4 +1,6 @@
 Stat,Value
+DefaultBoostCount,0
+DefaultBoostLimit,4
 DefaultStrength,10
 DefaultDexterity,10
 DefaultConstitution,10

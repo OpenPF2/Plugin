@@ -17,6 +17,8 @@ UPF2AttributeSet::UPF2AttributeSet()
 	: Experience(0.0f)
 	, HitPoints(1.0f)
 	, MaxHitPoints(1.0f)
+	, AbBoostCount(0.0f)
+	, AbBoostLimit(0.0f)
 	, AbStrength(0.0f)
 	, AbStrengthModifier(0.0f)
 	, AbDexterity(10.0f)
@@ -66,6 +68,8 @@ void UPF2AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(UPF2AttributeSet, Experience);
 	DOREPLIFETIME(UPF2AttributeSet, HitPoints);
 	DOREPLIFETIME(UPF2AttributeSet, MaxHitPoints);
+	DOREPLIFETIME(UPF2AttributeSet, AbBoostCount);
+	DOREPLIFETIME(UPF2AttributeSet, AbBoostLimit);
 	DOREPLIFETIME(UPF2AttributeSet, AbStrength);
 	DOREPLIFETIME(UPF2AttributeSet, AbStrengthModifier);
 	DOREPLIFETIME(UPF2AttributeSet, AbDexterity);
@@ -119,6 +123,16 @@ void UPF2AttributeSet::OnRep_HitPoints(const FGameplayAttributeData& OldValue)
 void UPF2AttributeSet::OnRep_MaxHitPoints(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, MaxHitPoints, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_AbBoostCount(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, AbBoostCount, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_AbBoostLimit(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, AbBoostLimit, OldValue);
 }
 
 void UPF2AttributeSet::OnRep_AbStrength(const FGameplayAttributeData& OldValue)
