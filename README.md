@@ -6,7 +6,25 @@ All abilities and stats are implemented using the Combat Ability System (CAS)
 plug-in that ships with Unreal Engine.
 
 ## Installation
-(To be documented)
+1. Check-out the project into the `Plugins/` folder of your larger UE4 project.
+   Ensure that the folder into which you check-out the project is named 
+   `OpenPF2Core`.
+2. Modify the `*.uproject` file of your larger UE4 project to ensure that both
+   the `OpenPF2Core` and `GameplayAbilities` plug-ins are enabled, like so:
+   ```json
+   "Plugins": [
+     {
+       "Name": "GameplayAbilities",
+       "Enabled": true
+     },
+     {
+       "Name": "OpenPF2Core",
+       "Enabled": true
+     }
+   ]
+   ```
+3. Re-generate Visual Studio/Rider project files.
+4. Compile your project.
 
 ## Licensing
 Since this plug-in incorporates content and elements that were originally
@@ -17,6 +35,6 @@ code base are covered by each license.
 
 ---
 <small>
-Pathfinder is a trademark of Paizo Publishing, LLC. Nothing in this project is
-officially approved by Paizo Publishing.
+Paizo and Pathfinder are trademarks of Paizo Inc. Nothing in this project is
+officially sanctioned or endorsed by Paizo Publishing.
 </small>
