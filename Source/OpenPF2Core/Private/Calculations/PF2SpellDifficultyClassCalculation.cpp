@@ -3,9 +3,9 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-#include "Calculations/DifficultyClass/PF2ClassDifficultyClassCalculation.h"
+#include "Calculations/PF2SpellDifficultyClassCalculation.h"
 
-UPF2ClassDifficultyClassCalculation::UPF2ClassDifficultyClassCalculation() :
-	UPF2KeyAbilityCalculationBase(TEXT("ClassDc"), TEXT("KeyAbility"), 10.0f)
+UPF2SpellDifficultyClassCalculation::UPF2SpellDifficultyClassCalculation() :
+	UPF2KeyAbilityCalculationBase(TEXT("SpellDc"), TEXT("SpellcastingKeyAbility"), 10.0f)
 {
 }
