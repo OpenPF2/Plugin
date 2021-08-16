@@ -439,6 +439,25 @@ public:
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkThieveryModifier)
 
 	/**
+	 * The number of ancestry feats that this character currently has applied.
+	 *
+	 * Capped by FeAncestryFeatLimit.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Feats", ReplicatedUsing=OnRep_FeAncestryFeatCount)
+	FGameplayAttributeData FeAncestryFeatCount;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, FeAncestryFeatCount)
+
+	/**
+	 * The limit on how many ancestry feats this character can apply.
+	 *
+	 * This caps FeAncestryFeatCount, but can be a larger number than FeAncestryFeatCount if the character is eligible for additional
+	 * ancestry feats that the player or story (for NPCs) has not yet applied.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Feats", ReplicatedUsing=OnRep_FeAncestryFeatLimit)
+	FGameplayAttributeData FeAncestryFeatLimit;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, FeAncestryFeatLimit)
+
+	/**
 	 * Damage is a 'temporary' attribute used by the DamageExecution to calculate final damage.
 	 *
 	 * This turns into -HitPoints.
@@ -577,4 +596,10 @@ public:
 
 	UFUNCTION()
     virtual void OnRep_SkThieveryModifier(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+    virtual void OnRep_FeAncestryFeatCount(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_FeAncestryFeatLimit(const FGameplayAttributeData& OldValue);
 };

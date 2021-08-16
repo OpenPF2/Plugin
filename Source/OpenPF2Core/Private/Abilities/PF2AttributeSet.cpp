@@ -57,6 +57,8 @@ UPF2AttributeSet::UPF2AttributeSet()
 	, SkStealthModifier(0.0f)
 	, SkSurvivalModifier(0.0f)
 	, SkThieveryModifier(0.0f)
+	, FeAncestryFeatCount(0.0f)
+	, FeAncestryFeatLimit(0.0f)
 	, Damage(0.0f)
 {
 }
@@ -68,6 +70,8 @@ void UPF2AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(UPF2AttributeSet, Experience);
 	DOREPLIFETIME(UPF2AttributeSet, HitPoints);
 	DOREPLIFETIME(UPF2AttributeSet, MaxHitPoints);
+	DOREPLIFETIME(UPF2AttributeSet, FeAncestryFeatCount);
+	DOREPLIFETIME(UPF2AttributeSet, FeAncestryFeatLimit);
 	DOREPLIFETIME(UPF2AttributeSet, AbBoostCount);
 	DOREPLIFETIME(UPF2AttributeSet, AbBoostLimit);
 	DOREPLIFETIME(UPF2AttributeSet, AbStrength);
@@ -323,6 +327,16 @@ void UPF2AttributeSet::OnRep_SkSurvivalModifier(const FGameplayAttributeData& Ol
 void UPF2AttributeSet::OnRep_SkThieveryModifier(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, SkThieveryModifier, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_FeAncestryFeatCount(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, FeAncestryFeatCount, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_FeAncestryFeatLimit(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, FeAncestryFeatLimit, OldValue);
 }
 
 void UPF2AttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
