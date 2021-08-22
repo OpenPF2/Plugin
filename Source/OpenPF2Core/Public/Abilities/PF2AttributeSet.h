@@ -13,6 +13,8 @@
 
 #include <AttributeSet.h>
 #include <AbilitySystemComponent.h>
+
+#include "PF2AbilityType.h"
 #include "PF2AttributeSet.generated.h"
 
 // Uses macros from AttributeSet.h
@@ -27,7 +29,29 @@ UCLASS()
 class OPENPF2CORE_API UPF2AttributeSet : public UAttributeSet
 {
 	GENERATED_BODY()
+
 public:
+
+	// =================================================================================================================
+	// Static Utility Methods
+	// =================================================================================================================
+	/**
+	 * Gets the attribute that corresponds to a character ability.
+	 *
+	 * @param AbilityType
+	 *   The type of ability for which an attribute is desired.
+	 *
+	 * @return The character attribute to which the ability corresponds.
+	 */
+	static FGameplayAttribute GetByAbilityType(EPF2AbilityType AbilityType);
+
+	/**
+	 * Gets the mappings from ability types to attributes.
+	 *
+	 * @return
+	 *   A map from ability types to attributes.
+	 */
+	static TMap<EPF2AbilityType, FGameplayAttribute> GetAbilityTypeToAttributeMappings();
 
 	// =================================================================================================================
 	// Constructors

@@ -13,6 +13,27 @@
 
 #include <Net/UnrealNetwork.h>
 
+FGameplayAttribute UPF2AttributeSet::GetByAbilityType(const EPF2AbilityType AbilityType)
+{
+	TMap<EPF2AbilityType, FGameplayAttribute> TypeMappings = GetAbilityTypeToAttributeMappings();
+
+	return TypeMappings[AbilityType];
+}
+
+TMap<EPF2AbilityType, FGameplayAttribute> UPF2AttributeSet::GetAbilityTypeToAttributeMappings()
+{
+	TMap<EPF2AbilityType, FGameplayAttribute> Mappings;
+
+	Mappings.Add(EPF2AbilityType::Charisma, UPF2AttributeSet::GetAbCharismaAttribute());
+	Mappings.Add(EPF2AbilityType::Constitution, UPF2AttributeSet::GetAbConstitutionAttribute());
+	Mappings.Add(EPF2AbilityType::Dexterity, UPF2AttributeSet::GetAbDexterityAttribute());
+	Mappings.Add(EPF2AbilityType::Intelligence, UPF2AttributeSet::GetAbIntelligenceAttribute());
+	Mappings.Add(EPF2AbilityType::Strength, UPF2AttributeSet::GetAbStrengthAttribute());
+	Mappings.Add(EPF2AbilityType::Wisdom, UPF2AttributeSet::GetAbWisdomAttribute());
+
+	return Mappings;
+}
+
 UPF2AttributeSet::UPF2AttributeSet()
 	: Experience(0.0f)
 	, HitPoints(1.0f)
