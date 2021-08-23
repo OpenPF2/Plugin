@@ -33,10 +33,11 @@ float UPF2AbilityBoostCalculation::DoCalculation(const FGameplayAttribute Abilit
 	UE_LOG(
 		LogPf2Core,
 		VeryVerbose,
-		TEXT("Calculated boost for ability score attribute ('%s'): %f + %f"),
+		TEXT("Calculated MMC boost for ability score attribute ('%s'): %f + %f = %f"),
 		*(AbilityAttribute.GetName()),
 		AbilityScore,
-		BoostedScore
+		BoostedScore,
+		AbilityScore + BoostedScore
 	);
 
 	return BoostedScore;

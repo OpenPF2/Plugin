@@ -17,7 +17,12 @@
 #include "PF2AbilityBoostCalculation.generated.h"
 
 /**
- * An MMC for adding points to an ability score.
+ * An MMC for boosting a single ability score.
+ *
+ * Ability boosts are available via both an MMC and a "Gameplay Effect Execution Calculation" (GEX). Prefer the GEX
+ * variation instead of this MMC variation whenever possible, as the GEX variation automatically increments the count of
+ * how many boosts are applied. The MMC variant should be used only when an ability needs to be boosted in response
+ * to changes in tags on the source or target.
  */
 UCLASS()
 class OPENPF2CORE_API UPF2AbilityBoostCalculation : public UPF2AbilityCalculationBase
