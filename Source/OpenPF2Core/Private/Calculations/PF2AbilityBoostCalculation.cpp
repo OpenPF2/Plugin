@@ -17,17 +17,17 @@
 float UPF2AbilityBoostCalculation::DoCalculation(const FGameplayAttribute AbilityAttribute,
 												 const float AbilityScore) const
 {
-	float BoostedScore;
+	float Boost;
 
 	// From the Pathfinder 2E Core Rulebook, page 68, "Ability Boosts":
 	// "Boosting an ability score increases it by 1 if it's already 18 or above, or by 2 if it starts out below 18."
 	if (AbilityScore < 18.0f)
 	{
-		BoostedScore = 2.0f;
+		Boost = 2.0f;
 	}
 	else
 	{
-		BoostedScore = 1.0f;
+		Boost = 1.0f;
 	}
 
 	UE_LOG(
@@ -36,9 +36,9 @@ float UPF2AbilityBoostCalculation::DoCalculation(const FGameplayAttribute Abilit
 		TEXT("Calculated MMC boost for ability score attribute ('%s'): %f + %f = %f"),
 		*(AbilityAttribute.GetName()),
 		AbilityScore,
-		BoostedScore,
-		AbilityScore + BoostedScore
+		Boost,
+		AbilityScore + Boost
 	);
 
-	return BoostedScore;
+	return Boost;
 }
