@@ -38,15 +38,15 @@ namespace AbilityBoostTests
 	};
 }
 
-BEGIN_DEFINE_SPEC(FPF2AbilityBoostSpec, "OpenPF2.AbilityBoosts", EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
-	UWorld *World;
-	APF2TestPawn* TestPawn;
-	UAbilitySystemComponent* PawnAbilityComponent;
+BEGIN_DEFINE_SPEC(FPF2AbilityBoostSpec, "OpenPF2.AbilityBoosts",
+                  EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+	UWorld*                                                 World;
+	APF2TestPawn*                                           TestPawn;
+	UAbilitySystemComponent*                                PawnAbilityComponent;
 	TMap<FString, TSubclassOf<UPF2AbilityBoostCalculation>> BoostMMCs;
-	TMap<FString, TSubclassOf<UGameplayEffect>> BoostGEs;
+	TMap<FString, TSubclassOf<UGameplayEffect>>             BoostGEs;
 
-protected:
-	template<typename BlueprintType>
+	template <typename BlueprintType>
 	static TSubclassOf<BlueprintType> LoadBlueprint(const FString FolderPath, const FString BlueprintName);
 
 	void SetupWorld();
@@ -56,14 +56,14 @@ protected:
 	void LoadMMCs();
 	void LoadGEs();
 
-	template<typename Modifier_T>
-	static FGameplayModifierInfo& AddModifier(UGameplayEffect* Effect,
-											  FProperty* Property,
-											  const EGameplayModOp::Type Op,
-											  const Modifier_T& Magnitude);
+	template <typename Modifier_T>
+	static FGameplayModifierInfo& AddModifier(UGameplayEffect*           Effect,
+	                                          FProperty*                 Property,
+	                                          const EGameplayModOp::Type Op,
+	                                          const Modifier_T&          Magnitude);
 END_DEFINE_SPEC(FPF2AbilityBoostSpec)
 
-template<typename BlueprintType>
+template <typename BlueprintType>
 TSubclassOf<BlueprintType> FPF2AbilityBoostSpec::LoadBlueprint(const FString FolderPath, const FString BlueprintName)
 {
 	const FString ObjectPath =
@@ -121,18 +121,18 @@ void FPF2AbilityBoostSpec::LoadGEs()
 }
 
 template <typename Modifier_T>
-FGameplayModifierInfo& FPF2AbilityBoostSpec::AddModifier(UGameplayEffect* Effect,
-														 FProperty* Property,
-														 const EGameplayModOp::Type Op,
-														 const Modifier_T& Magnitude)
+FGameplayModifierInfo& FPF2AbilityBoostSpec::AddModifier(UGameplayEffect*           Effect,
+                                                         FProperty*                 Property,
+                                                         const EGameplayModOp::Type Op,
+                                                         const Modifier_T&          Magnitude)
 {
-	const int32				NextIndex	= Effect->Modifiers.Num();
-	FGameplayModifierInfo&	Info		= Effect->Modifiers[NextIndex];
+	const int32            NextIndex = Effect->Modifiers.Num();
+	FGameplayModifierInfo& Info      = Effect->Modifiers[NextIndex];
 
 	Effect->Modifiers.SetNum(NextIndex + 1);
 
-	Info.ModifierMagnitude	= Magnitude;
-	Info.ModifierOp			= Op;
+	Info.ModifierMagnitude = Magnitude;
+	Info.ModifierOp        = Op;
 
 	Info.Attribute.SetUProperty(Property);
 
@@ -148,8 +148,8 @@ void FPF2AbilityBoostSpec::Define()
 		this->LoadMMCs();
 		this->LoadGEs();
 
-		this->TestPawn				= this->World->SpawnActor<APF2TestPawn>();
-		this->PawnAbilityComponent	= this->TestPawn->GetAbilitySystemComponent();
+		this->TestPawn             = this->World->SpawnActor<APF2TestPawn>();
+		this->PawnAbilityComponent = this->TestPawn->GetAbilitySystemComponent();
 
 		this->BeginPlay();
 	});
@@ -201,10 +201,11 @@ void FPF2AbilityBoostSpec::Define()
 
 				if (IsValid(EffectBP))
 				{
-					UGameplayEffect*			GameplayEffect		= EffectBP->GetDefaultObject<UGameplayEffect>();
-					constexpr float				StartingCharisma	= 10.0f;
-					const UPF2AttributeSet*		AttributeSet		= this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-					UPF2AttributeSet*			MutableAttributeSet = const_cast<UPF2AttributeSet *>(AttributeSet);
+					UGameplayEffect*            GameplayEffect      = EffectBP->GetDefaultObject<UGameplayEffect>();
+					constexpr float             StartingCharisma    = 10.0f,
+					                            BoostedCharisma     = StartingCharisma + 2;
+					const UPF2AttributeSet*     AttributeSet        = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
+					UPF2AttributeSet*           MutableAttributeSet = const_cast<UPF2AttributeSet*>(AttributeSet);
 					FActiveGameplayEffectHandle EffectHandle;
 
 					MutableAttributeSet->AbCharisma = StartingCharisma;
@@ -216,12 +217,19 @@ void FPF2AbilityBoostSpec::Define()
 					);
 
 					TestEqual(
-						TEXT("Base value changed to 12"),
+						FString::Format(TEXT("Base value changed to '{0}'"), { BoostedCharisma }),
 						this->PawnAbilityComponent->GetSet<UPF2AttributeSet>()->AbCharisma.GetBaseValue(),
-						12.0f
+						BoostedCharisma
 					);
 
 					this->PawnAbilityComponent->RemoveActiveGameplayEffect(EffectHandle);
+
+					// check that the value changed back
+					TestEqual(
+						FString::Format(TEXT("Base value changed to '{0}'"), { StartingCharisma }),
+						this->PawnAbilityComponent->GetSet<UPF2AttributeSet>()->AbCharisma.GetBaseValue(),
+						StartingCharisma
+					);
 				}
 				else
 				{
@@ -238,10 +246,11 @@ void FPF2AbilityBoostSpec::Define()
 
 				if (IsValid(EffectBP))
 				{
-					UGameplayEffect*			GameplayEffect		= EffectBP->GetDefaultObject<UGameplayEffect>();
-					constexpr float				StartingCharisma	= 18.0f;
-					const UPF2AttributeSet*		AttributeSet		= this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-					UPF2AttributeSet*			MutableAttributeSet = const_cast<UPF2AttributeSet *>(AttributeSet);
+					UGameplayEffect*            GameplayEffect      = EffectBP->GetDefaultObject<UGameplayEffect>();
+					constexpr float             StartingCharisma    = 18.0f,
+					                            BoostedCharisma     = StartingCharisma + 1;
+					const UPF2AttributeSet*     AttributeSet        = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
+					UPF2AttributeSet*           MutableAttributeSet = const_cast<UPF2AttributeSet*>(AttributeSet);
 					FActiveGameplayEffectHandle EffectHandle;
 
 					MutableAttributeSet->AbCharisma = StartingCharisma;
@@ -253,12 +262,19 @@ void FPF2AbilityBoostSpec::Define()
 					);
 
 					TestEqual(
-						TEXT("Base value changed to 12"),
+						FString::Format(TEXT("Base value changed to '{0}'"), { BoostedCharisma }),
 						this->PawnAbilityComponent->GetSet<UPF2AttributeSet>()->AbCharisma.GetBaseValue(),
-						19.0f
+						BoostedCharisma
 					);
 
 					this->PawnAbilityComponent->RemoveActiveGameplayEffect(EffectHandle);
+
+					// check that the value changed back
+					TestEqual(
+						FString::Format(TEXT("Base value changed to '{0}'"), { StartingCharisma }),
+						this->PawnAbilityComponent->GetSet<UPF2AttributeSet>()->AbCharisma.GetBaseValue(),
+						StartingCharisma
+					);
 				}
 				else
 				{
@@ -275,10 +291,11 @@ void FPF2AbilityBoostSpec::Define()
 
 				if (IsValid(EffectBP))
 				{
-					UGameplayEffect*			GameplayEffect		= EffectBP->GetDefaultObject<UGameplayEffect>();
-					constexpr float				StartingCharisma	= 19.0f;
-					const UPF2AttributeSet*		AttributeSet		= this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-					UPF2AttributeSet*			MutableAttributeSet = const_cast<UPF2AttributeSet *>(AttributeSet);
+					UGameplayEffect*            GameplayEffect      = EffectBP->GetDefaultObject<UGameplayEffect>();
+					constexpr float             StartingCharisma    = 19.0f,
+					                            BoostedCharisma     = StartingCharisma + 1;
+					const UPF2AttributeSet*     AttributeSet        = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
+					UPF2AttributeSet*           MutableAttributeSet = const_cast<UPF2AttributeSet*>(AttributeSet);
 					FActiveGameplayEffectHandle EffectHandle;
 
 					MutableAttributeSet->AbCharisma = StartingCharisma;
@@ -290,12 +307,19 @@ void FPF2AbilityBoostSpec::Define()
 					);
 
 					TestEqual(
-						TEXT("Base value changed to 20"),
+						FString::Format(TEXT("Base value changed to '{0}'"), { BoostedCharisma }),
 						this->PawnAbilityComponent->GetSet<UPF2AttributeSet>()->AbCharisma.GetBaseValue(),
-						20.0f
+						BoostedCharisma
 					);
 
 					this->PawnAbilityComponent->RemoveActiveGameplayEffect(EffectHandle);
+
+					// check that the value changed back
+					TestEqual(
+						FString::Format(TEXT("Base value changed to '{0}'"), { StartingCharisma }),
+						this->PawnAbilityComponent->GetSet<UPF2AttributeSet>()->AbCharisma.GetBaseValue(),
+						StartingCharisma
+					);
 				}
 				else
 				{
@@ -303,14 +327,5 @@ void FPF2AbilityBoostSpec::Define()
 				}
 			});
 		});
-
-		//
-		// // remove the effect
-		// {
-		//
-		// }
-		//
-		// // check that the value changed back
-		// Test->TestEqual(TEXT("Mana Restored"), DestComponent->GetSet<UAbilitySystemTestAttributeSet>()->Mana, StartingMana);
 	});
 }
