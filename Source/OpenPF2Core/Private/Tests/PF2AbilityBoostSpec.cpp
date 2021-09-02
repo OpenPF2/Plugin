@@ -200,7 +200,15 @@ void FPF2AbilityBoostSpec::VerifyOtherBoostsUnaffected(const FString GameEffectN
 			FGameplayAttributeData& CurrentAttribute     = *(AttributePair.Value);
 			FString                 CurrentAttributeName = AttributePair.Key;
 
-			if (CurrentAttributeName != TargetAttributeName)
+			if (CurrentAttributeName == TargetAttributeName)
+			{
+				TestNotEqual(
+					CurrentAttributeName + ".BaseValue",
+					CurrentAttribute.GetBaseValue(),
+					10.0f
+				);
+			}
+			else
 			{
 				TestEqual(
 					CurrentAttributeName + ".BaseValue",
