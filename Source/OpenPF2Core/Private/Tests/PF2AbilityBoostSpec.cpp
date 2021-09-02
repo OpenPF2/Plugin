@@ -166,6 +166,12 @@ void FPF2AbilityBoostSpec::VerifyBoostApplied(const FString GameEffectName,
 		TestEqual(
 			TargetAttributeName + ".BaseValue",
 			TargetAttribute->GetBaseValue(),
+			StartingValue
+		);
+
+		TestEqual(
+			TargetAttributeName + ".CurrentValue",
+			TargetAttribute->GetCurrentValue(),
 			ExpectedValueAfterBoost
 		);
 	}
@@ -202,9 +208,15 @@ void FPF2AbilityBoostSpec::VerifyOtherBoostsUnaffected(const FString GameEffectN
 
 			if (CurrentAttributeName == TargetAttributeName)
 			{
-				TestNotEqual(
+				TestEqual(
 					CurrentAttributeName + ".BaseValue",
 					CurrentAttribute.GetBaseValue(),
+					10.0f
+				);
+
+				TestNotEqual(
+					CurrentAttributeName + ".CurrentValue",
+					CurrentAttribute.GetCurrentValue(),
 					10.0f
 				);
 			}
@@ -213,6 +225,12 @@ void FPF2AbilityBoostSpec::VerifyOtherBoostsUnaffected(const FString GameEffectN
 				TestEqual(
 					CurrentAttributeName + ".BaseValue",
 					CurrentAttribute.GetBaseValue(),
+					10.0f
+				);
+
+				TestEqual(
+					CurrentAttributeName + ".CurrentValue",
+					CurrentAttribute.GetCurrentValue(),
 					10.0f
 				);
 			}
@@ -244,6 +262,12 @@ void FPF2AbilityBoostSpec::VerifyBoostRemoved(const FString GameEffectName,
 		TestEqual(
 			TargetAttributeName + ".BaseValue",
 			TargetAttribute->GetBaseValue(),
+			StartingValue
+		);
+
+		TestEqual(
+			TargetAttributeName + ".CurrentValue",
+			TargetAttribute->GetCurrentValue(),
 			StartingValue
 		);
 	}
@@ -334,7 +358,7 @@ void FPF2AbilityBoostSpec::Define()
 
 			Describe("when GE is applied", [=, this]()
 			{
-				It("applies a boost of +2", [=, this]()
+				It("applies a boost of +2 to the current value", [=, this]()
 				{
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
@@ -361,7 +385,7 @@ void FPF2AbilityBoostSpec::Define()
 
 			Describe("when GE is applied", [=, this]()
 			{
-				It("applies a boost of +1", [=, this]()
+				It("applies a boost of +1 to the current value", [=, this]()
 				{
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
@@ -388,7 +412,7 @@ void FPF2AbilityBoostSpec::Define()
 
 			Describe("when GE is applied", [=, this]()
 			{
-				It("applies a boost of +1", [=, this]()
+				It("applies a boost of +1 to the current value", [=, this]()
 				{
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
@@ -421,7 +445,7 @@ void FPF2AbilityBoostSpec::Define()
 
 			Describe("when GE is applied", [=, this]()
 			{
-				It("applies a boost of +2", [=, this]()
+				It("applies a boost of +2 to the current value", [=, this]()
 				{
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
@@ -448,7 +472,7 @@ void FPF2AbilityBoostSpec::Define()
 
 			Describe("when GE is applied", [=, this]()
 			{
-				It("applies a boost of +1", [=, this]()
+				It("applies a boost of +1 to the current value", [=, this]()
 				{
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
@@ -475,7 +499,7 @@ void FPF2AbilityBoostSpec::Define()
 
 			Describe("when GE is applied", [=, this]()
 			{
-				It("applies a boost of +1", [=, this]()
+				It("applies a boost of +1 to the current value", [=, this]()
 				{
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
@@ -508,7 +532,7 @@ void FPF2AbilityBoostSpec::Define()
 
 			Describe("when GE is applied", [=, this]()
 			{
-				It("applies a boost of +2", [=, this]()
+				It("applies a boost of +2 to the current value", [=, this]()
 				{
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
@@ -535,7 +559,7 @@ void FPF2AbilityBoostSpec::Define()
 
 			Describe("when GE is applied", [=, this]()
 			{
-				It("applies a boost of +1", [=, this]()
+				It("applies a boost of +1 to the current value", [=, this]()
 				{
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
@@ -562,7 +586,7 @@ void FPF2AbilityBoostSpec::Define()
 
 			Describe("when GE is applied", [=, this]()
 			{
-				It("applies a boost of +1", [=, this]()
+				It("applies a boost of +1 to the current value", [=, this]()
 				{
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
@@ -595,7 +619,7 @@ void FPF2AbilityBoostSpec::Define()
 
 			Describe("when GE is applied", [=, this]()
 			{
-				It("applies a boost of +2", [=, this]()
+				It("applies a boost of +2 to the current value", [=, this]()
 				{
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
@@ -622,7 +646,7 @@ void FPF2AbilityBoostSpec::Define()
 
 			Describe("when GE is applied", [=, this]()
 			{
-				It("applies a boost of +1", [=, this]()
+				It("applies a boost of +1 to the current value", [=, this]()
 				{
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
@@ -649,7 +673,7 @@ void FPF2AbilityBoostSpec::Define()
 
 			Describe("when GE is applied", [=, this]()
 			{
-				It("applies a boost of +1", [=, this]()
+				It("applies a boost of +1 to the current value", [=, this]()
 				{
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
@@ -682,7 +706,7 @@ void FPF2AbilityBoostSpec::Define()
 
 			Describe("when GE is applied", [=, this]()
 			{
-				It("applies a boost of +2", [=, this]()
+				It("applies a boost of +2 to the current value", [=, this]()
 				{
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
@@ -709,7 +733,7 @@ void FPF2AbilityBoostSpec::Define()
 
 			Describe("when GE is applied", [=, this]()
 			{
-				It("applies a boost of +1", [=, this]()
+				It("applies a boost of +1 to the current value", [=, this]()
 				{
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
@@ -736,7 +760,7 @@ void FPF2AbilityBoostSpec::Define()
 
 			Describe("when GE is applied", [=, this]()
 			{
-				It("applies a boost of +1", [=, this]()
+				It("applies a boost of +1 to the current value", [=, this]()
 				{
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
@@ -769,7 +793,7 @@ void FPF2AbilityBoostSpec::Define()
 
 			Describe("when GE is applied", [=, this]()
 			{
-				It("applies a boost of +2", [=, this]()
+				It("applies a boost of +2 to the current value", [=, this]()
 				{
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
@@ -796,7 +820,7 @@ void FPF2AbilityBoostSpec::Define()
 
 			Describe("when GE is applied", [=, this]()
 			{
-				It("applies a boost of +1", [=, this]()
+				It("applies a boost of +1 to the current value", [=, this]()
 				{
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
@@ -823,7 +847,7 @@ void FPF2AbilityBoostSpec::Define()
 
 			Describe("when GE is applied", [=, this]()
 			{
-				It("applies a boost of +1", [=, this]()
+				It("applies a boost of +1 to the current value", [=, this]()
 				{
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
