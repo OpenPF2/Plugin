@@ -38,6 +38,8 @@ namespace AbilityBoostTests
 	};
 }
 
+typedef TMap<FString, FGameplayAttributeData*> FAttributeCapture;
+
 BEGIN_DEFINE_SPEC(FPF2AbilityBoostSpec, "OpenPF2.AbilityBoosts",
                   EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 	UWorld*                                                 World;
@@ -49,6 +51,8 @@ BEGIN_DEFINE_SPEC(FPF2AbilityBoostSpec, "OpenPF2.AbilityBoosts",
 	template <typename BlueprintType>
 	static TSubclassOf<BlueprintType> LoadBlueprint(const FString FolderPath, const FString BlueprintName);
 
+	static FAttributeCapture CaptureAttributes(const UPF2AttributeSet* AttributeSet);
+
 	void SetupWorld();
 	void BeginPlay() const;
 	void DestroyWorld() const;
@@ -56,18 +60,21 @@ BEGIN_DEFINE_SPEC(FPF2AbilityBoostSpec, "OpenPF2.AbilityBoosts",
 	void LoadMMCs();
 	void LoadGEs();
 
-	void VerifyBoostApplied(FString                 GameEffectName,
-	                        FGameplayAttributeData& Attribute,
-	                        float                   StartingValue,
-	                        float                   ExpectedValueAfterBoost);
+	void VerifyBoostApplied(const FString GameEffectName,
+	                        const FString TargetAttributeName,
+	                        const float   StartingValue,
+	                        const float   ExpectedValueAfterBoost);
 
-	FActiveGameplayEffectHandle ApplyGameEffect(FGameplayAttributeData&             Attribute, float StartingValue,
+	void VerifyOtherBoostsUnaffected(const FString GameEffectName,
+	                                 const FString TargetAttributeName);
+
+	void VerifyBoostRemoved(const FString GameEffectName,
+	                        const FString TargetAttributeName,
+	                        const float   StartingValue);
+
+	FActiveGameplayEffectHandle ApplyGameEffect(FGameplayAttributeData&             Attribute,
+	                                            float                               StartingValue,
 	                                            const TSubclassOf<UGameplayEffect>& EffectBP) const;
-
-void VerifyBoostRemoved(FString                 GameEffectName,
-                        FGameplayAttributeData& Attribute,
-                        float                   StartingValue);
-
 END_DEFINE_SPEC(FPF2AbilityBoostSpec)
 
 template <typename BlueprintType>
@@ -80,6 +87,20 @@ TSubclassOf<BlueprintType> FPF2AbilityBoostSpec::LoadBlueprint(const FString Fol
 		TSoftClassPtr<BlueprintType>(FSoftObjectPath(ObjectPath));
 
 	return ObjectClass.LoadSynchronous();
+}
+
+FAttributeCapture FPF2AbilityBoostSpec::CaptureAttributes(const UPF2AttributeSet* AttributeSet)
+{
+	FAttributeCapture Snapshot;
+
+	Snapshot.Add(TEXT("AbCharisma"),     const_cast<FGameplayAttributeData *>(&AttributeSet->AbCharisma));
+	Snapshot.Add(TEXT("AbConstitution"), const_cast<FGameplayAttributeData *>(&AttributeSet->AbConstitution));
+	Snapshot.Add(TEXT("AbDexterity"),    const_cast<FGameplayAttributeData *>(&AttributeSet->AbDexterity));
+	Snapshot.Add(TEXT("AbIntelligence"), const_cast<FGameplayAttributeData *>(&AttributeSet->AbIntelligence));
+	Snapshot.Add(TEXT("AbStrength"),     const_cast<FGameplayAttributeData *>(&AttributeSet->AbStrength));
+	Snapshot.Add(TEXT("AbWisdom"),       const_cast<FGameplayAttributeData *>(&AttributeSet->AbWisdom));
+
+	return Snapshot;
 }
 
 void FPF2AbilityBoostSpec::SetupWorld()
@@ -127,20 +148,24 @@ void FPF2AbilityBoostSpec::LoadGEs()
 	}
 }
 
-void FPF2AbilityBoostSpec::VerifyBoostApplied(const FString           GameEffectName,
-                                              FGameplayAttributeData& Attribute,
-                                              const float             StartingValue,
-                                              const float             ExpectedValueAfterBoost)
+void FPF2AbilityBoostSpec::VerifyBoostApplied(const FString GameEffectName,
+                                              const FString TargetAttributeName,
+                                              const float   StartingValue,
+                                              const float   ExpectedValueAfterBoost)
 {
 	const TSubclassOf<UGameplayEffect>& EffectBP = this->BoostGEs[GameEffectName];
 
 	if (IsValid(EffectBP))
 	{
-		ApplyGameEffect(Attribute, StartingValue, EffectBP);
+		const UPF2AttributeSet* AttributeSet    = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
+		FAttributeCapture       Attributes      = CaptureAttributes(AttributeSet);
+		FGameplayAttributeData* TargetAttribute = Attributes[TargetAttributeName];
+
+		ApplyGameEffect(*TargetAttribute, StartingValue, EffectBP);
 
 		TestEqual(
-			TEXT("Base value"),
-			Attribute.GetBaseValue(),
+			TargetAttributeName + ".BaseValue",
+			TargetAttribute->GetBaseValue(),
 			ExpectedValueAfterBoost
 		);
 	}
@@ -150,22 +175,67 @@ void FPF2AbilityBoostSpec::VerifyBoostApplied(const FString           GameEffect
 	}
 }
 
-void FPF2AbilityBoostSpec::VerifyBoostRemoved(FString                 GameEffectName,
-                                              FGameplayAttributeData& Attribute,
-                                              float                   StartingValue)
+void FPF2AbilityBoostSpec::VerifyOtherBoostsUnaffected(const FString GameEffectName,
+                                                       const FString TargetAttributeName)
 {
 	const TSubclassOf<UGameplayEffect>& EffectBP = this->BoostGEs[GameEffectName];
 
 	if (IsValid(EffectBP))
 	{
-		const FActiveGameplayEffectHandle EffectHandle = ApplyGameEffect(Attribute, StartingValue, EffectBP);
+		const UPF2AttributeSet* AttributeSet    = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
+		FAttributeCapture       Attributes      = CaptureAttributes(AttributeSet);
+		FGameplayAttributeData* TargetAttribute = Attributes[TargetAttributeName];
+
+		for (const auto AttributePair : Attributes)
+		{
+			FGameplayAttributeData& CurrentAttribute = *(AttributePair.Value);
+
+			CurrentAttribute = 10.0f;
+		}
+
+		ApplyGameEffect(*TargetAttribute, 10.0f, EffectBP);
+
+		for (const auto AttributePair : Attributes)
+		{
+			FGameplayAttributeData& CurrentAttribute     = *(AttributePair.Value);
+			FString                 CurrentAttributeName = AttributePair.Key;
+
+			if (CurrentAttributeName != TargetAttributeName)
+			{
+				TestEqual(
+					CurrentAttributeName + ".BaseValue",
+					CurrentAttribute.GetBaseValue(),
+					10.0f
+				);
+			}
+		}
+	}
+	else
+	{
+		AddWarning("GE is not loaded.");
+	}
+}
+
+void FPF2AbilityBoostSpec::VerifyBoostRemoved(const FString GameEffectName,
+                                              const FString TargetAttributeName,
+                                              const float   StartingValue)
+{
+	const TSubclassOf<UGameplayEffect>& EffectBP = this->BoostGEs[GameEffectName];
+
+	if (IsValid(EffectBP))
+	{
+		const UPF2AttributeSet* AttributeSet    = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
+		FAttributeCapture       Attributes      = CaptureAttributes(AttributeSet);
+		FGameplayAttributeData* TargetAttribute = Attributes[TargetAttributeName];
+
+		const FActiveGameplayEffectHandle EffectHandle =
+			ApplyGameEffect(*TargetAttribute, StartingValue, EffectBP);
 
 		this->PawnAbilityComponent->RemoveActiveGameplayEffect(EffectHandle);
 
-		// check that the value changed back
 		TestEqual(
-			TEXT("Base value"),
-			Attribute.GetBaseValue(),
+			TargetAttributeName + ".BaseValue",
+			TargetAttribute->GetBaseValue(),
 			StartingValue
 		);
 	}
@@ -246,7 +316,8 @@ void FPF2AbilityBoostSpec::Define()
 
 	Describe("Charisma Boost", [=, this]()
 	{
-		const FString EffectName = TEXT("GE_BoostAbCharisma");
+		const FString EffectName    = TEXT("GE_BoostAbCharisma");
+		const FString AttributeName = TEXT("AbCharisma");
 
 		Describe("when stat is below 18", [=, this]()
 		{
@@ -257,10 +328,12 @@ void FPF2AbilityBoostSpec::Define()
 			{
 				It("applies a boost of +2", [=, this]()
 				{
-					const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-					FGameplayAttributeData  Attribute    = AttributeSet->AbCharisma;
+					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+				});
 
-					VerifyBoostApplied(EffectName, Attribute, StartingValue, ExpectedValueWithBoost);
+				It("dost not boost any other attributes", [=, this]()
+				{
+					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 				});
 			});
 
@@ -268,10 +341,7 @@ void FPF2AbilityBoostSpec::Define()
 			{
 				It("removes a boost of +2", [=, this]()
 				{
-					const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-					FGameplayAttributeData  Attribute    = AttributeSet->AbCharisma;
-
-					VerifyBoostRemoved(EffectName, Attribute, StartingValue);
+					VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 				});
 			});
 		});
@@ -285,10 +355,12 @@ void FPF2AbilityBoostSpec::Define()
 			{
 				It("applies a boost of +1", [=, this]()
 				{
-					const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-					FGameplayAttributeData  Attribute    = AttributeSet->AbCharisma;
+					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+				});
 
-					VerifyBoostApplied(EffectName, Attribute, StartingValue, ExpectedValueWithBoost);
+				It("dost not boost any other attributes", [=, this]()
+				{
+					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 				});
 			});
 
@@ -296,10 +368,7 @@ void FPF2AbilityBoostSpec::Define()
 			{
 				It("removes a boost of +1", [=, this]()
 				{
-					const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-					FGameplayAttributeData  Attribute    = AttributeSet->AbCharisma;
-
-					VerifyBoostRemoved(EffectName, Attribute, StartingValue);
+					VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 				});
 			});
 		});
@@ -313,10 +382,12 @@ void FPF2AbilityBoostSpec::Define()
 			{
 				It("applies a boost of +1", [=, this]()
 				{
-					const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-					FGameplayAttributeData  Attribute    = AttributeSet->AbCharisma;
+					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+				});
 
-					VerifyBoostApplied(EffectName, Attribute, StartingValue, ExpectedValueWithBoost);
+				It("dost not boost any other attributes", [=, this]()
+				{
+					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 				});
 			});
 
@@ -324,10 +395,442 @@ void FPF2AbilityBoostSpec::Define()
 			{
 				It("removes a boost of +1", [=, this]()
 				{
-					const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-					FGameplayAttributeData  Attribute    = AttributeSet->AbCharisma;
+					VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+				});
+			});
+		});
+	});
 
-					VerifyBoostRemoved(EffectName, Attribute, StartingValue);
+	Describe("Constitution Boost", [=, this]()
+	{
+		const FString EffectName    = TEXT("GE_BoostAbConstitution");
+		const FString AttributeName = TEXT("AbConstitution");
+
+		Describe("when stat is below 18", [=, this]()
+		{
+			constexpr float StartingValue          = 10;
+			constexpr float ExpectedValueWithBoost = 12;
+
+			Describe("when GE is applied", [=, this]()
+			{
+				It("applies a boost of +2", [=, this]()
+				{
+					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+				});
+
+				It("dost not boost any other attributes", [=, this]()
+				{
+					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+				});
+			});
+
+			Describe("when GE is removed after being applied", [=, this]()
+			{
+				It("removes a boost of +2", [=, this]()
+				{
+					VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+				});
+			});
+		});
+
+		Describe("when stat is 18", [=, this]()
+		{
+			constexpr float StartingValue          = 18;
+			constexpr float ExpectedValueWithBoost = 19;
+
+			Describe("when GE is applied", [=, this]()
+			{
+				It("applies a boost of +1", [=, this]()
+				{
+					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+				});
+
+				It("dost not boost any other attributes", [=, this]()
+				{
+					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+				});
+			});
+
+			Describe("when GE is removed after being applied", [=, this]()
+			{
+				It("removes a boost of +1", [=, this]()
+				{
+					VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+				});
+			});
+		});
+
+		Describe("when stat is > 18", [=, this]()
+		{
+			constexpr float StartingValue          = 19;
+			constexpr float ExpectedValueWithBoost = 20;
+
+			Describe("when GE is applied", [=, this]()
+			{
+				It("applies a boost of +1", [=, this]()
+				{
+					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+				});
+
+				It("dost not boost any other attributes", [=, this]()
+				{
+					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+				});
+			});
+
+			Describe("when GE is removed after being applied", [=, this]()
+			{
+				It("removes a boost of +1", [=, this]()
+				{
+					VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+				});
+			});
+		});
+	});
+
+	Describe("Dexterity Boost", [=, this]()
+	{
+		const FString EffectName    = TEXT("GE_BoostAbDexterity");
+		const FString AttributeName = TEXT("AbDexterity");
+
+		Describe("when stat is below 18", [=, this]()
+		{
+			constexpr float StartingValue          = 10;
+			constexpr float ExpectedValueWithBoost = 12;
+
+			Describe("when GE is applied", [=, this]()
+			{
+				It("applies a boost of +2", [=, this]()
+				{
+					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+				});
+
+				It("dost not boost any other attributes", [=, this]()
+				{
+					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+				});
+			});
+
+			Describe("when GE is removed after being applied", [=, this]()
+			{
+				It("removes a boost of +2", [=, this]()
+				{
+					VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+				});
+			});
+		});
+
+		Describe("when stat is 18", [=, this]()
+		{
+			constexpr float StartingValue          = 18;
+			constexpr float ExpectedValueWithBoost = 19;
+
+			Describe("when GE is applied", [=, this]()
+			{
+				It("applies a boost of +1", [=, this]()
+				{
+					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+				});
+
+				It("dost not boost any other attributes", [=, this]()
+				{
+					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+				});
+			});
+
+			Describe("when GE is removed after being applied", [=, this]()
+			{
+				It("removes a boost of +1", [=, this]()
+				{
+					VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+				});
+			});
+		});
+
+		Describe("when stat is > 18", [=, this]()
+		{
+			constexpr float StartingValue          = 19;
+			constexpr float ExpectedValueWithBoost = 20;
+
+			Describe("when GE is applied", [=, this]()
+			{
+				It("applies a boost of +1", [=, this]()
+				{
+					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+				});
+
+				It("dost not boost any other attributes", [=, this]()
+				{
+					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+				});
+			});
+
+			Describe("when GE is removed after being applied", [=, this]()
+			{
+				It("removes a boost of +1", [=, this]()
+				{
+					VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+				});
+			});
+		});
+	});
+
+	Describe("Intelligence Boost", [=, this]()
+	{
+		const FString EffectName    = TEXT("GE_BoostAbIntelligence");
+		const FString AttributeName = TEXT("AbIntelligence");
+
+		Describe("when stat is below 18", [=, this]()
+		{
+			constexpr float StartingValue          = 10;
+			constexpr float ExpectedValueWithBoost = 12;
+
+			Describe("when GE is applied", [=, this]()
+			{
+				It("applies a boost of +2", [=, this]()
+				{
+					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+				});
+
+				It("dost not boost any other attributes", [=, this]()
+				{
+					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+				});
+			});
+
+			Describe("when GE is removed after being applied", [=, this]()
+			{
+				It("removes a boost of +2", [=, this]()
+				{
+					VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+				});
+			});
+		});
+
+		Describe("when stat is 18", [=, this]()
+		{
+			constexpr float StartingValue          = 18;
+			constexpr float ExpectedValueWithBoost = 19;
+
+			Describe("when GE is applied", [=, this]()
+			{
+				It("applies a boost of +1", [=, this]()
+				{
+					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+				});
+
+				It("dost not boost any other attributes", [=, this]()
+				{
+					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+				});
+			});
+
+			Describe("when GE is removed after being applied", [=, this]()
+			{
+				It("removes a boost of +1", [=, this]()
+				{
+					VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+				});
+			});
+		});
+
+		Describe("when stat is > 18", [=, this]()
+		{
+			constexpr float StartingValue          = 19;
+			constexpr float ExpectedValueWithBoost = 20;
+
+			Describe("when GE is applied", [=, this]()
+			{
+				It("applies a boost of +1", [=, this]()
+				{
+					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+				});
+
+				It("dost not boost any other attributes", [=, this]()
+				{
+					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+				});
+			});
+
+			Describe("when GE is removed after being applied", [=, this]()
+			{
+				It("removes a boost of +1", [=, this]()
+				{
+					VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+				});
+			});
+		});
+	});
+
+	Describe("Strength Boost", [=, this]()
+	{
+		const FString EffectName    = TEXT("GE_BoostAbStrength");
+		const FString AttributeName = TEXT("AbStrength");
+
+		Describe("when stat is below 18", [=, this]()
+		{
+			constexpr float StartingValue          = 10;
+			constexpr float ExpectedValueWithBoost = 12;
+
+			Describe("when GE is applied", [=, this]()
+			{
+				It("applies a boost of +2", [=, this]()
+				{
+					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+				});
+
+				It("dost not boost any other attributes", [=, this]()
+				{
+					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+				});
+			});
+
+			Describe("when GE is removed after being applied", [=, this]()
+			{
+				It("removes a boost of +2", [=, this]()
+				{
+					VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+				});
+			});
+		});
+
+		Describe("when stat is 18", [=, this]()
+		{
+			constexpr float StartingValue          = 18;
+			constexpr float ExpectedValueWithBoost = 19;
+
+			Describe("when GE is applied", [=, this]()
+			{
+				It("applies a boost of +1", [=, this]()
+				{
+					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+				});
+
+				It("dost not boost any other attributes", [=, this]()
+				{
+					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+				});
+			});
+
+			Describe("when GE is removed after being applied", [=, this]()
+			{
+				It("removes a boost of +1", [=, this]()
+				{
+					VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+				});
+			});
+		});
+
+		Describe("when stat is > 18", [=, this]()
+		{
+			constexpr float StartingValue          = 19;
+			constexpr float ExpectedValueWithBoost = 20;
+
+			Describe("when GE is applied", [=, this]()
+			{
+				It("applies a boost of +1", [=, this]()
+				{
+					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+				});
+
+				It("dost not boost any other attributes", [=, this]()
+				{
+					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+				});
+			});
+
+			Describe("when GE is removed after being applied", [=, this]()
+			{
+				It("removes a boost of +1", [=, this]()
+				{
+					VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+				});
+			});
+		});
+	});
+
+	Describe("Wisdom Boost", [=, this]()
+	{
+		const FString EffectName    = TEXT("GE_BoostAbWisdom");
+		const FString AttributeName = TEXT("AbWisdom");
+
+		Describe("when stat is below 18", [=, this]()
+		{
+			constexpr float StartingValue          = 10;
+			constexpr float ExpectedValueWithBoost = 12;
+
+			Describe("when GE is applied", [=, this]()
+			{
+				It("applies a boost of +2", [=, this]()
+				{
+					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+				});
+
+				It("dost not boost any other attributes", [=, this]()
+				{
+					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+				});
+			});
+
+			Describe("when GE is removed after being applied", [=, this]()
+			{
+				It("removes a boost of +2", [=, this]()
+				{
+					VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+				});
+			});
+		});
+
+		Describe("when stat is 18", [=, this]()
+		{
+			constexpr float StartingValue          = 18;
+			constexpr float ExpectedValueWithBoost = 19;
+
+			Describe("when GE is applied", [=, this]()
+			{
+				It("applies a boost of +1", [=, this]()
+				{
+					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+				});
+
+				It("dost not boost any other attributes", [=, this]()
+				{
+					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+				});
+			});
+
+			Describe("when GE is removed after being applied", [=, this]()
+			{
+				It("removes a boost of +1", [=, this]()
+				{
+					VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+				});
+			});
+		});
+
+		Describe("when stat is > 18", [=, this]()
+		{
+			constexpr float StartingValue          = 19;
+			constexpr float ExpectedValueWithBoost = 20;
+
+			Describe("when GE is applied", [=, this]()
+			{
+				It("applies a boost of +1", [=, this]()
+				{
+					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+				});
+
+				It("dost not boost any other attributes", [=, this]()
+				{
+					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+				});
+			});
+
+			Describe("when GE is removed after being applied", [=, this]()
+			{
+				It("removes a boost of +1", [=, this]()
+				{
+					VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 				});
 			});
 		});
