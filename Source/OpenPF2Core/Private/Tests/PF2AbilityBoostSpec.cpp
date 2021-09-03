@@ -91,16 +91,16 @@ TSubclassOf<BlueprintType> FPF2AbilityBoostSpec::LoadBlueprint(const FString Fol
 
 FAttributeCapture FPF2AbilityBoostSpec::CaptureAttributes(const UPF2AttributeSet* AttributeSet)
 {
-	FAttributeCapture Snapshot;
+	FAttributeCapture Capture;
 
-	Snapshot.Add(TEXT("AbCharisma"),     const_cast<FGameplayAttributeData *>(&AttributeSet->AbCharisma));
-	Snapshot.Add(TEXT("AbConstitution"), const_cast<FGameplayAttributeData *>(&AttributeSet->AbConstitution));
-	Snapshot.Add(TEXT("AbDexterity"),    const_cast<FGameplayAttributeData *>(&AttributeSet->AbDexterity));
-	Snapshot.Add(TEXT("AbIntelligence"), const_cast<FGameplayAttributeData *>(&AttributeSet->AbIntelligence));
-	Snapshot.Add(TEXT("AbStrength"),     const_cast<FGameplayAttributeData *>(&AttributeSet->AbStrength));
-	Snapshot.Add(TEXT("AbWisdom"),       const_cast<FGameplayAttributeData *>(&AttributeSet->AbWisdom));
+	Capture.Add(TEXT("AbCharisma"),     const_cast<FGameplayAttributeData *>(&AttributeSet->AbCharisma));
+	Capture.Add(TEXT("AbConstitution"), const_cast<FGameplayAttributeData *>(&AttributeSet->AbConstitution));
+	Capture.Add(TEXT("AbDexterity"),    const_cast<FGameplayAttributeData *>(&AttributeSet->AbDexterity));
+	Capture.Add(TEXT("AbIntelligence"), const_cast<FGameplayAttributeData *>(&AttributeSet->AbIntelligence));
+	Capture.Add(TEXT("AbStrength"),     const_cast<FGameplayAttributeData *>(&AttributeSet->AbStrength));
+	Capture.Add(TEXT("AbWisdom"),       const_cast<FGameplayAttributeData *>(&AttributeSet->AbWisdom));
 
-	return Snapshot;
+	return Capture;
 }
 
 void FPF2AbilityBoostSpec::SetupWorld()
