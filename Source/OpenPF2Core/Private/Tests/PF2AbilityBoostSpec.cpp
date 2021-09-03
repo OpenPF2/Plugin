@@ -8,9 +8,6 @@
 #include "Calculations/PF2AbilityBoostCalculation.h"
 #include "Tests/PF2TestPawn.h"
 
-#define GET_FIELD_CHECKED(Class, Field) FindFieldChecked<FProperty>(Class::StaticClass(), GET_MEMBER_NAME_CHECKED(Class, Field))
-#define CONSTRUCT_CLASS(Class, Name) Class* Name = NewObject<Class>(GetTransientPackage(), FName(TEXT(#Name)))
-
 namespace AbilityBoostTests
 {
 	const FString GBlueprintPath = TEXT("/OpenPF2Core/OpenPF2/Core");
