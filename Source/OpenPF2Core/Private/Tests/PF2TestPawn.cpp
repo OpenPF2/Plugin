@@ -7,7 +7,7 @@
 #include <AbilitySystemComponent.h>
 #include "Abilities/PF2AttributeSet.h"
 
-FName  APF2TestPawn::AbilitySystemComponentName(TEXT("AbilitySystemComponent0"));
+FName APF2TestPawn::AbilitySystemComponentName(TEXT("AbilitySystemComponent0"));
 
 APF2TestPawn::APF2TestPawn(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
