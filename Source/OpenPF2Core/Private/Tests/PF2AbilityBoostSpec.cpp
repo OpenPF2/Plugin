@@ -37,7 +37,9 @@ namespace AbilityBoostTests
 
 typedef TMap<FString, FGameplayAttributeData*> FAttributeCapture;
 
-BEGIN_DEFINE_PF_SPEC(FPF2AbilityBoostSpec, "OpenPF2.AbilityBoosts", EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+BEGIN_DEFINE_PF_SPEC(FPF2AbilityBoostSpec,
+                     "OpenPF2.AbilityBoosts",
+                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 	TMap<FString, TSubclassOf<UPF2AbilityBoostCalculation>> BoostMMCs;
 	TMap<FString, TSubclassOf<UGameplayEffect>> BoostGEs;
 
