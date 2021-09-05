@@ -13,53 +13,53 @@
 
 #include <Net/UnrealNetwork.h>
 
-UPF2AttributeSet::UPF2AttributeSet()
-	: Experience(0.0f)
-	, HitPoints(1.0f)
-	, MaxHitPoints(1.0f)
-	, AbBoostCount(0.0f)
-	, AbBoostLimit(0.0f)
-	, AbStrength(10.0f)
-	, AbStrengthModifier(0.0f)
-	, AbDexterity(10.0f)
-	, AbDexterityModifier(0.0f)
-	, AbConstitution(10.0f)
-	, AbConstitutionModifier(0.0f)
-	, AbIntelligence(10.0f)
-	, AbIntelligenceModifier(0.0f)
-	, AbWisdom(10.0f)
-	, AbWisdomModifier(0.0f)
-	, AbCharisma(10.0f)
-	, AbCharismaModifier(0.0f)
-	, ClassDifficultyClass(0.0f)
-	, Speed(1.0f)
-	, MaxSpeed(1.0f)
-	, ArmorClass(10.0f)
-	, StFortitudeModifier(0.0f)
-	, StReflexModifier(0.0f)
-	, StWillModifier(0.0f)
-	, PerceptionModifier(0.0f)
-	, SkAcrobaticsModifier(0.0f)
-	, SkArcanaModifier(0.0f)
-	, SkAthleticsModifier(0.0f)
-	, SkCraftingModifier(0.0f)
-	, SkDeceptionModifier(0.0f)
-	, SkDiplomacyModifier(0.0f)
-	, SkIntimidationModifier(0.0f)
-	, SkLore1Modifier(0.0f)
-	, SkLore2Modifier(0.0f)
-	, SkMedicineModifier(0.0f)
-	, SkNatureModifier(0.0f)
-	, SkOccultismModifier(0.0f)
-	, SkPerformanceModifier(0.0f)
-	, SkReligionModifier(0.0f)
-	, SkSocietyModifier(0.0f)
-	, SkStealthModifier(0.0f)
-	, SkSurvivalModifier(0.0f)
-	, SkThieveryModifier(0.0f)
-	, FeAncestryFeatCount(0.0f)
-	, FeAncestryFeatLimit(0.0f)
-	, Damage(0.0f)
+UPF2AttributeSet::UPF2AttributeSet() :
+	Experience(0.0f),
+	HitPoints(1.0f),
+	MaxHitPoints(1.0f),
+	AbBoostCount(0.0f),
+	AbBoostLimit(0.0f),
+	AbStrength(10.0f),
+	AbStrengthModifier(0.0f),
+	AbDexterity(10.0f),
+	AbDexterityModifier(0.0f),
+	AbConstitution(10.0f),
+	AbConstitutionModifier(0.0f),
+	AbIntelligence(10.0f),
+	AbIntelligenceModifier(0.0f),
+	AbWisdom(10.0f),
+	AbWisdomModifier(0.0f),
+	AbCharisma(10.0f),
+	AbCharismaModifier(0.0f),
+	ClassDifficultyClass(0.0f),
+	Speed(1.0f),
+	MaxSpeed(1.0f),
+	ArmorClass(10.0f),
+	StFortitudeModifier(0.0f),
+	StReflexModifier(0.0f),
+	StWillModifier(0.0f),
+	PerceptionModifier(0.0f),
+	SkAcrobaticsModifier(0.0f),
+	SkArcanaModifier(0.0f),
+	SkAthleticsModifier(0.0f),
+	SkCraftingModifier(0.0f),
+	SkDeceptionModifier(0.0f),
+	SkDiplomacyModifier(0.0f),
+	SkIntimidationModifier(0.0f),
+	SkLore1Modifier(0.0f),
+	SkLore2Modifier(0.0f),
+	SkMedicineModifier(0.0f),
+	SkNatureModifier(0.0f),
+	SkOccultismModifier(0.0f),
+	SkPerformanceModifier(0.0f),
+	SkReligionModifier(0.0f),
+	SkSocietyModifier(0.0f),
+	SkStealthModifier(0.0f),
+	SkSurvivalModifier(0.0f),
+	SkThieveryModifier(0.0f),
+	FeAncestryFeatCount(0.0f),
+	FeAncestryFeatLimit(0.0f),
+	Damage(0.0f)
 {
 }
 
