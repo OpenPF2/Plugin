@@ -31,7 +31,9 @@ namespace AbilityModTests
 	};
 }
 
-BEGIN_DEFINE_PF_SPEC(FPF2AbilityModSpec, "OpenPF2.AbilityMods", EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+BEGIN_DEFINE_PF_SPEC(FPF2AbilityModSpec,
+                     "OpenPF2.AbilityMods",
+                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 	TMap<FString, TSubclassOf<UPF2AbilityModifierCalculation>> AbModMMCs;
 	TMap<FString, TSubclassOf<UGameplayEffect>>                AbModGEs;
 	TMap<float, float>                                         AbModMappings;
@@ -46,7 +48,7 @@ BEGIN_DEFINE_PF_SPEC(FPF2AbilityModSpec, "OpenPF2.AbilityMods", EAutomationTestF
 	                    const float   ExpectedModifier);
 
 	void VerifyCorrectAbilityAffected(const FString TargetAbilityAttributeName,
-	                                    const FString TargetModifierAttributeName);
+	                                  const FString TargetModifierAttributeName);
 
 	void VerifyModifierRemoved(const FString TargetAbilityAttributeName,
 	                           const FString TargetModifierAttributeName);
@@ -134,7 +136,7 @@ void FPF2AbilityModSpec::Define()
 					for (const auto ValuePair : this->AbModMappings)
 					{
 						const float AbilityValue          = ValuePair.Key,
-									ExpectedModifierValue = ValuePair.Value;
+						            ExpectedModifierValue = ValuePair.Value;
 
 						VerifyModifier(
 							TargetAbilityAttributeName,
@@ -176,7 +178,7 @@ void FPF2AbilityModSpec::Define()
 					for (const auto ValuePair : this->AbModMappings)
 					{
 						const float AbilityValue          = ValuePair.Key,
-									ExpectedModifierValue = ValuePair.Value;
+						            ExpectedModifierValue = ValuePair.Value;
 
 						VerifyModifier(
 							TargetAbilityAttributeName,
@@ -218,7 +220,7 @@ void FPF2AbilityModSpec::Define()
 					for (const auto ValuePair : this->AbModMappings)
 					{
 						const float AbilityValue          = ValuePair.Key,
-									ExpectedModifierValue = ValuePair.Value;
+						            ExpectedModifierValue = ValuePair.Value;
 
 						VerifyModifier(
 							TargetAbilityAttributeName,
@@ -260,7 +262,7 @@ void FPF2AbilityModSpec::Define()
 					for (const auto ValuePair : this->AbModMappings)
 					{
 						const float AbilityValue          = ValuePair.Key,
-									ExpectedModifierValue = ValuePair.Value;
+						            ExpectedModifierValue = ValuePair.Value;
 
 						VerifyModifier(
 							TargetAbilityAttributeName,
@@ -302,7 +304,7 @@ void FPF2AbilityModSpec::Define()
 					for (const auto ValuePair : this->AbModMappings)
 					{
 						const float AbilityValue          = ValuePair.Key,
-									ExpectedModifierValue = ValuePair.Value;
+						            ExpectedModifierValue = ValuePair.Value;
 
 						VerifyModifier(
 							TargetAbilityAttributeName,
@@ -344,7 +346,7 @@ void FPF2AbilityModSpec::Define()
 					for (const auto ValuePair : this->AbModMappings)
 					{
 						const float AbilityValue          = ValuePair.Key,
-									ExpectedModifierValue = ValuePair.Value;
+						            ExpectedModifierValue = ValuePair.Value;
 
 						VerifyModifier(
 							TargetAbilityAttributeName,
@@ -470,7 +472,7 @@ void FPF2AbilityModSpec::VerifyModifier(const FString TargetAbilityAttributeName
 }
 
 void FPF2AbilityModSpec::VerifyCorrectAbilityAffected(const FString TargetAbilityAttributeName,
-														const FString TargetModifierAttributeName)
+                                                      const FString TargetModifierAttributeName)
 {
 	const TSubclassOf<UGameplayEffect>& EffectBP = this->AbModGEs[AbilityModTests::GAbModGameEffectCalc];
 
