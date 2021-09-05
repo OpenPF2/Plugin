@@ -8,7 +8,9 @@ public class OpenPF2Core: ModuleRules
 {
 	public OpenPF2Core(ReadOnlyTargetRules Target) : base(Target)
 	{
-		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
+		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+
+		PrivatePCHHeaderFile = "Public/OpenPF2Core.h";
 
 		PublicDependencyModuleNames.AddRange(
 			new string[]
