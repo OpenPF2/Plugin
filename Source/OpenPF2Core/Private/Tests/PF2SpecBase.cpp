@@ -56,6 +56,22 @@ void FPF2SpecBase::DestroyWorld() const
 	this->World->DestroyWorld(false);
 }
 
+void FPF2SpecBase::SetupPawn()
+{
+	this->TestPawn             = this->World->SpawnActor<APF2TestPawn>();
+	this->PawnAbilityComponent = this->TestPawn->GetAbilitySystemComponent();
+}
+
+void FPF2SpecBase::DestroyPawn()
+{
+	if (this->TestPawn)
+	{
+		this->World->EditorDestroyActor(this->TestPawn, false);
+	}
+
+	this->TestPawn = nullptr;
+}
+
 FActiveGameplayEffectHandle FPF2SpecBase::ApplyGameEffect(FGameplayAttributeData&             Attribute,
                                                           const float                         StartingValue,
                                                           const TSubclassOf<UGameplayEffect>& EffectBP) const

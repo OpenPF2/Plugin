@@ -62,22 +62,17 @@ void FPF2AbilityBoostSpec::Define()
 	BeforeEach([=, this]()
 	{
 		this->SetupWorld();
+		this->SetupPawn();
 
 		this->LoadMMCs();
 		this->LoadGEs();
-
-		this->TestPawn             = this->World->SpawnActor<APF2TestPawn>();
-		this->PawnAbilityComponent = this->TestPawn->GetAbilitySystemComponent();
 
 		this->BeginPlay();
 	});
 
 	AfterEach([=, this]()
 	{
-		if (this->TestPawn)
-		{
-			this->World->EditorDestroyActor(this->TestPawn, false);
-		}
+		this->DestroyPawn();
 
 		this->BoostMMCs.Empty();
 		this->BoostGEs.Empty();
