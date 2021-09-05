@@ -277,7 +277,7 @@ void FPF2AbilityBoostSpec::Define()
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
 
-				It("dost not boost any other attributes", [=, this]()
+				It("does not boost any other attributes", [=, this]()
 				{
 					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 				});
@@ -304,7 +304,7 @@ void FPF2AbilityBoostSpec::Define()
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
 
-				It("dost not boost any other attributes", [=, this]()
+				It("does not boost any other attributes", [=, this]()
 				{
 					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 				});
@@ -331,7 +331,7 @@ void FPF2AbilityBoostSpec::Define()
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
 
-				It("dost not boost any other attributes", [=, this]()
+				It("does not boost any other attributes", [=, this]()
 				{
 					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 				});
@@ -364,7 +364,7 @@ void FPF2AbilityBoostSpec::Define()
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
 
-				It("dost not boost any other attributes", [=, this]()
+				It("does not boost any other attributes", [=, this]()
 				{
 					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 				});
@@ -391,7 +391,7 @@ void FPF2AbilityBoostSpec::Define()
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
 
-				It("dost not boost any other attributes", [=, this]()
+				It("does not boost any other attributes", [=, this]()
 				{
 					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 				});
@@ -418,7 +418,7 @@ void FPF2AbilityBoostSpec::Define()
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
 
-				It("dost not boost any other attributes", [=, this]()
+				It("does not boost any other attributes", [=, this]()
 				{
 					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 				});
@@ -451,7 +451,7 @@ void FPF2AbilityBoostSpec::Define()
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
 
-				It("dost not boost any other attributes", [=, this]()
+				It("does not boost any other attributes", [=, this]()
 				{
 					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 				});
@@ -478,7 +478,7 @@ void FPF2AbilityBoostSpec::Define()
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
 
-				It("dost not boost any other attributes", [=, this]()
+				It("does not boost any other attributes", [=, this]()
 				{
 					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 				});
@@ -505,7 +505,7 @@ void FPF2AbilityBoostSpec::Define()
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
 
-				It("dost not boost any other attributes", [=, this]()
+				It("does not boost any other attributes", [=, this]()
 				{
 					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 				});
@@ -538,7 +538,7 @@ void FPF2AbilityBoostSpec::Define()
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
 
-				It("dost not boost any other attributes", [=, this]()
+				It("does not boost any other attributes", [=, this]()
 				{
 					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 				});
@@ -565,7 +565,7 @@ void FPF2AbilityBoostSpec::Define()
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
 
-				It("dost not boost any other attributes", [=, this]()
+				It("does not boost any other attributes", [=, this]()
 				{
 					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 				});
@@ -592,7 +592,7 @@ void FPF2AbilityBoostSpec::Define()
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
 
-				It("dost not boost any other attributes", [=, this]()
+				It("does not boost any other attributes", [=, this]()
 				{
 					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 				});
@@ -625,7 +625,7 @@ void FPF2AbilityBoostSpec::Define()
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
 
-				It("dost not boost any other attributes", [=, this]()
+				It("does not boost any other attributes", [=, this]()
 				{
 					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 				});
@@ -652,7 +652,7 @@ void FPF2AbilityBoostSpec::Define()
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
 
-				It("dost not boost any other attributes", [=, this]()
+				It("does not boost any other attributes", [=, this]()
 				{
 					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 				});
@@ -679,7 +679,7 @@ void FPF2AbilityBoostSpec::Define()
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
 
-				It("dost not boost any other attributes", [=, this]()
+				It("does not boost any other attributes", [=, this]()
 				{
 					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 				});
@@ -712,7 +712,7 @@ void FPF2AbilityBoostSpec::Define()
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
 
-				It("dost not boost any other attributes", [=, this]()
+				It("does not boost any other attributes", [=, this]()
 				{
 					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 				});
@@ -739,7 +739,7 @@ void FPF2AbilityBoostSpec::Define()
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
 
-				It("dost not boost any other attributes", [=, this]()
+				It("does not boost any other attributes", [=, this]()
 				{
 					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 				});
@@ -766,7 +766,7 @@ void FPF2AbilityBoostSpec::Define()
 					VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 				});
 
-				It("dost not boost any other attributes", [=, this]()
+				It("does not boost any other attributes", [=, this]()
 				{
 					VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 				});
