@@ -22,6 +22,8 @@ FAttributeCapture FPF2SpecBase::CaptureAttributes(const UPF2AttributeSet* Attrib
 {
 	FAttributeCapture Capture;
 
+	Capture.Add(TEXT("AbBoostCount"), const_cast<FGameplayAttributeData *>(&AttributeSet->AbBoostCount));
+
 	Capture.Append(CaptureAbilityAttributes(AttributeSet));
 	Capture.Append(CaptureAbilityModifierAttributes(AttributeSet));
 
