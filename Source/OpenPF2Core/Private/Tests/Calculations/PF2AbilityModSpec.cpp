@@ -6,7 +6,6 @@
 #include "Abilities/PF2AttributeSet.h"
 #include "Calculations/PF2AbilityModifierCalculation.h"
 #include "Tests/PF2SpecBase.h"
-#include "Tests/PF2TestPawn.h"
 
 namespace AbilityModTests
 {
