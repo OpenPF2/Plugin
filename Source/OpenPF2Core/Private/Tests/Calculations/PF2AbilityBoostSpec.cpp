@@ -6,7 +6,6 @@
 #include "Abilities/PF2AttributeSet.h"
 #include "Calculations/PF2AbilityBoostCalculation.h"
 #include "Tests/PF2SpecBase.h"
-#include "Tests/PF2TestPawn.h"
 
 namespace AbilityBoostTests
 {
@@ -34,8 +33,6 @@ namespace AbilityBoostTests
 		TEXT("GE_BoostAbWisdom"),
 	};
 }
-
-typedef TMap<FString, FGameplayAttributeData*> FAttributeCapture;
 
 BEGIN_DEFINE_PF_SPEC(FPF2AbilityBoostSpec,
                      "OpenPF2.AbilityBoosts",
