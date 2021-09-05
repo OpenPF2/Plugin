@@ -57,157 +57,6 @@ BEGIN_DEFINE_PF_SPEC(FPF2AbilityBoostSpec, "OpenPF2.AbilityBoosts", EAutomationT
 	                        const float   StartingValue);
 END_DEFINE_PF_SPEC(FPF2AbilityBoostSpec)
 
-void FPF2AbilityBoostSpec::LoadMMCs()
-{
-	for (auto& BlueprintName : AbilityBoostTests::GBoostMmcNames)
-	{
-		TSubclassOf<UPF2AbilityBoostCalculation> CalculationBP =
-			this->LoadBlueprint<UPF2AbilityBoostCalculation>(AbilityBoostTests::GBlueprintPath, BlueprintName);
-
-		this->BoostMMCs.Add(BlueprintName, CalculationBP);
-	}
-}
-
-void FPF2AbilityBoostSpec::LoadGEs()
-{
-	for (auto& BlueprintName : AbilityBoostTests::GBoostGeNames)
-	{
-		TSubclassOf<UGameplayEffect> GameplayEffectBP =
-			this->LoadBlueprint<UGameplayEffect>(AbilityBoostTests::GBlueprintPath, BlueprintName);
-
-		this->BoostGEs.Add(BlueprintName, GameplayEffectBP);
-	}
-}
-
-void FPF2AbilityBoostSpec::VerifyBoostApplied(const FString GameEffectName,
-                                              const FString TargetAttributeName,
-                                              const float   StartingValue,
-                                              const float   ExpectedValueAfterBoost)
-{
-	const TSubclassOf<UGameplayEffect>& EffectBP = this->BoostGEs[GameEffectName];
-
-	if (IsValid(EffectBP))
-	{
-		const UPF2AttributeSet* AttributeSet    = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-		FAttributeCapture       Attributes      = CaptureAttributes(AttributeSet);
-		FGameplayAttributeData* TargetAttribute = Attributes[TargetAttributeName];
-
-		ApplyGameEffect(*TargetAttribute, StartingValue, EffectBP);
-
-		TestEqual(
-			TargetAttributeName + ".BaseValue",
-			TargetAttribute->GetBaseValue(),
-			StartingValue
-		);
-
-		TestEqual(
-			TargetAttributeName + ".CurrentValue",
-			TargetAttribute->GetCurrentValue(),
-			ExpectedValueAfterBoost
-		);
-	}
-	else
-	{
-		AddWarning("GE is not loaded.");
-	}
-}
-
-void FPF2AbilityBoostSpec::VerifyOtherBoostsUnaffected(const FString GameEffectName,
-                                                       const FString TargetAttributeName)
-{
-	const TSubclassOf<UGameplayEffect>& EffectBP = this->BoostGEs[GameEffectName];
-
-	if (IsValid(EffectBP))
-	{
-		const UPF2AttributeSet* AttributeSet    = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-		FAttributeCapture       Attributes      = CaptureAttributes(AttributeSet);
-		FGameplayAttributeData* TargetAttribute = Attributes[TargetAttributeName];
-
-		for (const auto AttributePair : Attributes)
-		{
-			FGameplayAttributeData& CurrentAttribute = *(AttributePair.Value);
-
-			CurrentAttribute = 10.0f;
-		}
-
-		ApplyGameEffect(*TargetAttribute, 10.0f, EffectBP);
-
-		for (const auto AttributePair : Attributes)
-		{
-			FGameplayAttributeData& CurrentAttribute     = *(AttributePair.Value);
-			FString                 CurrentAttributeName = AttributePair.Key;
-
-			if (CurrentAttributeName == TargetAttributeName)
-			{
-				TestEqual(
-					CurrentAttributeName + ".BaseValue",
-					CurrentAttribute.GetBaseValue(),
-					10.0f
-				);
-
-				TestNotEqual(
-					CurrentAttributeName + ".CurrentValue",
-					CurrentAttribute.GetCurrentValue(),
-					10.0f
-				);
-			}
-			else
-			{
-				TestEqual(
-					CurrentAttributeName + ".BaseValue",
-					CurrentAttribute.GetBaseValue(),
-					10.0f
-				);
-
-				TestEqual(
-					CurrentAttributeName + ".CurrentValue",
-					CurrentAttribute.GetCurrentValue(),
-					10.0f
-				);
-			}
-		}
-	}
-	else
-	{
-		AddWarning("GE is not loaded.");
-	}
-}
-
-void FPF2AbilityBoostSpec::VerifyBoostRemoved(const FString GameEffectName,
-                                              const FString TargetAttributeName,
-                                              const float   StartingValue)
-{
-	const TSubclassOf<UGameplayEffect>& EffectBP = this->BoostGEs[GameEffectName];
-
-	if (IsValid(EffectBP))
-	{
-		const UPF2AttributeSet* AttributeSet    = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-		FAttributeCapture       Attributes      = CaptureAttributes(AttributeSet);
-		FGameplayAttributeData* TargetAttribute = Attributes[TargetAttributeName];
-
-		const FActiveGameplayEffectHandle EffectHandle =
-			ApplyGameEffect(*TargetAttribute, StartingValue, EffectBP);
-
-		this->PawnAbilityComponent->RemoveActiveGameplayEffect(EffectHandle);
-
-		TestEqual(
-			TargetAttributeName + ".BaseValue",
-			TargetAttribute->GetBaseValue(),
-			StartingValue
-		);
-
-		TestEqual(
-			TargetAttributeName + ".CurrentValue",
-			TargetAttribute->GetCurrentValue(),
-			StartingValue
-		);
-	}
-	else
-	{
-		AddWarning("GE is not loaded.");
-	}
-}
-
 void FPF2AbilityBoostSpec::Define()
 {
 	BeforeEach([=, this]()
@@ -781,4 +630,155 @@ void FPF2AbilityBoostSpec::Define()
 			});
 		});
 	});
+}
+
+void FPF2AbilityBoostSpec::LoadMMCs()
+{
+	for (auto& BlueprintName : AbilityBoostTests::GBoostMmcNames)
+	{
+		TSubclassOf<UPF2AbilityBoostCalculation> CalculationBP =
+			this->LoadBlueprint<UPF2AbilityBoostCalculation>(AbilityBoostTests::GBlueprintPath, BlueprintName);
+
+		this->BoostMMCs.Add(BlueprintName, CalculationBP);
+	}
+}
+
+void FPF2AbilityBoostSpec::LoadGEs()
+{
+	for (auto& BlueprintName : AbilityBoostTests::GBoostGeNames)
+	{
+		TSubclassOf<UGameplayEffect> GameplayEffectBP =
+			this->LoadBlueprint<UGameplayEffect>(AbilityBoostTests::GBlueprintPath, BlueprintName);
+
+		this->BoostGEs.Add(BlueprintName, GameplayEffectBP);
+	}
+}
+
+void FPF2AbilityBoostSpec::VerifyBoostApplied(const FString GameEffectName,
+                                              const FString TargetAttributeName,
+                                              const float   StartingValue,
+                                              const float   ExpectedValueAfterBoost)
+{
+	const TSubclassOf<UGameplayEffect>& EffectBP = this->BoostGEs[GameEffectName];
+
+	if (IsValid(EffectBP))
+	{
+		const UPF2AttributeSet* AttributeSet    = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
+		FAttributeCapture       Attributes      = CaptureAttributes(AttributeSet);
+		FGameplayAttributeData* TargetAttribute = Attributes[TargetAttributeName];
+
+		ApplyGameEffect(*TargetAttribute, StartingValue, EffectBP);
+
+		TestEqual(
+			TargetAttributeName + ".BaseValue",
+			TargetAttribute->GetBaseValue(),
+			StartingValue
+		);
+
+		TestEqual(
+			TargetAttributeName + ".CurrentValue",
+			TargetAttribute->GetCurrentValue(),
+			ExpectedValueAfterBoost
+		);
+	}
+	else
+	{
+		AddWarning("GE is not loaded.");
+	}
+}
+
+void FPF2AbilityBoostSpec::VerifyOtherBoostsUnaffected(const FString GameEffectName,
+                                                       const FString TargetAttributeName)
+{
+	const TSubclassOf<UGameplayEffect>& EffectBP = this->BoostGEs[GameEffectName];
+
+	if (IsValid(EffectBP))
+	{
+		const UPF2AttributeSet* AttributeSet    = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
+		FAttributeCapture       Attributes      = CaptureAttributes(AttributeSet);
+		FGameplayAttributeData* TargetAttribute = Attributes[TargetAttributeName];
+
+		for (const auto AttributePair : Attributes)
+		{
+			FGameplayAttributeData& CurrentAttribute = *(AttributePair.Value);
+
+			CurrentAttribute = 10.0f;
+		}
+
+		ApplyGameEffect(*TargetAttribute, 10.0f, EffectBP);
+
+		for (const auto AttributePair : Attributes)
+		{
+			FGameplayAttributeData& CurrentAttribute     = *(AttributePair.Value);
+			FString                 CurrentAttributeName = AttributePair.Key;
+
+			if (CurrentAttributeName == TargetAttributeName)
+			{
+				TestEqual(
+					CurrentAttributeName + ".BaseValue",
+					CurrentAttribute.GetBaseValue(),
+					10.0f
+				);
+
+				TestNotEqual(
+					CurrentAttributeName + ".CurrentValue",
+					CurrentAttribute.GetCurrentValue(),
+					10.0f
+				);
+			}
+			else
+			{
+				TestEqual(
+					CurrentAttributeName + ".BaseValue",
+					CurrentAttribute.GetBaseValue(),
+					10.0f
+				);
+
+				TestEqual(
+					CurrentAttributeName + ".CurrentValue",
+					CurrentAttribute.GetCurrentValue(),
+					10.0f
+				);
+			}
+		}
+	}
+	else
+	{
+		AddWarning("GE is not loaded.");
+	}
+}
+
+void FPF2AbilityBoostSpec::VerifyBoostRemoved(const FString GameEffectName,
+                                              const FString TargetAttributeName,
+                                              const float   StartingValue)
+{
+	const TSubclassOf<UGameplayEffect>& EffectBP = this->BoostGEs[GameEffectName];
+
+	if (IsValid(EffectBP))
+	{
+		const UPF2AttributeSet* AttributeSet    = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
+		FAttributeCapture       Attributes      = CaptureAttributes(AttributeSet);
+		FGameplayAttributeData* TargetAttribute = Attributes[TargetAttributeName];
+
+		const FActiveGameplayEffectHandle EffectHandle =
+			ApplyGameEffect(*TargetAttribute, StartingValue, EffectBP);
+
+		this->PawnAbilityComponent->RemoveActiveGameplayEffect(EffectHandle);
+
+		TestEqual(
+			TargetAttributeName + ".BaseValue",
+			TargetAttribute->GetBaseValue(),
+			StartingValue
+		);
+
+		TestEqual(
+			TargetAttributeName + ".CurrentValue",
+			TargetAttribute->GetCurrentValue(),
+			StartingValue
+		);
+	}
+	else
+	{
+		AddWarning("GE is not loaded.");
+	}
 }
