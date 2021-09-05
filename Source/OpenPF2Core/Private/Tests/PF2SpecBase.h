@@ -120,6 +120,9 @@ protected:
 	void BeginPlay() const;
 	void DestroyWorld() const;
 
+	void SetupPawn();
+	void DestroyPawn();
+
 	FActiveGameplayEffectHandle ApplyGameEffect(FGameplayAttributeData&             Attribute,
 	                                            float                               StartingValue,
 	                                            const TSubclassOf<UGameplayEffect>& EffectBP) const;
