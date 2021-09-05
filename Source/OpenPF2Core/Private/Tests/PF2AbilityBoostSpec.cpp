@@ -73,6 +73,7 @@ void FPF2AbilityBoostSpec::Define()
 	AfterEach([=, this]()
 	{
 		this->DestroyPawn();
+		this->DestroyWorld();
 
 		this->BoostMMCs.Empty();
 		this->BoostGEs.Empty();
