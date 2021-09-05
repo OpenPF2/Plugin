@@ -681,8 +681,11 @@ void FPF2AbilityBoostSpec::VerifyBoostApplied(const FString GameEffectName,
 	if (IsValid(EffectBP))
 	{
 		const UPF2AttributeSet* AttributeSet    = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-		FAttributeCapture       Attributes      = CaptureAttributes(AttributeSet);
+		FAttributeCapture       Attributes      = CaptureAbilityAttributes(AttributeSet);
 		FGameplayAttributeData* TargetAttribute = Attributes[TargetAttributeName];
+
+		// Sanity check test logic.
+		TestNotEqual("Captured at least one ability attribute", Attributes.Num(), 0);
 
 		ApplyGameEffect(*TargetAttribute, StartingValue, EffectBP);
 
@@ -712,8 +715,11 @@ void FPF2AbilityBoostSpec::VerifyOtherBoostsUnaffected(const FString GameEffectN
 	if (IsValid(EffectBP))
 	{
 		const UPF2AttributeSet* AttributeSet    = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-		FAttributeCapture       Attributes      = CaptureAttributes(AttributeSet);
+		FAttributeCapture       Attributes      = CaptureAbilityAttributes(AttributeSet);
 		FGameplayAttributeData* TargetAttribute = Attributes[TargetAttributeName];
+
+		// Sanity check test logic.
+		TestNotEqual("Captured at least one ability attribute", Attributes.Num(), 0);
 
 		for (const auto AttributePair : Attributes)
 		{
@@ -774,11 +780,14 @@ void FPF2AbilityBoostSpec::VerifyBoostRemoved(const FString GameEffectName,
 	if (IsValid(EffectBP))
 	{
 		const UPF2AttributeSet* AttributeSet    = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-		FAttributeCapture       Attributes      = CaptureAttributes(AttributeSet);
+		FAttributeCapture       Attributes      = CaptureAbilityAttributes(AttributeSet);
 		FGameplayAttributeData* TargetAttribute = Attributes[TargetAttributeName];
 
 		const FActiveGameplayEffectHandle EffectHandle =
 			ApplyGameEffect(*TargetAttribute, StartingValue, EffectBP);
+
+		// Sanity check test logic.
+		TestNotEqual("Captured at least one ability attribute", Attributes.Num(), 0);
 
 		this->PawnAbilityComponent->RemoveActiveGameplayEffect(EffectHandle);
 
