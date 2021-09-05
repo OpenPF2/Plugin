@@ -54,30 +54,18 @@ END_DEFINE_PF_SPEC(FPF2AbilityModSpec)
 
 void FPF2AbilityModSpec::Define()
 {
-	BeforeEach([=, this]()
-	{
-		this->SetupWorld();
-		this->SetupPawn();
-
-		this->LoadMMCs();
-		this->LoadGEs();
-		this->LoadAbModMappings();
-
-		this->BeginPlay();
-	});
-
-	AfterEach([=, this]()
-	{
-		this->DestroyPawn();
-		this->DestroyWorld();
-
-		this->AbModMMCs.Empty();
-		this->AbModGEs.Empty();
-		this->AbModMappings.Empty();
-	});
-
 	Describe("Blueprint Loading for Ability Mod MMCs", [=, this]()
 	{
+		BeforeEach([=, this]()
+		{
+			this->LoadMMCs();
+		});
+
+		AfterEach([=, this]()
+		{
+			this->AbModMMCs.Empty();
+		});
+
 		for (const auto& BlueprintName : AbilityModTests::GAbModMmcNames)
 		{
 			It(BlueprintName + " should load", [=, this]()
@@ -91,6 +79,16 @@ void FPF2AbilityModSpec::Define()
 
 	Describe("Blueprint Loading for Ability Mod GEs", [=, this]()
 	{
+		BeforeEach([=, this]()
+		{
+			this->LoadGEs();
+		});
+
+		AfterEach([=, this]()
+		{
+			this->AbModGEs.Empty();
+		});
+
 		for (const auto& BlueprintName : AbilityModTests::GAbModGeNames)
 		{
 			It(BlueprintName + " should load", [=, this]()
@@ -102,254 +100,277 @@ void FPF2AbilityModSpec::Define()
 		}
 	});
 
-	Describe("Charisma Modifier", [=, this]()
+	Describe("Effects of Modifiers", [=, this]()
 	{
-		const FString TargetAbilityAttributeName  = TEXT("AbCharisma");
-		const FString TargetModifierAttributeName = TEXT("AbCharismaModifier");
-
-		Describe("when GE is applied", [=, this]()
+		BeforeEach([=, this]()
 		{
-			It("calculates a modifier based on the current ability score", [=, this]()
+			this->SetupWorld();
+			this->SetupPawn();
+
+			this->LoadGEs();
+			this->LoadAbModMappings();
+
+			this->BeginPlay();
+		});
+
+		AfterEach([=, this]()
+		{
+			this->DestroyPawn();
+			this->DestroyWorld();
+
+			this->AbModGEs.Empty();
+			this->AbModMappings.Empty();
+		});
+
+		Describe("Charisma Modifier", [=, this]()
+		{
+			const FString TargetAbilityAttributeName  = TEXT("AbCharisma");
+			const FString TargetModifierAttributeName = TEXT("AbCharismaModifier");
+
+			Describe("when GE is applied", [=, this]()
 			{
-				for (const auto ValuePair : this->AbModMappings)
+				It("calculates a modifier based on the current ability score", [=, this]()
 				{
-					const float AbilityValue          = ValuePair.Key,
-					            ExpectedModifierValue = ValuePair.Value;
+					for (const auto ValuePair : this->AbModMappings)
+					{
+						const float AbilityValue          = ValuePair.Key,
+									ExpectedModifierValue = ValuePair.Value;
 
-					VerifyModifier(
-						TargetAbilityAttributeName,
-						TargetModifierAttributeName,
-						AbilityValue,
-						ExpectedModifierValue
-					);
+						VerifyModifier(
+							TargetAbilityAttributeName,
+							TargetModifierAttributeName,
+							AbilityValue,
+							ExpectedModifierValue
+						);
 
-					// Workaround: Without this, Ability scores from one test iteration seem to affect the next.
-					this->DestroyPawn();
-					this->SetupPawn();
-				}
-			});
+						// Workaround: Without this, Ability scores from one test iteration seem to affect the next.
+						this->DestroyPawn();
+						this->SetupPawn();
+					}
+				});
 
-			It("applies the calculation only to the associated modifier attribute", [=, this]()
-			{
-				VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
-			});
-		});
-
-		Describe("when GE is removed after being applied", [=, this]()
-		{
-			It("resets the modifier", [=, this]()
-			{
-				VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
-			});
-		});
-	});
-
-	Describe("Constitution Modifier", [=, this]()
-	{
-		const FString TargetAbilityAttributeName  = TEXT("AbConstitution");
-		const FString TargetModifierAttributeName = TEXT("AbConstitutionModifier");
-
-		Describe("when GE is applied", [=, this]()
-		{
-			It("calculates a modifier based on the current ability score", [=, this]()
-			{
-				for (const auto ValuePair : this->AbModMappings)
+				It("applies the calculation only to the associated modifier attribute", [=, this]()
 				{
-					const float AbilityValue          = ValuePair.Key,
-					            ExpectedModifierValue = ValuePair.Value;
-
-					VerifyModifier(
-						TargetAbilityAttributeName,
-						TargetModifierAttributeName,
-						AbilityValue,
-						ExpectedModifierValue
-					);
-
-					// Workaround: Without this, Ability scores from one test iteration seem to affect the next.
-					this->DestroyPawn();
-					this->SetupPawn();
-				}
+					VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
+				});
 			});
 
-			It("applies the calculation only to the associated modifier attribute", [=, this]()
+			Describe("when GE is removed after being applied", [=, this]()
 			{
-				VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
-			});
-		});
-
-		Describe("when GE is removed after being applied", [=, this]()
-		{
-			It("resets the modifier", [=, this]()
-			{
-				VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
-			});
-		});
-	});
-
-	Describe("Dexterity Modifier", [=, this]()
-	{
-		const FString TargetAbilityAttributeName  = TEXT("AbDexterity");
-		const FString TargetModifierAttributeName = TEXT("AbDexterityModifier");
-
-		Describe("when GE is applied", [=, this]()
-		{
-			It("calculates a modifier based on the current ability score", [=, this]()
-			{
-				for (const auto ValuePair : this->AbModMappings)
+				It("resets the modifier", [=, this]()
 				{
-					const float AbilityValue          = ValuePair.Key,
-					            ExpectedModifierValue = ValuePair.Value;
-
-					VerifyModifier(
-						TargetAbilityAttributeName,
-						TargetModifierAttributeName,
-						AbilityValue,
-						ExpectedModifierValue
-					);
-
-					// Workaround: Without this, Ability scores from one test iteration seem to affect the next.
-					this->DestroyPawn();
-					this->SetupPawn();
-				}
-			});
-
-			It("applies the calculation only to the associated modifier attribute", [=, this]()
-			{
-				VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
+					VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
+				});
 			});
 		});
 
-		Describe("when GE is removed after being applied", [=, this]()
+		Describe("Constitution Modifier", [=, this]()
 		{
-			It("resets the modifier", [=, this]()
-			{
-				VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
-			});
-		});
-	});
+			const FString TargetAbilityAttributeName  = TEXT("AbConstitution");
+			const FString TargetModifierAttributeName = TEXT("AbConstitutionModifier");
 
-	Describe("Intelligence Modifier", [=, this]()
-	{
-		const FString TargetAbilityAttributeName  = TEXT("AbIntelligence");
-		const FString TargetModifierAttributeName = TEXT("AbIntelligenceModifier");
-
-		Describe("when GE is applied", [=, this]()
-		{
-			It("calculates a modifier based on the current ability score", [=, this]()
+			Describe("when GE is applied", [=, this]()
 			{
-				for (const auto ValuePair : this->AbModMappings)
+				It("calculates a modifier based on the current ability score", [=, this]()
 				{
-					const float AbilityValue          = ValuePair.Key,
-					            ExpectedModifierValue = ValuePair.Value;
+					for (const auto ValuePair : this->AbModMappings)
+					{
+						const float AbilityValue          = ValuePair.Key,
+									ExpectedModifierValue = ValuePair.Value;
 
-					VerifyModifier(
-						TargetAbilityAttributeName,
-						TargetModifierAttributeName,
-						AbilityValue,
-						ExpectedModifierValue
-					);
+						VerifyModifier(
+							TargetAbilityAttributeName,
+							TargetModifierAttributeName,
+							AbilityValue,
+							ExpectedModifierValue
+						);
 
-					// Workaround: Without this, Ability scores from one test iteration seem to affect the next.
-					this->DestroyPawn();
-					this->SetupPawn();
-				}
-			});
+						// Workaround: Without this, Ability scores from one test iteration seem to affect the next.
+						this->DestroyPawn();
+						this->SetupPawn();
+					}
+				});
 
-			It("applies the calculation only to the associated modifier attribute", [=, this]()
-			{
-				VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
-			});
-		});
-
-		Describe("when GE is removed after being applied", [=, this]()
-		{
-			It("resets the modifier", [=, this]()
-			{
-				VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
-			});
-		});
-	});
-
-	Describe("Strength Modifier", [=, this]()
-	{
-		const FString TargetAbilityAttributeName  = TEXT("AbStrength");
-		const FString TargetModifierAttributeName = TEXT("AbStrengthModifier");
-
-		Describe("when GE is applied", [=, this]()
-		{
-			It("calculates a modifier based on the current ability score", [=, this]()
-			{
-				for (const auto ValuePair : this->AbModMappings)
+				It("applies the calculation only to the associated modifier attribute", [=, this]()
 				{
-					const float AbilityValue          = ValuePair.Key,
-					            ExpectedModifierValue = ValuePair.Value;
-
-					VerifyModifier(
-						TargetAbilityAttributeName,
-						TargetModifierAttributeName,
-						AbilityValue,
-						ExpectedModifierValue
-					);
-
-					// Workaround: Without this, Ability scores from one test iteration seem to affect the next.
-					this->DestroyPawn();
-					this->SetupPawn();
-				}
+					VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
+				});
 			});
 
-			It("applies the calculation only to the associated modifier attribute", [=, this]()
+			Describe("when GE is removed after being applied", [=, this]()
 			{
-				VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
-			});
-		});
-
-		Describe("when GE is removed after being applied", [=, this]()
-		{
-			It("resets the modifier", [=, this]()
-			{
-				VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
-			});
-		});
-	});
-
-	Describe("Wisdom Modifier", [=, this]()
-	{
-		const FString TargetAbilityAttributeName  = TEXT("AbWisdom");
-		const FString TargetModifierAttributeName = TEXT("AbWisdomModifier");
-
-		Describe("when GE is applied", [=, this]()
-		{
-			It("calculates a modifier based on the current ability score", [=, this]()
-			{
-				for (const auto ValuePair : this->AbModMappings)
+				It("resets the modifier", [=, this]()
 				{
-					const float AbilityValue          = ValuePair.Key,
-					            ExpectedModifierValue = ValuePair.Value;
-
-					VerifyModifier(
-						TargetAbilityAttributeName,
-						TargetModifierAttributeName,
-						AbilityValue,
-						ExpectedModifierValue
-					);
-
-					// Workaround: Without this, Ability scores from one test iteration seem to affect the next.
-					this->DestroyPawn();
-					this->SetupPawn();
-				}
-			});
-
-			It("applies the calculation only to the associated modifier attribute", [=, this]()
-			{
-				VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
+					VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
+				});
 			});
 		});
 
-		Describe("when GE is removed after being applied", [=, this]()
+		Describe("Dexterity Modifier", [=, this]()
 		{
-			It("resets the modifier", [=, this]()
+			const FString TargetAbilityAttributeName  = TEXT("AbDexterity");
+			const FString TargetModifierAttributeName = TEXT("AbDexterityModifier");
+
+			Describe("when GE is applied", [=, this]()
 			{
-				VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
+				It("calculates a modifier based on the current ability score", [=, this]()
+				{
+					for (const auto ValuePair : this->AbModMappings)
+					{
+						const float AbilityValue          = ValuePair.Key,
+									ExpectedModifierValue = ValuePair.Value;
+
+						VerifyModifier(
+							TargetAbilityAttributeName,
+							TargetModifierAttributeName,
+							AbilityValue,
+							ExpectedModifierValue
+						);
+
+						// Workaround: Without this, Ability scores from one test iteration seem to affect the next.
+						this->DestroyPawn();
+						this->SetupPawn();
+					}
+				});
+
+				It("applies the calculation only to the associated modifier attribute", [=, this]()
+				{
+					VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
+				});
+			});
+
+			Describe("when GE is removed after being applied", [=, this]()
+			{
+				It("resets the modifier", [=, this]()
+				{
+					VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
+				});
+			});
+		});
+
+		Describe("Intelligence Modifier", [=, this]()
+		{
+			const FString TargetAbilityAttributeName  = TEXT("AbIntelligence");
+			const FString TargetModifierAttributeName = TEXT("AbIntelligenceModifier");
+
+			Describe("when GE is applied", [=, this]()
+			{
+				It("calculates a modifier based on the current ability score", [=, this]()
+				{
+					for (const auto ValuePair : this->AbModMappings)
+					{
+						const float AbilityValue          = ValuePair.Key,
+									ExpectedModifierValue = ValuePair.Value;
+
+						VerifyModifier(
+							TargetAbilityAttributeName,
+							TargetModifierAttributeName,
+							AbilityValue,
+							ExpectedModifierValue
+						);
+
+						// Workaround: Without this, Ability scores from one test iteration seem to affect the next.
+						this->DestroyPawn();
+						this->SetupPawn();
+					}
+				});
+
+				It("applies the calculation only to the associated modifier attribute", [=, this]()
+				{
+					VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
+				});
+			});
+
+			Describe("when GE is removed after being applied", [=, this]()
+			{
+				It("resets the modifier", [=, this]()
+				{
+					VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
+				});
+			});
+		});
+
+		Describe("Strength Modifier", [=, this]()
+		{
+			const FString TargetAbilityAttributeName  = TEXT("AbStrength");
+			const FString TargetModifierAttributeName = TEXT("AbStrengthModifier");
+
+			Describe("when GE is applied", [=, this]()
+			{
+				It("calculates a modifier based on the current ability score", [=, this]()
+				{
+					for (const auto ValuePair : this->AbModMappings)
+					{
+						const float AbilityValue          = ValuePair.Key,
+									ExpectedModifierValue = ValuePair.Value;
+
+						VerifyModifier(
+							TargetAbilityAttributeName,
+							TargetModifierAttributeName,
+							AbilityValue,
+							ExpectedModifierValue
+						);
+
+						// Workaround: Without this, Ability scores from one test iteration seem to affect the next.
+						this->DestroyPawn();
+						this->SetupPawn();
+					}
+				});
+
+				It("applies the calculation only to the associated modifier attribute", [=, this]()
+				{
+					VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
+				});
+			});
+
+			Describe("when GE is removed after being applied", [=, this]()
+			{
+				It("resets the modifier", [=, this]()
+				{
+					VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
+				});
+			});
+		});
+
+		Describe("Wisdom Modifier", [=, this]()
+		{
+			const FString TargetAbilityAttributeName  = TEXT("AbWisdom");
+			const FString TargetModifierAttributeName = TEXT("AbWisdomModifier");
+
+			Describe("when GE is applied", [=, this]()
+			{
+				It("calculates a modifier based on the current ability score", [=, this]()
+				{
+					for (const auto ValuePair : this->AbModMappings)
+					{
+						const float AbilityValue          = ValuePair.Key,
+									ExpectedModifierValue = ValuePair.Value;
+
+						VerifyModifier(
+							TargetAbilityAttributeName,
+							TargetModifierAttributeName,
+							AbilityValue,
+							ExpectedModifierValue
+						);
+
+						// Workaround: Without this, Ability scores from one test iteration seem to affect the next.
+						this->DestroyPawn();
+						this->SetupPawn();
+					}
+				});
+
+				It("applies the calculation only to the associated modifier attribute", [=, this]()
+				{
+					VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
+				});
+			});
+
+			Describe("when GE is removed after being applied", [=, this]()
+			{
+				It("resets the modifier", [=, this]()
+				{
+					VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
+				});
 			});
 		});
 	});
