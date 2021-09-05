@@ -437,16 +437,18 @@ void FPF2AbilityModSpec::VerifyModifier(const FString TargetAbilityAttributeName
 
 	if (IsValid(EffectBP))
 	{
-		const UPF2AttributeSet  *AttributeSet            = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-		FAttributeCapture       Attributes               = CaptureAttributes(AttributeSet);
-		FGameplayAttributeData  *TargetAbilityAttribute  = Attributes[TargetAbilityAttributeName],
-								*TargetModifierAttribute = Attributes[TargetModifierAttributeName];
+		const UPF2AttributeSet* AttributeSet            = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
+		FAttributeCapture       Attributes              = CaptureAttributes(AttributeSet);
+		FGameplayAttributeData *TargetAbilityAttribute  = Attributes[TargetAbilityAttributeName],
+		                       *TargetModifierAttribute = Attributes[TargetModifierAttributeName];
+
+		// Sanity check test logic.
+		TestNotEqual("Captured at least one attribute", Attributes.Num(), 0);
 
 		// Initialize modifier a known value.
 		*TargetModifierAttribute = 0.0f;
 
-		const FActiveGameplayEffectHandle EffectHandle =
-			ApplyGameEffect(*TargetAbilityAttribute, AbilityValue, EffectBP);
+		ApplyGameEffect(*TargetAbilityAttribute, AbilityValue, EffectBP);
 
 		TestEqual(
 			FString::Format(TEXT("{0}.BaseValue(for ability score {1})"), {TargetModifierAttributeName, AbilityValue}),
@@ -455,7 +457,8 @@ void FPF2AbilityModSpec::VerifyModifier(const FString TargetAbilityAttributeName
 		);
 
 		TestEqual(
-			FString::Format(TEXT("{0}.CurrentValue(for ability score {1})"), {TargetModifierAttributeName, AbilityValue}),
+			FString::Format(
+				TEXT("{0}.CurrentValue(for ability score {1})"), {TargetModifierAttributeName, AbilityValue}),
 			TargetModifierAttribute->GetCurrentValue(),
 			ExpectedModifier
 		);
@@ -473,32 +476,37 @@ void FPF2AbilityModSpec::VerifyCorrectAbilityAffected(const FString TargetAbilit
 
 	if (IsValid(EffectBP))
 	{
-		const UPF2AttributeSet  *AttributeSet            = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-		FAttributeCapture       Attributes               = CaptureAttributes(AttributeSet);
-		FGameplayAttributeData  *TargetAbilityAttribute  = Attributes[TargetAbilityAttributeName];
+		const UPF2AttributeSet* AttributeSet           = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
+		FAttributeCapture       AbilityAttributes      = CaptureAbilityAttributes(AttributeSet),
+		                        ModifierAttributes     = CaptureAbilityModifierAttributes(AttributeSet);
+		FGameplayAttributeData* TargetAbilityAttribute = AbilityAttributes[TargetAbilityAttributeName];
 
-		for (const auto AttributePair : Attributes)
+		// Sanity check test logic.
+		TestNotEqual("Captured at least one ability attribute", AbilityAttributes.Num(), 0);
+		TestNotEqual("Captured at least one modifier attribute", ModifierAttributes.Num(), 0);
+
+		// Start all attributes at a known value.
+		for (const auto AttributePair : AbilityAttributes)
 		{
-			FString                 CurrentAttributeName = AttributePair.Key;
-			FGameplayAttributeData& CurrentAttribute     = *(AttributePair.Value);
+			FGameplayAttributeData& CurrentAttribute = *(AttributePair.Value);
 
-			// Start all attributes from a known value.
-			if (CurrentAttributeName.EndsWith("Modifier"))
-			{
-				// From Table 1-1 in Core Rulebook: Output modifier for attribute value of 12 => 1
-				CurrentAttribute = 1.0f;
-			}
-			else
-			{
-				// Attribute value, from which the modifier is derived.
-				CurrentAttribute = 12.0f;
-			}
+			// Attribute value, from which the modifier is derived.
+			CurrentAttribute = 12.0f;
+		}
+
+		// Start all attribute modifiers from a known value.
+		for (const auto AttributePair : ModifierAttributes)
+		{
+			FGameplayAttributeData& CurrentAttribute = *(AttributePair.Value);
+
+			// From Table 1-1 in Core Rulebook: Output modifier for attribute value of 12 => 1
+			CurrentAttribute = 1.0f;
 		}
 
 		// This sets _only_ the target ability to 13, which should result in a modifier of +3
 		ApplyGameEffect(*TargetAbilityAttribute, 16.0f, EffectBP);
 
-		for (const auto AttributePair : Attributes)
+		for (const auto AttributePair : AbilityAttributes)
 		{
 			FGameplayAttributeData& CurrentAttribute     = *(AttributePair.Value);
 			FString                 CurrentAttributeName = AttributePair.Key;
@@ -518,8 +526,30 @@ void FPF2AbilityModSpec::VerifyCorrectAbilityAffected(const FString TargetAbilit
 					16.0f
 				);
 			}
+			// Current Value is another attribute
+			else
+			{
+				TestEqual(
+					CurrentAttributeName + ".BaseValue",
+					CurrentAttribute.GetBaseValue(),
+					12.0f
+				);
+
+				TestEqual(
+					CurrentAttributeName + ".CurrentValue",
+					CurrentAttribute.GetCurrentValue(),
+					12.0f
+				);
+			}
+		}
+
+		for (const auto AttributePair : ModifierAttributes)
+		{
+			FGameplayAttributeData& CurrentAttribute     = *(AttributePair.Value);
+			FString                 CurrentAttributeName = AttributePair.Key;
+
 			// Current Value is Target Attribute Modifier
-			else if (CurrentAttributeName == TargetModifierAttributeName)
+			if (CurrentAttributeName == TargetModifierAttributeName)
 			{
 				TestEqual(
 					CurrentAttributeName + ".BaseValue",
@@ -535,33 +565,18 @@ void FPF2AbilityModSpec::VerifyCorrectAbilityAffected(const FString TargetAbilit
 				);
 			}
 			// Current Value is a Modifier for another attribute
-			else if (CurrentAttributeName.EndsWith("Modifier"))
-			{
-				TestEqual(
-					CurrentAttributeName + ".BaseValue",
-					CurrentAttribute.GetBaseValue(),
-					1.0f
-				);
-
-				TestEqual(
-					CurrentAttributeName + ".CurrentValue",
-					CurrentAttribute.GetCurrentValue(),
-					1.0f
-				);
-			}
-			// Current Value is another attribute
 			else
 			{
 				TestEqual(
 					CurrentAttributeName + ".BaseValue",
 					CurrentAttribute.GetBaseValue(),
-					12.0f
+					1.0f
 				);
 
 				TestEqual(
 					CurrentAttributeName + ".CurrentValue",
 					CurrentAttribute.GetCurrentValue(),
-					12.0f
+					1.0f
 				);
 			}
 		}
@@ -586,6 +601,9 @@ void FPF2AbilityModSpec::VerifyModifierRemoved(const FString TargetAbilityAttrib
 
 		const FActiveGameplayEffectHandle EffectHandle =
 			ApplyGameEffect(*TargetAbilityAttribute, 13.0f, EffectBP);
+
+		// Sanity check test logic.
+		TestNotEqual("Captured at least one attribute", Attributes.Num(), 0);
 
 		this->PawnAbilityComponent->RemoveActiveGameplayEffect(EffectHandle);
 

@@ -22,12 +22,29 @@ FAttributeCapture FPF2SpecBase::CaptureAttributes(const UPF2AttributeSet* Attrib
 {
 	FAttributeCapture Capture;
 
+	Capture.Append(CaptureAbilityAttributes(AttributeSet));
+	Capture.Append(CaptureAbilityModifierAttributes(AttributeSet));
+
+	return Capture;
+}
+
+FAttributeCapture FPF2SpecBase::CaptureAbilityAttributes(const UPF2AttributeSet* AttributeSet)
+{
+	FAttributeCapture Capture;
+
 	Capture.Add(TEXT("AbCharisma"),     const_cast<FGameplayAttributeData *>(&AttributeSet->AbCharisma));
 	Capture.Add(TEXT("AbConstitution"), const_cast<FGameplayAttributeData *>(&AttributeSet->AbConstitution));
 	Capture.Add(TEXT("AbDexterity"),    const_cast<FGameplayAttributeData *>(&AttributeSet->AbDexterity));
 	Capture.Add(TEXT("AbIntelligence"), const_cast<FGameplayAttributeData *>(&AttributeSet->AbIntelligence));
 	Capture.Add(TEXT("AbStrength"),     const_cast<FGameplayAttributeData *>(&AttributeSet->AbStrength));
 	Capture.Add(TEXT("AbWisdom"),       const_cast<FGameplayAttributeData *>(&AttributeSet->AbWisdom));
+
+	return Capture;
+}
+
+FAttributeCapture FPF2SpecBase::CaptureAbilityModifierAttributes(const UPF2AttributeSet* AttributeSet)
+{
+	FAttributeCapture Capture;
 
 	Capture.Add(TEXT("AbCharismaModifier"),     const_cast<FGameplayAttributeData *>(&AttributeSet->AbCharismaModifier));
 	Capture.Add(TEXT("AbConstitutionModifier"), const_cast<FGameplayAttributeData *>(&AttributeSet->AbConstitutionModifier));

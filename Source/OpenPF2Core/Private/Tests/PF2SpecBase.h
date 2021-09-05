@@ -115,6 +115,8 @@ protected:
 	static TSubclassOf<BlueprintType> LoadBlueprint(const FString FolderPath, const FString BlueprintName);
 
 	static FAttributeCapture CaptureAttributes(const UPF2AttributeSet* AttributeSet);
+	static FAttributeCapture CaptureAbilityAttributes(const UPF2AttributeSet* AttributeSet);
+	static FAttributeCapture CaptureAbilityModifierAttributes(const UPF2AttributeSet* AttributeSet);
 
 	void SetupWorld();
 	void BeginPlay() const;
