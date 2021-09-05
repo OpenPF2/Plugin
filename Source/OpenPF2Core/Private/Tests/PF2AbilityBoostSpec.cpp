@@ -54,6 +54,8 @@ BEGIN_DEFINE_PF_SPEC(FPF2AbilityBoostSpec,
 	void VerifyOtherBoostsUnaffected(const FString GameEffectName,
 	                                 const FString TargetAttributeName);
 
+	void VerifyBoostCounter(FString GameEffectName, FString TargetAttributeName, int NumTimes);
+
 	void VerifyBoostRemoved(const FString GameEffectName,
 	                        const FString TargetAttributeName,
 	                        const float   StartingValue);
@@ -212,6 +214,22 @@ void FPF2AbilityBoostSpec::Define()
 					});
 				});
 			});
+
+			Describe("when GE is applied once", [=, this]()
+			{
+				It("increments the boost counter by 1", [=, this]()
+				{
+					VerifyBoostCounter(EffectName, AttributeName, 1);
+				});
+			});
+
+			Describe("when GE is applied twice", [=, this]()
+			{
+				It("increments the boost counter by 2", [=, this]()
+				{
+					VerifyBoostCounter(EffectName, AttributeName, 2);
+				});
+			});
 		});
 
 		Describe("Constitution Boost", [=, this]()
@@ -297,6 +315,22 @@ void FPF2AbilityBoostSpec::Define()
 					{
 						VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
+				});
+			});
+
+			Describe("when GE is applied once", [=, this]()
+			{
+				It("increments the boost counter by 1", [=, this]()
+				{
+					VerifyBoostCounter(EffectName, AttributeName, 1);
+				});
+			});
+
+			Describe("when GE is applied twice", [=, this]()
+			{
+				It("increments the boost counter by 2", [=, this]()
+				{
+					VerifyBoostCounter(EffectName, AttributeName, 2);
 				});
 			});
 		});
@@ -386,6 +420,22 @@ void FPF2AbilityBoostSpec::Define()
 					});
 				});
 			});
+
+			Describe("when GE is applied once", [=, this]()
+			{
+				It("increments the boost counter by 1", [=, this]()
+				{
+					VerifyBoostCounter(EffectName, AttributeName, 1);
+				});
+			});
+
+			Describe("when GE is applied twice", [=, this]()
+			{
+				It("increments the boost counter by 2", [=, this]()
+				{
+					VerifyBoostCounter(EffectName, AttributeName, 2);
+				});
+			});
 		});
 
 		Describe("Intelligence Boost", [=, this]()
@@ -471,6 +521,22 @@ void FPF2AbilityBoostSpec::Define()
 					{
 						VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
+				});
+			});
+
+			Describe("when GE is applied once", [=, this]()
+			{
+				It("increments the boost counter by 1", [=, this]()
+				{
+					VerifyBoostCounter(EffectName, AttributeName, 1);
+				});
+			});
+
+			Describe("when GE is applied twice", [=, this]()
+			{
+				It("increments the boost counter by 2", [=, this]()
+				{
+					VerifyBoostCounter(EffectName, AttributeName, 2);
 				});
 			});
 		});
@@ -560,6 +626,22 @@ void FPF2AbilityBoostSpec::Define()
 					});
 				});
 			});
+
+			Describe("when GE is applied once", [=, this]()
+			{
+				It("increments the boost counter by 1", [=, this]()
+				{
+					VerifyBoostCounter(EffectName, AttributeName, 1);
+				});
+			});
+
+			Describe("when GE is applied twice", [=, this]()
+			{
+				It("increments the boost counter by 2", [=, this]()
+				{
+					VerifyBoostCounter(EffectName, AttributeName, 2);
+				});
+			});
 		});
 
 		Describe("Wisdom Boost", [=, this]()
@@ -645,6 +727,22 @@ void FPF2AbilityBoostSpec::Define()
 					{
 						VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
+				});
+			});
+
+			Describe("when GE is applied once", [=, this]()
+			{
+				It("increments the boost counter by 1", [=, this]()
+				{
+					VerifyBoostCounter(EffectName, AttributeName, 1);
+				});
+			});
+
+			Describe("when GE is applied twice", [=, this]()
+			{
+				It("increments the boost counter by 2", [=, this]()
+				{
+					VerifyBoostCounter(EffectName, AttributeName, 2);
 				});
 			});
 		});
@@ -766,6 +864,48 @@ void FPF2AbilityBoostSpec::VerifyOtherBoostsUnaffected(const FString GameEffectN
 				);
 			}
 		}
+	}
+	else
+	{
+		AddWarning("GE is not loaded.");
+	}
+}
+
+void FPF2AbilityBoostSpec::VerifyBoostCounter(const FString GameEffectName,
+                                              const FString TargetAttributeName,
+                                              const int NumTimes)
+{
+	const TSubclassOf<UGameplayEffect>& EffectBP = this->BoostGEs[GameEffectName];
+
+	if (IsValid(EffectBP))
+	{
+		const UPF2AttributeSet* AttributeSet        = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
+		FAttributeCapture       Attributes          = CaptureAttributes(AttributeSet);
+		const FString           CountAttributeName  = "AbBoostCount";
+		FGameplayAttributeData *TargetAttribute     = Attributes[TargetAttributeName],
+		                       *BoostCountAttribute = Attributes[CountAttributeName];
+
+		// Sanity check test logic.
+		TestNotEqual("Captured at least one attribute", Attributes.Num(), 0);
+
+		*(BoostCountAttribute) = 0.0f;
+
+		for (int AppliedCount = 0; AppliedCount < NumTimes; ++AppliedCount)
+		{
+			ApplyGameEffect(*TargetAttribute, 10.0f, EffectBP);
+		}
+
+		TestEqual(
+			CountAttributeName + ".BaseValue",
+			BoostCountAttribute->GetBaseValue(),
+			0.0f
+		);
+
+		TestEqual(
+			CountAttributeName + ".CurrentValue",
+			BoostCountAttribute->GetCurrentValue(),
+			static_cast<float>(NumTimes)
+		);
 	}
 	else
 	{
