@@ -348,6 +348,11 @@ void FPF2SkillModifierCalculationSpec::Define()
 	});
 }
 
+TSubclassOf<UGameplayEffect> FPF2SkillModifierCalculationSpec::LoadGE() const
+{
+	return this->LoadBlueprint<UGameplayEffect>(BlueprintPath, SkillGameEffectCalc);
+}
+
 void FPF2SkillModifierCalculationSpec::VerifySkillModifier(const FString AbModFriendlyName,
                                                            const FString AbModAttributeName,
                                                            const FString SkillModAttributeFriendlyName,
@@ -421,9 +426,4 @@ void FPF2SkillModifierCalculationSpec::VerifySkillModifier(const FString AbModAt
 		SkillAttribute->GetCurrentValue(),
 		ExpectedSkillMod
 	);
-}
-
-TSubclassOf<UGameplayEffect> FPF2SkillModifierCalculationSpec::LoadGE() const
-{
-	return this->LoadBlueprint<UGameplayEffect>(BlueprintPath, SkillGameEffectCalc);
 }

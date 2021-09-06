@@ -101,6 +101,11 @@ void FPF2PerceptionModifierCalculationSpec::Define()
 	});
 }
 
+TSubclassOf<UGameplayEffect> FPF2PerceptionModifierCalculationSpec::LoadGE() const
+{
+	return this->LoadBlueprint<UGameplayEffect>(BlueprintPath, PerceptionGameEffectCalc);
+}
+
 void FPF2PerceptionModifierCalculationSpec::VerifyPerceptionModifier(const float   AbModScore,
                                                                      const FString ProficiencyLevel,
                                                                      const float   ExpectedPcpMod)
@@ -128,9 +133,4 @@ void FPF2PerceptionModifierCalculationSpec::VerifyPerceptionModifier(const float
 		PcpAttribute->GetCurrentValue(),
 		ExpectedPcpMod
 	);
-}
-
-TSubclassOf<UGameplayEffect> FPF2PerceptionModifierCalculationSpec::LoadGE() const
-{
-	return this->LoadBlueprint<UGameplayEffect>(BlueprintPath, PerceptionGameEffectCalc);
 }

@@ -123,6 +123,11 @@ void FPF2SavingThrowModifierCalculationSpec::Define()
 	});
 }
 
+TSubclassOf<UGameplayEffect> FPF2SavingThrowModifierCalculationSpec::LoadGE() const
+{
+	return this->LoadBlueprint<UGameplayEffect>(BlueprintPath, SavingThrowGameEffectCalc);
+}
+
 void FPF2SavingThrowModifierCalculationSpec::VerifySavingThrowModifier(const FString AbModFriendlyName,
                                                                        const FString AbModAttributeName,
                                                                        const FString SavingModAttributeFriendlyName,
@@ -196,9 +201,4 @@ void FPF2SavingThrowModifierCalculationSpec::VerifySavingThrowModifier(const FSt
 		SavingAttribute->GetCurrentValue(),
 		ExpectedSavingMod
 	);
-}
-
-TSubclassOf<UGameplayEffect> FPF2SavingThrowModifierCalculationSpec::LoadGE() const
-{
-	return this->LoadBlueprint<UGameplayEffect>(BlueprintPath, SavingThrowGameEffectCalc);
 }
