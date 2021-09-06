@@ -7,14 +7,13 @@
 #include "Calculations/PF2AbilityModifierCalculation.h"
 #include "Tests/PF2SpecBase.h"
 
-namespace AbilityModTests
-{
-	const FString GBlueprintPath       = TEXT("/OpenPF2Core/OpenPF2/Core");
-	const FString GAbModGameEffectCalc = TEXT("GE_CalcAbilityModifiers");
+BEGIN_DEFINE_PF_SPEC(FPF2AbilityModSpec,
+                     "OpenPF2.AbilityMods",
+                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+	const FString BlueprintPath       = TEXT("/OpenPF2Core/OpenPF2/Core");
+	const FString AbModGameEffectCalc = TEXT("GE_CalcAbilityModifiers");
 
-	// If this is made constexp, it does not compile (see RSCPP-32172).
-	// ReSharper disable once CppVariableCanBeMadeConstexpr
-	const FString GAbModMmcNames[] = {
+	const FString AbModMmcNames[6] = {
 		TEXT("MMC_AbModCharisma"),
 		TEXT("MMC_AbModConstitution"),
 		TEXT("MMC_AbModDexterity"),
@@ -23,16 +22,10 @@ namespace AbilityModTests
 		TEXT("MMC_AbModWisdom"),
 	};
 
-	// If this is made constexp, it does not compile (see RSCPP-32172).
-	// ReSharper disable once CppVariableCanBeMadeConstexpr
-	const FString GAbModGeNames[] = {
-		GAbModGameEffectCalc,
+	const FString AbModGeNames[1] = {
+		AbModGameEffectCalc,
 	};
-}
 
-BEGIN_DEFINE_PF_SPEC(FPF2AbilityModSpec,
-                     "OpenPF2.AbilityMods",
-                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 	TMap<FString, TSubclassOf<UPF2AbilityModifierCalculation>> AbModMMCs;
 	TMap<FString, TSubclassOf<UGameplayEffect>>                AbModGEs;
 	TMap<float, float>                                         AbModMappings;
@@ -67,7 +60,7 @@ void FPF2AbilityModSpec::Define()
 			this->AbModMMCs.Empty();
 		});
 
-		for (const auto& BlueprintName : AbilityModTests::GAbModMmcNames)
+		for (const auto& BlueprintName : AbModMmcNames)
 		{
 			It(BlueprintName + " should load", [=, this]()
 			{
@@ -90,7 +83,7 @@ void FPF2AbilityModSpec::Define()
 			this->AbModGEs.Empty();
 		});
 
-		for (const auto& BlueprintName : AbilityModTests::GAbModGeNames)
+		for (const auto& BlueprintName : AbModGeNames)
 		{
 			It(BlueprintName + " should load", [=, this]()
 			{
@@ -379,10 +372,10 @@ void FPF2AbilityModSpec::Define()
 
 void FPF2AbilityModSpec::LoadMMCs()
 {
-	for (auto& BlueprintName : AbilityModTests::GAbModMmcNames)
+	for (auto& BlueprintName : AbModMmcNames)
 	{
 		TSubclassOf<UPF2AbilityModifierCalculation> CalculationBP =
-			this->LoadBlueprint<UPF2AbilityModifierCalculation>(AbilityModTests::GBlueprintPath, BlueprintName);
+			this->LoadBlueprint<UPF2AbilityModifierCalculation>(BlueprintPath, BlueprintName);
 
 		this->AbModMMCs.Add(BlueprintName, CalculationBP);
 	}
@@ -390,10 +383,10 @@ void FPF2AbilityModSpec::LoadMMCs()
 
 void FPF2AbilityModSpec::LoadGEs()
 {
-	for (auto& BlueprintName : AbilityModTests::GAbModGeNames)
+	for (auto& BlueprintName : AbModGeNames)
 	{
 		TSubclassOf<UGameplayEffect> GameplayEffectBP =
-			this->LoadBlueprint<UGameplayEffect>(AbilityModTests::GBlueprintPath, BlueprintName);
+			this->LoadBlueprint<UGameplayEffect>(BlueprintPath, BlueprintName);
 
 		this->AbModGEs.Add(BlueprintName, GameplayEffectBP);
 	}
@@ -434,7 +427,7 @@ void FPF2AbilityModSpec::VerifyModifier(const FString TargetAbilityAttributeName
                                         const float   AbilityValue,
                                         const float   ExpectedModifier)
 {
-	const TSubclassOf<UGameplayEffect>& EffectBP = this->AbModGEs[AbilityModTests::GAbModGameEffectCalc];
+	const TSubclassOf<UGameplayEffect>& EffectBP = this->AbModGEs[AbModGameEffectCalc];
 
 	if (IsValid(EffectBP))
 	{
@@ -473,7 +466,7 @@ void FPF2AbilityModSpec::VerifyModifier(const FString TargetAbilityAttributeName
 void FPF2AbilityModSpec::VerifyCorrectAbilityAffected(const FString TargetAbilityAttributeName,
                                                       const FString TargetModifierAttributeName)
 {
-	const TSubclassOf<UGameplayEffect>& EffectBP = this->AbModGEs[AbilityModTests::GAbModGameEffectCalc];
+	const TSubclassOf<UGameplayEffect>& EffectBP = this->AbModGEs[AbModGameEffectCalc];
 
 	if (IsValid(EffectBP))
 	{
@@ -591,7 +584,7 @@ void FPF2AbilityModSpec::VerifyCorrectAbilityAffected(const FString TargetAbilit
 void FPF2AbilityModSpec::VerifyModifierRemoved(const FString TargetAbilityAttributeName,
                                                const FString TargetModifierAttributeName)
 {
-	const TSubclassOf<UGameplayEffect>& EffectBP = this->AbModGEs[AbilityModTests::GAbModGameEffectCalc];
+	const TSubclassOf<UGameplayEffect>& EffectBP = this->AbModGEs[AbModGameEffectCalc];
 
 	if (IsValid(EffectBP))
 	{

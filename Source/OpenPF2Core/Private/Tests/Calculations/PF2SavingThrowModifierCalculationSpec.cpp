@@ -9,6 +9,9 @@
 BEGIN_DEFINE_PF_SPEC(FPF2SavingThrowModifierCalculationSpec,
                      "OpenPF2.SavingThrowModifierCalculations",
                      EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+	const FString BlueprintPath             = TEXT("/OpenPF2Core/OpenPF2/Core");
+	const FString SavingThrowGameEffectCalc = TEXT("GE_CalcSavingThrowModifiers");
+
 	const TMap<float, TMap<FString, float>> ExpectedValues =
 	{
 		{
@@ -197,8 +200,5 @@ void FPF2SavingThrowModifierCalculationSpec::VerifySavingThrowModifier(const FSt
 
 TSubclassOf<UGameplayEffect> FPF2SavingThrowModifierCalculationSpec::LoadGE() const
 {
-	const FString BlueprintPath = TEXT("/OpenPF2Core/OpenPF2/Core");
-	const FString BlueprintName = TEXT("GE_CalcSavingThrowModifiers");
-
-	return this->LoadBlueprint<UGameplayEffect>(BlueprintPath, BlueprintName);
+	return this->LoadBlueprint<UGameplayEffect>(BlueprintPath, SavingThrowGameEffectCalc);
 }
