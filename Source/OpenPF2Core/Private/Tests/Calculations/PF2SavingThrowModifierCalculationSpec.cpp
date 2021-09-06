@@ -145,13 +145,13 @@ void FPF2SavingThrowModifierCalculationSpec::VerifySavingThrowModifier(const FSt
 					It(FString::Format(TEXT("calculates a {0} saving throw of {1}"), {SavingModAttributeFriendlyName, FString::FormatAsNumber(ExpectedSavingMod)}), [=, this]()
 					{
 						this->VerifySavingThrowModifier(
-                            AbModAttributeName,
-                            AbModScore,
-                            SavingModAttributeFriendlyName,
-                            SavingModAttributeName,
-                            ProficiencyLevel,
-                            ExpectedSavingMod
-                        );
+							AbModAttributeName,
+							AbModScore,
+							SavingModAttributeFriendlyName,
+							SavingModAttributeName,
+							ProficiencyLevel,
+							ExpectedSavingMod
+						);
 					});
 				});
 			}
