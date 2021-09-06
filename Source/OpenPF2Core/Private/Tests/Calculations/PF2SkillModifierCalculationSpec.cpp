@@ -370,13 +370,13 @@ void FPF2SkillModifierCalculationSpec::VerifySkillModifier(const FString AbModFr
 					It(FString::Format(TEXT("calculates a {0} skill of {1}"), {SkillModAttributeFriendlyName, FString::FormatAsNumber(ExpectedSkillMod)}), [=, this]()
 					{
 						this->VerifySkillModifier(
-                            AbModAttributeName,
-                            AbModScore,
-                            SkillModAttributeFriendlyName,
-                            SkillModAttributeName,
-                            ProficiencyLevel,
-                            ExpectedSkillMod
-                        );
+							AbModAttributeName,
+							AbModScore,
+							SkillModAttributeFriendlyName,
+							SkillModAttributeName,
+							ProficiencyLevel,
+							ExpectedSkillMod
+						);
 					});
 				});
 			}
