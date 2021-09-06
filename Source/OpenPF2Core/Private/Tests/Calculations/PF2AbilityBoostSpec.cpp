@@ -7,13 +7,12 @@
 #include "Calculations/PF2AbilityBoostCalculation.h"
 #include "Tests/PF2SpecBase.h"
 
-namespace AbilityBoostTests
-{
-	const FString GBlueprintPath = TEXT("/OpenPF2Core/OpenPF2/Core");
+BEGIN_DEFINE_PF_SPEC(FPF2AbilityBoostSpec,
+                     "OpenPF2.AbilityBoosts",
+                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+	const FString BlueprintPath = TEXT("/OpenPF2Core/OpenPF2/Core");
 
-	// If this is made constexp, it does not compile (see RSCPP-32172).
-	// ReSharper disable once CppVariableCanBeMadeConstexpr
-	const FString GBoostMmcNames[] = {
+	const FString BoostMmcNames[6] = {
 		TEXT("MMC_AbBoostCharisma"),
 		TEXT("MMC_AbBoostConstitution"),
 		TEXT("MMC_AbBoostDexterity"),
@@ -22,9 +21,7 @@ namespace AbilityBoostTests
 		TEXT("MMC_AbBoostWisdom"),
 	};
 
-	// If this is made constexp, it does not compile (see RSCPP-32172).
-	// ReSharper disable once CppVariableCanBeMadeConstexpr
-	const FString GBoostGeNames[] = {
+	const FString BoostGeNames[6] = {
 		TEXT("GE_BoostAbCharisma"),
 		TEXT("GE_BoostAbConstitution"),
 		TEXT("GE_BoostAbDexterity"),
@@ -32,11 +29,7 @@ namespace AbilityBoostTests
 		TEXT("GE_BoostAbStrength"),
 		TEXT("GE_BoostAbWisdom"),
 	};
-}
 
-BEGIN_DEFINE_PF_SPEC(FPF2AbilityBoostSpec,
-                     "OpenPF2.AbilityBoosts",
-                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 	TMap<FString, TSubclassOf<UPF2AbilityBoostCalculation>> BoostMMCs;
 	TMap<FString, TSubclassOf<UGameplayEffect>> BoostGEs;
 
@@ -72,7 +65,7 @@ void FPF2AbilityBoostSpec::Define()
 			this->BoostMMCs.Empty();
 		});
 
-		for (const auto& BlueprintName : AbilityBoostTests::GBoostMmcNames)
+		for (const auto& BlueprintName : BoostMmcNames)
 		{
 			It(BlueprintName + " should load", [=, this]()
 			{
@@ -95,7 +88,7 @@ void FPF2AbilityBoostSpec::Define()
 			this->BoostGEs.Empty();
 		});
 
-		for (const auto& BlueprintName : AbilityBoostTests::GBoostGeNames)
+		for (const auto& BlueprintName : BoostGeNames)
 		{
 			It(BlueprintName + " should load", [=, this]()
 			{
@@ -748,10 +741,10 @@ void FPF2AbilityBoostSpec::Define()
 
 void FPF2AbilityBoostSpec::LoadMMCs()
 {
-	for (auto& BlueprintName : AbilityBoostTests::GBoostMmcNames)
+	for (auto& BlueprintName : BoostMmcNames)
 	{
 		TSubclassOf<UPF2AbilityBoostCalculation> CalculationBP =
-			this->LoadBlueprint<UPF2AbilityBoostCalculation>(AbilityBoostTests::GBlueprintPath, BlueprintName);
+			this->LoadBlueprint<UPF2AbilityBoostCalculation>(BlueprintPath, BlueprintName);
 
 		this->BoostMMCs.Add(BlueprintName, CalculationBP);
 	}
@@ -759,10 +752,10 @@ void FPF2AbilityBoostSpec::LoadMMCs()
 
 void FPF2AbilityBoostSpec::LoadGEs()
 {
-	for (auto& BlueprintName : AbilityBoostTests::GBoostGeNames)
+	for (auto& BlueprintName : BoostGeNames)
 	{
 		TSubclassOf<UGameplayEffect> GameplayEffectBP =
-			this->LoadBlueprint<UGameplayEffect>(AbilityBoostTests::GBlueprintPath, BlueprintName);
+			this->LoadBlueprint<UGameplayEffect>(BlueprintPath, BlueprintName);
 
 		this->BoostGEs.Add(BlueprintName, GameplayEffectBP);
 	}
