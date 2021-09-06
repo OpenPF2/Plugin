@@ -1,0 +1,84 @@
+﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
+// distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+#include "Abilities/PF2AttributeSet.h"
+#include "Tests/PF2SpecBase.h"
+
+BEGIN_DEFINE_PF_SPEC(FPF2AttributeSetSpec,
+                     "OpenPF2.AttributeSet",
+                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+END_DEFINE_PF_SPEC(FPF2AttributeSetSpec)
+
+void FPF2AttributeSetSpec::Define()
+{
+	BeforeEach([=, this]()
+	{
+		this->SetupWorld();
+		this->SetupPawn();
+
+		this->BeginPlay();
+	});
+
+	AfterEach([=, this]()
+	{
+		this->DestroyPawn();
+		this->DestroyWorld();
+	});
+
+	Describe("At UPF2AttributeSet construction time", [this]()
+	{
+		It("has default values for all defined attributes", [this]()
+		{
+			const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
+
+			TestEqual(TEXT("Experience"),             AttributeSet->GetExperience(),              0.0f);
+			TestEqual(TEXT("HitPoints"),              AttributeSet->GetHitPoints(),               1.0f);
+			TestEqual(TEXT("MaxHitPoints"),           AttributeSet->GetMaxHitPoints(),            1.0f);
+			TestEqual(TEXT("AbBoostCount"),           AttributeSet->GetAbBoostCount(),            0.0f);
+			TestEqual(TEXT("AbBoostLimit"),           AttributeSet->GetAbBoostLimit(),            0.0f);
+			TestEqual(TEXT("AbStrength"),             AttributeSet->GetAbStrength(),             10.0f);
+			TestEqual(TEXT("AbStrengthModifier"),     AttributeSet->GetAbStrengthModifier(),      0.0f);
+			TestEqual(TEXT("AbDexterity"),            AttributeSet->GetAbDexterity(),            10.0f);
+			TestEqual(TEXT("AbDexterityModifier"),    AttributeSet->GetAbDexterityModifier(),     0.0f);
+			TestEqual(TEXT("AbConstitution"),         AttributeSet->GetAbConstitution(),         10.0f);
+			TestEqual(TEXT("AbConstitutionModifier"), AttributeSet->GetAbConstitutionModifier(),  0.0f);
+			TestEqual(TEXT("AbIntelligence"),         AttributeSet->GetAbIntelligence(),         10.0f);
+			TestEqual(TEXT("AbIntelligenceModifier"), AttributeSet->GetAbIntelligenceModifier(),  0.0f);
+			TestEqual(TEXT("AbWisdom"),               AttributeSet->GetAbWisdom(),               10.0f);
+			TestEqual(TEXT("AbWisdomModifier"),       AttributeSet->GetAbWisdomModifier(),        0.0f);
+			TestEqual(TEXT("AbCharisma"),             AttributeSet->GetAbCharisma(),             10.0f);
+			TestEqual(TEXT("AbCharismaModifier"),     AttributeSet->GetAbCharismaModifier(),      0.0f);
+			TestEqual(TEXT("ClassDifficultyClass"),   AttributeSet->GetClassDifficultyClass(),    0.0f);
+			TestEqual(TEXT("Speed"),                  AttributeSet->GetSpeed(),                   1.0f);
+			TestEqual(TEXT("MaxSpeed"),               AttributeSet->GetMaxSpeed(),                1.0f);
+			TestEqual(TEXT("ArmorClass"),             AttributeSet->GetArmorClass(),             10.0f);
+			TestEqual(TEXT("StFortitudeModifier"),    AttributeSet->GetStFortitudeModifier(),     0.0f);
+			TestEqual(TEXT("StReflexModifier"),       AttributeSet->GetStReflexModifier(),        0.0f);
+			TestEqual(TEXT("StWillModifier"),         AttributeSet->GetStWillModifier(),          0.0f);
+			TestEqual(TEXT("PerceptionModifier"),     AttributeSet->GetPerceptionModifier(),      0.0f);
+			TestEqual(TEXT("SkAcrobaticsModifier"),   AttributeSet->GetSkAcrobaticsModifier(),    0.0f);
+			TestEqual(TEXT("SkArcanaModifier"),       AttributeSet->GetSkArcanaModifier(),        0.0f);
+			TestEqual(TEXT("SkAthleticsModifier"),    AttributeSet->GetSkAthleticsModifier(),     0.0f);
+			TestEqual(TEXT("SkCraftingModifier"),     AttributeSet->GetSkCraftingModifier(),      0.0f);
+			TestEqual(TEXT("SkDeceptionModifier"),    AttributeSet->GetSkDeceptionModifier(),     0.0f);
+			TestEqual(TEXT("SkDiplomacyModifier"),    AttributeSet->GetSkDiplomacyModifier(),     0.0f);
+			TestEqual(TEXT("SkIntimidationModifier"), AttributeSet->GetSkIntimidationModifier(),  0.0f);
+			TestEqual(TEXT("SkLore1Modifier"),        AttributeSet->GetSkLore1Modifier(),         0.0f);
+			TestEqual(TEXT("SkLore2Modifier"),        AttributeSet->GetSkLore2Modifier(),         0.0f);
+			TestEqual(TEXT("SkMedicineModifier"),     AttributeSet->GetSkMedicineModifier(),      0.0f);
+			TestEqual(TEXT("SkNatureModifier"),       AttributeSet->GetSkNatureModifier(),        0.0f);
+			TestEqual(TEXT("SkOccultismModifier"),    AttributeSet->GetSkOccultismModifier(),     0.0f);
+			TestEqual(TEXT("SkPerformanceModifier"),  AttributeSet->GetSkPerformanceModifier(),   0.0f);
+			TestEqual(TEXT("SkReligionModifier"),     AttributeSet->GetSkReligionModifier(),      0.0f);
+			TestEqual(TEXT("SkSocietyModifier"),      AttributeSet->GetSkSocietyModifier(),       0.0f);
+			TestEqual(TEXT("SkStealthModifier"),      AttributeSet->GetSkStealthModifier(),       0.0f);
+			TestEqual(TEXT("SkSurvivalModifier"),     AttributeSet->GetSkSurvivalModifier(),      0.0f);
+			TestEqual(TEXT("SkThieveryModifier"),     AttributeSet->GetSkThieveryModifier(),      0.0f);
+			TestEqual(TEXT("FeAncestryFeatCount"),    AttributeSet->GetFeAncestryFeatCount(),     0.0f);
+			TestEqual(TEXT("FeAncestryFeatLimit"),    AttributeSet->GetFeAncestryFeatLimit(),     0.0f);
+			TestEqual(TEXT("Damage"),                 AttributeSet->GetDamage(),                  0.0f);
+		});
+	});
+}
