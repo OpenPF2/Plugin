@@ -177,16 +177,7 @@ void FPF2SavingThrowModifierCalculationSpec::VerifySavingThrowModifier(const FSt
 	const FGameplayAttributeData*       SavingAttribute = Attributes[SavingModAttributeName];
 	const TSubclassOf<UGameplayEffect>& EffectBP        = this->LoadGE();
 
-	this->PawnAbilityComponent->AddLooseGameplayTag(
-		FGameplayTag::RequestGameplayTag(
-			FName(
-				FString::Format(
-					TEXT("SavingThrow.{0}.{1}"),
-					{SavingModAttributeFriendlyName, ProficiencyLevel}
-				)
-			)
-		)
-	);
+	this->ApplyTag(FString::Format(TEXT("SavingThrow.{0}.{1}"), {SavingModAttributeFriendlyName, ProficiencyLevel}));
 
 	ApplyGameEffect(*AbModAttribute, AbModScore, EffectBP);
 

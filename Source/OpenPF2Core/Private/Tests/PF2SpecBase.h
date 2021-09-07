@@ -120,7 +120,6 @@ protected:
 	static FAttributeCapture CaptureSavingThrowAttributes(const UPF2AttributeSet* AttributeSet);
 	static FAttributeCapture CaptureSkillModifierAttributes(const UPF2AttributeSet* AttributeSet);
 
-
 	void SetupWorld();
 	void BeginPlay() const;
 	void DestroyWorld() const;
@@ -131,4 +130,7 @@ protected:
 	FActiveGameplayEffectHandle ApplyGameEffect(FGameplayAttributeData&             Attribute,
 	                                            float                               StartingValue,
 	                                            const TSubclassOf<UGameplayEffect>& EffectBP) const;
+
+	void ApplyTag(FString TagName) const;
+	void RemoveTag(FString TagName) const;
 };
