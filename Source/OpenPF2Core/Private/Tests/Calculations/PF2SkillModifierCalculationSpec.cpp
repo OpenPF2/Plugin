@@ -402,16 +402,7 @@ void FPF2SkillModifierCalculationSpec::VerifySkillModifier(const FString AbModAt
 	const FGameplayAttributeData*       SkillAttribute = Attributes[SkillModAttributeName];
 	const TSubclassOf<UGameplayEffect>& EffectBP       = this->LoadGE();
 
-	this->PawnAbilityComponent->AddLooseGameplayTag(
-		FGameplayTag::RequestGameplayTag(
-			FName(
-				FString::Format(
-					TEXT("Skill.{0}.{1}"),
-					{SkillModAttributeFriendlyName, ProficiencyLevel}
-				)
-			)
-		)
-	);
+	this->ApplyTag(FString::Format(TEXT("Skill.{0}.{1}"), {SkillModAttributeFriendlyName, ProficiencyLevel}));
 
 	ApplyGameEffect(*AbModAttribute, AbModScore, EffectBP);
 
