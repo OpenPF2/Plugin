@@ -45,106 +45,103 @@ void FPF2ClassDifficultyClassCalculationSpec::Define()
 		this->BeginPlay();
 	});
 
+	BeforeEach([=, this]()
+	{
+		const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
+		FAttributeCapture       Attributes   = CaptureAbilityModifierAttributes(AttributeSet);
+
+		// Zero out all attributes so that only the "boosted" attribute has an effect.
+		for (auto& Modifier : this->AbilityModifierAttributes)
+		{
+			const FString ModifierName = Modifier.Value;
+
+			*(Attributes[ModifierName]) = 0.0f;
+		}
+	});
+
 	AfterEach([=, this]()
 	{
 		this->DestroyPawn();
 		this->DestroyWorld();
 	});
 
-	Describe("Class DC", [=, this]
+	for (auto& KeyAbility : this->AbilityModifierAttributes)
 	{
-		BeforeEach([=, this]()
+		const FString KeyAbilityName      = KeyAbility.Key,
+		              KeyAbilityAttribute = KeyAbility.Value;
+
+		Describe(FString::Format(TEXT("when the character's Key Ability is '{0}'"), {KeyAbilityName}), [=, this]
 		{
-			const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-			FAttributeCapture       Attributes   = CaptureAbilityModifierAttributes(AttributeSet);
-
-			// Zero out all attributes so that only the "boosted" attribute has an effect.
-			for (auto& Modifier : this->AbilityModifierAttributes)
+			BeforeEach([=, this]()
 			{
-				const FString ModifierName = Modifier.Value;
+				this->ApplyTag(FString::Format(TEXT("KeyAbility.{0}"), {KeyAbilityName}));
+			});
 
-				*(Attributes[ModifierName]) = 0.0f;
+			for (auto& BoostedAbility : this->AbilityModifierAttributes)
+			{
+				const FString BoostedAbilityName      = BoostedAbility.Key,
+				              BoostedAbilityAttribute = BoostedAbility.Value;
+
+				Describe(FString::Format(TEXT("when the '{0}' Ability Modifier is 5"), {BoostedAbilityName}), [=, this]
+				{
+					BeforeEach([=, this]()
+					{
+						const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
+						FAttributeCapture       Attributes   = CaptureAbilityModifierAttributes(AttributeSet);
+
+						*(Attributes[BoostedAbilityAttribute]) = 5.0f;
+					});
+
+					for (auto& Proficiency : this->ProficiencyValues)
+					{
+						const FString ProficiencyLevel = Proficiency.Key;
+						const float   ProficiencyValue = Proficiency.Value;
+
+						Describe(FString::Format(TEXT("when the character is '{0}' in Class DC"), {ProficiencyLevel}), [=, this]()
+						{
+							float ExpectedClassDcMod;
+
+							BeforeEach([=, this]()
+							{
+								this->ApplyTag(FString::Format(TEXT("ClassDc.{0}"), {ProficiencyLevel}));
+							});
+
+							if (KeyAbilityName == BoostedAbilityName)
+							{
+								ExpectedClassDcMod = 10.0f + 5.0f + ProficiencyValue;
+							}
+							else
+							{
+								ExpectedClassDcMod = 10.0f + 0.0f + ProficiencyValue;
+							}
+
+							It(FString::Format(TEXT("calculates a Class DC modifier of {0}"), {FString::FormatAsNumber(ExpectedClassDcMod)}), [=, this]()
+							{
+								const UPF2AttributeSet*             AttributeSet     = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
+								FAttributeCapture                   Attributes       = CaptureAttributes(AttributeSet);
+								FGameplayAttributeData*             ClassDcAttribute = Attributes[this->CdcModAttributeName];
+								const TSubclassOf<UGameplayEffect>& EffectBP         = this->LoadGE();
+
+								this->ApplyGameEffect(*ClassDcAttribute, 0.0f, EffectBP);
+
+								TestEqual(
+									FString::Format(TEXT("{0}.BaseValue"), {this->CdcModAttributeName}),
+									ClassDcAttribute->GetBaseValue(),
+									0.0f
+								);
+
+								TestEqual(
+									FString::Format(TEXT("{0}.CurrentValue"), {this->CdcModAttributeName}),
+									ClassDcAttribute->GetCurrentValue(),
+									ExpectedClassDcMod
+								);
+							});
+						});
+					}
+				});
 			}
 		});
-
-		for (auto& KeyAbility : this->AbilityModifierAttributes)
-		{
-			const FString KeyAbilityName      = KeyAbility.Key,
-			              KeyAbilityAttribute = KeyAbility.Value;
-
-			Describe(FString::Format(TEXT("when the character's Key Ability is '{0}'"), {KeyAbilityName}), [=, this]
-			{
-				BeforeEach([=, this]()
-				{
-					this->ApplyTag(FString::Format(TEXT("KeyAbility.{0}"), {KeyAbilityName}));
-				});
-
-				for (auto& BoostedAbility : this->AbilityModifierAttributes)
-				{
-					const FString BoostedAbilityName      = BoostedAbility.Key,
-					              BoostedAbilityAttribute = BoostedAbility.Value;
-
-					Describe(FString::Format(TEXT("when the '{0}' Ability Modifier is 5"), {BoostedAbilityName}), [=, this]
-					{
-						BeforeEach([=, this]()
-						{
-							const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-							FAttributeCapture       Attributes   = CaptureAbilityModifierAttributes(AttributeSet);
-
-							*(Attributes[BoostedAbilityAttribute]) = 5.0f;
-						});
-
-						for (auto& Proficiency : this->ProficiencyValues)
-						{
-							const FString ProficiencyLevel = Proficiency.Key;
-							const float   ProficiencyValue = Proficiency.Value;
-
-							Describe(FString::Format(TEXT("when the character is '{0}' in Class DC"), {ProficiencyLevel}), [=, this]()
-							{
-								float ExpectedClassDcMod;
-
-								BeforeEach([=, this]()
-								{
-									this->ApplyTag(FString::Format(TEXT("ClassDc.{0}"), {ProficiencyLevel}));
-								});
-
-								if (KeyAbilityName == BoostedAbilityName)
-								{
-									ExpectedClassDcMod = 10.0f + 5.0f + ProficiencyValue;
-								}
-								else
-								{
-									ExpectedClassDcMod = 10.0f + 0.0f + ProficiencyValue;
-								}
-
-								It(FString::Format(TEXT("calculates a Class DC modifier of {0}"), {FString::FormatAsNumber(ExpectedClassDcMod)}), [=, this]()
-								{
-									const UPF2AttributeSet*             AttributeSet     = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-									FAttributeCapture                   Attributes       = CaptureAttributes(AttributeSet);
-									FGameplayAttributeData*             ClassDcAttribute = Attributes[this->CdcModAttributeName];
-									const TSubclassOf<UGameplayEffect>& EffectBP         = this->LoadGE();
-
-									this->ApplyGameEffect(*ClassDcAttribute, 0.0f, EffectBP);
-
-									TestEqual(
-										FString::Format(TEXT("{0}.BaseValue"), {this->CdcModAttributeName}),
-										ClassDcAttribute->GetBaseValue(),
-										0.0f
-									);
-
-									TestEqual(
-										FString::Format(TEXT("{0}.CurrentValue"), {this->CdcModAttributeName}),
-										ClassDcAttribute->GetCurrentValue(),
-										ExpectedClassDcMod
-									);
-								});
-							});
-						}
-					});
-				}
-			});
-		}
-	});
+	}
 }
 
 TSubclassOf<UGameplayEffect> FPF2ClassDifficultyClassCalculationSpec::LoadGE() const
