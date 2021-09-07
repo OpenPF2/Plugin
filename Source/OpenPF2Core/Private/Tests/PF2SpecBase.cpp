@@ -22,19 +22,19 @@ FAttributeCapture FPF2SpecBase::CaptureAttributes(const UPF2AttributeSet* Attrib
 {
 	FAttributeCapture Capture;
 
-	Capture.Add(TEXT("Experience"), const_cast<FGameplayAttributeData *>(&AttributeSet->Experience));
-	Capture.Add(TEXT("HitPoints"), const_cast<FGameplayAttributeData *>(&AttributeSet->HitPoints));
-	Capture.Add(TEXT("MaxHitPoints"), const_cast<FGameplayAttributeData *>(&AttributeSet->MaxHitPoints));
-	Capture.Add(TEXT("AbBoostCount"), const_cast<FGameplayAttributeData *>(&AttributeSet->AbBoostCount));
-	Capture.Add(TEXT("AbBoostLimit"), const_cast<FGameplayAttributeData *>(&AttributeSet->AbBoostLimit));
+	Capture.Add(TEXT("Experience"),           const_cast<FGameplayAttributeData *>(&AttributeSet->Experience));
+	Capture.Add(TEXT("HitPoints"),            const_cast<FGameplayAttributeData *>(&AttributeSet->HitPoints));
+	Capture.Add(TEXT("MaxHitPoints"),         const_cast<FGameplayAttributeData *>(&AttributeSet->MaxHitPoints));
+	Capture.Add(TEXT("AbBoostCount"),         const_cast<FGameplayAttributeData *>(&AttributeSet->AbBoostCount));
+	Capture.Add(TEXT("AbBoostLimit"),         const_cast<FGameplayAttributeData *>(&AttributeSet->AbBoostLimit));
 	Capture.Add(TEXT("ClassDifficultyClass"), const_cast<FGameplayAttributeData *>(&AttributeSet->ClassDifficultyClass));
-	Capture.Add(TEXT("Speed"), const_cast<FGameplayAttributeData *>(&AttributeSet->Speed));
-	Capture.Add(TEXT("MaxSpeed"), const_cast<FGameplayAttributeData *>(&AttributeSet->MaxSpeed));
-	Capture.Add(TEXT("ArmorClass"), const_cast<FGameplayAttributeData *>(&AttributeSet->ArmorClass));
-	Capture.Add(TEXT("PerceptionModifier"), const_cast<FGameplayAttributeData *>(&AttributeSet->PerceptionModifier));
-	Capture.Add(TEXT("FeAncestryFeatCount"), const_cast<FGameplayAttributeData *>(&AttributeSet->FeAncestryFeatCount));
-	Capture.Add(TEXT("FeAncestryFeatLimit"), const_cast<FGameplayAttributeData *>(&AttributeSet->FeAncestryFeatLimit));
-	Capture.Add(TEXT("Damage"), const_cast<FGameplayAttributeData *>(&AttributeSet->Damage));
+	Capture.Add(TEXT("Speed"),                const_cast<FGameplayAttributeData *>(&AttributeSet->Speed));
+	Capture.Add(TEXT("MaxSpeed"),             const_cast<FGameplayAttributeData *>(&AttributeSet->MaxSpeed));
+	Capture.Add(TEXT("ArmorClass"),           const_cast<FGameplayAttributeData *>(&AttributeSet->ArmorClass));
+	Capture.Add(TEXT("PerceptionModifier"),   const_cast<FGameplayAttributeData *>(&AttributeSet->PerceptionModifier));
+	Capture.Add(TEXT("FeAncestryFeatCount"),  const_cast<FGameplayAttributeData *>(&AttributeSet->FeAncestryFeatCount));
+	Capture.Add(TEXT("FeAncestryFeatLimit"),  const_cast<FGameplayAttributeData *>(&AttributeSet->FeAncestryFeatLimit));
+	Capture.Add(TEXT("Damage"),               const_cast<FGameplayAttributeData *>(&AttributeSet->Damage));
 
 	Capture.Append(CaptureAbilityAttributes(AttributeSet));
 	Capture.Append(CaptureAbilityModifierAttributes(AttributeSet));
