@@ -74,31 +74,28 @@ void FPF2PerceptionModifierCalculationSpec::Define()
 		this->DestroyWorld();
 	});
 
-	Describe("Perception Modifier", [=, this]
+	for (const auto AbilityValues : this->ExpectedValues)
 	{
-		for (const auto AbilityValues : this->ExpectedValues)
+		const float                AbModScore     = AbilityValues.Key;
+		const TMap<FString, float> TrainingScores = AbilityValues.Value;
+
+		Describe(FString::Format(TEXT("when the character has a Perception modifier of {0}"), {FString::FormatAsNumber(AbModScore)}), [=, this]()
 		{
-			const float                AbModScore     = AbilityValues.Key;
-			const TMap<FString, float> TrainingScores = AbilityValues.Value;
-
-			Describe(FString::Format(TEXT("when the character has a Perception modifier of {0}"), {FString::FormatAsNumber(AbModScore)}), [=, this]()
+			for (const auto ProficiencyValues : TrainingScores)
 			{
-				for (const auto ProficiencyValues : TrainingScores)
-				{
-					const FString ProficiencyLevel = ProficiencyValues.Key;
-					const float   ExpectedPcpMod   = ProficiencyValues.Value;
+				const FString ProficiencyLevel = ProficiencyValues.Key;
+				const float   ExpectedPcpMod   = ProficiencyValues.Value;
 
-					Describe(FString::Format(TEXT("when the character is '{0}' in Perception"), {ProficiencyLevel}), [=, this]()
+				Describe(FString::Format(TEXT("when the character is '{0}' in Perception"), {ProficiencyLevel}), [=, this]()
+				{
+					It(FString::Format(TEXT("calculates a Perception modifier of {0}"), {FString::FormatAsNumber(ExpectedPcpMod)}), [=, this]()
 					{
-						It(FString::Format(TEXT("calculates a Perception modifier of {0}"), {FString::FormatAsNumber(ExpectedPcpMod)}), [=, this]()
-						{
-							this->VerifyPerceptionModifier(AbModScore, ProficiencyLevel, ExpectedPcpMod);
-						});
+						this->VerifyPerceptionModifier(AbModScore, ProficiencyLevel, ExpectedPcpMod);
 					});
-				}
-			});
-		}
-	});
+				});
+			}
+		});
+	}
 }
 
 TSubclassOf<UGameplayEffect> FPF2PerceptionModifierCalculationSpec::LoadGE() const
