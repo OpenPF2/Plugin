@@ -133,12 +133,12 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("applies a boost of +2 to the current value", [=, this]()
 					{
-						VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
 					It("does not boost any other attributes", [=, this]()
 					{
-						VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
@@ -146,7 +146,7 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("removes a boost of +2", [=, this]()
 					{
-						VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
@@ -160,12 +160,12 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("applies a boost of +1 to the current value", [=, this]()
 					{
-						VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
 					It("does not boost any other attributes", [=, this]()
 					{
-						VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
@@ -173,7 +173,7 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("removes a boost of +1", [=, this]()
 					{
-						VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
@@ -187,12 +187,12 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("applies a boost of +1 to the current value", [=, this]()
 					{
-						VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
 					It("does not boost any other attributes", [=, this]()
 					{
-						VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
@@ -200,7 +200,7 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("removes a boost of +1", [=, this]()
 					{
-						VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
@@ -209,7 +209,7 @@ void FPF2AbilityBoostSpec::Define()
 			{
 				It("increments the boost counter by 1", [=, this]()
 				{
-					VerifyBoostCounter(EffectName, AttributeName, 1);
+					this->VerifyBoostCounter(EffectName, AttributeName, 1);
 				});
 			});
 
@@ -217,7 +217,7 @@ void FPF2AbilityBoostSpec::Define()
 			{
 				It("increments the boost counter by 2", [=, this]()
 				{
-					VerifyBoostCounter(EffectName, AttributeName, 2);
+					this->VerifyBoostCounter(EffectName, AttributeName, 2);
 				});
 			});
 		});
@@ -236,12 +236,12 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("applies a boost of +2 to the current value", [=, this]()
 					{
-						VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
 					It("does not boost any other attributes", [=, this]()
 					{
-						VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
@@ -249,7 +249,7 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("removes a boost of +2", [=, this]()
 					{
-						VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
@@ -263,12 +263,12 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("applies a boost of +1 to the current value", [=, this]()
 					{
-						VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
 					It("does not boost any other attributes", [=, this]()
 					{
-						VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
@@ -276,7 +276,7 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("removes a boost of +1", [=, this]()
 					{
-						VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
@@ -290,12 +290,12 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("applies a boost of +1 to the current value", [=, this]()
 					{
-						VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
 					It("does not boost any other attributes", [=, this]()
 					{
-						VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
@@ -303,7 +303,7 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("removes a boost of +1", [=, this]()
 					{
-						VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
@@ -312,7 +312,7 @@ void FPF2AbilityBoostSpec::Define()
 			{
 				It("increments the boost counter by 1", [=, this]()
 				{
-					VerifyBoostCounter(EffectName, AttributeName, 1);
+					this->VerifyBoostCounter(EffectName, AttributeName, 1);
 				});
 			});
 
@@ -320,7 +320,7 @@ void FPF2AbilityBoostSpec::Define()
 			{
 				It("increments the boost counter by 2", [=, this]()
 				{
-					VerifyBoostCounter(EffectName, AttributeName, 2);
+					this->VerifyBoostCounter(EffectName, AttributeName, 2);
 				});
 			});
 		});
@@ -339,12 +339,12 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("applies a boost of +2 to the current value", [=, this]()
 					{
-						VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
 					It("does not boost any other attributes", [=, this]()
 					{
-						VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
@@ -352,7 +352,7 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("removes a boost of +2", [=, this]()
 					{
-						VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
@@ -366,12 +366,12 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("applies a boost of +1 to the current value", [=, this]()
 					{
-						VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
 					It("does not boost any other attributes", [=, this]()
 					{
-						VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
@@ -379,7 +379,7 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("removes a boost of +1", [=, this]()
 					{
-						VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
@@ -393,12 +393,12 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("applies a boost of +1 to the current value", [=, this]()
 					{
-						VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
 					It("does not boost any other attributes", [=, this]()
 					{
-						VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
@@ -406,7 +406,7 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("removes a boost of +1", [=, this]()
 					{
-						VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
@@ -415,7 +415,7 @@ void FPF2AbilityBoostSpec::Define()
 			{
 				It("increments the boost counter by 1", [=, this]()
 				{
-					VerifyBoostCounter(EffectName, AttributeName, 1);
+					this->VerifyBoostCounter(EffectName, AttributeName, 1);
 				});
 			});
 
@@ -423,7 +423,7 @@ void FPF2AbilityBoostSpec::Define()
 			{
 				It("increments the boost counter by 2", [=, this]()
 				{
-					VerifyBoostCounter(EffectName, AttributeName, 2);
+					this->VerifyBoostCounter(EffectName, AttributeName, 2);
 				});
 			});
 		});
@@ -442,12 +442,12 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("applies a boost of +2 to the current value", [=, this]()
 					{
-						VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
 					It("does not boost any other attributes", [=, this]()
 					{
-						VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
@@ -455,7 +455,7 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("removes a boost of +2", [=, this]()
 					{
-						VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
@@ -469,12 +469,12 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("applies a boost of +1 to the current value", [=, this]()
 					{
-						VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
 					It("does not boost any other attributes", [=, this]()
 					{
-						VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
@@ -482,7 +482,7 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("removes a boost of +1", [=, this]()
 					{
-						VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
@@ -496,12 +496,12 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("applies a boost of +1 to the current value", [=, this]()
 					{
-						VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
 					It("does not boost any other attributes", [=, this]()
 					{
-						VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
@@ -509,7 +509,7 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("removes a boost of +1", [=, this]()
 					{
-						VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
@@ -518,7 +518,7 @@ void FPF2AbilityBoostSpec::Define()
 			{
 				It("increments the boost counter by 1", [=, this]()
 				{
-					VerifyBoostCounter(EffectName, AttributeName, 1);
+					this->VerifyBoostCounter(EffectName, AttributeName, 1);
 				});
 			});
 
@@ -526,7 +526,7 @@ void FPF2AbilityBoostSpec::Define()
 			{
 				It("increments the boost counter by 2", [=, this]()
 				{
-					VerifyBoostCounter(EffectName, AttributeName, 2);
+					this->VerifyBoostCounter(EffectName, AttributeName, 2);
 				});
 			});
 		});
@@ -545,12 +545,12 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("applies a boost of +2 to the current value", [=, this]()
 					{
-						VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
 					It("does not boost any other attributes", [=, this]()
 					{
-						VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
@@ -558,7 +558,7 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("removes a boost of +2", [=, this]()
 					{
-						VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
@@ -572,12 +572,12 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("applies a boost of +1 to the current value", [=, this]()
 					{
-						VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
 					It("does not boost any other attributes", [=, this]()
 					{
-						VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
@@ -585,7 +585,7 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("removes a boost of +1", [=, this]()
 					{
-						VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
@@ -599,12 +599,12 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("applies a boost of +1 to the current value", [=, this]()
 					{
-						VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
 					It("does not boost any other attributes", [=, this]()
 					{
-						VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
@@ -612,7 +612,7 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("removes a boost of +1", [=, this]()
 					{
-						VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
@@ -621,7 +621,7 @@ void FPF2AbilityBoostSpec::Define()
 			{
 				It("increments the boost counter by 1", [=, this]()
 				{
-					VerifyBoostCounter(EffectName, AttributeName, 1);
+					this->VerifyBoostCounter(EffectName, AttributeName, 1);
 				});
 			});
 
@@ -629,7 +629,7 @@ void FPF2AbilityBoostSpec::Define()
 			{
 				It("increments the boost counter by 2", [=, this]()
 				{
-					VerifyBoostCounter(EffectName, AttributeName, 2);
+					this->VerifyBoostCounter(EffectName, AttributeName, 2);
 				});
 			});
 		});
@@ -648,12 +648,12 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("applies a boost of +2 to the current value", [=, this]()
 					{
-						VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
 					It("does not boost any other attributes", [=, this]()
 					{
-						VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
@@ -661,7 +661,7 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("removes a boost of +2", [=, this]()
 					{
-						VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
@@ -675,12 +675,12 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("applies a boost of +1 to the current value", [=, this]()
 					{
-						VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
 					It("does not boost any other attributes", [=, this]()
 					{
-						VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
@@ -688,7 +688,7 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("removes a boost of +1", [=, this]()
 					{
-						VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
@@ -702,12 +702,12 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("applies a boost of +1 to the current value", [=, this]()
 					{
-						VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
+						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
 					It("does not boost any other attributes", [=, this]()
 					{
-						VerifyOtherBoostsUnaffected(EffectName, AttributeName);
+						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
@@ -715,7 +715,7 @@ void FPF2AbilityBoostSpec::Define()
 				{
 					It("removes a boost of +1", [=, this]()
 					{
-						VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
+						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
@@ -724,7 +724,7 @@ void FPF2AbilityBoostSpec::Define()
 			{
 				It("increments the boost counter by 1", [=, this]()
 				{
-					VerifyBoostCounter(EffectName, AttributeName, 1);
+					this->VerifyBoostCounter(EffectName, AttributeName, 1);
 				});
 			});
 
@@ -732,7 +732,7 @@ void FPF2AbilityBoostSpec::Define()
 			{
 				It("increments the boost counter by 2", [=, this]()
 				{
-					VerifyBoostCounter(EffectName, AttributeName, 2);
+					this->VerifyBoostCounter(EffectName, AttributeName, 2);
 				});
 			});
 		});
@@ -777,7 +777,7 @@ void FPF2AbilityBoostSpec::VerifyBoostApplied(const FString GameEffectName,
 		// Sanity check test logic.
 		TestNotEqual("Captured at least one ability attribute", Attributes.Num(), 0);
 
-		ApplyGameEffect(*TargetAttribute, StartingValue, EffectBP);
+		this->ApplyGameEffect(*TargetAttribute, StartingValue, EffectBP);
 
 		TestEqual(
 			TargetAttributeName + ".BaseValue",
@@ -818,7 +818,7 @@ void FPF2AbilityBoostSpec::VerifyOtherBoostsUnaffected(const FString GameEffectN
 			CurrentAttribute = 10.0f;
 		}
 
-		ApplyGameEffect(*TargetAttribute, 10.0f, EffectBP);
+		this->ApplyGameEffect(*TargetAttribute, 10.0f, EffectBP);
 
 		for (const auto AttributePair : Attributes)
 		{
@@ -882,7 +882,7 @@ void FPF2AbilityBoostSpec::VerifyBoostCounter(const FString GameEffectName,
 
 		for (int AppliedCount = 0; AppliedCount < NumTimes; ++AppliedCount)
 		{
-			ApplyGameEffect(*TargetAttribute, 10.0f, EffectBP);
+			this->ApplyGameEffect(*TargetAttribute, 10.0f, EffectBP);
 		}
 
 		TestEqual(
@@ -916,7 +916,7 @@ void FPF2AbilityBoostSpec::VerifyBoostRemoved(const FString GameEffectName,
 		FGameplayAttributeData* TargetAttribute = Attributes[TargetAttributeName];
 
 		const FActiveGameplayEffectHandle EffectHandle =
-			ApplyGameEffect(*TargetAttribute, StartingValue, EffectBP);
+			this->ApplyGameEffect(*TargetAttribute, StartingValue, EffectBP);
 
 		// Sanity check test logic.
 		TestNotEqual("Captured at least one ability attribute", Attributes.Num(), 0);

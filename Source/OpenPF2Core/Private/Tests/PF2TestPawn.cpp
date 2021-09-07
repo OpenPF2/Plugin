@@ -11,17 +11,20 @@ FName APF2TestPawn::AbilitySystemComponentName(TEXT("AbilitySystemComponent0"));
 
 APF2TestPawn::APF2TestPawn(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
-	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(APF2TestPawn::AbilitySystemComponentName);
-	AbilitySystemComponent->SetIsReplicated(true);
+	this->AbilitySystemComponent =
+		this->CreateDefaultSubobject<UAbilitySystemComponent>(APF2TestPawn::AbilitySystemComponentName);
+
+	this->AbilitySystemComponent->SetIsReplicated(true);
 }
 
 void APF2TestPawn::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-	AbilitySystemComponent->InitStats(UPF2AttributeSet::StaticClass(), nullptr);
+
+	this->AbilitySystemComponent->InitStats(UPF2AttributeSet::StaticClass(), nullptr);
 }
 
 UAbilitySystemComponent* APF2TestPawn::GetAbilitySystemComponent() const
 {
-	return FindComponentByClass<UAbilitySystemComponent>();
+	return this->FindComponentByClass<UAbilitySystemComponent>();
 }

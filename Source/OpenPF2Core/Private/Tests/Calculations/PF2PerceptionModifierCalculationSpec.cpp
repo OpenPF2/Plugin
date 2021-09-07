@@ -116,8 +116,8 @@ void FPF2PerceptionModifierCalculationSpec::VerifyPerceptionModifier(const float
 	const FGameplayAttributeData*       PcpAttribute    = Attributes[PcpModAttributeName];
 	const TSubclassOf<UGameplayEffect>& EffectBP        = this->LoadGE();
 
-	ApplyTag(FString::Format(TEXT("Perception.{0}"), {ProficiencyLevel}));
-	ApplyGameEffect(*AbModAttribute, AbModScore, EffectBP);
+	this->ApplyTag(FString::Format(TEXT("Perception.{0}"), {ProficiencyLevel}));
+	this->ApplyGameEffect(*AbModAttribute, AbModScore, EffectBP);
 
 	TestEqual(
 		FString::Format(TEXT("{0}.BaseValue"), {PcpModAttributeName}),

@@ -84,7 +84,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		const FString SkillModAttributeFriendlyName = TEXT("Acrobatics");
 		const FString SkillModAttributeName         = TEXT("SkAcrobaticsModifier");
 
-		VerifySkillModifier(
+		this->VerifySkillModifier(
 			AbModFriendlyName,
 			AbModAttributeName,
 			SkillModAttributeFriendlyName,
@@ -99,7 +99,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		const FString SkillModAttributeFriendlyName = TEXT("Arcana");
 		const FString SkillModAttributeName         = TEXT("SkArcanaModifier");
 
-		VerifySkillModifier(
+		this->VerifySkillModifier(
 			AbModFriendlyName,
 			AbModAttributeName,
 			SkillModAttributeFriendlyName,
@@ -114,7 +114,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		const FString SkillModAttributeFriendlyName = TEXT("Athletics");
 		const FString SkillModAttributeName         = TEXT("SkAthleticsModifier");
 
-		VerifySkillModifier(
+		this->VerifySkillModifier(
 			AbModFriendlyName,
 			AbModAttributeName,
 			SkillModAttributeFriendlyName,
@@ -129,7 +129,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		const FString SkillModAttributeFriendlyName = TEXT("Crafting");
 		const FString SkillModAttributeName         = TEXT("SkCraftingModifier");
 
-		VerifySkillModifier(
+		this->VerifySkillModifier(
 			AbModFriendlyName,
 			AbModAttributeName,
 			SkillModAttributeFriendlyName,
@@ -144,7 +144,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		const FString SkillModAttributeFriendlyName = TEXT("Deception");
 		const FString SkillModAttributeName         = TEXT("SkDeceptionModifier");
 
-		VerifySkillModifier(
+		this->VerifySkillModifier(
 			AbModFriendlyName,
 			AbModAttributeName,
 			SkillModAttributeFriendlyName,
@@ -159,7 +159,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		const FString SkillModAttributeFriendlyName = TEXT("Diplomacy");
 		const FString SkillModAttributeName         = TEXT("SkDiplomacyModifier");
 
-		VerifySkillModifier(
+		this->VerifySkillModifier(
 			AbModFriendlyName,
 			AbModAttributeName,
 			SkillModAttributeFriendlyName,
@@ -174,7 +174,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		const FString SkillModAttributeFriendlyName = TEXT("Intimidation");
 		const FString SkillModAttributeName         = TEXT("SkIntimidationModifier");
 
-		VerifySkillModifier(
+		this->VerifySkillModifier(
 			AbModFriendlyName,
 			AbModAttributeName,
 			SkillModAttributeFriendlyName,
@@ -189,7 +189,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		const FString SkillModAttributeFriendlyName = TEXT("Lore1");
 		const FString SkillModAttributeName         = TEXT("SkLore1Modifier");
 
-		VerifySkillModifier(
+		this->VerifySkillModifier(
 			AbModFriendlyName,
 			AbModAttributeName,
 			SkillModAttributeFriendlyName,
@@ -204,7 +204,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		const FString SkillModAttributeFriendlyName = TEXT("Lore2");
 		const FString SkillModAttributeName         = TEXT("SkLore2Modifier");
 
-		VerifySkillModifier(
+		this->VerifySkillModifier(
 			AbModFriendlyName,
 			AbModAttributeName,
 			SkillModAttributeFriendlyName,
@@ -219,7 +219,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		const FString SkillModAttributeFriendlyName = TEXT("Medicine");
 		const FString SkillModAttributeName         = TEXT("SkMedicineModifier");
 
-		VerifySkillModifier(
+		this->VerifySkillModifier(
 			AbModFriendlyName,
 			AbModAttributeName,
 			SkillModAttributeFriendlyName,
@@ -234,7 +234,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		const FString SkillModAttributeFriendlyName = TEXT("Nature");
 		const FString SkillModAttributeName         = TEXT("SkNatureModifier");
 
-		VerifySkillModifier(
+		this->VerifySkillModifier(
 			AbModFriendlyName,
 			AbModAttributeName,
 			SkillModAttributeFriendlyName,
@@ -249,7 +249,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		const FString SkillModAttributeFriendlyName = TEXT("Occultism");
 		const FString SkillModAttributeName         = TEXT("SkOccultismModifier");
 
-		VerifySkillModifier(
+		this->VerifySkillModifier(
 			AbModFriendlyName,
 			AbModAttributeName,
 			SkillModAttributeFriendlyName,
@@ -264,7 +264,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		const FString SkillModAttributeFriendlyName = TEXT("Performance");
 		const FString SkillModAttributeName         = TEXT("SkPerformanceModifier");
 
-		VerifySkillModifier(
+		this->VerifySkillModifier(
 			AbModFriendlyName,
 			AbModAttributeName,
 			SkillModAttributeFriendlyName,
@@ -279,7 +279,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		const FString SkillModAttributeFriendlyName = TEXT("Religion");
 		const FString SkillModAttributeName         = TEXT("SkReligionModifier");
 
-		VerifySkillModifier(
+		this->VerifySkillModifier(
 			AbModFriendlyName,
 			AbModAttributeName,
 			SkillModAttributeFriendlyName,
@@ -294,7 +294,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		const FString SkillModAttributeFriendlyName = TEXT("Society");
 		const FString SkillModAttributeName         = TEXT("SkSocietyModifier");
 
-		VerifySkillModifier(
+		this->VerifySkillModifier(
 			AbModFriendlyName,
 			AbModAttributeName,
 			SkillModAttributeFriendlyName,
@@ -309,7 +309,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		const FString SkillModAttributeFriendlyName = TEXT("Stealth");
 		const FString SkillModAttributeName         = TEXT("SkStealthModifier");
 
-		VerifySkillModifier(
+		this->VerifySkillModifier(
 			AbModFriendlyName,
 			AbModAttributeName,
 			SkillModAttributeFriendlyName,
@@ -324,7 +324,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		const FString SkillModAttributeFriendlyName = TEXT("Survival");
 		const FString SkillModAttributeName         = TEXT("SkSurvivalModifier");
 
-		VerifySkillModifier(
+		this->VerifySkillModifier(
 			AbModFriendlyName,
 			AbModAttributeName,
 			SkillModAttributeFriendlyName,
@@ -339,7 +339,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		const FString SkillModAttributeFriendlyName = TEXT("Thievery");
 		const FString SkillModAttributeName         = TEXT("SkThieveryModifier");
 
-		VerifySkillModifier(
+		this->VerifySkillModifier(
 			AbModFriendlyName,
 			AbModAttributeName,
 			SkillModAttributeFriendlyName,
@@ -403,8 +403,7 @@ void FPF2SkillModifierCalculationSpec::VerifySkillModifier(const FString AbModAt
 	const TSubclassOf<UGameplayEffect>& EffectBP       = this->LoadGE();
 
 	this->ApplyTag(FString::Format(TEXT("Skill.{0}.{1}"), {SkillModAttributeFriendlyName, ProficiencyLevel}));
-
-	ApplyGameEffect(*AbModAttribute, AbModScore, EffectBP);
+	this->ApplyGameEffect(*AbModAttribute, AbModScore, EffectBP);
 
 	TestEqual(
 		FString::Format(TEXT("{0}.BaseValue"), {SkillModAttributeName}),

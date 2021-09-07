@@ -130,7 +130,7 @@ void FPF2AbilityModSpec::Define()
 						const float AbilityValue          = ValuePair.Key,
 						            ExpectedModifierValue = ValuePair.Value;
 
-						VerifyModifier(
+						this->VerifyModifier(
 							TargetAbilityAttributeName,
 							TargetModifierAttributeName,
 							AbilityValue,
@@ -145,7 +145,7 @@ void FPF2AbilityModSpec::Define()
 
 				It("applies the calculation only to the associated modifier attribute", [=, this]()
 				{
-					VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
+					this->VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 
@@ -153,7 +153,7 @@ void FPF2AbilityModSpec::Define()
 			{
 				It("resets the modifier", [=, this]()
 				{
-					VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
+					this->VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 		});
@@ -172,7 +172,7 @@ void FPF2AbilityModSpec::Define()
 						const float AbilityValue          = ValuePair.Key,
 						            ExpectedModifierValue = ValuePair.Value;
 
-						VerifyModifier(
+						this->VerifyModifier(
 							TargetAbilityAttributeName,
 							TargetModifierAttributeName,
 							AbilityValue,
@@ -187,7 +187,7 @@ void FPF2AbilityModSpec::Define()
 
 				It("applies the calculation only to the associated modifier attribute", [=, this]()
 				{
-					VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
+					this->VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 
@@ -195,7 +195,7 @@ void FPF2AbilityModSpec::Define()
 			{
 				It("resets the modifier", [=, this]()
 				{
-					VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
+					this->VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 		});
@@ -214,7 +214,7 @@ void FPF2AbilityModSpec::Define()
 						const float AbilityValue          = ValuePair.Key,
 						            ExpectedModifierValue = ValuePair.Value;
 
-						VerifyModifier(
+						this->VerifyModifier(
 							TargetAbilityAttributeName,
 							TargetModifierAttributeName,
 							AbilityValue,
@@ -229,7 +229,7 @@ void FPF2AbilityModSpec::Define()
 
 				It("applies the calculation only to the associated modifier attribute", [=, this]()
 				{
-					VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
+					this->VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 
@@ -237,7 +237,7 @@ void FPF2AbilityModSpec::Define()
 			{
 				It("resets the modifier", [=, this]()
 				{
-					VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
+					this->VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 		});
@@ -256,7 +256,7 @@ void FPF2AbilityModSpec::Define()
 						const float AbilityValue          = ValuePair.Key,
 						            ExpectedModifierValue = ValuePair.Value;
 
-						VerifyModifier(
+						this->VerifyModifier(
 							TargetAbilityAttributeName,
 							TargetModifierAttributeName,
 							AbilityValue,
@@ -271,7 +271,7 @@ void FPF2AbilityModSpec::Define()
 
 				It("applies the calculation only to the associated modifier attribute", [=, this]()
 				{
-					VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
+					this->VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 
@@ -279,7 +279,7 @@ void FPF2AbilityModSpec::Define()
 			{
 				It("resets the modifier", [=, this]()
 				{
-					VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
+					this->VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 		});
@@ -298,7 +298,7 @@ void FPF2AbilityModSpec::Define()
 						const float AbilityValue          = ValuePair.Key,
 						            ExpectedModifierValue = ValuePair.Value;
 
-						VerifyModifier(
+						this->VerifyModifier(
 							TargetAbilityAttributeName,
 							TargetModifierAttributeName,
 							AbilityValue,
@@ -313,7 +313,7 @@ void FPF2AbilityModSpec::Define()
 
 				It("applies the calculation only to the associated modifier attribute", [=, this]()
 				{
-					VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
+					this->VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 
@@ -321,7 +321,7 @@ void FPF2AbilityModSpec::Define()
 			{
 				It("resets the modifier", [=, this]()
 				{
-					VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
+					this->VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 		});
@@ -340,7 +340,7 @@ void FPF2AbilityModSpec::Define()
 						const float AbilityValue          = ValuePair.Key,
 						            ExpectedModifierValue = ValuePair.Value;
 
-						VerifyModifier(
+						this->VerifyModifier(
 							TargetAbilityAttributeName,
 							TargetModifierAttributeName,
 							AbilityValue,
@@ -355,7 +355,7 @@ void FPF2AbilityModSpec::Define()
 
 				It("applies the calculation only to the associated modifier attribute", [=, this]()
 				{
-					VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
+					this->VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 
@@ -363,7 +363,7 @@ void FPF2AbilityModSpec::Define()
 			{
 				It("resets the modifier", [=, this]()
 				{
-					VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
+					this->VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 		});
@@ -442,7 +442,7 @@ void FPF2AbilityModSpec::VerifyModifier(const FString TargetAbilityAttributeName
 		// Initialize modifier a known value.
 		*TargetModifierAttribute = 0.0f;
 
-		ApplyGameEffect(*TargetAbilityAttribute, AbilityValue, EffectBP);
+		this->ApplyGameEffect(*TargetAbilityAttribute, AbilityValue, EffectBP);
 
 		TestEqual(
 			FString::Format(TEXT("{0}.BaseValue(for ability score {1})"), {TargetModifierAttributeName, AbilityValue}),
@@ -498,7 +498,7 @@ void FPF2AbilityModSpec::VerifyCorrectAbilityAffected(const FString TargetAbilit
 		}
 
 		// This sets _only_ the target ability to 13, which should result in a modifier of +3
-		ApplyGameEffect(*TargetAbilityAttribute, 16.0f, EffectBP);
+		this->ApplyGameEffect(*TargetAbilityAttribute, 16.0f, EffectBP);
 
 		for (const auto AttributePair : AbilityAttributes)
 		{
@@ -594,7 +594,7 @@ void FPF2AbilityModSpec::VerifyModifierRemoved(const FString TargetAbilityAttrib
 		const FGameplayAttributeData* TargetModifierAttribute = Attributes[TargetModifierAttributeName];
 
 		const FActiveGameplayEffectHandle EffectHandle =
-			ApplyGameEffect(*TargetAbilityAttribute, 13.0f, EffectBP);
+			this->ApplyGameEffect(*TargetAbilityAttribute, 13.0f, EffectBP);
 
 		// Sanity check test logic.
 		TestNotEqual("Captured at least one attribute", Attributes.Num(), 0);
