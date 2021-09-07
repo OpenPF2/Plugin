@@ -84,7 +84,7 @@ void FPF2SavingThrowModifierCalculationSpec::Define()
 		const FString SavingModAttributeFriendlyName = TEXT("Fortitude");
 		const FString SavingModAttributeName         = TEXT("StFortitudeModifier");
 
-		VerifySavingThrowModifier(
+		this->VerifySavingThrowModifier(
 			AbModFriendlyName,
 			AbModAttributeName,
 			SavingModAttributeFriendlyName,
@@ -99,7 +99,7 @@ void FPF2SavingThrowModifierCalculationSpec::Define()
 		const FString SavingModAttributeFriendlyName = TEXT("Reflex");
 		const FString SavingModAttributeName         = TEXT("StReflexModifier");
 
-		VerifySavingThrowModifier(
+		this->VerifySavingThrowModifier(
 			AbModFriendlyName,
 			AbModAttributeName,
 			SavingModAttributeFriendlyName,
@@ -114,7 +114,7 @@ void FPF2SavingThrowModifierCalculationSpec::Define()
 		const FString SavingModAttributeFriendlyName = TEXT("Will");
 		const FString SavingModAttributeName         = TEXT("StWillModifier");
 
-		VerifySavingThrowModifier(
+		this->VerifySavingThrowModifier(
 			AbModFriendlyName,
 			AbModAttributeName,
 			SavingModAttributeFriendlyName,
@@ -178,8 +178,7 @@ void FPF2SavingThrowModifierCalculationSpec::VerifySavingThrowModifier(const FSt
 	const TSubclassOf<UGameplayEffect>& EffectBP        = this->LoadGE();
 
 	this->ApplyTag(FString::Format(TEXT("SavingThrow.{0}.{1}"), {SavingModAttributeFriendlyName, ProficiencyLevel}));
-
-	ApplyGameEffect(*AbModAttribute, AbModScore, EffectBP);
+	this->ApplyGameEffect(*AbModAttribute, AbModScore, EffectBP);
 
 	TestEqual(
 		FString::Format(TEXT("{0}.BaseValue"), {SavingModAttributeName}),
