@@ -65,7 +65,7 @@ void FPF2AbilityBoostSpec::Define()
 			this->BoostMMCs.Empty();
 		});
 
-		for (const auto& BlueprintName : BoostMmcNames)
+		for (const auto& BlueprintName : this->BoostMmcNames)
 		{
 			It(BlueprintName + " should load", [=, this]()
 			{
@@ -88,7 +88,7 @@ void FPF2AbilityBoostSpec::Define()
 			this->BoostGEs.Empty();
 		});
 
-		for (const auto& BlueprintName : BoostGeNames)
+		for (const auto& BlueprintName : this->BoostGeNames)
 		{
 			It(BlueprintName + " should load", [=, this]()
 			{
@@ -741,10 +741,10 @@ void FPF2AbilityBoostSpec::Define()
 
 void FPF2AbilityBoostSpec::LoadMMCs()
 {
-	for (auto& BlueprintName : BoostMmcNames)
+	for (auto& BlueprintName : this->BoostMmcNames)
 	{
 		TSubclassOf<UPF2AbilityBoostCalculation> CalculationBP =
-			this->LoadBlueprint<UPF2AbilityBoostCalculation>(BlueprintPath, BlueprintName);
+			this->LoadBlueprint<UPF2AbilityBoostCalculation>(this->BlueprintPath, BlueprintName);
 
 		this->BoostMMCs.Add(BlueprintName, CalculationBP);
 	}
@@ -752,10 +752,10 @@ void FPF2AbilityBoostSpec::LoadMMCs()
 
 void FPF2AbilityBoostSpec::LoadGEs()
 {
-	for (auto& BlueprintName : BoostGeNames)
+	for (auto& BlueprintName : this->BoostGeNames)
 	{
 		TSubclassOf<UGameplayEffect> GameplayEffectBP =
-			this->LoadBlueprint<UGameplayEffect>(BlueprintPath, BlueprintName);
+			this->LoadBlueprint<UGameplayEffect>(this->BlueprintPath, BlueprintName);
 
 		this->BoostGEs.Add(BlueprintName, GameplayEffectBP);
 	}

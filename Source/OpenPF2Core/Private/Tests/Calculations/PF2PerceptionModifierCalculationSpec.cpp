@@ -103,7 +103,7 @@ void FPF2PerceptionModifierCalculationSpec::Define()
 
 TSubclassOf<UGameplayEffect> FPF2PerceptionModifierCalculationSpec::LoadGE() const
 {
-	return this->LoadBlueprint<UGameplayEffect>(BlueprintPath, PerceptionGameEffectCalc);
+	return this->LoadBlueprint<UGameplayEffect>(this->BlueprintPath, this->PerceptionGameEffectCalc);
 }
 
 void FPF2PerceptionModifierCalculationSpec::VerifyPerceptionModifier(const float   AbModScore,
@@ -112,21 +112,21 @@ void FPF2PerceptionModifierCalculationSpec::VerifyPerceptionModifier(const float
 {
 	const UPF2AttributeSet*             AttributeSet    = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
 	FAttributeCapture                   Attributes      = CaptureAttributes(AttributeSet);
-	FGameplayAttributeData*             AbModAttribute  = Attributes[AbModAttributeName];
-	const FGameplayAttributeData*       PcpAttribute    = Attributes[PcpModAttributeName];
+	FGameplayAttributeData*             AbModAttribute  = Attributes[this->AbModAttributeName];
+	const FGameplayAttributeData*       PcpAttribute    = Attributes[this->PcpModAttributeName];
 	const TSubclassOf<UGameplayEffect>& EffectBP        = this->LoadGE();
 
 	this->ApplyTag(FString::Format(TEXT("Perception.{0}"), {ProficiencyLevel}));
 	this->ApplyGameEffect(*AbModAttribute, AbModScore, EffectBP);
 
 	TestEqual(
-		FString::Format(TEXT("{0}.BaseValue"), {PcpModAttributeName}),
+		FString::Format(TEXT("{0}.BaseValue"), {this->PcpModAttributeName}),
 		PcpAttribute->GetBaseValue(),
 		0.0f
 	);
 
 	TestEqual(
-		FString::Format(TEXT("{0}.CurrentValue"), {PcpModAttributeName}),
+		FString::Format(TEXT("{0}.CurrentValue"), {this->PcpModAttributeName}),
 		PcpAttribute->GetCurrentValue(),
 		ExpectedPcpMod
 	);

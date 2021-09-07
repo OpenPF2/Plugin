@@ -125,7 +125,7 @@ void FPF2SavingThrowModifierCalculationSpec::Define()
 
 TSubclassOf<UGameplayEffect> FPF2SavingThrowModifierCalculationSpec::LoadGE() const
 {
-	return this->LoadBlueprint<UGameplayEffect>(BlueprintPath, SavingThrowGameEffectCalc);
+	return this->LoadBlueprint<UGameplayEffect>(this->BlueprintPath, this->SavingThrowGameEffectCalc);
 }
 
 void FPF2SavingThrowModifierCalculationSpec::VerifySavingThrowModifier(const FString AbModFriendlyName,
