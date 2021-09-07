@@ -445,14 +445,17 @@ void FPF2AbilityModSpec::VerifyModifier(const FString TargetAbilityAttributeName
 		this->ApplyGameEffect(*TargetAbilityAttribute, AbilityValue, EffectBP);
 
 		TestEqual(
-			FString::Format(TEXT("{0}.BaseValue(for ability score {1})"), {TargetModifierAttributeName, AbilityValue}),
+			FString::Format(
+				TEXT("{0}.BaseValue(for ability score '{1}')"), {TargetModifierAttributeName, AbilityValue}
+			),
 			TargetModifierAttribute->GetBaseValue(),
 			0.0f
 		);
 
 		TestEqual(
 			FString::Format(
-				TEXT("{0}.CurrentValue(for ability score {1})"), {TargetModifierAttributeName, AbilityValue}),
+				TEXT("{0}.CurrentValue(for ability score '{1}')"), {TargetModifierAttributeName, AbilityValue}
+			),
 			TargetModifierAttribute->GetCurrentValue(),
 			ExpectedModifier
 		);

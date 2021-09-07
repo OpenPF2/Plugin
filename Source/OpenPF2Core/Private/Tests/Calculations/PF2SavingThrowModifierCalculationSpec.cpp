@@ -138,16 +138,16 @@ void FPF2SavingThrowModifierCalculationSpec::VerifySavingThrowModifier(const FSt
 		const float                AbModScore     = AbilityValues.Key;
 		const TMap<FString, float> TrainingScores = AbilityValues.Value;
 
-		Describe(FString::Format(TEXT("when the character has a {0} modifier of {1}"), {AbModFriendlyName, FString::FormatAsNumber(AbModScore)}), [=, this]()
+		Describe(FString::Format(TEXT("when the character has a '{0}' modifier of '{1}'"), {AbModFriendlyName, FString::FormatAsNumber(AbModScore)}), [=, this]()
 		{
 			for (const auto ProficiencyValues : TrainingScores)
 			{
 				const FString ProficiencyLevel  = ProficiencyValues.Key;
 				const float   ExpectedSavingMod = ProficiencyValues.Value;
 
-				Describe(FString::Format(TEXT("when the character is '{0}' in {1} saving throws"), {ProficiencyLevel, SavingModAttributeFriendlyName}), [=, this]()
+				Describe(FString::Format(TEXT("when the character is '{0}' in '{1}' saving throws"), {ProficiencyLevel, SavingModAttributeFriendlyName}), [=, this]()
 				{
-					It(FString::Format(TEXT("calculates a {0} saving throw of {1}"), {SavingModAttributeFriendlyName, FString::FormatAsNumber(ExpectedSavingMod)}), [=, this]()
+					It(FString::Format(TEXT("calculates a '{0}' saving throw of '{1}'"), {SavingModAttributeFriendlyName, FString::FormatAsNumber(ExpectedSavingMod)}), [=, this]()
 					{
 						this->VerifySavingThrowModifier(
 							AbModAttributeName,

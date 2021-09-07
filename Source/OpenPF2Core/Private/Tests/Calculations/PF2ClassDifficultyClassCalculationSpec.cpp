@@ -82,7 +82,7 @@ void FPF2ClassDifficultyClassCalculationSpec::Define()
 				const FString BoostedAbilityName      = BoostedAbility.Key,
 				              BoostedAbilityAttribute = BoostedAbility.Value;
 
-				Describe(FString::Format(TEXT("when the '{0}' Ability Modifier is 5"), {BoostedAbilityName}), [=, this]
+				Describe(FString::Format(TEXT("when the '{0}' Ability Modifier is '5'"), {BoostedAbilityName}), [=, this]
 				{
 					BeforeEach([=, this]()
 					{
@@ -115,7 +115,7 @@ void FPF2ClassDifficultyClassCalculationSpec::Define()
 								ExpectedClassDcMod = 10.0f + 0.0f + ProficiencyValue;
 							}
 
-							It(FString::Format(TEXT("calculates a Class DC modifier of {0}"), {FString::FormatAsNumber(ExpectedClassDcMod)}), [=, this]()
+							It(FString::Format(TEXT("calculates a Class DC Modifier of '{0}'"), {FString::FormatAsNumber(ExpectedClassDcMod)}), [=, this]()
 							{
 								const UPF2AttributeSet*             AttributeSet     = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
 								FAttributeCapture                   Attributes       = CaptureAttributes(AttributeSet);

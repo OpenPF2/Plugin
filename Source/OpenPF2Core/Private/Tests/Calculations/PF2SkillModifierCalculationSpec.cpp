@@ -363,16 +363,16 @@ void FPF2SkillModifierCalculationSpec::VerifySkillModifier(const FString AbModFr
 		const float                AbModScore     = AbilityValues.Key;
 		const TMap<FString, float> TrainingScores = AbilityValues.Value;
 
-		Describe(FString::Format(TEXT("when the character has a {0} modifier of {1}"), {AbModFriendlyName, FString::FormatAsNumber(AbModScore)}), [=, this]()
+		Describe(FString::Format(TEXT("when the character has a '{0}' Modifier of '{1}'"), {AbModFriendlyName, FString::FormatAsNumber(AbModScore)}), [=, this]()
 		{
 			for (const auto ProficiencyValues : TrainingScores)
 			{
 				const FString ProficiencyLevel  = ProficiencyValues.Key;
 				const float   ExpectedSkillMod = ProficiencyValues.Value;
 
-				Describe(FString::Format(TEXT("when the character is '{0}' in {1} skill"), {ProficiencyLevel, SkillModAttributeFriendlyName}), [=, this]()
+				Describe(FString::Format(TEXT("when the character is '{0}' in '{1}' skill"), {ProficiencyLevel, SkillModAttributeFriendlyName}), [=, this]()
 				{
-					It(FString::Format(TEXT("calculates a {0} skill of {1}"), {SkillModAttributeFriendlyName, FString::FormatAsNumber(ExpectedSkillMod)}), [=, this]()
+					It(FString::Format(TEXT("calculates a '{0}' skill of '{1}'"), {SkillModAttributeFriendlyName, FString::FormatAsNumber(ExpectedSkillMod)}), [=, this]()
 					{
 						this->VerifySkillModifier(
 							AbModAttributeName,
