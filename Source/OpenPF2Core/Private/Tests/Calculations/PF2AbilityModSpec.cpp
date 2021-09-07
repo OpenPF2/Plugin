@@ -13,7 +13,7 @@ BEGIN_DEFINE_PF_SPEC(FPF2AbilityModSpec,
 	const FString BlueprintPath       = TEXT("/OpenPF2Core/OpenPF2/Core");
 	const FString AbModGameEffectCalc = TEXT("GE_CalcAbilityModifiers");
 
-	const FString AbModMmcNames[6] = {
+	const TArray<FString> AbModMmcNames = {
 		TEXT("MMC_AbModCharisma"),
 		TEXT("MMC_AbModConstitution"),
 		TEXT("MMC_AbModDexterity"),
@@ -22,7 +22,7 @@ BEGIN_DEFINE_PF_SPEC(FPF2AbilityModSpec,
 		TEXT("MMC_AbModWisdom"),
 	};
 
-	const FString AbModGeNames[1] = {
+	const TArray<FString> AbModGeNames = {
 		this->AbModGameEffectCalc,
 	};
 

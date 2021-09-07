@@ -12,7 +12,7 @@ BEGIN_DEFINE_PF_SPEC(FPF2AbilityBoostSpec,
                      EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 	const FString BlueprintPath = TEXT("/OpenPF2Core/OpenPF2/Core");
 
-	const FString BoostMmcNames[6] = {
+	const TArray<FString> BoostMmcNames = {
 		TEXT("MMC_AbBoostCharisma"),
 		TEXT("MMC_AbBoostConstitution"),
 		TEXT("MMC_AbBoostDexterity"),
@@ -21,7 +21,7 @@ BEGIN_DEFINE_PF_SPEC(FPF2AbilityBoostSpec,
 		TEXT("MMC_AbBoostWisdom"),
 	};
 
-	const FString BoostGeNames[6] = {
+	const TArray<FString> BoostGeNames = {
 		TEXT("GE_BoostAbCharisma"),
 		TEXT("GE_BoostAbConstitution"),
 		TEXT("GE_BoostAbDexterity"),
