@@ -29,6 +29,12 @@ class OPENPF2CORE_API UPF2ArmorClassCalculation : public UPF2TemlCalculationBase
 {
 	GENERATED_BODY()
 
+protected:
+	/**
+	 * Capture definition for the Dexterity Ability Modifier.
+	 */
+	FGameplayEffectAttributeCaptureDefinition DexterityModifierCaptureDefinition;
+
 public:
 	/**
 	 * Constructor for URPGArmorClassCalculation.
@@ -50,6 +56,14 @@ public:
 	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
 
 protected:
+	/**
+	 * Gets the captured dexterity modifier.
+	 *
+	 * @return
+	 *   The character's dexterity modifier.
+	 */
+	float GetDexterityModifier(const FGameplayEffectSpec& Spec) const;
+
 	/**
 	 * Calculates the bonus to AC gained from the type of armor being worn.
 	 *
