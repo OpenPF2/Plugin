@@ -72,21 +72,21 @@ public:
 	 *	ability.
 	 */
 	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetCaptureByAttribute(
-																			const FGameplayAttribute Attribute) const
+	                                                                           const FGameplayAttribute Attribute) const
 	{
 		return this->GetCaptureByName(Attribute.GetName());
 	}
 
 	/**
-	* Gets a capture definition for the specified ability-related attribute.
-	*
-	* @param Name
-	*	The name of the attribute for which a capture definition is desired.
-	*
-	* @return
-	*	Either the desired capture definition; or nullptr if the given attribute name doesn't correspond to a character
-	*	ability.
-	*/
+	 * Gets a capture definition for the specified ability-related attribute.
+	 *
+	 * @param Name
+	 *	The name of the attribute for which a capture definition is desired.
+	 *
+	 * @return
+	 *	Either the desired capture definition; or nullptr if the given attribute name doesn't correspond to a character
+	 *	ability.
+	 */
 	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetCaptureByName(const FString Name) const
 	{
 		if (this->CaptureDefinitions.Contains(Name))
