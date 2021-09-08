@@ -17,12 +17,9 @@
 
 UPF2ModifierCalculationBase::UPF2ModifierCalculationBase(const FGameplayAttribute SkillAbilityAttribute,
 														 const FString SkillGameplayTagPrefix) :
-	UPF2TemlCalculationBase()
+	UPF2TemlCalculationBase(),
+	SkillAbilityCaptureDefinition(GameplayAbilityUtils::BuildSourceCaptureFor(SkillAbilityAttribute))
 {
-	this->SkillAbilityCaptureDefinition.AttributeToCapture	= SkillAbilityAttribute;
-	this->SkillAbilityCaptureDefinition.AttributeSource		= EGameplayEffectAttributeCaptureSource::Source;
-	this->SkillAbilityCaptureDefinition.bSnapshot			= false;
-
 	RelevantAttributesToCapture.Add(this->SkillAbilityCaptureDefinition);
 
 	this->SkillGameplayTagPrefix = SkillGameplayTagPrefix;
