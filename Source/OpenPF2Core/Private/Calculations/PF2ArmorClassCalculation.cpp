@@ -21,8 +21,8 @@ float UPF2ArmorClassCalculation::CalculateBaseMagnitude_Implementation(const FGa
 	// "Use your proficiency bonus for the category (light, medium, or heavy) or the specific type of armor you're
 	// wearing. If you're not wearing armor, use your proficiency in unarmored defense."
 	//
-	const float	ArmorTypeProficiencyBonus	= CalculateArmorTypeProficiencyBonus(Spec),
-				AbilityScore				= 10 + ArmorTypeProficiencyBonus;
+	const float ArmorTypeProficiencyBonus = CalculateArmorTypeProficiencyBonus(Spec),
+	            AbilityScore              = 10 + ArmorTypeProficiencyBonus;
 
 	UE_LOG(
 		LogPf2Core,
@@ -37,10 +37,12 @@ float UPF2ArmorClassCalculation::CalculateBaseMagnitude_Implementation(const FGa
 
 float UPF2ArmorClassCalculation::CalculateArmorTypeProficiencyBonus(const FGameplayEffectSpec& Spec) const
 {
-	const FGameplayTagContainer	*SourceTags					= Spec.CapturedSourceTags.GetAggregatedTags();
-	const FString				ArmorType					= DetermineArmorType(SourceTags),
-								ArmorTypeProficiencyPrefix	= "Armor.Category." + ArmorType;
-	const float					ProficiencyBonus			= CalculateProficiencyBonus(ArmorTypeProficiencyPrefix, Spec);
+	const FGameplayTagContainer* SourceTags                 = Spec.CapturedSourceTags.GetAggregatedTags();
+	const FString                ArmorType                  = DetermineArmorType(SourceTags),
+	                             ArmorTypeProficiencyPrefix = "Armor.Category." + ArmorType;
+
+	const float ProficiencyBonus =
+		CalculateProficiencyBonus(ArmorTypeProficiencyPrefix, Spec);
 
 	UE_LOG(
 		LogPf2Core,
@@ -53,7 +55,7 @@ float UPF2ArmorClassCalculation::CalculateArmorTypeProficiencyBonus(const FGamep
 	return ProficiencyBonus;
 }
 
-FString UPF2ArmorClassCalculation::DetermineArmorType(const FGameplayTagContainer *SourceTags) const
+FString UPF2ArmorClassCalculation::DetermineArmorType(const FGameplayTagContainer* SourceTags) const
 {
 	// Default to no armor.
 	FString ArmorType = "Unarmored";
