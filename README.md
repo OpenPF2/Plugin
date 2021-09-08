@@ -25,6 +25,9 @@ plug-in that ships with Unreal Engine.
    ```
 3. Re-generate Visual Studio/Rider project files.
 4. Compile your project.
+5. Copy the `Config/Tags/` folder from the plug-in into your project's `Config` folder.
+   _Even in UE 4.27, this is still required. The engine
+   [does not automatically scan or package config files provided by plugins](https://docs.unrealengine.com/4.27/en-US/ProductionPipelines/Plugins/#pluginsinprojects)._
 
 ## Licensing
 Since this plug-in incorporates content and elements that were originally
