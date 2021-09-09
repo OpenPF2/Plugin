@@ -155,7 +155,8 @@ void FPF2SpecBase::DestroyPawn()
 
 FActiveGameplayEffectHandle FPF2SpecBase::ApplyGameEffect(FGameplayAttributeData&             Attribute,
                                                           const float                         StartingValue,
-                                                          const TSubclassOf<UGameplayEffect>& EffectBP) const
+                                                          const TSubclassOf<UGameplayEffect>& EffectBP,
+                                                          const float                         CharacterLevel) const
 {
 	UGameplayEffect* GameplayEffect = EffectBP->GetDefaultObject<UGameplayEffect>();
 
@@ -164,7 +165,7 @@ FActiveGameplayEffectHandle FPF2SpecBase::ApplyGameEffect(FGameplayAttributeData
 	const FActiveGameplayEffectHandle EffectHandle = this->PawnAbilityComponent->ApplyGameplayEffectToTarget(
 		GameplayEffect,
 		this->PawnAbilityComponent,
-		1.0f
+		CharacterLevel
 	);
 
 	return EffectHandle;
