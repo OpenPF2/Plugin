@@ -402,7 +402,7 @@ void FPF2SkillModifierCalculationSpec::VerifySkillModifier(const FString AbModAt
 	const FGameplayAttributeData*       SkillAttribute = Attributes[SkillModAttributeName];
 	const TSubclassOf<UGameplayEffect>& EffectBP       = this->LoadGE();
 
-	this->ApplyTag(FString::Format(TEXT("Skill.{0}.{1}"), {SkillModAttributeFriendlyName, ProficiencyLevel}));
+	this->ApplyUnreplicatedTag(FString::Format(TEXT("Skill.{0}.{1}"), {SkillModAttributeFriendlyName, ProficiencyLevel}));
 	this->ApplyGameEffect(*AbModAttribute, AbModScore, EffectBP);
 
 	TestEqual(
