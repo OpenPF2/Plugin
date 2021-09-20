@@ -20,9 +20,9 @@ For the purposes of the OGL, the following definitions apply:
 - "Product Identity": Except for material designated as Open Game Content (see
   below), the source code, logic, and game mechanics of this project shall be
   considered Product Identity for the purposes of the Open Game License version
-  1.0a, Section 1(e). (Elements that have previously been designated as Open
-  Game Content, or are exclusively derived from previous Open Game Content, or
-  that are in the public domain are not included in this declaration.)
+  1.0a, Section 1(e). (Elements that: 1) have previously been designated as Open
+  Game Content; 2) are exclusively derived from previous Open Game Content; OR
+  3) that are in the public domain; are not included in this declaration.)
 
 - "Open Game Content": All game mechanics and content licensed from third
   parties as "Open Game Content" under the Open Game License version 1.0a shall
