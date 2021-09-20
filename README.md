@@ -2,7 +2,7 @@
 A plug-in for Unreal Engine that provides logic and content for building an RPG
 with mechanics similar to Pathfinder&trade; 2nd Edition by Paizo Publishing.
 
-All abilities and stats are implemented using the Combat Ability System (CAS)
+All abilities and stats are implemented using the Gameplay Ability System (GAS)
 plug-in that ships with Unreal Engine.
 
 ## Installation
