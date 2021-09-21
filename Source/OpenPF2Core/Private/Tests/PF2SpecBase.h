@@ -117,6 +117,7 @@ protected:
 	static FAttributeCapture CaptureAbilityModifierAttributes(const UPF2AttributeSet* AttributeSet);
 	static FAttributeCapture CaptureSavingThrowAttributes(const UPF2AttributeSet* AttributeSet);
 	static FAttributeCapture CaptureSkillModifierAttributes(const UPF2AttributeSet* AttributeSet);
+	static FAttributeCapture CaptureSpellAttributes(const UPF2AttributeSet* AttributeSet);
 
 	void SetupWorld();
 	void BeginPlay() const;
