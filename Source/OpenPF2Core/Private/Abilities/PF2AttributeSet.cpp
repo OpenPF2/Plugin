@@ -70,8 +70,6 @@ void UPF2AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(UPF2AttributeSet, Experience);
 	DOREPLIFETIME(UPF2AttributeSet, HitPoints);
 	DOREPLIFETIME(UPF2AttributeSet, MaxHitPoints);
-	DOREPLIFETIME(UPF2AttributeSet, FeAncestryFeatCount);
-	DOREPLIFETIME(UPF2AttributeSet, FeAncestryFeatLimit);
 	DOREPLIFETIME(UPF2AttributeSet, AbBoostCount);
 	DOREPLIFETIME(UPF2AttributeSet, AbBoostLimit);
 	DOREPLIFETIME(UPF2AttributeSet, AbStrength);
@@ -112,6 +110,8 @@ void UPF2AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(UPF2AttributeSet, SkStealthModifier);
 	DOREPLIFETIME(UPF2AttributeSet, SkSurvivalModifier);
 	DOREPLIFETIME(UPF2AttributeSet, SkThieveryModifier);
+	DOREPLIFETIME(UPF2AttributeSet, FeAncestryFeatCount);
+	DOREPLIFETIME(UPF2AttributeSet, FeAncestryFeatLimit);
 }
 
 void UPF2AttributeSet::OnRep_Experience(const FGameplayAttributeData& OldValue)
