@@ -57,6 +57,8 @@ UPF2AttributeSet::UPF2AttributeSet() :
 	SkStealthModifier(0.0f),
 	SkSurvivalModifier(0.0f),
 	SkThieveryModifier(0.0f),
+	SpellAttackRoll(0.0f),
+	SpellDifficultyClass(0.0f),
 	FeAncestryFeatCount(0.0f),
 	FeAncestryFeatLimit(0.0f),
 	Damage(0.0f)
@@ -110,6 +112,8 @@ void UPF2AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(UPF2AttributeSet, SkStealthModifier);
 	DOREPLIFETIME(UPF2AttributeSet, SkSurvivalModifier);
 	DOREPLIFETIME(UPF2AttributeSet, SkThieveryModifier);
+	DOREPLIFETIME(UPF2AttributeSet, SpellAttackRoll);
+	DOREPLIFETIME(UPF2AttributeSet, SpellDifficultyClass);
 	DOREPLIFETIME(UPF2AttributeSet, FeAncestryFeatCount);
 	DOREPLIFETIME(UPF2AttributeSet, FeAncestryFeatLimit);
 }
@@ -327,6 +331,16 @@ void UPF2AttributeSet::OnRep_SkSurvivalModifier(const FGameplayAttributeData& Ol
 void UPF2AttributeSet::OnRep_SkThieveryModifier(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, SkThieveryModifier, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_SpellAttackRoll(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, SpellAttackRoll, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_SpellDifficultyClass(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, SpellDifficultyClass, OldValue);
 }
 
 void UPF2AttributeSet::OnRep_FeAncestryFeatCount(const FGameplayAttributeData& OldValue)

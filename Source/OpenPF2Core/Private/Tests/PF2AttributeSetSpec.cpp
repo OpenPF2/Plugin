@@ -76,6 +76,8 @@ void FPF2AttributeSetSpec::Define()
 			TestEqual(TEXT("SkStealthModifier"),      AttributeSet->GetSkStealthModifier(),       0.0f);
 			TestEqual(TEXT("SkSurvivalModifier"),     AttributeSet->GetSkSurvivalModifier(),      0.0f);
 			TestEqual(TEXT("SkThieveryModifier"),     AttributeSet->GetSkThieveryModifier(),      0.0f);
+			TestEqual(TEXT("SpellAttackRoll"),        AttributeSet->GetSpellAttackRoll(),         0.0f);
+			TestEqual(TEXT("SpellDifficultyClass"),   AttributeSet->GetSpellDifficultyClass(),    0.0f);
 			TestEqual(TEXT("FeAncestryFeatCount"),    AttributeSet->GetFeAncestryFeatCount(),     0.0f);
 			TestEqual(TEXT("FeAncestryFeatLimit"),    AttributeSet->GetFeAncestryFeatLimit(),     0.0f);
 			TestEqual(TEXT("Damage"),                 AttributeSet->GetDamage(),                  0.0f);
