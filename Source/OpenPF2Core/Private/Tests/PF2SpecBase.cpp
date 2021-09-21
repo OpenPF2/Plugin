@@ -41,6 +41,7 @@ FAttributeCapture FPF2SpecBase::CaptureAttributes(const UPF2AttributeSet* Attrib
 	Capture.Append(CaptureAbilityModifierAttributes(AttributeSet));
 	Capture.Append(CaptureSavingThrowAttributes(AttributeSet));
 	Capture.Append(CaptureSkillModifierAttributes(AttributeSet));
+	Capture.Append(CaptureSpellAttributes(AttributeSet));
 
 	return Capture;
 }
@@ -108,6 +109,17 @@ FAttributeCapture FPF2SpecBase::CaptureSkillModifierAttributes(const UPF2Attribu
 		{ TEXT("SkStealthModifier"),      const_cast<FGameplayAttributeData *>(&AttributeSet->SkStealthModifier) },
 		{ TEXT("SkSurvivalModifier"),     const_cast<FGameplayAttributeData *>(&AttributeSet->SkSurvivalModifier) },
 		{ TEXT("SkThieveryModifier"),     const_cast<FGameplayAttributeData *>(&AttributeSet->SkThieveryModifier) },
+	};
+
+	return Capture;
+}
+
+FAttributeCapture FPF2SpecBase::CaptureSpellAttributes(const UPF2AttributeSet* AttributeSet)
+{
+	FAttributeCapture Capture =
+	{
+		{ TEXT("SpellAttackRoll"),      const_cast<FGameplayAttributeData *>(&AttributeSet->SpellAttackRoll) },
+		{ TEXT("SpellDifficultyClass"), const_cast<FGameplayAttributeData *>(&AttributeSet->SpellDifficultyClass) },
 	};
 
 	return Capture;
