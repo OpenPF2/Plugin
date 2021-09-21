@@ -6,6 +6,6 @@
 #include "Calculations/PF2SpellAttackRollCalculation.h"
 
 UPF2SpellAttackRollCalculation::UPF2SpellAttackRollCalculation() :
-	UPF2KeyAbilityCalculationBase(TEXT("SpellAttack"), TEXT("SpellcastingKeyAbility"))
+	UPF2KeyAbilityCalculationBase(TEXT("SpellAttack"), TEXT("SpellcastingAbility"))
 {
 }
