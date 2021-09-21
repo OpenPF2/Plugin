@@ -450,8 +450,8 @@ public:
 	/**
 	 * The limit on how many ancestry feats this character can apply.
 	 *
-	 * This caps FeAncestryFeatCount, but can be a larger number than FeAncestryFeatCount if the character is eligible for additional
-	 * ancestry feats that the player or story (for NPCs) has not yet applied.
+	 * This caps FeAncestryFeatCount, but can be a larger number than FeAncestryFeatCount if the character is eligible
+	 * for additional ancestry feats that the player or story (for NPCs) has not yet applied.
 	 */
 	UPROPERTY(BlueprintReadOnly, Category = "Feats", ReplicatedUsing=OnRep_FeAncestryFeatLimit)
 	FGameplayAttributeData FeAncestryFeatLimit;
