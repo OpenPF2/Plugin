@@ -1,19 +1,28 @@
 ﻿OpenPF2 for Unreal Engine License Terms
 =======================================
-Different portions of material in this project are governed by two different
+Different portions of material in this project are governed by three different
 licenses:
   - Content and game logic sourced from Pathfinder 2nd Edition is licensed under
     the Open Game License (OGL) v. 1.0a.
-  - All other source code and logic is licensed under the Mozilla Public
-    License, v. 2.0.
+    
+  - Select portions of code have been provided by Epic Games, Inc. for use only
+    with Unreal Engine. Such code is clearly denoted by a file header that reads
+    "Adapted from content that is Copyright Epic Games, Inc." Code contained in
+    files that bear such a notice may only be used in derivative works that are
+    part of a larger, Unreal-Engine-based project according to the terms of the
+    Unreal® Engine End User License Agreement For Publishing (UE EULA). All
+    other use is prohibited.
+
+  - All other source code and logic is licensed and may be freely redistributed
+    under the Mozilla Public License, v. 2.0.
 
 For the purposes of the OGL, the following definitions apply:
 - "Product Identity": Except for material designated as Open Game Content (see
   below), the source code, logic, and game mechanics of this project shall be
   considered Product Identity for the purposes of the Open Game License version
-  1.0a, Section 1(e). (Elements that have previously been designated as Open
-  Game Content, or are exclusively derived from previous Open Game Content, or
-  that are in the public domain are not included in this declaration.)
+  1.0a, Section 1(e). (Elements that: 1) have previously been designated as Open
+  Game Content; 2) are exclusively derived from previous Open Game Content; OR
+  3) that are in the public domain; are not included in this declaration.)
 
 - "Open Game Content": All game mechanics and content licensed from third
   parties as "Open Game Content" under the Open Game License version 1.0a shall
@@ -35,7 +44,8 @@ For the purposes of the OGL, the following definitions apply:
     what portion of the material is Open Game Content.
 
 No portion of this work other than the material designated as Open Game Content
-may be reproduced in any form without written permission, except under the MPL.
+may be reproduced in any form without written permission from the authors, except
+as allowed under the MPL or UE EULA.
 
 ================================================================================
 Mozilla Public License Version 2.0

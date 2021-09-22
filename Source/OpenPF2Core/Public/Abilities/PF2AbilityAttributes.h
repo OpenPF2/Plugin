@@ -21,12 +21,24 @@ class FPF2AbilityAttributes final
 {
 public:
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AbBoostCount);
+
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AbCharisma);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(AbCharismaModifier);
+
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AbConstitution);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(AbConstitutionModifier);
+
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AbDexterity);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(AbDexterityModifier);
+
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AbIntelligence);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(AbIntelligenceModifier);
+
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AbStrength);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(AbStrengthModifier);
+
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AbWisdom);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(AbWisdomModifier);
 
 	/**
 	 * Gets an instance of this container.
@@ -60,21 +72,21 @@ public:
 	 *	ability.
 	 */
 	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetCaptureByAttribute(
-																			const FGameplayAttribute Attribute) const
+	                                                                           const FGameplayAttribute Attribute) const
 	{
 		return this->GetCaptureByName(Attribute.GetName());
 	}
 
 	/**
-	* Gets a capture definition for the specified ability-related attribute.
-	*
-	* @param Name
-	*	The name of the attribute for which a capture definition is desired.
-	*
-	* @return
-	*	Either the desired capture definition; or nullptr if the given attribute name doesn't correspond to a character
-	*	ability.
-	*/
+	 * Gets a capture definition for the specified ability-related attribute.
+	 *
+	 * @param Name
+	 *	The name of the attribute for which a capture definition is desired.
+	 *
+	 * @return
+	 *	Either the desired capture definition; or nullptr if the given attribute name doesn't correspond to a character
+	 *	ability.
+	 */
 	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetCaptureByName(const FString Name) const
 	{
 		if (this->CaptureDefinitions.Contains(Name))
@@ -98,13 +110,24 @@ private:
 	 */
 	FPF2AbilityAttributes()
 	{
-		DEFINE_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, AbBoostCount, Target, false);
+		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbBoostCount, Target, false);
 
 		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbCharisma, Target, false);
+		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbCharismaModifier, Target, false);
+
 		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbConstitution, Target, false);
+		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbConstitutionModifier, Target, false);
+
 		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbDexterity, Target, false);
+		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbDexterityModifier, Target, false);
+
 		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbIntelligence, Target, false);
+		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbIntelligenceModifier, Target, false);
+
 		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbStrength, Target, false);
+		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbStrengthModifier, Target, false);
+
 		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbWisdom, Target, false);
+		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbWisdomModifier, Target, false);
 	}
 };

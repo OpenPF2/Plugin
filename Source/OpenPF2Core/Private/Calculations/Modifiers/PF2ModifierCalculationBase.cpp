@@ -16,13 +16,10 @@
 #include "Abilities/PF2AttributeSet.h"
 
 UPF2ModifierCalculationBase::UPF2ModifierCalculationBase(const FGameplayAttribute SkillAbilityAttribute,
-														 const FString SkillGameplayTagPrefix) :
-	UPF2TemlCalculationBase()
+                                                         const FString            SkillGameplayTagPrefix) :
+	UPF2TemlCalculationBase(),
+	SkillAbilityCaptureDefinition(GameplayAbilityUtils::BuildSourceCaptureFor(SkillAbilityAttribute))
 {
-	this->SkillAbilityCaptureDefinition.AttributeToCapture	= SkillAbilityAttribute;
-	this->SkillAbilityCaptureDefinition.AttributeSource		= EGameplayEffectAttributeCaptureSource::Source;
-	this->SkillAbilityCaptureDefinition.bSnapshot			= false;
-
 	RelevantAttributesToCapture.Add(this->SkillAbilityCaptureDefinition);
 
 	this->SkillGameplayTagPrefix = SkillGameplayTagPrefix;
@@ -30,12 +27,12 @@ UPF2ModifierCalculationBase::UPF2ModifierCalculationBase(const FGameplayAttribut
 
 float UPF2ModifierCalculationBase::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
 {
-	float							AbilityScore			= 0.0f,
-									ProficiencyBonus,
-									Modifier;
-	const FGameplayTagContainer		*SourceTags				= Spec.CapturedSourceTags.GetAggregatedTags(),
-									*TargetTags				= Spec.CapturedTargetTags.GetAggregatedTags();
-	FAggregatorEvaluateParameters	EvaluationParameters;
+	float                         AbilityScore         = 0.0f,
+	                              ProficiencyBonus,
+	                              Modifier;
+	const FGameplayTagContainer   *SourceTags          = Spec.CapturedSourceTags.GetAggregatedTags(),
+	                              *TargetTags          = Spec.CapturedTargetTags.GetAggregatedTags();
+	FAggregatorEvaluateParameters EvaluationParameters;
 
 	EvaluationParameters.SourceTags = SourceTags;
 	EvaluationParameters.TargetTags = TargetTags;

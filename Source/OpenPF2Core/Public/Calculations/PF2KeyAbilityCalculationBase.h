@@ -48,7 +48,7 @@ public:
 	 *	or "SpellDc".
 	 * @param KeyAbilityGameplayTagPrefix
 	 *	The tag prefix to use to determine the key ability for this stat.  For the Class DC, this is "KeyAbility". For
-	 *	Spell Attack and Spell DC, this is "SpellcastingKeyAbility".
+	 *	Spell Attack and Spell DC, this is "SpellcastingAbility".
 	 * @param BaseValue
 	 *	The base value for this stat. For DC stats, this is usually "10". For other stats (e.g. Spell Attack Roll),
 	 *	this is 0.
