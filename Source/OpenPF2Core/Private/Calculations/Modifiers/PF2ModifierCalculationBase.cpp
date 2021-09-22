@@ -16,7 +16,7 @@
 #include "Abilities/PF2AttributeSet.h"
 
 UPF2ModifierCalculationBase::UPF2ModifierCalculationBase(const FGameplayAttribute SkillAbilityAttribute,
-														 const FString SkillGameplayTagPrefix) :
+                                                         const FString            SkillGameplayTagPrefix) :
 	UPF2TemlCalculationBase(),
 	SkillAbilityCaptureDefinition(GameplayAbilityUtils::BuildSourceCaptureFor(SkillAbilityAttribute))
 {
@@ -27,12 +27,12 @@ UPF2ModifierCalculationBase::UPF2ModifierCalculationBase(const FGameplayAttribut
 
 float UPF2ModifierCalculationBase::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
 {
-	float							AbilityScore			= 0.0f,
-									ProficiencyBonus,
-									Modifier;
-	const FGameplayTagContainer		*SourceTags				= Spec.CapturedSourceTags.GetAggregatedTags(),
-									*TargetTags				= Spec.CapturedTargetTags.GetAggregatedTags();
-	FAggregatorEvaluateParameters	EvaluationParameters;
+	float                         AbilityScore         = 0.0f,
+	                              ProficiencyBonus,
+	                              Modifier;
+	const FGameplayTagContainer   *SourceTags          = Spec.CapturedSourceTags.GetAggregatedTags(),
+	                              *TargetTags          = Spec.CapturedTargetTags.GetAggregatedTags();
+	FAggregatorEvaluateParameters EvaluationParameters;
 
 	EvaluationParameters.SourceTags = SourceTags;
 	EvaluationParameters.TargetTags = TargetTags;
