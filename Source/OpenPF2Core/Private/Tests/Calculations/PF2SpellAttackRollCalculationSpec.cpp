@@ -23,11 +23,10 @@ BEGIN_DEFINE_PF_SPEC(FPF2SpellAttackRollCalculationsSpec,
 		{"Legendary", 9.0f},
 	};
 
-	const TMap<FString, FString> SpellAbilityModifierAttributes = {
-		{"Charisma", "AbCharismaModifier" },
-		{"Wisdom",   "AbWisdomModifier"   },
-	};
-
+	// The classes in the core rulebook don't have any spellcasting abilities other than Wisdom and Charisma, but
+	// there's no reason to limit game makers to just those options. Plus, add-on material for PF2 could always invent a
+	// new class that uses something like Intelligence for a character that does complex spellcasting or Dexterity for a
+	// character who performs physically-dexterous spells.
 	const TMap<FString, FString> AllAbilityModifierAttributes = {
 		{"Charisma",     "AbCharismaModifier"     },
 		{"Constitution", "AbConstitutionModifier" },
@@ -56,7 +55,7 @@ void FPF2SpellAttackRollCalculationsSpec::Define()
 		FAttributeCapture       Attributes   = CaptureAbilityModifierAttributes(AttributeSet);
 
 		// Zero out all attributes so that only the "boosted" attribute has an effect.
-		for (auto& Modifier : this->SpellAbilityModifierAttributes)
+		for (auto& Modifier : this->AllAbilityModifierAttributes)
 		{
 			const FString ModifierName = Modifier.Value;
 
@@ -70,7 +69,7 @@ void FPF2SpellAttackRollCalculationsSpec::Define()
 		this->DestroyWorld();
 	});
 
-	for (auto& SpellAbility : this->SpellAbilityModifierAttributes)
+	for (auto& SpellAbility : this->AllAbilityModifierAttributes)
 	{
 		const FString SpellAbilityName      = SpellAbility.Key,
 		              SpellAbilityAttribute = SpellAbility.Value;
