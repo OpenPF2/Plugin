@@ -439,6 +439,22 @@ public:
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkThieveryModifier)
 
 	/**
+	 * A measure of how potent a character's spells are against the defenses of other creatures.
+	 * (Pathfinder 2E Core Rulebook, "Spell Attack Roll and Spell DC", page 298)
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Spells", ReplicatedUsing=OnRep_SpellAttackRoll)
+	FGameplayAttributeData SpellAttackRoll;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SpellAttackRoll)
+
+	/**
+	 * How hard it is to resist a character's spells with saving throws, or to counteract them.
+	 * (Pathfinder 2E Core Rulebook, page 636)
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Spells", ReplicatedUsing=OnRep_SpellDifficultyClass)
+	FGameplayAttributeData SpellDifficultyClass;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SpellDifficultyClass)
+
+	/**
 	 * The number of ancestry feats that this character currently has applied.
 	 *
 	 * Capped by FeAncestryFeatLimit.
@@ -450,8 +466,8 @@ public:
 	/**
 	 * The limit on how many ancestry feats this character can apply.
 	 *
-	 * This caps FeAncestryFeatCount, but can be a larger number than FeAncestryFeatCount if the character is eligible for additional
-	 * ancestry feats that the player or story (for NPCs) has not yet applied.
+	 * This caps FeAncestryFeatCount, but can be a larger number than FeAncestryFeatCount if the character is eligible
+	 * for additional ancestry feats that the player or story (for NPCs) has not yet applied.
 	 */
 	UPROPERTY(BlueprintReadOnly, Category = "Feats", ReplicatedUsing=OnRep_FeAncestryFeatLimit)
 	FGameplayAttributeData FeAncestryFeatLimit;
@@ -602,4 +618,11 @@ public:
 
 	UFUNCTION()
 	virtual void OnRep_FeAncestryFeatLimit(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_SpellAttackRoll(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_SpellDifficultyClass(const FGameplayAttributeData& OldValue);
+
 };
