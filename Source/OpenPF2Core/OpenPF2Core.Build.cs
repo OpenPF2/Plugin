@@ -17,7 +17,8 @@ public class OpenPF2Core: ModuleRules
 			{
 				"Core",
 				"GameplayAbilities",
-				"GameplayTags"
+				"GameplayTags",
+				"GameplayTasks",
 			}
 		);
 
