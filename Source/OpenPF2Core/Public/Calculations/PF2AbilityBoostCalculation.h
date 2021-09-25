@@ -29,6 +29,9 @@ class OPENPF2CORE_API UPF2AbilityBoostCalculation : public UPF2AbilityCalculatio
 {
 	GENERATED_BODY()
 
+	// =================================================================================================================
+	// Public Methods
+	// =================================================================================================================
 	/**
 	 * Calculates an ability boost.
 	 *

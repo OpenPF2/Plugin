@@ -19,5 +19,8 @@ class OPENPF2CORE_API UPF2NatureModifierCalculation : public UPF2ModifierCalcula
 	GENERATED_BODY()
 
 public:
+	// =================================================================================================================
+	// Constructors
+	// =================================================================================================================
 	explicit UPF2NatureModifierCalculation();
 };

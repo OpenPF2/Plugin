@@ -19,5 +19,8 @@ class OPENPF2CORE_API UPF2WillModifierCalculation : public UPF2ModifierCalculati
 	GENERATED_BODY()
 
 public:
+	// =================================================================================================================
+	// Constructors
+	// =================================================================================================================
 	explicit UPF2WillModifierCalculation();
 };

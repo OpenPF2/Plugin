@@ -19,5 +19,8 @@ class OPENPF2CORE_API UPF2MedicineModifierCalculation : public UPF2ModifierCalcu
 	GENERATED_BODY()
 
 public:
+	// =================================================================================================================
+	// Constructors
+	// =================================================================================================================
 	explicit UPF2MedicineModifierCalculation();
 };

@@ -37,6 +37,9 @@ class OPENPF2CORE_API UPF2SpellAttackRollCalculation : public UPF2KeyAbilityCalc
 	GENERATED_BODY()
 
 public:
+	// =================================================================================================================
+	// Constructors
+	// =================================================================================================================
 	/**
 	 * Constructor for UPF2SpellAttackRollCalculation.
 	 */

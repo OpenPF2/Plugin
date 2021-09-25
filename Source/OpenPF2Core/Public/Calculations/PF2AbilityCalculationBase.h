@@ -18,9 +18,15 @@ class OPENPF2CORE_API UPF2AbilityCalculationBase : public UGameplayModMagnitudeC
 	GENERATED_BODY()
 
 public:
+	// =================================================================================================================
+	// Public Methods
+	// =================================================================================================================
 	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
 
 protected:
+	// =================================================================================================================
+	// Protected Methods
+	// =================================================================================================================
 	/**
 	 * Calculates an ability-based modifier value based on the attribute captured by the provided GE specification.
 	 *

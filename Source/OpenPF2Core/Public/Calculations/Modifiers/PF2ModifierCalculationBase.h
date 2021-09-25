@@ -20,6 +20,9 @@ class OPENPF2CORE_API UPF2ModifierCalculationBase : public UPF2TemlCalculationBa
 	GENERATED_BODY()
 
 public:
+	// =================================================================================================================
+	// Constructors
+	// =================================================================================================================
 	/**
 	 * Default constructor UE4 invokes for objects of this type.
 	 *
@@ -49,6 +52,9 @@ public:
 	explicit UPF2ModifierCalculationBase(const FGameplayAttribute SkillAbilityAttribute,
 	                                     const FString            SkillGameplayTagPrefix);
 
+	// =================================================================================================================
+	// Public Methods
+	// =================================================================================================================
 	/**
 	 * Calculates a skill proficiency based on the attributes captured by the provided GE specification.
 	 *
@@ -65,6 +71,9 @@ public:
 	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
 
 protected:
+	// =================================================================================================================
+	// Protected Fields
+	// =================================================================================================================
 	/**
 	 * Capture definition for the RPG character attribute that contributes to proficiency in the skill.
 	 */
