@@ -10,8 +10,8 @@
 
 float UPF2AbilityCalculationBase::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
 {
-	float		Value					= 0.0f;
-	const int	CapturedAttributeCount	= RelevantAttributesToCapture.Num();
+	float     Value                  = 0.0f;
+	const int CapturedAttributeCount = this->RelevantAttributesToCapture.Num();
 
 	if (CapturedAttributeCount == 0)
 	{
@@ -23,7 +23,7 @@ float UPF2AbilityCalculationBase::CalculateBaseMagnitude_Implementation(const FG
 	}
 	else if (CapturedAttributeCount == 1)
 	{
-		Value = DoCalculation(Spec);
+		Value = this->DoCalculation(Spec);
 	}
 	else
 	{
@@ -40,17 +40,17 @@ float UPF2AbilityCalculationBase::CalculateBaseMagnitude_Implementation(const FG
 
 float UPF2AbilityCalculationBase::DoCalculation(const FGameplayEffectSpec& Spec) const
 {
-	const FGameplayEffectAttributeCaptureDefinition AbilityAttributeDef   = RelevantAttributesToCapture[0];
-	const FGameplayAttribute						AbilityAttribute	  = AbilityAttributeDef.AttributeToCapture;
-	const FGameplayTagContainer						*SourceTags			  = Spec.CapturedSourceTags.GetAggregatedTags(),
-													*TargetTags			  = Spec.CapturedTargetTags.GetAggregatedTags();
-	FAggregatorEvaluateParameters					EvaluationParameters;
-	float											AbilityScore		  = 0.0f;
+	const FGameplayEffectAttributeCaptureDefinition AbilityAttributeDef  = this->RelevantAttributesToCapture[0];
+	const FGameplayAttribute                        AbilityAttribute     = AbilityAttributeDef.AttributeToCapture;
+	const FGameplayTagContainer                     *SourceTags          = Spec.CapturedSourceTags.GetAggregatedTags(),
+	                                                *TargetTags          = Spec.CapturedTargetTags.GetAggregatedTags();
+	FAggregatorEvaluateParameters                   EvaluationParameters;
+	float                                           AbilityScore = 0.0f;
 
 	EvaluationParameters.SourceTags = SourceTags;
 	EvaluationParameters.TargetTags = TargetTags;
 
-	GetCapturedAttributeMagnitude(AbilityAttributeDef, Spec, EvaluationParameters, AbilityScore);
+	this->GetCapturedAttributeMagnitude(AbilityAttributeDef, Spec, EvaluationParameters, AbilityScore);
 
-	return DoCalculation(AbilityAttribute, AbilityScore);
+	return this->DoCalculation(AbilityAttribute, AbilityScore);
 }

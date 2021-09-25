@@ -1,9 +1,9 @@
 ﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
-//	 - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
-//	 - System Reference Document, Copyright 2000, Wizards of the Coast, Inc.
-//	 - Pathfinder Core Rulebook (Second Edition), Copyright 2019, Paizo Inc.
+//   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
+//   - System Reference Document, Copyright 2000, Wizards of the Coast, Inc.
+//   - Pathfinder Core Rulebook (Second Edition), Copyright 2019, Paizo Inc.
 // Except for material designated as Product Identity, the game mechanics and logic in this file are Open Game Content,
 // as defined in the Open Game License version 1.0a, Section 1(d) (see accompanying LICENSE.TXT). No portion of this
 // file other than the material designated as Open Game Content may be reproduced in any form without written
@@ -24,8 +24,8 @@ UPF2KeyAbilityCalculationBase::UPF2KeyAbilityCalculationBase() :
 }
 
 UPF2KeyAbilityCalculationBase::UPF2KeyAbilityCalculationBase(const FString StatGameplayTagPrefix,
-															 const FString KeyAbilityGameplayTagPrefix,
-															 const float BaseValue) :
+                                                             const FString KeyAbilityGameplayTagPrefix,
+                                                             const float   BaseValue) :
 	UPF2TemlCalculationBase(),
 	StatGameplayTagPrefix(StatGameplayTagPrefix),
 	BaseValue(BaseValue)
@@ -88,9 +88,9 @@ float UPF2KeyAbilityCalculationBase::CalculateBaseMagnitude_Implementation(const
 	// Spell DC = 10 + your spellcasting ability modifier + proficiency bonus + other bonuses + penalties"
 	//
 	// Source: Pathfinder 2E Core Rulebook, page 298, "Spell Attack Roll and Spell DC".
-	const float	ProficiencyBonus	= CalculateProficiencyBonus(this->StatGameplayTagPrefix, Spec),
-				KeyAbilityModifier	= CalculateKeyAbilityModifier(Spec),
-				AbilityScore		= this->BaseValue + ProficiencyBonus + KeyAbilityModifier;
+	const float ProficiencyBonus   = this->CalculateProficiencyBonus(this->StatGameplayTagPrefix, Spec),
+	            KeyAbilityModifier = this->CalculateKeyAbilityModifier(Spec),
+	            AbilityScore       = this->BaseValue + ProficiencyBonus + KeyAbilityModifier;
 
 	UE_LOG(
 		LogPf2Core,
@@ -108,26 +108,33 @@ float UPF2KeyAbilityCalculationBase::CalculateBaseMagnitude_Implementation(const
 
 float UPF2KeyAbilityCalculationBase::CalculateKeyAbilityModifier(const FGameplayEffectSpec& Spec) const
 {
-	float											KeyAbilityModifier			= 0.0f;
-	const FGameplayTagContainer						*SourceTags					= Spec.CapturedSourceTags.GetAggregatedTags();
-	const FGameplayEffectAttributeCaptureDefinition	KeyAbilityCaptureDefinition	= DetermineKeyAbility(SourceTags);
+	float                        KeyAbilityModifier = 0.0f;
+	const FGameplayTagContainer* SourceTags         = Spec.CapturedSourceTags.GetAggregatedTags();
+
+	const FGameplayEffectAttributeCaptureDefinition KeyAbilityCaptureDefinition =
+		this->DetermineKeyAbility(SourceTags);
 
 	if (KeyAbilityCaptureDefinition.AttributeToCapture.IsValid())
 	{
-		const FGameplayTagContainer		*TargetTags				= Spec.CapturedTargetTags.GetAggregatedTags();
-		FAggregatorEvaluateParameters	EvaluationParameters;
+		const FGameplayTagContainer*  TargetTags           = Spec.CapturedTargetTags.GetAggregatedTags();
+		FAggregatorEvaluateParameters EvaluationParameters;
 
 		EvaluationParameters.SourceTags = SourceTags;
 		EvaluationParameters.TargetTags = TargetTags;
 
-		GetCapturedAttributeMagnitude(KeyAbilityCaptureDefinition, Spec, EvaluationParameters, KeyAbilityModifier);
+		this->GetCapturedAttributeMagnitude(
+			KeyAbilityCaptureDefinition,
+			Spec,
+			EvaluationParameters,
+			KeyAbilityModifier
+		);
 	}
 
 	return KeyAbilityModifier;
 }
 
 FGameplayEffectAttributeCaptureDefinition UPF2KeyAbilityCalculationBase::DetermineKeyAbility(
-																		const FGameplayTagContainer* SourceTags) const
+	                                                                      const FGameplayTagContainer* SourceTags) const
 {
 	FGameplayEffectAttributeCaptureDefinition KeyAbilityCaptureDefinition;
 
