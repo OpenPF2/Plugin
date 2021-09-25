@@ -53,7 +53,7 @@ float UPF2ArmorClassCalculation::GetDexterityModifier(const FGameplayEffectSpec&
 	EvaluationParameters.SourceTags = SourceTags;
 	EvaluationParameters.TargetTags = TargetTags;
 
-	GetCapturedAttributeMagnitude(
+	this->GetCapturedAttributeMagnitude(
 		this->DexterityModifierCaptureDefinition,
 		Spec,
 		EvaluationParameters,
@@ -70,7 +70,7 @@ float UPF2ArmorClassCalculation::CalculateArmorTypeProficiencyBonus(const FGamep
 	                             ArmorTypeProficiencyPrefix = "Armor.Category." + ArmorType;
 
 	const float ProficiencyBonus =
-		CalculateProficiencyBonus(ArmorTypeProficiencyPrefix, Spec);
+		this->CalculateProficiencyBonus(ArmorTypeProficiencyPrefix, Spec);
 
 	UE_LOG(
 		LogPf2Core,

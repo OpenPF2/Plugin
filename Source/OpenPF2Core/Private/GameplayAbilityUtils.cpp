@@ -19,8 +19,8 @@ namespace GameplayAbilityUtils
 		FGameplayEffectAttributeCaptureDefinition CaptureDefinition;
 
 		CaptureDefinition.AttributeToCapture = Attribute;
-		CaptureDefinition.AttributeSource	 = EGameplayEffectAttributeCaptureSource::Source;
-		CaptureDefinition.bSnapshot			 = false;
+		CaptureDefinition.AttributeSource    = EGameplayEffectAttributeCaptureSource::Source;
+		CaptureDefinition.bSnapshot          = false;
 
 		return CaptureDefinition;
 	}

@@ -47,7 +47,7 @@ public:
 	 *	"Skill.Arcana".
 	 */
 	explicit UPF2ModifierCalculationBase(const FGameplayAttribute SkillAbilityAttribute,
-										 const FString SkillGameplayTagPrefix);
+	                                     const FString            SkillGameplayTagPrefix);
 
 	/**
 	 * Calculates a skill proficiency based on the attributes captured by the provided GE specification.

@@ -42,7 +42,7 @@ protected:
 	 * All sub-classes must override this implementation.
 	 *
 	 * @param AbilityAttribute
-	*	The type of ability score for which a calculated value is desired.
+	 *	The type of ability score for which a calculated value is desired.
 	 * @param AbilityScore
 	 *	The current base value of the ability attribute.
 	 *
@@ -50,5 +50,5 @@ protected:
 	 *	The calculated value.
 	 */
 	virtual float DoCalculation(const FGameplayAttribute AbilityAttribute, const float AbilityScore) const
-	PURE_VIRTUAL(URPGAbilityCalculationBase::DoCalculation, return 0;);
+	PURE_VIRTUAL(UPF2AbilityCalculationBase::DoCalculation, return 0;);
 };
