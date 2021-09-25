@@ -19,5 +19,8 @@ class OPENPF2CORE_API UPF2IntimidationModifierCalculation : public UPF2ModifierC
 	GENERATED_BODY()
 
 public:
+	// =================================================================================================================
+	// Constructors
+	// =================================================================================================================
 	explicit UPF2IntimidationModifierCalculation();
 };

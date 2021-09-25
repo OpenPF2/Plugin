@@ -29,18 +29,18 @@ class OPENPF2CORE_API UPF2ArmorClassCalculation : public UPF2TemlCalculationBase
 {
 	GENERATED_BODY()
 
-protected:
-	/**
-	 * Capture definition for the Dexterity Ability Modifier.
-	 */
-	FGameplayEffectAttributeCaptureDefinition DexterityModifierCaptureDefinition;
-
 public:
+	// =================================================================================================================
+	// Constructors
+	// =================================================================================================================
 	/**
 	 * Constructor for UPF2ArmorClassCalculation.
 	 */
 	explicit UPF2ArmorClassCalculation();
 
+	// =================================================================================================================
+	// Public Methods
+	// =================================================================================================================
 	/**
 	 * Calculates this stat based on the character's Dexterity, equipped armor (if any), and armor ranks.
 	 *
@@ -56,6 +56,17 @@ public:
 	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
 
 protected:
+	// =================================================================================================================
+	// Protected Fields
+	// =================================================================================================================
+	/**
+	 * Capture definition for the Dexterity Ability Modifier.
+	 */
+	FGameplayEffectAttributeCaptureDefinition DexterityModifierCaptureDefinition;
+
+	// =================================================================================================================
+	// Protected Methods
+	// =================================================================================================================
 	/**
 	 * Gets the captured dexterity modifier.
 	 *
@@ -69,6 +80,9 @@ protected:
 	 *
 	 * @param Spec
 	 *	The Gameplay Effect (GE) specification that provides information about the character's attributes and tags.
+	 *
+	 * @return
+	 *	The amount that the current armor type contributes to the character's AC modifier.
 	 */
 	float CalculateArmorTypeProficiencyBonus(const FGameplayEffectSpec& Spec) const;
 

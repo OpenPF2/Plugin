@@ -19,5 +19,8 @@ class OPENPF2CORE_API UPF2StealthModifierCalculation : public UPF2ModifierCalcul
 	GENERATED_BODY()
 
 public:
+	// =================================================================================================================
+	// Constructors
+	// =================================================================================================================
 	explicit UPF2StealthModifierCalculation();
 };

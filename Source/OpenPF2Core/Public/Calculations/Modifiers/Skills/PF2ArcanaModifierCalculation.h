@@ -19,5 +19,8 @@ class OPENPF2CORE_API UPF2ArcanaModifierCalculation : public UPF2ModifierCalcula
 	GENERATED_BODY()
 
 public:
+	// =================================================================================================================
+	// Constructors
+	// =================================================================================================================
 	explicit UPF2ArcanaModifierCalculation();
 };

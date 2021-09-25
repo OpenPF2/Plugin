@@ -29,6 +29,9 @@ class OPENPF2CORE_API UPF2AbilityModifierCalculation : public UPF2AbilityCalcula
 	GENERATED_BODY()
 
 protected:
+	// =================================================================================================================
+	// Protected Methods
+	// =================================================================================================================
 	/**
 	 * Calculates an ability modifier based on the attribute captured by the provided GE specification.
 	 *

@@ -19,5 +19,8 @@ class OPENPF2CORE_API UPF2PerformanceModifierCalculation : public UPF2ModifierCa
 	GENERATED_BODY()
 
 public:
+	// =================================================================================================================
+	// Constructors
+	// =================================================================================================================
 	explicit UPF2PerformanceModifierCalculation();
 };

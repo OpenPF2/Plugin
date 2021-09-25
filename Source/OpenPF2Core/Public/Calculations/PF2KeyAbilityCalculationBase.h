@@ -28,6 +28,9 @@ class OPENPF2CORE_API UPF2KeyAbilityCalculationBase : public UPF2TemlCalculation
 	GENERATED_BODY()
 
 public:
+	// =================================================================================================================
+	// Constructors
+	// =================================================================================================================
 	/**
 	 * Default constructor UE4 invokes for objects of this type.
 	 *
@@ -57,6 +60,9 @@ public:
 										   const FString KeyAbilityGameplayTagPrefix,
 										   const float BaseValue = 0.0f);
 
+	// =================================================================================================================
+	// Public Methods
+	// =================================================================================================================
 	/**
 	 * Calculates this stat based on the Key Attribute captured by the provided GE specification.
 	 *
@@ -70,6 +76,9 @@ public:
 	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
 
 protected:
+	// =================================================================================================================
+	// Protected Methods
+	// =================================================================================================================
 	/**
 	 * The tag prefix to use for checking a character's training in this stat.
 	 */
@@ -108,6 +117,9 @@ protected:
 	 */
 	FString KeyAbilityGameplayTag;
 
+	// =================================================================================================================
+	// Protected Methods
+	// =================================================================================================================
 	/**
 	 * Adds a capture definition for the specified ability, keyed by the given Key Ability tag name.
 	 *
@@ -126,6 +138,9 @@ protected:
 	 * @param Spec
 	 *	The Gameplay Effect (GE) specification that provides information about the character attribute upon which a
 	 *	Key Ability modifier is desired.
+	 *
+	 * @return
+	 *	The modifier calculated for this ability, based on the modifier the character has in the key ability.
 	 */
 	float CalculateKeyAbilityModifier(const FGameplayEffectSpec& Spec) const;
 

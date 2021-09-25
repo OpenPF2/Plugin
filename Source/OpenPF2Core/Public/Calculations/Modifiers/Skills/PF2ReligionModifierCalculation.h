@@ -19,5 +19,8 @@ class OPENPF2CORE_API UPF2ReligionModifierCalculation : public UPF2ModifierCalcu
 	GENERATED_BODY()
 
 public:
+	// =================================================================================================================
+	// Constructors
+	// =================================================================================================================
 	explicit UPF2ReligionModifierCalculation();
 };

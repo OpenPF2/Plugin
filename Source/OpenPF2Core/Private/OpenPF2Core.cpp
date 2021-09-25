@@ -9,7 +9,8 @@
 
 void FOpenPF2CoreModule::StartupModule()
 {
-	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
+	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin
+	// file per-module
 }
 
 void FOpenPF2CoreModule::ShutdownModule()
@@ -19,7 +20,7 @@ void FOpenPF2CoreModule::ShutdownModule()
 }
 
 #undef LOCTEXT_NAMESPACE
-	
+
 IMPLEMENT_MODULE(FOpenPF2CoreModule, OpenPF2Core)
 
 /** Logging definitions */

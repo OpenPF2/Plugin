@@ -13,24 +13,41 @@
 
 class UAbilitySystemComponent;
 
+/**
+ * A pawn that holds an ability system component, for use in testing logic that relies on Attribute Sets and other
+ * GAS-related functionality.
+ */
 UCLASS(Blueprintable, BlueprintType, notplaceable)
 class OPENPF2CORE_API APF2TestPawn : public ADefaultPawn, public IGameplayCueInterface, public IAbilitySystemInterface
 {
 	GENERATED_UCLASS_BODY()
 
+	// =================================================================================================================
+	// Public Methods
+	// =================================================================================================================
 	virtual void PostInitializeComponents() override;
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 private:
-	/** The ability system component of this pawn (manipulated by tests). */
+	/**
+	 * The ability system component of this pawn (manipulated by tests).
+	 */
 	UPROPERTY(Category = AbilitySystem, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UAbilitySystemComponent* AbilitySystemComponent;
 
 public:
+	/**
+	 * The name of the ASC so that the sub-component can be looked-up by name in tests.
+	 */
 	static FName AbilitySystemComponentName;
 
-	/** Gets the ASC in this pawn. **/
+	/**
+	 * Gets the ASC of this pawn.
+	 *
+	 * @return
+	 *	The Ability System Component this pawn manages.
+	 */
 	class UAbilitySystemComponent* GetAbilitySystemComponent()
 	{
 		return AbilitySystemComponent;

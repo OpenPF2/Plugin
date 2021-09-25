@@ -8,14 +8,25 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
+/**
+ * Log category for logic evaluated by the OpenPF2 core code.
+ */
 OPENPF2CORE_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2Core, VeryVerbose, VeryVerbose);
+
+/**
+ * Log category for logging character abilities and stats (very verbose).
+ */
 OPENPF2CORE_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2CoreStatsDebug, VeryVerbose, VeryVerbose);
 
+/**
+ * Top-level module for responding to events for the OpenPF2 plug-in.
+ */
 class FOpenPF2CoreModule : public IModuleInterface
 {
 public:
-
-	/** IModuleInterface implementation */
+	// =================================================================================================================
+	// Public Methods - IModuleInterface Implementation
+	// =================================================================================================================
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
 };

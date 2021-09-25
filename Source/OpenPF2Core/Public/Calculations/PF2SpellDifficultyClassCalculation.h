@@ -34,6 +34,9 @@ class OPENPF2CORE_API UPF2SpellDifficultyClassCalculation : public UPF2KeyAbilit
 	GENERATED_BODY()
 
 public:
+	// =================================================================================================================
+	// Constructors
+	// =================================================================================================================
 	/**
 	 * Constructor for UPF2SpellDifficultyClassCalculation.
 	 */
