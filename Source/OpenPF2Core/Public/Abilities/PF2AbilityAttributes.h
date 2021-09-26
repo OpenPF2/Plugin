@@ -8,10 +8,22 @@
 #include "GameplayEffectExecutionCalculation.h"
 #include "Abilities/PF2AttributeSet.h"
 
-#define DEFINE_ABILITY_CAPTUREDEF(S, P, T, B) \
+#define DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(S, P, T, B) \
 { \
 	DEFINE_ATTRIBUTE_CAPTUREDEF(S, P, T, B) \
 	this->CaptureDefinitions.Add(P##Property->GetName(), P##Def); \
+}
+
+#define DEFINE_ABILITY_CAPTUREDEF(S, P, T, B) \
+{ \
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(S, P, T, B) \
+	this->AbilityNames.Add(P##Property->GetName()); \
+}
+
+#define DEFINE_ABILITY_MODIFIER_CAPTUREDEF(S, P, T, B) \
+{ \
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(S, P, T, B) \
+	this->AbilityModifierNames.Add(P##Property->GetName()); \
 }
 
 /**
@@ -62,6 +74,28 @@ public:
 	TArray<FGameplayEffectAttributeCaptureDefinition> GetCaptureDefinitions() const;
 
 	/**
+	 * Gets the names of all ability-related attributes.
+	 *
+	 * @return
+	 *	The name of each ability attribute.
+	 */
+	TArray<FString> GetAbilityNames() const
+	{
+		return this->AbilityNames;
+	}
+
+	/**
+	 * Gets the names of all ability-modifier-related attributes.
+	 *
+	 * @return
+	 *	The name of each ability modifier attribute.
+	 */
+	TArray<FString> GetAbilityModifierNames() const
+	{
+		return this->AbilityModifierNames;
+	}
+
+	/**
 	 * Gets a capture definition for the given ability-related attribute.
 	 *
 	 * @param Attribute
@@ -106,28 +140,34 @@ private:
 	TMap<FString, FGameplayEffectAttributeCaptureDefinition> CaptureDefinitions;
 
 	/**
+	 * The names of all ability-related attributes.
+	 */
+	TArray<FString> AbilityNames;
+
+	/**
+	 * The names of all ability-modifier-related attributes.
+	 */
+	TArray<FString> AbilityModifierNames;
+
+	/**
 	 * Constructor for FPF2AbilityAttributes.
 	 */
 	FPF2AbilityAttributes()
 	{
-		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbBoostCount, Target, false);
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, AbBoostCount, Target, false);
 
 		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbCharisma, Target, false);
-		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbCharismaModifier, Target, false);
-
 		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbConstitution, Target, false);
-		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbConstitutionModifier, Target, false);
-
 		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbDexterity, Target, false);
-		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbDexterityModifier, Target, false);
-
 		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbIntelligence, Target, false);
-		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbIntelligenceModifier, Target, false);
-
 		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbStrength, Target, false);
-		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbStrengthModifier, Target, false);
-
 		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbWisdom, Target, false);
-		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbWisdomModifier, Target, false);
+
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbCharismaModifier, Target, false);
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbConstitutionModifier, Target, false);
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbDexterityModifier, Target, false);
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbIntelligenceModifier, Target, false);
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbStrengthModifier, Target, false);
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbWisdomModifier, Target, false);
 	}
 };
