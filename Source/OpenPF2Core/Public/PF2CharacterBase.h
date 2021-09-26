@@ -37,6 +37,9 @@ public:
 	// =================================================================================================================
 	// Constructors
 	// =================================================================================================================
+	/**
+	 * Default constructor for APF2CharacterBase.
+	 */
 	explicit APF2CharacterBase();
 
 	// =================================================================================================================
@@ -54,9 +57,34 @@ public:
 	// =================================================================================================================
 	// Public Methods - Blueprint Callable
 	// =================================================================================================================
+	/**
+	 * Gets the current level of this character.
+	 *
+	 * The character level impacts the character's stats and how many boosts and feats the character can have.
+	 *
+	 * From the Pathfinder 2E Core Rulebook, page 31, "Leveling Up":
+	 * "Each level grants greater skill, increased resiliency, and new capabilities, allowing your character to face
+	 * even greater challenges and go on to earn even more impressive rewards."
+	 */
 	UFUNCTION(BlueprintCallable)
 	virtual int32 GetCharacterLevel() const;
 
+	/**
+	 * Sets the current level of this character.
+	 *
+	 * The character level impacts the character's stats and how many boosts and feats the character can have.
+	 *
+	 * From the Pathfinder 2E Core Rulebook, page 31, "Leveling Up":
+	 * "Each level grants greater skill, increased resiliency, and new capabilities, allowing your character to face
+	 * even greater challenges and go on to earn even more impressive rewards."
+	 *
+	 * @param NewLevel
+	 *	The new level for the character. Must be greater than 0.
+	 *
+	 * @return
+	 *	true if the level was valid and changed; or, false, if the level was either invalid or did not change (the
+	 *	character was already the specified level).
+	 */
 	UFUNCTION(BlueprintCallable)
 	virtual bool SetCharacterLevel(int32 NewLevel);
 
