@@ -9,6 +9,8 @@
 #include <AbilitySystemGlobals.h>
 #include <Net/UnrealNetwork.h>
 
+#include "Abilities/PF2AbilityAttributes.h"
+
 APF2CharacterBase::APF2CharacterBase()
 {
 	UPF2AbilitySystemComponent* NewAbilitySystemComponent =
@@ -21,6 +23,11 @@ APF2CharacterBase::APF2CharacterBase()
 	this->CharacterLevel             = 1;
 	this->bPassiveEffectsInitialized = false;
 	this->CharacterName              = FText::FromString(TEXT("Character"));
+
+	for (const auto& AbilityName : FPF2AbilityAttributes::GetInstance().GetAbilityNames())
+	{
+		this->AbilityBoosts.Add(FPF2CharacterAbilityBoostCount(AbilityName, 0));
+	}
 }
 
 void APF2CharacterBase::PossessedBy(AController* NewController)

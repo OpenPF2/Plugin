@@ -16,8 +16,8 @@
 
 #include "PF2AncestryAndHeritageGameplayEffectBase.h"
 #include "PF2BackgroundGameplayEffectBase.h"
+#include "PF2CharacterAbilityBoostCount.h"
 #include "PF2ClassGameplayEffectBase.h"
-
 #include "Abilities/PF2AbilitySystemComponent.h"
 #include "Abilities/PF2AttributeSet.h"
 #include "PF2CharacterBase.generated.h"
@@ -161,6 +161,9 @@ protected:
 	 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Character")
 	TArray<TSubclassOf<UGameplayEffect>> PassiveGameplayEffects;
+
+	UPROPERTY(EditAnywhere, EditFixedSize, meta=(EditFixedOrder), Category="Character")
+	TArray<FPF2CharacterAbilityBoostCount> AbilityBoosts;
 
 	/**
 	 * Whether or not passive gameplay effects have been initialized for this character.
