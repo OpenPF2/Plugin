@@ -78,6 +78,7 @@ void APF2CharacterBase::HandleCharacterLevelChanged(const float OldLevel, const 
 	this->DeactivatePassiveGameplayEffects();
 
 	this->CharacterLevel = NewLevel;
+	this->OnCharacterLevelChanged(OldLevel, NewLevel);
 
 	this->ActivatePassiveGameplayEffects();
 }
