@@ -13,19 +13,25 @@
 
 #include <GameFramework/Character.h>
 #include <AbilitySystemInterface.h>
+#include <UObject/ConstructorHelpers.h>
 
+#include "Abilities/PF2AbilityAttributes.h"
+#include "Abilities/PF2AbilitySystemComponent.h"
+#include "Abilities/PF2AttributeSet.h"
 #include "PF2AncestryAndHeritageGameplayEffectBase.h"
 #include "PF2BackgroundGameplayEffectBase.h"
 #include "PF2CharacterAbilityBoostCount.h"
 #include "PF2ClassGameplayEffectBase.h"
-#include "Abilities/PF2AbilitySystemComponent.h"
-#include "Abilities/PF2AttributeSet.h"
 #include "PF2CharacterBase.generated.h"
+
+// Forward declaration; this is defined at the end of the file.
+template<class AscType, class AttributeSetType>
+class TPF2CharacterComponentFactory;
 
 /**
  * Base class for both playable and non-playable characters in OpenPF2.
  *
- * PF2-based games should extend this class if they need to provide custom character ability initialization logic.
+ * PF2-based games must extend this class if they have custom character attributes or abilities.
  */
 UCLASS()
 // ReSharper disable once CppClassCanBeFinal
@@ -35,7 +41,7 @@ class OPENPF2CORE_API APF2CharacterBase : public ACharacter, public IAbilitySyst
 
 public:
 	// =================================================================================================================
-	// Constructors
+	// Public Constructors
 	// =================================================================================================================
 	/**
 	 * Default constructor for APF2CharacterBase.
@@ -254,6 +260,36 @@ protected:
 	int32 bPassiveEffectsActivated;
 
 	// =================================================================================================================
+	// Protected Constructors
+	// =================================================================================================================
+	/**
+	 * Constructor for sub-classes to specify the type of the ASC and Attribute Set.
+	 *
+	 * @param ComponentFactory
+	 *   The factory component to use for generating the ASC and Attribute Set.
+	 */
+	template<class AscType, class AttributeSetType>
+	APF2CharacterBase(TPF2CharacterComponentFactory<AscType, AttributeSetType> ComponentFactory) :
+		CharacterName(FText::FromString(TEXT("Character"))),
+		CharacterLevel(1),
+		bManagedPassiveEffectsGenerated(false),
+		bPassiveEffectsActivated(false)
+	{
+		this->AbilitySystemComponent = ComponentFactory.CreateAbilitySystemComponent(this);
+		this->AttributeSet           = ComponentFactory.CreateAttributeSet(this);
+
+		for (const auto& AbilityName : FPF2AbilityAttributes::GetInstance().GetAbilityNames())
+		{
+			const ConstructorHelpers::FObjectFinder<UClass> BoostEffectBP(
+				*(FString::Format(TEXT("/OpenPF2Core/OpenPF2/Core/GE_Boost{0}.GE_Boost{0}_C"), {AbilityName}))
+			);
+
+			this->AbilityBoostEffects.Add(AbilityName, BoostEffectBP.Object);
+			this->AbilityBoosts.Add(FPF2CharacterAbilityBoostCount(AbilityName, 0));
+		}
+	}
+
+	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
 	/**
@@ -316,4 +352,53 @@ protected:
 	 */
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnCharacterLevelChanged(float OldLevel, float NewLevel);
+};
+
+/**
+ * Type of object for instantiating the ASC and attribute set for this type of character.
+ *
+ * This is in a separate object to allow these types to be parameterized/templated so sub-classes can swap out the type
+ * of ASC and attribute set just by supplying different types in their constructors.
+ */
+template<class AscType, class AttributeSetType>
+class TPF2CharacterComponentFactory
+{
+public:
+	/**
+	 * Creates an Ability System Component (ASC) for this character.
+	 *
+	 * The ASC is automatically created as a default sub-object of the character, with the name
+	 * "AbilitySystemComponent".
+	 *
+	 * @param Character
+	 *	The character for which the ASC will be created.
+	 *
+	 * @return
+	 *	The new ASC.
+	 */
+	static AscType* CreateAbilitySystemComponent(APF2CharacterBase* Character)
+	{
+		AscType* AbilitySystemComponent = Character->CreateDefaultSubobject<AscType>(TEXT("AbilitySystemComponent"));
+
+		AbilitySystemComponent->SetIsReplicated(true);
+
+		return AbilitySystemComponent;
+	}
+
+	/**
+	 * Creates an Attribute Set for this character.
+	 *
+	 * The attribute set is automatically created as a default sub-object of the character, with the name
+	 * "AttributeSet".
+	 *
+	 * @param Character
+	 *	The character for which the attribute set will be created.
+	 *
+	 * @return
+	 *	The new attribute set.
+	 */
+	static AttributeSetType* CreateAttributeSet(APF2CharacterBase* Character)
+	{
+		return Character->CreateDefaultSubobject<AttributeSetType>(TEXT("AttributeSet"));
+	}
 };

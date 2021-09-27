@@ -5,37 +5,14 @@
 
 #include "PF2CharacterBase.h"
 #include "Abilities/PF2AbilitySystemComponent.h"
-#include "Abilities/PF2AbilityAttributes.h"
 
 #include <AbilitySystemGlobals.h>
 #include <Net/UnrealNetwork.h>
 #include <UObject/ConstructorHelpers.h>
 
-APF2CharacterBase::APF2CharacterBase()
+APF2CharacterBase::APF2CharacterBase() :
+	APF2CharacterBase(TPF2CharacterComponentFactory<UPF2AbilitySystemComponent, UPF2AttributeSet>())
 {
-	UPF2AbilitySystemComponent* NewAbilitySystemComponent =
-		this->CreateDefaultSubobject<UPF2AbilitySystemComponent>(TEXT("AbilitySystemComponent"));
-
-	NewAbilitySystemComponent->SetIsReplicated(true);
-
-	this->AbilitySystemComponent = NewAbilitySystemComponent;
-	this->AttributeSet           = this->CreateDefaultSubobject<UPF2AttributeSet>(TEXT("AttributeSet"));
-
-	this->CharacterName  = FText::FromString(TEXT("Character"));
-	this->CharacterLevel = 1;
-
-	this->bManagedPassiveEffectsGenerated = false;
-	this->bPassiveEffectsActivated        = false;
-
-	for (const auto& AbilityName : FPF2AbilityAttributes::GetInstance().GetAbilityNames())
-	{
-		const ConstructorHelpers::FObjectFinder<UClass> BoostEffectBP(
-			*(FString::Format(TEXT("/OpenPF2Core/OpenPF2/Core/GE_Boost{0}.GE_Boost{0}_C"), {AbilityName}))
-		);
-
-		this->AbilityBoostEffects.Add(AbilityName, BoostEffectBP.Object);
-		this->AbilityBoosts.Add(FPF2CharacterAbilityBoostCount(AbilityName, 0));
-	}
 }
 
 void APF2CharacterBase::PossessedBy(AController* NewController)
