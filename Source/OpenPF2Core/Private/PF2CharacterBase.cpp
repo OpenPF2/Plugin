@@ -5,11 +5,11 @@
 
 #include "PF2CharacterBase.h"
 #include "Abilities/PF2AbilitySystemComponent.h"
+#include "Abilities/PF2AbilityAttributes.h"
 
 #include <AbilitySystemGlobals.h>
 #include <Net/UnrealNetwork.h>
-
-#include "Abilities/PF2AbilityAttributes.h"
+#include <UObject/ConstructorHelpers.h>
 
 APF2CharacterBase::APF2CharacterBase()
 {
@@ -18,14 +18,22 @@ APF2CharacterBase::APF2CharacterBase()
 
 	NewAbilitySystemComponent->SetIsReplicated(true);
 
-	this->AbilitySystemComponent     = NewAbilitySystemComponent;
-	this->AttributeSet               = this->CreateDefaultSubobject<UPF2AttributeSet>(TEXT("AttributeSet"));
-	this->CharacterLevel             = 1;
-	this->bPassiveEffectsInitialized = false;
-	this->CharacterName              = FText::FromString(TEXT("Character"));
+	this->AbilitySystemComponent = NewAbilitySystemComponent;
+	this->AttributeSet           = this->CreateDefaultSubobject<UPF2AttributeSet>(TEXT("AttributeSet"));
+
+	this->CharacterName  = FText::FromString(TEXT("Character"));
+	this->CharacterLevel = 1;
+
+	this->bManagedPassiveEffectsGenerated = false;
+	this->bPassiveEffectsActivated        = false;
 
 	for (const auto& AbilityName : FPF2AbilityAttributes::GetInstance().GetAbilityNames())
 	{
+		const ConstructorHelpers::FObjectFinder<UClass> BoostEffectBP(
+			*(FString::Format(TEXT("/OpenPF2Core/OpenPF2/Core/GE_Boost{0}.GE_Boost{0}_C"), {AbilityName}))
+		);
+
+		this->AbilityBoostEffects.Add(AbilityName, BoostEffectBP.Object);
 		this->AbilityBoosts.Add(FPF2CharacterAbilityBoostCount(AbilityName, 0));
 	}
 }
@@ -37,7 +45,7 @@ void APF2CharacterBase::PossessedBy(AController* NewController)
 	if (this->AbilitySystemComponent)
 	{
 		this->AbilitySystemComponent->InitAbilityActorInfo(this, this);
-		this->AddStartupPassiveGameplayEffects();
+		this->ActivatePassiveGameplayEffects();
 	}
 }
 
@@ -63,6 +71,11 @@ UAbilitySystemComponent* APF2CharacterBase::GetAbilitySystemComponent() const
 	return this->AbilitySystemComponent;
 }
 
+bool APF2CharacterBase::IsAuthorityForEffects() const
+{
+	return (this->GetLocalRole() == ROLE_Authority);
+}
+
 int32 APF2CharacterBase::GetCharacterLevel() const
 {
 	return this->CharacterLevel;
@@ -83,12 +96,27 @@ bool APF2CharacterBase::SetCharacterLevel(const int32 NewLevel)
 	}
 }
 
-void APF2CharacterBase::AddStartupPassiveGameplayEffects()
+void APF2CharacterBase::HandleCharacterLevelChanged(const float OldLevel, const float NewLevel)
+{
+	this->DeactivatePassiveGameplayEffects();
+
+	this->CharacterLevel = NewLevel;
+
+	this->ActivatePassiveGameplayEffects();
+}
+
+void APF2CharacterBase::ActivatePassiveGameplayEffects()
 {
 	check(this->AbilitySystemComponent);
 
-	if ((GetLocalRole() == ROLE_Authority) && !this->bPassiveEffectsInitialized)
+	if (this->IsAuthorityForEffects() && !this->bPassiveEffectsActivated)
 	{
+		this->GenerateManagedPassiveGameplayEffects();
+
+		this->PassiveGameplayEffects.Empty();
+		this->PassiveGameplayEffects.Append(this->ManagedGameplayEffects);
+		this->PassiveGameplayEffects.Append(this->AdditionalPassiveGameplayEffects);
+
 		for (const TSubclassOf<UGameplayEffect>& GameplayEffect : this->PassiveGameplayEffects)
 		{
 			FGameplayEffectContextHandle EffectContext = this->AbilitySystemComponent->MakeEffectContext();
@@ -111,15 +139,15 @@ void APF2CharacterBase::AddStartupPassiveGameplayEffects()
 			}
 		}
 
-		this->bPassiveEffectsInitialized = true;
+		this->bPassiveEffectsActivated = true;
 	}
 }
 
-void APF2CharacterBase::RemoveStartupPassiveGameplayEffects()
+void APF2CharacterBase::DeactivatePassiveGameplayEffects()
 {
 	check(this->AbilitySystemComponent);
 
-	if ((GetLocalRole() == ROLE_Authority) && this->bPassiveEffectsInitialized)
+	if (this->IsAuthorityForEffects() && this->bPassiveEffectsActivated)
 	{
 		FGameplayEffectQuery Query;
 
@@ -127,15 +155,46 @@ void APF2CharacterBase::RemoveStartupPassiveGameplayEffects()
 
 		this->AbilitySystemComponent->RemoveActiveEffects(Query);
 
-		this->bPassiveEffectsInitialized = false;
+		this->bPassiveEffectsActivated = false;
 	}
 }
 
-void APF2CharacterBase::HandleCharacterLevelChanged(const float OldLevel, const float NewLevel)
+void APF2CharacterBase::GenerateManagedPassiveGameplayEffects()
 {
-	this->RemoveStartupPassiveGameplayEffects();
+	if (this->IsAuthorityForEffects() && !this->bManagedPassiveEffectsGenerated)
+	{
+		TArray<TSubclassOf<UGameplayEffect>> BlueprintEffects = {
+			this->AncestryAndHeritage,
+			this->Background,
+		};
 
-	this->CharacterLevel = NewLevel;
+		for (const auto& BlueprintEffect : BlueprintEffects)
+		{
+			if (*BlueprintEffect != nullptr)
+			{
+				this->ManagedGameplayEffects.Add(BlueprintEffect);
+			}
+		}
 
-	this->AddStartupPassiveGameplayEffects();
+		for (const auto& CharacterBoost : this->AbilityBoosts)
+		{
+			const FString                      AttributeName = CharacterBoost.GetAttributeName();
+			const int32                        BoostCount    = CharacterBoost.GetBoostCount();
+			const TSubclassOf<UGameplayEffect> BoostEffect   = this->AbilityBoostEffects[AttributeName];
+
+			for (int32 BoostIndex = 0; BoostIndex < BoostCount; ++BoostIndex)
+			{
+				this->ManagedGameplayEffects.Add(BoostEffect);
+			}
+		}
+
+		this->bManagedPassiveEffectsGenerated = true;
+	}
+}
+
+void APF2CharacterBase::ClearManagedPassiveGameplayEffects()
+{
+	this->ManagedGameplayEffects.Empty();
+
+	this->bManagedPassiveEffectsGenerated = false;
 }
