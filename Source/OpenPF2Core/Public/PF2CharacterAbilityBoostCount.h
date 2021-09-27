@@ -45,6 +45,28 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostCount {
 	{
 	}
 
+	/**
+	 * Gets the name of the ability attribute being boosted.
+	 *
+	 * @return
+	 *	The name of the attribute in the attribute set for the ability.
+	 */
+	FString GetAttributeName() const
+	{
+		return AttributeName;
+	}
+
+	/**
+	 * Gets how many boosts to apply to the attribute.
+	 *
+	 * @return
+	 *	The number of times that the ability score should be boosted.
+	 */
+	int32 GetBoostCount() const
+	{
+		return BoostCount;
+	}
+
 protected:
 	// =================================================================================================================
 	// Protected Properties

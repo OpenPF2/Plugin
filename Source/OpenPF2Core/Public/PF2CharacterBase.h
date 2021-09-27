@@ -183,35 +183,115 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(Categories="CreatureAlignment"), Category="Character")
 	FGameplayTag Alignment;
 
+	// TODO: Consider whether this needs to be split apart to support NPC characters.
 	/**
-	 * Gameplay Effects that are always passively applied to the character (not dependent on the environment or
-	 * abilities).
+	 * Ability boosts to apply to this character's abilities.
+	 *
+	 * Because game rules tend to be very complex, no validation is done to ensure that the kind and number of boosts
+	 * you apply here are legal. Therefore, do not apply more boosts than the boost cap at the character's current
+	 * level, and pay close attention to ancestry, class, and other gameplay rules and restrictions to avoid creating a
+	 * character that is overpowered. In addition, the character's key ability boost (as specified by their class) is
+	 * applied automatically, so you should not add an additional boost for the character's key ability.
+	 *
+	 * From the Pathfinder 2E Core Rulebook, page 20, "Ability Score Overview":
+	 * "Each ability score starts at 10, representing human average, but as you make character choices, you’ll adjust
+	 * these scores by applying ability boosts, which increase a score..."
+	 *
+	 * "Each ancestry provides ability boosts ... Your character’s background provides two ability boosts. Your
+	 * character’s class provides an ability boost to the ability score most important to your class, called your key
+	 * ability score."
+	 *
+	 * "When your character receives an ability boost, the rules indicate whether it must be applied to a specific
+	 * ability score or to one of two specific ability scores, or whether it is a “free” ability boost that can be
+	 * applied to any ability score of your choice. However, when you gain multiple ability boosts at the same time,
+	 * you must apply each one to a different score."
 	 */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Character")
-	TArray<TSubclassOf<UGameplayEffect>> PassiveGameplayEffects;
-
 	UPROPERTY(EditAnywhere, EditFixedSize, meta=(EditFixedOrder), Category="Character")
 	TArray<FPF2CharacterAbilityBoostCount> AbilityBoosts;
 
 	/**
-	 * Whether or not passive gameplay effects have been initialized for this character.
+	 * The Gameplay Effects used to boost abilities.
+	 */
+	UPROPERTY()
+	TMap<FString, TSubclassOf<UGameplayEffect>> AbilityBoostEffects;
+
+	/**
+	 * Additional Gameplay Effects (GEs) that are always passively applied to the character, not dependent on the
+	 * environment or activated abilities.
+	 *
+	 * This list is appended to the end of the full list of passive GEs that are generated from other values specified
+	 * on this character (e.g. ancestry, class, boosts, etc). You should not add GEs for these "managed" passive GEs.
+	 */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Character")
+	TArray<TSubclassOf<UGameplayEffect>> AdditionalPassiveGameplayEffects;
+
+	/**
+	 * The list of passive Gameplay Effects (GEs) that are generated from other values specified on this character.
+	 */
+	UPROPERTY(BlueprintReadOnly)
+	TArray<TSubclassOf<UGameplayEffect>> ManagedGameplayEffects;
+
+	/**
+	 * The full list of Gameplay Effects (GEs) that are always passively applied to the character.
+	 *
+	 * This is a superset of the character's managed passive GEs and additional passive GEs.
+	 */
+	UPROPERTY(BlueprintReadOnly)
+	TArray<TSubclassOf<UGameplayEffect>> PassiveGameplayEffects;
+
+	/**
+	 * Whether or not managed passive gameplay effects have been generated for this character.
 	 */
 	UPROPERTY()
 	// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
-	int32 bPassiveEffectsInitialized;
+	int32 bManagedPassiveEffectsGenerated;
+
+	/**
+	 * Whether or not passive gameplay effects have been activated on this character.
+	 */
+	UPROPERTY()
+	// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
+	int32 bPassiveEffectsActivated;
 
 	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
 	/**
+	 * Gets whether the local machine has authoritative control over this character actor.
+	 *
+	 * Only the authoritative machine (e.g. the server) should make changes to GEs to ensure that changes to them
+	 * replicate properly.
+	 *
+	 * @return
+	 *	true if the local machine is the server that is authoritative about this character; or, false if the local
+	 *	machine is a client doing simulation or prediction.
+	 */
+	bool IsAuthorityForEffects() const;
+
+	/**
 	 * Activates gameplay effects that are always passively applied to the character.
 	 */
-	void AddStartupPassiveGameplayEffects();
+	void ActivatePassiveGameplayEffects();
 
 	/**
 	 * Removes all passive gameplay effects that were previously activated for this character.
 	 */
-	void RemoveStartupPassiveGameplayEffects();
+	void DeactivatePassiveGameplayEffects();
+
+	/**
+	 * Populates the list of passive Gameplay Effects based on the settings in this blueprint.
+	 *
+	 * This method is idempotent. If the list is already populated, this method has no effect.
+	 */
+	void GenerateManagedPassiveGameplayEffects();
+
+	/**
+	 * Clear the list of managed, passive Gameplay Effects (GEs) so that it can be regenerated.
+	 *
+	 * This should not be called if passive GEs are already applied to the character. If GEs are already applied, you
+	 * must call DeactivatePassiveGameplayEffects() first.
+	 */
+	void ClearManagedPassiveGameplayEffects();
 
 	/**
 	 * Callback invoked when a character's level has changed, to allow logic that depends on levels to be refreshed.
