@@ -21,6 +21,7 @@
 #include "PF2AncestryAndHeritageGameplayEffectBase.h"
 #include "PF2BackgroundGameplayEffectBase.h"
 #include "PF2CharacterAbilityBoostCount.h"
+#include "PF2CharacterConstants.h"
 #include "PF2ClassGameplayEffectBase.h"
 #include "PF2CharacterBase.generated.h"
 
@@ -225,25 +226,15 @@ protected:
 	 * Additional Gameplay Effects (GEs) that are always passively applied to the character, not dependent on the
 	 * environment or activated abilities.
 	 *
-	 * This list is appended to the end of the full list of passive GEs that are generated from other values specified
-	 * on this character (e.g. ancestry, class, boosts, etc). You should not add GEs for these "managed" passive GEs.
+	 * This list is combined with the full list of passive GEs that are active on this character. GEs are automatically
+	 * added to apply calculations for the other values that are set on this character (e.g. ancestry, class, boosts,
+	 * etc); you should not add GEs for these "managed" passive GEs.
+	 *
+	 * Core GEs that initialize base character stats are evaluated before these additional GEs, while Core GEs that
+	 * depend on ability scores (e.g. ability modifier calculation) are evaluated after these additional GEs.
 	 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Character")
 	TArray<TSubclassOf<UGameplayEffect>> AdditionalPassiveGameplayEffects;
-
-	/**
-	 * The list of passive Gameplay Effects (GEs) that are generated from other values specified on this character.
-	 */
-	UPROPERTY(BlueprintReadOnly)
-	TArray<TSubclassOf<UGameplayEffect>> ManagedGameplayEffects;
-
-	/**
-	 * The full list of Gameplay Effects (GEs) that are always passively applied to the character.
-	 *
-	 * This is a superset of the character's managed passive GEs and additional passive GEs.
-	 */
-	UPROPERTY(BlueprintReadOnly)
-	TArray<TSubclassOf<UGameplayEffect>> PassiveGameplayEffects;
 
 	/**
 	 * Whether or not managed passive gameplay effects have been generated for this character.
@@ -258,6 +249,28 @@ protected:
 	UPROPERTY()
 	// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
 	int32 bPassiveEffectsActivated;
+
+	/**
+	 * The core Gameplay Effects that drive stats for every character.
+	 */
+	TMultiMap<int32, TSubclassOf<UGameplayEffect>> CoreGameplayEffects;
+
+	/**
+	 * The list of passive Gameplay Effects (GEs) that are generated from other values specified on this character.
+	 *
+	 * Each value is a gameplay effect and the key is the weight of that GE. The weight controls the order that all GEs
+	 * are applied. Lower weights are applied earlier than higher weights.
+	 */
+	TMultiMap<int32, TSubclassOf<UGameplayEffect>> ManagedGameplayEffects;
+
+	/**
+	 * The full list of Gameplay Effects (GEs) that are always passively applied to the character.
+	 *
+	 * This is a superset of the character's managed passive GEs and additional passive GEs. Each value is a gameplay
+	 * effect and the key is the weight of that GE. The weight controls the order that all GEs are applied. Lower
+	 * weights are applied earlier than higher weights.
+	 */
+	TMultiMap<int32, TSubclassOf<UGameplayEffect>> PassiveGameplayEffects;
 
 	// =================================================================================================================
 	// Protected Constructors
@@ -278,13 +291,28 @@ protected:
 		this->AbilitySystemComponent = ComponentFactory.CreateAbilitySystemComponent(this);
 		this->AttributeSet           = ComponentFactory.CreateAttributeSet(this);
 
+		for (const auto& GeCoreBlueprintPath : PF2CharacterConstants::GeCoreBlueprintPaths)
+		{
+			const FString EffectName = GeCoreBlueprintPath.Key;
+			const int32   Weight     = GeCoreBlueprintPath.Value;
+			const FString EffectPath = GetBlueprintPath(EffectName);
+
+			const ConstructorHelpers::FObjectFinder<UClass> EffectBP(*EffectPath);
+
+			this->CoreGameplayEffects.Add(Weight, EffectBP.Object);
+		}
+
 		for (const auto& AbilityName : FPF2AbilityAttributes::GetInstance().GetAbilityNames())
 		{
-			const ConstructorHelpers::FObjectFinder<UClass> BoostEffectBP(
-				*(FString::Format(TEXT("/OpenPF2Core/OpenPF2/Core/GE_Boost{0}.GE_Boost{0}_C"), {AbilityName}))
-			);
+			const FString Filename =
+				GetBlueprintPath(FString::Format(*PF2CharacterConstants::GeBlueprintBoostNameFormat, {AbilityName}));
 
-			this->AbilityBoostEffects.Add(AbilityName, BoostEffectBP.Object);
+			const ConstructorHelpers::FObjectFinder<UClass> EffectBP(*Filename);
+
+			// Allow boost effects to be looked-up by ability name later.
+			this->AbilityBoostEffects.Add(AbilityName, EffectBP.Object);
+
+			// Meanwhile, give game designers an easy way to set boosts on a per-ability basis.
 			this->AbilityBoosts.Add(FPF2CharacterAbilityBoostCount(AbilityName, 0));
 		}
 	}
@@ -292,6 +320,20 @@ protected:
 	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
+	/**
+	 * Returns the path to the Blueprint having the given name.
+	 *
+	 * @param Name
+	 *	The name of the blueprint for which a path is desired.
+	 *
+	 * @return
+	 *	The path to the blueprint.
+	 */
+	static FORCEINLINE FString GetBlueprintPath(FString Name)
+	{
+		return FString::Format(TEXT("{0}{1}.{1}_C"), { PF2CharacterConstants::BlueprintBasePath, Name });
+	}
+
 	/**
 	 * Gets whether the local machine has authoritative control over this character actor.
 	 *
