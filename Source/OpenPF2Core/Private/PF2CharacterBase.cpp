@@ -92,13 +92,21 @@ void APF2CharacterBase::ActivatePassiveGameplayEffects()
 		this->GenerateManagedPassiveGameplayEffects();
 
 		this->PassiveGameplayEffects.Empty();
+		this->PassiveGameplayEffects.Append(this->CoreGameplayEffects);
 		this->PassiveGameplayEffects.Append(this->ManagedGameplayEffects);
-		this->PassiveGameplayEffects.Append(this->AdditionalPassiveGameplayEffects);
 
-		for (const TSubclassOf<UGameplayEffect>& GameplayEffect : this->PassiveGameplayEffects)
+		for (const auto& AdditionalEffect : this->AdditionalPassiveGameplayEffects)
 		{
-			FGameplayEffectContextHandle EffectContext = this->AbilitySystemComponent->MakeEffectContext();
-			FGameplayEffectSpecHandle    NewHandle;
+			this->PassiveGameplayEffects.Add(PF2CharacterConstants::GeWeights::AdditionalEffects, AdditionalEffect);
+		}
+
+		this->PassiveGameplayEffects.KeyStableSort(TLess<int32>());
+
+		for (const auto& EffectInfo : this->PassiveGameplayEffects)
+		{
+			const TSubclassOf<UGameplayEffect> GameplayEffect = EffectInfo.Value;
+			FGameplayEffectContextHandle       EffectContext  = this->AbilitySystemComponent->MakeEffectContext();
+			FGameplayEffectSpecHandle          NewHandle;
 
 			EffectContext.AddSourceObject(this);
 
@@ -150,7 +158,7 @@ void APF2CharacterBase::GenerateManagedPassiveGameplayEffects()
 		{
 			if (*BlueprintEffect != nullptr)
 			{
-				this->ManagedGameplayEffects.Add(BlueprintEffect);
+				this->ManagedGameplayEffects.Add(PF2CharacterConstants::GeWeights::ManagedEffects, BlueprintEffect);
 			}
 		}
 
@@ -162,7 +170,7 @@ void APF2CharacterBase::GenerateManagedPassiveGameplayEffects()
 
 			for (int32 BoostIndex = 0; BoostIndex < BoostCount; ++BoostIndex)
 			{
-				this->ManagedGameplayEffects.Add(BoostEffect);
+				this->ManagedGameplayEffects.Add(PF2CharacterConstants::GeWeights::ManagedEffects, BoostEffect);
 			}
 		}
 
