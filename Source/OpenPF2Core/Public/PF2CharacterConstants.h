@@ -46,7 +46,6 @@ namespace PF2CharacterConstants
 	 */
 	static const FString GeBlueprintBoostNameFormat = TEXT("GE_Boost{0}");
 
-	// TODO: Consider whether this needs to be split apart to support NPC characters.
 	/**
 	 * Paths to Gameplay Effect Blueprints for core stat calculations.
 	 *
