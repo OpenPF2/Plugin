@@ -282,7 +282,7 @@ protected:
 	 *   The factory component to use for generating the ASC and Attribute Set.
 	 */
 	template<class AscType, class AttributeSetType>
-	APF2CharacterBase(TPF2CharacterComponentFactory<AscType, AttributeSetType> ComponentFactory) :
+	explicit APF2CharacterBase(TPF2CharacterComponentFactory<AscType, AttributeSetType> ComponentFactory) :
 		CharacterName(FText::FromString(TEXT("Character"))),
 		CharacterLevel(1),
 		bManagedPassiveEffectsGenerated(false),
