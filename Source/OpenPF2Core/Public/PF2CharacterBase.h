@@ -105,7 +105,6 @@ protected:
 	UPROPERTY()
 	UPF2AbilitySystemComponent* AbilitySystemComponent;
 
-	// TODO: Consider whether this needs to be split apart to support NPC characters.
 	/**
 	 * The attributes of this character.
 	 */
@@ -127,7 +126,6 @@ protected:
 	UPROPERTY(EditAnywhere, Replicated, meta=(ClampMin=1), Category="Character")
 	int32 CharacterLevel;
 
-	// TODO: Consider whether this needs to be split apart to support NPC characters.
 	/**
 	 * The ancestry and heritage of this character.
 	 *
@@ -146,7 +144,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Character")
 	TSubclassOf<UPF2AncestryAndHeritageGameplayEffectBase> AncestryAndHeritage;
 
-	// TODO: Consider whether this needs to be split apart to support NPC characters.
 	/**
 	 * The background of this character.
 	 *
@@ -157,7 +154,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Character")
 	TSubclassOf<UPF2BackgroundGameplayEffectBase> Background;
 
-	// TODO: Consider whether this needs to be split apart to support NPC characters.
 	/**
 	 * The class of this character.
 	 *
@@ -172,7 +168,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Character")
 	TSubclassOf<UPF2ClassGameplayEffectBase> Class;
 
-	// TODO: Consider whether this needs to be split apart to support NPC characters.
 	/**
 	 * The alignment of this character.
 	 *
@@ -190,7 +185,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(Categories="CreatureAlignment"), Category="Character")
 	FGameplayTag Alignment;
 
-	// TODO: Consider whether this needs to be split apart to support NPC characters.
 	/**
 	 * Ability boosts to apply to this character's abilities.
 	 *
