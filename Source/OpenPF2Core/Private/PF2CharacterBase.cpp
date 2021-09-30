@@ -89,18 +89,7 @@ void APF2CharacterBase::ActivatePassiveGameplayEffects()
 
 	if (this->IsAuthorityForEffects() && !this->bPassiveEffectsActivated)
 	{
-		this->GenerateManagedPassiveGameplayEffects();
-
-		this->PassiveGameplayEffects.Empty();
-		this->PassiveGameplayEffects.Append(this->CoreGameplayEffects);
-		this->PassiveGameplayEffects.Append(this->ManagedGameplayEffects);
-
-		for (const auto& AdditionalEffect : this->AdditionalPassiveGameplayEffects)
-		{
-			this->PassiveGameplayEffects.Add(PF2CharacterConstants::GeWeights::AdditionalEffects, AdditionalEffect);
-		}
-
-		this->PassiveGameplayEffects.KeyStableSort(TLess<int32>());
+		this->PopulatePassiveGameplayEffects();
 
 		for (const auto& EffectInfo : this->PassiveGameplayEffects)
 		{
@@ -127,6 +116,25 @@ void APF2CharacterBase::ActivatePassiveGameplayEffects()
 
 		this->bPassiveEffectsActivated = true;
 	}
+}
+
+void APF2CharacterBase::PopulatePassiveGameplayEffects()
+{
+	TMultiMap<int32, TSubclassOf<UGameplayEffect>> GameplayEffects;
+
+	this->GenerateManagedPassiveGameplayEffects();
+
+	GameplayEffects.Append(this->CoreGameplayEffects);
+	GameplayEffects.Append(this->ManagedGameplayEffects);
+
+	for (const auto& AdditionalEffect : this->AdditionalPassiveGameplayEffects)
+	{
+		GameplayEffects.Add(PF2CharacterConstants::GeWeights::AdditionalEffects, AdditionalEffect);
+	}
+
+	GameplayEffects.KeyStableSort(TLess<int32>());
+
+	this->PassiveGameplayEffects = GameplayEffects;
 }
 
 void APF2CharacterBase::DeactivatePassiveGameplayEffects()
