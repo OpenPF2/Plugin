@@ -186,6 +186,14 @@ protected:
 	FGameplayTag Alignment;
 
 	/**
+	 * Additional languages that this character has learned beyond those known at 1st level.
+	 *
+	 * Languages granted by ancestry do not need to be duplicated here.
+	 */
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(Categories="Language"), Category="Character")
+	TArray<FGameplayTag> AdditionalLanguages;
+
+	/**
 	 * Ability boosts to apply to this character's abilities.
 	 *
 	 * Because game rules tend to be very complex, no validation is done to ensure that the kind and number of boosts
