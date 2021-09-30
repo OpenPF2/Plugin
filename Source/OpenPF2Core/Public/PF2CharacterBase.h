@@ -231,14 +231,14 @@ protected:
 	TArray<TSubclassOf<UGameplayEffect>> AdditionalPassiveGameplayEffects;
 
 	/**
-	 * Whether or not managed passive gameplay effects have been generated for this character.
+	 * Whether or not managed passive Gameplay Effects have been generated for this character.
 	 */
 	UPROPERTY()
 	// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
 	int32 bManagedPassiveEffectsGenerated;
 
 	/**
-	 * Whether or not passive gameplay effects have been activated on this character.
+	 * Whether or not passive Gameplay Effects have been activated on this character.
 	 */
 	UPROPERTY()
 	// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
@@ -341,12 +341,12 @@ protected:
 	bool IsAuthorityForEffects() const;
 
 	/**
-	 * Activates gameplay effects that are always passively applied to the character.
+	 * Activates Gameplay Effects that are always passively applied to the character.
 	 */
 	void ActivatePassiveGameplayEffects();
 
 	/**
-	 * Removes all passive gameplay effects that were previously activated for this character.
+	 * Removes all passive Gameplay Effects that were previously activated for this character.
 	 */
 	void DeactivatePassiveGameplayEffects();
 
