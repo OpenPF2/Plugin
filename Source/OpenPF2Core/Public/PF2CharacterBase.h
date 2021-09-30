@@ -191,7 +191,7 @@ protected:
 	 * Languages granted by ancestry do not need to be duplicated here.
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(Categories="Language"), Category="Character")
-	TArray<FGameplayTag> AdditionalLanguages;
+	FGameplayTagContainer AdditionalLanguages;
 
 	/**
 	 * Ability boosts manually applied by a game designer or player to this character's abilities.
@@ -215,8 +215,9 @@ protected:
 	 * applied to any ability score of your choice. However, when you gain multiple ability boosts at the same time,
 	 * you must apply each one to a different score."
 	 */
-	UPROPERTY(EditAnywhere, EditFixedSize, meta=(EditFixedOrder), Category="Character")
-	TArray<FPF2CharacterAbilityBoostCount> ManualAbilityBoosts;
+	UPROPERTY(EditAnywhere, EditFixedSize, meta=(EditFixedOrder), Category="Ability Scores")
+	TArray<FPF2CharacterAbilityBoostCount> AdditionalAbilityBoosts;
+
 
 	/**
 	 * Proficiency ranks manually applied by a game designer or player to this character's skills.
@@ -226,7 +227,7 @@ protected:
 	 * of "Skill.Survival.Trained" and "Skill.Survival.Untrained".
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(Categories="Skill"), Category="Skills")
-	TArray<FGameplayTag> ManualSkillProficiencies;
+	FGameplayTagContainer AdditionalSkillProficiencies;
 
 	/**
 	 * The Gameplay Effects used to boost abilities.
@@ -325,7 +326,7 @@ protected:
 			this->AbilityBoostEffects.Add(AbilityName, EffectBP.Object);
 
 			// Meanwhile, give game designers an easy way to set boosts on a per-ability basis.
-			this->ManualAbilityBoosts.Add(FPF2CharacterAbilityBoostCount(AbilityName, 0));
+			this->AdditionalAbilityBoosts.Add(FPF2CharacterAbilityBoostCount(AbilityName, 0));
 		}
 	}
 
