@@ -93,9 +93,10 @@ void APF2CharacterBase::ActivatePassiveGameplayEffects()
 
 		for (const auto& EffectInfo : this->PassiveGameplayEffects)
 		{
-			const TSubclassOf<UGameplayEffect> GameplayEffect = EffectInfo.Value;
-			FGameplayEffectContextHandle       EffectContext  = this->AbilitySystemComponent->MakeEffectContext();
+			const TSubclassOf<UGameplayEffect> GameplayEffect     = EffectInfo.Value;
+			FGameplayEffectContextHandle       EffectContext      = this->AbilitySystemComponent->MakeEffectContext();
 			FGameplayEffectSpecHandle          NewHandle;
+			FGameplayEffectSpec*               GameplayEffectSpec;
 
 			EffectContext.AddSourceObject(this);
 
@@ -105,10 +106,17 @@ void APF2CharacterBase::ActivatePassiveGameplayEffects()
 				EffectContext
 			);
 
+			GameplayEffectSpec = NewHandle.Data.Get();
+
+			if (GameplayEffect->GetName() == PF2CharacterConstants::GeDynamicTagsClassName)
+			{
+				this->ApplyDynamicTags(GameplayEffectSpec);
+			}
+
 			if (NewHandle.IsValid())
 			{
 				this->AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(
-					*NewHandle.Data.Get(),
+					*GameplayEffectSpec,
 					this->AbilitySystemComponent
 				);
 			}
@@ -135,6 +143,23 @@ void APF2CharacterBase::PopulatePassiveGameplayEffects()
 	GameplayEffects.KeyStableSort(TLess<int32>());
 
 	this->PassiveGameplayEffects = GameplayEffects;
+}
+
+void APF2CharacterBase::ApplyDynamicTags(FGameplayEffectSpec* GameplayEffectSpec) const
+{
+	TArray<FGameplayTag> DynamicTags = {
+		this->Alignment,
+	};
+
+	DynamicTags.Append(this->AdditionalLanguages);
+
+	for (auto& DynamicTag : DynamicTags)
+	{
+		if (DynamicTag.IsValid())
+		{
+			GameplayEffectSpec->DynamicGrantedTags.AddTag(DynamicTag);
+		}
+	}
 }
 
 void APF2CharacterBase::DeactivatePassiveGameplayEffects()

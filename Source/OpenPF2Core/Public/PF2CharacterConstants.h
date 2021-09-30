@@ -47,6 +47,16 @@ namespace PF2CharacterConstants
 	static const FString GeBlueprintBoostNameFormat = TEXT("GE_Boost{0}");
 
 	/**
+	 * The name of the Gameplay Effect that is used to apply tags that have been set on the character.
+	 */
+	static const FString GeDynamicTagsName = TEXT("GE_ApplyDynamicTags");
+
+	/**
+	* The name of the Gameplay Effect that is used to apply tags that have been set on the character.
+	*/
+	static const FString GeDynamicTagsClassName = FString::Format(TEXT("{0}_C"), { GeDynamicTagsName });
+
+	/**
 	 * Paths to Gameplay Effect Blueprints for core stat calculations.
 	 *
 	 * The weight of each path controls the order in which the corresponding GE is applied. Base stat GEs are applied
@@ -56,6 +66,7 @@ namespace PF2CharacterConstants
 	static const TMap<const FString, const int32> GeCoreBlueprintPaths = {
 		// Initialize base stats.
 		{ TEXT("GE_ApplyBaseCharacterStats"),  GeWeights::InitializeBaseStats  },
+		{ GeDynamicTagsName,                   GeWeights::InitializeBaseStats  },
 		{ TEXT("GE_CalcKeyAbilityBoost"),      GeWeights::InitializeBaseStats  },
 
 		// Finalize stats.

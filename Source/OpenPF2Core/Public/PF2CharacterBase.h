@@ -354,6 +354,18 @@ protected:
 	void ActivatePassiveGameplayEffects();
 
 	/**
+	 * Populates the full list of passive Gameplay Effects, sorted by weight.
+	 */
+	void PopulatePassiveGameplayEffects();
+
+	/**
+	 * Adds tags that were set on this character to the provided Gameplay Effect spec, as dynamic tags.
+	 *
+	 * This includes tags like ancestry, additional languages, and skill proficiencies.
+	 */
+	void ApplyDynamicTags(FGameplayEffectSpec* GameplayEffectSpec) const;
+
+	/**
 	 * Removes all passive Gameplay Effects that were previously activated for this character.
 	 */
 	void DeactivatePassiveGameplayEffects();
