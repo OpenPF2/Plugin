@@ -147,20 +147,13 @@ void APF2CharacterBase::PopulatePassiveGameplayEffects()
 
 void APF2CharacterBase::ApplyDynamicTags(FGameplayEffectSpec* GameplayEffectSpec) const
 {
-	TArray<FGameplayTag> DynamicTags = {
-		this->Alignment,
-	};
+	FGameplayTagContainer DynamicTags;
 
-	DynamicTags.Append(this->AdditionalLanguages);
-	DynamicTags.Append(this->ManualSkillProficiencies);
+	DynamicTags.AddTag(this->Alignment);
+	DynamicTags.AppendTags(this->AdditionalLanguages);
+	DynamicTags.AppendTags(this->AdditionalSkillProficiencies);
 
-	for (auto& DynamicTag : DynamicTags)
-	{
-		if (DynamicTag.IsValid())
-		{
-			GameplayEffectSpec->DynamicGrantedTags.AddTag(DynamicTag);
-		}
-	}
+	GameplayEffectSpec->DynamicGrantedTags.AppendTags(DynamicTags);
 }
 
 void APF2CharacterBase::DeactivatePassiveGameplayEffects()
@@ -196,7 +189,7 @@ void APF2CharacterBase::GenerateManagedPassiveGameplayEffects()
 			}
 		}
 
-		for (const auto& CharacterBoost : this->ManualAbilityBoosts)
+		for (const auto& CharacterBoost : this->AdditionalAbilityBoosts)
 		{
 			const FString                      AttributeName = CharacterBoost.GetAttributeName();
 			const int32                        BoostCount    = CharacterBoost.GetBoostCount();
