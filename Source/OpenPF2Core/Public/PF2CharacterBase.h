@@ -194,7 +194,7 @@ protected:
 	TArray<FGameplayTag> AdditionalLanguages;
 
 	/**
-	 * Ability boosts to apply to this character's abilities.
+	 * Ability boosts manually applied by a game designer or player to this character's abilities.
 	 *
 	 * Because game rules tend to be very complex, no validation is done to ensure that the kind and number of boosts
 	 * you apply here are legal. Therefore, do not apply more boosts than the boost cap at the character's current
@@ -216,7 +216,7 @@ protected:
 	 * you must apply each one to a different score."
 	 */
 	UPROPERTY(EditAnywhere, EditFixedSize, meta=(EditFixedOrder), Category="Character")
-	TArray<FPF2CharacterAbilityBoostCount> AbilityBoosts;
+	TArray<FPF2CharacterAbilityBoostCount> ManualAbilityBoosts;
 
 	/**
 	 * The Gameplay Effects used to boost abilities.
@@ -315,7 +315,7 @@ protected:
 			this->AbilityBoostEffects.Add(AbilityName, EffectBP.Object);
 
 			// Meanwhile, give game designers an easy way to set boosts on a per-ability basis.
-			this->AbilityBoosts.Add(FPF2CharacterAbilityBoostCount(AbilityName, 0));
+			this->ManualAbilityBoosts.Add(FPF2CharacterAbilityBoostCount(AbilityName, 0));
 		}
 	}
 

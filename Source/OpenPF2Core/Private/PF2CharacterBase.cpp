@@ -195,7 +195,7 @@ void APF2CharacterBase::GenerateManagedPassiveGameplayEffects()
 			}
 		}
 
-		for (const auto& CharacterBoost : this->AbilityBoosts)
+		for (const auto& CharacterBoost : this->ManualAbilityBoosts)
 		{
 			const FString                      AttributeName = CharacterBoost.GetAttributeName();
 			const int32                        BoostCount    = CharacterBoost.GetBoostCount();
