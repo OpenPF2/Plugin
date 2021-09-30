@@ -152,6 +152,7 @@ void APF2CharacterBase::ApplyDynamicTags(FGameplayEffectSpec* GameplayEffectSpec
 	};
 
 	DynamicTags.Append(this->AdditionalLanguages);
+	DynamicTags.Append(this->ManualSkillProficiencies);
 
 	for (auto& DynamicTag : DynamicTags)
 	{

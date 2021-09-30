@@ -219,6 +219,16 @@ protected:
 	TArray<FPF2CharacterAbilityBoostCount> ManualAbilityBoosts;
 
 	/**
+	 * Proficiency ranks manually applied by a game designer or player to this character's skills.
+	 *
+	 * Higher proficiencies override lower proficiencies, so if a character is, for example, "Master" in "Survival"
+	 * skill, you only need to select "Skill.Survival.Master", and do not need to also select the lower proficiency tags
+	 * of "Skill.Survival.Trained" and "Skill.Survival.Untrained".
+	 */
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(Categories="Skill"), Category="Skills")
+	TArray<FGameplayTag> ManualSkillProficiencies;
+
+	/**
 	 * The Gameplay Effects used to boost abilities.
 	 */
 	UPROPERTY()
