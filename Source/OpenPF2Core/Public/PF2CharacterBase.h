@@ -218,6 +218,11 @@ protected:
 	UPROPERTY(EditAnywhere, EditFixedSize, meta=(EditFixedOrder), Category="Ability Scores")
 	TArray<FPF2CharacterAbilityBoostCount> AdditionalAbilityBoosts;
 
+	/**
+	 * The name(s) of lore sub-categories that this character is knowledgeable about.
+	 */
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Skills")
+	TArray<FString> LoreNames;
 
 	/**
 	 * Proficiency ranks manually applied by a game designer or player to this character's skills.
