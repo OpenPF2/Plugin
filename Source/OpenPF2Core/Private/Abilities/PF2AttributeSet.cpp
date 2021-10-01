@@ -39,8 +39,6 @@ UPF2AttributeSet::UPF2AttributeSet() :
 	StReflexModifier(0.0f),
 	StWillModifier(0.0f),
 	PerceptionModifier(0.0f),
-	SkSkillCount(0.0f),
-	SkSkillLimit(0.0f),
 	SkAcrobaticsModifier(0.0f),
 	SkArcanaModifier(0.0f),
 	SkAthleticsModifier(0.0f),
@@ -243,16 +241,6 @@ void UPF2AttributeSet::OnRep_StWillModifier(const FGameplayAttributeData& OldVal
 void UPF2AttributeSet::OnRep_PerceptionModifier(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, PerceptionModifier, OldValue);
-}
-
-void UPF2AttributeSet::OnRep_SkSkillCount(const FGameplayAttributeData& OldValue)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, SkSkillCount, OldValue);
-}
-
-void UPF2AttributeSet::OnRep_SkSkillLimit(const FGameplayAttributeData& OldValue)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, SkSkillLimit, OldValue);
 }
 
 void UPF2AttributeSet::OnRep_SkAcrobaticsModifier(const FGameplayAttributeData& OldValue)
