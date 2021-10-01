@@ -58,6 +58,8 @@ void FPF2AttributeSetSpec::Define()
 			TestEqual(TEXT("StReflexModifier"),       AttributeSet->GetStReflexModifier(),        0.0f);
 			TestEqual(TEXT("StWillModifier"),         AttributeSet->GetStWillModifier(),          0.0f);
 			TestEqual(TEXT("PerceptionModifier"),     AttributeSet->GetPerceptionModifier(),      0.0f);
+			TestEqual(TEXT("SkSkillCount"),           AttributeSet->GetSkSkillCount(),            0.0f);
+			TestEqual(TEXT("SkSkillLimit"),           AttributeSet->GetSkSkillLimit(),            0.0f);
 			TestEqual(TEXT("SkAcrobaticsModifier"),   AttributeSet->GetSkAcrobaticsModifier(),    0.0f);
 			TestEqual(TEXT("SkArcanaModifier"),       AttributeSet->GetSkArcanaModifier(),        0.0f);
 			TestEqual(TEXT("SkAthleticsModifier"),    AttributeSet->GetSkAthleticsModifier(),     0.0f);
