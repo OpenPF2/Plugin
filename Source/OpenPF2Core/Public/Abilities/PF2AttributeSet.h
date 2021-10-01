@@ -301,25 +301,6 @@ public:
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, PerceptionModifier)
 
 	/**
-	 * The number of skills that this character currently has selected/applied.
-	 *
-	 * Capped by SkSkillLimit.
-	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing=OnRep_SkSkillCount)
-	FGameplayAttributeData SkSkillCount;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkSkillCount)
-
-	/**
-	 * The limit on how many skills this character can select/apply.
-	 *
-	 * This caps SkSkillCount, but can be a larger number than SkSkillCount if the character is eligible for additional
-	 * skills that the player or story (for NPCs) has not yet added.
-	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing=OnRep_SkSkillLimit)
-	FGameplayAttributeData SkSkillLimit;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkSkillLimit)
-
-	/**
 	 * Acrobatics measures a character's ability to perform tasks requiring coordination and grace.
 	 * (Pathfinder 2E Core Rulebook, page 240)
 	 */
@@ -588,12 +569,6 @@ public:
 
 	UFUNCTION()
 	virtual void OnRep_PerceptionModifier(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
-	virtual void OnRep_SkSkillCount(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
-	virtual void OnRep_SkSkillLimit(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
     virtual void OnRep_SkAcrobaticsModifier(const FGameplayAttributeData& OldValue);
