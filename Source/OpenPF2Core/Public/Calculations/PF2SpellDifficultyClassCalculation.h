@@ -13,7 +13,7 @@
 
 #include <CoreMinimal.h>
 
-#include "Calculations/PF2KeyAbilityCalculationBase.h"
+#include "Calculations/PF2KeyAbilityTemlCalculationBase.h"
 #include "PF2SpellDifficultyClassCalculation.generated.h"
 
 /**
@@ -29,7 +29,7 @@
  * 10 + ability modifier used for spellcasting + proficiency bonus + other bonuses + penalties"
  */
 UCLASS()
-class OPENPF2CORE_API UPF2SpellDifficultyClassCalculation : public UPF2KeyAbilityCalculationBase
+class OPENPF2CORE_API UPF2SpellDifficultyClassCalculation : public UPF2KeyAbilityTemlCalculationBase
 {
 	GENERATED_BODY()
 

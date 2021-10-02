@@ -13,7 +13,7 @@
 
 #include <CoreMinimal.h>
 
-#include "Calculations/PF2KeyAbilityCalculationBase.h"
+#include "Calculations/PF2KeyAbilityTemlCalculationBase.h"
 #include "PF2ArmorClassCalculation.generated.h"
 
 /**

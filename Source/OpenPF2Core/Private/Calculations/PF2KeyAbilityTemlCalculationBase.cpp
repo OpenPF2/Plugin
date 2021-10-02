@@ -9,23 +9,23 @@
 // file other than the material designated as Open Game Content may be reproduced in any form without written
 // permission.
 
-#include "Calculations/PF2KeyAbilityCalculationBase.h"
+#include "Calculations/PF2KeyAbilityTemlCalculationBase.h"
 
 #include "OpenPF2Core.h"
 #include "GameplayAbilityUtils.h"
 #include "Abilities/PF2AttributeSet.h"
 
-UPF2KeyAbilityCalculationBase::UPF2KeyAbilityCalculationBase() :
-	UPF2KeyAbilityCalculationBase(
+UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase() :
+	UPF2KeyAbilityTemlCalculationBase(
 		TEXT(""),
 		TEXT("KeyAbility")
 	)
 {
 }
 
-UPF2KeyAbilityCalculationBase::UPF2KeyAbilityCalculationBase(const FString StatGameplayTagPrefix,
-                                                             const FString KeyAbilityGameplayTagPrefix,
-                                                             const float   BaseValue) :
+UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase(const FString StatGameplayTagPrefix,
+                                                                     const FString KeyAbilityGameplayTagPrefix,
+                                                                     const float   BaseValue) :
 	UPF2TemlCalculationBase(),
 	StatGameplayTagPrefix(StatGameplayTagPrefix),
 	BaseValue(BaseValue)
@@ -61,8 +61,8 @@ UPF2KeyAbilityCalculationBase::UPF2KeyAbilityCalculationBase(const FString StatG
 	);
 }
 
-void UPF2KeyAbilityCalculationBase::DefineKeyAbilityCapture(const FString KeyAbilityTagName,
-															const FGameplayAttribute Attribute)
+void UPF2KeyAbilityTemlCalculationBase::DefineKeyAbilityCapture(const FString            KeyAbilityTagName,
+                                                                const FGameplayAttribute Attribute)
 {
 	const FGameplayEffectAttributeCaptureDefinition CaptureDefinition =
 		GameplayAbilityUtils::BuildSourceCaptureFor(Attribute);
@@ -75,7 +75,7 @@ void UPF2KeyAbilityCalculationBase::DefineKeyAbilityCapture(const FString KeyAbi
 	this->RelevantAttributesToCapture.Add(CaptureDefinition);
 }
 
-float UPF2KeyAbilityCalculationBase::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
+float UPF2KeyAbilityTemlCalculationBase::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
 {
 	// Logic shared by the "Class DC", "Spell Attack Roll", and "Spell DC" calculations.
 	// "A class DC ... equals 10 plus their proficiency bonus for their class DC (+3 for most 1st-level characters) plus
@@ -106,7 +106,7 @@ float UPF2KeyAbilityCalculationBase::CalculateBaseMagnitude_Implementation(const
 	return AbilityScore;
 }
 
-float UPF2KeyAbilityCalculationBase::CalculateKeyAbilityModifier(const FGameplayEffectSpec& Spec) const
+float UPF2KeyAbilityTemlCalculationBase::CalculateKeyAbilityModifier(const FGameplayEffectSpec& Spec) const
 {
 	float                        KeyAbilityModifier = 0.0f;
 	const FGameplayTagContainer* SourceTags         = Spec.CapturedSourceTags.GetAggregatedTags();
@@ -133,7 +133,7 @@ float UPF2KeyAbilityCalculationBase::CalculateKeyAbilityModifier(const FGameplay
 	return KeyAbilityModifier;
 }
 
-FGameplayEffectAttributeCaptureDefinition UPF2KeyAbilityCalculationBase::DetermineKeyAbility(
+FGameplayEffectAttributeCaptureDefinition UPF2KeyAbilityTemlCalculationBase::DetermineKeyAbility(
 	                                                                      const FGameplayTagContainer* SourceTags) const
 {
 	FGameplayEffectAttributeCaptureDefinition KeyAbilityCaptureDefinition;
