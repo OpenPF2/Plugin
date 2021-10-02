@@ -16,14 +16,14 @@
 #include "Abilities/PF2AttributeSet.h"
 
 UPF2SimpleTemlModifierCalculationBase::UPF2SimpleTemlModifierCalculationBase(
-																	const FGameplayAttribute SkillAbilityAttribute,
-																	const FString            SkillGameplayTagPrefix) :
+																	const FGameplayAttribute BaseAttribute,
+																	const FString            ProficiencyTagPrefix) :
 	UPF2TemlCalculationBase(),
-	SkillAbilityCaptureDefinition(GameplayAbilityUtils::BuildSourceCaptureFor(SkillAbilityAttribute))
+	BaseAbilityCaptureDefinition(GameplayAbilityUtils::BuildSourceCaptureFor(BaseAttribute))
 {
-	this->RelevantAttributesToCapture.Add(this->SkillAbilityCaptureDefinition);
+	this->RelevantAttributesToCapture.Add(this->BaseAbilityCaptureDefinition);
 
-	this->SkillGameplayTagPrefix = SkillGameplayTagPrefix;
+	this->ProficiencyTagPrefix = ProficiencyTagPrefix;
 }
 
 float UPF2SimpleTemlModifierCalculationBase::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
@@ -38,7 +38,7 @@ float UPF2SimpleTemlModifierCalculationBase::CalculateBaseMagnitude_Implementati
 	EvaluationParameters.SourceTags = SourceTags;
 	EvaluationParameters.TargetTags = TargetTags;
 
-	this->GetCapturedAttributeMagnitude(this->SkillAbilityCaptureDefinition, Spec, EvaluationParameters, AbilityScore);
+	this->GetCapturedAttributeMagnitude(this->BaseAbilityCaptureDefinition, Spec, EvaluationParameters, AbilityScore);
 
 	// "In the second box to the right of each skill name on your character sheet, there’s an abbreviation that reminds
 	// you of the ability score tied to that skill. For each skill in which your character is trained, add your
@@ -47,7 +47,7 @@ float UPF2SimpleTemlModifierCalculationBase::CalculateBaseMagnitude_Implementati
 	// your character is untrained in, use the same method, but your proficiency bonus is +0."
 	//
 	// Source: Pathfinder 2E Core Rulebook, page 28, "Skills".
-	ProficiencyBonus = this->CalculateProficiencyBonus(this->SkillGameplayTagPrefix, Spec);
+	ProficiencyBonus = this->CalculateProficiencyBonus(this->ProficiencyTagPrefix, Spec);
 
 	Modifier = AbilityScore + ProficiencyBonus;
 
@@ -55,7 +55,7 @@ float UPF2SimpleTemlModifierCalculationBase::CalculateBaseMagnitude_Implementati
 		LogPf2Core,
 		VeryVerbose,
 		TEXT("Calculated modifier ('%s'): %f + %f = %f"),
-		*(this->SkillGameplayTagPrefix),
+		*(this->ProficiencyTagPrefix),
 		AbilityScore,
 		ProficiencyBonus,
 		Modifier

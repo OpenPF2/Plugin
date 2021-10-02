@@ -42,36 +42,35 @@ public:
 	/**
 	 * Constructor for UPF2SimpleTemlModifierCalculationBase.
 	 *
-	 * The skill proficiency calculation is initialized so that the specified attribute is factored-in to the
-	 * proficiency bonus, and TEML tags on the character that have the specified prefix determine the magnitude of the
-	 * boost.
+	 * The proficiency calculation is initialized so that the specified attribute is factored-in to the proficiency
+	 * bonus, and TEML tags on the character that have the specified prefix determine the magnitude of the boost.
 	 *
-	 * @param SkillAbilityAttribute
-	 *	The RPG attribute for the character ability that contributes to proficiency in the skill. For example,
-	 *	"UPF2AttributeSet::GetAbDexterityModifierAttribute()" for Acrobatics,
-	 *	"UPF2AttributeSet::GetAbIntelligenceModifierAttribute()" for Arcana, etc.)
-	 * @param SkillGameplayTagPrefix
-	 *	The tag prefix to use for checking a character's training in the skill. For example, "Skill.Acrobatics" or
-	 *	"Skill.Arcana".
+	 * @param BaseAttribute
+	 *	The RPG attribute for the character ability that contributes to proficiency in the attribute. This is typically
+	 *	one of the character's ability modifier. For example, "UPF2AttributeSet::GetAbDexterityModifierAttribute()" for
+	 *	Acrobatics, "UPF2AttributeSet::GetAbIntelligenceModifierAttribute()" for Arcana, etc.)
+	 * @param ProficiencyTagPrefix
+	 *	The tag prefix to use for determining the character's training in the attribute. For example, "Skill.Acrobatics"
+	 *	or "SavingThrow.Fortitude".
 	 */
-	explicit UPF2SimpleTemlModifierCalculationBase(const FGameplayAttribute SkillAbilityAttribute,
-	                                               const FString            SkillGameplayTagPrefix);
+	explicit UPF2SimpleTemlModifierCalculationBase(const FGameplayAttribute BaseAttribute,
+	                                               const FString            ProficiencyTagPrefix);
 
 	// =================================================================================================================
 	// Public Methods
 	// =================================================================================================================
 	/**
-	 * Calculates a skill proficiency based on the attributes captured by the provided GE specification.
+	 * Calculates attribute proficiency based on the attributes captured by the provided GE specification.
 	 *
 	 * Most sub-classes should not need to override this implementation. Instead, this implementation depends on other
-	 * methods to provide the source skill and skill tags.
+	 * methods to provide the base attribute and proficiency tag.
 	 *
 	 * @param Spec
 	 *	The Gameplay Effect (GE) specification that provides information about the character attributes for which a
-	 *	calculated skill proficiency is desired.
+	 *	calculated attribute proficiency is desired.
 	 *
 	 * @return
-	 *	The calculated skill proficiency.
+	 *	The calculated attribute proficiency.
 	 */
 	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
 
@@ -80,12 +79,12 @@ protected:
 	// Protected Fields
 	// =================================================================================================================
 	/**
-	 * Capture definition for the RPG character attribute that contributes to proficiency in the skill.
+	 * Capture definition for the RPG character attribute that contributes to proficiency in the attribute.
 	 */
-	FGameplayEffectAttributeCaptureDefinition SkillAbilityCaptureDefinition;
+	FGameplayEffectAttributeCaptureDefinition BaseAbilityCaptureDefinition;
 
 	/**
-	 * The tag prefix to use for checking a character's training in the skill.
+	 * The tag prefix to use for checking a character's training in the attribute.
 	 */
-	FString SkillGameplayTagPrefix;
+	FString ProficiencyTagPrefix;
 };
