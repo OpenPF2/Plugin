@@ -8,7 +8,7 @@
 #include "Abilities/PF2AttributeSet.h"
 
 UPF2SocietyModifierCalculation::UPF2SocietyModifierCalculation() :
-	UPF2ModifierCalculationBase(
+	UPF2SimpleTemlModifierCalculationBase(
 		UPF2AttributeSet::GetAbIntelligenceModifierAttribute(),
 		FString("Skill.Society")
 	)

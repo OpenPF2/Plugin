@@ -7,14 +7,14 @@
 
 #include <CoreMinimal.h>
 
-#include "Calculations/Modifiers/PF2ModifierCalculationBase.h"
+#include "Calculations/Modifiers/PF2SimpleTemlModifierCalculationBase.h"
 #include "PF2SurvivalModifierCalculation.generated.h"
 
 /**
  * MMC that calculates the proficiency a character has in Survival skill.
  */
 UCLASS()
-class OPENPF2CORE_API UPF2SurvivalModifierCalculation : public UPF2ModifierCalculationBase
+class OPENPF2CORE_API UPF2SurvivalModifierCalculation : public UPF2SimpleTemlModifierCalculationBase
 {
 	GENERATED_BODY()
 

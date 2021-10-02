@@ -7,14 +7,14 @@
 
 #include <CoreMinimal.h>
 
-#include "Calculations/Modifiers/PF2ModifierCalculationBase.h"
+#include "Calculations/Modifiers/PF2SimpleTemlModifierCalculationBase.h"
 #include "PF2OccultismModifierCalculation.generated.h"
 
 /**
  * MMC that calculates the proficiency a character has in Occultism skill.
  */
 UCLASS()
-class OPENPF2CORE_API UPF2OccultismModifierCalculation : public UPF2ModifierCalculationBase
+class OPENPF2CORE_API UPF2OccultismModifierCalculation : public UPF2SimpleTemlModifierCalculationBase
 {
 	GENERATED_BODY()
 

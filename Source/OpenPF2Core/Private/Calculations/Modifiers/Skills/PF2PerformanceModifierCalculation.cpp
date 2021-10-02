@@ -8,7 +8,7 @@
 #include "Abilities/PF2AttributeSet.h"
 
 UPF2PerformanceModifierCalculation::UPF2PerformanceModifierCalculation() :
-	UPF2ModifierCalculationBase(
+	UPF2SimpleTemlModifierCalculationBase(
 		UPF2AttributeSet::GetAbCharismaModifierAttribute(),
 		FString("Skill.Performance")
 	)

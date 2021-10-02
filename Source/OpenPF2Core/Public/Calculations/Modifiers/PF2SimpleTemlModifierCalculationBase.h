@@ -9,13 +9,19 @@
 #include <GameplayModMagnitudeCalculation.h>
 
 #include "Calculations/PF2TemlCalculationBase.h"
-#include "PF2ModifierCalculationBase.generated.h"
+#include "PF2SimpleTemlModifierCalculationBase.generated.h"
 
 /**
- * Base class for MMCs that calculate the proficiency a character has in a particular skill.
+ * Base class for MMCs that calculate the proficiency modifier for a character attribute. This base class is only used
+ * for calculations that are "simple"; that is to say, this base class is only used to calculate proficiencies that are
+ * a function of the value of a character's ability score modifier (Strength, Dexterity, Intelligence, etc.) and a TEML
+ * proficiency (e.g. skills, saving throws, and perception).
+ *
+ * More advanced calculations (Armor Class, Class DC, Spell Attack Roll, and Spell DC) derive from
+ * UPF2TemlCalculationBase directly, instead of deriving from this base class, as they have more complex business logic.
  */
 UCLASS(Abstract)
-class OPENPF2CORE_API UPF2ModifierCalculationBase : public UPF2TemlCalculationBase
+class OPENPF2CORE_API UPF2SimpleTemlModifierCalculationBase : public UPF2TemlCalculationBase
 {
 	GENERATED_BODY()
 
@@ -27,15 +33,14 @@ public:
 	 * Default constructor UE4 invokes for objects of this type.
 	 *
 	 * Sub-classes must implement their own version of this constructor that calls
-	 * UPF2ModifierCalculationBase(FGameplayAttribute, FString) instead of calling this
-	 * constructor overload.
+	 * UPF2SimpleTemlModifierCalculationBase(FGameplayAttribute, FString) instead of calling this constructor overload.
 	 */
-	explicit UPF2ModifierCalculationBase() : UPF2TemlCalculationBase()
+	explicit UPF2SimpleTemlModifierCalculationBase() : UPF2TemlCalculationBase()
 	{
 	};
 
 	/**
-	 * Constructor for UPF2ModifierCalculationBase.
+	 * Constructor for UPF2SimpleTemlModifierCalculationBase.
 	 *
 	 * The skill proficiency calculation is initialized so that the specified attribute is factored-in to the
 	 * proficiency bonus, and TEML tags on the character that have the specified prefix determine the magnitude of the
@@ -49,8 +54,8 @@ public:
 	 *	The tag prefix to use for checking a character's training in the skill. For example, "Skill.Acrobatics" or
 	 *	"Skill.Arcana".
 	 */
-	explicit UPF2ModifierCalculationBase(const FGameplayAttribute SkillAbilityAttribute,
-	                                     const FString            SkillGameplayTagPrefix);
+	explicit UPF2SimpleTemlModifierCalculationBase(const FGameplayAttribute SkillAbilityAttribute,
+	                                               const FString            SkillGameplayTagPrefix);
 
 	// =================================================================================================================
 	// Public Methods

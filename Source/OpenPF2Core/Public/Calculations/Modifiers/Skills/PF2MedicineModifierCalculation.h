@@ -7,14 +7,14 @@
 
 #include <CoreMinimal.h>
 
-#include "Calculations/Modifiers/PF2ModifierCalculationBase.h"
+#include "Calculations/Modifiers/PF2SimpleTemlModifierCalculationBase.h"
 #include "PF2MedicineModifierCalculation.generated.h"
 
 /**
  * MMC that calculates the proficiency a character has in Medicine skill.
  */
 UCLASS()
-class OPENPF2CORE_API UPF2MedicineModifierCalculation : public UPF2ModifierCalculationBase
+class OPENPF2CORE_API UPF2MedicineModifierCalculation : public UPF2SimpleTemlModifierCalculationBase
 {
 	GENERATED_BODY()
 

@@ -7,14 +7,14 @@
 
 #include <CoreMinimal.h>
 
-#include "Calculations/Modifiers/PF2ModifierCalculationBase.h"
+#include "Calculations/Modifiers/PF2SimpleTemlModifierCalculationBase.h"
 #include "PF2ReflexModifierCalculation.generated.h"
 
 /**
  * MMC that calculates the modifier a character has in Reflex Saving Throws.
  */
 UCLASS()
-class OPENPF2CORE_API UPF2ReflexModifierCalculation : public UPF2ModifierCalculationBase
+class OPENPF2CORE_API UPF2ReflexModifierCalculation : public UPF2SimpleTemlModifierCalculationBase
 {
 	GENERATED_BODY()
 

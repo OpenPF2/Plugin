@@ -7,14 +7,14 @@
 
 #include <CoreMinimal.h>
 
-#include "Calculations/Modifiers/PF2ModifierCalculationBase.h"
+#include "Calculations/Modifiers/PF2SimpleTemlModifierCalculationBase.h"
 #include "PF2Lore1ModifierCalculation.generated.h"
 
 /**
  * MMC that calculates the proficiency a character has in Lore 1 skill.
  */
 UCLASS()
-class OPENPF2CORE_API UPF2Lore1ModifierCalculation : public UPF2ModifierCalculationBase
+class OPENPF2CORE_API UPF2Lore1ModifierCalculation : public UPF2SimpleTemlModifierCalculationBase
 {
 	GENERATED_BODY()
 

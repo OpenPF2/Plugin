@@ -8,7 +8,7 @@
 #include "Abilities/PF2AttributeSet.h"
 
 UPF2ArcanaModifierCalculation::UPF2ArcanaModifierCalculation() :
-	UPF2ModifierCalculationBase(
+	UPF2SimpleTemlModifierCalculationBase(
 		UPF2AttributeSet::GetAbIntelligenceModifierAttribute(),
 		FString("Skill.Arcana")
 	)

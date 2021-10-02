@@ -7,14 +7,14 @@
 
 #include <CoreMinimal.h>
 
-#include "Calculations/Modifiers/PF2ModifierCalculationBase.h"
+#include "Calculations/Modifiers/PF2SimpleTemlModifierCalculationBase.h"
 #include "PF2AthleticsModifierCalculation.generated.h"
 
 /**
  * MMC that calculates the proficiency a character has in Athletics skill.
  */
 UCLASS()
-class OPENPF2CORE_API UPF2AthleticsModifierCalculation : public UPF2ModifierCalculationBase
+class OPENPF2CORE_API UPF2AthleticsModifierCalculation : public UPF2SimpleTemlModifierCalculationBase
 {
 	GENERATED_BODY()
 
