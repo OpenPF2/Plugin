@@ -8,7 +8,7 @@
 #include "Abilities/PF2AttributeSet.h"
 
 UPF2SurvivalModifierCalculation::UPF2SurvivalModifierCalculation() :
-	UPF2ModifierCalculationBase(
+	UPF2SimpleTemlModifierCalculationBase(
 		UPF2AttributeSet::GetAbWisdomModifierAttribute(),
 		FString("Skill.Survival")
 	)

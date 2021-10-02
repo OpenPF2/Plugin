@@ -7,14 +7,14 @@
 
 #include <CoreMinimal.h>
 
-#include "Calculations/Modifiers/PF2ModifierCalculationBase.h"
+#include "Calculations/Modifiers/PF2SimpleTemlModifierCalculationBase.h"
 #include "PF2WillModifierCalculation.generated.h"
 
 /**
  * MMC that calculates the modifier a character has in Will Saving Throws.
  */
 UCLASS()
-class OPENPF2CORE_API UPF2WillModifierCalculation : public UPF2ModifierCalculationBase
+class OPENPF2CORE_API UPF2WillModifierCalculation : public UPF2SimpleTemlModifierCalculationBase
 {
 	GENERATED_BODY()
 

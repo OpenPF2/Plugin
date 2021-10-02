@@ -8,7 +8,7 @@
 #include "Abilities/PF2AttributeSet.h"
 
 UPF2FortitudeModifierCalculation::UPF2FortitudeModifierCalculation() :
-	UPF2ModifierCalculationBase(
+	UPF2SimpleTemlModifierCalculationBase(
 		UPF2AttributeSet::GetAbConstitutionModifierAttribute(),
 		FString("SavingThrow.Fortitude")
 	)

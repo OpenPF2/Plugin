@@ -9,14 +9,15 @@
 // file other than the material designated as Open Game Content may be reproduced in any form without written
 // permission.
 
-#include "Calculations/Modifiers/PF2ModifierCalculationBase.h"
+#include "Calculations/Modifiers/PF2SimpleTemlModifierCalculationBase.h"
 
 #include "OpenPF2Core.h"
 #include "GameplayAbilityUtils.h"
 #include "Abilities/PF2AttributeSet.h"
 
-UPF2ModifierCalculationBase::UPF2ModifierCalculationBase(const FGameplayAttribute SkillAbilityAttribute,
-                                                         const FString            SkillGameplayTagPrefix) :
+UPF2SimpleTemlModifierCalculationBase::UPF2SimpleTemlModifierCalculationBase(
+																	const FGameplayAttribute SkillAbilityAttribute,
+																	const FString            SkillGameplayTagPrefix) :
 	UPF2TemlCalculationBase(),
 	SkillAbilityCaptureDefinition(GameplayAbilityUtils::BuildSourceCaptureFor(SkillAbilityAttribute))
 {
@@ -25,7 +26,7 @@ UPF2ModifierCalculationBase::UPF2ModifierCalculationBase(const FGameplayAttribut
 	this->SkillGameplayTagPrefix = SkillGameplayTagPrefix;
 }
 
-float UPF2ModifierCalculationBase::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
+float UPF2SimpleTemlModifierCalculationBase::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
 {
 	float                         AbilityScore         = 0.0f,
 	                              ProficiencyBonus,

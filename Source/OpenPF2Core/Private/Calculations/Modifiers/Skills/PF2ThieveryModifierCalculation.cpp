@@ -8,7 +8,7 @@
 #include "Abilities/PF2AttributeSet.h"
 
 UPF2ThieveryModifierCalculation::UPF2ThieveryModifierCalculation() :
-	UPF2ModifierCalculationBase(
+	UPF2SimpleTemlModifierCalculationBase(
 		UPF2AttributeSet::GetAbDexterityModifierAttribute(),
 		FString("Skill.Thievery")
 	)

@@ -8,7 +8,7 @@
 #include "Abilities/PF2AttributeSet.h"
 
 UPF2Lore2ModifierCalculation::UPF2Lore2ModifierCalculation() :
-	UPF2ModifierCalculationBase(
+	UPF2SimpleTemlModifierCalculationBase(
 		UPF2AttributeSet::GetAbIntelligenceModifierAttribute(),
 		FString("Skill.Lore2")
 	)

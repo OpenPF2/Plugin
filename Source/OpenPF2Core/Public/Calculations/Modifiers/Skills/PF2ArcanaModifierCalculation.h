@@ -7,14 +7,14 @@
 
 #include <CoreMinimal.h>
 
-#include "Calculations/Modifiers/PF2ModifierCalculationBase.h"
+#include "Calculations/Modifiers/PF2SimpleTemlModifierCalculationBase.h"
 #include "PF2ArcanaModifierCalculation.generated.h"
 
 /**
  * MMC that calculates the proficiency a character has in Arcana skill.
  */
 UCLASS()
-class OPENPF2CORE_API UPF2ArcanaModifierCalculation : public UPF2ModifierCalculationBase
+class OPENPF2CORE_API UPF2ArcanaModifierCalculation : public UPF2SimpleTemlModifierCalculationBase
 {
 	GENERATED_BODY()
 

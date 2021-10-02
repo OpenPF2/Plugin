@@ -8,7 +8,7 @@
 #include "Abilities/PF2AttributeSet.h"
 
 UPF2IntimidationModifierCalculation::UPF2IntimidationModifierCalculation() :
-	UPF2ModifierCalculationBase(
+	UPF2SimpleTemlModifierCalculationBase(
 		UPF2AttributeSet::GetAbCharismaModifierAttribute(),
 		FString("Skill.Intimidation")
 	)

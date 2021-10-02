@@ -8,7 +8,7 @@
 #include "Abilities/PF2AttributeSet.h"
 
 UPF2AthleticsModifierCalculation::UPF2AthleticsModifierCalculation() :
-	UPF2ModifierCalculationBase(
+	UPF2SimpleTemlModifierCalculationBase(
 		UPF2AttributeSet::GetAbStrengthModifierAttribute(),
 		FString("Skill.Athletics")
 	)
