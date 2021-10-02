@@ -17,13 +17,13 @@
 #include "GameplayAbilityUtils.h"
 #include "PF2TemlCalculationBase.h"
 
-#include "PF2KeyAbilityCalculationBase.generated.h"
+#include "PF2KeyAbilityTemlCalculationBase.generated.h"
 
 /**
- * Base class for MMCs that are based on a character's "Key Ability" (Class DC, Spell Attack Roll, Spell DC, etc.).
+ * Base class for MMCs that are based on the key ability of the character (Class DC, Spell Attack Roll, Spell DC, etc.).
  */
 UCLASS(Abstract)
-class OPENPF2CORE_API UPF2KeyAbilityCalculationBase : public UPF2TemlCalculationBase
+class OPENPF2CORE_API UPF2KeyAbilityTemlCalculationBase : public UPF2TemlCalculationBase
 {
 	GENERATED_BODY()
 
@@ -35,12 +35,12 @@ public:
 	 * Default constructor UE4 invokes for objects of this type.
 	 *
 	 * Sub-classes must implement their own version of this constructor that calls
-	 * UPF2KeyAbilityCalculationBase(FString) instead of calling this constructor overload.
+	 * UPF2KeyAbilityTemlCalculationBase(FString) instead of calling this constructor overload.
 	 */
-	explicit UPF2KeyAbilityCalculationBase();
+	explicit UPF2KeyAbilityTemlCalculationBase();
 
 	/**
-	 * Constructor for UPF2KeyAbilityCalculationBase.
+	 * Constructor for UPF2KeyAbilityTemlCalculationBase.
 	 *
 	 * The skill proficiency calculation is initialized so that the specified attribute is factored-in to the
 	 * proficiency bonus, and TEML tags on the character that have the specified prefix determine the magnitude of the
@@ -56,9 +56,9 @@ public:
 	 *	The base value for this stat. For DC stats, this is usually "10". For other stats (e.g. Spell Attack Roll),
 	 *	this is 0.
 	 */
-	explicit UPF2KeyAbilityCalculationBase(const FString StatGameplayTagPrefix,
-										   const FString KeyAbilityGameplayTagPrefix,
-										   const float BaseValue = 0.0f);
+	explicit UPF2KeyAbilityTemlCalculationBase(const FString StatGameplayTagPrefix,
+	                                           const FString KeyAbilityGameplayTagPrefix,
+	                                           const float   BaseValue = 0.0f);
 
 	// =================================================================================================================
 	// Public Methods

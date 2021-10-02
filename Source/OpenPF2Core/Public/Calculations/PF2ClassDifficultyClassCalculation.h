@@ -13,7 +13,7 @@
 
 #include <CoreMinimal.h>
 
-#include "Calculations/PF2KeyAbilityCalculationBase.h"
+#include "Calculations/PF2KeyAbilityTemlCalculationBase.h"
 #include "PF2ClassDifficultyClassCalculation.generated.h"
 
 /**
@@ -25,7 +25,7 @@
  * score."
  */
 UCLASS()
-class OPENPF2CORE_API UPF2ClassDifficultyClassCalculation : public UPF2KeyAbilityCalculationBase
+class OPENPF2CORE_API UPF2ClassDifficultyClassCalculation : public UPF2KeyAbilityTemlCalculationBase
 {
 	GENERATED_BODY()
 

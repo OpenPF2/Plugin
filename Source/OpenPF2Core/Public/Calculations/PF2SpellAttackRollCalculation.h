@@ -13,7 +13,7 @@
 
 #include <CoreMinimal.h>
 
-#include "Calculations/PF2KeyAbilityCalculationBase.h"
+#include "Calculations/PF2KeyAbilityTemlCalculationBase.h"
 #include "PF2SpellAttackRollCalculation.generated.h"
 
 /**
@@ -32,7 +32,7 @@
  * rolls for these different sources of spells."
  */
 UCLASS()
-class OPENPF2CORE_API UPF2SpellAttackRollCalculation : public UPF2KeyAbilityCalculationBase
+class OPENPF2CORE_API UPF2SpellAttackRollCalculation : public UPF2KeyAbilityTemlCalculationBase
 {
 	GENERATED_BODY()
 

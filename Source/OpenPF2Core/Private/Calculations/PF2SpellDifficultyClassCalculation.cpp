@@ -6,6 +6,6 @@
 #include "Calculations/PF2SpellDifficultyClassCalculation.h"
 
 UPF2SpellDifficultyClassCalculation::UPF2SpellDifficultyClassCalculation() :
-	UPF2KeyAbilityCalculationBase(TEXT("SpellDc"), TEXT("SpellcastingAbility"), 10.0f)
+	UPF2KeyAbilityTemlCalculationBase(TEXT("SpellDc"), TEXT("SpellcastingAbility"), 10.0f)
 {
 }
