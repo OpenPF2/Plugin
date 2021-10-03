@@ -13,7 +13,7 @@
 
 #include "OpenPF2Core.h"
 #include "GameplayAbilityUtils.h"
-#include "TemlCalculationUtils.h"
+#include "PF2TemlCalculation.h"
 
 #include "Abilities/PF2AbilityAttributes.h"
 #include "Abilities/PF2AttributeSet.h"
@@ -76,7 +76,7 @@ float UPF2ArmorClassCalculation::CalculateArmorTypeProficiencyBonus(const FGamep
 	const FString                ArmorType                  = DetermineArmorType(SourceTags),
 	                             ArmorTypeProficiencyPrefix = "Armor.Category." + ArmorType;
 
-	const float ProficiencyBonus = TemlCalculationUtils::CalculateProficiencyBonus(ArmorTypeProficiencyPrefix, Spec);
+	const float ProficiencyBonus = FPF2TemlCalculation(ArmorTypeProficiencyPrefix, Spec).GetValue();
 
 	UE_LOG(
 		LogPf2Core,

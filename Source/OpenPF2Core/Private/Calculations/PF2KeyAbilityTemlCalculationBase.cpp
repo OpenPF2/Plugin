@@ -13,7 +13,7 @@
 
 #include "OpenPF2Core.h"
 #include "GameplayAbilityUtils.h"
-#include "TemlCalculationUtils.h"
+#include "PF2TemlCalculation.h"
 
 #include "Abilities/PF2AttributeSet.h"
 
@@ -89,7 +89,7 @@ float UPF2KeyAbilityTemlCalculationBase::CalculateBaseMagnitude_Implementation(c
 	// Spell DC = 10 + your spellcasting ability modifier + proficiency bonus + other bonuses + penalties"
 	//
 	// Source: Pathfinder 2E Core Rulebook, page 298, "Spell Attack Roll and Spell DC".
-	const float ProficiencyBonus   = TemlCalculationUtils::CalculateProficiencyBonus(this->StatGameplayTagPrefix, Spec),
+	const float ProficiencyBonus   = FPF2TemlCalculation(this->StatGameplayTagPrefix, Spec).GetValue(),
 	            KeyAbilityModifier = this->CalculateKeyAbilityModifier(Spec),
 	            AbilityScore       = this->BaseValue + ProficiencyBonus + KeyAbilityModifier;
 
