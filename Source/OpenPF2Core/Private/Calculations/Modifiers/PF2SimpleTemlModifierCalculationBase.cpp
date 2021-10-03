@@ -12,7 +12,7 @@
 #include "Calculations/Modifiers/PF2SimpleTemlModifierCalculationBase.h"
 #include "OpenPF2Core.h"
 #include "GameplayAbilityUtils.h"
-#include "TemlCalculationUtils.h"
+#include "PF2TemlCalculation.h"
 #include "Abilities/PF2AttributeSet.h"
 
 float UPF2SimpleTemlModifierCalculationBase::DoCalculation(const FGameplayEffectSpec& Spec,
@@ -26,7 +26,7 @@ float UPF2SimpleTemlModifierCalculationBase::DoCalculation(const FGameplayEffect
 	// your character is untrained in, use the same method, but your proficiency bonus is +0."
 	//
 	// Source: Pathfinder 2E Core Rulebook, page 28, "Skills".
-	const float ProficiencyBonus = TemlCalculationUtils::CalculateProficiencyBonus(this->ProficiencyRootTag, Spec);
+	const float ProficiencyBonus = FPF2TemlCalculation(this->ProficiencyRootTag, Spec).GetValue();
 
 	return this->DoCalculation(Spec, AbilityAttribute, AbilityScore, ProficiencyBonus);
 }
