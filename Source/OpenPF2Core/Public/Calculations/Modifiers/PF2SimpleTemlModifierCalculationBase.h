@@ -5,86 +5,65 @@
 
 #pragma once
 
-#include <CoreMinimal.h>
 #include <GameplayModMagnitudeCalculation.h>
 
-#include "Calculations/PF2TemlCalculationBase.h"
+#include "Calculations/PF2AbilityCalculationBase.h"
 #include "PF2SimpleTemlModifierCalculationBase.generated.h"
 
 /**
- * Base class for MMCs that calculate the proficiency modifier for a character attribute. This base class is only used
- * for calculations that are "simple"; that is to say, this base class is only used to calculate proficiencies that are
- * a function of the value of a character's ability score modifier (Strength, Dexterity, Intelligence, etc.) and a TEML
- * proficiency (e.g. skills, saving throws, and perception).
+ * Base class for MMCs that perform a simple calculation to determine the TEML proficiency modifier for a character
+ * attribute. This base class is only used to calculate proficiencies that are a function of the value of a character's
+ * ability score modifier (Strength, Dexterity, Intelligence, etc.) and a TEML proficiency (e.g. skills, saving throws,
+ * and perception).
  *
- * More advanced calculations (Armor Class, Class DC, Spell Attack Roll, and Spell DC) derive from
- * UPF2TemlCalculationBase directly, instead of deriving from this base class, as they have more complex business logic.
+ * More advanced TEML-based calculations (Armor Class, Class DC, Spell Attack Roll, and Spell DC) derive from
+ * UGameplayModMagnitudeCalculation directly instead of deriving from this base class, as they have more much more
+ * complex business logic.
  */
 UCLASS(Abstract)
-class OPENPF2CORE_API UPF2SimpleTemlModifierCalculationBase : public UPF2TemlCalculationBase
+class OPENPF2CORE_API UPF2SimpleTemlModifierCalculationBase : public UPF2AbilityCalculationBase
 {
 	GENERATED_BODY()
-
-public:
-	// =================================================================================================================
-	// Constructors
-	// =================================================================================================================
-	/**
-	 * Default constructor UE4 invokes for objects of this type.
-	 *
-	 * Sub-classes must implement their own version of this constructor that calls
-	 * UPF2SimpleTemlModifierCalculationBase(FGameplayAttribute, FString) instead of calling this constructor overload.
-	 */
-	explicit UPF2SimpleTemlModifierCalculationBase() : UPF2TemlCalculationBase()
-	{
-	};
-
-	/**
-	 * Constructor for UPF2SimpleTemlModifierCalculationBase.
-	 *
-	 * The proficiency calculation is initialized so that the specified attribute is factored-in to the proficiency
-	 * bonus, and TEML tags on the character that have the specified prefix determine the magnitude of the boost.
-	 *
-	 * @param BaseAttribute
-	 *	The RPG attribute for the character ability that contributes to proficiency in the attribute. This is typically
-	 *	one of the character's ability modifier. For example, "UPF2AttributeSet::GetAbDexterityModifierAttribute()" for
-	 *	Acrobatics, "UPF2AttributeSet::GetAbIntelligenceModifierAttribute()" for Arcana, etc.)
-	 * @param ProficiencyTagPrefix
-	 *	The tag prefix to use for determining the character's training in the attribute. For example, "Skill.Acrobatics"
-	 *	or "SavingThrow.Fortitude".
-	 */
-	explicit UPF2SimpleTemlModifierCalculationBase(const FGameplayAttribute BaseAttribute,
-	                                               const FString            ProficiencyTagPrefix);
-
-	// =================================================================================================================
-	// Public Methods
-	// =================================================================================================================
-	/**
-	 * Calculates attribute proficiency based on the attributes captured by the provided GE specification.
-	 *
-	 * Most sub-classes should not need to override this implementation. Instead, this implementation depends on other
-	 * methods to provide the base attribute and proficiency tag.
-	 *
-	 * @param Spec
-	 *	The Gameplay Effect (GE) specification that provides information about the character attributes for which a
-	 *	calculated attribute proficiency is desired.
-	 *
-	 * @return
-	 *	The calculated attribute proficiency.
-	 */
-	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
 
 protected:
 	// =================================================================================================================
 	// Protected Fields
 	// =================================================================================================================
 	/**
-	 * Capture definition for the RPG character attribute that contributes to proficiency in the attribute.
+	 * The root tag (aka tag prefix) of the tags that indicate the character's training in the attribute.
 	 */
-	FGameplayEffectAttributeCaptureDefinition BaseAbilityCaptureDefinition;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Attributes")
+	FGameplayTag ProficiencyRootTag;
+
+	// =================================================================================================================
+	// Protected Methods
+	// =================================================================================================================
+	// Avoid warnings C4263 and C4264 by ensuring we inherit base class implementation.
+	using UPF2AbilityCalculationBase::DoCalculation;
+
+	virtual float DoCalculation(const FGameplayEffectSpec& Spec,
+	                            const FGameplayAttribute   AbilityAttribute,
+	                            const float                AbilityScore) const override;
 
 	/**
-	 * The tag prefix to use for checking a character's training in the attribute.
+	 * Calculates an attribute proficiency based on the captured attribute value and TEML proficiency value.
+	 *
+	 * @param Spec
+	 *	The Gameplay Effect (GE) specification that provides information about the ability score for which a TEML
+	 *	proficiency value is desired.
+	 * @param AbilityAttribute
+	 *	The type of ability score for which a calculated value is desired.
+	 * @param AbilityScore
+	 *	The current base value of the ability attribute.
+	 * @param TemlProficiencyBonus
+	 *	The proficiency the character has in this ability, as derived from tags on the character corresponding to the
+	 *	proficiency root tag.
+	 *
+	 * @return
+	 *	The calculated attribute proficiency.
 	 */
-	FString ProficiencyTagPrefix;
+	virtual float DoCalculation(const FGameplayEffectSpec& Spec,
+	                            const FGameplayAttribute   AbilityAttribute,
+	                            const float                AbilityScore,
+	                            const float                TemlProficiencyBonus) const;
 };

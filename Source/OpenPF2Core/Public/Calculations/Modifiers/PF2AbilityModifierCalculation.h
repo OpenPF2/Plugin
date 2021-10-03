@@ -18,10 +18,10 @@
 #include "PF2AbilityModifierCalculation.generated.h"
 
 /**
- * An MMC used for determining ability modifiers from normal ability scores.
+ * Base MMC used for determining ability modifiers from normal ability scores.
  *
- * This is expected to have one blueprint for each ability (Strength, Dexterity, Constitution, etc). The ability for
- * which the modifier is being calculated *must* be the ONLY attribute being captured.
+ * There is expected to be one blueprint sub-class of this base class for each ability (Strength, Dexterity, Constitution,
+ * etc). The ability for which the modifier is being calculated *must* be the one and ONLY attribute being captured.
  */
 UCLASS(Abstract)
 class OPENPF2CORE_API UPF2AbilityModifierCalculation : public UPF2AbilityCalculationBase

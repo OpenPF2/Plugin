@@ -15,7 +15,6 @@
 #include <GameplayModMagnitudeCalculation.h>
 
 #include "GameplayAbilityUtils.h"
-#include "PF2TemlCalculationBase.h"
 
 #include "PF2KeyAbilityTemlCalculationBase.generated.h"
 
@@ -23,7 +22,7 @@
  * Base class for MMCs that are based on the key ability of the character (Class DC, Spell Attack Roll, Spell DC, etc.).
  */
 UCLASS(Abstract)
-class OPENPF2CORE_API UPF2KeyAbilityTemlCalculationBase : public UPF2TemlCalculationBase
+class OPENPF2CORE_API UPF2KeyAbilityTemlCalculationBase : public UGameplayModMagnitudeCalculation
 {
 	GENERATED_BODY()
 

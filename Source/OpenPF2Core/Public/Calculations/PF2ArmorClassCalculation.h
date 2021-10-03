@@ -13,7 +13,7 @@
 
 #include <CoreMinimal.h>
 
-#include "Calculations/PF2KeyAbilityTemlCalculationBase.h"
+#include "GameplayModMagnitudeCalculation.h"
 #include "PF2ArmorClassCalculation.generated.h"
 
 /**
@@ -25,7 +25,7 @@
  * bonus with their armor, plus their armor’s item bonus to AC and any other permanent bonuses and penalties."
  */
 UCLASS()
-class OPENPF2CORE_API UPF2ArmorClassCalculation : public UPF2TemlCalculationBase
+class OPENPF2CORE_API UPF2ArmorClassCalculation : public UGameplayModMagnitudeCalculation
 {
 	GENERATED_BODY()
 
