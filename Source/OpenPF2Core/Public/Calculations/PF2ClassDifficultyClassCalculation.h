@@ -34,7 +34,7 @@ public:
 	// Constructors
 	// =================================================================================================================
 	/**
-	 * Constructor for UPF2ClassDifficultyClassCalculation.
+	 * Default constructor for UPF2ClassDifficultyClassCalculation.
 	 */
 	explicit UPF2ClassDifficultyClassCalculation();
 };
