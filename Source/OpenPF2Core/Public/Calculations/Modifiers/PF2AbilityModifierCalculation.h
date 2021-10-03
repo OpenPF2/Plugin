@@ -51,6 +51,9 @@ protected:
 	 *
 	 * ... and so on.
 	 *
+	 * @param Spec
+	 *	The Gameplay Effect (GE) specification that provides information about the ability score for which a calculated
+	 *	value is desired.
 	 * @param AbilityAttribute
 	 *	The type of ability score for which an ability modifier is desired.
 	 * @param AbilityScore
@@ -59,5 +62,7 @@ protected:
 	 * @return
 	 *	The ability modifier.
 	 */
-	virtual float DoCalculation(const FGameplayAttribute AbilityAttribute, const float AbilityScore) const override;
+	virtual float DoCalculation(const FGameplayEffectSpec& Spec,
+	                            const FGameplayAttribute   AbilityAttribute,
+	                            const float                AbilityScore) const override;
 };

@@ -47,6 +47,9 @@ protected:
 	 *
 	 * All sub-classes must override this implementation.
 	 *
+	 * @param Spec
+	 *	The Gameplay Effect (GE) specification that provides information about the ability score for which a calculated
+	 *	value is desired.
 	 * @param AbilityAttribute
 	 *	The type of ability score for which a calculated value is desired.
 	 * @param AbilityScore
@@ -55,6 +58,8 @@ protected:
 	 * @return
 	 *	The calculated value.
 	 */
-	virtual float DoCalculation(const FGameplayAttribute AbilityAttribute, const float AbilityScore) const
+	virtual float DoCalculation(const FGameplayEffectSpec& Spec,
+								const FGameplayAttribute AbilityAttribute,
+								const float AbilityScore) const
 	PURE_VIRTUAL(UPF2AbilityCalculationBase::DoCalculation, return 0;);
 };

@@ -40,6 +40,9 @@ class OPENPF2CORE_API UPF2AbilityBoostCalculation : public UPF2AbilityCalculatio
 	 * applying an ability boost is already 18 or higher, its value increases by only 1. At 1st level, a character can
 	 * never have any ability score that’s higher than 18."
 	 *
+	 * @param Spec
+	 *	The Gameplay Effect (GE) specification that provides information about the ability score for which a calculated
+	 *	value is desired.
 	 * @param AbilityAttribute
 	 *	The type of ability score for which an ability boost is desired.
 	 * @param AbilityScore
@@ -49,5 +52,7 @@ class OPENPF2CORE_API UPF2AbilityBoostCalculation : public UPF2AbilityCalculatio
 	 *	The boost to apply to the ability score. (This is just the boost; the ability score has not been added to the
 	 *	result).
 	 */
-	virtual float DoCalculation(const FGameplayAttribute AbilityAttribute, const float AbilityScore) const override;
+	virtual float DoCalculation(const FGameplayEffectSpec& Spec,
+	                            const FGameplayAttribute   AbilityAttribute,
+	                            const float                AbilityScore) const override;
 };
