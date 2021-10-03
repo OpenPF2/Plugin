@@ -9,13 +9,13 @@
 // file other than the material designated as Open Game Content may be reproduced in any form without written
 // permission.
 
-#include "Calculations/Modifiers/PF2AbilityModifierCalculation.h"
+#include "Calculations/Modifiers/PF2AbilityModifierCalculationBase.h"
 #include "OpenPF2Core.h"
 #include "Abilities/PF2AttributeSet.h"
 
-float UPF2AbilityModifierCalculation::DoCalculation(const FGameplayEffectSpec& Spec,
-                                                    const FGameplayAttribute   AbilityAttribute,
-                                                    const float                AbilityScore) const
+float UPF2AbilityModifierCalculationBase::DoCalculation(const FGameplayEffectSpec& Spec,
+                                                        const FGameplayAttribute   AbilityAttribute,
+                                                        const float                AbilityScore) const
 {
 	float AbilityModifier;
 

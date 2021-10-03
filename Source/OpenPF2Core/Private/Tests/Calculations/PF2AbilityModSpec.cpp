@@ -10,7 +10,7 @@
 // permission.
 
 #include "Abilities/PF2AttributeSet.h"
-#include "Calculations/Modifiers/PF2AbilityModifierCalculation.h"
+#include "Calculations/Modifiers/PF2AbilityModifierCalculationBase.h"
 #include "Tests/PF2SpecBase.h"
 
 BEGIN_DEFINE_PF_SPEC(FPF2AbilityModSpec,
@@ -32,7 +32,7 @@ BEGIN_DEFINE_PF_SPEC(FPF2AbilityModSpec,
 		this->AbModGameEffectCalc,
 	};
 
-	TMap<FString, TSubclassOf<UPF2AbilityModifierCalculation>> AbModMMCs;
+	TMap<FString, TSubclassOf<UPF2AbilityModifierCalculationBase>> AbModMMCs;
 	TMap<FString, TSubclassOf<UGameplayEffect>>                AbModGEs;
 	TMap<float, float>                                         AbModMappings;
 
@@ -70,7 +70,7 @@ void FPF2AbilityModSpec::Define()
 		{
 			It(BlueprintName + " should load", [=, this]()
 			{
-				const TSubclassOf<UPF2AbilityModifierCalculation>& MmcBlueprint = this->AbModMMCs[BlueprintName];
+				const TSubclassOf<UPF2AbilityModifierCalculationBase>& MmcBlueprint = this->AbModMMCs[BlueprintName];
 
 				TestTrue(BlueprintName + " is not null.", IsValid(MmcBlueprint));
 			});
@@ -380,8 +380,8 @@ void FPF2AbilityModSpec::LoadMMCs()
 {
 	for (auto& BlueprintName : this->AbModMmcNames)
 	{
-		TSubclassOf<UPF2AbilityModifierCalculation> CalculationBP =
-			this->LoadBlueprint<UPF2AbilityModifierCalculation>(this->BlueprintPath, BlueprintName);
+		TSubclassOf<UPF2AbilityModifierCalculationBase> CalculationBP =
+			this->LoadBlueprint<UPF2AbilityModifierCalculationBase>(this->BlueprintPath, BlueprintName);
 
 		this->AbModMMCs.Add(BlueprintName, CalculationBP);
 	}

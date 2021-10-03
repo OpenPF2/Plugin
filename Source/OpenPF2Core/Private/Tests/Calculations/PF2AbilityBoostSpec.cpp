@@ -4,7 +4,7 @@
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "Abilities/PF2AttributeSet.h"
-#include "Calculations/PF2AbilityBoostCalculation.h"
+#include "Calculations/PF2AbilityBoostCalculationBase.h"
 #include "Tests/PF2SpecBase.h"
 
 BEGIN_DEFINE_PF_SPEC(FPF2AbilityBoostSpec,
@@ -30,7 +30,7 @@ BEGIN_DEFINE_PF_SPEC(FPF2AbilityBoostSpec,
 		TEXT("GE_BoostAbWisdom"),
 	};
 
-	TMap<FString, TSubclassOf<UPF2AbilityBoostCalculation>> BoostMMCs;
+	TMap<FString, TSubclassOf<UPF2AbilityBoostCalculationBase>> BoostMMCs;
 	TMap<FString, TSubclassOf<UGameplayEffect>> BoostGEs;
 
 	void LoadMMCs();
@@ -69,7 +69,7 @@ void FPF2AbilityBoostSpec::Define()
 		{
 			It(BlueprintName + " should load", [=, this]()
 			{
-				const TSubclassOf<UPF2AbilityBoostCalculation>& MmcBlueprint = this->BoostMMCs[BlueprintName];
+				const TSubclassOf<UPF2AbilityBoostCalculationBase>& MmcBlueprint = this->BoostMMCs[BlueprintName];
 
 				TestTrue(BlueprintName + " is not null.", IsValid(MmcBlueprint));
 			});
@@ -743,8 +743,8 @@ void FPF2AbilityBoostSpec::LoadMMCs()
 {
 	for (auto& BlueprintName : this->BoostMmcNames)
 	{
-		TSubclassOf<UPF2AbilityBoostCalculation> CalculationBP =
-			this->LoadBlueprint<UPF2AbilityBoostCalculation>(this->BlueprintPath, BlueprintName);
+		TSubclassOf<UPF2AbilityBoostCalculationBase> CalculationBP =
+			this->LoadBlueprint<UPF2AbilityBoostCalculationBase>(this->BlueprintPath, BlueprintName);
 
 		this->BoostMMCs.Add(BlueprintName, CalculationBP);
 	}
