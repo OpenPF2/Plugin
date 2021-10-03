@@ -13,6 +13,8 @@
 
 #include "OpenPF2Core.h"
 #include "GameplayAbilityUtils.h"
+#include "TemlCalculationUtils.h"
+
 #include "Abilities/PF2AttributeSet.h"
 
 UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase() :
@@ -26,7 +28,6 @@ UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase() :
 UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase(const FString StatGameplayTagPrefix,
                                                                      const FString KeyAbilityGameplayTagPrefix,
                                                                      const float   BaseValue) :
-	UPF2TemlCalculationBase(),
 	StatGameplayTagPrefix(StatGameplayTagPrefix),
 	BaseValue(BaseValue)
 {
@@ -88,7 +89,7 @@ float UPF2KeyAbilityTemlCalculationBase::CalculateBaseMagnitude_Implementation(c
 	// Spell DC = 10 + your spellcasting ability modifier + proficiency bonus + other bonuses + penalties"
 	//
 	// Source: Pathfinder 2E Core Rulebook, page 298, "Spell Attack Roll and Spell DC".
-	const float ProficiencyBonus   = this->CalculateProficiencyBonus(this->StatGameplayTagPrefix, Spec),
+	const float ProficiencyBonus   = TemlCalculationUtils::CalculateProficiencyBonus(this->StatGameplayTagPrefix, Spec),
 	            KeyAbilityModifier = this->CalculateKeyAbilityModifier(Spec),
 	            AbilityScore       = this->BaseValue + ProficiencyBonus + KeyAbilityModifier;
 

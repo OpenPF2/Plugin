@@ -10,36 +10,15 @@
 // permission.
 
 #include "Calculations/Modifiers/PF2SimpleTemlModifierCalculationBase.h"
-
 #include "OpenPF2Core.h"
 #include "GameplayAbilityUtils.h"
+#include "TemlCalculationUtils.h"
 #include "Abilities/PF2AttributeSet.h"
 
-UPF2SimpleTemlModifierCalculationBase::UPF2SimpleTemlModifierCalculationBase(
-																	const FGameplayAttribute BaseAttribute,
-																	const FString            ProficiencyTagPrefix) :
-	UPF2TemlCalculationBase(),
-	BaseAbilityCaptureDefinition(GameplayAbilityUtils::BuildSourceCaptureFor(BaseAttribute))
+float UPF2SimpleTemlModifierCalculationBase::DoCalculation(const FGameplayEffectSpec& Spec,
+                                                           const FGameplayAttribute   AbilityAttribute,
+                                                           const float                AbilityScore) const
 {
-	this->RelevantAttributesToCapture.Add(this->BaseAbilityCaptureDefinition);
-
-	this->ProficiencyTagPrefix = ProficiencyTagPrefix;
-}
-
-float UPF2SimpleTemlModifierCalculationBase::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
-{
-	float                         AbilityScore         = 0.0f,
-	                              ProficiencyBonus,
-	                              Modifier;
-	const FGameplayTagContainer   *SourceTags          = Spec.CapturedSourceTags.GetAggregatedTags(),
-	                              *TargetTags          = Spec.CapturedTargetTags.GetAggregatedTags();
-	FAggregatorEvaluateParameters EvaluationParameters;
-
-	EvaluationParameters.SourceTags = SourceTags;
-	EvaluationParameters.TargetTags = TargetTags;
-
-	this->GetCapturedAttributeMagnitude(this->BaseAbilityCaptureDefinition, Spec, EvaluationParameters, AbilityScore);
-
 	// "In the second box to the right of each skill name on your character sheet, there’s an abbreviation that reminds
 	// you of the ability score tied to that skill. For each skill in which your character is trained, add your
 	// proficiency bonus for that skill (typically +3 for a 1st-level character) to the indicated ability’s modifier, as
@@ -47,17 +26,25 @@ float UPF2SimpleTemlModifierCalculationBase::CalculateBaseMagnitude_Implementati
 	// your character is untrained in, use the same method, but your proficiency bonus is +0."
 	//
 	// Source: Pathfinder 2E Core Rulebook, page 28, "Skills".
-	ProficiencyBonus = this->CalculateProficiencyBonus(this->ProficiencyTagPrefix, Spec);
+	const float ProficiencyBonus = TemlCalculationUtils::CalculateProficiencyBonus(this->ProficiencyRootTag, Spec);
 
-	Modifier = AbilityScore + ProficiencyBonus;
+	return this->DoCalculation(Spec, AbilityAttribute, AbilityScore, ProficiencyBonus);
+}
+
+float UPF2SimpleTemlModifierCalculationBase::DoCalculation(const FGameplayEffectSpec& Spec,
+                                                           const FGameplayAttribute   AbilityAttribute,
+                                                           const float                AbilityScore,
+                                                           const float                TemlProficiencyBonus) const
+{
+	const float Modifier = AbilityScore + TemlProficiencyBonus;
 
 	UE_LOG(
 		LogPf2Core,
 		VeryVerbose,
 		TEXT("Calculated modifier ('%s'): %f + %f = %f"),
-		*(this->ProficiencyTagPrefix),
+		*(this->ProficiencyRootTag.ToString()),
 		AbilityScore,
-		ProficiencyBonus,
+		TemlProficiencyBonus,
 		Modifier
 	);
 

@@ -12,12 +12,13 @@
 #include "Calculations/PF2ArmorClassCalculation.h"
 
 #include "OpenPF2Core.h"
+#include "GameplayAbilityUtils.h"
+#include "TemlCalculationUtils.h"
 
 #include "Abilities/PF2AbilityAttributes.h"
 #include "Abilities/PF2AttributeSet.h"
 
 UPF2ArmorClassCalculation::UPF2ArmorClassCalculation() :
-	UPF2TemlCalculationBase(),
 	DexterityModifierCaptureDefinition(FPF2AbilityAttributes::GetInstance().AbDexterityModifierDef)
 {
 	this->RelevantAttributesToCapture.Add(this->DexterityModifierCaptureDefinition);
@@ -75,8 +76,7 @@ float UPF2ArmorClassCalculation::CalculateArmorTypeProficiencyBonus(const FGamep
 	const FString                ArmorType                  = DetermineArmorType(SourceTags),
 	                             ArmorTypeProficiencyPrefix = "Armor.Category." + ArmorType;
 
-	const float ProficiencyBonus =
-		this->CalculateProficiencyBonus(ArmorTypeProficiencyPrefix, Spec);
+	const float ProficiencyBonus = TemlCalculationUtils::CalculateProficiencyBonus(ArmorTypeProficiencyPrefix, Spec);
 
 	UE_LOG(
 		LogPf2Core,
