@@ -19,7 +19,7 @@
  * saving throws and "Master" proficiency in Perception, with the "SavingThrow.Reflex" and "Perception" tag prefixes,
  * respectively.
  */
-class FPF2TemlCalculation
+class OPENPF2CORE_API FPF2TemlCalculation
 {
 protected:
 	/**
