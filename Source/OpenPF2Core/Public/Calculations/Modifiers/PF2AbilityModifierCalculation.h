@@ -23,7 +23,7 @@
  * This is expected to have one blueprint for each ability (Strength, Dexterity, Constitution, etc). The ability for
  * which the modifier is being calculated *must* be the ONLY attribute being captured.
  */
-UCLASS()
+UCLASS(Abstract)
 class OPENPF2CORE_API UPF2AbilityModifierCalculation : public UPF2AbilityCalculationBase
 {
 	GENERATED_BODY()

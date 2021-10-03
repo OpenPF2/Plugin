@@ -23,7 +23,7 @@
  * variation instead of this MMC variation whenever possible, as the GEX variation automatically increments the count of
  * how many boosts are applied.
  */
-UCLASS()
+UCLASS(Abstract)
 class OPENPF2CORE_API UPF2AbilityBoostCalculation : public UPF2AbilityCalculationBase
 {
 	GENERATED_BODY()
