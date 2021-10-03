@@ -12,7 +12,7 @@
  * Parent class for Gameplay Effects that represent how a character's background impacts them.
  */
 UCLASS(Abstract)
-class UPF2BackgroundGameplayEffectBase : public UGameplayEffect
+class OPENPF2CORE_API UPF2BackgroundGameplayEffectBase : public UGameplayEffect
 {
 	GENERATED_BODY()
 };

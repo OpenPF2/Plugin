@@ -29,7 +29,7 @@
 /**
  * Singleton container for ability-related attribute capture definitions.
  */
-class FPF2AbilityAttributes final
+class OPENPF2CORE_API FPF2AbilityAttributes final
 {
 public:
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AbBoostCount);
