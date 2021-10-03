@@ -9,14 +9,13 @@
 // file other than the material designated as Open Game Content may be reproduced in any form without written
 // permission.
 
-#include "Calculations/PF2AbilityBoostCalculation.h"
-
+#include "Calculations/PF2AbilityBoostCalculationBase.h"
 #include "OpenPF2Core.h"
 #include "Abilities/PF2AttributeSet.h"
 
-float UPF2AbilityBoostCalculation::DoCalculation(const FGameplayEffectSpec& Spec,
-                                                 const FGameplayAttribute   AbilityAttribute,
-                                                 const float                AbilityScore) const
+float UPF2AbilityBoostCalculationBase::DoCalculation(const FGameplayEffectSpec& Spec,
+                                                     const FGameplayAttribute   AbilityAttribute,
+                                                     const float                AbilityScore) const
 {
 	float Boost;
 

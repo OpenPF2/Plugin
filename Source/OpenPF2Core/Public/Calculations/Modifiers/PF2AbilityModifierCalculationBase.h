@@ -11,45 +11,56 @@
 
 #pragma once
 
+#include <GameplayModMagnitudeCalculation.h>
 #include <CoreMinimal.h>
 
-#include "PF2AbilityCalculationBase.h"
-#include "PF2AbilityBoostCalculation.generated.h"
+#include "Calculations/PF2AbilityCalculationBase.h"
+#include "PF2AbilityModifierCalculationBase.generated.h"
 
 /**
- * An MMC for boosting a single ability score.
+ * Base MMC used for determining ability modifiers from normal ability scores.
  *
- * Ability boosts are available via both an MMC and a "Gameplay Effect Execution Calculation" (GEX). Prefer the GEX
- * variation instead of this MMC variation whenever possible, as the GEX variation automatically increments the count of
- * how many boosts are applied.
+ * There is expected to be one blueprint sub-class of this base class for each ability (Strength, Dexterity, Constitution,
+ * etc). The ability for which the modifier is being calculated *must* be the one and ONLY attribute being captured.
  */
 UCLASS(Abstract)
-class OPENPF2CORE_API UPF2AbilityBoostCalculation : public UPF2AbilityCalculationBase
+class OPENPF2CORE_API UPF2AbilityModifierCalculationBase : public UPF2AbilityCalculationBase
 {
 	GENERATED_BODY()
 
+protected:
 	// =================================================================================================================
-	// Public Methods
+	// Protected Methods
 	// =================================================================================================================
 	/**
-	 * Calculates an ability boost.
+	 * Calculates an ability modifier based on the attribute captured by the provided GE specification.
 	 *
-	 * From the Pathfinder 2E Core Rulebook, page 20:
-	 * "An ability boost normally increases an ability score’s value by 2. However, if the ability score to which you’re
-	 * applying an ability boost is already 18 or higher, its value increases by only 1. At 1st level, a character can
-	 * never have any ability score that’s higher than 18."
+	 * According to "Table 1-1: Ability Modifiers" in the Pathfinder 2E Core Rulebook, the ability modifier for an
+	 * ability is equal to:
+	 *
+	 * Floor(Score / 2) - 5
+	 *
+	 * So:
+	 *  1 => -5
+	 *  2 => -4
+	 *  3 => -4
+	 * 10 =>  0
+	 * 11 =>  0
+	 * 24 => +7
+	 * 25 => +7
+	 *
+	 * ... and so on.
 	 *
 	 * @param Spec
 	 *	The Gameplay Effect (GE) specification that provides information about the ability score for which a calculated
 	 *	value is desired.
 	 * @param AbilityAttribute
-	 *	The type of ability score for which an ability boost is desired.
+	 *	The type of ability score for which an ability modifier is desired.
 	 * @param AbilityScore
 	 *	The current base value of the ability attribute.
 	 *
 	 * @return
-	 *	The boost to apply to the ability score. (This is just the boost; the ability score has not been added to the
-	 *	result).
+	 *	The ability modifier.
 	 */
 	virtual float DoCalculation(const FGameplayEffectSpec& Spec,
 	                            const FGameplayAttribute   AbilityAttribute,
