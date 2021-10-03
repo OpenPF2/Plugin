@@ -14,8 +14,9 @@
 #include "OpenPF2Core.h"
 #include "Abilities/PF2AttributeSet.h"
 
-float UPF2AbilityBoostCalculation::DoCalculation(const FGameplayAttribute AbilityAttribute,
-                                                 const float              AbilityScore) const
+float UPF2AbilityBoostCalculation::DoCalculation(const FGameplayEffectSpec& Spec,
+                                                 const FGameplayAttribute   AbilityAttribute,
+                                                 const float                AbilityScore) const
 {
 	float Boost;
 
