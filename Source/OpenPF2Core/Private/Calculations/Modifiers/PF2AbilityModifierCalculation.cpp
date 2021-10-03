@@ -9,8 +9,7 @@
 // file other than the material designated as Open Game Content may be reproduced in any form without written
 // permission.
 
-#include "Calculations/PF2AbilityModifierCalculation.h"
-
+#include "Calculations/Modifiers/PF2AbilityModifierCalculation.h"
 #include "OpenPF2Core.h"
 #include "Abilities/PF2AttributeSet.h"
 

@@ -14,7 +14,7 @@
 #include <GameplayModMagnitudeCalculation.h>
 #include <CoreMinimal.h>
 
-#include "PF2AbilityCalculationBase.h"
+#include "Calculations/PF2AbilityCalculationBase.h"
 #include "PF2AbilityModifierCalculation.generated.h"
 
 /**
