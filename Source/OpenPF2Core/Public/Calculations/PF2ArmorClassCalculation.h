@@ -34,7 +34,7 @@ public:
 	// Constructors
 	// =================================================================================================================
 	/**
-	 * Constructor for UPF2ArmorClassCalculation.
+	 * Default constructor for UPF2ArmorClassCalculation.
 	 */
 	explicit UPF2ArmorClassCalculation();
 
