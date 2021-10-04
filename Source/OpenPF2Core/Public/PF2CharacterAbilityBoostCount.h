@@ -28,7 +28,7 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostCount {
 	 * Default constructor, called by UE.
 	 */
 	explicit FPF2CharacterAbilityBoostCount() :
-		Attribute(EPF2CharacterAbilityScoreType::AbCharisma),
+		AbilityScoreType(EPF2CharacterAbilityScoreType::AbStrength),
 		BoostCount(0)
 	{
 	}
@@ -36,26 +36,27 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostCount {
 	/**
 	 * Constructor for FPF2CharacterAbilityBoostCount.
 	 *
-	 * @param Attribute
+	 * @param AbilityScoreType
 	 *	The name of the attribute being boosted in the character's attribute set.
 	 * @param BoostCount
 	 *	The number of boosts to apply to the attribute.
 	 */
-	explicit FPF2CharacterAbilityBoostCount(const EPF2CharacterAbilityScoreType Attribute, const int32 BoostCount) :
-		Attribute(Attribute),
+	explicit FPF2CharacterAbilityBoostCount(const EPF2CharacterAbilityScoreType AbilityScoreType,
+	                                        const int32                         BoostCount) :
+		AbilityScoreType(AbilityScoreType),
 		BoostCount(BoostCount)
 	{
 	}
 
 	/**
-	 * Gets the name of the ability attribute being boosted.
+	 * Gets the ability score being boosted.
 	 *
 	 * @return
-	 *	The name of the attribute in the attribute set for the ability.
+	 *	The type of character ability score being boosted.
 	 */
-	EPF2CharacterAbilityScoreType GetAttribute() const
+	EPF2CharacterAbilityScoreType GetAbilityScoreType() const
 	{
-		return Attribute;
+		return this->AbilityScoreType;
 	}
 
 	/**
@@ -77,7 +78,7 @@ protected:
 	 * The name of the attribute being boosted in the character's attribute set.
 	 */
 	UPROPERTY(VisibleAnywhere)
-	EPF2CharacterAbilityScoreType Attribute;
+	EPF2CharacterAbilityScoreType AbilityScoreType;
 
 	/**
 	 * The number of boosts to apply to the attribute.
