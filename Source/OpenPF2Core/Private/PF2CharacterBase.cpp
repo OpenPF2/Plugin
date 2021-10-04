@@ -191,7 +191,7 @@ void APF2CharacterBase::GenerateManagedPassiveGameplayEffects()
 
 		for (const auto& CharacterBoost : this->AdditionalAbilityBoosts)
 		{
-			const EPF2CharacterAbilityScoreType Attribute   = CharacterBoost.GetAttribute();
+			const EPF2CharacterAbilityScoreType Attribute   = CharacterBoost.GetAbilityScoreType();
 			const int32                         BoostCount  = CharacterBoost.GetBoostCount();
 			const TSubclassOf<UGameplayEffect>  BoostEffect = this->AbilityBoostEffects[Attribute];
 
