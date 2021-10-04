@@ -67,7 +67,25 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostCount {
 	 */
 	int32 GetBoostCount() const
 	{
-		return BoostCount;
+		return this->BoostCount;
+	}
+
+	/**
+	 * Increments the number of boosts to apply to the attribute.
+	 */
+	void IncrementBoostCount()
+	{
+		++this->BoostCount;
+	}
+
+	/**
+	 * Decrements the number of boosts to apply to the attribute.
+	 *
+	 * Attempting to reduce the boost count lower than 0 has no effect.
+	 */
+	void DecrementBoostCount()
+	{
+		this->BoostCount = FMath::Min(this->BoostCount - 1, 0);
 	}
 
 protected:
