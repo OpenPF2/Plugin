@@ -96,6 +96,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual bool SetCharacterLevel(int32 NewLevel);
 
+	/**
+	 * Adds an additional boost of the specified ability to this character's attribute set.
+	 *
+	 * The boost is accomplished via a passive Gameplay Effect added to this character's ASC. In addition, the count of
+	 * Additional Ability Boosts on this character are updated to ensure that the boost survives passive GEs being
+	 * recalculated/reapplied, as would happen during character leveling.
+	 */
+	UFUNCTION(BlueprintCallable)
+    virtual void ApplyAbilityBoost(EPF2CharacterAbilityScoreType TargetAbilityScore);
+
 protected:
 	// =================================================================================================================
 	// Protected Properties - Blueprint Accessible

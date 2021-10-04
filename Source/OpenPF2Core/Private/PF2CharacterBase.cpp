@@ -73,6 +73,36 @@ bool APF2CharacterBase::SetCharacterLevel(const int32 NewLevel)
 	}
 }
 
+void APF2CharacterBase::ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore)
+{
+	const TSubclassOf<UGameplayEffect> BoostEffect = this->AbilityBoostEffects[TargetAbilityScore];
+
+	UE_LOG(
+		LogPf2Core,
+		VeryVerbose,
+		TEXT("Applying a boost to ability ('%s') on character ('%s')."),
+		*(PF2EnumUtils::ToString(TargetAbilityScore)),
+		*(this->GetName())
+	);
+
+	// This has no effect on what passive GEs are currently applied, but it ensures that if passive GEs get recalculated
+	// (e.g. during a level change), the new ability boost will get recorded so it is not lost.
+	for (auto& CharacterBoost : this->AdditionalAbilityBoosts)
+	{
+		if (CharacterBoost.GetAbilityScoreType() == TargetAbilityScore)
+		{
+			CharacterBoost.IncrementBoostCount();
+		}
+	}
+
+	// Now, actually add a passive GE for the boost...
+	this->ManagedGameplayEffects.Add(PF2CharacterConstants::GeWeights::ManagedEffects, BoostEffect);
+
+	// ...and reapply all the passive GEs.
+	this->DeactivatePassiveGameplayEffects();
+	this->ActivatePassiveGameplayEffects();
+}
+
 void APF2CharacterBase::HandleCharacterLevelChanged(const float OldLevel, const float NewLevel)
 {
 	this->DeactivatePassiveGameplayEffects();
