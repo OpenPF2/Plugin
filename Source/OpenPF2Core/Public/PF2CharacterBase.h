@@ -15,14 +15,15 @@
 #include <AbilitySystemInterface.h>
 #include <UObject/ConstructorHelpers.h>
 
-#include "Abilities/PF2AbilityAttributes.h"
 #include "Abilities/PF2AbilitySystemComponent.h"
 #include "Abilities/PF2AttributeSet.h"
+#include "Abilities/PF2CharacterAbilityScoreType.h"
 #include "PF2AncestryAndHeritageGameplayEffectBase.h"
 #include "PF2BackgroundGameplayEffectBase.h"
 #include "PF2CharacterAbilityBoostCount.h"
 #include "PF2CharacterConstants.h"
 #include "PF2ClassGameplayEffectBase.h"
+#include "PF2EnumUtils.h"
 #include "PF2CharacterBase.generated.h"
 
 // Forward declaration; this is defined at the end of the file.
@@ -238,7 +239,7 @@ protected:
 	 * The Gameplay Effects used to boost abilities.
 	 */
 	UPROPERTY()
-	TMap<FString, TSubclassOf<UGameplayEffect>> AbilityBoostEffects;
+	TMap<EPF2CharacterAbilityScoreType, TSubclassOf<UGameplayEffect>> AbilityBoostEffects;
 
 	/**
 	 * Additional Gameplay Effects (GEs) that are always passively applied to the character, not dependent on the
@@ -320,18 +321,20 @@ protected:
 			this->CoreGameplayEffects.Add(Weight, EffectBP.Object);
 		}
 
-		for (const auto& AbilityName : FPF2AbilityAttributes::GetInstance().GetAbilityNames())
+		for (const auto& Ability : TEnumRange<EPF2CharacterAbilityScoreType>())
 		{
+			const FString AbilityName = PF2EnumUtils::ToString(Ability);
+
 			const FString Filename =
 				GetBlueprintPath(FString::Format(*PF2CharacterConstants::GeBlueprintBoostNameFormat, {AbilityName}));
 
 			const ConstructorHelpers::FObjectFinder<UClass> EffectBP(*Filename);
 
 			// Allow boost effects to be looked-up by ability name later.
-			this->AbilityBoostEffects.Add(AbilityName, EffectBP.Object);
+			this->AbilityBoostEffects.Add(Ability, EffectBP.Object);
 
 			// Meanwhile, give game designers an easy way to set boosts on a per-ability basis.
-			this->AdditionalAbilityBoosts.Add(FPF2CharacterAbilityBoostCount(AbilityName, 0));
+			this->AdditionalAbilityBoosts.Add(FPF2CharacterAbilityBoostCount(Ability, 0));
 		}
 	}
 

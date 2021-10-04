@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include "Abilities/PF2CharacterAbilityScoreType.h"
 #include "PF2CharacterAbilityBoostCount.generated.h"
 
 /**
@@ -27,6 +28,7 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostCount {
 	 * Default constructor, called by UE.
 	 */
 	explicit FPF2CharacterAbilityBoostCount() :
+		Attribute(EPF2CharacterAbilityScoreType::AbCharisma),
 		BoostCount(0)
 	{
 	}
@@ -34,13 +36,13 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostCount {
 	/**
 	 * Constructor for FPF2CharacterAbilityBoostCount.
 	 *
-	 * @param AttributeName
+	 * @param Attribute
 	 *	The name of the attribute being boosted in the character's attribute set.
 	 * @param BoostCount
 	 *	The number of boosts to apply to the attribute.
 	 */
-	explicit FPF2CharacterAbilityBoostCount(const FString AttributeName, const int32 BoostCount) :
-		AttributeName(AttributeName),
+	explicit FPF2CharacterAbilityBoostCount(const EPF2CharacterAbilityScoreType Attribute, const int32 BoostCount) :
+		Attribute(Attribute),
 		BoostCount(BoostCount)
 	{
 	}
@@ -51,9 +53,9 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostCount {
 	 * @return
 	 *	The name of the attribute in the attribute set for the ability.
 	 */
-	FString GetAttributeName() const
+	EPF2CharacterAbilityScoreType GetAttribute() const
 	{
-		return AttributeName;
+		return Attribute;
 	}
 
 	/**
@@ -75,7 +77,7 @@ protected:
 	 * The name of the attribute being boosted in the character's attribute set.
 	 */
 	UPROPERTY(VisibleAnywhere)
-	FString AttributeName;
+	EPF2CharacterAbilityScoreType Attribute;
 
 	/**
 	 * The number of boosts to apply to the attribute.
