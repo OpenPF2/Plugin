@@ -195,6 +195,15 @@ void APF2CharacterBase::GenerateManagedPassiveGameplayEffects()
 			const int32                         BoostCount  = CharacterBoost.GetBoostCount();
 			const TSubclassOf<UGameplayEffect>  BoostEffect = this->AbilityBoostEffects[Attribute];
 
+			UE_LOG(
+				LogPf2Core,
+				VeryVerbose,
+				TEXT("Applying '%d' additional boosts to ability ('%s') on character ('%s')."),
+				BoostCount,
+				*(PF2EnumUtils::ToString(Attribute)),
+				*(this->GetName())
+			);
+
 			for (int32 BoostIndex = 0; BoostIndex < BoostCount; ++BoostIndex)
 			{
 				this->ManagedGameplayEffects.Add(PF2CharacterConstants::GeWeights::ManagedEffects, BoostEffect);
