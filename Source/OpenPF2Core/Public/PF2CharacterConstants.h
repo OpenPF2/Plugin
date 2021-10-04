@@ -61,7 +61,10 @@ namespace PF2CharacterConstants
 	 *
 	 * The weight of each path controls the order in which the corresponding GE is applied. Base stat GEs are applied
 	 * first, followed by ancestry and class GEs, ability boost GEs, additional passive GEs, and then all other core
-	 * GEs.
+	 * GEs. GEs that have the same weight are applied in the order they have been added/listed here.
+	 *
+	 * TODO: Consider whether we want to expose GE weights to Blueprint and then move this list into a Blueprint
+	 * UPROPERTY instead, so that it's not hard-coded.
 	 */
 	static const TMap<const FString, const int32> GeCoreBlueprintPaths = {
 		// Initialize base stats.
