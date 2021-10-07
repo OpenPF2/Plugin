@@ -21,9 +21,11 @@
 #include "PF2AncestryAndHeritageGameplayEffectBase.h"
 #include "PF2BackgroundGameplayEffectBase.h"
 #include "PF2CharacterAbilityBoostCount.h"
+#include "PF2CharacterAbilityEventsInterface.h"
 #include "PF2CharacterConstants.h"
+#include "PF2CharacterInterface.h"
 #include "PF2ClassGameplayEffectBase.h"
-#include "PF2EnumUtils.h"
+
 #include "PF2CharacterBase.generated.h"
 
 // Forward declaration; this is defined at the end of the file.
@@ -37,7 +39,11 @@ class TPF2CharacterComponentFactory;
  */
 UCLASS()
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API APF2CharacterBase : public ACharacter, public IAbilitySystemInterface
+class OPENPF2CORE_API APF2CharacterBase :
+	public ACharacter,
+	public IAbilitySystemInterface,
+	public IPF2CharacterInterface,
+	public IPF2CharacterAbilityEventsInterface
 {
 	GENERATED_BODY()
 
@@ -63,20 +69,23 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	// =================================================================================================================
+	// Public Methods - IPF2CharacterInterface Implementation
+	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual int32 GetCharacterLevel() const override;
+
+
+	// =================================================================================================================
+	// Public Methods - IPF2CharacterInterface Implementation
+	// =================================================================================================================
+	virtual void OnAbilityBoostAdded(
+		const TScriptInterface<IPF2CharacterAbilitySystemComponentInterface> TargetAsc,
+		const AActor*                                               TargetActor,
+		const EPF2CharacterAbilityScoreType                         TargetAbilityScore) override;
+
+	// =================================================================================================================
 	// Public Methods - Blueprint Callable
 	// =================================================================================================================
-	/**
-	 * Gets the current level of this character.
-	 *
-	 * The character level impacts the character's stats and how many boosts and feats the character can have.
-	 *
-	 * From the Pathfinder 2E Core Rulebook, page 31, "Leveling Up":
-	 * "Each level grants greater skill, increased resiliency, and new capabilities, allowing your character to face
-	 * even greater challenges and go on to earn even more impressive rewards."
-	 */
-	UFUNCTION(BlueprintCallable)
-	virtual int32 GetCharacterLevel() const;
-
 	/**
 	 * Sets the current level of this character.
 	 *
@@ -246,12 +255,6 @@ protected:
 	FGameplayTagContainer AdditionalSkillProficiencies;
 
 	/**
-	 * The Gameplay Effects used to boost abilities.
-	 */
-	UPROPERTY()
-	TMap<EPF2CharacterAbilityScoreType, TSubclassOf<UGameplayEffect>> AbilityBoostEffects;
-
-	/**
 	 * Additional Gameplay Effects (GEs) that are always passively applied to the character, not dependent on the
 	 * environment or activated abilities.
 	 *
@@ -273,13 +276,6 @@ protected:
 	int32 bManagedPassiveEffectsGenerated;
 
 	/**
-	 * Whether or not passive Gameplay Effects have been activated on this character.
-	 */
-	UPROPERTY()
-	// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
-	int32 bPassiveEffectsActivated;
-
-	/**
 	 * The core Gameplay Effects that drive stats for every character.
 	 */
 	TMultiMap<int32, TSubclassOf<UGameplayEffect>> CoreGameplayEffects;
@@ -291,15 +287,6 @@ protected:
 	 * are applied. Lower weights are applied earlier than higher weights.
 	 */
 	TMultiMap<int32, TSubclassOf<UGameplayEffect>> ManagedGameplayEffects;
-
-	/**
-	 * The full list of Gameplay Effects (GEs) that are always passively applied to the character.
-	 *
-	 * This is a superset of the character's managed passive GEs and additional passive GEs. Each value is a gameplay
-	 * effect and the key is the weight of that GE. The weight controls the order that all GEs are applied. Lower
-	 * weights are applied earlier than higher weights.
-	 */
-	TMultiMap<int32, TSubclassOf<UGameplayEffect>> PassiveGameplayEffects;
 
 	// =================================================================================================================
 	// Protected Constructors
@@ -314,36 +301,25 @@ protected:
 	explicit APF2CharacterBase(TPF2CharacterComponentFactory<AscType, AttributeSetType> ComponentFactory) :
 		CharacterName(FText::FromString(TEXT("Character"))),
 		CharacterLevel(1),
-		bManagedPassiveEffectsGenerated(false),
-		bPassiveEffectsActivated(false)
+		bManagedPassiveEffectsGenerated(false)
 	{
 		this->AbilitySystemComponent = ComponentFactory.CreateAbilitySystemComponent(this);
 		this->AttributeSet           = ComponentFactory.CreateAttributeSet(this);
 
-		for (const auto& GeCoreBlueprintPath : PF2CharacterConstants::GeCoreBlueprintPaths)
+		for (const auto& GeCoreBlueprintPath : PF2CharacterConstants::GeCoreCharacterBlueprintPaths)
 		{
 			const FString EffectName = GeCoreBlueprintPath.Key;
 			const int32   Weight     = GeCoreBlueprintPath.Value;
-			const FString EffectPath = GetBlueprintPath(EffectName);
+			const FString EffectPath = PF2CharacterConstants::GetBlueprintPath(EffectName);
 
-			const ConstructorHelpers::FObjectFinder<UClass> EffectBP(*EffectPath);
+			const ConstructorHelpers::FObjectFinder<UClass> EffectFinder(*EffectPath);
 
-			this->CoreGameplayEffects.Add(Weight, EffectBP.Object);
+			this->CoreGameplayEffects.Add(Weight, EffectFinder.Object);
 		}
 
 		for (const auto& Ability : TEnumRange<EPF2CharacterAbilityScoreType>())
 		{
-			const FString AbilityName = PF2EnumUtils::ToString(Ability);
-
-			const FString Filename =
-				GetBlueprintPath(FString::Format(*PF2CharacterConstants::GeBlueprintBoostNameFormat, {AbilityName}));
-
-			const ConstructorHelpers::FObjectFinder<UClass> EffectBP(*Filename);
-
-			// Allow boost effects to be looked-up by ability name later.
-			this->AbilityBoostEffects.Add(Ability, EffectBP.Object);
-
-			// Meanwhile, give game designers an easy way to set boosts on a per-ability basis.
+			// Give game designers an easy way to set boosts on a per-ability basis.
 			this->AdditionalAbilityBoosts.Add(FPF2CharacterAbilityBoostCount(Ability, 0));
 		}
 	}
@@ -352,18 +328,12 @@ protected:
 	// Protected Methods
 	// =================================================================================================================
 	/**
-	 * Returns the path to the Blueprint having the given name.
-	 *
-	 * @param Name
-	 *	The name of the blueprint for which a path is desired.
+	 * Gets a PF2-specific version of the ASC sub-component of this character.
 	 *
 	 * @return
-	 *	The path to the blueprint.
+	 *	The ASC, as an implementation of the interface for character ASCs.
 	 */
-	static FORCEINLINE FString GetBlueprintPath(FString Name)
-	{
-		return FString::Format(TEXT("{0}{1}.{1}_C"), { PF2CharacterConstants::BlueprintBasePath, Name });
-	}
+	IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent() const;
 
 	/**
 	 * Gets whether the local machine has authoritative control over this character actor.
@@ -388,11 +358,11 @@ protected:
 	void PopulatePassiveGameplayEffects();
 
 	/**
-	 * Adds tags that were set on this character to the provided Gameplay Effect spec, as dynamic tags.
+	 * Adds tags that were set on this character as dynamic tags on the ASC.
 	 *
 	 * This includes tags like ancestry, additional languages, and skill proficiencies.
 	 */
-	void ApplyDynamicTags(FGameplayEffectSpec* GameplayEffectSpec) const;
+	void ApplyDynamicTags() const;
 
 	/**
 	 * Removes all passive Gameplay Effects that were previously activated for this character.
@@ -409,7 +379,7 @@ protected:
 	/**
 	 * Clear the list of managed, passive Gameplay Effects (GEs) so that it can be regenerated.
 	 *
-	 * This should not be called if passive GEs are already applied to the character. If GEs are already applied, you
+	 * This should not be called if passive GEs are already applied to this character. If GEs are already applied, you
 	 * must call DeactivatePassiveGameplayEffects() first.
 	 */
 	void ClearManagedPassiveGameplayEffects();
@@ -418,9 +388,9 @@ protected:
 	 * Callback invoked when a character's level has changed, to allow logic that depends on levels to be refreshed.
 	 *
 	 * @param OldLevel
-	 *	The previous level of the character.
+	 *	The previous level of this character.
 	 * @param NewLevel
-	 *	The new level for the character.
+	 *	The new level for this character.
 	 */
 	virtual void HandleCharacterLevelChanged(float OldLevel, float NewLevel);
 
@@ -431,9 +401,9 @@ protected:
 	 * BP event invoked when a character's level has changed, to allow logic that depends on levels to be refreshed.
 	 *
 	 * @param OldLevel
-	 *	The previous level of the character.
+	 *	The previous level of this character.
 	 * @param NewLevel
-	 *	The new level for the character.
+	 *	The new level for this character.
 	 */
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnCharacterLevelChanged(float OldLevel, float NewLevel);

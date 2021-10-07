@@ -4,7 +4,9 @@
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "PF2CharacterBase.h"
+
 #include "Abilities/PF2AbilitySystemComponent.h"
+#include "PF2EnumUtils.h"
 
 #include <AbilitySystemGlobals.h>
 #include <Net/UnrealNetwork.h>
@@ -45,7 +47,19 @@ void APF2CharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 
 UAbilitySystemComponent* APF2CharacterBase::GetAbilitySystemComponent() const
 {
+	check(this->AbilitySystemComponent);
 	return this->AbilitySystemComponent;
+}
+
+IPF2CharacterAbilitySystemComponentInterface* APF2CharacterBase::GetCharacterAbilitySystemComponent() const
+{
+	// Too bad that ASCs in UE don't implement an interface; otherwise we could extend it so casts like this aren't
+	// needed.
+	IPF2CharacterAbilitySystemComponentInterface* CharacterAsc =
+		Cast<IPF2CharacterAbilitySystemComponentInterface>(this->AbilitySystemComponent);
+
+	check(CharacterAsc);
+	return CharacterAsc;
 }
 
 bool APF2CharacterBase::IsAuthorityForEffects() const
@@ -56,6 +70,23 @@ bool APF2CharacterBase::IsAuthorityForEffects() const
 int32 APF2CharacterBase::GetCharacterLevel() const
 {
 	return this->CharacterLevel;
+}
+
+void APF2CharacterBase::OnAbilityBoostAdded(
+		const TScriptInterface<IPF2CharacterAbilitySystemComponentInterface> TargetAsc,
+		const AActor*                                               TargetActor,
+		const EPF2CharacterAbilityScoreType                         TargetAbilityScore)
+{
+	// This has no effect on what passive GEs are currently applied, but it ensures that the new ability boost that has
+	// only been activated on the ASC will still be retained even if passive GEs for this character get recalculated
+	// (e.g. during a character level-up)
+	for (auto& CharacterBoost : this->AdditionalAbilityBoosts)
+	{
+		if (CharacterBoost.GetAbilityScoreType() == TargetAbilityScore)
+		{
+			CharacterBoost.IncrementBoostCount();
+		}
+	}
 }
 
 bool APF2CharacterBase::SetCharacterLevel(const int32 NewLevel)
@@ -75,32 +106,7 @@ bool APF2CharacterBase::SetCharacterLevel(const int32 NewLevel)
 
 void APF2CharacterBase::ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore)
 {
-	const TSubclassOf<UGameplayEffect> BoostEffect = this->AbilityBoostEffects[TargetAbilityScore];
-
-	UE_LOG(
-		LogPf2Core,
-		VeryVerbose,
-		TEXT("Applying a boost to ability ('%s') on character ('%s')."),
-		*(PF2EnumUtils::ToString(TargetAbilityScore)),
-		*(this->GetName())
-	);
-
-	// This has no effect on what passive GEs are currently applied, but it ensures that if passive GEs get recalculated
-	// (e.g. during a level change), the new ability boost will get recorded so it is not lost.
-	for (auto& CharacterBoost : this->AdditionalAbilityBoosts)
-	{
-		if (CharacterBoost.GetAbilityScoreType() == TargetAbilityScore)
-		{
-			CharacterBoost.IncrementBoostCount();
-		}
-	}
-
-	// Now, actually add a passive GE for the boost...
-	this->ManagedGameplayEffects.Add(PF2CharacterConstants::GeWeights::ManagedEffects, BoostEffect);
-
-	// ...and reapply all the passive GEs.
-	this->DeactivatePassiveGameplayEffects();
-	this->ActivatePassiveGameplayEffects();
+	this->GetCharacterAbilitySystemComponent()->ApplyAbilityBoost(TargetAbilityScore);
 }
 
 void APF2CharacterBase::HandleCharacterLevelChanged(const float OldLevel, const float NewLevel)
@@ -115,44 +121,14 @@ void APF2CharacterBase::HandleCharacterLevelChanged(const float OldLevel, const 
 
 void APF2CharacterBase::ActivatePassiveGameplayEffects()
 {
-	check(this->AbilitySystemComponent);
+	IPF2CharacterAbilitySystemComponentInterface* CharacterAsc = this->GetCharacterAbilitySystemComponent();
 
-	if (this->IsAuthorityForEffects() && !this->bPassiveEffectsActivated)
+	if (this->IsAuthorityForEffects() && !CharacterAsc->ArePassiveGameplayEffectsActive())
 	{
 		this->PopulatePassiveGameplayEffects();
+		this->ApplyDynamicTags();
 
-		for (const auto& EffectInfo : this->PassiveGameplayEffects)
-		{
-			const TSubclassOf<UGameplayEffect> GameplayEffect     = EffectInfo.Value;
-			FGameplayEffectContextHandle       EffectContext      = this->AbilitySystemComponent->MakeEffectContext();
-			FGameplayEffectSpecHandle          NewHandle;
-			FGameplayEffectSpec*               GameplayEffectSpec;
-
-			EffectContext.AddSourceObject(this);
-
-			NewHandle = this->AbilitySystemComponent->MakeOutgoingSpec(
-				GameplayEffect,
-				this->GetCharacterLevel(),
-				EffectContext
-			);
-
-			GameplayEffectSpec = NewHandle.Data.Get();
-
-			if (GameplayEffect->GetName() == PF2CharacterConstants::GeDynamicTagsClassName)
-			{
-				this->ApplyDynamicTags(GameplayEffectSpec);
-			}
-
-			if (NewHandle.IsValid())
-			{
-				this->AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(
-					*GameplayEffectSpec,
-					this->AbilitySystemComponent
-				);
-			}
-		}
-
-		this->bPassiveEffectsActivated = true;
+		CharacterAsc->ActivatePassiveGameplayEffects();
 	}
 }
 
@@ -170,12 +146,10 @@ void APF2CharacterBase::PopulatePassiveGameplayEffects()
 		GameplayEffects.Add(PF2CharacterConstants::GeWeights::AdditionalEffects, AdditionalEffect);
 	}
 
-	GameplayEffects.KeyStableSort(TLess<int32>());
-
-	this->PassiveGameplayEffects = GameplayEffects;
+	this->GetCharacterAbilitySystemComponent()->SetPassiveGameplayEffects(GameplayEffects);
 }
 
-void APF2CharacterBase::ApplyDynamicTags(FGameplayEffectSpec* GameplayEffectSpec) const
+void APF2CharacterBase::ApplyDynamicTags() const
 {
 	FGameplayTagContainer DynamicTags;
 
@@ -183,22 +157,15 @@ void APF2CharacterBase::ApplyDynamicTags(FGameplayEffectSpec* GameplayEffectSpec
 	DynamicTags.AppendTags(this->AdditionalLanguages);
 	DynamicTags.AppendTags(this->AdditionalSkillProficiencies);
 
-	GameplayEffectSpec->DynamicGrantedTags.AppendTags(DynamicTags);
+	this->GetCharacterAbilitySystemComponent()->AppendDynamicTags(DynamicTags);
 }
 
+// ReSharper disable once CppMemberFunctionMayBeConst
 void APF2CharacterBase::DeactivatePassiveGameplayEffects()
 {
-	check(this->AbilitySystemComponent);
-
-	if (this->IsAuthorityForEffects() && this->bPassiveEffectsActivated)
+	if (this->IsAuthorityForEffects())
 	{
-		FGameplayEffectQuery Query;
-
-		Query.EffectSource = this;
-
-		this->AbilitySystemComponent->RemoveActiveEffects(Query);
-
-		this->bPassiveEffectsActivated = false;
+		this->GetCharacterAbilitySystemComponent()->DeactivatePassiveGameplayEffects();
 	}
 }
 
@@ -206,6 +173,8 @@ void APF2CharacterBase::GenerateManagedPassiveGameplayEffects()
 {
 	if (this->IsAuthorityForEffects() && !this->bManagedPassiveEffectsGenerated)
 	{
+		IPF2CharacterAbilitySystemComponentInterface* CharacterAsc = this->GetCharacterAbilitySystemComponent();
+
 		TArray<TSubclassOf<UGameplayEffect>> BlueprintEffects = {
 			this->AncestryAndHeritage,
 			this->Background,
@@ -223,7 +192,7 @@ void APF2CharacterBase::GenerateManagedPassiveGameplayEffects()
 		{
 			const EPF2CharacterAbilityScoreType Attribute   = CharacterBoost.GetAbilityScoreType();
 			const int32                         BoostCount  = CharacterBoost.GetBoostCount();
-			const TSubclassOf<UGameplayEffect>  BoostEffect = this->AbilityBoostEffects[Attribute];
+			const TSubclassOf<UGameplayEffect>  BoostEffect = CharacterAsc->GetBoostEffectForAbility(Attribute);
 
 			UE_LOG(
 				LogPf2Core,
