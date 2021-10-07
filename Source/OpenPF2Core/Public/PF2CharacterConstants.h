@@ -57,7 +57,7 @@ namespace PF2CharacterConstants
 	static const FString GeDynamicTagsClassName = FString::Format(TEXT("{0}_C"), { GeDynamicTagsName });
 
 	/**
-	 * Paths to Gameplay Effect Blueprints for core stat calculations.
+	 * Paths to Gameplay Effect Blueprints for core stat calculations in characters.
 	 *
 	 * The weight of each path controls the order in which the corresponding GE is applied. Base stat GEs are applied
 	 * first, followed by ancestry and class GEs, ability boost GEs, additional passive GEs, and then all other core
@@ -66,10 +66,9 @@ namespace PF2CharacterConstants
 	 * TODO: Consider whether we want to expose GE weights to Blueprint and then move this list into a Blueprint
 	 * UPROPERTY instead, so that it's not hard-coded.
 	 */
-	static const TMap<const FString, const int32> GeCoreBlueprintPaths = {
+	static const TMap<const FString, const int32> GeCoreCharacterBlueprintPaths = {
 		// Initialize base stats.
 		{ TEXT("GE_ApplyBaseCharacterStats"),  GeWeights::InitializeBaseStats  },
-		{ GeDynamicTagsName,                   GeWeights::InitializeBaseStats  },
 		{ TEXT("GE_CalcKeyAbilityBoost"),      GeWeights::InitializeBaseStats  },
 
 		// Finalize stats.
@@ -83,4 +82,18 @@ namespace PF2CharacterConstants
 		{ TEXT("GE_CalcSkillModifiers"),       GeWeights::FinalizeStats        },
 		{ TEXT("GE_CalcAncestryFeatLimit"),    GeWeights::FinalizeStats        },
 	};
+
+	/**
+	 * Returns the path to the Blueprint having the given name.
+	 *
+	 * @param Name
+	 *	The name of the blueprint for which a path is desired.
+	 *
+	 * @return
+	 *	The path to the blueprint.
+	 */
+	static FORCEINLINE FString GetBlueprintPath(FString Name)
+	{
+		return FString::Format(TEXT("{0}{1}.{1}_C"), { BlueprintBasePath, Name });
+	}
 }
