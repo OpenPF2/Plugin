@@ -18,9 +18,27 @@
  * Data about how many boosts should be applied to a specific character ability.
  */
 USTRUCT()
-struct OPENPF2CORE_API FPF2CharacterAbilityBoostCount {
+struct OPENPF2CORE_API FPF2CharacterAbilityBoostCount
+{
 	GENERATED_BODY()
 
+protected:
+	// =================================================================================================================
+	// Protected Properties
+	// =================================================================================================================
+	/**
+	 * The name of the attribute being boosted in the character's attribute set.
+	 */
+	UPROPERTY(VisibleAnywhere)
+	EPF2CharacterAbilityScoreType AbilityScoreType;
+
+	/**
+	 * The number of boosts to apply to the attribute.
+	 */
+	UPROPERTY(EditAnywhere, meta=(ClampMin=0))
+	int32 BoostCount;
+
+public:
 	// =================================================================================================================
 	// Constructors
 	// =================================================================================================================
@@ -87,20 +105,4 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostCount {
 	{
 		this->BoostCount = FMath::Min(this->BoostCount - 1, 0);
 	}
-
-protected:
-	// =================================================================================================================
-	// Protected Properties
-	// =================================================================================================================
-	/**
-	 * The name of the attribute being boosted in the character's attribute set.
-	 */
-	UPROPERTY(VisibleAnywhere)
-	EPF2CharacterAbilityScoreType AbilityScoreType;
-
-	/**
-	 * The number of boosts to apply to the attribute.
-	 */
-	UPROPERTY(EditAnywhere, meta=(ClampMin=0))
-	int32 BoostCount;
 };
