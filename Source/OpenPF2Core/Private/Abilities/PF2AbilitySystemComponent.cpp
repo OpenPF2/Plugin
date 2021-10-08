@@ -237,13 +237,13 @@ void UPF2AbilitySystemComponent::ApplyAbilityBoost(const EPF2CharacterAbilitySco
 	});
 }
 
-TSubclassOf<UGameplayEffect> UPF2AbilitySystemComponent::GetBoostEffectForAbility(
+FORCEINLINE TSubclassOf<UGameplayEffect> UPF2AbilitySystemComponent::GetBoostEffectForAbility(
 	const EPF2CharacterAbilityScoreType AbilityScore)
 {
 	return this->AbilityBoostEffects[AbilityScore];
 }
 
-int UPF2AbilitySystemComponent::GetCharacterLevel() const
+FORCEINLINE int UPF2AbilitySystemComponent::GetCharacterLevel() const
 {
 	IPF2CharacterInterface* OwningCharacter = Cast<IPF2CharacterInterface>(this->GetOwnerActor());
 

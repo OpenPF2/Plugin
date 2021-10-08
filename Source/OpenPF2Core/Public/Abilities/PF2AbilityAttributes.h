@@ -79,7 +79,7 @@ public:
 	 * @return
 	 *	The name of each ability attribute.
 	 */
-	TArray<FString> GetAbilityNames() const
+	FORCEINLINE TArray<FString> GetAbilityNames() const
 	{
 		return this->AbilityNames;
 	}
@@ -90,7 +90,7 @@ public:
 	 * @return
 	 *	The name of each ability modifier attribute.
 	 */
-	TArray<FString> GetAbilityModifierNames() const
+	FORCEINLINE TArray<FString> GetAbilityModifierNames() const
 	{
 		return this->AbilityModifierNames;
 	}

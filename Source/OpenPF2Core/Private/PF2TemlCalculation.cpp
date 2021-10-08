@@ -74,7 +74,7 @@ FPF2TemlCalculation::FPF2TemlCalculation(const FGameplayTag TagPrefix, const FGa
 	this->Value = ProficiencyBonus;
 }
 
-float FPF2TemlCalculation::GetValue() const
+FORCEINLINE float FPF2TemlCalculation::GetValue() const
 {
 	return this->Value;
 }

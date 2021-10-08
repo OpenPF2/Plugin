@@ -92,7 +92,7 @@ namespace PF2CharacterConstants
 	 * @return
 	 *	The path to the blueprint.
 	 */
-	static FORCEINLINE FString GetBlueprintPath(FString Name)
+	FORCEINLINE static FString GetBlueprintPath(FString Name)
 	{
 		return FString::Format(TEXT("{0}{1}.{1}_C"), { BlueprintBasePath, Name });
 	}
