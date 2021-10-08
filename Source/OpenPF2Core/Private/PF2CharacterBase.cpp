@@ -51,7 +51,7 @@ UAbilitySystemComponent* APF2CharacterBase::GetAbilitySystemComponent() const
 	return this->AbilitySystemComponent;
 }
 
-IPF2CharacterAbilitySystemComponentInterface* APF2CharacterBase::GetCharacterAbilitySystemComponent() const
+FORCEINLINE IPF2CharacterAbilitySystemComponentInterface* APF2CharacterBase::GetCharacterAbilitySystemComponent() const
 {
 	// Too bad that ASCs in UE don't implement an interface; otherwise we could extend it so casts like this aren't
 	// needed.

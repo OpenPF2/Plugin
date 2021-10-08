@@ -54,7 +54,7 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostCount {
 	 * @return
 	 *	The type of character ability score being boosted.
 	 */
-	EPF2CharacterAbilityScoreType GetAbilityScoreType() const
+	FORCEINLINE EPF2CharacterAbilityScoreType GetAbilityScoreType() const
 	{
 		return this->AbilityScoreType;
 	}
@@ -65,7 +65,7 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostCount {
 	 * @return
 	 *	The number of times that the ability score should be boosted.
 	 */
-	int32 GetBoostCount() const
+	FORCEINLINE int32 GetBoostCount() const
 	{
 		return this->BoostCount;
 	}
@@ -73,7 +73,7 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostCount {
 	/**
 	 * Increments the number of boosts to apply to the attribute.
 	 */
-	void IncrementBoostCount()
+	FORCEINLINE void IncrementBoostCount()
 	{
 		++this->BoostCount;
 	}
@@ -83,7 +83,7 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostCount {
 	 *
 	 * Attempting to reduce the boost count lower than 0 has no effect.
 	 */
-	void DecrementBoostCount()
+	FORCEINLINE void DecrementBoostCount()
 	{
 		this->BoostCount = FMath::Min(this->BoostCount - 1, 0);
 	}

@@ -6,7 +6,7 @@
 #include "Abilities/PF2AbilityAttributes.h"
 #include "GameplayEffectTypes.h"
 
-TArray<FGameplayEffectAttributeCaptureDefinition> FPF2AbilityAttributes::GetCaptureDefinitions() const
+FORCEINLINE TArray<FGameplayEffectAttributeCaptureDefinition> FPF2AbilityAttributes::GetCaptureDefinitions() const
 {
 	TArray<FGameplayEffectAttributeCaptureDefinition> Result;
 

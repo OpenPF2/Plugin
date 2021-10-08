@@ -50,7 +50,7 @@ float UPF2ArmorClassCalculation::CalculateBaseMagnitude_Implementation(const FGa
 	return AbilityScore;
 }
 
-float UPF2ArmorClassCalculation::GetDexterityModifier(const FGameplayEffectSpec& Spec) const
+FORCEINLINE float UPF2ArmorClassCalculation::GetDexterityModifier(const FGameplayEffectSpec& Spec) const
 {
 	float                         DexterityModifier     = 0.0f;
 	const FGameplayTagContainer   *SourceTags           = Spec.CapturedSourceTags.GetAggregatedTags(),
