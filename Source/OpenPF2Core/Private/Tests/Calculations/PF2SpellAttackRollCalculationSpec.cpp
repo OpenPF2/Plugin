@@ -7,7 +7,7 @@
 #include "Tests/PF2SpecBase.h"
 
 BEGIN_DEFINE_PF_SPEC(FPF2SpellAttackRollCalculationsSpec,
-                     "OpenPF2.SpellAttackRollCalculationss",
+                     "OpenPF2.SpellAttackRollCalculations",
                      EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 	const FString BlueprintPath                 = TEXT("/OpenPF2Core/OpenPF2/Core");
 	const FString SpellAttackRollGameEffectCalc = TEXT("GE_CalcSpellAttackRoll");
