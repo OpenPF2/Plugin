@@ -37,6 +37,16 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 			});
 		});
 
+		Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+		{
+			It(TEXT("returns 0"), [=, this]()
+			{
+				const FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+				TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 0);
+			});
+		});
+
 		Describe(TEXT("GetRemainingOptions()"), [=, this]()
 		{
 			It(TEXT("returns an empty array"), [=, this]()
@@ -79,6 +89,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 							Matcher.CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
+				});
+			});
+
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 1"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 1);
 				});
 			});
 
@@ -135,6 +160,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 							Matcher.CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
+				});
+			});
+
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 0"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 0);
 				});
 			});
 
@@ -206,6 +246,16 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 				});
 			});
 
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 1"), [=, this]()
+				{
+					const FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 1);
+				});
+			});
+
 			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
 				It(TEXT("returns only Strength and Dexterity"), [=, this]()
@@ -262,6 +312,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 							Matcher.CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
+				});
+			});
+
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 0"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 0);
 				});
 			});
 
@@ -323,6 +388,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 				});
 			});
 
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 2"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 2);
+				});
+			});
+
 			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
 				It(TEXT("returns all ability score types"), [=, this]()
@@ -398,6 +478,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 						TEXT("CanApplyAbilityBoost(AbCharisma)"),
 						Matcher.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
 					);
+				});
+			});
+
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 1"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 1);
 				});
 			});
 
@@ -479,6 +574,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 				});
 			});
 
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 0"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 0);
+				});
+			});
+
 			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
 				It(TEXT("returns an empty array"), [=, this]()
@@ -523,6 +633,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 							Matcher.CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
+				});
+			});
+
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 0"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 0);
 				});
 			});
 
@@ -591,6 +716,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 				});
 			});
 
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 1"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 1);
+				});
+			});
+
 			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
 				It(TEXT("returns only 'Strength' and 'Dexterity'"), [=, this]()
@@ -651,6 +791,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 							Matcher.CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
+				});
+			});
+
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 0"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 0);
 				});
 			});
 
@@ -712,6 +867,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 				});
 			});
 
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 2"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 2);
+				});
+			});
+
 			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
 				It(TEXT("returns all ability score types"), [=, this]()
@@ -787,6 +957,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 						TEXT("CanApplyAbilityBoost(AbCharisma)"),
 						Matcher.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
 					);
+				});
+			});
+
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 1"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 1);
 				});
 			});
 
@@ -868,6 +1053,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 				});
 			});
 
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 0"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 0);
+				});
+			});
+
 			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
 				It(TEXT("returns an empty array"), [=, this]()
@@ -912,6 +1112,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 							Matcher.CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
+				});
+			});
+
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 0"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 0);
 				});
 			});
 
@@ -980,6 +1195,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 				});
 			});
 
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 1"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 1);
+				});
+			});
+
 			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
 				It(TEXT("returns only 'Strength' and 'Dexterity'"), [=, this]()
@@ -1040,6 +1270,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 							Matcher.CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
+				});
+			});
+
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 0"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 0);
 				});
 			});
 
@@ -1120,6 +1365,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 						TEXT("CanApplyAbilityBoost(AbCharisma)"),
 						Matcher.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
 					);
+				});
+			});
+
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 2"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 2);
 				});
 			});
 
@@ -1205,6 +1465,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 				});
 			});
 
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 1"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 1);
+				});
+			});
+
 			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
 				It(TEXT("returns only 'Dexterity' and 'Constitution'"), [=, this]()
@@ -1286,6 +1561,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 				});
 			});
 
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 1"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 1);
+				});
+			});
+
 			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
 				It(TEXT("returns only 'Constitution' and 'Strength'"), [=, this]()
@@ -1346,6 +1636,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 				});
 			});
 
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 0"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 0);
+				});
+			});
+
 			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
 				It(TEXT("returns an empty array"), [=, this]()
@@ -1387,6 +1692,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 							Matcher.CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
+				});
+			});
+
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 0"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 0);
 				});
 			});
 
@@ -1451,6 +1771,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 							Matcher.CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
+				});
+			});
+
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 3"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 3);
 				});
 			});
 
@@ -1529,6 +1864,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 						TEXT("CanApplyAbilityBoost(AbCharisma)"),
 						Matcher.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
 					);
+				});
+			});
+
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 2"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 2);
 				});
 			});
 
@@ -1625,6 +1975,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 						TEXT("CanApplyAbilityBoost(AbCharisma)"),
 						Matcher.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
 					);
+				});
+			});
+
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 2"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 2);
 				});
 			});
 
@@ -1725,6 +2090,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 				});
 			});
 
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 1"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 1);
+				});
+			});
+
 			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
 				It(TEXT("returns all abilities except 'Strength' and 'Constitution'"), [=, this]()
@@ -1814,6 +2194,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 						TEXT("CanApplyAbilityBoost(AbCharisma)"),
 						Matcher.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
 					);
+				});
+			});
+
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 1"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 1);
 				});
 			});
 
@@ -1909,6 +2304,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 				});
 			});
 
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 1"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 1);
+				});
+			});
+
 			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
 				It(TEXT("returns only 'Strength' and 'Dexterity'"), [=, this]()
@@ -1991,6 +2401,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 				});
 			});
 
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 1"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 1);
+				});
+			});
+
 			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
 				It(TEXT("returns only 'Strength' and 'Constitution'"), [=, this]()
@@ -2049,6 +2474,21 @@ void FPF2AbilityBoostRuleOptionMatcherSpec::Define()
 							Matcher.CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
+				});
+			});
+
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 0"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionMatcher Matcher(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Matcher.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Matcher.GetRemainingBoostCount()", Matcher.GetRemainingBoostCount(), 0);
 				});
 			});
 

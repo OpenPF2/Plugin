@@ -5,6 +5,8 @@
 
 #include "Abilities/PF2AbilityBoostRuleOptionMatcher.h"
 
+#include "PF2EnumUtils.h"
+
 FPF2AbilityBoostRuleOptionMatcher::FPF2AbilityBoostRuleOptionMatcher(
 	                                                             const TArray<FPF2AbilityBoostRuleOption> RuleOptions) :
 	RuleOptions(RuleOptions)
@@ -18,7 +20,7 @@ bool FPF2AbilityBoostRuleOptionMatcher::CanApplyAbilityBoost(const EPF2Character
 
 	// We can't apply more boosts than we have rules.
 	// Also, the same ability score type can't be targeted twice in the same boost activation.
-	if ((this->UsedAbilities.Num() < this->RuleOptions.Num()) && !AbilityScoreTypesToMatch.Contains(AbilityScoreType))
+	if ((this->GetRemainingBoostCount() > 0) && !AbilityScoreTypesToMatch.Contains(AbilityScoreType))
 	{
 		TArray<TArray<FPF2AbilityBoostRuleOption>> RulePermutations      = this->CalculateRulePermutations();
 		TArray<TArray<FPF2AbilityBoostRuleOption>> RemainingPermutations = RulePermutations;
@@ -49,10 +51,21 @@ bool FPF2AbilityBoostRuleOptionMatcher::CanApplyAbilityBoost(const EPF2Character
 	return CanApply;
 }
 
-void FPF2AbilityBoostRuleOptionMatcher::ApplyAbilityBoost(EPF2CharacterAbilityScoreType AbilityScoreType)
+void FPF2AbilityBoostRuleOptionMatcher::ApplyAbilityBoost(const EPF2CharacterAbilityScoreType AbilityScoreType)
 {
-	check(this->CanApplyAbilityBoost(AbilityScoreType));
+	checkf(
+		this->CanApplyAbilityBoost(AbilityScoreType),
+		TEXT("A boost to '%s' cannot be applied based on the unused rule options ('%d' boosts remain)."),
+		*(PF2EnumUtils::ToString(AbilityScoreType)),
+		this->GetRemainingBoostCount()
+	);
+
 	this->UsedAbilities.Add(AbilityScoreType);
+}
+
+int32 FPF2AbilityBoostRuleOptionMatcher::GetRemainingBoostCount() const
+{
+	return (this->RuleOptions.Num() - this->UsedAbilities.Num());
 }
 
 TSet<EPF2CharacterAbilityScoreType> FPF2AbilityBoostRuleOptionMatcher::GetRemainingOptions()

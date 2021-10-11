@@ -72,6 +72,14 @@ public:
 	void ApplyAbilityBoost(EPF2CharacterAbilityScoreType AbilityScoreType);
 
 	/**
+	 * Gets the count of how many additional boosts can be applied.
+	 *
+	 * @return
+	 *	The number of boosts that can still be applied.
+	 */
+	int32 GetRemainingBoostCount() const;
+
+	/**
 	 * Gets the list of abilities that have not yet been boosted that rule options allow to be boosted.
 	 *
 	 * @return
