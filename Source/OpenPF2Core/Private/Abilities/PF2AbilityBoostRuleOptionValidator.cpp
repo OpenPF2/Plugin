@@ -3,17 +3,17 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-#include "Abilities/PF2AbilityBoostRuleOptionMatcher.h"
+#include "Abilities/PF2AbilityBoostRuleOptionValidator.h"
 
 #include "PF2EnumUtils.h"
 
-FPF2AbilityBoostRuleOptionMatcher::FPF2AbilityBoostRuleOptionMatcher(
-	                                                             const TArray<FPF2AbilityBoostRuleOption> RuleOptions) :
+FPF2AbilityBoostRuleOptionValidator::FPF2AbilityBoostRuleOptionValidator(
+	const TArray<FPF2AbilityBoostRuleOption> RuleOptions) :
 	RuleOptions(RuleOptions)
 {
 }
 
-bool FPF2AbilityBoostRuleOptionMatcher::CanApplyAbilityBoost(const EPF2CharacterAbilityScoreType AbilityScoreType)
+bool FPF2AbilityBoostRuleOptionValidator::CanApplyAbilityBoost(const EPF2CharacterAbilityScoreType AbilityScoreType)
 {
 	bool                                CanApply                 = false;
 	TSet<EPF2CharacterAbilityScoreType> AbilityScoreTypesToMatch = this->UsedAbilities;
@@ -51,7 +51,7 @@ bool FPF2AbilityBoostRuleOptionMatcher::CanApplyAbilityBoost(const EPF2Character
 	return CanApply;
 }
 
-void FPF2AbilityBoostRuleOptionMatcher::ApplyAbilityBoost(const EPF2CharacterAbilityScoreType AbilityScoreType)
+void FPF2AbilityBoostRuleOptionValidator::ApplyAbilityBoost(const EPF2CharacterAbilityScoreType AbilityScoreType)
 {
 	checkf(
 		this->CanApplyAbilityBoost(AbilityScoreType),
@@ -63,12 +63,12 @@ void FPF2AbilityBoostRuleOptionMatcher::ApplyAbilityBoost(const EPF2CharacterAbi
 	this->UsedAbilities.Add(AbilityScoreType);
 }
 
-int32 FPF2AbilityBoostRuleOptionMatcher::GetRemainingBoostCount() const
+int32 FPF2AbilityBoostRuleOptionValidator::GetRemainingBoostCount() const
 {
 	return (this->RuleOptions.Num() - this->UsedAbilities.Num());
 }
 
-TSet<EPF2CharacterAbilityScoreType> FPF2AbilityBoostRuleOptionMatcher::GetRemainingOptions()
+TSet<EPF2CharacterAbilityScoreType> FPF2AbilityBoostRuleOptionValidator::GetRemainingOptions()
 {
 	TSet<EPF2CharacterAbilityScoreType> AllRuleAbilityOptions;
 	TSet<EPF2CharacterAbilityScoreType> RemainingOptions;
@@ -107,7 +107,7 @@ TSet<EPF2CharacterAbilityScoreType> FPF2AbilityBoostRuleOptionMatcher::GetRemain
 	return RemainingOptions;
 }
 
-TArray<TArray<FPF2AbilityBoostRuleOption>> FPF2AbilityBoostRuleOptionMatcher::CalculateRulePermutations()
+TArray<TArray<FPF2AbilityBoostRuleOption>> FPF2AbilityBoostRuleOptionValidator::CalculateRulePermutations()
 {
 	if (this->CachedRulePermutations.Num() == 0)
 	{
@@ -117,8 +117,8 @@ TArray<TArray<FPF2AbilityBoostRuleOption>> FPF2AbilityBoostRuleOptionMatcher::Ca
 	return this->CachedRulePermutations;
 }
 
-TArray<TArray<FPF2AbilityBoostRuleOption>> FPF2AbilityBoostRuleOptionMatcher::CalculateRulePermutations(
-	                                                               TArray<FPF2AbilityBoostRuleOption> SeenOptions) const
+TArray<TArray<FPF2AbilityBoostRuleOption>> FPF2AbilityBoostRuleOptionValidator::CalculateRulePermutations(
+	const TArray<FPF2AbilityBoostRuleOption> SeenOptions) const
 {
 	TArray<TArray<FPF2AbilityBoostRuleOption>> Result;
 

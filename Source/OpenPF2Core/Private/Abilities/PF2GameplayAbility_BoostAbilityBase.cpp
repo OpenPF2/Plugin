@@ -5,7 +5,7 @@
 
 #include "Abilities/PF2GameplayAbility_BoostAbilityBase.h"
 
-#include "Abilities/PF2AbilityBoostRuleOptionMatcher.h"
+#include "Abilities/PF2AbilityBoostRuleOptionValidator.h"
 #include "Abilities/PF2AttributeSet.h"
 #include "Abilities/PF2CharacterAbilitySystemComponentInterface.h"
 #include "Abilities/PF2GameplayAbilityTargetData_BoostAbility.h"
@@ -55,7 +55,7 @@ void UPF2GameplayAbility_BoostAbilityBase::ActivateAbility(const FGameplayAbilit
 		IPF2CharacterAbilitySystemComponentInterface* CharacterAsc =
 			this->GetCharacterAbilitySystemComponent(ActorInfo);
 
-		FPF2AbilityBoostRuleOptionMatcher Validator(this->BoostRuleOptions);
+		FPF2AbilityBoostRuleOptionValidator Validator(this->BoostRuleOptions);
 
 		for (auto& Selection : BoostSelections)
 		{

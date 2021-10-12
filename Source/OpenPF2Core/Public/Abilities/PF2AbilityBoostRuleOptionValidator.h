@@ -21,7 +21,7 @@
  * allowed by the combinations of rule options and the rule that the same ability cannot be boosted twice by the same
  * GA activation (for boosts granted "at the same time").
  */
-class FPF2AbilityBoostRuleOptionMatcher
+class FPF2AbilityBoostRuleOptionValidator
 {
 	/**
 	 * The rule options against which boosts will be checked.
@@ -42,12 +42,12 @@ class FPF2AbilityBoostRuleOptionMatcher
 
 public:
 	/**
-	 * Constructor for FPF2AbilityBoostRuleOptionMatcher.
+	 * Constructor for FPF2AbilityBoostRuleOptionValidator.
 	 *
 	 * @param RuleOptions
 	 *	The rule options against which the new instance will check boosts.
 	 */
-	explicit FPF2AbilityBoostRuleOptionMatcher(TArray<FPF2AbilityBoostRuleOption> RuleOptions);
+	explicit FPF2AbilityBoostRuleOptionValidator(TArray<FPF2AbilityBoostRuleOption> RuleOptions);
 
 	/**
 	 * Determines if the specified ability score can be boosted based on rule options and previously-boosted abilities.
