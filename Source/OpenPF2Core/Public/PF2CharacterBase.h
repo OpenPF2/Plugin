@@ -47,74 +47,6 @@ class OPENPF2CORE_API APF2CharacterBase :
 {
 	GENERATED_BODY()
 
-public:
-	// =================================================================================================================
-	// Public Constructors
-	// =================================================================================================================
-	/**
-	 * Default constructor for APF2CharacterBase.
-	 */
-	explicit APF2CharacterBase();
-
-	// =================================================================================================================
-	// Public Methods
-	// =================================================================================================================
-	virtual void PossessedBy(AController* NewController) override;
-	virtual void OnRep_Controller() override;
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
-	// =================================================================================================================
-	// Public Methods - IAbilitySystemInterface Implementation
-	// =================================================================================================================
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-
-	// =================================================================================================================
-	// Public Methods - IPF2CharacterInterface Implementation
-	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
-	virtual int32 GetCharacterLevel() const override;
-
-
-	// =================================================================================================================
-	// Public Methods - IPF2CharacterInterface Implementation
-	// =================================================================================================================
-	virtual void OnAbilityBoostAdded(
-		const TScriptInterface<IPF2CharacterAbilitySystemComponentInterface> TargetAsc,
-		const AActor*                                               TargetActor,
-		const EPF2CharacterAbilityScoreType                         TargetAbilityScore) override;
-
-	// =================================================================================================================
-	// Public Methods - Blueprint Callable
-	// =================================================================================================================
-	/**
-	 * Sets the current level of this character.
-	 *
-	 * The character level impacts the character's stats and how many boosts and feats the character can have.
-	 *
-	 * From the Pathfinder 2E Core Rulebook, page 31, "Leveling Up":
-	 * "Each level grants greater skill, increased resiliency, and new capabilities, allowing your character to face
-	 * even greater challenges and go on to earn even more impressive rewards."
-	 *
-	 * @param NewLevel
-	 *	The new level for the character. Must be greater than 0.
-	 *
-	 * @return
-	 *	true if the level was valid and changed; or, false, if the level was either invalid or did not change (the
-	 *	character was already the specified level).
-	 */
-	UFUNCTION(BlueprintCallable)
-	virtual bool SetCharacterLevel(int32 NewLevel);
-
-	/**
-	 * Adds an additional boost of the specified ability to this character's attribute set.
-	 *
-	 * The boost is accomplished via a passive Gameplay Effect added to this character's ASC. In addition, the count of
-	 * Additional Ability Boosts on this character are updated to ensure that the boost survives passive GEs being
-	 * recalculated/reapplied, as would happen during character leveling.
-	 */
-	UFUNCTION(BlueprintCallable)
-    virtual void ApplyAbilityBoost(EPF2CharacterAbilityScoreType TargetAbilityScore);
-
 protected:
 	// =================================================================================================================
 	// Protected Properties - Blueprint Accessible
@@ -288,6 +220,16 @@ protected:
 	 */
 	TMultiMap<int32, TSubclassOf<UGameplayEffect>> ManagedGameplayEffects;
 
+public:
+	// =================================================================================================================
+	// Public Constructors
+	// =================================================================================================================
+	/**
+	 * Default constructor for APF2CharacterBase.
+	 */
+	explicit APF2CharacterBase();
+
+protected:
 	// =================================================================================================================
 	// Protected Constructors
 	// =================================================================================================================
@@ -324,6 +266,66 @@ protected:
 		}
 	}
 
+public:
+	// =================================================================================================================
+	// Public Methods
+	// =================================================================================================================
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void OnRep_Controller() override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	// =================================================================================================================
+	// Public Methods - IAbilitySystemInterface Implementation
+	// =================================================================================================================
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	// =================================================================================================================
+	// Public Methods - IPF2CharacterInterface Implementation
+	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual int32 GetCharacterLevel() const override;
+
+	// =================================================================================================================
+	// Public Methods - IPF2CharacterInterface Implementation
+	// =================================================================================================================
+	virtual void OnAbilityBoostAdded(
+		const TScriptInterface<IPF2CharacterAbilitySystemComponentInterface> TargetAsc,
+		const AActor*                                               TargetActor,
+		const EPF2CharacterAbilityScoreType                         TargetAbilityScore) override;
+
+	// =================================================================================================================
+	// Public Methods - Blueprint Callable
+	// =================================================================================================================
+	/**
+	 * Sets the current level of this character.
+	 *
+	 * The character level impacts the character's stats and how many boosts and feats the character can have.
+	 *
+	 * From the Pathfinder 2E Core Rulebook, page 31, "Leveling Up":
+	 * "Each level grants greater skill, increased resiliency, and new capabilities, allowing your character to face
+	 * even greater challenges and go on to earn even more impressive rewards."
+	 *
+	 * @param NewLevel
+	 *	The new level for the character. Must be greater than 0.
+	 *
+	 * @return
+	 *	true if the level was valid and changed; or, false, if the level was either invalid or did not change (the
+	 *	character was already the specified level).
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual bool SetCharacterLevel(int32 NewLevel);
+
+	/**
+	 * Adds an additional boost of the specified ability to this character's attribute set.
+	 *
+	 * The boost is accomplished via a passive Gameplay Effect added to this character's ASC. In addition, the count of
+	 * Additional Ability Boosts on this character are updated to ensure that the boost survives passive GEs being
+	 * recalculated/reapplied, as would happen during character leveling.
+	 */
+	UFUNCTION(BlueprintCallable)
+    virtual void ApplyAbilityBoost(EPF2CharacterAbilityScoreType TargetAbilityScore);
+
+protected:
 	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
