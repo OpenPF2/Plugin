@@ -1,17 +1,24 @@
 ﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
 //
-// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
-// distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+// Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
+//   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
+//   - System Reference Document, Copyright 2000, Wizards of the Coast, Inc.
+//   - Pathfinder Core Rulebook (Second Edition), Copyright 2019, Paizo Inc.
+// Except for material designated as Product Identity, the game mechanics and logic in this file are Open Game Content,
+// as defined in the Open Game License version 1.0a, Section 1(d) (see accompanying LICENSE.TXT). No portion of this
+// file other than the material designated as Open Game Content may be reproduced in any form without written
+// permission.
 
 #include "Calculations/PF2ArmorClassCalculation.h"
 
 #include "OpenPF2Core.h"
+#include "GameplayAbilityUtils.h"
+#include "PF2TemlCalculation.h"
 
 #include "Abilities/PF2AbilityAttributes.h"
 #include "Abilities/PF2AttributeSet.h"
 
 UPF2ArmorClassCalculation::UPF2ArmorClassCalculation() :
-	UPF2TemlCalculationBase(),
 	DexterityModifierCaptureDefinition(FPF2AbilityAttributes::GetInstance().AbDexterityModifierDef)
 {
 	this->RelevantAttributesToCapture.Add(this->DexterityModifierCaptureDefinition);
@@ -43,7 +50,7 @@ float UPF2ArmorClassCalculation::CalculateBaseMagnitude_Implementation(const FGa
 	return AbilityScore;
 }
 
-float UPF2ArmorClassCalculation::GetDexterityModifier(const FGameplayEffectSpec& Spec) const
+FORCEINLINE float UPF2ArmorClassCalculation::GetDexterityModifier(const FGameplayEffectSpec& Spec) const
 {
 	float                         DexterityModifier     = 0.0f;
 	const FGameplayTagContainer   *SourceTags           = Spec.CapturedSourceTags.GetAggregatedTags(),
@@ -69,8 +76,7 @@ float UPF2ArmorClassCalculation::CalculateArmorTypeProficiencyBonus(const FGamep
 	const FString                ArmorType                  = DetermineArmorType(SourceTags),
 	                             ArmorTypeProficiencyPrefix = "Armor.Category." + ArmorType;
 
-	const float ProficiencyBonus =
-		this->CalculateProficiencyBonus(ArmorTypeProficiencyPrefix, Spec);
+	const float ProficiencyBonus = FPF2TemlCalculation(ArmorTypeProficiencyPrefix, Spec).GetValue();
 
 	UE_LOG(
 		LogPf2Core,

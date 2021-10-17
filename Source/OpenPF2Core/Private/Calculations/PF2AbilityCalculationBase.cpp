@@ -4,7 +4,6 @@
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "Calculations/PF2AbilityCalculationBase.h"
-
 #include "OpenPF2Core.h"
 #include "Abilities/PF2AttributeSet.h"
 
@@ -52,5 +51,5 @@ float UPF2AbilityCalculationBase::DoCalculation(const FGameplayEffectSpec& Spec)
 
 	this->GetCapturedAttributeMagnitude(AbilityAttributeDef, Spec, EvaluationParameters, AbilityScore);
 
-	return this->DoCalculation(AbilityAttribute, AbilityScore);
+	return this->DoCalculation(Spec, AbilityAttribute, AbilityScore);
 }

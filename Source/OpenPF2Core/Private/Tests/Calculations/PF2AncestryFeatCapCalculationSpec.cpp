@@ -10,7 +10,7 @@
 // permission.
 
 #include "Abilities/PF2AttributeSet.h"
-#include "Calculations/PF2AbilityModifierCalculation.h"
+#include "Calculations/Modifiers/PF2AbilityModifierCalculationBase.h"
 #include "Tests/PF2SpecBase.h"
 
 BEGIN_DEFINE_PF_SPEC(FPF2AncestryFeatCapCalculationSpec,
