@@ -68,20 +68,20 @@ namespace PF2CharacterConstants
 	 */
 	static const TMap<const FString, const int32> GeCoreCharacterBlueprintPaths = {
 		// Initialize base stats.
-		{ TEXT("GE_ApplyBaseCharacterStats"),     GeWeights::InitializeBaseStats  },
-		{ TEXT("GE_GrantCharacterBaseAbilities"), GeWeights::InitializeBaseStats  },
-		{ TEXT("GE_CalcKeyAbilityBoost"),         GeWeights::InitializeBaseStats  },
+		{ TEXT("GE_ApplyBaseCharacterStats"),     GeWeights::InitializeBaseStats },
+		{ TEXT("GE_GrantCharacterBaseAbilities"), GeWeights::InitializeBaseStats },
+		{ TEXT("GE_CalcKeyAbilityBoost"),         GeWeights::InitializeBaseStats },
 
 		// Finalize stats.
-		{ TEXT("GE_CalcAbilityModifiers"),     GeWeights::FinalizeStats        },
-		{ TEXT("GE_CalcClassDifficultyClass"), GeWeights::FinalizeStats        },
-		{ TEXT("GE_CalcArmorClass"),           GeWeights::FinalizeStats        },
-		{ TEXT("GE_CalcPerceptionModifier"),   GeWeights::FinalizeStats        },
-		{ TEXT("GE_CalcSavingThrowModifiers"), GeWeights::FinalizeStats        },
-		{ TEXT("GE_CalcSpellAttackRoll"),      GeWeights::FinalizeStats        },
-		{ TEXT("GE_CalcSpellDifficultyClass"), GeWeights::FinalizeStats        },
-		{ TEXT("GE_CalcSkillModifiers"),       GeWeights::FinalizeStats        },
-		{ TEXT("GE_CalcAncestryFeatLimit"),    GeWeights::FinalizeStats        },
+		{ TEXT("GE_CalcAbilityModifiers"),     GeWeights::FinalizeStats          },
+		{ TEXT("GE_CalcClassDifficultyClass"), GeWeights::FinalizeStats          },
+		{ TEXT("GE_CalcArmorClass"),           GeWeights::FinalizeStats          },
+		{ TEXT("GE_CalcPerceptionModifier"),   GeWeights::FinalizeStats          },
+		{ TEXT("GE_CalcSavingThrowModifiers"), GeWeights::FinalizeStats          },
+		{ TEXT("GE_CalcSpellAttackRoll"),      GeWeights::FinalizeStats          },
+		{ TEXT("GE_CalcSpellDifficultyClass"), GeWeights::FinalizeStats          },
+		{ TEXT("GE_CalcSkillModifiers"),       GeWeights::FinalizeStats          },
+		{ TEXT("GE_CalcAncestryFeatLimit"),    GeWeights::FinalizeStats          },
 	};
 
 	/**

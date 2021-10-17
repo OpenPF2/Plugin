@@ -33,8 +33,8 @@ struct OPENPF2CORE_API FPF2AbilityBoostRuleOption
 	bool operator==(const FPF2AbilityBoostRuleOption& Other) const
 	{
 		return ((this->bIsFreeBoost == Other.bIsFreeBoost) &&
-				(this->AbilityScoreTypes.Num() == Other.AbilityScoreTypes.Num()) &&
-				(this->AbilityScoreTypes.Intersect(Other.AbilityScoreTypes).Num() == this->AbilityScoreTypes.Num()));
+			    (this->AbilityScoreTypes.Num() == Other.AbilityScoreTypes.Num()) &&
+			    (this->AbilityScoreTypes.Intersect(Other.AbilityScoreTypes).Num() == this->AbilityScoreTypes.Num()));
 	};
 
 	bool operator!=(const FPF2AbilityBoostRuleOption& Other) const
