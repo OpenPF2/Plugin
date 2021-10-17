@@ -15,11 +15,12 @@ UPF2GameplayAbility_BoostAbilityBase::UPF2GameplayAbility_BoostAbilityBase()
 	FAbilityTriggerData TriggerData;
 
 	TriggerData.TriggerSource = EGameplayAbilityTriggerSource::GameplayEvent;
-
-	TriggerData.TriggerTag =
-		FGameplayTag(FGameplayTag::RequestGameplayTag(FName("TriggerTagCategory.ApplySelectedAbilityBoost")));
+	TriggerData.TriggerTag    = GetTriggerTag();
 
 	this->AbilityTriggers.Add(TriggerData);
+
+	// We don't maintain any local state.
+	this->InstancingPolicy = EGameplayAbilityInstancingPolicy::NonInstanced;
 }
 
 bool UPF2GameplayAbility_BoostAbilityBase::CheckCost(const FGameplayAbilitySpecHandle Handle,
@@ -50,7 +51,7 @@ void UPF2GameplayAbility_BoostAbilityBase::ActivateAbility(const FGameplayAbilit
 {
 	if (CommitAbility(Handle, ActorInfo, ActivationInfo))
 	{
-		const TArray<EPF2CharacterAbilityScoreType> BoostSelections = this->GetBoostSelections(TriggerEventData);
+		const TSet<EPF2CharacterAbilityScoreType> BoostSelections = this->GetBoostSelections(TriggerEventData);
 
 		IPF2CharacterAbilitySystemComponentInterface* CharacterAsc =
 			this->GetCharacterAbilitySystemComponent(ActorInfo);
@@ -71,10 +72,12 @@ void UPF2GameplayAbility_BoostAbilityBase::ActivateAbility(const FGameplayAbilit
 		{
 			CharacterAsc->ApplyAbilityBoost(Selection);
 		}
+
+		EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
 	}
 }
 
-TArray<EPF2CharacterAbilityScoreType> UPF2GameplayAbility_BoostAbilityBase::GetBoostSelections(
+TSet<EPF2CharacterAbilityScoreType> UPF2GameplayAbility_BoostAbilityBase::GetBoostSelections(
 	const FGameplayEventData* TriggerEventData) const
 {
 	const FGameplayAbilityTargetDataHandle GameplayAbilityTargetDataHandle = TriggerEventData->TargetData;

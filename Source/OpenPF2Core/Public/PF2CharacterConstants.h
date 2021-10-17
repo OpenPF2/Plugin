@@ -68,8 +68,9 @@ namespace PF2CharacterConstants
 	 */
 	static const TMap<const FString, const int32> GeCoreCharacterBlueprintPaths = {
 		// Initialize base stats.
-		{ TEXT("GE_ApplyBaseCharacterStats"),  GeWeights::InitializeBaseStats  },
-		{ TEXT("GE_CalcKeyAbilityBoost"),      GeWeights::InitializeBaseStats  },
+		{ TEXT("GE_ApplyBaseCharacterStats"),     GeWeights::InitializeBaseStats  },
+		{ TEXT("GE_GrantCharacterBaseAbilities"), GeWeights::InitializeBaseStats  },
+		{ TEXT("GE_CalcKeyAbilityBoost"),         GeWeights::InitializeBaseStats  },
 
 		// Finalize stats.
 		{ TEXT("GE_CalcAbilityModifiers"),     GeWeights::FinalizeStats        },

@@ -39,6 +39,11 @@ class OPENPF2CORE_API UPF2GameplayAbility_BoostAbilityBase : public UGameplayAbi
 public:
 	UPF2GameplayAbility_BoostAbilityBase();
 
+	static FORCEINLINE FGameplayTag GetTriggerTag()
+	{
+		return FGameplayTag(FGameplayTag::RequestGameplayTag(FName("TriggerTagCategory.ApplySelectedAbilityBoost")));
+	};
+
 	virtual bool CheckCost(const FGameplayAbilitySpecHandle Handle,
 	                       const FGameplayAbilityActorInfo* ActorInfo,
 	                       FGameplayTagContainer*           OptionalRelevantTags) const override;
@@ -65,7 +70,7 @@ protected:
 	 *	The choice(s) for ability boosts. The value of each element is the chosen ability and the key is the rule option
 	 *	to which the choice corresponds.
 	 */
-	TArray<EPF2CharacterAbilityScoreType> GetBoostSelections(const FGameplayEventData* TriggerEventData) const;
+	TSet<EPF2CharacterAbilityScoreType> GetBoostSelections(const FGameplayEventData* TriggerEventData) const;
 
 	/**
 	 * Gets the ASC of the given actor, as an implementation of IPF2CharacterAbilitySystemComponentInterface.

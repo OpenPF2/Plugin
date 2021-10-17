@@ -20,8 +20,6 @@
 #include "Abilities/PF2CharacterAbilityScoreType.h"
 #include "PF2AncestryAndHeritageGameplayEffectBase.h"
 #include "PF2BackgroundGameplayEffectBase.h"
-#include "PF2CharacterAbilityBoostCount.h"
-#include "PF2CharacterAbilityEventsInterface.h"
 #include "PF2CharacterConstants.h"
 #include "PF2CharacterInterface.h"
 #include "PF2ClassGameplayEffectBase.h"
@@ -33,6 +31,21 @@ template<class AscType, class AttributeSetType>
 class TPF2CharacterComponentFactory;
 
 /**
+ * Struct for representing the selection of what ability/abilities to boost when activating a specific boost GA.
+ */
+USTRUCT(BlueprintType)
+struct OPENPF2CORE_API FPF2CharacterAbilityBoostSelection
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UPF2GameplayAbility_BoostAbilityBase> BoostGameplayAbility;
+
+	UPROPERTY(EditAnywhere)
+	TSet<EPF2CharacterAbilityScoreType> SelectedAbilities;
+};
+
+/**
  * Base class for both playable and non-playable characters in OpenPF2.
  *
  * PF2-based games must extend this class if they have custom character attributes or abilities.
@@ -42,8 +55,7 @@ UCLASS()
 class OPENPF2CORE_API APF2CharacterBase :
 	public ACharacter,
 	public IAbilitySystemInterface,
-	public IPF2CharacterInterface,
-	public IPF2CharacterAbilityEventsInterface
+	public IPF2CharacterInterface
 {
 	GENERATED_BODY()
 
@@ -146,31 +158,6 @@ protected:
 	FGameplayTagContainer AdditionalLanguages;
 
 	/**
-	 * Ability boosts manually applied by a game designer or player to this character's abilities.
-	 *
-	 * Because game rules tend to be very complex, no validation is done to ensure that the kind and number of boosts
-	 * you apply here are legal. Therefore, do not apply more boosts than the boost cap at the character's current
-	 * level, and pay close attention to ancestry, class, and other gameplay rules and restrictions to avoid creating a
-	 * character that is overpowered. In addition, the character's key ability boost (as specified by their class) is
-	 * applied automatically, so you should not add an additional boost for the character's key ability.
-	 *
-	 * From the Pathfinder 2E Core Rulebook, page 20, "Ability Score Overview":
-	 * "Each ability score starts at 10, representing human average, but as you make character choices, you’ll adjust
-	 * these scores by applying ability boosts, which increase a score..."
-	 *
-	 * "Each ancestry provides ability boosts ... Your character’s background provides two ability boosts. Your
-	 * character’s class provides an ability boost to the ability score most important to your class, called your key
-	 * ability score."
-	 *
-	 * "When your character receives an ability boost, the rules indicate whether it must be applied to a specific
-	 * ability score or to one of two specific ability scores, or whether it is a “free” ability boost that can be
-	 * applied to any ability score of your choice. However, when you gain multiple ability boosts at the same time,
-	 * you must apply each one to a different score."
-	 */
-	UPROPERTY(EditAnywhere, EditFixedSize, meta=(EditFixedOrder), Category="Ability Scores")
-	TArray<FPF2CharacterAbilityBoostCount> AdditionalAbilityBoosts;
-
-	/**
 	 * The name(s) of lore sub-categories that this character is knowledgeable about.
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Skills")
@@ -220,6 +207,44 @@ protected:
 	 */
 	TMultiMap<int32, TSubclassOf<UGameplayEffect>> ManagedGameplayEffects;
 
+	/**
+	 * The abilities to boost, as chosen by the player or a game designer, out of what ability boosts are pending.
+	 *
+	 * At the start of play, or upon receipt of a ApplySelectedBoostsEvent, an attempt is made to match up each
+	 * selection in this property to a boost ability granted to this character. Upon a match, the matching GA is
+	 * activated, and the selection is removed from this property. Boost GAs are single-shot abilities that remove
+	 * themselves once they've applied an ability score boost. So, any selections added to this property "consume"
+	 * pending ability boosts for this character. Each selection is matched-up and evaluated in the order it appears in
+	 * this property, so multiple selections can target pending ability boosts of the same boost GA type without there
+	 * being a conflict.
+	 *
+	 * Each boost GA is granted to the character by background, ancestry, heritage, or class. This approach to
+	 * matching-up ability boost selections to pending ability boosts helps to ensure that the kind and number of
+	 * boosts that get applied are legal according to game rules, unless a game designer manually adds boost GEs to the
+	 * character.
+	 *
+	 * If ability boosts are added manually via GEs, take care not to apply more boosts than the boost cap at the
+	 * character's current level, and pay close attention to ancestry, class, and other gameplay rules and restrictions
+	 * to avoid creating a character that is overpowered. In addition, the character's key ability boost (as specified
+	 * by their class) is applied automatically, so you should not add an additional boost for the character's key
+	 * ability.
+	 *
+	 * From the Pathfinder 2E Core Rulebook, page 20, "Ability Score Overview":
+	 * "Each ability score starts at 10, representing human average, but as you make character choices, you’ll adjust
+	 * these scores by applying ability boosts, which increase a score..."
+	 *
+	 * "Each ancestry provides ability boosts ... Your character’s background provides two ability boosts. Your
+	 * character’s class provides an ability boost to the ability score most important to your class, called your key
+	 * ability score."
+	 *
+	 * "When your character receives an ability boost, the rules indicate whether it must be applied to a specific
+	 * ability score or to one of two specific ability scores, or whether it is a “free” ability boost that can be
+	 * applied to any ability score of your choice. However, when you gain multiple ability boosts at the same time,
+	 * you must apply each one to a different score."
+	 */
+	UPROPERTY(EditAnywhere, Category="Ability Boosts")
+	TArray<FPF2CharacterAbilityBoostSelection> AbilityBoostSelections;
+
 public:
 	// =================================================================================================================
 	// Public Constructors
@@ -258,12 +283,6 @@ protected:
 
 			this->CoreGameplayEffects.Add(Weight, EffectFinder.Object);
 		}
-
-		for (const auto& Ability : TEnumRange<EPF2CharacterAbilityScoreType>())
-		{
-			// Give game designers an easy way to set boosts on a per-ability basis.
-			this->AdditionalAbilityBoosts.Add(FPF2CharacterAbilityBoostCount(Ability, 0));
-		}
 	}
 
 public:
@@ -284,14 +303,6 @@ public:
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
 	virtual int32 GetCharacterLevel() const override;
-
-	// =================================================================================================================
-	// Public Methods - IPF2CharacterInterface Implementation
-	// =================================================================================================================
-	virtual void OnAbilityBoostAdded(
-		const TScriptInterface<IPF2CharacterAbilitySystemComponentInterface> TargetAsc,
-		const AActor*                                               TargetActor,
-		const EPF2CharacterAbilityScoreType                         TargetAbilityScore) override;
 
 	// =================================================================================================================
 	// Public Methods - Blueprint Callable
@@ -348,6 +359,17 @@ protected:
 	 *	machine is a client doing simulation or prediction.
 	 */
 	bool IsAuthorityForEffects() const;
+
+	/**
+	 * Attempts to find and activate a pending ability boost Gameplay Ability for each Ability Boost Selection.
+	 */
+	void ApplyAbilityBoostSelections();
+
+	/**
+	 * Activates the specified ability boost ability with the provided selections of which abilities to boost.
+	 */
+	void ActivateAbilityBoost(FGameplayAbilitySpec* BoostSpec,
+	                          const FPF2CharacterAbilityBoostSelection& AbilityBoostSelection) const;
 
 	/**
 	 * Activates Gameplay Effects that are always passively applied to the character.
