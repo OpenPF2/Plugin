@@ -56,15 +56,17 @@ void UPF2GameplayAbility_BoostAbilityBase::ActivateAbility(const FGameplayAbilit
 		IPF2CharacterAbilitySystemComponentInterface* CharacterAsc =
 			this->GetCharacterAbilitySystemComponent(ActorInfo);
 
-		FPF2AbilityBoostRuleOptionValidator Validator(this->BoostRuleOptions);
+		UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+		Validator->AppendRuleOptions(this->BoostRuleOptions);
 
 		for (auto& Selection : BoostSelections)
 		{
-			Validator.ApplyAbilityBoost(Selection);
+			Validator->ApplyAbilityBoost(Selection);
 		}
 
 		checkf(
-			Validator.GetRemainingBoostCount() == 0,
+			Validator->GetRemainingBoostCount() == 0,
 			TEXT("There must be a selection for every rule option.")
 		);
 

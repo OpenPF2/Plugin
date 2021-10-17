@@ -11,7 +11,7 @@
 #include "Tests/PF2SpecBase.h"
 
 BEGIN_DEFINE_SPEC(FPF2AbilityBoostRuleOptionValidatorSpec,
-                  "OpenPF2.FPF2AbilityBoostRuleOptionValidator",
+                  "OpenPF2.UPF2AbilityBoostRuleOptionValidator",
                   EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 END_DEFINE_SPEC(FPF2AbilityBoostRuleOptionValidatorSpec)
 
@@ -25,13 +25,15 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 		{
 			It(TEXT("returns `false` for all abilities"), [=, this]()
 			{
-				FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+				UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+				Validator->AppendRuleOptions(RuleOptions);
 
 				for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
 				{
 					TestFalse(
 						FString::Format(TEXT("CanApplyAbilityBoost({0})"), { PF2EnumUtils::ToString(AbilityScoreType)}),
-						Validator.CanApplyAbilityBoost(AbilityScoreType)
+						Validator->CanApplyAbilityBoost(AbilityScoreType)
 					);
 				}
 			});
@@ -41,9 +43,11 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 		{
 			It(TEXT("returns 0"), [=, this]()
 			{
-				const FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+				UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
-				TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 0);
+				Validator->AppendRuleOptions(RuleOptions);
+
+				TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 0);
 			});
 		});
 
@@ -51,9 +55,11 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 		{
 			It(TEXT("returns an empty array"), [=, this]()
 			{
-				FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+				UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
-				TestEqual(TEXT("GetRemainingOptions().Num()"), Validator.GetRemainingOptions().Num(), 0);
+				Validator->AppendRuleOptions(RuleOptions);
+
+				TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
 			});
 		});
 	});
@@ -72,11 +78,13 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `true` for all abilities"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
@@ -86,7 +94,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 								TEXT("CanApplyAbilityBoost({0})"),
 								{ PF2EnumUtils::ToString(AbilityScoreType)}
 							),
-							Validator.CanApplyAbilityBoost(AbilityScoreType)
+							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
 				});
@@ -96,14 +104,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 1"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 1);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 1);
 				});
 			});
 
@@ -111,14 +121,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns all ability score types"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator.GetRemainingOptions();
+					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator->GetRemainingOptions();
 
 					TestEqual("RemainingOptions.Num()", RemainingOptions.Num(), 6);
 
@@ -146,18 +158,20 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
 					{
 						TestFalse(
 							FString::Format(TEXT("CanApplyAbilityBoost({0})"), { PF2EnumUtils::ToString(AbilityScoreType)}),
-							Validator.CanApplyAbilityBoost(AbilityScoreType)
+							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
 				});
@@ -167,14 +181,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 0"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 0);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 0);
 				});
 			});
 
@@ -182,14 +198,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns an empty array"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator.GetRemainingOptions().Num(), 0);
+					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
 				});
 			});
 		});
@@ -210,11 +228,13 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `true` for all abilities"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
@@ -224,7 +244,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 								TEXT("CanApplyAbilityBoost({0})"),
 								{ PF2EnumUtils::ToString(AbilityScoreType)}
 							),
-							Validator.CanApplyAbilityBoost(AbilityScoreType)
+							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
 				});
@@ -234,14 +254,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 2"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 2);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 2);
 				});
 			});
 
@@ -249,14 +271,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns all ability score types"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator.GetRemainingOptions();
+					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator->GetRemainingOptions();
 
 					TestEqual("RemainingOptions.Num()", RemainingOptions.Num(), 6);
 
@@ -284,41 +308,43 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `true` for all abilities except the one that was applied"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbStrength)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbDexterity)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbConstitution)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbIntelligence)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbWisdom)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbCharisma)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
 					);
 				});
 			});
@@ -327,14 +353,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 1"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 1);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 1);
 				});
 			});
 
@@ -342,14 +370,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns all ability score types except the one that was applied"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator.GetRemainingOptions();
+					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator->GetRemainingOptions();
 
 					TestEqual(
 						"RemainingOptions.Num()",
@@ -396,18 +426,20 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
 					{
 						TestFalse(
 							FString::Format(TEXT("CanApplyAbilityBoost({0})"), { PF2EnumUtils::ToString(AbilityScoreType)}),
-							Validator.CanApplyAbilityBoost(AbilityScoreType)
+							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
 				});
@@ -417,14 +449,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 0"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 0);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 0);
 				});
 			});
 
@@ -432,14 +466,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns an empty array"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator.GetRemainingOptions().Num(), 0);
+					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
 				});
 			});
 		});
@@ -462,36 +498,38 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `true` only for Strength and Dexterity"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbStrength)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbDexterity)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbConstitution)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbIntelligence)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbWisdom)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
 					);
 				});
 			});
@@ -500,9 +538,11 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 1"), [=, this]()
 				{
-					const FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 1);
+					Validator->AppendRuleOptions(RuleOptions);
+
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 1);
 				});
 			});
 
@@ -510,14 +550,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns only Strength and Dexterity"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator.GetRemainingOptions();
+					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator->GetRemainingOptions();
 
 					TestEqual(
 						"RemainingOptions.Num()",
@@ -548,18 +590,20 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
 					{
 						TestFalse(
 							FString::Format(TEXT("CanApplyAbilityBoost({0})"), { PF2EnumUtils::ToString(AbilityScoreType)}),
-							Validator.CanApplyAbilityBoost(AbilityScoreType)
+							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
 				});
@@ -569,14 +613,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 0"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 0);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 0);
 				});
 			});
 
@@ -584,14 +630,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns an empty array"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator.GetRemainingOptions().Num(), 0);
+					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
 				});
 			});
 		});
@@ -618,11 +666,13 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `true` for all abilities"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
@@ -632,7 +682,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 								TEXT("CanApplyAbilityBoost({0})"),
 								{ PF2EnumUtils::ToString(AbilityScoreType)}
 							),
-							Validator.CanApplyAbilityBoost(AbilityScoreType)
+							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
 				});
@@ -642,14 +692,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 2"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 2);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 2);
 				});
 			});
 
@@ -657,14 +709,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns all ability score types"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator.GetRemainingOptions();
+					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator->GetRemainingOptions();
 
 					TestEqual("RemainingOptions.Num()", RemainingOptions.Num(), 6);
 
@@ -692,41 +746,43 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `true` for all abilities except 'Strength'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbStrength)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbDexterity)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbConstitution)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbIntelligence)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbWisdom)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbCharisma)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
 					);
 				});
 			});
@@ -735,14 +791,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 1"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 1);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 1);
 				});
 			});
 
@@ -750,14 +808,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns all abilities except 'Strength'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator.GetRemainingOptions();
+					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator->GetRemainingOptions();
 
 					TestEqual(
 						"RemainingOptions.Num()",
@@ -804,11 +864,13 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
@@ -818,7 +880,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 								TEXT("CanApplyAbilityBoost({0})"),
 								{ PF2EnumUtils::ToString(AbilityScoreType)}
 							),
-							Validator.CanApplyAbilityBoost(AbilityScoreType)
+							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
 				});
@@ -828,14 +890,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 0"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 0);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 0);
 				});
 			});
 
@@ -843,14 +907,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns an empty array"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator.GetRemainingOptions().Num(), 0);
+					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
 				});
 			});
 		});
@@ -866,11 +932,13 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
@@ -880,7 +948,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 								TEXT("CanApplyAbilityBoost({0})"),
 								{ PF2EnumUtils::ToString(AbilityScoreType)}
 							),
-							Validator.CanApplyAbilityBoost(AbilityScoreType)
+							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
 				});
@@ -890,14 +958,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 0"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 0);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 0);
 				});
 			});
 
@@ -905,14 +975,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns an empty array"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator.GetRemainingOptions().Num(), 0);
+					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
 				});
 			});
 		});
@@ -927,41 +999,43 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `true` for only 'Strength' and 'Dexterity"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbStrength)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbDexterity)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbConstitution)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbIntelligence)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbWisdom)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbCharisma)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
 					);
 				});
 			});
@@ -970,14 +1044,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 1"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 1);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 1);
 				});
 			});
 
@@ -985,14 +1061,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns only 'Strength' and 'Dexterity'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator.GetRemainingOptions();
+					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator->GetRemainingOptions();
 
 					TestEqual(
 						"RemainingOptions.Num()",
@@ -1024,11 +1102,13 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
@@ -1038,7 +1118,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 								TEXT("CanApplyAbilityBoost({0})"),
 								{ PF2EnumUtils::ToString(AbilityScoreType)}
 							),
-							Validator.CanApplyAbilityBoost(AbilityScoreType)
+							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
 				});
@@ -1048,14 +1128,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 0"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 0);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 0);
 				});
 			});
 
@@ -1063,14 +1145,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns an empty array"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator.GetRemainingOptions().Num(), 0);
+					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
 				});
 			});
 		});
@@ -1097,11 +1181,13 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `true` for all abilities"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
@@ -1111,7 +1197,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 								TEXT("CanApplyAbilityBoost({0})"),
 								{ PF2EnumUtils::ToString(AbilityScoreType)}
 							),
-							Validator.CanApplyAbilityBoost(AbilityScoreType)
+							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
 				});
@@ -1121,14 +1207,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 2"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 2);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 2);
 				});
 			});
 
@@ -1136,14 +1224,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns all ability score types"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator.GetRemainingOptions();
+					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator->GetRemainingOptions();
 
 					TestEqual("RemainingOptions.Num()", RemainingOptions.Num(), 6);
 
@@ -1171,41 +1261,43 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `true` for all abilities except 'Strength'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbStrength)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbDexterity)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbConstitution)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbIntelligence)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbWisdom)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbCharisma)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
 					);
 				});
 			});
@@ -1214,14 +1306,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 1"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 1);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 1);
 				});
 			});
 
@@ -1229,14 +1323,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns all abilities except 'Strength'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator.GetRemainingOptions();
+					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator->GetRemainingOptions();
 
 					TestEqual(
 						"RemainingOptions.Num()",
@@ -1283,11 +1379,13 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
@@ -1297,7 +1395,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 								TEXT("CanApplyAbilityBoost({0})"),
 								{ PF2EnumUtils::ToString(AbilityScoreType)}
 							),
-							Validator.CanApplyAbilityBoost(AbilityScoreType)
+							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
 				});
@@ -1307,14 +1405,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 0"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 0);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 0);
 				});
 			});
 
@@ -1322,14 +1422,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns an empty array"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator.GetRemainingOptions().Num(), 0);
+					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
 				});
 			});
 		});
@@ -1345,11 +1447,13 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
@@ -1359,7 +1463,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 								TEXT("CanApplyAbilityBoost({0})"),
 								{ PF2EnumUtils::ToString(AbilityScoreType)}
 							),
-							Validator.CanApplyAbilityBoost(AbilityScoreType)
+							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
 				});
@@ -1369,14 +1473,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 0"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 0);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 0);
 				});
 			});
 
@@ -1384,14 +1490,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns an empty array"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator.GetRemainingOptions().Num(), 0);
+					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
 				});
 			});
 		});
@@ -1406,41 +1514,43 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `true` for only 'Strength' and 'Dexterity"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbStrength)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbDexterity)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbConstitution)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbIntelligence)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbWisdom)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbCharisma)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
 					);
 				});
 			});
@@ -1449,14 +1559,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 1"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 1);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 1);
 				});
 			});
 
@@ -1464,14 +1576,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns only 'Strength' and 'Dexterity'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator.GetRemainingOptions();
+					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator->GetRemainingOptions();
 
 					TestEqual(
 						"RemainingOptions.Num()",
@@ -1503,11 +1617,13 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
@@ -1517,7 +1633,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 								TEXT("CanApplyAbilityBoost({0})"),
 								{ PF2EnumUtils::ToString(AbilityScoreType)}
 							),
-							Validator.CanApplyAbilityBoost(AbilityScoreType)
+							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
 				});
@@ -1527,14 +1643,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 0"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 0);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 0);
 				});
 			});
 
@@ -1542,14 +1660,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns an empty array"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator.GetRemainingOptions().Num(), 0);
+					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
 				});
 			});
 		});
@@ -1579,41 +1699,43 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `true` for 'Strength', 'Dexterity', and 'Constitution'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbStrength)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbDexterity)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbConstitution)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbIntelligence)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbWisdom)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbCharisma)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
 					);
 				});
 			});
@@ -1622,14 +1744,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 2"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 2);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 2);
 				});
 			});
 
@@ -1637,14 +1761,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns only 'Strength', 'Dexterity', and 'Constitution'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator.GetRemainingOptions();
+					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator->GetRemainingOptions();
 
 					TestEqual("RemainingOptions.Num()", RemainingOptions.Num(), 3);
 
@@ -1676,41 +1802,43 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `true` for 'Dexterity' and 'Constitution'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbStrength)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbDexterity)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbConstitution)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbIntelligence)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbWisdom)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbCharisma)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
 					);
 				});
 			});
@@ -1719,14 +1847,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 1"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 1);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 1);
 				});
 			});
 
@@ -1734,14 +1864,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns only 'Dexterity' and 'Constitution'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator.GetRemainingOptions();
+					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator->GetRemainingOptions();
 
 					TestEqual(
 						"RemainingOptions.Num()",
@@ -1772,41 +1904,43 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `true` for 'Constitution' and 'Strength'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbStrength)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbDexterity)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbConstitution)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbIntelligence)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbWisdom)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbCharisma)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
 					);
 				});
 			});
@@ -1815,14 +1949,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 1"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 1);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 1);
 				});
 			});
 
@@ -1830,14 +1966,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns only 'Constitution' and 'Strength'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator.GetRemainingOptions();
+					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator->GetRemainingOptions();
 
 					TestEqual(
 						"RemainingOptions.Num()",
@@ -1869,18 +2007,20 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
 					{
 						TestFalse(
 							FString::Format(TEXT("CanApplyAbilityBoost({0})"), { PF2EnumUtils::ToString(AbilityScoreType)}),
-							Validator.CanApplyAbilityBoost(AbilityScoreType)
+							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
 				});
@@ -1890,14 +2030,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 0"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 0);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 0);
 				});
 			});
 
@@ -1905,14 +2047,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns an empty array"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator.GetRemainingOptions().Num(), 0);
+					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
 				});
 			});
 		});
@@ -1928,18 +2072,20 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
 					{
 						TestFalse(
 							FString::Format(TEXT("CanApplyAbilityBoost({0})"), { PF2EnumUtils::ToString(AbilityScoreType)}),
-							Validator.CanApplyAbilityBoost(AbilityScoreType)
+							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
 				});
@@ -1949,14 +2095,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 0"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 0);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 0);
 				});
 			});
 
@@ -1964,14 +2112,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns an empty array"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator.GetRemainingOptions().Num(), 0);
+					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
 				});
 			});
 		});
@@ -2004,11 +2154,13 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `true` for all abilities"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
@@ -2018,7 +2170,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 								TEXT("CanApplyAbilityBoost({0})"),
 								{ PF2EnumUtils::ToString(AbilityScoreType)}
 							),
-							Validator.CanApplyAbilityBoost(AbilityScoreType)
+							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
 				});
@@ -2028,14 +2180,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 3"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 3);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 3);
 				});
 			});
 
@@ -2043,14 +2197,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns all ability score types"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator.GetRemainingOptions();
+					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator->GetRemainingOptions();
 
 					TestEqual("RemainingOptions.Num()", RemainingOptions.Num(), 6);
 
@@ -2078,41 +2234,43 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `true` for all abilities except 'Strength'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbStrength)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbDexterity)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbConstitution)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbIntelligence)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbWisdom)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbCharisma)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
 					);
 				});
 			});
@@ -2121,14 +2279,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 2"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 2);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 2);
 				});
 			});
 
@@ -2136,14 +2296,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns all abilities except 'Strength'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator.GetRemainingOptions();
+					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator->GetRemainingOptions();
 
 					TestEqual(
 						"RemainingOptions.Num()",
@@ -2189,41 +2351,43 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `true` for all abilities except 'Constitution'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbStrength)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbDexterity)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbConstitution)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbIntelligence)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbWisdom)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbCharisma)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
 					);
 				});
 			});
@@ -2232,14 +2396,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 2"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 2);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 2);
 				});
 			});
 
@@ -2247,14 +2413,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns all abilities except 'Constitution'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator.GetRemainingOptions();
+					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator->GetRemainingOptions();
 
 					TestEqual(
 						"RemainingOptions.Num()",
@@ -2301,41 +2469,43 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `true` for all abilities except 'Strength' and 'Constitution'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbStrength)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbDexterity)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbConstitution)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbIntelligence)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbWisdom)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbCharisma)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
 					);
 				});
 			});
@@ -2344,14 +2514,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 1"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 1);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 1);
 				});
 			});
 
@@ -2359,14 +2531,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns all abilities except 'Strength' and 'Constitution'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator.GetRemainingOptions();
+					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator->GetRemainingOptions();
 
 					TestEqual(
 						"RemainingOptions.Num()",
@@ -2408,41 +2582,43 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `true` for all abilities except 'Strength' and 'Dexterity'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbStrength)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbDexterity)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbConstitution)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbIntelligence)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbWisdom)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbCharisma)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
 					);
 				});
 			});
@@ -2451,14 +2627,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 1"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 1);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 1);
 				});
 			});
 
@@ -2466,14 +2644,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns all abilities except 'Strength' and 'Dexterity'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator.GetRemainingOptions();
+					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator->GetRemainingOptions();
 
 					TestEqual(
 						"RemainingOptions.Num()",
@@ -2515,41 +2695,43 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `true` only for 'Strength' and 'Dexterity'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbStrength)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbDexterity)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbConstitution)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbIntelligence)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbWisdom)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbCharisma)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
 					);
 				});
 			});
@@ -2558,14 +2740,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 1"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 1);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 1);
 				});
 			});
 
@@ -2573,14 +2757,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns only 'Strength' and 'Dexterity'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator.GetRemainingOptions();
+					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator->GetRemainingOptions();
 
 					TestEqual(
 						"RemainingOptions.Num()",
@@ -2612,41 +2798,43 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `true` for only 'Strength' and 'Constitution'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbStrength)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbDexterity)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
 					);
 
 					TestTrue(
 						TEXT("CanApplyAbilityBoost(AbConstitution)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbIntelligence)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbWisdom)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
 					);
 
 					TestFalse(
 						TEXT("CanApplyAbilityBoost(AbCharisma)"),
-						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
+						Validator->CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
 					);
 				});
 			});
@@ -2655,14 +2843,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 1"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 1);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 1);
 				});
 			});
 
@@ -2670,14 +2860,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns only 'Strength' and 'Constitution'"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator.GetRemainingOptions();
+					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator->GetRemainingOptions();
 
 					TestEqual(
 						"RemainingOptions.Num()",
@@ -2710,18 +2902,20 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
 					{
 						TestFalse(
 							FString::Format(TEXT("CanApplyAbilityBoost({0})"), { PF2EnumUtils::ToString(AbilityScoreType)}),
-							Validator.CanApplyAbilityBoost(AbilityScoreType)
+							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
 				});
@@ -2731,14 +2925,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns 0"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 0);
+					TestEqual("Validator->GetRemainingBoostCount()", Validator->GetRemainingBoostCount(), 0);
 				});
 			});
 
@@ -2746,14 +2942,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			{
 				It(TEXT("returns an empty array"), [=, this]()
 				{
-					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
 
 					for (auto& AbilityScoreType : AbilityBoostsToApply)
 					{
-						Validator.ApplyAbilityBoost(AbilityScoreType);
+						Validator->ApplyAbilityBoost(AbilityScoreType);
 					}
 
-					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator.GetRemainingOptions().Num(), 0);
+					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
 				});
 			});
 		});

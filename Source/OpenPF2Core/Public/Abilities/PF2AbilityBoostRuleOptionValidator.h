@@ -8,8 +8,10 @@
 #include "PF2AbilityBoostRuleOption.h"
 #include "PF2CharacterAbilityScoreType.h"
 
+#include "PF2AbilityBoostRuleOptionValidator.generated.h"
+
 /**
- * A utility class for evaluating ability boost choices against ability boost rule options.
+ * A service object for evaluating ability boost choices against ability boost rule options.
  *
  * For example, if a particular ancestry grants the player boosts to the following:
  * 1. Strength or Dexterity
@@ -21,16 +23,22 @@
  * allowed by the combinations of rule options and the rule that the same ability cannot be boosted twice by the same
  * GA activation (for boosts granted "at the same time").
  */
-class FPF2AbilityBoostRuleOptionValidator
+UCLASS(BlueprintType)
+class UPF2AbilityBoostRuleOptionValidator final : public UObject
 {
+	GENERATED_BODY()
+
+protected:
 	/**
 	 * The rule options against which boosts will be checked.
 	 */
+	UPROPERTY(BlueprintReadOnly)
 	TArray<FPF2AbilityBoostRuleOption> RuleOptions;
 
 	/**
 	 * The abilities that have already been targeted by previous boosts during this activation.
 	 */
+	UPROPERTY(BlueprintReadOnly)
 	TSet<EPF2CharacterAbilityScoreType> UsedAbilities;
 
 	/**
@@ -42,12 +50,33 @@ class FPF2AbilityBoostRuleOptionValidator
 
 public:
 	/**
-	 * Constructor for FPF2AbilityBoostRuleOptionValidator.
-	 *
-	 * @param RuleOptions
-	 *	The rule options against which the new instance will check boosts.
+	 * Constructor for UPF2AbilityBoostRuleOptionValidator.
 	 */
-	explicit FPF2AbilityBoostRuleOptionValidator(TArray<FPF2AbilityBoostRuleOption> RuleOptions);
+	explicit UPF2AbilityBoostRuleOptionValidator()
+	{
+	};
+
+	/**
+	 * Adds multiple rule options to be taken into consideration during validation.
+	 *
+	 * This cannot be called if ability boosts have already been applied to the validator.
+	 *
+	 * @param NewRuleOptions
+	 *	The options to add to the validator.
+	 */
+	UFUNCTION(BlueprintCallable)
+	void AppendRuleOptions(const TArray<FPF2AbilityBoostRuleOption> NewRuleOptions);
+
+	/**
+	 * Adds a rule option to be taken into consideration during validation.
+	 *
+	 * This cannot be called if ability boosts have already been applied to the validator.
+	 *
+	 * @param RuleOption
+	 *	The option to add to the validator.
+	 */
+	UFUNCTION(BlueprintCallable)
+	void AddRuleOption(const FPF2AbilityBoostRuleOption RuleOption);
 
 	/**
 	 * Determines if the specified ability score can be boosted based on rule options and previously-boosted abilities.
@@ -58,6 +87,7 @@ public:
 	 * @return
 	 *	true if a boost of the specified ability would be allowed; false if it would not be allowed.
 	 */
+	UFUNCTION(BlueprintCallable)
 	bool CanApplyAbilityBoost(EPF2CharacterAbilityScoreType AbilityScoreType);
 
 	/**
@@ -69,6 +99,7 @@ public:
 	 * @param AbilityScoreType
 	 *	The type of ability score that is being boosted.
 	 */
+	UFUNCTION(BlueprintCallable)
 	void ApplyAbilityBoost(EPF2CharacterAbilityScoreType AbilityScoreType);
 
 	/**
@@ -77,6 +108,7 @@ public:
 	 * @return
 	 *	The number of boosts that can still be applied.
 	 */
+	UFUNCTION(BlueprintCallable)
 	int32 GetRemainingBoostCount() const;
 
 	/**
@@ -85,6 +117,7 @@ public:
 	 * @return
 	 *	The set of abilities that can be boosted, according to the rule options in this matcher.
 	 */
+	UFUNCTION(BlueprintCallable)
 	TSet<EPF2CharacterAbilityScoreType> GetRemainingOptions();
 
 protected:
