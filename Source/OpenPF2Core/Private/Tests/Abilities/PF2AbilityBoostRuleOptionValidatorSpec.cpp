@@ -195,6 +195,256 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 		});
 	});
 
+	Describe(TEXT("when there are two free ability boost rule options"), [=, this]()
+	{
+		const TArray<FPF2AbilityBoostRuleOption> RuleOptions = {
+			FPF2AbilityBoostRuleOption(true),
+			FPF2AbilityBoostRuleOption(true),
+		};
+
+		Describe(TEXT("before any ability boosts have been applied"), [=, this]()
+		{
+			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {};
+
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
+			{
+				It(TEXT("returns `true` for all abilities"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
+					{
+						TestTrue(
+							FString::Format(
+								TEXT("CanApplyAbilityBoost({0})"),
+								{ PF2EnumUtils::ToString(AbilityScoreType)}
+							),
+							Validator.CanApplyAbilityBoost(AbilityScoreType)
+						);
+					}
+				});
+			});
+
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 2"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 2);
+				});
+			});
+
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
+			{
+				It(TEXT("returns all ability score types"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator.GetRemainingOptions();
+
+					TestEqual("RemainingOptions.Num()", RemainingOptions.Num(), 6);
+
+					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
+					{
+						TestTrue(
+							FString::Format(
+								TEXT("GetRemainingOptions() contains '{0}'"),
+								{ PF2EnumUtils::ToString(AbilityScoreType)}
+							),
+							RemainingOptions.Contains(AbilityScoreType)
+						);
+					}
+				});
+			});
+		});
+
+		Describe(TEXT("after one ability boost has been applied"), [=, this]()
+		{
+			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
+				EPF2CharacterAbilityScoreType::AbStrength,
+			};
+
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
+			{
+				It(TEXT("returns `true` for all abilities except the one that was applied"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestFalse(
+						TEXT("CanApplyAbilityBoost(AbStrength)"),
+						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbStrength)
+					);
+
+					TestTrue(
+						TEXT("CanApplyAbilityBoost(AbDexterity)"),
+						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbDexterity)
+					);
+
+					TestTrue(
+						TEXT("CanApplyAbilityBoost(AbConstitution)"),
+						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbConstitution)
+					);
+
+					TestTrue(
+						TEXT("CanApplyAbilityBoost(AbIntelligence)"),
+						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbIntelligence)
+					);
+
+					TestTrue(
+						TEXT("CanApplyAbilityBoost(AbWisdom)"),
+						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbWisdom)
+					);
+
+					TestTrue(
+						TEXT("CanApplyAbilityBoost(AbCharisma)"),
+						Validator.CanApplyAbilityBoost(EPF2CharacterAbilityScoreType::AbCharisma)
+					);
+				});
+			});
+
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 1"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 1);
+				});
+			});
+
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
+			{
+				It(TEXT("returns all ability score types except the one that was applied"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					const TSet<EPF2CharacterAbilityScoreType> RemainingOptions = Validator.GetRemainingOptions();
+
+					TestEqual(
+						"RemainingOptions.Num()",
+						RemainingOptions.Num(),
+						5
+					);
+
+					TestTrue(
+						TEXT("GetRemainingOptions() contains 'AbDexterity'"),
+						RemainingOptions.Contains(EPF2CharacterAbilityScoreType::AbDexterity)
+					);
+
+					TestTrue(
+						TEXT("GetRemainingOptions() contains 'AbConstitution'"),
+						RemainingOptions.Contains(EPF2CharacterAbilityScoreType::AbConstitution)
+					);
+
+					TestTrue(
+						TEXT("GetRemainingOptions() contains 'AbIntelligence'"),
+						RemainingOptions.Contains(EPF2CharacterAbilityScoreType::AbIntelligence)
+					);
+
+					TestTrue(
+						TEXT("GetRemainingOptions() contains 'AbWisdom'"),
+						RemainingOptions.Contains(EPF2CharacterAbilityScoreType::AbWisdom)
+					);
+
+					TestTrue(
+						TEXT("GetRemainingOptions() contains 'AbCharisma'"),
+						RemainingOptions.Contains(EPF2CharacterAbilityScoreType::AbCharisma)
+					);
+				});
+			});
+		});
+
+		Describe(TEXT("after two ability boosts have been applied"), [=, this]()
+		{
+			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
+				EPF2CharacterAbilityScoreType::AbStrength,
+				EPF2CharacterAbilityScoreType::AbDexterity,
+			};
+
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
+			{
+				It(TEXT("returns `false` for all abilities"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
+					{
+						TestFalse(
+							FString::Format(TEXT("CanApplyAbilityBoost({0})"), { PF2EnumUtils::ToString(AbilityScoreType)}),
+							Validator.CanApplyAbilityBoost(AbilityScoreType)
+						);
+					}
+				});
+			});
+
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
+			{
+				It(TEXT("returns 0"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual("Validator.GetRemainingBoostCount()", Validator.GetRemainingBoostCount(), 0);
+				});
+			});
+
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
+			{
+				It(TEXT("returns an empty array"), [=, this]()
+				{
+					FPF2AbilityBoostRuleOptionValidator Validator(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator.ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator.GetRemainingOptions().Num(), 0);
+				});
+			});
+		});
+	});
+
 	Describe(TEXT("when there is only a rule option of Strength or Dexterity"), [=, this]()
 	{
 		const TArray<FPF2AbilityBoostRuleOption> RuleOptions = {

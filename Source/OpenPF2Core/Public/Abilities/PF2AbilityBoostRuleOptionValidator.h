@@ -108,11 +108,15 @@ protected:
 	/**
 	 * Internal, recursive method for calculating permutations of rule options.
 	 *
+	 * @param RemainingOptions
+	 *	The remaining rule options that can be used to construct additional permutations.
 	 * @param SeenOptions
-	 *	The options included in this permutation thus far.
+	 *	The rule options included in this permutation thus far.
 	 *
 	 * @return
 	 *	The full list of permutation(s) that started with the given SeenOptions.
 	 */
-	TArray<TArray<FPF2AbilityBoostRuleOption>> CalculateRulePermutations(TArray<FPF2AbilityBoostRuleOption> SeenOptions) const;
+	TArray<TArray<FPF2AbilityBoostRuleOption>> CalculateRulePermutations(
+		const TArray<FPF2AbilityBoostRuleOption> RemainingOptions,
+		const TArray<FPF2AbilityBoostRuleOption> SeenOptions) const;
 };
