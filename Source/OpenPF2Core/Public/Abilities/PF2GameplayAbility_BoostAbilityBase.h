@@ -36,6 +36,16 @@ class OPENPF2CORE_API UPF2GameplayAbility_BoostAbilityBase : public UGameplayAbi
 {
 	GENERATED_BODY()
 
+protected:
+	/**
+	 * The boost(s) this ability applies to the target.
+	 *
+	 * Each element represents a single rule option for an ability score boost. Each can either be a free ability boost;
+	 * or the option to choose between one or more ability options.
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Ability Boost Options")
+	TArray<FPF2AbilityBoostRuleOption> BoostRuleOptions;
+
 public:
 	UPF2GameplayAbility_BoostAbilityBase();
 
@@ -54,15 +64,6 @@ public:
 	                             const FGameplayEventData*            TriggerEventData) override;
 
 protected:
-	/**
-	 * The boost(s) this ability applies to the target.
-	 *
-	 * Each element represents a single rule option for an ability score boost. Each can either be a free ability boost;
-	 * or the option to choose between one or more ability options.
-	 */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Ability Boost Options")
-	TArray<FPF2AbilityBoostRuleOption> BoostRuleOptions;
-
 	/**
 	 * Gets which boosts were selected and passed-in to a GA activation.
 	 *
