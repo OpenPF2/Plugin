@@ -33,7 +33,7 @@ struct OPENPF2CORE_API FPF2GameplayAbilityTargetData_BoostAbility : public FGame
 	GENERATED_BODY()
 
 	UPROPERTY(BlueprintReadWrite)
-	TArray<EPF2CharacterAbilityScoreType> SelectedAbilities;
+	TSet<EPF2CharacterAbilityScoreType> SelectedAbilities;
 
 	/**
 	 * Constructor for FPF2GameplayAbilityTargetData_BoostAbility.
@@ -47,9 +47,9 @@ struct OPENPF2CORE_API FPF2GameplayAbilityTargetData_BoostAbility : public FGame
 	 *
 	 * @param SelectedAbilities
 	 *	The choice(s) for ability boosts. The choices must be allowed by the rule options of the GA being activated. The
-	 *	choices can be provided in any order in the array, regardless of the order of the rule options.
+	 *	choices can be provided in any order, regardless of the order of the rule options.
 	 */
-	explicit FPF2GameplayAbilityTargetData_BoostAbility(const TArray<EPF2CharacterAbilityScoreType> SelectedAbilities) :
+	explicit FPF2GameplayAbilityTargetData_BoostAbility(const TSet<EPF2CharacterAbilityScoreType> SelectedAbilities) :
 		SelectedAbilities(SelectedAbilities)
 	{
 	}

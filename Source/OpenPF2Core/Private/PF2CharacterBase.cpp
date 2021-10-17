@@ -6,11 +6,13 @@
 #include "PF2CharacterBase.h"
 
 #include "Abilities/PF2AbilitySystemComponent.h"
-#include "PF2EnumUtils.h"
 
 #include <AbilitySystemGlobals.h>
 #include <Net/UnrealNetwork.h>
 #include <UObject/ConstructorHelpers.h>
+
+#include "Abilities/PF2GameplayAbilityTargetData_BoostAbility.h"
+#include "Abilities/PF2GameplayAbility_BoostAbilityBase.h"
 
 APF2CharacterBase::APF2CharacterBase() :
 	APF2CharacterBase(TPF2CharacterComponentFactory<UPF2AbilitySystemComponent, UPF2AttributeSet>())
@@ -24,7 +26,9 @@ void APF2CharacterBase::PossessedBy(AController* NewController)
 	if (this->AbilitySystemComponent)
 	{
 		this->AbilitySystemComponent->InitAbilityActorInfo(this, this);
+
 		this->ActivatePassiveGameplayEffects();
+		this->ApplyAbilityBoostSelections();
 	}
 }
 
@@ -72,23 +76,6 @@ int32 APF2CharacterBase::GetCharacterLevel() const
 	return this->CharacterLevel;
 }
 
-void APF2CharacterBase::OnAbilityBoostAdded(
-		const TScriptInterface<IPF2CharacterAbilitySystemComponentInterface> TargetAsc,
-		const AActor*                                               TargetActor,
-		const EPF2CharacterAbilityScoreType                         TargetAbilityScore)
-{
-	// This has no effect on what passive GEs are currently applied, but it ensures that the new ability boost that has
-	// only been activated on the ASC will still be retained even if passive GEs for this character get recalculated
-	// (e.g. during a character level-up)
-	for (auto& CharacterBoost : this->AdditionalAbilityBoosts)
-	{
-		if (CharacterBoost.GetAbilityScoreType() == TargetAbilityScore)
-		{
-			CharacterBoost.IncrementBoostCount();
-		}
-	}
-}
-
 bool APF2CharacterBase::SetCharacterLevel(const int32 NewLevel)
 {
 	const int32 OldLevel = this->CharacterLevel;
@@ -117,6 +104,60 @@ void APF2CharacterBase::HandleCharacterLevelChanged(const float OldLevel, const 
 	this->OnCharacterLevelChanged(OldLevel, NewLevel);
 
 	this->ActivatePassiveGameplayEffects();
+}
+
+void APF2CharacterBase::ApplyAbilityBoostSelections()
+{
+	if (this->IsAuthorityForEffects())
+	{
+		TArray<FPF2CharacterAbilityBoostSelection> UnmatchedAbilityBoostSelections;
+
+		for (const auto& AbilityBoostSelection : this->AbilityBoostSelections)
+		{
+			TSubclassOf<UPF2GameplayAbility_BoostAbilityBase> BoostGa   = AbilityBoostSelection.BoostGameplayAbility;
+			UAbilitySystemComponent*                          Asc       = this->GetAbilitySystemComponent();
+			FGameplayAbilitySpec*                             BoostSpec = Asc->FindAbilitySpecFromClass(BoostGa);
+
+			if (BoostSpec == nullptr)
+			{
+				UnmatchedAbilityBoostSelections.Add(AbilityBoostSelection);
+			}
+			else
+			{
+				this->ActivateAbilityBoost(BoostSpec, AbilityBoostSelection);
+			}
+		}
+
+		// In case we couldn't match some, put them back into the property. This is safer than trying to modify the
+		// property in place while we iterate.
+		this->AbilityBoostSelections = UnmatchedAbilityBoostSelections;
+	}
+}
+
+void APF2CharacterBase::ActivateAbilityBoost(FGameplayAbilitySpec* BoostSpec,
+	                                         const FPF2CharacterAbilityBoostSelection& AbilityBoostSelection) const
+{
+	UAbilitySystemComponent*                    Asc               = this->GetAbilitySystemComponent();
+	const TSet<EPF2CharacterAbilityScoreType>   SelectedAbilities = AbilityBoostSelection.SelectedAbilities;
+	FPF2GameplayAbilityTargetData_BoostAbility* BoostTargetData   = new FPF2GameplayAbilityTargetData_BoostAbility();
+	FGameplayAbilityTargetDataHandle            TargetDataHandle;
+	FGameplayEventData                          BoostEventInfo;
+
+	BoostSpec->RemoveAfterActivation   = true;
+	BoostTargetData->SelectedAbilities = SelectedAbilities;
+
+	TargetDataHandle.Add(BoostTargetData);
+
+	BoostEventInfo.TargetData = TargetDataHandle;
+
+	// Fire it up!
+	Asc->TriggerAbilityFromGameplayEvent(
+		BoostSpec->Handle,
+		Asc->AbilityActorInfo.Get(),
+		UPF2GameplayAbility_BoostAbilityBase::GetTriggerTag(),
+		&BoostEventInfo,
+		*Asc
+	);
 }
 
 void APF2CharacterBase::ActivatePassiveGameplayEffects()
@@ -173,8 +214,6 @@ void APF2CharacterBase::GenerateManagedPassiveGameplayEffects()
 {
 	if (this->IsAuthorityForEffects() && !this->bManagedPassiveEffectsGenerated)
 	{
-		IPF2CharacterAbilitySystemComponentInterface* CharacterAsc = this->GetCharacterAbilitySystemComponent();
-
 		TArray<TSubclassOf<UGameplayEffect>> BlueprintEffects = {
 			this->AncestryAndHeritage,
 			this->Background,
@@ -185,27 +224,6 @@ void APF2CharacterBase::GenerateManagedPassiveGameplayEffects()
 			if (*BlueprintEffect != nullptr)
 			{
 				this->ManagedGameplayEffects.Add(PF2CharacterConstants::GeWeights::ManagedEffects, BlueprintEffect);
-			}
-		}
-
-		for (const auto& CharacterBoost : this->AdditionalAbilityBoosts)
-		{
-			const EPF2CharacterAbilityScoreType Attribute   = CharacterBoost.GetAbilityScoreType();
-			const int32                         BoostCount  = CharacterBoost.GetBoostCount();
-			const TSubclassOf<UGameplayEffect>  BoostEffect = CharacterAsc->GetBoostEffectForAbility(Attribute);
-
-			UE_LOG(
-				LogPf2Core,
-				VeryVerbose,
-				TEXT("Applying '%d' additional boosts to ability ('%s') on character ('%s')."),
-				BoostCount,
-				*(PF2EnumUtils::ToString(Attribute)),
-				*(this->GetName())
-			);
-
-			for (int32 BoostIndex = 0; BoostIndex < BoostCount; ++BoostIndex)
-			{
-				this->ManagedGameplayEffects.Add(PF2CharacterConstants::GeWeights::ManagedEffects, BoostEffect);
 			}
 		}
 

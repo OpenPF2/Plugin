@@ -24,12 +24,6 @@ class OPENPF2CORE_API IPF2CharacterAbilitySystemComponentInterface : public IPF2
 public:
 	/**
 	 * Adds a boost of the specified ability to the attribute set of the owning character.
-	 *
-	 * The boost is accomplished via a passive Gameplay Effect added to the ASC. In addition, if the owning actor
-	 * implements IPF2CharacterAbilityEventsInterface (as APF2CharacterBase does), it will be notified via
-	 * OnAbilityBoostAdded that a boost is being added so that it can update its book-keeping of "Additional Ability
-	 * Boosts". This will ensure that the new ability boost will survive the recalculation or re-application of passive
-	 * GEs that can happen during character lifecycle events like level-ups.
 	 */
 	UFUNCTION(BlueprintCallable)
     virtual void ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore) = 0;
