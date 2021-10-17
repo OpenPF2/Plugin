@@ -111,33 +111,36 @@ TArray<TArray<FPF2AbilityBoostRuleOption>> FPF2AbilityBoostRuleOptionValidator::
 {
 	if (this->CachedRulePermutations.Num() == 0)
 	{
-		this->CachedRulePermutations = this->CalculateRulePermutations({});
+		this->CachedRulePermutations = this->CalculateRulePermutations(this->RuleOptions, {});
 	}
 
 	return this->CachedRulePermutations;
 }
 
 TArray<TArray<FPF2AbilityBoostRuleOption>> FPF2AbilityBoostRuleOptionValidator::CalculateRulePermutations(
+	const TArray<FPF2AbilityBoostRuleOption> RemainingOptions,
 	const TArray<FPF2AbilityBoostRuleOption> SeenOptions) const
 {
 	TArray<TArray<FPF2AbilityBoostRuleOption>> Result;
+	const int32                                RemainingOptionCount = RemainingOptions.Num();
 
-	if (SeenOptions.Num() == this->RuleOptions.Num())
+	if (RemainingOptionCount == 0)
 	{
-		// No more options to evaluate on this path. Return the path we've got!
 		Result.Add(SeenOptions);
 	}
 	else
 	{
-		for (const FPF2AbilityBoostRuleOption& RuleOption : this->RuleOptions)
+		for (int OptionIndex = 0; OptionIndex < RemainingOptionCount; ++OptionIndex)
 		{
-			if (!SeenOptions.Contains(RuleOption))
-			{
-				TArray<FPF2AbilityBoostRuleOption> NewSeenOptions = SeenOptions;
+			const FPF2AbilityBoostRuleOption   RuleOption          = RemainingOptions[OptionIndex];
+			TArray<FPF2AbilityBoostRuleOption> NewRemainingOptions = RemainingOptions,
+			                                   NewSeenOptions      = SeenOptions;
 
-				NewSeenOptions.Add(RuleOption);
-				Result.Append(this->CalculateRulePermutations(NewSeenOptions));
-			}
+			// Skip the option we're on right now.
+			NewRemainingOptions.RemoveAt(OptionIndex);
+
+			NewSeenOptions.Add(RuleOption);
+			Result.Append(this->CalculateRulePermutations(NewRemainingOptions, NewSeenOptions));
 		}
 	}
 
