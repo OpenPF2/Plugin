@@ -39,6 +39,12 @@ class OPENPF2CORE_API UPF2GameplayAbility_BoostAbilityBase : public UGameplayAbi
 
 protected:
 	/**
+	 * The description of this boost, as shown to the player when they are being asked to make a selection.
+	 */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Description")
+	FText Description;
+
+	/**
 	 * The boost(s) this ability applies to the target.
 	 *
 	 * Each element represents a single rule option for an ability score boost. Each can either be a free ability boost;
