@@ -13,7 +13,7 @@
 #include "Calculations/PF2KeyAbilityTemlCalculationBase.h"
 
 #include "OpenPF2Core.h"
-#include "GameplayAbilityUtils.h"
+#include "PF2GameplayAbilityUtilities.h"
 #include "PF2TemlCalculation.h"
 
 #include "Abilities/PF2AttributeSet.h"
@@ -67,7 +67,7 @@ void UPF2KeyAbilityTemlCalculationBase::DefineKeyAbilityCapture(const FString   
                                                                 const FGameplayAttribute Attribute)
 {
 	const FGameplayEffectAttributeCaptureDefinition CaptureDefinition =
-		GameplayAbilityUtils::BuildSourceCaptureFor(Attribute);
+		PF2GameplayAbilityUtilities::BuildSourceCaptureFor(Attribute);
 
 	this->KeyAbilityCaptureDefinitions.Add(
 		KeyAbilityTagName,
@@ -144,7 +144,7 @@ FGameplayEffectAttributeCaptureDefinition UPF2KeyAbilityTemlCalculationBase::Det
 	{
 		const FString TagName = PairIterator.Key();
 
-		if (GameplayAbilityUtils::HasTag(SourceTags, TagName))
+		if (PF2GameplayAbilityUtilities::HasTag(SourceTags, TagName))
 		{
 			KeyAbilityCaptureDefinition = PairIterator.Value();
 			break;

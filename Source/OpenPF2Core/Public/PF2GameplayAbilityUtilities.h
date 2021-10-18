@@ -13,7 +13,7 @@
 /**
  * Utility logic for working with the Gameplay Abilities System (GAS).
  */
-namespace GameplayAbilityUtils
+namespace PF2GameplayAbilityUtilities
 {
 	/**
 	 * Gets the specified tag out of the tags known to the project.

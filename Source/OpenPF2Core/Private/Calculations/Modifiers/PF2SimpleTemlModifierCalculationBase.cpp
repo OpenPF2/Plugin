@@ -12,7 +12,6 @@
 
 #include "Calculations/Modifiers/PF2SimpleTemlModifierCalculationBase.h"
 #include "OpenPF2Core.h"
-#include "GameplayAbilityUtils.h"
 #include "PF2TemlCalculation.h"
 #include "Abilities/PF2AttributeSet.h"
 

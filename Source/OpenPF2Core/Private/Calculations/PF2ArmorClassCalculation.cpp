@@ -13,7 +13,7 @@
 #include "Calculations/PF2ArmorClassCalculation.h"
 
 #include "OpenPF2Core.h"
-#include "GameplayAbilityUtils.h"
+#include "PF2GameplayAbilityUtilities.h"
 #include "PF2TemlCalculation.h"
 
 #include "Abilities/PF2AbilityAttributes.h"
@@ -96,17 +96,17 @@ FString UPF2ArmorClassCalculation::DetermineArmorType(const FGameplayTagContaine
 	FString ArmorType = "Unarmored";
 
 	// Bypass additional checks if the character has no armor equipped, to avoid checking every armor type.
-	if (GameplayAbilityUtils::HasTag(SourceTags, FName("Armor.Equipped")))
+	if (PF2GameplayAbilityUtilities::HasTag(SourceTags, FName("Armor.Equipped")))
 	{
-		if (GameplayAbilityUtils::HasTag(SourceTags, FName("Armor.Equipped.Heavy")))
+		if (PF2GameplayAbilityUtilities::HasTag(SourceTags, FName("Armor.Equipped.Heavy")))
 		{
 			ArmorType = "Heavy";
 		}
-		else if (GameplayAbilityUtils::HasTag(SourceTags, FName("Armor.Equipped.Medium")))
+		else if (PF2GameplayAbilityUtilities::HasTag(SourceTags, FName("Armor.Equipped.Medium")))
 		{
 			ArmorType = "Medium";
 		}
-		else if (GameplayAbilityUtils::HasTag(SourceTags, FName("Armor.Equipped.Light")))
+		else if (PF2GameplayAbilityUtilities::HasTag(SourceTags, FName("Armor.Equipped.Light")))
 		{
 			ArmorType = "Light";
 		}

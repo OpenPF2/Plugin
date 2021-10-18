@@ -5,13 +5,13 @@
 
 #pragma once
 
-#include "GameplayAbilityUtils.h"
+#include "PF2GameplayAbilityUtilities.h"
 #include <CoreMinimal.h>
 
 /**
  * Utility logic for working with Gameplay Abilities.
  */
-namespace GameplayAbilityUtils
+namespace PF2GameplayAbilityUtilities
 {
 	FGameplayEffectAttributeCaptureDefinition BuildSourceCaptureFor(const FGameplayAttribute Attribute)
 	{

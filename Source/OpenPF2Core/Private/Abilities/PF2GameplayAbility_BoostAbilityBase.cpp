@@ -22,7 +22,7 @@ UPF2GameplayAbility_BoostAbilityBase::UPF2GameplayAbility_BoostAbilityBase()
 	// We don't maintain any local state.
 	this->InstancingPolicy = EGameplayAbilityInstancingPolicy::NonInstanced;
 
-	this->AbilityTags.AddTag(GameplayAbilityUtils::GetTag(FName("Ability.ApplyAbilityBoost")));
+	this->AbilityTags.AddTag(PF2GameplayAbilityUtilities::GetTag(FName("Ability.ApplyAbilityBoost")));
 }
 
 bool UPF2GameplayAbility_BoostAbilityBase::CheckCost(const FGameplayAbilitySpecHandle Handle,

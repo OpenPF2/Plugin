@@ -5,7 +5,7 @@
 
 #include "Tests/PF2SpecBase.h"
 
-#include "GameplayAbilityUtils.h"
+#include "PF2GameplayAbilityUtilities.h"
 #include "Abilities/PF2AttributeSet.h"
 
 template <typename BlueprintType>
@@ -187,10 +187,10 @@ FActiveGameplayEffectHandle FPF2SpecBase::ApplyGameEffect(FGameplayAttributeData
 
 void FPF2SpecBase::ApplyUnreplicatedTag(const FString TagName, const float CharacterLevel) const
 {
-	this->PawnAbilityComponent->AddLooseGameplayTag(GameplayAbilityUtils::GetTag(TagName));
+	this->PawnAbilityComponent->AddLooseGameplayTag(PF2GameplayAbilityUtilities::GetTag(TagName));
 }
 
 void FPF2SpecBase::RemoveUnreplicatedTag(const FString TagName) const
 {
-	this->PawnAbilityComponent->RemoveLooseGameplayTag(GameplayAbilityUtils::GetTag(TagName));
+	this->PawnAbilityComponent->RemoveLooseGameplayTag(PF2GameplayAbilityUtilities::GetTag(TagName));
 }

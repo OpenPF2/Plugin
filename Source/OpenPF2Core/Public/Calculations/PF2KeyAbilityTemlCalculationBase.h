@@ -15,8 +15,6 @@
 #include <CoreMinimal.h>
 #include <GameplayModMagnitudeCalculation.h>
 
-#include "GameplayAbilityUtils.h"
-
 #include "PF2KeyAbilityTemlCalculationBase.generated.h"
 
 /**
