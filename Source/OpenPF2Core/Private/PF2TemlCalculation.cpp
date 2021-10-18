@@ -15,12 +15,12 @@
 #include <CoreMinimal.h>
 
 FPF2TemlCalculation::FPF2TemlCalculation(const FString TagPrefix, const FGameplayEffectSpec& Spec) :
-	FPF2TemlCalculation(FGameplayTag::RequestGameplayTag(FName(TagPrefix)), Spec)
+	FPF2TemlCalculation(GameplayAbilityUtils::GetTag(TagPrefix), Spec)
 {
 }
 
 FPF2TemlCalculation::FPF2TemlCalculation(const FName TagPrefix, const FGameplayEffectSpec& Spec) :
-	FPF2TemlCalculation(FGameplayTag::RequestGameplayTag(TagPrefix), Spec)
+	FPF2TemlCalculation(GameplayAbilityUtils::GetTag(TagPrefix), Spec)
 {
 }
 

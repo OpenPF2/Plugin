@@ -11,10 +11,42 @@
 #include "GameplayTagContainer.h"
 
 /**
- * Utility logic for working with Gameplay Abilities.
+ * Utility logic for working with the Gameplay Abilities System (GAS).
  */
 namespace GameplayAbilityUtils
 {
+	/**
+	 * Gets the specified tag out of the tags known to the project.
+	 *
+	 * The tag must already exist in one of the INI files under Config/Tags; otherwise, this will trigger an error.
+	 *
+	 * @param TagName
+	 *	The name of the tag, as an FName.
+	 *
+	 * @return
+	 *	The desired tag.
+	 */
+	FORCEINLINE static FGameplayTag GetTag(const FName TagName)
+	{
+		return FGameplayTag::RequestGameplayTag(TagName);
+	}
+
+	/**
+	 * Gets the specified tag out of the tags known to the project.
+	 *
+	 * The tag must already exist in one of the INI files under Config/Tags; otherwise, this will trigger an error.
+	 *
+	 * @param TagName
+	 *	The name of the tag, as a string.
+	 *
+	 * @return
+	 *	The desired tag.
+	 */
+	FORCEINLINE static FGameplayTag GetTag(const FString TagName)
+	{
+		return GetTag(FName(TagName));
+	}
+
 	/**
 	 * Creates an attribute capture definition for the specified Gameplay Attribute.
 	 *
@@ -41,7 +73,7 @@ namespace GameplayAbilityUtils
 	 */
 	FORCEINLINE static bool HasTag(const FGameplayTagContainer *Tags, const FName TagNameOrPrefix)
 	{
-		return Tags->HasTag(FGameplayTag::RequestGameplayTag(TagNameOrPrefix));
+		return Tags->HasTag(GetTag(TagNameOrPrefix));
 	}
 
 	/**
@@ -59,6 +91,6 @@ namespace GameplayAbilityUtils
 	 */
 	FORCEINLINE static bool HasTag(const FGameplayTagContainer *Tags, const FString TagNameOrPrefix)
 	{
-		return Tags->HasTag(FGameplayTag::RequestGameplayTag(FName(TagNameOrPrefix)));
+		return Tags->HasTag(GetTag(TagNameOrPrefix));
 	}
 }

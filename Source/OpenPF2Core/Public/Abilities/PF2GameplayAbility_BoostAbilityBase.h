@@ -13,6 +13,7 @@
 #pragma once
 
 #include "Abilities/GameplayAbility.h"
+#include "GameplayAbilityUtils.h"
 #include "PF2AbilityBoostRuleOption.h"
 #include "PF2AttributeSet.h"
 #include "PF2CharacterAbilitySystemComponentInterface.h"
@@ -58,7 +59,7 @@ public:
 
 	static FORCEINLINE FGameplayTag GetTriggerTag()
 	{
-		return FGameplayTag(FGameplayTag::RequestGameplayTag(FName("TriggerTagCategory.ApplySelectedAbilityBoost")));
+		return GameplayAbilityUtils::GetTag(FName("TriggerTagCategory.ApplySelectedAbilityBoost"));
 	};
 
 	virtual bool CheckCost(const FGameplayAbilitySpecHandle Handle,

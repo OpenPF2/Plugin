@@ -4,6 +4,8 @@
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "Tests/PF2SpecBase.h"
+
+#include "GameplayAbilityUtils.h"
 #include "Abilities/PF2AttributeSet.h"
 
 template <typename BlueprintType>
@@ -185,10 +187,10 @@ FActiveGameplayEffectHandle FPF2SpecBase::ApplyGameEffect(FGameplayAttributeData
 
 void FPF2SpecBase::ApplyUnreplicatedTag(const FString TagName, const float CharacterLevel)
 {
-	this->PawnAbilityComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName(TagName)));
+	this->PawnAbilityComponent->AddLooseGameplayTag(GameplayAbilityUtils::GetTag(TagName));
 }
 
 void FPF2SpecBase::RemoveUnreplicatedTag(const FString TagName)
 {
-	this->PawnAbilityComponent->RemoveLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName(TagName)));
+	this->PawnAbilityComponent->RemoveLooseGameplayTag(GameplayAbilityUtils::GetTag(TagName));
 }
