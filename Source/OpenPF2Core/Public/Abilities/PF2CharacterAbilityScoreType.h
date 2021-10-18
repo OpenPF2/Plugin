@@ -17,7 +17,7 @@
  *
  * @see UPF2AttributeSet
  */
-UENUM()
+UENUM(BlueprintType)
 enum class EPF2CharacterAbilityScoreType : uint8
 {
 	// The key/machine name of each enum value MUST exactly match the name of the corresponding character attribute from
