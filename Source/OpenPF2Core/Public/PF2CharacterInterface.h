@@ -11,6 +11,7 @@
 // permission.
 
 #pragma once
+#include "Abilities/PF2GameplayAbility_BoostAbilityBase.h"
 
 #include "PF2CharacterInterface.generated.h"
 
@@ -39,4 +40,13 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable)
 	virtual int32 GetCharacterLevel() const = 0;
+
+	/**
+	 * Gets all of the ability boosts that have been granted to this character that require choices from the player.
+	 *
+	 * @return
+	 *	The ability boost GAs that are still pending for this character.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<UPF2GameplayAbility_BoostAbilityBase *> GetPendingAbilityBoosts() const = 0;
 };

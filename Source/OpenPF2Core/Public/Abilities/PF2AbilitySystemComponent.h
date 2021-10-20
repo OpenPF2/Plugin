@@ -70,6 +70,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual TSubclassOf<UGameplayEffect> GetBoostEffectForAbility(const EPF2CharacterAbilityScoreType AbilityScore) override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<UPF2GameplayAbility_BoostAbilityBase *> GetPendingAbilityBoosts() const override;
+
 protected:
 	// =================================================================================================================
 	// Protected Properties - Blueprint Accessible

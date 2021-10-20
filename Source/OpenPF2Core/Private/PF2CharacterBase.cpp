@@ -76,6 +76,11 @@ int32 APF2CharacterBase::GetCharacterLevel() const
 	return this->CharacterLevel;
 }
 
+TArray<UPF2GameplayAbility_BoostAbilityBase *> APF2CharacterBase::GetPendingAbilityBoosts() const
+{
+	return this->GetCharacterAbilitySystemComponent()->GetPendingAbilityBoosts();
+}
+
 bool APF2CharacterBase::SetCharacterLevel(const int32 NewLevel)
 {
 	const int32 OldLevel = this->CharacterLevel;

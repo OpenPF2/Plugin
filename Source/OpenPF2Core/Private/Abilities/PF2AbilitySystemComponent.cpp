@@ -6,6 +6,8 @@
 #include "Abilities/PF2AbilitySystemComponent.h"
 
 #include <UObject/ConstructorHelpers.h>
+
+#include "PF2ArrayUtilities.h"
 #include "PF2CharacterConstants.h"
 #include "PF2CharacterInterface.h"
 #include "PF2EnumUtils.h"
@@ -241,6 +243,29 @@ FORCEINLINE TSubclassOf<UGameplayEffect> UPF2AbilitySystemComponent::GetBoostEff
 	const EPF2CharacterAbilityScoreType AbilityScore)
 {
 	return this->AbilityBoostEffects[AbilityScore];
+}
+
+TArray<UPF2GameplayAbility_BoostAbilityBase *> UPF2AbilitySystemComponent::GetPendingAbilityBoosts() const
+{
+	TArray<UPF2GameplayAbility_BoostAbilityBase *> MatchingGameplayAbilities;
+	TArray<FGameplayAbilitySpec*>                  MatchingGameplayAbilitySpecs;
+
+	this->GetActivatableGameplayAbilitySpecsByAllMatchingTags(
+		FGameplayTagContainer(PF2GameplayAbilityUtilities::GetTag(FName("Ability.ApplyAbilityBoost"))),
+		MatchingGameplayAbilitySpecs,
+		false
+	);
+
+	MatchingGameplayAbilities =
+		PF2ArrayUtilities::Map<UPF2GameplayAbility_BoostAbilityBase *>(
+			MatchingGameplayAbilitySpecs,
+			[](const FGameplayAbilitySpec* AbilitySpec)
+			{
+				return Cast<UPF2GameplayAbility_BoostAbilityBase>(AbilitySpec->Ability);
+			}
+		);
+
+	return MatchingGameplayAbilities;
 }
 
 FORCEINLINE int UPF2AbilitySystemComponent::GetCharacterLevel() const

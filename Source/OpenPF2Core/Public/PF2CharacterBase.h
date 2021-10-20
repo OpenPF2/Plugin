@@ -305,6 +305,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual int32 GetCharacterLevel() const override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<UPF2GameplayAbility_BoostAbilityBase *> GetPendingAbilityBoosts() const override;
+
 	// =================================================================================================================
 	// Public Methods - Blueprint Callable
 	// =================================================================================================================
