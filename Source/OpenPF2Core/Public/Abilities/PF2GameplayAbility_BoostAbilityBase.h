@@ -34,6 +34,7 @@
  * must apply each one to a different score."
  */
 UCLASS(Abstract, HideCategories=("Triggers"))
+// ReSharper disable once CppClassCanBeFinal
 class OPENPF2CORE_API UPF2GameplayAbility_BoostAbilityBase : public UGameplayAbility
 {
 	GENERATED_BODY()
