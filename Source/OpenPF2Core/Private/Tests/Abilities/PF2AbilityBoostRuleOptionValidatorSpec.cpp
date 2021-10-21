@@ -3,7 +3,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-#include "PF2EnumUtils.h"
+#include "PF2EnumUtilities.h"
 
 #include "Abilities/PF2AbilityBoostRuleOption.h"
 #include "Abilities/PF2AbilityBoostRuleOptionValidator.h"
@@ -32,7 +32,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
 				{
 					TestFalse(
-						FString::Format(TEXT("CanApplyAbilityBoost({0})"), { PF2EnumUtils::ToString(AbilityScoreType)}),
+						FString::Format(TEXT("CanApplyAbilityBoost({0})"), { PF2EnumUtilities::ToString(AbilityScoreType)}),
 						Validator->CanApplyAbilityBoost(AbilityScoreType)
 					);
 				}
@@ -92,7 +92,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 						TestTrue(
 							FString::Format(
 								TEXT("CanApplyAbilityBoost({0})"),
-								{ PF2EnumUtils::ToString(AbilityScoreType)}
+								{ PF2EnumUtilities::ToString(AbilityScoreType)}
 							),
 							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
@@ -139,7 +139,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 						TestTrue(
 							FString::Format(
 								TEXT("GetRemainingOptions() contains '{0}'"),
-								{ PF2EnumUtils::ToString(AbilityScoreType)}
+								{ PF2EnumUtilities::ToString(AbilityScoreType)}
 							),
 							RemainingOptions.Contains(AbilityScoreType)
 						);
@@ -170,7 +170,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
 					{
 						TestFalse(
-							FString::Format(TEXT("CanApplyAbilityBoost({0})"), { PF2EnumUtils::ToString(AbilityScoreType)}),
+							FString::Format(TEXT("CanApplyAbilityBoost({0})"), { PF2EnumUtilities::ToString(AbilityScoreType)}),
 							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
@@ -242,7 +242,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 						TestTrue(
 							FString::Format(
 								TEXT("CanApplyAbilityBoost({0})"),
-								{ PF2EnumUtils::ToString(AbilityScoreType)}
+								{ PF2EnumUtilities::ToString(AbilityScoreType)}
 							),
 							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
@@ -289,7 +289,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 						TestTrue(
 							FString::Format(
 								TEXT("GetRemainingOptions() contains '{0}'"),
-								{ PF2EnumUtils::ToString(AbilityScoreType)}
+								{ PF2EnumUtilities::ToString(AbilityScoreType)}
 							),
 							RemainingOptions.Contains(AbilityScoreType)
 						);
@@ -438,7 +438,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
 					{
 						TestFalse(
-							FString::Format(TEXT("CanApplyAbilityBoost({0})"), { PF2EnumUtils::ToString(AbilityScoreType)}),
+							FString::Format(TEXT("CanApplyAbilityBoost({0})"), { PF2EnumUtilities::ToString(AbilityScoreType)}),
 							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
@@ -602,7 +602,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
 					{
 						TestFalse(
-							FString::Format(TEXT("CanApplyAbilityBoost({0})"), { PF2EnumUtils::ToString(AbilityScoreType)}),
+							FString::Format(TEXT("CanApplyAbilityBoost({0})"), { PF2EnumUtilities::ToString(AbilityScoreType)}),
 							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
@@ -680,7 +680,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 						TestTrue(
 							FString::Format(
 								TEXT("CanApplyAbilityBoost({0})"),
-								{ PF2EnumUtils::ToString(AbilityScoreType)}
+								{ PF2EnumUtilities::ToString(AbilityScoreType)}
 							),
 							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
@@ -727,7 +727,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 						TestTrue(
 							FString::Format(
 								TEXT("GetRemainingOptions() contains '{0}'"),
-								{ PF2EnumUtils::ToString(AbilityScoreType)}
+								{ PF2EnumUtilities::ToString(AbilityScoreType)}
 							),
 							RemainingOptions.Contains(AbilityScoreType)
 						);
@@ -878,7 +878,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 						TestFalse(
 							FString::Format(
 								TEXT("CanApplyAbilityBoost({0})"),
-								{ PF2EnumUtils::ToString(AbilityScoreType)}
+								{ PF2EnumUtilities::ToString(AbilityScoreType)}
 							),
 							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
@@ -946,7 +946,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 						TestFalse(
 							FString::Format(
 								TEXT("CanApplyAbilityBoost({0})"),
-								{ PF2EnumUtils::ToString(AbilityScoreType)}
+								{ PF2EnumUtilities::ToString(AbilityScoreType)}
 							),
 							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
@@ -1116,7 +1116,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 						TestFalse(
 							FString::Format(
 								TEXT("CanApplyAbilityBoost({0})"),
-								{ PF2EnumUtils::ToString(AbilityScoreType)}
+								{ PF2EnumUtilities::ToString(AbilityScoreType)}
 							),
 							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
@@ -1195,7 +1195,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 						TestTrue(
 							FString::Format(
 								TEXT("CanApplyAbilityBoost({0})"),
-								{ PF2EnumUtils::ToString(AbilityScoreType)}
+								{ PF2EnumUtilities::ToString(AbilityScoreType)}
 							),
 							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
@@ -1242,7 +1242,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 						TestTrue(
 							FString::Format(
 								TEXT("GetRemainingOptions() contains '{0}'"),
-								{ PF2EnumUtils::ToString(AbilityScoreType)}
+								{ PF2EnumUtilities::ToString(AbilityScoreType)}
 							),
 							RemainingOptions.Contains(AbilityScoreType)
 						);
@@ -1393,7 +1393,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 						TestFalse(
 							FString::Format(
 								TEXT("CanApplyAbilityBoost({0})"),
-								{ PF2EnumUtils::ToString(AbilityScoreType)}
+								{ PF2EnumUtilities::ToString(AbilityScoreType)}
 							),
 							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
@@ -1461,7 +1461,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 						TestFalse(
 							FString::Format(
 								TEXT("CanApplyAbilityBoost({0})"),
-								{ PF2EnumUtils::ToString(AbilityScoreType)}
+								{ PF2EnumUtilities::ToString(AbilityScoreType)}
 							),
 							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
@@ -1631,7 +1631,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 						TestFalse(
 							FString::Format(
 								TEXT("CanApplyAbilityBoost({0})"),
-								{ PF2EnumUtils::ToString(AbilityScoreType)}
+								{ PF2EnumUtilities::ToString(AbilityScoreType)}
 							),
 							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
@@ -2019,7 +2019,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
 					{
 						TestFalse(
-							FString::Format(TEXT("CanApplyAbilityBoost({0})"), { PF2EnumUtils::ToString(AbilityScoreType)}),
+							FString::Format(TEXT("CanApplyAbilityBoost({0})"), { PF2EnumUtilities::ToString(AbilityScoreType)}),
 							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
@@ -2084,7 +2084,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
 					{
 						TestFalse(
-							FString::Format(TEXT("CanApplyAbilityBoost({0})"), { PF2EnumUtils::ToString(AbilityScoreType)}),
+							FString::Format(TEXT("CanApplyAbilityBoost({0})"), { PF2EnumUtilities::ToString(AbilityScoreType)}),
 							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}
@@ -2168,7 +2168,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 						TestTrue(
 							FString::Format(
 								TEXT("CanApplyAbilityBoost({0})"),
-								{ PF2EnumUtils::ToString(AbilityScoreType)}
+								{ PF2EnumUtilities::ToString(AbilityScoreType)}
 							),
 							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
@@ -2215,7 +2215,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 						TestTrue(
 							FString::Format(
 								TEXT("GetRemainingOptions() contains '{0}'"),
-								{ PF2EnumUtils::ToString(AbilityScoreType)}
+								{ PF2EnumUtilities::ToString(AbilityScoreType)}
 							),
 							RemainingOptions.Contains(AbilityScoreType)
 						);
@@ -2914,7 +2914,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
 					{
 						TestFalse(
-							FString::Format(TEXT("CanApplyAbilityBoost({0})"), { PF2EnumUtils::ToString(AbilityScoreType)}),
+							FString::Format(TEXT("CanApplyAbilityBoost({0})"), { PF2EnumUtilities::ToString(AbilityScoreType)}),
 							Validator->CanApplyAbilityBoost(AbilityScoreType)
 						);
 					}

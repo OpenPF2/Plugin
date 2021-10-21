@@ -10,7 +10,7 @@
 #include "PF2ArrayUtilities.h"
 #include "PF2CharacterConstants.h"
 #include "PF2CharacterInterface.h"
-#include "PF2EnumUtils.h"
+#include "PF2EnumUtilities.h"
 
 UPF2AbilitySystemComponent::UPF2AbilitySystemComponent() : bPassiveEffectsActivated(false)
 {
@@ -23,7 +23,7 @@ UPF2AbilitySystemComponent::UPF2AbilitySystemComponent() : bPassiveEffectsActiva
 
 	for (const auto& Ability : TEnumRange<EPF2CharacterAbilityScoreType>())
 	{
-		const FString AbilityName = PF2EnumUtils::ToString(Ability);
+		const FString AbilityName = PF2EnumUtilities::ToString(Ability);
 
 		const FString Filename =
 			PF2CharacterConstants::GetBlueprintPath(
@@ -230,7 +230,7 @@ void UPF2AbilitySystemComponent::ApplyAbilityBoost(const EPF2CharacterAbilitySco
 			LogPf2Core,
 			VeryVerbose,
 			TEXT("Applying a boost to ability ('%s') through ASC for character ('%s') via GE ('%s')."),
-			*(PF2EnumUtils::ToString(TargetAbilityScore)),
+			*(PF2EnumUtilities::ToString(TargetAbilityScore)),
 			*(this->GetOwnerActor()->GetName()),
 			*(BoostEffect->GetName())
 		);

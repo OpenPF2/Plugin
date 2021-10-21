@@ -4,7 +4,7 @@
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "Abilities/PF2AbilityBoostRuleOptionValidator.h"
-#include "PF2EnumUtils.h"
+#include "PF2EnumUtilities.h"
 
 void UPF2AbilityBoostRuleOptionValidator::AppendRuleOptions(const TArray<FPF2AbilityBoostRuleOption> NewRuleOptions)
 {
@@ -63,7 +63,7 @@ void UPF2AbilityBoostRuleOptionValidator::ApplyAbilityBoost(const EPF2CharacterA
 	checkf(
 		this->CanApplyAbilityBoost(AbilityScoreType),
 		TEXT("A boost to '%s' cannot be applied based on the unused rule options ('%d' boosts remain)."),
-		*(PF2EnumUtils::ToString(AbilityScoreType)),
+		*(PF2EnumUtilities::ToString(AbilityScoreType)),
 		this->GetRemainingBoostCount()
 	);
 
