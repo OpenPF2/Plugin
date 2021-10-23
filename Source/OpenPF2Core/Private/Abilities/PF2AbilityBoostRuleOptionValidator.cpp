@@ -14,6 +14,50 @@ void UPF2AbilityBoostRuleOptionValidator::AppendRuleOptions(const TArray<FPF2Abi
 	}
 }
 
+int32 UPF2AbilityBoostRuleOptionValidator::GetRemainingBoostCount() const
+{
+	return (this->RuleOptions.Num() - this->UsedAbilities.Num());
+}
+
+TSet<EPF2CharacterAbilityScoreType> UPF2AbilityBoostRuleOptionValidator::GetRemainingOptions()
+{
+	TSet<EPF2CharacterAbilityScoreType> AllRuleAbilityOptions;
+	TSet<EPF2CharacterAbilityScoreType> RemainingOptions;
+
+	for (const auto& RuleOption : this->RuleOptions)
+	{
+		if (RuleOption.bIsFreeBoost)
+		{
+			for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
+			{
+				AllRuleAbilityOptions.Add(AbilityScoreType);
+			}
+		}
+		else
+		{
+			AllRuleAbilityOptions.Append(RuleOption.AbilityScoreTypes);
+		}
+	}
+
+	if (this->UsedAbilities.Num() == 0)
+	{
+		// We don't need to search any further, since all options are still on the table.
+		RemainingOptions = AllRuleAbilityOptions;
+	}
+	else
+	{
+		for (const auto& AbilityScoreType : AllRuleAbilityOptions)
+		{
+			if (this->CanApplyAbilityBoost(AbilityScoreType))
+			{
+				RemainingOptions.Add(AbilityScoreType);
+			}
+		}
+	}
+
+	return RemainingOptions;
+}
+
 void UPF2AbilityBoostRuleOptionValidator::AddRuleOption(const FPF2AbilityBoostRuleOption RuleOption)
 {
 	checkf(this->UsedAbilities.Num() == 0, TEXT("Rule options cannot be added once an ability boost has been added."));
@@ -68,50 +112,6 @@ void UPF2AbilityBoostRuleOptionValidator::ApplyAbilityBoost(const EPF2CharacterA
 	);
 
 	this->UsedAbilities.Add(AbilityScoreType);
-}
-
-int32 UPF2AbilityBoostRuleOptionValidator::GetRemainingBoostCount() const
-{
-	return (this->RuleOptions.Num() - this->UsedAbilities.Num());
-}
-
-TSet<EPF2CharacterAbilityScoreType> UPF2AbilityBoostRuleOptionValidator::GetRemainingOptions()
-{
-	TSet<EPF2CharacterAbilityScoreType> AllRuleAbilityOptions;
-	TSet<EPF2CharacterAbilityScoreType> RemainingOptions;
-
-	for (const auto& RuleOption : this->RuleOptions)
-	{
-		if (RuleOption.bIsFreeBoost)
-		{
-			for (const auto& AbilityScoreType : TEnumRange<EPF2CharacterAbilityScoreType>())
-			{
-				AllRuleAbilityOptions.Add(AbilityScoreType);
-			}
-		}
-		else
-		{
-			AllRuleAbilityOptions.Append(RuleOption.AbilityScoreTypes);
-		}
-	}
-
-	if (this->UsedAbilities.Num() == 0)
-	{
-		// We don't need to search any further, since all options are still on the table.
-		RemainingOptions = AllRuleAbilityOptions;
-	}
-	else
-	{
-		for (const auto& AbilityScoreType : AllRuleAbilityOptions)
-		{
-			if (this->CanApplyAbilityBoost(AbilityScoreType))
-			{
-				RemainingOptions.Add(AbilityScoreType);
-			}
-		}
-	}
-
-	return RemainingOptions;
 }
 
 TArray<TArray<FPF2AbilityBoostRuleOption>> UPF2AbilityBoostRuleOptionValidator::CalculateRulePermutations()

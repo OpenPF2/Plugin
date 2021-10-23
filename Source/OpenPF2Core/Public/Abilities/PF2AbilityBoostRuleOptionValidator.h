@@ -57,6 +57,24 @@ public:
 	};
 
 	/**
+	 * Gets the count of how many additional boosts can be applied.
+	 *
+	 * @return
+	 *	The number of boosts that can still be applied.
+	 */
+	UFUNCTION(BlueprintCallable)
+	int32 GetRemainingBoostCount() const;
+
+	/**
+	 * Gets the list of abilities that have not yet been boosted that rule options allow to be boosted.
+	 *
+	 * @return
+	 *	The set of abilities that can be boosted, according to the rule options in this matcher.
+	 */
+	UFUNCTION(BlueprintCallable)
+	TSet<EPF2CharacterAbilityScoreType> GetRemainingOptions();
+
+	/**
 	 * Adds multiple rule options to be taken into consideration during validation.
 	 *
 	 * This cannot be called if ability boosts have already been applied to the validator.
@@ -101,24 +119,6 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable)
 	void ApplyAbilityBoost(EPF2CharacterAbilityScoreType AbilityScoreType);
-
-	/**
-	 * Gets the count of how many additional boosts can be applied.
-	 *
-	 * @return
-	 *	The number of boosts that can still be applied.
-	 */
-	UFUNCTION(BlueprintCallable)
-	int32 GetRemainingBoostCount() const;
-
-	/**
-	 * Gets the list of abilities that have not yet been boosted that rule options allow to be boosted.
-	 *
-	 * @return
-	 *	The set of abilities that can be boosted, according to the rule options in this matcher.
-	 */
-	UFUNCTION(BlueprintCallable)
-	TSet<EPF2CharacterAbilityScoreType> GetRemainingOptions();
 
 protected:
 	/**
