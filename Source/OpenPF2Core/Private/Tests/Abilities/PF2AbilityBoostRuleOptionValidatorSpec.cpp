@@ -62,6 +62,18 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
 			});
 		});
+
+		Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+		{
+			It(TEXT("returns false"), [=, this]()
+			{
+				UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+				Validator->AppendRuleOptions(RuleOptions);
+
+				TestFalse("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
+			});
+		});
 	});
 
 	Describe(TEXT("when there is only a free ability boost rule option"), [=, this]()
@@ -146,6 +158,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					}
 				});
 			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns true"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestTrue("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
+				});
+			});
 		});
 
 		Describe(TEXT("after an ability boost has been applied"), [=, this]()
@@ -208,6 +237,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					}
 
 					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
+				});
+			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns false"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestFalse("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
 				});
 			});
 		});
@@ -294,6 +340,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 							RemainingOptions.Contains(AbilityScoreType)
 						);
 					}
+				});
+			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns true"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestTrue("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
 				});
 			});
 		});
@@ -413,6 +476,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					);
 				});
 			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns true"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestTrue("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
+				});
+			});
 		});
 
 		Describe(TEXT("after two ability boosts have been applied"), [=, this]()
@@ -476,6 +556,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					}
 
 					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
+				});
+			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns false"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestFalse("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
 				});
 			});
 		});
@@ -578,6 +675,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					);
 				});
 			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns true"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestTrue("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
+				});
+			});
 		});
 
 		Describe(TEXT("after an ability boost has been applied"), [=, this]()
@@ -640,6 +754,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					}
 
 					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
+				});
+			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns false"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestFalse("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
 				});
 			});
 		});
@@ -734,6 +865,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					}
 				});
 			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns true"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestTrue("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
+				});
+			});
 		});
 
 		Describe(TEXT("after a boost to 'Strength' has been applied"), [=, this]()
@@ -851,6 +999,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					);
 				});
 			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns true"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestTrue("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
+				});
+			});
 		});
 
 		Describe(TEXT("after a boost to 'Strength' and 'Constitution' has been applied"), [=, this]()
@@ -919,6 +1084,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
 				});
 			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns false"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestFalse("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
+				});
+			});
 		});
 
 		Describe(TEXT("after a boost to 'Strength' and 'Dexterity' has been applied"), [=, this]()
@@ -985,6 +1167,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					}
 
 					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
+				});
+			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns false"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestFalse("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
 				});
 			});
 		});
@@ -1089,6 +1288,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					);
 				});
 			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns true"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestTrue("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
+				});
+			});
 		});
 
 		Describe(TEXT("after a boost to 'Intelligence' and 'Strength' has been applied"), [=, this]()
@@ -1155,6 +1371,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					}
 
 					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
+				});
+			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns false"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestFalse("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
 				});
 			});
 		});
@@ -1249,6 +1482,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					}
 				});
 			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns true"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestTrue("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
+				});
+			});
 		});
 
 		Describe(TEXT("after a boost to 'Strength' has been applied"), [=, this]()
@@ -1366,6 +1616,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					);
 				});
 			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns true"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestTrue("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
+				});
+			});
 		});
 
 		Describe(TEXT("after a boost to 'Strength' and 'Constitution' has been applied"), [=, this]()
@@ -1434,6 +1701,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
 				});
 			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns false"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestFalse("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
+				});
+			});
 		});
 
 		Describe(TEXT("after a boost to 'Strength' and 'Dexterity' has been applied"), [=, this]()
@@ -1500,6 +1784,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					}
 
 					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
+				});
+			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns false"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestFalse("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
 				});
 			});
 		});
@@ -1604,6 +1905,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					);
 				});
 			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns true"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestTrue("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
+				});
+			});
 		});
 
 		Describe(TEXT("after a boost to 'Intelligence' and 'Strength' has been applied"), [=, this]()
@@ -1670,6 +1988,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					}
 
 					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
+				});
+			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns false"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestFalse("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
 				});
 			});
 		});
@@ -1790,6 +2125,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					);
 				});
 			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns true"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestTrue("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
+				});
+			});
 		});
 
 		Describe(TEXT("after a boost to 'Strength' has been applied"), [=, this]()
@@ -1890,6 +2242,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 						TEXT("GetRemainingOptions() contains 'AbConstitution'"),
 						RemainingOptions.Contains(EPF2CharacterAbilityScoreType::AbConstitution)
 					);
+				});
+			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns true"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestTrue("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
 				});
 			});
 		});
@@ -1994,6 +2363,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					);
 				});
 			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns true"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestTrue("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
+				});
+			});
 		});
 
 		Describe(TEXT("after a boost to 'Strength' and 'Constitution' has been applied"), [=, this]()
@@ -2059,6 +2445,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
 				});
 			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns false"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestFalse("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
+				});
+			});
 		});
 
 		Describe(TEXT("after a boost to 'Strength' and 'Dexterity' has been applied"), [=, this]()
@@ -2122,6 +2525,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					}
 
 					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
+				});
+			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns false"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestFalse("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
 				});
 			});
 		});
@@ -2220,6 +2640,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 							RemainingOptions.Contains(AbilityScoreType)
 						);
 					}
+				});
+			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns true"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestTrue("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
 				});
 			});
 		});
@@ -2339,6 +2776,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					);
 				});
 			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns true"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestTrue("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
+				});
+			});
 		});
 
 		Describe(TEXT("after a boost to 'Constitution' has been applied"), [=, this]()
@@ -2456,6 +2910,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					);
 				});
 			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns true"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestTrue("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
+				});
+			});
 		});
 
 		Describe(TEXT("after a boost to 'Strength' and 'Constitution' has been applied"), [=, this]()
@@ -2567,6 +3038,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 						TEXT("GetRemainingOptions() contains 'AbCharisma'"),
 						RemainingOptions.Contains(EPF2CharacterAbilityScoreType::AbCharisma)
 					);
+				});
+			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns true"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestTrue("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
 				});
 			});
 		});
@@ -2682,6 +3170,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					);
 				});
 			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns true"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestTrue("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
+				});
+			});
 		});
 
 		Describe(TEXT("after a boost to 'Intelligence' and 'Constitution' has been applied"), [=, this]()
@@ -2783,6 +3288,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 						TEXT("GetRemainingOptions() contains 'AbDexterity'"),
 						RemainingOptions.Contains(EPF2CharacterAbilityScoreType::AbDexterity)
 					);
+				});
+			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns true"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestTrue("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
 				});
 			});
 		});
@@ -2888,6 +3410,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					);
 				});
 			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns true"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestTrue("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
+				});
+			});
 		});
 
 		Describe(TEXT("after a boost to 'Intelligence', 'Dexterity', and 'Constitution' has been applied"), [=, this]()
@@ -2952,6 +3491,23 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 					}
 
 					TestEqual(TEXT("GetRemainingOptions().Num()"), Validator->GetRemainingOptions().Num(), 0);
+				});
+			});
+
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
+			{
+				It(TEXT("returns false"), [=, this]()
+				{
+					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+					Validator->AppendRuleOptions(RuleOptions);
+
+					for (auto& AbilityScoreType : AbilityBoostsToApply)
+					{
+						Validator->ApplyAbilityBoost(AbilityScoreType);
+					}
+
+					TestFalse("Validator->HasRemainingBoosts()", Validator->HasRemainingBoosts());
 				});
 			});
 		});

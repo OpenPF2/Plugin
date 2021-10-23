@@ -68,7 +68,7 @@ void UPF2GameplayAbility_BoostAbilityBase::ActivateAbility(const FGameplayAbilit
 		}
 
 		checkf(
-			Validator->GetRemainingBoostCount() == 0,
+			!Validator->HasRemainingBoosts(),
 			TEXT("There must be a selection for every rule option.")
 		);
 

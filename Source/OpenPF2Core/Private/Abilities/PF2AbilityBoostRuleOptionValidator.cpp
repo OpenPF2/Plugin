@@ -58,6 +58,11 @@ TSet<EPF2CharacterAbilityScoreType> UPF2AbilityBoostRuleOptionValidator::GetRema
 	return RemainingOptions;
 }
 
+bool UPF2AbilityBoostRuleOptionValidator::HasRemainingBoosts()
+{
+	return (this->GetRemainingBoostCount() != 0);
+}
+
 void UPF2AbilityBoostRuleOptionValidator::AddRuleOption(const FPF2AbilityBoostRuleOption RuleOption)
 {
 	checkf(this->UsedAbilities.Num() == 0, TEXT("Rule options cannot be added once an ability boost has been added."));

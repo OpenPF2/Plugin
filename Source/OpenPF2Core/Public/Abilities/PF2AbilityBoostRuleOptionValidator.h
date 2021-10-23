@@ -75,6 +75,15 @@ public:
 	TSet<EPF2CharacterAbilityScoreType> GetRemainingOptions();
 
 	/**
+	 * Determines if there are any remaining boosts to choose based on the rule options that have been set.
+	 *
+	 * @return
+	 *	true if the number of remaining boosts is greater than 0; or, false, otherwise.
+	 */
+	UFUNCTION(BlueprintCallable)
+	bool HasRemainingBoosts();
+
+	/**
 	 * Adds multiple rule options to be taken into consideration during validation.
 	 *
 	 * This cannot be called if ability boosts have already been applied to the validator.
