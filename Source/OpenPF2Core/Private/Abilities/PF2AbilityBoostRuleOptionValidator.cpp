@@ -62,6 +62,10 @@ void UPF2AbilityBoostRuleOptionValidator::AddRuleOption(const FPF2AbilityBoostRu
 {
 	checkf(this->UsedAbilities.Num() == 0, TEXT("Rule options cannot be added once an ability boost has been added."));
 	this->RuleOptions.Add(RuleOption);
+
+	// This is done for safety, but really shouldn't have much of an impact since we tend only to evaluate and cache
+	// permutations after an ability boost has been applied.
+	this->CachedRulePermutations.Empty();
 }
 
 bool UPF2AbilityBoostRuleOptionValidator::CanApplyAbilityBoost(const EPF2CharacterAbilityScoreType AbilityScoreType)
