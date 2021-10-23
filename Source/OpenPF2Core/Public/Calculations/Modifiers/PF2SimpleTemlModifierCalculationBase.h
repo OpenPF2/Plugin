@@ -41,9 +41,10 @@ protected:
 	// Avoid warnings C4263 and C4264 by ensuring we inherit base class implementation.
 	using UPF2AbilityCalculationBase::DoCalculation;
 
-	virtual float DoCalculation(const FGameplayEffectSpec& Spec,
-	                            const FGameplayAttribute   AbilityAttribute,
-	                            const float                AbilityScore) const override;
+	virtual float DoCalculation(
+		const FGameplayEffectSpec& Spec,
+		const FGameplayAttribute   AbilityAttribute,
+		const float                AbilityScore) const override;
 
 	/**
 	 * Calculates an attribute proficiency based on the captured attribute value and TEML proficiency value.
@@ -62,8 +63,9 @@ protected:
 	 * @return
 	 *	The calculated attribute proficiency.
 	 */
-	virtual float DoCalculation(const FGameplayEffectSpec& Spec,
-	                            const FGameplayAttribute   AbilityAttribute,
-	                            const float                AbilityScore,
-	                            const float                TemlProficiencyBonus) const;
+	virtual float DoCalculation(
+		const FGameplayEffectSpec& Spec,
+		const FGameplayAttribute   AbilityAttribute,
+		const float                AbilityScore,
+		const float                TemlProficiencyBonus) const;
 };

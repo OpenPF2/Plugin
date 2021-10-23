@@ -15,9 +15,10 @@
 #include "PF2TemlCalculation.h"
 #include "Abilities/PF2AttributeSet.h"
 
-float UPF2SimpleTemlModifierCalculationBase::DoCalculation(const FGameplayEffectSpec& Spec,
-                                                           const FGameplayAttribute   AbilityAttribute,
-                                                           const float                AbilityScore) const
+float UPF2SimpleTemlModifierCalculationBase::DoCalculation(
+	const FGameplayEffectSpec& Spec,
+	const FGameplayAttribute   AbilityAttribute,
+	const float                AbilityScore) const
 {
 	// "In the second box to the right of each skill name on your character sheet, there’s an abbreviation that reminds
 	// you of the ability score tied to that skill. For each skill in which your character is trained, add your
@@ -31,10 +32,11 @@ float UPF2SimpleTemlModifierCalculationBase::DoCalculation(const FGameplayEffect
 	return this->DoCalculation(Spec, AbilityAttribute, AbilityScore, ProficiencyBonus);
 }
 
-float UPF2SimpleTemlModifierCalculationBase::DoCalculation(const FGameplayEffectSpec& Spec,
-                                                           const FGameplayAttribute   AbilityAttribute,
-                                                           const float                AbilityScore,
-                                                           const float                TemlProficiencyBonus) const
+float UPF2SimpleTemlModifierCalculationBase::DoCalculation(
+	const FGameplayEffectSpec& Spec,
+	const FGameplayAttribute   AbilityAttribute,
+	const float                AbilityScore,
+	const float                TemlProficiencyBonus) const
 {
 	const float Modifier = AbilityScore + TemlProficiencyBonus;
 

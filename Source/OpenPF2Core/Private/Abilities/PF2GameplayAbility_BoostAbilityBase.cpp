@@ -25,9 +25,10 @@ UPF2GameplayAbility_BoostAbilityBase::UPF2GameplayAbility_BoostAbilityBase()
 	this->AbilityTags.AddTag(PF2GameplayAbilityUtilities::GetTag(FName("Ability.ApplyAbilityBoost")));
 }
 
-bool UPF2GameplayAbility_BoostAbilityBase::CheckCost(const FGameplayAbilitySpecHandle Handle,
-                                                     const FGameplayAbilityActorInfo* ActorInfo,
-                                                     FGameplayTagContainer*           OptionalRelevantTags) const
+bool UPF2GameplayAbility_BoostAbilityBase::CheckCost(
+	const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo,
+	FGameplayTagContainer*           OptionalRelevantTags) const
 {
 	if (Super::CheckCost(Handle, ActorInfo, OptionalRelevantTags))
 	{
@@ -46,10 +47,11 @@ bool UPF2GameplayAbility_BoostAbilityBase::CheckCost(const FGameplayAbilitySpecH
 	}
 }
 
-void UPF2GameplayAbility_BoostAbilityBase::ActivateAbility(const FGameplayAbilitySpecHandle     Handle,
-                                                           const FGameplayAbilityActorInfo*     ActorInfo,
-                                                           const FGameplayAbilityActivationInfo ActivationInfo,
-                                                           const FGameplayEventData*            TriggerEventData)
+void UPF2GameplayAbility_BoostAbilityBase::ActivateAbility(
+	const FGameplayAbilitySpecHandle     Handle,
+	const FGameplayAbilityActorInfo*     ActorInfo,
+	const FGameplayAbilityActivationInfo ActivationInfo,
+	const FGameplayEventData*            TriggerEventData)
 {
 	if (CommitAbility(Handle, ActorInfo, ActivationInfo))
 	{

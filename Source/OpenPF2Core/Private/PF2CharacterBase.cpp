@@ -139,8 +139,9 @@ void APF2CharacterBase::ApplyAbilityBoostSelections()
 	}
 }
 
-void APF2CharacterBase::ActivateAbilityBoost(FGameplayAbilitySpec* BoostSpec,
-	                                         const FPF2CharacterAbilityBoostSelection& AbilityBoostSelection) const
+void APF2CharacterBase::ActivateAbilityBoost(
+	FGameplayAbilitySpec*                     BoostSpec,
+	const FPF2CharacterAbilityBoostSelection& AbilityBoostSelection) const
 {
 	UAbilitySystemComponent*                    Asc               = this->GetAbilitySystemComponent();
 	const TSet<EPF2CharacterAbilityScoreType>   SelectedAbilities = AbilityBoostSelection.SelectedAbilities;

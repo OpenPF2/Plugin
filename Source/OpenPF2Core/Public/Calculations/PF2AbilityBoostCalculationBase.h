@@ -52,7 +52,8 @@ class OPENPF2CORE_API UPF2AbilityBoostCalculationBase : public UPF2AbilityCalcul
 	 *	The boost to apply to the ability score. (This is just the boost; the ability score has not been added to the
 	 *	result).
 	 */
-	virtual float DoCalculation(const FGameplayEffectSpec& Spec,
-	                            const FGameplayAttribute   AbilityAttribute,
-	                            const float                AbilityScore) const override;
+	virtual float DoCalculation(
+		const FGameplayEffectSpec& Spec,
+		const FGameplayAttribute   AbilityAttribute,
+		const float                AbilityScore) const override;
 };

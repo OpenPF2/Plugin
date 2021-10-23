@@ -68,7 +68,8 @@ public:
     virtual void ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual TSubclassOf<UGameplayEffect> GetBoostEffectForAbility(const EPF2CharacterAbilityScoreType AbilityScore) override;
+	virtual TSubclassOf<UGameplayEffect> GetBoostEffectForAbility(
+		const EPF2CharacterAbilityScoreType AbilityScore) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual TArray<UPF2GameplayAbility_BoostAbilityBase *> GetPendingAbilityBoosts() const override;

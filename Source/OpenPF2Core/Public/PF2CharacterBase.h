@@ -306,7 +306,7 @@ public:
 	virtual int32 GetCharacterLevel() const override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual TArray<UPF2GameplayAbility_BoostAbilityBase *> GetPendingAbilityBoosts() const override;
+	virtual TArray<UPF2GameplayAbility_BoostAbilityBase*> GetPendingAbilityBoosts() const override;
 
 	// =================================================================================================================
 	// Public Methods - Blueprint Callable
@@ -372,8 +372,9 @@ protected:
 	/**
 	 * Activates the specified ability boost ability with the provided selections of which abilities to boost.
 	 */
-	void ActivateAbilityBoost(FGameplayAbilitySpec* BoostSpec,
-	                          const FPF2CharacterAbilityBoostSelection& AbilityBoostSelection) const;
+	void ActivateAbilityBoost(
+		FGameplayAbilitySpec*                     BoostSpec,
+		const FPF2CharacterAbilityBoostSelection& AbilityBoostSelection) const;
 
 	/**
 	 * Activates Gameplay Effects that are always passively applied to the character.

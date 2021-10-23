@@ -48,5 +48,5 @@ public:
 	 *	The ability boost GAs that are still pending for this character.
 	 */
 	UFUNCTION(BlueprintCallable)
-	virtual TArray<UPF2GameplayAbility_BoostAbilityBase *> GetPendingAbilityBoosts() const = 0;
+	virtual TArray<UPF2GameplayAbility_BoostAbilityBase*> GetPendingAbilityBoosts() const = 0;
 };

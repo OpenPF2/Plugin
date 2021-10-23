@@ -26,9 +26,10 @@ UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase() :
 {
 }
 
-UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase(const FString StatGameplayTagPrefix,
-                                                                     const FString KeyAbilityGameplayTagPrefix,
-                                                                     const float   BaseValue) :
+UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase(
+	const FString StatGameplayTagPrefix,
+	const FString KeyAbilityGameplayTagPrefix,
+	const float   BaseValue) :
 	StatGameplayTagPrefix(StatGameplayTagPrefix),
 	BaseValue(BaseValue)
 {
@@ -63,8 +64,9 @@ UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase(const FStri
 	);
 }
 
-void UPF2KeyAbilityTemlCalculationBase::DefineKeyAbilityCapture(const FString            KeyAbilityTagName,
-                                                                const FGameplayAttribute Attribute)
+void UPF2KeyAbilityTemlCalculationBase::DefineKeyAbilityCapture(
+	const FString            KeyAbilityTagName,
+	const FGameplayAttribute Attribute)
 {
 	const FGameplayEffectAttributeCaptureDefinition CaptureDefinition =
 		PF2GameplayAbilityUtilities::BuildSourceCaptureFor(Attribute);
@@ -118,7 +120,7 @@ float UPF2KeyAbilityTemlCalculationBase::CalculateKeyAbilityModifier(const FGame
 
 	if (KeyAbilityCaptureDefinition.AttributeToCapture.IsValid())
 	{
-		const FGameplayTagContainer*  TargetTags           = Spec.CapturedTargetTags.GetAggregatedTags();
+		const FGameplayTagContainer*  TargetTags = Spec.CapturedTargetTags.GetAggregatedTags();
 		FAggregatorEvaluateParameters EvaluationParameters;
 
 		EvaluationParameters.SourceTags = SourceTags;
@@ -136,7 +138,7 @@ float UPF2KeyAbilityTemlCalculationBase::CalculateKeyAbilityModifier(const FGame
 }
 
 FGameplayEffectAttributeCaptureDefinition UPF2KeyAbilityTemlCalculationBase::DetermineKeyAbility(
-	                                                                      const FGameplayTagContainer* SourceTags) const
+	const FGameplayTagContainer* SourceTags) const
 {
 	FGameplayEffectAttributeCaptureDefinition KeyAbilityCaptureDefinition;
 

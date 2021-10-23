@@ -63,7 +63,8 @@ protected:
 	 * @return
 	 *	The ability modifier.
 	 */
-	virtual float DoCalculation(const FGameplayEffectSpec& Spec,
-	                            const FGameplayAttribute   AbilityAttribute,
-	                            const float                AbilityScore) const override;
+	virtual float DoCalculation(
+		const FGameplayEffectSpec& Spec,
+		const FGameplayAttribute   AbilityAttribute,
+		const float                AbilityScore) const override;
 };
