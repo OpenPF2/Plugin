@@ -49,4 +49,29 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable)
 	virtual TArray<UPF2GameplayAbility_BoostAbilityBase*> GetPendingAbilityBoosts() const = 0;
+
+	/**
+	 * Applies a single ability boost selection to this character.
+	 *
+	 * The ability score selections must be compatible with the rule options of the Boost GA.
+	 *
+	 * The ability boost does not take effect immediately. Invoke ApplyAbilityBoostSelections() to apply all of the
+	 * selections that have been added.
+	 *
+	 * @param BoostGameplayAbility
+	 *	The "Boost GA" -- the Gameplay Ability for which ability score boost selections are being applied.
+	 * @param SelectedAbilities
+	 *	The ability scores that the player selected, out of the options offered by the Boost GA.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual void AddAbilityBoostSelection(
+		const TSubclassOf<class UPF2GameplayAbility_BoostAbilityBase> BoostGameplayAbility,
+		const TSet<EPF2CharacterAbilityScoreType>                     SelectedAbilities) = 0;
+
+	/**
+	 * Attempts to find and activate a pending ability boost Gameplay Ability for each Ability Boost Selection on this
+	 * character.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual void ApplyAbilityBoostSelections() = 0;
 };

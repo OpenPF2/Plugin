@@ -39,6 +39,34 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostSelection
 {
 	GENERATED_BODY()
 
+	// =================================================================================================================
+	// Public Constructors
+	// =================================================================================================================
+	/**
+	 * Constructor for FPF2CharacterAbilityBoostSelection.
+	 */
+	explicit FPF2CharacterAbilityBoostSelection()
+	{
+	}
+
+	/**
+	 * Constructor for FPF2CharacterAbilityBoostSelection.
+	 *
+	 * @param BoostGameplayAbility
+	 *	The "Boost GA" -- the Gameplay Ability for which ability score boost selections are being applied.
+	 * @param SelectedAbilities
+	 *	The ability scores that the player selected, out of the options offered by the Boost GA.
+	 */
+	explicit FPF2CharacterAbilityBoostSelection(
+		TSubclassOf<class UPF2GameplayAbility_BoostAbilityBase> BoostGameplayAbility,
+		TSet<EPF2CharacterAbilityScoreType>                     SelectedAbilities) :
+			BoostGameplayAbility(BoostGameplayAbility),
+			SelectedAbilities(SelectedAbilities)
+	{
+	}
+
+	/**
+	 */
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UPF2GameplayAbility_BoostAbilityBase> BoostGameplayAbility;
 
@@ -211,8 +239,8 @@ protected:
 	/**
 	 * The abilities to boost, as chosen by the player or a game designer, out of what ability boosts are pending.
 	 *
-	 * At the start of play, or upon receipt of a ApplySelectedBoostsEvent, an attempt is made to match up each
-	 * selection in this property to a boost ability granted to this character. Upon a match, the matching GA is
+	 * At the start of play, or upon a call to ApplyAbilityBoostSelections(), an attempt is made to match up
+	 * each selection in this property to a boost ability granted to this character. Upon a match, the matching GA is
 	 * activated, and the selection is removed from this property. Boost GAs are single-shot abilities that remove
 	 * themselves once they've applied an ability score boost. So, any selections added to this property "consume"
 	 * pending ability boosts for this character. Each selection is matched-up and evaluated in the order it appears in
@@ -307,6 +335,11 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual TArray<UPF2GameplayAbility_BoostAbilityBase*> GetPendingAbilityBoosts() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void AddAbilityBoostSelection(
+		const TSubclassOf<class UPF2GameplayAbility_BoostAbilityBase> BoostGameplayAbility,
+		const TSet<EPF2CharacterAbilityScoreType>                     SelectedAbilities) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void ApplyAbilityBoostSelections() override;

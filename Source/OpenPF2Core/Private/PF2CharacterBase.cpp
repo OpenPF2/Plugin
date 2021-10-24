@@ -64,6 +64,13 @@ TArray<UPF2GameplayAbility_BoostAbilityBase *> APF2CharacterBase::GetPendingAbil
 	return this->GetCharacterAbilitySystemComponent()->GetPendingAbilityBoosts();
 }
 
+void APF2CharacterBase::AddAbilityBoostSelection(
+	const TSubclassOf<class UPF2GameplayAbility_BoostAbilityBase> BoostGameplayAbility,
+	const TSet<EPF2CharacterAbilityScoreType>                     SelectedAbilities)
+{
+	this->AbilityBoostSelections.Add(FPF2CharacterAbilityBoostSelection(BoostGameplayAbility, SelectedAbilities));
+}
+
 void APF2CharacterBase::ApplyAbilityBoostSelections()
 {
 	if (this->IsAuthorityForEffects())
