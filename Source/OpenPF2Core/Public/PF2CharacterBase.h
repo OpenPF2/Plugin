@@ -308,9 +308,20 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual TArray<UPF2GameplayAbility_BoostAbilityBase*> GetPendingAbilityBoosts() const override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual void ApplyAbilityBoostSelections() override;
+
 	// =================================================================================================================
 	// Public Methods - Blueprint Callable
 	// =================================================================================================================
+	/**
+	 * Gets a PF2-specific version of the ASC sub-component of this character.
+	 *
+	 * @return
+	 *	The ASC, as an implementation of the interface for character ASCs.
+	 */
+	IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent() const;
+
 	/**
 	 * Sets the current level of this character.
 	 *
@@ -344,13 +355,6 @@ protected:
 	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
-	/**
-	 * Gets a PF2-specific version of the ASC sub-component of this character.
-	 *
-	 * @return
-	 *	The ASC, as an implementation of the interface for character ASCs.
-	 */
-	IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent() const;
 
 	/**
 	 * Gets whether the local machine has authoritative control over this character actor.
@@ -363,11 +367,6 @@ protected:
 	 *	machine is a client doing simulation or prediction.
 	 */
 	bool IsAuthorityForEffects() const;
-
-	/**
-	 * Attempts to find and activate a pending ability boost Gameplay Ability for each Ability Boost Selection.
-	 */
-	void ApplyAbilityBoostSelections();
 
 	/**
 	 * Activates the specified ability boost ability with the provided selections of which abilities to boost.

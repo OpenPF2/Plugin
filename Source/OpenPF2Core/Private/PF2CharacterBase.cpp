@@ -5,12 +5,11 @@
 
 #include "PF2CharacterBase.h"
 
-#include "Abilities/PF2AbilitySystemComponent.h"
-
 #include <AbilitySystemGlobals.h>
 #include <Net/UnrealNetwork.h>
 #include <UObject/ConstructorHelpers.h>
 
+#include "Abilities/PF2AbilitySystemComponent.h"
 #include "Abilities/PF2GameplayAbilityTargetData_BoostAbility.h"
 #include "Abilities/PF2GameplayAbility_BoostAbilityBase.h"
 
@@ -55,22 +54,6 @@ UAbilitySystemComponent* APF2CharacterBase::GetAbilitySystemComponent() const
 	return this->AbilitySystemComponent;
 }
 
-FORCEINLINE IPF2CharacterAbilitySystemComponentInterface* APF2CharacterBase::GetCharacterAbilitySystemComponent() const
-{
-	// Too bad that ASCs in UE don't implement an interface; otherwise we could extend it so casts like this aren't
-	// needed.
-	IPF2CharacterAbilitySystemComponentInterface* CharacterAsc =
-		Cast<IPF2CharacterAbilitySystemComponentInterface>(this->AbilitySystemComponent);
-
-	check(CharacterAsc);
-	return CharacterAsc;
-}
-
-bool APF2CharacterBase::IsAuthorityForEffects() const
-{
-	return (this->GetLocalRole() == ROLE_Authority);
-}
-
 int32 APF2CharacterBase::GetCharacterLevel() const
 {
 	return this->CharacterLevel;
@@ -79,36 +62,6 @@ int32 APF2CharacterBase::GetCharacterLevel() const
 TArray<UPF2GameplayAbility_BoostAbilityBase *> APF2CharacterBase::GetPendingAbilityBoosts() const
 {
 	return this->GetCharacterAbilitySystemComponent()->GetPendingAbilityBoosts();
-}
-
-bool APF2CharacterBase::SetCharacterLevel(const int32 NewLevel)
-{
-	const int32 OldLevel = this->CharacterLevel;
-
-	if ((OldLevel != NewLevel) && (NewLevel > 0))
-	{
-		this->HandleCharacterLevelChanged(OldLevel, NewLevel);
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-void APF2CharacterBase::ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore)
-{
-	this->GetCharacterAbilitySystemComponent()->ApplyAbilityBoost(TargetAbilityScore);
-}
-
-void APF2CharacterBase::HandleCharacterLevelChanged(const float OldLevel, const float NewLevel)
-{
-	this->DeactivatePassiveGameplayEffects();
-
-	this->CharacterLevel = NewLevel;
-	this->OnCharacterLevelChanged(OldLevel, NewLevel);
-
-	this->ActivatePassiveGameplayEffects();
 }
 
 void APF2CharacterBase::ApplyAbilityBoostSelections()
@@ -137,6 +90,42 @@ void APF2CharacterBase::ApplyAbilityBoostSelections()
 		// property in place while we iterate.
 		this->AbilityBoostSelections = UnmatchedAbilityBoostSelections;
 	}
+}
+
+FORCEINLINE IPF2CharacterAbilitySystemComponentInterface* APF2CharacterBase::GetCharacterAbilitySystemComponent() const
+{
+	// Too bad that ASCs in UE don't implement an interface; otherwise we could extend it so casts like this aren't
+	// needed.
+	IPF2CharacterAbilitySystemComponentInterface* CharacterAsc =
+		Cast<IPF2CharacterAbilitySystemComponentInterface>(this->AbilitySystemComponent);
+
+	check(CharacterAsc);
+	return CharacterAsc;
+}
+
+bool APF2CharacterBase::SetCharacterLevel(const int32 NewLevel)
+{
+	const int32 OldLevel = this->CharacterLevel;
+
+	if ((OldLevel != NewLevel) && (NewLevel > 0))
+	{
+		this->HandleCharacterLevelChanged(OldLevel, NewLevel);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void APF2CharacterBase::ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore)
+{
+	this->GetCharacterAbilitySystemComponent()->ApplyAbilityBoost(TargetAbilityScore);
+}
+
+bool APF2CharacterBase::IsAuthorityForEffects() const
+{
+	return (this->GetLocalRole() == ROLE_Authority);
 }
 
 void APF2CharacterBase::ActivateAbilityBoost(
@@ -242,4 +231,14 @@ void APF2CharacterBase::ClearManagedPassiveGameplayEffects()
 	this->ManagedGameplayEffects.Empty();
 
 	this->bManagedPassiveEffectsGenerated = false;
+}
+
+void APF2CharacterBase::HandleCharacterLevelChanged(const float OldLevel, const float NewLevel)
+{
+	this->DeactivatePassiveGameplayEffects();
+
+	this->CharacterLevel = NewLevel;
+	this->OnCharacterLevelChanged(OldLevel, NewLevel);
+
+	this->ActivatePassiveGameplayEffects();
 }
