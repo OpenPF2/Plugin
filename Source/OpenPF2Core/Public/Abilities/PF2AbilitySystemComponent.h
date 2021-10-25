@@ -23,25 +23,37 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2AbilitySystemComponentInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintGetter)
+	UFUNCTION(BlueprintPure)
 	virtual bool ArePassiveGameplayEffectsActive() override
 	{
-		return this->bPassiveEffectsActivated;
+		return this->ActivatedWeightGroups.Num() != 0;
 	}
 
 	UFUNCTION(BlueprintCallable)
-	virtual void AddPassiveGameplayEffect(const int32 Weight, const TSubclassOf<UGameplayEffect> Effect) override;
+	virtual void AddPassiveGameplayEffect(TSubclassOf<UGameplayEffect> Effect) override;
 
-	virtual void SetPassiveGameplayEffects(const TMultiMap<int32, TSubclassOf<UGameplayEffect>> Effects) override;
+	UFUNCTION(BlueprintCallable)
+	virtual void AddPassiveGameplayEffectWithWeight(
+		const FName WeightGroup,
+		const TSubclassOf<UGameplayEffect> Effect
+	) override;
+
+	virtual void SetPassiveGameplayEffects(const TMultiMap<FName, TSubclassOf<UGameplayEffect>> Effects) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void RemoveAllPassiveGameplayEffects() override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void ActivatePassiveGameplayEffects() override;
+	virtual void ActivateAllPassiveGameplayEffects() override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void DeactivatePassiveGameplayEffects() override;
+	virtual TSet<FName> ActivatePassiveGameplayEffectsAfter(const FName WeightGroup) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void DeactivateAllPassiveGameplayEffects() override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual TSet<FName> DeactivatePassiveGameplayEffectsAfter(const FName WeightGroup) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void AddDynamicTag(const FGameplayTag Tag) override;
@@ -97,11 +109,10 @@ protected:
 	FGameplayTagContainer DynamicTags;
 
 	/**
-	 * Whether or not passive Gameplay Effects have been activated on this ASC.
+	 * The weight groups of Gameplay Effects that have been activated on this ASC.
 	 */
-	UPROPERTY(VisibleAnywhere, BlueprintGetter=ArePassiveGameplayEffectsActive)
-	// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
-	bool bPassiveEffectsActivated;
+	UPROPERTY(VisibleAnywhere)
+	TSet<FName> ActivatedWeightGroups;
 
 	/**
 	 * A special, "dummy" GE that is used for applying dynamic tags.
@@ -115,10 +126,10 @@ protected:
 	 * The list of Gameplay Effects (GEs) that are always passively applied to this ASC.
 	 *
 	 * This is typically a superset of the owning character's managed passive GEs and additional passive GEs. Each value
-	 * is a gameplay effect and the key is the weight of that GE. The weight controls the order that all GEs are
+	 * is a gameplay effect and the key is the weight group of that GE. The weight controls the order that all GEs are
 	 * applied. Lower weights are applied earlier than higher weights.
 	 */
-	TMultiMap<int32, TSubclassOf<UGameplayEffect>> PassiveGameplayEffects;
+	TMultiMap<FName, TSubclassOf<UGameplayEffect>> PassiveGameplayEffects;
 
 	// =================================================================================================================
 	// Protected Methods
@@ -135,6 +146,32 @@ protected:
 	int GetCharacterLevel() const;
 
 	/**
+	 * Gets the name of the default weight group into which the given GE should be placed.
+	 *
+	 * If the GE does not define a default weight group, PF2CharacterConstants::GeWeightGroups::AdditionalEffects is
+	 * returned.
+	 */
+	FName GetDefaultWeightGroupOfGameplayEffect(TSubclassOf<UGameplayEffect> GameplayEffect);
+
+	/**
+	 * Activates a specific passive Gameplay Effect on this ASC.
+	 *
+	 * @param GameplayEffect
+	 *	The effect to activate.
+	 */
+	void ActivatePassiveGameplayEffect(TSubclassOf<UGameplayEffect> GameplayEffect);
+
+	/**
+	 * Builds the list of all passive gameplay effects to activate, organized by weight group.
+	 *
+	 * The returned list includes all of the passive GEs that have been added to this GE as well as the dynamic tag GE.
+	 *
+	 * @return
+	 *	The map of passive GEs to activate, keyed by weight group.
+	 */
+	TMultiMap<FName, TSubclassOf<UGameplayEffect>> BuildPassiveGameplayEffectsToApply() const;
+
+	/**
 	 * Invokes the logic of the specified callable, with special handling if passive GEs are already active on this ASC.
 	 *
 	 * If passive GEs are active on this ASC before this call, they are deactivated; then the callable is invoked, and
@@ -142,8 +179,45 @@ protected:
 	 * end of this call.
 	 *
 	 * @param Callable
-	 *   A lambda that is invoked to perform the task.
+	 *	A lambda that is invoked to perform the task.
 	 */
 	template<typename Func>
-	void InvokeAndReapplyPassiveGEs(Func Callable);
+	void InvokeAndReapplyAllPassiveGEs(const Func Callable);
+
+	/**
+	 * Invokes the logic of the specified callable, then re-applies passive GEs in weight groups after it.
+	 *
+	 * The weight groups affected are determined by the default weight group of the given GE.
+	 *
+	 * If passive GEs in weight groups after the specified weight group were active on this ASC before this call, they
+	 * are deactivated; then the callable is invoked, and passive GEs in the subsequent weight groups are re-activated.
+	 * If no passive GEs were active in subsequent weight groups before this call, then they are not activated at the
+	 * end of this call.
+	 *
+	 * @param Effect
+	 *	The GE that the callable is interacting with. The GE is used to dictate which weight group the callable is
+	 *	affecting. All subsequent weight groups will be re-applied, if they are active.
+	 * @param Callable
+	 *	A lambda that is invoked to perform the task.
+	 */
+	template<typename Func>
+	void InvokeAndReapplyPassiveGEsInSubsequentWeightGroups(
+		const TSubclassOf<UGameplayEffect> Effect,
+		const Func Callable);
+
+	/**
+	 * Invokes the logic of the specified callable, then re-applies passive GEs that were active in subsequent groups.
+	 *
+	 * If passive GEs in weight groups after the specified weight group were active on this ASC before this call, they
+	 * are deactivated; then the callable is invoked, and passive GEs in the subsequent weight groups are re-activated.
+	 * If no passive GEs were active in subsequent weight groups before this call, then they are not activated at the
+	 * end of this call.
+	 *
+	 * @param WeightGroup
+	 *	The weight group that the callable affects. All subsequent weight groups will be re-applied, if they are active.
+	 * @param Callable
+	 *	A lambda that is invoked to perform the task.
+	 */
+	template<typename Func>
+	void InvokeAndReapplyPassiveGEsInSubsequentWeightGroups(const FName WeightGroup, const Func Callable);
 };

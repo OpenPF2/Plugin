@@ -171,13 +171,13 @@ void APF2CharacterBase::ActivatePassiveGameplayEffects()
 		this->PopulatePassiveGameplayEffects();
 		this->ApplyDynamicTags();
 
-		CharacterAsc->ActivatePassiveGameplayEffects();
+		CharacterAsc->ActivateAllPassiveGameplayEffects();
 	}
 }
 
 void APF2CharacterBase::PopulatePassiveGameplayEffects()
 {
-	TMultiMap<int32, TSubclassOf<UGameplayEffect>> GameplayEffects;
+	TMultiMap<FName, TSubclassOf<UGameplayEffect>> GameplayEffects;
 
 	this->GenerateManagedPassiveGameplayEffects();
 
@@ -186,7 +186,7 @@ void APF2CharacterBase::PopulatePassiveGameplayEffects()
 
 	for (const auto& AdditionalEffect : this->AdditionalPassiveGameplayEffects)
 	{
-		GameplayEffects.Add(PF2CharacterConstants::GeWeights::AdditionalEffects, AdditionalEffect);
+		GameplayEffects.Add(PF2CharacterConstants::GeWeightGroups::AdditionalEffects, AdditionalEffect);
 	}
 
 	this->GetCharacterAbilitySystemComponent()->SetPassiveGameplayEffects(GameplayEffects);
@@ -208,7 +208,7 @@ void APF2CharacterBase::DeactivatePassiveGameplayEffects()
 {
 	if (this->IsAuthorityForEffects())
 	{
-		this->GetCharacterAbilitySystemComponent()->DeactivatePassiveGameplayEffects();
+		this->GetCharacterAbilitySystemComponent()->DeactivateAllPassiveGameplayEffects();
 	}
 }
 
@@ -225,7 +225,10 @@ void APF2CharacterBase::GenerateManagedPassiveGameplayEffects()
 		{
 			if (*BlueprintEffect != nullptr)
 			{
-				this->ManagedGameplayEffects.Add(PF2CharacterConstants::GeWeights::ManagedEffects, BlueprintEffect);
+				this->ManagedGameplayEffects.Add(
+					PF2CharacterConstants::GeWeightGroups::ManagedEffects,
+					BlueprintEffect
+				);
 			}
 		}
 

@@ -224,17 +224,21 @@ protected:
 	int32 bManagedPassiveEffectsGenerated;
 
 	/**
-	 * The core Gameplay Effects that drive stats for every character.
+	 * The Gameplay Effects that drive stats for every character.
 	 */
-	TMultiMap<int32, TSubclassOf<UGameplayEffect>> CoreGameplayEffects;
+	TMultiMap<FName, TSubclassOf<UGameplayEffect>> CoreGameplayEffects;
 
 	/**
 	 * The list of passive Gameplay Effects (GEs) that are generated from other values specified on this character.
 	 *
-	 * Each value is a gameplay effect and the key is the weight of that GE. The weight controls the order that all GEs
-	 * are applied. Lower weights are applied earlier than higher weights.
+	 * Each value is a gameplay effect and the key is the weight group of that GE (sorted alphanumerically). The weight
+	 * controls the order that all GEs are applied. Lower weights are applied earlier than higher weights.
+	 *
+	 * The names of each group are exposed as tags in the "GameplayEffect.WeightGroup" tag list so that they can be
+	 * applied to GEs by game designers to control the default group that a GE gets added to. A GE can also be
+	 * explicitly added to a group via the AddPassiveGameplayEffectWithWeight() method on the Character ASC.
 	 */
-	TMultiMap<int32, TSubclassOf<UGameplayEffect>> ManagedGameplayEffects;
+	TMultiMap<FName, TSubclassOf<UGameplayEffect>> ManagedGameplayEffects;
 
 	/**
 	 * The abilities to boost, as chosen by the player or a game designer, out of what ability boosts are pending.
@@ -304,13 +308,13 @@ protected:
 
 		for (const auto& GeCoreBlueprintPath : PF2CharacterConstants::GeCoreCharacterBlueprintPaths)
 		{
-			const FString EffectName = GeCoreBlueprintPath.Key;
-			const int32   Weight     = GeCoreBlueprintPath.Value;
-			const FString EffectPath = PF2CharacterConstants::GetBlueprintPath(EffectName);
+			const FString EffectName  = GeCoreBlueprintPath.Key;
+			const FName   WeightGroup = GeCoreBlueprintPath.Value;
+			const FString EffectPath  = PF2CharacterConstants::GetBlueprintPath(EffectName);
 
 			const ConstructorHelpers::FObjectFinder<UClass> EffectFinder(*EffectPath);
 
-			this->CoreGameplayEffects.Add(Weight, EffectFinder.Object);
+			this->CoreGameplayEffects.Add(WeightGroup, EffectFinder.Object);
 		}
 	}
 
@@ -441,7 +445,7 @@ protected:
 	 * Clear the list of managed, passive Gameplay Effects (GEs) so that it can be regenerated.
 	 *
 	 * This should not be called if passive GEs are already applied to this character. If GEs are already applied, you
-	 * must call DeactivatePassiveGameplayEffects() first.
+	 * must call DeactivateAllPassiveGameplayEffects() first.
 	 */
 	void ClearManagedPassiveGameplayEffects();
 

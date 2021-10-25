@@ -28,6 +28,13 @@ class OPENPF2CORE_API IPF2CharacterAbilitySystemComponentInterface : public IPF2
 public:
 	/**
 	 * Adds a boost of the specified ability to the attribute set of the owning character.
+	 *
+	 * This results in a passive GE being added to the ASC of the character. The GE is added to the weight group
+	 * specified by a tag on GE; this is known as the "default" weight group of the GE. Any Passive GEs in weight
+	 * groups after the default weight group of the GE are automatically re-applied.
+	 *
+	 * @param TargetAbilityScore
+	 *	The ability score that will be boosted.
 	 */
 	UFUNCTION(BlueprintCallable)
     virtual void ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore) = 0;
