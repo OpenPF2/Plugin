@@ -156,10 +156,14 @@ protected:
 	/**
 	 * Activates a specific passive Gameplay Effect on this ASC.
 	 *
+	 * @param WeightGroup
+	 *	The weight group for which the effect is being activated.
 	 * @param GameplayEffect
 	 *	The effect to activate.
 	 */
-	void ActivatePassiveGameplayEffect(TSubclassOf<UGameplayEffect> GameplayEffect);
+	void ActivatePassiveGameplayEffect(
+		const FName                        WeightGroup,
+		const TSubclassOf<UGameplayEffect> GameplayEffect);
 
 	/**
 	 * Builds the list of all passive gameplay effects to activate, organized by weight group.

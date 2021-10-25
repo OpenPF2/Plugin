@@ -90,7 +90,7 @@ void UPF2AbilitySystemComponent::ActivateAllPassiveGameplayEffects()
 		{
 			const TSubclassOf<UGameplayEffect> GameplayEffect = EffectInfo.Value;
 
-			this->ActivatePassiveGameplayEffect(GameplayEffect);
+			this->ActivatePassiveGameplayEffect(CurrentWeightGroup, GameplayEffect);
 
 			this->ActivatedWeightGroups.Add(CurrentWeightGroup);
 		}
@@ -117,7 +117,7 @@ TSet<FName> UPF2AbilitySystemComponent::ActivatePassiveGameplayEffectsAfter(cons
 		{
 			const TSubclassOf<UGameplayEffect> GameplayEffect = EffectInfo.Value;
 
-			this->ActivatePassiveGameplayEffect(GameplayEffect);
+			this->ActivatePassiveGameplayEffect(CurrentWeightGroup, GameplayEffect);
 
 			this->ActivatedWeightGroups.Add(CurrentWeightGroup);
 			ActivatedGroups.Add(CurrentWeightGroup);
@@ -165,7 +165,9 @@ TSet<FName> UPF2AbilitySystemComponent::DeactivatePassiveGameplayEffectsAfter(co
 	return TargetWeightGroupNames;
 }
 
-void UPF2AbilitySystemComponent::ActivatePassiveGameplayEffect(const TSubclassOf<UGameplayEffect> GameplayEffect)
+void UPF2AbilitySystemComponent::ActivatePassiveGameplayEffect(
+	const FName                        WeightGroup,
+	const TSubclassOf<UGameplayEffect> GameplayEffect)
 {
 	FGameplayEffectContextHandle EffectContext = this->MakeEffectContext();
 	FGameplayEffectSpecHandle    NewHandle;
@@ -180,6 +182,11 @@ void UPF2AbilitySystemComponent::ActivatePassiveGameplayEffect(const TSubclassOf
 	);
 
 	GameplayEffectSpec = NewHandle.Data.Get();
+
+	// Ensure that the GE spec is tagged with its weight no matter how the weight was set (either through API or through
+	// a tag in the InheritableGameplayEffectTags field on the GE definition class itself). Without this, only the tag
+	// from the GE definition spec would pass through.
+	GameplayEffectSpec->DynamicAssetTags.AddTag(PF2GameplayAbilityUtilities::GetTag(WeightGroup));
 
 	if (GameplayEffect->GetName() == PF2CharacterConstants::GeDynamicTagsClassName)
 	{
