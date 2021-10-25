@@ -297,20 +297,18 @@ void UPF2AbilitySystemComponent::RemoveAllDynamicTags()
 void UPF2AbilitySystemComponent::ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore)
 {
 	const TSubclassOf<UGameplayEffect> BoostEffect = this->AbilityBoostEffects[TargetAbilityScore];
+	const FName                        WeightGroup = PF2CharacterConstants::GeWeightGroups::ManagedEffects;
 
-	this->InvokeAndReapplyPassiveGEsInSubsequentWeightGroups(BoostEffect, [this, TargetAbilityScore, BoostEffect]
-	{
-		UE_LOG(
-			LogPf2Core,
-			VeryVerbose,
-			TEXT("Applying a boost to ability ('%s') through ASC for character ('%s') via GE ('%s')."),
-			*(PF2EnumUtilities::ToString(TargetAbilityScore)),
-			*(this->GetOwnerActor()->GetName()),
-			*(BoostEffect->GetName())
-		);
+	UE_LOG(
+		LogPf2Core,
+		VeryVerbose,
+		TEXT("Applying a boost to ability ('%s') through ASC for character ('%s') via GE ('%s')."),
+		*(PF2EnumUtilities::ToString(TargetAbilityScore)),
+		*(this->GetOwnerActor()->GetName()),
+		*(BoostEffect->GetName())
+	);
 
-		this->PassiveGameplayEffects.Add(PF2CharacterConstants::GeWeightGroups::ManagedEffects, BoostEffect);
-	});
+	this->AddPassiveGameplayEffectWithWeight(WeightGroup, BoostEffect);
 }
 
 FORCEINLINE TSubclassOf<UGameplayEffect> UPF2AbilitySystemComponent::GetBoostEffectForAbility(
