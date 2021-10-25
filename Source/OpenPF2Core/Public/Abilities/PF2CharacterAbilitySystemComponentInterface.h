@@ -35,8 +35,12 @@ public:
 	 * Adds a boost of the specified ability to the attribute set of the owning character.
 	 *
 	 * This results in a passive GE being added to the ASC of the character. The GE is added to the weight group
-	 * specified by a tag on GE; this is known as the "default" weight group of the GE. Any Passive GEs in weight
-	 * groups after the default weight group of the GE are automatically re-applied.
+	 * specified by a tag on GE; this is known as the "default" weight group of the GE.
+	 *
+	 * If the group into which the GE is being added is already active, then the GE for the boost is activated
+	 * immediately. In addition, any Passive GEs in weight groups after the default weight group of the GE are
+	 * automatically re-applied.
+	 *
 	 *
 	 * @param TargetAbilityScore
 	 *	The ability score that will be boosted.

@@ -54,6 +54,12 @@ void UPF2AbilitySystemComponent::AddPassiveGameplayEffectWithWeight(
 	this->InvokeAndReapplyPassiveGEsInSubsequentWeightGroups(WeightGroup, [this, WeightGroup, Effect]
 	{
 		this->PassiveGameplayEffects.Add(WeightGroup, Effect);
+
+		if (this->ActivatedWeightGroups.Contains(WeightGroup))
+		{
+			// Activate the new passive GE since it's being put into an active group.
+			this->ActivatePassiveGameplayEffect(WeightGroup, Effect);
+		}
 	});
 }
 
@@ -438,7 +444,11 @@ void UPF2AbilitySystemComponent::InvokeAndReapplyPassiveGEsInSubsequentWeightGro
 	const FName WeightGroup,
 	const Func Callable)
 {
-	const bool SubsequentGroupsWereActive = (this->DeactivatePassiveGameplayEffectsAfter(WeightGroup).Num() != 0);
+	// NOTE: If the group we are affecting isn't active, we don't bother to re-apply subsequent groups because they
+	// won't be affected.
+	const bool SubsequentGroupsWereActive =
+		this->ActivatedWeightGroups.Contains(WeightGroup) &&
+		(this->DeactivatePassiveGameplayEffectsAfter(WeightGroup).Num() != 0);
 
 	Callable();
 

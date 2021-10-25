@@ -193,10 +193,12 @@ protected:
 	 *
 	 * The weight groups affected are determined by the default weight group of the given GE.
 	 *
-	 * If passive GEs in weight groups after the specified weight group were active on this ASC before this call, they
-	 * are deactivated; then the callable is invoked, and passive GEs in the subsequent weight groups are re-activated.
-	 * If no passive GEs were active in subsequent weight groups before this call, then they are not activated at the
-	 * end of this call.
+	 * If the default weight group is active, and passive GEs in weight groups after the specified weight group were
+	 * active on this ASC before this call, they are deactivated; the callable is invoked; and then passive GEs in the
+	 * subsequent weight groups are re-activated.
+	 *
+	 * If the default weight group is not active, or no passive GEs were active in subsequent weight groups before this
+	 * call, no additional weight groups are activated at the end of this call.
 	 *
 	 * @param Effect
 	 *	The GE that the callable is interacting with. The GE is used to dictate which weight group the callable is
@@ -212,13 +214,16 @@ protected:
 	/**
 	 * Invokes the logic of the specified callable, then re-applies passive GEs that were active in subsequent groups.
 	 *
-	 * If passive GEs in weight groups after the specified weight group were active on this ASC before this call, they
-	 * are deactivated; then the callable is invoked, and passive GEs in the subsequent weight groups are re-activated.
-	 * If no passive GEs were active in subsequent weight groups before this call, then they are not activated at the
-	 * end of this call.
+	 * If the specified weight group is active, and passive GEs in weight groups after the specified weight group were
+	 * active on this ASC before this call, they are deactivated; the callable is invoked; and then passive GEs in the
+	 * subsequent weight groups are re-activated.
+	 *
+	 * If the given weight group is not active, or no passive GEs were active in subsequent weight groups before this
+	 * call, no additional weight groups are activated at the end of this call.
 	 *
 	 * @param WeightGroup
-	 *	The weight group that the callable affects. All subsequent weight groups will be re-applied, if they are active.
+	 *	The weight group that the callable affects. If this weight group is currently active on this ASC, all subsequent
+	 *	weight groups will be re-applied, if they are active.
 	 * @param Callable
 	 *	A lambda that is invoked to perform the task.
 	 */
