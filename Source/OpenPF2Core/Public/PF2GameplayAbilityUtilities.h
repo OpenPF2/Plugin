@@ -26,7 +26,7 @@ namespace PF2GameplayAbilityUtilities
 	 * @return
 	 *	The desired tag.
 	 */
-	FORCEINLINE static FGameplayTag GetTag(const FName TagName)
+	FORCEINLINE FGameplayTag GetTag(const FName TagName)
 	{
 		return FGameplayTag::RequestGameplayTag(TagName);
 	}
@@ -42,21 +42,10 @@ namespace PF2GameplayAbilityUtilities
 	 * @return
 	 *	The desired tag.
 	 */
-	FORCEINLINE static FGameplayTag GetTag(const FString TagName)
+	FORCEINLINE FGameplayTag GetTag(const FString TagName)
 	{
 		return GetTag(FName(TagName));
 	}
-
-	/**
-	 * Creates an attribute capture definition for the specified Gameplay Attribute.
-	 *
-	 * @param Attribute
-	 *	The Gameplay Attribute that should be captured.
-	 *
-	 * @return
-	 *	The capture definition for the specified attribute.
-	 */
-	FGameplayEffectAttributeCaptureDefinition BuildSourceCaptureFor(const FGameplayAttribute Attribute);
 
 	/**
 	 * Checks if a tag with the given name or prefix is present.
@@ -71,7 +60,7 @@ namespace PF2GameplayAbilityUtilities
 	 *	- TRUE if given a tag prefix, and there is a tag present in the tag list that starts with that prefix.
 	 *	- FALSE, otherwise.
 	 */
-	FORCEINLINE static bool HasTag(const FGameplayTagContainer *Tags, const FName TagNameOrPrefix)
+	FORCEINLINE bool HasTag(const FGameplayTagContainer *Tags, const FName TagNameOrPrefix)
 	{
 		return Tags->HasTag(GetTag(TagNameOrPrefix));
 	}
@@ -89,8 +78,19 @@ namespace PF2GameplayAbilityUtilities
 	 *	- TRUE if given a tag prefix, and there is a tag present in the tag list that starts with that prefix.
 	 *	- FALSE, otherwise.
 	 */
-	FORCEINLINE static bool HasTag(const FGameplayTagContainer *Tags, const FString TagNameOrPrefix)
+	FORCEINLINE bool HasTag(const FGameplayTagContainer *Tags, const FString TagNameOrPrefix)
 	{
 		return Tags->HasTag(GetTag(TagNameOrPrefix));
 	}
+
+	/**
+	 * Creates an attribute capture definition for the specified Gameplay Attribute.
+	 *
+	 * @param Attribute
+	 *	The Gameplay Attribute that should be captured.
+	 *
+	 * @return
+	 *	The capture definition for the specified attribute.
+	 */
+	OPENPF2CORE_API FGameplayEffectAttributeCaptureDefinition BuildSourceCaptureFor(const FGameplayAttribute Attribute);
 }
