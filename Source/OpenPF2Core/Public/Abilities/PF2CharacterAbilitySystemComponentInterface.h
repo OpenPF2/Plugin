@@ -57,7 +57,7 @@ public:
 	virtual TSubclassOf<UGameplayEffect> GetBoostEffectForAbility(const EPF2CharacterAbilityScoreType AbilityScore) = 0;
 
 	/**
-	 * Gets all of the ability boosts that have been granted to this ASC.
+	 * Gets all of the ability boosts that have been granted on this ASC.
 	 *
 	 * @return
 	 *	The ability boost GAs that are still pending for this character.
