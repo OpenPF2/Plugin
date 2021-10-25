@@ -312,10 +312,10 @@ FORCEINLINE TSubclassOf<UGameplayEffect> UPF2AbilitySystemComponent::GetBoostEff
 	return this->AbilityBoostEffects[AbilityScore];
 }
 
-TArray<UPF2GameplayAbility_BoostAbilityBase *> UPF2AbilitySystemComponent::GetPendingAbilityBoosts() const
+TArray<UPF2GameplayAbility_BoostAbilityBase*> UPF2AbilitySystemComponent::GetPendingAbilityBoosts() const
 {
-	TArray<UPF2GameplayAbility_BoostAbilityBase *> MatchingGameplayAbilities;
-	TArray<FGameplayAbilitySpec*>                  MatchingGameplayAbilitySpecs;
+	TArray<UPF2GameplayAbility_BoostAbilityBase*> MatchingGameplayAbilities;
+	TArray<FGameplayAbilitySpec*>                 MatchingGameplayAbilitySpecs;
 
 	this->GetActivatableGameplayAbilitySpecsByAllMatchingTags(
 		FGameplayTagContainer(PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.ApplyAbilityBoost"))),
@@ -324,7 +324,7 @@ TArray<UPF2GameplayAbility_BoostAbilityBase *> UPF2AbilitySystemComponent::GetPe
 	);
 
 	MatchingGameplayAbilities =
-		PF2ArrayUtilities::Map<UPF2GameplayAbility_BoostAbilityBase *>(
+		PF2ArrayUtilities::Map<UPF2GameplayAbility_BoostAbilityBase*>(
 			MatchingGameplayAbilitySpecs,
 			[](const FGameplayAbilitySpec* AbilitySpec)
 			{
