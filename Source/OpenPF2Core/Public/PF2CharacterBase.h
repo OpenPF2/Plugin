@@ -24,6 +24,7 @@
 #include "PF2CharacterConstants.h"
 #include "PF2CharacterInterface.h"
 #include "PF2ClassGameplayEffectBase.h"
+#include "PF2GameplayAbilityUtilities.h"
 
 #include "PF2CharacterBase.generated.h"
 
@@ -306,15 +307,16 @@ protected:
 		this->AbilitySystemComponent = ComponentFactory.CreateAbilitySystemComponent(this);
 		this->AttributeSet           = ComponentFactory.CreateAttributeSet(this);
 
-		for (const auto& GeCoreBlueprintPath : PF2CharacterConstants::GeCoreCharacterBlueprintPaths)
+		for (const auto& EffectName : PF2CharacterConstants::GeCoreCharacterBlueprintPaths)
 		{
-			const FString EffectName  = GeCoreBlueprintPath.Key;
-			const FName   WeightGroup = GeCoreBlueprintPath.Value;
-			const FString EffectPath  = PF2CharacterConstants::GetBlueprintPath(EffectName);
+			const FString EffectPath = PF2CharacterConstants::GetBlueprintPath(EffectName);
 
 			const ConstructorHelpers::FObjectFinder<UClass> EffectFinder(*EffectPath);
+			const TSubclassOf<UGameplayEffect>              GameplayEffect = EffectFinder.Object;
 
-			this->CoreGameplayEffects.Add(WeightGroup, EffectFinder.Object);
+			const FName WeightGroup = PF2GameplayAbilityUtilities::GetWeightGroupOfGameplayEffect(GameplayEffect);
+
+			this->CoreGameplayEffects.Add(WeightGroup, GameplayEffect);
 		}
 	}
 

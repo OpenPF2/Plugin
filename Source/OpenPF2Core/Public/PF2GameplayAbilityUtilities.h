@@ -7,8 +7,10 @@
 
 #include <CoreMinimal.h>
 
+#include "GameplayEffect.h"
 #include "GameplayEffectTypes.h"
 #include "GameplayTagContainer.h"
+#include "PF2CharacterConstants.h"
 
 /**
  * Utility logic for working with the Gameplay Abilities System (GAS).
@@ -93,4 +95,23 @@ namespace PF2GameplayAbilityUtilities
 	 *	The capture definition for the specified attribute.
 	 */
 	OPENPF2CORE_API FGameplayEffectAttributeCaptureDefinition BuildSourceCaptureFor(const FGameplayAttribute Attribute);
+
+	/**
+	 * Gets the name of the default weight group into which the given GE should be placed.
+	 *
+	 * If the GE does not define a default weight group, PF2CharacterConstants::GeWeightGroups::PreAbilityBoosts is
+	 * returned.
+	 *
+	 * @param GameplayEffect
+	 *	The effect for which a weight group is desired.
+	 * @param DefaultWeight
+	 *	The weight to return if the gameplay effect does not indicate its weight with a tag.
+	 *
+	 * @return
+	 *	The name of the weight group for the effect.
+	 */
+	OPENPF2CORE_API FName GetWeightGroupOfGameplayEffect(
+		const TSubclassOf<UGameplayEffect> GameplayEffect,
+		const FName DefaultWeight = PF2CharacterConstants::GeWeightGroups::PreAbilityBoosts
+	);
 }

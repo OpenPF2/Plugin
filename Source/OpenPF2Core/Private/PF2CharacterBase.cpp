@@ -186,7 +186,14 @@ void APF2CharacterBase::PopulatePassiveGameplayEffects()
 
 	for (const auto& AdditionalEffect : this->AdditionalPassiveGameplayEffects)
 	{
-		GameplayEffects.Add(PF2CharacterConstants::GeWeightGroups::AdditionalEffects, AdditionalEffect);
+		// Allow GE to override the default weight group.
+		const FName WeightGroup =
+			PF2GameplayAbilityUtilities::GetWeightGroupOfGameplayEffect(
+				AdditionalEffect,
+				PF2CharacterConstants::GeWeightGroups::PreAbilityBoosts
+			);
+
+		GameplayEffects.Add(WeightGroup, AdditionalEffect);
 	}
 
 	this->GetCharacterAbilitySystemComponent()->SetPassiveGameplayEffects(GameplayEffects);
@@ -216,19 +223,23 @@ void APF2CharacterBase::GenerateManagedPassiveGameplayEffects()
 {
 	if (this->IsAuthorityForEffects() && !this->bManagedPassiveEffectsGenerated)
 	{
-		TArray<TSubclassOf<UGameplayEffect>> BlueprintEffects = {
+		TArray<TSubclassOf<UGameplayEffect>> EffectBlueprints = {
 			this->AncestryAndHeritage,
 			this->Background,
 		};
 
-		for (const auto& BlueprintEffect : BlueprintEffects)
+		for (const auto& EffectBlueprint : EffectBlueprints)
 		{
-			if (*BlueprintEffect != nullptr)
+			if (*EffectBlueprint != nullptr)
 			{
-				this->ManagedGameplayEffects.Add(
-					PF2CharacterConstants::GeWeightGroups::ManagedEffects,
-					BlueprintEffect
-				);
+				// Allow managed GE to override the default weight group.
+				const FName WeightGroup =
+					PF2GameplayAbilityUtilities::GetWeightGroupOfGameplayEffect(
+						EffectBlueprint,
+						PF2CharacterConstants::GeWeightGroups::ManagedEffects
+					);
+
+				this->ManagedGameplayEffects.Add(WeightGroup, EffectBlueprint);
 			}
 		}
 

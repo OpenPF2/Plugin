@@ -27,7 +27,7 @@ UPF2AbilitySystemComponent::UPF2AbilitySystemComponent()
 
 		const FString Filename =
 			PF2CharacterConstants::GetBlueprintPath(
-				FString::Format(*PF2CharacterConstants::GeBlueprintBoostNameFormat, {AbilityName})
+				FName(FString::Format(*PF2CharacterConstants::GeBlueprintBoostNameFormat, {AbilityName}))
 			);
 
 		const ConstructorHelpers::FObjectFinder<UClass> BoostGeFinder(*Filename);
@@ -39,12 +39,9 @@ UPF2AbilitySystemComponent::UPF2AbilitySystemComponent()
 
 void UPF2AbilitySystemComponent::AddPassiveGameplayEffect(const TSubclassOf<UGameplayEffect> Effect)
 {
-	const FName WeightGroup = this->GetDefaultWeightGroupOfGameplayEffect(Effect);
+	const FName WeightGroup = PF2GameplayAbilityUtilities::GetWeightGroupOfGameplayEffect(Effect);
 
-	this->InvokeAndReapplyPassiveGEsInSubsequentWeightGroups(WeightGroup, [this, WeightGroup, Effect]
-	{
-		this->PassiveGameplayEffects.Add(WeightGroup, Effect);
-	});
+	this->AddPassiveGameplayEffectWithWeight(WeightGroup, Effect);
 }
 
 void UPF2AbilitySystemComponent::AddPassiveGameplayEffectWithWeight(
@@ -310,7 +307,13 @@ void UPF2AbilitySystemComponent::RemoveAllDynamicTags()
 void UPF2AbilitySystemComponent::ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore)
 {
 	const TSubclassOf<UGameplayEffect> BoostEffect = this->AbilityBoostEffects[TargetAbilityScore];
-	const FName                        WeightGroup = PF2CharacterConstants::GeWeightGroups::ManagedEffects;
+
+	// Allow boost GE to override the default weight group.
+	const FName WeightGroup =
+		PF2GameplayAbilityUtilities::GetWeightGroupOfGameplayEffect(
+			BoostEffect,
+			PF2CharacterConstants::GeWeightGroups::AbilityBoosts
+		);
 
 	UE_LOG(
 		LogPf2Core,
@@ -367,43 +370,6 @@ FORCEINLINE int UPF2AbilitySystemComponent::GetCharacterLevel() const
 	}
 }
 
-FName UPF2AbilitySystemComponent::GetDefaultWeightGroupOfGameplayEffect(
-	const TSubclassOf<UGameplayEffect> GameplayEffect)
-{
-	FName                  WeightGroup;
-	const UGameplayEffect* Effect      = GameplayEffect.GetDefaultObject();
-
-	const FGameplayTag WeightTagParent = PF2GameplayAbilityUtilities::GetTag(FName(TEXT("GameplayEffect.WeightGroup")));
-
-	const FGameplayTagContainer WeightTags =
-		Effect->InheritableGameplayEffectTags.CombinedTags.Filter(FGameplayTagContainer(WeightTagParent));
-
-	if (WeightTags.IsEmpty())
-	{
-		WeightGroup = PF2CharacterConstants::GeWeightGroups::AdditionalEffects;
-	}
-	else
-	{
-		const FGameplayTag WeightTag = WeightTags.First();
-
-		checkf(
-			WeightTags.Num() < 2,
-			TEXT("A Gameplay Effect can only have a single weight group assigned (this GE has been assigned '%d' weight groups)."),
-			WeightTags.Num()
-		);
-
-		checkf(
-			WeightTag != WeightTagParent,
-			TEXT("Parent tag of weight groups ('%s') cannot be used as a weight group "),
-			*WeightTagParent.ToString()
-		);
-
-		WeightGroup = WeightTag.GetTagName();
-	}
-
-	return WeightGroup;
-}
-
 TMultiMap<FName, TSubclassOf<UGameplayEffect>> UPF2AbilitySystemComponent::BuildPassiveGameplayEffectsToApply() const
 {
 	TMultiMap<FName, TSubclassOf<UGameplayEffect>> EffectsToApply = this->PassiveGameplayEffects;
@@ -440,7 +406,7 @@ void UPF2AbilitySystemComponent::InvokeAndReapplyPassiveGEsInSubsequentWeightGro
 	const TSubclassOf<UGameplayEffect> Effect,
 	const Func Callable)
 {
-	FName WeightGroup = this->GetDefaultWeightGroupOfGameplayEffect(Effect);
+	FName WeightGroup = PF2GameplayAbilityUtilities::GetWeightGroupOfGameplayEffect(Effect);
 
 	this->InvokeAndReapplyPassiveGEsInSubsequentWeightGroups(WeightGroup, Callable);
 }

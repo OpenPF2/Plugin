@@ -23,4 +23,41 @@ namespace PF2GameplayAbilityUtilities
 
 		return CaptureDefinition;
 	}
+
+	FName GetWeightGroupOfGameplayEffect(
+		const TSubclassOf<UGameplayEffect> GameplayEffect,
+		const FName DefaultWeight)
+	{
+		FName                  WeightGroup;
+		const FGameplayTag     WeightTagParent = GetTag(FName(TEXT("GameplayEffect.WeightGroup")));
+		const UGameplayEffect* Effect          = GameplayEffect.GetDefaultObject();
+
+		const FGameplayTagContainer WeightTags =
+			Effect->InheritableGameplayEffectTags.CombinedTags.Filter(FGameplayTagContainer(WeightTagParent));
+
+		if (WeightTags.IsEmpty())
+		{
+			WeightGroup = DefaultWeight;
+		}
+		else
+		{
+			const FGameplayTag WeightTag = WeightTags.First();
+
+			checkf(
+				WeightTags.Num() < 2,
+				TEXT("A Gameplay Effect can only have a single weight group assigned (this GE has been assigned '%d' weight groups)."),
+				WeightTags.Num()
+			);
+
+			checkf(
+				WeightTag != WeightTagParent,
+				TEXT("Parent tag of weight groups ('%s') cannot be used as a weight group "),
+				*WeightTagParent.ToString()
+			);
+
+			WeightGroup = WeightTag.GetTagName();
+		}
+
+		return WeightGroup;
+	}
 }

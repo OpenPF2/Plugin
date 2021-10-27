@@ -24,22 +24,40 @@ namespace PF2CharacterConstants
 		/**
 		 * The weight group used for GEs that initialize base stats.
 		 */
-		static const FName InitializeBaseStats = FName("GameplayEffect.WeightGroup.00_InitializeBaseStats");
+		static const FName InitializeBaseStats = FName(TEXT("GameplayEffect.WeightGroup.00_InitializeBaseStats"));
 
 		/**
-		 * The weight group used for managed GEs generated from other values on a character.
+		 * The weight group used for GEs provided by the game designer that have to run right after base stats.
 		 */
-		static const FName ManagedEffects = FName("GameplayEffect.WeightGroup.10_ManagedEffects");
+		static const FName PostInitializeBaseStats =
+			FName(TEXT("GameplayEffect.WeightGroup.05_PostInitializeBaseStats"));
 
 		/**
-		 * The default weight group used for GEs provided by the game designer.
+		 * The weight group used for GEs generated from other values on this character (managed by ASC logic).
 		 */
-		static const FName AdditionalEffects = FName("GameplayEffect.WeightGroup.20_AdditionalEffects");
+		static const FName ManagedEffects = FName(TEXT("GameplayEffect.WeightGroup.10_ManagedEffects"));
 
 		/**
-		 * The weight group used for GEs that must run last because they heavily depend on results of earlier GEs.
+		 * The default weight group for custom, passive GEs from a game designer; applied before ability boosts.
 		 */
-		static const FName FinalizeStats = FName("GameplayEffect.WeightGroup.30_FinalizeStats");
+		static const FName PreAbilityBoosts = FName(TEXT("GameplayEffect.WeightGroup.15_PreAbilityBoosts"));
+
+		/**
+		 * The weight group used for ability boosts selected by the player or a game designer.
+		 */
+		static const FName AbilityBoosts = FName(TEXT("GameplayEffect.WeightGroup.20_AbilityBoosts"));
+
+		/**
+		 * The weight group used for custom GEs provided by the game designer that must run before the last group of
+		 * stats GEs.
+		 */
+		static const FName PreFinalizeStats = FName(TEXT("GameplayEffect.WeightGroup.25_PreFinalizeStats"));
+
+		/**
+		 * The weight group used for GEs that need to run last because they heavily depend on the results of earlier
+		 * GEs.
+		 */
+		static const FName FinalizeStats = FName(TEXT("GameplayEffect.WeightGroup.30_FinalizeStats"));
 	}
 
 	/**
@@ -65,28 +83,28 @@ namespace PF2CharacterConstants
 	/**
 	 * Paths to Gameplay Effect Blueprints for core stat calculations in characters.
 	 *
-	 * The weight of each path controls the order in which the corresponding GE is applied. Base stat GEs are applied
+	 * The weight group tag on each passive GE controls the order in which it is applied. Base stat GEs are applied
 	 * first, followed by ancestry and class GEs, ability boost GEs, additional passive GEs, and then all other core
-	 * GEs. GEs that have the same weight are applied in the order they have been added/listed here.
+	 * GEs. GEs that have the same weight group are applied in the order they have been added/listed here.
 	 *
 	 * TODO: Consider whether we want to move this list into a Blueprint UPROPERTY, so that it's not hard-coded.
 	 */
-	static const TMap<const FString, FName> GeCoreCharacterBlueprintPaths = {
+	static const TArray<FName> GeCoreCharacterBlueprintPaths = {
 		// Initialize base stats.
-		{ TEXT("GE_ApplyBaseCharacterStats"),     GeWeightGroups::InitializeBaseStats },
-		{ TEXT("GE_GrantCharacterBaseAbilities"), GeWeightGroups::InitializeBaseStats },
-		{ TEXT("GE_CalcKeyAbilityBoost"),         GeWeightGroups::InitializeBaseStats },
+		TEXT("GE_ApplyBaseCharacterStats"),
+		TEXT("GE_GrantCharacterBaseAbilities"),
+		TEXT("GE_CalcKeyAbilityBoost"),
 
 		// Finalize stats.
-		{ TEXT("GE_CalcAbilityModifiers"),        GeWeightGroups::FinalizeStats       },
-		{ TEXT("GE_CalcClassDifficultyClass"),    GeWeightGroups::FinalizeStats       },
-		{ TEXT("GE_CalcArmorClass"),              GeWeightGroups::FinalizeStats       },
-		{ TEXT("GE_CalcPerceptionModifier"),      GeWeightGroups::FinalizeStats       },
-		{ TEXT("GE_CalcSavingThrowModifiers"),    GeWeightGroups::FinalizeStats       },
-		{ TEXT("GE_CalcSpellAttackRoll"),         GeWeightGroups::FinalizeStats       },
-		{ TEXT("GE_CalcSpellDifficultyClass"),    GeWeightGroups::FinalizeStats       },
-		{ TEXT("GE_CalcSkillModifiers"),          GeWeightGroups::FinalizeStats       },
-		{ TEXT("GE_CalcAncestryFeatLimit"),       GeWeightGroups::FinalizeStats       },
+		TEXT("GE_CalcAbilityModifiers"),
+		TEXT("GE_CalcClassDifficultyClass"),
+		TEXT("GE_CalcArmorClass"),
+		TEXT("GE_CalcPerceptionModifier"),
+		TEXT("GE_CalcSavingThrowModifiers"),
+		TEXT("GE_CalcSpellAttackRoll"),
+		TEXT("GE_CalcSpellDifficultyClass"),
+		TEXT("GE_CalcSkillModifiers"),
+		TEXT("GE_CalcAncestryFeatLimit"),
 	};
 
 	/**
@@ -98,8 +116,8 @@ namespace PF2CharacterConstants
 	 * @return
 	 *	The path to the blueprint.
 	 */
-	FORCEINLINE static FString GetBlueprintPath(FString Name)
+	FORCEINLINE static FString GetBlueprintPath(FName Name)
 	{
-		return FString::Format(TEXT("{0}{1}.{1}_C"), { BlueprintBasePath, Name });
+		return FString::Format(TEXT("{0}{1}.{1}_C"), { BlueprintBasePath, Name.ToString() });
 	}
 }

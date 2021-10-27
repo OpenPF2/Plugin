@@ -146,14 +146,6 @@ protected:
 	int GetCharacterLevel() const;
 
 	/**
-	 * Gets the name of the default weight group into which the given GE should be placed.
-	 *
-	 * If the GE does not define a default weight group, PF2CharacterConstants::GeWeightGroups::AdditionalEffects is
-	 * returned.
-	 */
-	FName GetDefaultWeightGroupOfGameplayEffect(TSubclassOf<UGameplayEffect> GameplayEffect);
-
-	/**
 	 * Activates a specific passive Gameplay Effect on this ASC.
 	 *
 	 * @param WeightGroup
