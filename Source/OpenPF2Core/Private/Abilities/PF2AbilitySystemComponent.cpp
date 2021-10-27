@@ -51,6 +51,13 @@ void UPF2AbilitySystemComponent::AddPassiveGameplayEffectWithWeight(
 	const FName                        WeightGroup,
 	const TSubclassOf<UGameplayEffect> Effect)
 {
+	// Special case: If this is the first time a GE from this weight group is being added, and other weight groups are
+	// active, let's assume that we want to enable the new weight group.
+	if ((this->PassiveGameplayEffects.Num(WeightGroup) == 0) && this->ArePassiveGameplayEffectsActive())
+	{
+		this->ActivatedWeightGroups.Add(WeightGroup);
+	}
+
 	this->InvokeAndReapplyPassiveGEsInSubsequentWeightGroups(WeightGroup, [this, WeightGroup, Effect]
 	{
 		this->PassiveGameplayEffects.Add(WeightGroup, Effect);
