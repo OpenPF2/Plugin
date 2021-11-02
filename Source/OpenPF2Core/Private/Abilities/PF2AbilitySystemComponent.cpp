@@ -356,6 +356,60 @@ TArray<UPF2GameplayAbility_BoostAbilityBase*> UPF2AbilitySystemComponent::GetPen
 	return MatchingGameplayAbilities;
 }
 
+TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> UPF2AbilitySystemComponent::GetAbilityScoreValues() const
+{
+	const UPF2AttributeSet* AttributeSet =
+		Cast<UPF2AttributeSet>(this->GetAttributeSubobject(UPF2AttributeSet::StaticClass()));
+
+	const TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> Values =
+		{
+			{
+				EPF2CharacterAbilityScoreType::AbStrength,
+				FPF2AttributeModifierSnapshot(
+					AttributeSet->AbStrength.GetCurrentValue(),
+					AttributeSet->AbStrengthModifier.GetCurrentValue()
+				)
+			},
+			{
+				EPF2CharacterAbilityScoreType::AbDexterity,
+				FPF2AttributeModifierSnapshot(
+					AttributeSet->AbDexterity.GetCurrentValue(),
+					AttributeSet->AbDexterityModifier.GetCurrentValue()
+				)
+			},
+			{
+				EPF2CharacterAbilityScoreType::AbConstitution,
+				FPF2AttributeModifierSnapshot(
+					AttributeSet->AbConstitution.GetCurrentValue(),
+					AttributeSet->AbConstitutionModifier.GetCurrentValue()
+				)
+			},
+			{
+				EPF2CharacterAbilityScoreType::AbIntelligence,
+				FPF2AttributeModifierSnapshot(
+					AttributeSet->AbIntelligence.GetCurrentValue(),
+					AttributeSet->AbIntelligenceModifier.GetCurrentValue()
+				)
+			},
+			{
+				EPF2CharacterAbilityScoreType::AbWisdom,
+				FPF2AttributeModifierSnapshot(
+					AttributeSet->AbWisdom.GetCurrentValue(),
+					AttributeSet->AbWisdomModifier.GetCurrentValue()
+				)
+			},
+			{
+				EPF2CharacterAbilityScoreType::AbCharisma,
+				FPF2AttributeModifierSnapshot(
+					AttributeSet->AbCharisma.GetCurrentValue(),
+					AttributeSet->AbCharismaModifier.GetCurrentValue()
+				)
+			},
+		};
+
+	return Values;
+}
+
 FORCEINLINE int UPF2AbilitySystemComponent::GetCharacterLevel() const
 {
 	IPF2CharacterInterface* OwningCharacter = Cast<IPF2CharacterInterface>(this->GetOwnerActor());

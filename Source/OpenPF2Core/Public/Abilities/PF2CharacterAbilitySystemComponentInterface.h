@@ -5,8 +5,9 @@
 
 #pragma once
 
-#include "PF2AbilitySystemComponentInterface.h"
 #include "Abilities/PF2CharacterAbilityScoreType.h"
+#include "PF2AbilitySystemComponentInterface.h"
+#include "PF2AttributeModifierSnapshot.h"
 
 #include "PF2CharacterAbilitySystemComponentInterface.generated.h"
 
@@ -68,4 +69,13 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable)
 	virtual TArray<UPF2GameplayAbility_BoostAbilityBase *> GetPendingAbilityBoosts() const = 0;
+
+	/**
+	 * Gets a snapshot from this ASC of all current character ability scores and their modifiers.
+	 *
+	 * @return
+	 *	A map from character ability scores to a snapshot of their values and modifiers.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> GetAbilityScoreValues() const = 0;
 };
