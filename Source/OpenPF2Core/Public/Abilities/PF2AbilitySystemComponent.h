@@ -47,13 +47,19 @@ public:
 	virtual void ActivateAllPassiveGameplayEffects() override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual TSet<FName> ActivatePassiveGameplayEffectsAfter(const FName WeightGroup) override;
-
-	UFUNCTION(BlueprintCallable)
 	virtual void DeactivateAllPassiveGameplayEffects() override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual TSet<FName> DeactivatePassiveGameplayEffectsAfter(const FName WeightGroup) override;
+	virtual TSet<FName> ActivatePassiveGameplayEffectsAfter(const FName StartingWeightGroup) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual TSet<FName> DeactivatePassiveGameplayEffectsAfter(const FName StartingWeightGroup) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual bool ActivatePassiveGameplayEffects(const FName WeightGroup) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual bool DeactivatePassiveGameplayEffects(const FName WeightGroup) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void AddDynamicTag(const FGameplayTag Tag) override;
@@ -134,6 +140,12 @@ protected:
 	 */
 	TMultiMap<FName, TSubclassOf<UGameplayEffect>> PassiveGameplayEffects;
 
+	/**
+	 * The cached list of all Gameplay Effects registered on this ASC with AddPassiveGameplayEffect() or
+	 * AddPassiveGameplayEffectWithWeight.
+	 */
+	TMultiMap<FName, TSubclassOf<UGameplayEffect>> CachedPassiveGameplayEffectsToApply;
+
 	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
@@ -149,6 +161,30 @@ protected:
 	int GetCharacterLevel() const;
 
 	/**
+	 * Gets or builds the list of all passive gameplay effects to activate, organized by weight group.
+	 *
+	 * The returned list includes all of the passive GEs that have been added to this GE as well as the dynamic tag GE.
+	 *
+	 * The list is cached, for performance reasons.
+	 *
+	 * @return
+	 *	The map of passive GEs to activate, keyed by weight group.
+	 */
+	TMultiMap<FName, TSubclassOf<UGameplayEffect>> GetPassiveGameplayEffectsToApply();
+
+	/**
+	 * Builds the list of all passive gameplay effects to activate, organized by weight group.
+	 *
+	 * The returned list includes all of the passive GEs that have been added to this GE as well as the dynamic tag GE.
+	 *
+	 * The list is not cached.
+	 *
+	 * @return
+	 *	The map of passive GEs to activate, keyed by weight group.
+	 */
+	TMultiMap<FName, TSubclassOf<UGameplayEffect>> BuildPassiveGameplayEffectsToApply() const;
+
+	/**
 	 * Activates a specific passive Gameplay Effect on this ASC.
 	 *
 	 * @param WeightGroup
@@ -159,16 +195,6 @@ protected:
 	void ActivatePassiveGameplayEffect(
 		const FName                        WeightGroup,
 		const TSubclassOf<UGameplayEffect> GameplayEffect);
-
-	/**
-	 * Builds the list of all passive gameplay effects to activate, organized by weight group.
-	 *
-	 * The returned list includes all of the passive GEs that have been added to this GE as well as the dynamic tag GE.
-	 *
-	 * @return
-	 *	The map of passive GEs to activate, keyed by weight group.
-	 */
-	TMultiMap<FName, TSubclassOf<UGameplayEffect>> BuildPassiveGameplayEffectsToApply() const;
 
 	/**
 	 * Invokes the logic of the specified callable, with special handling if passive GEs are already active on this ASC.

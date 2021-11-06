@@ -102,6 +102,12 @@ public:
 	virtual void ActivateAllPassiveGameplayEffects() = 0;
 
 	/**
+	 * Removes all passive Gameplay Effects that were previously activated on this ASC.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual void DeactivateAllPassiveGameplayEffects() = 0;
+
+	/**
 	 * Activates only Gameplay Effects that exist after the given weight group.
 	 *
 	 * The weight group itself is not activated.
@@ -114,12 +120,6 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable)
 	virtual TSet<FName> ActivatePassiveGameplayEffectsAfter(const FName WeightGroup) = 0;
-
-	/**
-	 * Removes all passive Gameplay Effects that were previously activated on this ASC.
-	 */
-	UFUNCTION(BlueprintCallable)
-	virtual void DeactivateAllPassiveGameplayEffects() = 0;
 
 	/**
 	 * Deactivates only Gameplay Effects that exist after the given weight group.
@@ -135,6 +135,31 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable)
 	virtual TSet<FName> DeactivatePassiveGameplayEffectsAfter(const FName WeightGroup) = 0;
+
+	/**
+	 * Activates the specified weight group of Gameplay Effects.
+	 *
+	 * @param WeightGroup
+	 *	The name of the group to activate.
+	 *
+	 * @return
+	 *	true if the group was activated; or, false, if the group was not activated because it was already activated.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual bool ActivatePassiveGameplayEffects(const FName WeightGroup) = 0;
+
+	/**
+	 * Deactivates the specified weight group of Gameplay Effects.
+	 *
+	 * @param WeightGroup
+	 *	The name of the group to deactivate.
+	 *
+	 * @return
+	 *	true if the group was deactivated; or, false, if the group was not deactivated because it was already
+	 *	deactivated.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual bool DeactivatePassiveGameplayEffects(const FName WeightGroup) = 0;
 
 	/**
 	 * Applies a tag to this ASC that is otherwise not granted by a GE.
