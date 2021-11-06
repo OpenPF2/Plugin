@@ -42,6 +42,23 @@ public:
 	virtual int32 GetCharacterLevel() const = 0;
 
 	/**
+	 * Gets a PF2-specific version of the ASC sub-component of this character.
+	 *
+	 * @param Output
+	 *	The ASC, as an implementation of the interface for character ASCs.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual void GetCharacterAbilitySystemComponent(TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const = 0;
+
+	/**
+	 * Gets a PF2-specific version of the ASC sub-component of this character.
+	 *
+	 * @return
+	 *	The ASC, as an implementation of the interface for character ASCs.
+	 */
+	virtual IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent() const = 0;
+
+	/**
 	 * Gets all of the ability boosts that have been granted to this character that require choices from the player.
 	 *
 	 * @return

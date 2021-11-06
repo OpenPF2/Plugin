@@ -340,6 +340,11 @@ public:
 	virtual int32 GetCharacterLevel() const override;
 
 	UFUNCTION(BlueprintCallable)
+	virtual void GetCharacterAbilitySystemComponent(TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const override;
+
+	virtual IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent() const override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual TArray<UPF2GameplayAbility_BoostAbilityBase*> GetPendingAbilityBoosts() const override;
 
 	UFUNCTION(BlueprintCallable)
@@ -353,14 +358,6 @@ public:
 	// =================================================================================================================
 	// Public Methods - Blueprint Callable
 	// =================================================================================================================
-	/**
-	 * Gets a PF2-specific version of the ASC sub-component of this character.
-	 *
-	 * @return
-	 *	The ASC, as an implementation of the interface for character ASCs.
-	 */
-	IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent() const;
-
 	/**
 	 * Sets the current level of this character.
 	 *

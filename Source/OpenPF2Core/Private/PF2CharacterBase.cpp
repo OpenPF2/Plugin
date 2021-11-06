@@ -99,6 +99,14 @@ void APF2CharacterBase::ApplyAbilityBoostSelections()
 	}
 }
 
+FORCEINLINE void APF2CharacterBase::GetCharacterAbilitySystemComponent(TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const
+{
+	// This is weird, but the way that TScriptInterface objects work is it maintains a reference to a UObject that
+	// *implements* an interface along with a pointer to the part of the UObject that provides the interface
+	// implementation, so we need to provide the concrete object instead of the interface type.
+	Output = this->AbilitySystemComponent;
+}
+
 FORCEINLINE IPF2CharacterAbilitySystemComponentInterface* APF2CharacterBase::GetCharacterAbilitySystemComponent() const
 {
 	// Too bad that ASCs in UE don't implement an interface; otherwise we could extend it so casts like this aren't
