@@ -203,43 +203,6 @@ bool UPF2AbilitySystemComponent::DeactivatePassiveGameplayEffects(const FName We
 	}
 }
 
-void UPF2AbilitySystemComponent::ActivatePassiveGameplayEffect(
-	const FName                        WeightGroup,
-	const TSubclassOf<UGameplayEffect> GameplayEffect)
-{
-	FGameplayEffectContextHandle EffectContext = this->MakeEffectContext();
-	FGameplayEffectSpecHandle    NewHandle;
-	FGameplayEffectSpec*         GameplayEffectSpec;
-
-	EffectContext.AddSourceObject(this);
-
-	NewHandle = this->MakeOutgoingSpec(
-		GameplayEffect,
-		this->GetCharacterLevel(),
-		EffectContext
-	);
-
-	GameplayEffectSpec = NewHandle.Data.Get();
-
-	// Ensure that the GE spec is tagged with its weight no matter how the weight was set (either through API or through
-	// a tag in the InheritableGameplayEffectTags field on the GE definition class itself). Without this, only the tag
-	// from the GE definition spec would pass through.
-	GameplayEffectSpec->DynamicAssetTags.AddTag(PF2GameplayAbilityUtilities::GetTag(WeightGroup));
-
-	// Special case: If the GE being activated is our "dummy" GE for dynamic tags, apply tags to it.
-	//
-	// TODO: Find a different way to accomplish this without a GE. This feels very much like a kludge.
-	if (GameplayEffect->GetName() == PF2CharacterConstants::GeDynamicTagsClassName)
-	{
-		GameplayEffectSpec->DynamicGrantedTags.AppendTags(this->DynamicTags);
-	}
-
-	if (NewHandle.IsValid())
-	{
-		this->ApplyGameplayEffectSpecToTarget(*GameplayEffectSpec, this);
-	}
-}
-
 void UPF2AbilitySystemComponent::AddDynamicTag(const FGameplayTag Tag)
 {
 	this->InvokeAndReapplyAllPassiveGEs([this, Tag]
@@ -358,12 +321,6 @@ void UPF2AbilitySystemComponent::ApplyAbilityBoost(const EPF2CharacterAbilitySco
 	this->AddPassiveGameplayEffectWithWeight(WeightGroup, BoostEffect);
 }
 
-FORCEINLINE TSubclassOf<UGameplayEffect> UPF2AbilitySystemComponent::GetBoostEffectForAbility(
-	const EPF2CharacterAbilityScoreType AbilityScore)
-{
-	return this->AbilityBoostEffects[AbilityScore];
-}
-
 TArray<UPF2GameplayAbility_BoostAbilityBase*> UPF2AbilitySystemComponent::GetPendingAbilityBoosts() const
 {
 	TArray<UPF2GameplayAbility_BoostAbilityBase*> MatchingGameplayAbilities;
@@ -476,6 +433,43 @@ TMultiMap<FName, TSubclassOf<UGameplayEffect>> UPF2AbilitySystemComponent::Build
 	EffectsToApply.KeyStableSort(FNameLexicalLess());
 
 	return EffectsToApply;
+}
+
+void UPF2AbilitySystemComponent::ActivatePassiveGameplayEffect(
+	const FName                        WeightGroup,
+	const TSubclassOf<UGameplayEffect> GameplayEffect)
+{
+	FGameplayEffectContextHandle EffectContext = this->MakeEffectContext();
+	FGameplayEffectSpecHandle    NewHandle;
+	FGameplayEffectSpec*         GameplayEffectSpec;
+
+	EffectContext.AddSourceObject(this);
+
+	NewHandle = this->MakeOutgoingSpec(
+		GameplayEffect,
+		this->GetCharacterLevel(),
+		EffectContext
+	);
+
+	GameplayEffectSpec = NewHandle.Data.Get();
+
+	// Ensure that the GE spec is tagged with its weight no matter how the weight was set (either through API or through
+	// a tag in the InheritableGameplayEffectTags field on the GE definition class itself). Without this, only the tag
+	// from the GE definition spec would pass through.
+	GameplayEffectSpec->DynamicAssetTags.AddTag(PF2GameplayAbilityUtilities::GetTag(WeightGroup));
+
+	// Special case: If the GE being activated is our "dummy" GE for dynamic tags, apply tags to it.
+	//
+	// TODO: Find a different way to accomplish this without a GE. This feels very much like a kludge.
+	if (GameplayEffect->GetName() == PF2CharacterConstants::GeDynamicTagsClassName)
+	{
+		GameplayEffectSpec->DynamicGrantedTags.AppendTags(this->DynamicTags);
+	}
+
+	if (NewHandle.IsValid())
+	{
+		this->ApplyGameplayEffectSpecToTarget(*GameplayEffectSpec, this);
+	}
 }
 
 template <typename Func>

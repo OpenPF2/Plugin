@@ -6,7 +6,6 @@
 #pragma once
 
 #include <AbilitySystemComponent.h>
-
 #include "PF2CharacterAbilitySystemComponentInterface.h"
 
 #include "PF2AbilitySystemComponent.generated.h"
@@ -86,8 +85,11 @@ public:
     virtual void ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual TSubclassOf<UGameplayEffect> GetBoostEffectForAbility(
-		const EPF2CharacterAbilityScoreType AbilityScore) override;
+	virtual FORCEINLINE TSubclassOf<UGameplayEffect> GetBoostEffectForAbility(
+		const EPF2CharacterAbilityScoreType AbilityScore) override
+	{
+		return this->AbilityBoostEffects[AbilityScore];
+	}
 
 	UFUNCTION(BlueprintCallable)
 	virtual TArray<UPF2GameplayAbility_BoostAbilityBase *> GetPendingAbilityBoosts() const override;
