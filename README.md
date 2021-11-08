@@ -5,6 +5,14 @@ with mechanics similar to Pathfinder&trade; 2nd Edition by Paizo Publishing.
 All abilities and stats are implemented using the Gameplay Ability System (GAS)
 plug-in that ships with Unreal Engine.
 
+## Status
+This plug-in is still in an early stage of development. We are attempting to
+model as much of the PF2 Core Rulebook as possible. You can track our progress
+and see which parts of the PF2 Core Rulebook match which parts of the codebase
+here:
+
+https://1drv.ms/x/s!AigXEMxuXyh0gpRnYs8NlW-gC2oMnA?e=K8dHvP
+
 ## Installation
 1. Check-out the project into the `Plugins/` folder of your larger UE4 project.
    Ensure that the folder into which you check-out the project is named 
