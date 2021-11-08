@@ -99,7 +99,8 @@ void APF2CharacterBase::ApplyAbilityBoostSelections()
 	}
 }
 
-FORCEINLINE void APF2CharacterBase::GetCharacterAbilitySystemComponent(TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const
+FORCEINLINE void APF2CharacterBase::GetCharacterAbilitySystemComponent(
+	TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const
 {
 	// This is weird, but the way that TScriptInterface objects work is it maintains a reference to a UObject that
 	// *implements* an interface along with a pointer to the part of the UObject that provides the interface
