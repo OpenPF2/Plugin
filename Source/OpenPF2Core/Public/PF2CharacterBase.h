@@ -279,6 +279,17 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Ability Boosts")
 	TArray<FPF2CharacterAbilityBoostSelection> AbilityBoostSelections;
 
+	/**
+	 * The ability boost selections that have already been applied to this character.
+	 *
+	 * This is used to keep track of which boosts to disregard in the event that a character's passive GEs are disabled
+	 * and then re-enabled (as happens during character leveling). Without this, when a passive GE that grants an
+	 * ability boost is re-activated, the player would have the option to choose another set of ability boosts even
+	 * though their prior selections are still in effect on the player's character.
+	 */
+	UPROPERTY()
+	TArray<FPF2CharacterAbilityBoostSelection> AppliedAbilityBoostSelections;
+
 public:
 	// =================================================================================================================
 	// Public Constructors
@@ -403,6 +414,18 @@ public:
 	UFUNCTION(BlueprintCallable)
     virtual void ApplyAbilityBoost(EPF2CharacterAbilityScoreType TargetAbilityScore);
 
+	/**
+	 * Removes any ability boosts that were previously provided with a choice from the player or game designer but that
+	 * have nevertheless been re-granted to this character (e.g., because passive GEs were toggled off and then on).
+	 *
+	 * An ability boost is declared "Redundant" if its Boost GA class matches the boost GA class of an applied ability
+	 * boost. Since the same boost GA class can be used multiple times on the same character, this method should ONLY be
+	 * called when passive GAs are being re-enabled after being toggled off; otherwise, we run the risk of skipping over
+	 * a new ability boost GA that just happens to have the same class as one that was already applied.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual void RemoveRedundantPendingAbilityBoosts();
+
 protected:
 	// =================================================================================================================
 	// Protected Methods
@@ -429,6 +452,10 @@ protected:
 
 	/**
 	 * Activates Gameplay Effects that are always passively applied to the character.
+	 *
+	 * This is the preferred method for toggling passive GEs on for a character that supports ability boosts instead of
+	 * toggling passive GEs on the character's ASC, as this method automatically skips out of offering boost selections
+	 * for which a player or game designer has already made choices.
 	 */
 	void ActivatePassiveGameplayEffects();
 
@@ -446,6 +473,11 @@ protected:
 
 	/**
 	 * Removes all passive Gameplay Effects that were previously activated for this character.
+	 *
+	 * This is the preferred method for toggling passive GEs off for a character that supports ability boosts (e.g.,
+	 * during a character level-up) instead of toggling passive GEs off at the character's ASC, as it gives the code for
+	 * the character a chance to react to the change before involving the ASC. For example, if the state of any GAs
+	 * needs to be recorded so that they are re-applied correctly after passive GEs are re-activated.
 	 */
 	void DeactivatePassiveGameplayEffects();
 

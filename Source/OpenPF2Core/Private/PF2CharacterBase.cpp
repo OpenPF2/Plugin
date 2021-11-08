@@ -90,6 +90,8 @@ void APF2CharacterBase::ApplyAbilityBoostSelections()
 			else
 			{
 				this->ActivateAbilityBoost(BoostSpec, AbilityBoostSelection);
+
+				this->AppliedAbilityBoostSelections.Add(AbilityBoostSelection);
 			}
 		}
 
@@ -139,6 +141,25 @@ void APF2CharacterBase::ApplyAbilityBoost(const EPF2CharacterAbilityScoreType Ta
 	this->GetCharacterAbilitySystemComponent()->ApplyAbilityBoost(TargetAbilityScore);
 }
 
+void APF2CharacterBase::RemoveRedundantPendingAbilityBoosts()
+{
+	if (this->IsAuthorityForEffects())
+	{
+		for (const auto& AbilityBoostSelection : this->AppliedAbilityBoostSelections)
+		{
+			TSubclassOf<UPF2GameplayAbility_BoostAbilityBase> BoostGa   = AbilityBoostSelection.BoostGameplayAbility;
+			UAbilitySystemComponent*                          Asc       = this->GetAbilitySystemComponent();
+			FGameplayAbilitySpec*                             BoostSpec = Asc->FindAbilitySpecFromClass(BoostGa);
+
+			if (BoostSpec != nullptr)
+			{
+				// The player or a game designer already made a selection for this boost ability.
+				Asc->ClearAbility(BoostSpec->Handle);
+			}
+		}
+	}
+}
+
 bool APF2CharacterBase::IsAuthorityForEffects() const
 {
 	return (this->GetLocalRole() == ROLE_Authority);
@@ -181,6 +202,9 @@ void APF2CharacterBase::ActivatePassiveGameplayEffects()
 		this->ApplyDynamicTags();
 
 		CharacterAsc->ActivateAllPassiveGameplayEffects();
+
+		// Ensure we do not re-prompt for boosts that have already chosen and applied to this character.
+		this->RemoveRedundantPendingAbilityBoosts();
 	}
 }
 
