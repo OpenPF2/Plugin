@@ -382,6 +382,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void ApplyAbilityBoostSelections() override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual void ActivatePassiveGameplayEffects() override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void DeactivatePassiveGameplayEffects() override;
+
 	// =================================================================================================================
 	// Public Methods - Blueprint Callable
 	// =================================================================================================================
@@ -451,15 +457,6 @@ protected:
 		const FPF2CharacterAbilityBoostSelection& AbilityBoostSelection) const;
 
 	/**
-	 * Activates Gameplay Effects that are always passively applied to the character.
-	 *
-	 * This is the preferred method for toggling passive GEs on for a character that supports ability boosts instead of
-	 * toggling passive GEs on the character's ASC, as this method automatically skips out of offering boost selections
-	 * for which a player or game designer has already made choices.
-	 */
-	void ActivatePassiveGameplayEffects();
-
-	/**
 	 * Populates the full list of passive Gameplay Effects, sorted by weight.
 	 */
 	void PopulatePassiveGameplayEffects();
@@ -470,16 +467,6 @@ protected:
 	 * This includes tags like ancestry, additional languages, and skill proficiencies.
 	 */
 	void ApplyDynamicTags() const;
-
-	/**
-	 * Removes all passive Gameplay Effects that were previously activated for this character.
-	 *
-	 * This is the preferred method for toggling passive GEs off for a character that supports ability boosts (e.g.,
-	 * during a character level-up) instead of toggling passive GEs off at the character's ASC, as it gives the code for
-	 * the character a chance to react to the change before involving the ASC. For example, if the state of any GAs
-	 * needs to be recorded so that they are re-applied correctly after passive GEs are re-activated.
-	 */
-	void DeactivatePassiveGameplayEffects();
 
 	/**
 	 * Populates the list of passive Gameplay Effects based on the settings in this blueprint.
