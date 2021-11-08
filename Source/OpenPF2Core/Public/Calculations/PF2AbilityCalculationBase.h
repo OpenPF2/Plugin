@@ -58,8 +58,9 @@ protected:
 	 * @return
 	 *	The calculated value.
 	 */
-	virtual float DoCalculation(const FGameplayEffectSpec& Spec,
-								const FGameplayAttribute AbilityAttribute,
-								const float AbilityScore) const
+	virtual float DoCalculation(
+		const FGameplayEffectSpec& Spec,
+		const FGameplayAttribute   AbilityAttribute,
+		const float                AbilityScore) const
 	PURE_VIRTUAL(UPF2AbilityCalculationBase::DoCalculation, return 0;);
 };

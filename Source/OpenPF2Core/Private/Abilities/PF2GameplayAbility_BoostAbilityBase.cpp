@@ -21,11 +21,14 @@ UPF2GameplayAbility_BoostAbilityBase::UPF2GameplayAbility_BoostAbilityBase()
 
 	// We don't maintain any local state.
 	this->InstancingPolicy = EGameplayAbilityInstancingPolicy::NonInstanced;
+
+	this->AbilityTags.AddTag(PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.ApplyAbilityBoost")));
 }
 
-bool UPF2GameplayAbility_BoostAbilityBase::CheckCost(const FGameplayAbilitySpecHandle Handle,
-                                                     const FGameplayAbilityActorInfo* ActorInfo,
-                                                     FGameplayTagContainer*           OptionalRelevantTags) const
+bool UPF2GameplayAbility_BoostAbilityBase::CheckCost(
+	const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo,
+	FGameplayTagContainer*           OptionalRelevantTags) const
 {
 	if (Super::CheckCost(Handle, ActorInfo, OptionalRelevantTags))
 	{
@@ -44,10 +47,11 @@ bool UPF2GameplayAbility_BoostAbilityBase::CheckCost(const FGameplayAbilitySpecH
 	}
 }
 
-void UPF2GameplayAbility_BoostAbilityBase::ActivateAbility(const FGameplayAbilitySpecHandle     Handle,
-                                                           const FGameplayAbilityActorInfo*     ActorInfo,
-                                                           const FGameplayAbilityActivationInfo ActivationInfo,
-                                                           const FGameplayEventData*            TriggerEventData)
+void UPF2GameplayAbility_BoostAbilityBase::ActivateAbility(
+	const FGameplayAbilitySpecHandle     Handle,
+	const FGameplayAbilityActorInfo*     ActorInfo,
+	const FGameplayAbilityActivationInfo ActivationInfo,
+	const FGameplayEventData*            TriggerEventData)
 {
 	if (CommitAbility(Handle, ActorInfo, ActivationInfo))
 	{
@@ -56,15 +60,17 @@ void UPF2GameplayAbility_BoostAbilityBase::ActivateAbility(const FGameplayAbilit
 		IPF2CharacterAbilitySystemComponentInterface* CharacterAsc =
 			this->GetCharacterAbilitySystemComponent(ActorInfo);
 
-		FPF2AbilityBoostRuleOptionValidator Validator(this->BoostRuleOptions);
+		UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
+
+		Validator->AppendRuleOptions(this->BoostRuleOptions);
 
 		for (auto& Selection : BoostSelections)
 		{
-			Validator.ApplyAbilityBoost(Selection);
+			Validator->ApplyAbilityBoost(Selection);
 		}
 
 		checkf(
-			Validator.GetRemainingBoostCount() == 0,
+			!Validator->HasRemainingBoosts(),
 			TEXT("There must be a selection for every rule option.")
 		);
 

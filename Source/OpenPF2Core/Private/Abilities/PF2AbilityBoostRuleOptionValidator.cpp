@@ -4,71 +4,22 @@
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "Abilities/PF2AbilityBoostRuleOptionValidator.h"
+#include "PF2EnumUtilities.h"
 
-#include "PF2EnumUtils.h"
-
-FPF2AbilityBoostRuleOptionValidator::FPF2AbilityBoostRuleOptionValidator(
-	const TArray<FPF2AbilityBoostRuleOption> RuleOptions) :
-	RuleOptions(RuleOptions)
+void UPF2AbilityBoostRuleOptionValidator::AppendRuleOptions(const TArray<FPF2AbilityBoostRuleOption> NewRuleOptions)
 {
-}
-
-bool FPF2AbilityBoostRuleOptionValidator::CanApplyAbilityBoost(const EPF2CharacterAbilityScoreType AbilityScoreType)
-{
-	bool                                CanApply                 = false;
-	TSet<EPF2CharacterAbilityScoreType> AbilityScoreTypesToMatch = this->UsedAbilities;
-
-	// We can't apply more boosts than we have rules.
-	// Also, the same ability score type can't be targeted twice in the same boost activation.
-	if ((this->GetRemainingBoostCount() > 0) && !AbilityScoreTypesToMatch.Contains(AbilityScoreType))
+	for (const auto& RuleOption : NewRuleOptions)
 	{
-		TArray<TArray<FPF2AbilityBoostRuleOption>> RulePermutations      = this->CalculateRulePermutations();
-		TArray<TArray<FPF2AbilityBoostRuleOption>> RemainingPermutations = RulePermutations;
-
-		AbilityScoreTypesToMatch.Add(AbilityScoreType);
-
-		for (const TArray<FPF2AbilityBoostRuleOption>& RulePermutation : RulePermutations)
-		{
-			for (int PositionIndex = 0; PositionIndex < AbilityScoreTypesToMatch.Num(); ++PositionIndex)
-			{
-				const FSetElementId                  ElementId               = FSetElementId::FromInteger(PositionIndex);
-				const EPF2CharacterAbilityScoreType& AbilityScoreTypeToMatch = AbilityScoreTypesToMatch[ElementId];
-				const FPF2AbilityBoostRuleOption&    RuleOption              = RulePermutation[PositionIndex];
-
-				if (!RuleOption.bIsFreeBoost && !RuleOption.AbilityScoreTypes.Contains(AbilityScoreTypeToMatch))
-				{
-					// This permutation doesn't have a rule in this position of the sequence of rules that would match
-					// this ability boost, so disqualify the permutation.
-					RemainingPermutations.Remove(RulePermutation);
-					break;
-				}
-			}
-		}
-
-		CanApply = (RemainingPermutations.Num() != 0);
+		this->AddRuleOption(RuleOption);
 	}
-
-	return CanApply;
 }
 
-void FPF2AbilityBoostRuleOptionValidator::ApplyAbilityBoost(const EPF2CharacterAbilityScoreType AbilityScoreType)
-{
-	checkf(
-		this->CanApplyAbilityBoost(AbilityScoreType),
-		TEXT("A boost to '%s' cannot be applied based on the unused rule options ('%d' boosts remain)."),
-		*(PF2EnumUtils::ToString(AbilityScoreType)),
-		this->GetRemainingBoostCount()
-	);
-
-	this->UsedAbilities.Add(AbilityScoreType);
-}
-
-int32 FPF2AbilityBoostRuleOptionValidator::GetRemainingBoostCount() const
+int32 UPF2AbilityBoostRuleOptionValidator::GetRemainingBoostCount() const
 {
 	return (this->RuleOptions.Num() - this->UsedAbilities.Num());
 }
 
-TSet<EPF2CharacterAbilityScoreType> FPF2AbilityBoostRuleOptionValidator::GetRemainingOptions()
+TSet<EPF2CharacterAbilityScoreType> UPF2AbilityBoostRuleOptionValidator::GetRemainingOptions()
 {
 	TSet<EPF2CharacterAbilityScoreType> AllRuleAbilityOptions;
 	TSet<EPF2CharacterAbilityScoreType> RemainingOptions;
@@ -107,7 +58,72 @@ TSet<EPF2CharacterAbilityScoreType> FPF2AbilityBoostRuleOptionValidator::GetRema
 	return RemainingOptions;
 }
 
-TArray<TArray<FPF2AbilityBoostRuleOption>> FPF2AbilityBoostRuleOptionValidator::CalculateRulePermutations()
+bool UPF2AbilityBoostRuleOptionValidator::HasRemainingBoosts()
+{
+	return (this->GetRemainingBoostCount() != 0);
+}
+
+void UPF2AbilityBoostRuleOptionValidator::AddRuleOption(const FPF2AbilityBoostRuleOption RuleOption)
+{
+	checkf(this->UsedAbilities.Num() == 0, TEXT("Rule options cannot be added once an ability boost has been added."));
+	this->RuleOptions.Add(RuleOption);
+
+	// This is done for safety, but really shouldn't have much of an impact since we tend only to evaluate and cache
+	// permutations after an ability boost has been applied.
+	this->CachedRulePermutations.Empty();
+}
+
+bool UPF2AbilityBoostRuleOptionValidator::CanApplyAbilityBoost(const EPF2CharacterAbilityScoreType AbilityScoreType)
+{
+	bool                                CanApply                 = false;
+	TSet<EPF2CharacterAbilityScoreType> AbilityScoreTypesToMatch = this->UsedAbilities;
+
+	// We can't apply more boosts than we have rules.
+	// Also, the same ability score type can't be targeted twice in the same boost activation.
+	if ((this->GetRemainingBoostCount() > 0) && !AbilityScoreTypesToMatch.Contains(AbilityScoreType))
+	{
+		TArray<TArray<FPF2AbilityBoostRuleOption>> RulePermutations      = this->CalculateRulePermutations();
+		TArray<TArray<FPF2AbilityBoostRuleOption>> RemainingPermutations = RulePermutations;
+
+		AbilityScoreTypesToMatch.Add(AbilityScoreType);
+
+		for (const TArray<FPF2AbilityBoostRuleOption>& RulePermutation : RulePermutations)
+		{
+			for (int PositionIndex = 0; PositionIndex < AbilityScoreTypesToMatch.Num(); ++PositionIndex)
+			{
+				const FSetElementId                  ElementId               = FSetElementId::FromInteger(PositionIndex);
+				const EPF2CharacterAbilityScoreType& AbilityScoreTypeToMatch = AbilityScoreTypesToMatch[ElementId];
+				const FPF2AbilityBoostRuleOption&    RuleOption              = RulePermutation[PositionIndex];
+
+				if (!RuleOption.bIsFreeBoost && !RuleOption.AbilityScoreTypes.Contains(AbilityScoreTypeToMatch))
+				{
+					// This permutation doesn't have a rule in this position of the sequence of rules that would match
+					// this ability boost, so disqualify the permutation.
+					RemainingPermutations.Remove(RulePermutation);
+					break;
+				}
+			}
+		}
+
+		CanApply = (RemainingPermutations.Num() != 0);
+	}
+
+	return CanApply;
+}
+
+void UPF2AbilityBoostRuleOptionValidator::ApplyAbilityBoost(const EPF2CharacterAbilityScoreType AbilityScoreType)
+{
+	checkf(
+		this->CanApplyAbilityBoost(AbilityScoreType),
+		TEXT("A boost to '%s' cannot be applied based on the unused rule options ('%d' boosts remain)."),
+		*(PF2EnumUtilities::ToString(AbilityScoreType)),
+		this->GetRemainingBoostCount()
+	);
+
+	this->UsedAbilities.Add(AbilityScoreType);
+}
+
+TArray<TArray<FPF2AbilityBoostRuleOption>> UPF2AbilityBoostRuleOptionValidator::CalculateRulePermutations()
 {
 	if (this->CachedRulePermutations.Num() == 0)
 	{
@@ -117,7 +133,7 @@ TArray<TArray<FPF2AbilityBoostRuleOption>> FPF2AbilityBoostRuleOptionValidator::
 	return this->CachedRulePermutations;
 }
 
-TArray<TArray<FPF2AbilityBoostRuleOption>> FPF2AbilityBoostRuleOptionValidator::CalculateRulePermutations(
+TArray<TArray<FPF2AbilityBoostRuleOption>> UPF2AbilityBoostRuleOptionValidator::CalculateRulePermutations(
 	const TArray<FPF2AbilityBoostRuleOption> RemainingOptions,
 	const TArray<FPF2AbilityBoostRuleOption> SeenOptions) const
 {

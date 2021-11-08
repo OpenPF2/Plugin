@@ -4,6 +4,7 @@
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
 //   - System Reference Document, Copyright 2000, Wizards of the Coast, Inc.
 //   - Pathfinder Core Rulebook (Second Edition), Copyright 2019, Paizo Inc.
+//
 // Except for material designated as Product Identity, the game mechanics and logic in this file are Open Game Content,
 // as defined in the Open Game License version 1.0a, Section 1(d) (see accompanying LICENSE.TXT). No portion of this
 // file other than the material designated as Open Game Content may be reproduced in any form without written
@@ -23,6 +24,7 @@
 #include "PF2CharacterConstants.h"
 #include "PF2CharacterInterface.h"
 #include "PF2ClassGameplayEffectBase.h"
+#include "PF2GameplayAbilityUtilities.h"
 
 #include "PF2CharacterBase.generated.h"
 
@@ -38,6 +40,34 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostSelection
 {
 	GENERATED_BODY()
 
+	// =================================================================================================================
+	// Public Constructors
+	// =================================================================================================================
+	/**
+	 * Constructor for FPF2CharacterAbilityBoostSelection.
+	 */
+	explicit FPF2CharacterAbilityBoostSelection()
+	{
+	}
+
+	/**
+	 * Constructor for FPF2CharacterAbilityBoostSelection.
+	 *
+	 * @param BoostGameplayAbility
+	 *	The "Boost GA" -- the Gameplay Ability for which ability score boost selections are being applied.
+	 * @param SelectedAbilities
+	 *	The ability scores that the player selected, out of the options offered by the Boost GA.
+	 */
+	explicit FPF2CharacterAbilityBoostSelection(
+		TSubclassOf<class UPF2GameplayAbility_BoostAbilityBase> BoostGameplayAbility,
+		TSet<EPF2CharacterAbilityScoreType>                     SelectedAbilities) :
+			BoostGameplayAbility(BoostGameplayAbility),
+			SelectedAbilities(SelectedAbilities)
+	{
+	}
+
+	/**
+	 */
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UPF2GameplayAbility_BoostAbilityBase> BoostGameplayAbility;
 
@@ -195,23 +225,27 @@ protected:
 	int32 bManagedPassiveEffectsGenerated;
 
 	/**
-	 * The core Gameplay Effects that drive stats for every character.
+	 * The Gameplay Effects that drive stats for every character.
 	 */
-	TMultiMap<int32, TSubclassOf<UGameplayEffect>> CoreGameplayEffects;
+	TMultiMap<FName, TSubclassOf<UGameplayEffect>> CoreGameplayEffects;
 
 	/**
 	 * The list of passive Gameplay Effects (GEs) that are generated from other values specified on this character.
 	 *
-	 * Each value is a gameplay effect and the key is the weight of that GE. The weight controls the order that all GEs
-	 * are applied. Lower weights are applied earlier than higher weights.
+	 * Each value is a gameplay effect and the key is the weight group of that GE (sorted alphanumerically). The weight
+	 * controls the order that all GEs are applied. Lower weights are applied earlier than higher weights.
+	 *
+	 * The names of each group are exposed as tags in the "GameplayEffect.WeightGroup" tag list so that they can be
+	 * applied to GEs by game designers to control the default group that a GE gets added to. A GE can also be
+	 * explicitly added to a group via the AddPassiveGameplayEffectWithWeight() method on the Character ASC.
 	 */
-	TMultiMap<int32, TSubclassOf<UGameplayEffect>> ManagedGameplayEffects;
+	TMultiMap<FName, TSubclassOf<UGameplayEffect>> ManagedGameplayEffects;
 
 	/**
 	 * The abilities to boost, as chosen by the player or a game designer, out of what ability boosts are pending.
 	 *
-	 * At the start of play, or upon receipt of a ApplySelectedBoostsEvent, an attempt is made to match up each
-	 * selection in this property to a boost ability granted to this character. Upon a match, the matching GA is
+	 * At the start of play, or upon a call to ApplyAbilityBoostSelections(), an attempt is made to match up
+	 * each selection in this property to a boost ability granted to this character. Upon a match, the matching GA is
 	 * activated, and the selection is removed from this property. Boost GAs are single-shot abilities that remove
 	 * themselves once they've applied an ability score boost. So, any selections added to this property "consume"
 	 * pending ability boosts for this character. Each selection is matched-up and evaluated in the order it appears in
@@ -245,6 +279,17 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Ability Boosts")
 	TArray<FPF2CharacterAbilityBoostSelection> AbilityBoostSelections;
 
+	/**
+	 * The ability boost selections that have already been applied to this character.
+	 *
+	 * This is used to keep track of which boosts to disregard in the event that a character's passive GEs are disabled
+	 * and then re-enabled (as happens during character leveling). Without this, when a passive GE that grants an
+	 * ability boost is re-activated, the player would have the option to choose another set of ability boosts even
+	 * though their prior selections are still in effect on the player's character.
+	 */
+	UPROPERTY()
+	TArray<FPF2CharacterAbilityBoostSelection> AppliedAbilityBoostSelections;
+
 public:
 	// =================================================================================================================
 	// Public Constructors
@@ -273,15 +318,16 @@ protected:
 		this->AbilitySystemComponent = ComponentFactory.CreateAbilitySystemComponent(this);
 		this->AttributeSet           = ComponentFactory.CreateAttributeSet(this);
 
-		for (const auto& GeCoreBlueprintPath : PF2CharacterConstants::GeCoreCharacterBlueprintPaths)
+		for (const auto& EffectName : PF2CharacterConstants::GeCoreCharacterBlueprintPaths)
 		{
-			const FString EffectName = GeCoreBlueprintPath.Key;
-			const int32   Weight     = GeCoreBlueprintPath.Value;
 			const FString EffectPath = PF2CharacterConstants::GetBlueprintPath(EffectName);
 
 			const ConstructorHelpers::FObjectFinder<UClass> EffectFinder(*EffectPath);
+			const TSubclassOf<UGameplayEffect>              GameplayEffect = EffectFinder.Object;
 
-			this->CoreGameplayEffects.Add(Weight, EffectFinder.Object);
+			const FName WeightGroup = PF2GameplayAbilityUtilities::GetWeightGroupOfGameplayEffect(GameplayEffect);
+
+			this->CoreGameplayEffects.Add(WeightGroup, GameplayEffect);
 		}
 	}
 
@@ -303,6 +349,44 @@ public:
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
 	virtual int32 GetCharacterLevel() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void GetCharacterAbilitySystemComponent(TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const override;
+
+	virtual IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<UPF2GameplayAbility_BoostAbilityBase*> GetPendingAbilityBoosts() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void AddAbilityBoostSelection(
+		const TSubclassOf<class UPF2GameplayAbility_BoostAbilityBase> BoostGameplayAbility,
+		const TSet<EPF2CharacterAbilityScoreType>                     SelectedAbilities) override;
+
+	/**
+	 * Attempts to find and activate a pending ability boost Gameplay Ability for each Ability Boost selection on this
+	 * character.
+	 *
+	 * Pending ability boosts are registered on this character via calls to AddAbilityBoostSelection() before a call to
+	 * this method.
+	 *
+	 * The call flow for this is as follows:
+	 *	1. Ability boosts are added to this character via one or more calls to AddAbilityBoostSelection().
+	 *	2. This method is called.
+	 *	3. This method invokes ActivateAbilityBoost() once for each pending boost selection.
+	 *	4. ActivateAbilityBoost() is used to activate the boost Gameplay Ability (GA) that corresponds to a pending
+	 *	   boost selection.
+	 *	5. During activation, the boost GA calls the ApplyAbilityBoost() method on the ASC for this character to
+	 *	   activate each valid boost selection.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual void ApplyAbilityBoostSelections() override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void ActivatePassiveGameplayEffects() override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void DeactivatePassiveGameplayEffects() override;
 
 	// =================================================================================================================
 	// Public Methods - Blueprint Callable
@@ -336,17 +420,22 @@ public:
 	UFUNCTION(BlueprintCallable)
     virtual void ApplyAbilityBoost(EPF2CharacterAbilityScoreType TargetAbilityScore);
 
+	/**
+	 * Removes any ability boosts that were previously provided with a choice from the player or game designer but that
+	 * have nevertheless been re-granted to this character (e.g., because passive GEs were toggled off and then on).
+	 *
+	 * An ability boost is declared "Redundant" if its Boost GA class matches the boost GA class of an applied ability
+	 * boost. Since the same boost GA class can be used multiple times on the same character, this method should ONLY be
+	 * called when passive GAs are being re-enabled after being toggled off; otherwise, we run the risk of skipping over
+	 * a new ability boost GA that just happens to have the same class as one that was already applied.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual void RemoveRedundantPendingAbilityBoosts();
+
 protected:
 	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
-	/**
-	 * Gets a PF2-specific version of the ASC sub-component of this character.
-	 *
-	 * @return
-	 *	The ASC, as an implementation of the interface for character ASCs.
-	 */
-	IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent() const;
 
 	/**
 	 * Gets whether the local machine has authoritative control over this character actor.
@@ -361,20 +450,11 @@ protected:
 	bool IsAuthorityForEffects() const;
 
 	/**
-	 * Attempts to find and activate a pending ability boost Gameplay Ability for each Ability Boost Selection.
-	 */
-	void ApplyAbilityBoostSelections();
-
-	/**
 	 * Activates the specified ability boost ability with the provided selections of which abilities to boost.
 	 */
-	void ActivateAbilityBoost(FGameplayAbilitySpec* BoostSpec,
-	                          const FPF2CharacterAbilityBoostSelection& AbilityBoostSelection) const;
-
-	/**
-	 * Activates Gameplay Effects that are always passively applied to the character.
-	 */
-	void ActivatePassiveGameplayEffects();
+	void ActivateAbilityBoost(
+		FGameplayAbilitySpec*                     BoostSpec,
+		const FPF2CharacterAbilityBoostSelection& AbilityBoostSelection) const;
 
 	/**
 	 * Populates the full list of passive Gameplay Effects, sorted by weight.
@@ -389,11 +469,6 @@ protected:
 	void ApplyDynamicTags() const;
 
 	/**
-	 * Removes all passive Gameplay Effects that were previously activated for this character.
-	 */
-	void DeactivatePassiveGameplayEffects();
-
-	/**
 	 * Populates the list of passive Gameplay Effects based on the settings in this blueprint.
 	 *
 	 * This method is idempotent. If the list is already populated, this method has no effect.
@@ -404,7 +479,7 @@ protected:
 	 * Clear the list of managed, passive Gameplay Effects (GEs) so that it can be regenerated.
 	 *
 	 * This should not be called if passive GEs are already applied to this character. If GEs are already applied, you
-	 * must call DeactivatePassiveGameplayEffects() first.
+	 * must call DeactivateAllPassiveGameplayEffects() first.
 	 */
 	void ClearManagedPassiveGameplayEffects();
 

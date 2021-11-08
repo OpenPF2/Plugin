@@ -106,7 +106,7 @@ public:
 	 *	ability.
 	 */
 	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetCaptureByAttribute(
-	                                                                           const FGameplayAttribute Attribute) const
+		const FGameplayAttribute Attribute) const
 	{
 		return this->GetCaptureByName(Attribute.GetName());
 	}

@@ -4,6 +4,7 @@
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
 //   - System Reference Document, Copyright 2000, Wizards of the Coast, Inc.
 //   - Pathfinder Core Rulebook (Second Edition), Copyright 2019, Paizo Inc.
+//
 // Except for material designated as Product Identity, the game mechanics and logic in this file are Open Game Content,
 // as defined in the Open Game License version 1.0a, Section 1(d) (see accompanying LICENSE.TXT). No portion of this
 // file other than the material designated as Open Game Content may be reproduced in any form without written
@@ -12,7 +13,7 @@
 #include "Calculations/PF2KeyAbilityTemlCalculationBase.h"
 
 #include "OpenPF2Core.h"
-#include "GameplayAbilityUtils.h"
+#include "PF2GameplayAbilityUtilities.h"
 #include "PF2TemlCalculation.h"
 
 #include "Abilities/PF2AttributeSet.h"
@@ -25,9 +26,10 @@ UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase() :
 {
 }
 
-UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase(const FString StatGameplayTagPrefix,
-                                                                     const FString KeyAbilityGameplayTagPrefix,
-                                                                     const float   BaseValue) :
+UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase(
+	const FString StatGameplayTagPrefix,
+	const FString KeyAbilityGameplayTagPrefix,
+	const float   BaseValue) :
 	StatGameplayTagPrefix(StatGameplayTagPrefix),
 	BaseValue(BaseValue)
 {
@@ -62,11 +64,12 @@ UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase(const FStri
 	);
 }
 
-void UPF2KeyAbilityTemlCalculationBase::DefineKeyAbilityCapture(const FString            KeyAbilityTagName,
-                                                                const FGameplayAttribute Attribute)
+void UPF2KeyAbilityTemlCalculationBase::DefineKeyAbilityCapture(
+	const FString            KeyAbilityTagName,
+	const FGameplayAttribute Attribute)
 {
 	const FGameplayEffectAttributeCaptureDefinition CaptureDefinition =
-		GameplayAbilityUtils::BuildSourceCaptureFor(Attribute);
+		PF2GameplayAbilityUtilities::BuildSourceCaptureFor(Attribute);
 
 	this->KeyAbilityCaptureDefinitions.Add(
 		KeyAbilityTagName,
@@ -117,7 +120,7 @@ float UPF2KeyAbilityTemlCalculationBase::CalculateKeyAbilityModifier(const FGame
 
 	if (KeyAbilityCaptureDefinition.AttributeToCapture.IsValid())
 	{
-		const FGameplayTagContainer*  TargetTags           = Spec.CapturedTargetTags.GetAggregatedTags();
+		const FGameplayTagContainer*  TargetTags = Spec.CapturedTargetTags.GetAggregatedTags();
 		FAggregatorEvaluateParameters EvaluationParameters;
 
 		EvaluationParameters.SourceTags = SourceTags;
@@ -135,7 +138,7 @@ float UPF2KeyAbilityTemlCalculationBase::CalculateKeyAbilityModifier(const FGame
 }
 
 FGameplayEffectAttributeCaptureDefinition UPF2KeyAbilityTemlCalculationBase::DetermineKeyAbility(
-	                                                                      const FGameplayTagContainer* SourceTags) const
+	const FGameplayTagContainer* SourceTags) const
 {
 	FGameplayEffectAttributeCaptureDefinition KeyAbilityCaptureDefinition;
 
@@ -143,7 +146,7 @@ FGameplayEffectAttributeCaptureDefinition UPF2KeyAbilityTemlCalculationBase::Det
 	{
 		const FString TagName = PairIterator.Key();
 
-		if (GameplayAbilityUtils::HasTag(SourceTags, TagName))
+		if (PF2GameplayAbilityUtilities::HasTag(SourceTags, TagName))
 		{
 			KeyAbilityCaptureDefinition = PairIterator.Value();
 			break;

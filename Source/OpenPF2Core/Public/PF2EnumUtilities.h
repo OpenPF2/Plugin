@@ -8,17 +8,17 @@
 /**
  * Utility logic for working with Enums.
  */
-namespace PF2EnumUtils
+namespace PF2EnumUtilities
 {
 	/**
-	* Convert the value of an enum to a string.
-	*
-	* @param EnumValue
-	*	The enumerated type value to convert to a string.
-	*
-	* @return
-	*	The key/name that corresponds to the value in the enumerated type.
-	*/
+	 * Convert the value of an enum to a string.
+	 *
+	 * @param EnumValue
+	 *	The enumerated type value to convert to a string.
+	 *
+	 * @return
+	 *	The key/name that corresponds to the value in the enumerated type.
+	 */
 	template<typename T>
 	FString ToString(const T EnumValue)
 	{

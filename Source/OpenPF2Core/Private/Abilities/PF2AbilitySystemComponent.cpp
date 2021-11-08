@@ -6,11 +6,13 @@
 #include "Abilities/PF2AbilitySystemComponent.h"
 
 #include <UObject/ConstructorHelpers.h>
+
+#include "PF2ArrayUtilities.h"
 #include "PF2CharacterConstants.h"
 #include "PF2CharacterInterface.h"
-#include "PF2EnumUtils.h"
+#include "PF2EnumUtilities.h"
 
-UPF2AbilitySystemComponent::UPF2AbilitySystemComponent() : bPassiveEffectsActivated(false)
+UPF2AbilitySystemComponent::UPF2AbilitySystemComponent()
 {
 	const FString DynamicTagsGeFilename =
 		PF2CharacterConstants::GetBlueprintPath(*PF2CharacterConstants::GeDynamicTagsName);
@@ -21,11 +23,11 @@ UPF2AbilitySystemComponent::UPF2AbilitySystemComponent() : bPassiveEffectsActiva
 
 	for (const auto& Ability : TEnumRange<EPF2CharacterAbilityScoreType>())
 	{
-		const FString AbilityName = PF2EnumUtils::ToString(Ability);
+		const FString AbilityName = PF2EnumUtilities::ToString(Ability);
 
 		const FString Filename =
 			PF2CharacterConstants::GetBlueprintPath(
-				FString::Format(*PF2CharacterConstants::GeBlueprintBoostNameFormat, {AbilityName})
+				FName(FString::Format(*PF2CharacterConstants::GeBlueprintBoostNameFormat, {AbilityName}))
 			);
 
 		const ConstructorHelpers::FObjectFinder<UClass> BoostGeFinder(*Filename);
@@ -35,97 +37,175 @@ UPF2AbilitySystemComponent::UPF2AbilitySystemComponent() : bPassiveEffectsActiva
 	}
 }
 
-void UPF2AbilitySystemComponent::AddPassiveGameplayEffect(const int32 Weight, const TSubclassOf<UGameplayEffect> Effect)
+void UPF2AbilitySystemComponent::AddPassiveGameplayEffect(const TSubclassOf<UGameplayEffect> Effect)
 {
-	this->InvokeAndReapplyPassiveGEs([this, Weight, Effect]
+	const FName WeightGroup = PF2GameplayAbilityUtilities::GetWeightGroupOfGameplayEffect(Effect);
+
+	this->AddPassiveGameplayEffectWithWeight(WeightGroup, Effect);
+}
+
+void UPF2AbilitySystemComponent::AddPassiveGameplayEffectWithWeight(
+	const FName                        WeightGroup,
+	const TSubclassOf<UGameplayEffect> Effect)
+{
+	// Special case: If this is the first time a GE from this weight group is being added, and other weight groups are
+	// active, let's assume that we want to enable the new weight group.
+	if ((this->PassiveGameplayEffects.Num(WeightGroup) == 0) && this->ArePassiveGameplayEffectsActive())
 	{
-		this->PassiveGameplayEffects.Add(Weight, Effect);
+		this->ActivatedWeightGroups.Add(WeightGroup);
+	}
+
+	this->InvokeAndReapplyPassiveGEsInSubsequentWeightGroups(WeightGroup, [this, WeightGroup, Effect]
+	{
+		this->PassiveGameplayEffects.Add(WeightGroup, Effect);
+		this->CachedPassiveGameplayEffectsToApply.Empty();
+
+		if (this->ActivatedWeightGroups.Contains(WeightGroup))
+		{
+			// Activate the new passive GE since it's being put into an active group.
+			this->ActivatePassiveGameplayEffect(WeightGroup, Effect);
+		}
 	});
 }
 
-void UPF2AbilitySystemComponent::SetPassiveGameplayEffects(const TMultiMap<int32, TSubclassOf<UGameplayEffect>> Effects)
+void UPF2AbilitySystemComponent::SetPassiveGameplayEffects(const TMultiMap<FName, TSubclassOf<UGameplayEffect>> Effects)
 {
-	this->InvokeAndReapplyPassiveGEs([this, Effects]
+	this->InvokeAndReapplyAllPassiveGEs([this, Effects]
 	{
 		this->PassiveGameplayEffects = Effects;
+		this->CachedPassiveGameplayEffectsToApply.Empty();
 	});
 }
 
 void UPF2AbilitySystemComponent::RemoveAllPassiveGameplayEffects()
 {
-	this->DeactivatePassiveGameplayEffects();
+	this->DeactivateAllPassiveGameplayEffects();
+
 	this->PassiveGameplayEffects.Empty();
+	this->CachedPassiveGameplayEffectsToApply.Empty();
 }
 
-void UPF2AbilitySystemComponent::ActivatePassiveGameplayEffects()
+void UPF2AbilitySystemComponent::ActivateAllPassiveGameplayEffects()
 {
-	if (!this->bPassiveEffectsActivated)
+	const TMultiMap<FName, TSubclassOf<UGameplayEffect>> EffectsToApply = this->GetPassiveGameplayEffectsToApply();
+
+	TSet<FName> AllWeightGroups,
+	            InactiveGroups;
+
+	EffectsToApply.GetKeys(AllWeightGroups);
+
+	InactiveGroups = AllWeightGroups.Difference(this->ActivatedWeightGroups);
+
+	for (const auto& InactiveGroup : InactiveGroups)
 	{
-		TMultiMap<int32, TSubclassOf<UGameplayEffect>> EffectsToApply = this->PassiveGameplayEffects;
-
-		// Add a pseudo-GE for the dynamic tags.
-		EffectsToApply.Add(PF2CharacterConstants::GeWeights::InitializeBaseStats, this->DynamicTagsEffect);
-
-		// Ensure Passive GEs are always evaluated in weight order.
-		EffectsToApply.KeyStableSort(TLess<int32>());
-
-		for (const auto& EffectInfo : this->PassiveGameplayEffects)
-		{
-			const TSubclassOf<UGameplayEffect> GameplayEffect     = EffectInfo.Value;
-			FGameplayEffectContextHandle       EffectContext      = this->MakeEffectContext();
-			FGameplayEffectSpecHandle          NewHandle;
-			FGameplayEffectSpec*               GameplayEffectSpec;
-
-			// TODO: Confirm it's all right for the source object to be the ASC rather than the character. In the Action
-			// RPG sample, the source was the actor, but it seems like as long as we're consistent about it here and in
-			// DeactivatePassiveGameplayEffects, it doesn't matter. It feels cleaner to use the ASC since the ASC is
-			// what actually manages and applies the passive GEs.
-			EffectContext.AddSourceObject(this);
-
-			NewHandle = this->MakeOutgoingSpec(
-				GameplayEffect,
-				this->GetCharacterLevel(),
-				EffectContext
-			);
-
-			GameplayEffectSpec = NewHandle.Data.Get();
-
-			if (GameplayEffect->GetName() == PF2CharacterConstants::GeDynamicTagsClassName)
-			{
-				GameplayEffectSpec->DynamicGrantedTags.AppendTags(this->DynamicTags);
-			}
-
-			if (NewHandle.IsValid())
-			{
-				this->ApplyGameplayEffectSpecToTarget(*GameplayEffectSpec, this);
-			}
-		}
-
-		this->bPassiveEffectsActivated = true;
+		this->ActivatePassiveGameplayEffects(InactiveGroup);
 	}
 }
 
-void UPF2AbilitySystemComponent::DeactivatePassiveGameplayEffects()
+void UPF2AbilitySystemComponent::DeactivateAllPassiveGameplayEffects()
 {
-	if (this->bPassiveEffectsActivated)
+	FGameplayEffectQuery Query;
+
+	Query.EffectSource = this;
+
+	this->RemoveActiveEffects(Query);
+	this->ActivatedWeightGroups.Empty();
+}
+
+TSet<FName> UPF2AbilitySystemComponent::ActivatePassiveGameplayEffectsAfter(const FName StartingWeightGroup)
+{
+	const TMultiMap<FName, TSubclassOf<UGameplayEffect>> EffectsToApply = this->GetPassiveGameplayEffectsToApply();
+
+	TSet<FName> AllWeightGroups,
+	            InactiveGroups,
+	            ActivatedGroups;
+
+	EffectsToApply.GetKeys(AllWeightGroups);
+
+	InactiveGroups = AllWeightGroups.Difference(this->ActivatedWeightGroups);
+
+	for (const auto& InactiveGroup : InactiveGroups)
+	{
+		if (StartingWeightGroup.LexicalLess(InactiveGroup) && this->ActivatePassiveGameplayEffects(InactiveGroup))
+		{
+			ActivatedGroups.Add(InactiveGroup);
+		}
+	}
+
+	return ActivatedGroups;
+}
+
+TSet<FName> UPF2AbilitySystemComponent::DeactivatePassiveGameplayEffectsAfter(const FName StartingWeightGroup)
+{
+	TSet<FName> DeactivatedGroups;
+
+	// We have to make a copy of the set because we'll be modifying it in the loop.
+	TSet<FName> WeightGroups = this->ActivatedWeightGroups;
+
+	for (const FName& ActiveGroup : WeightGroups)
+	{
+		if (StartingWeightGroup.LexicalLess(ActiveGroup) && this->DeactivatePassiveGameplayEffects(ActiveGroup))
+		{
+			DeactivatedGroups.Add(ActiveGroup);
+		}
+	}
+
+	return DeactivatedGroups;
+}
+
+bool UPF2AbilitySystemComponent::ActivatePassiveGameplayEffects(const FName WeightGroup)
+{
+	if (this->ActivatedWeightGroups.Contains(WeightGroup))
+	{
+		return false;
+	}
+	else
+	{
+		const TMultiMap<FName, TSubclassOf<UGameplayEffect>> AllEffects   = this->GetPassiveGameplayEffectsToApply();
+		TArray<TSubclassOf<UGameplayEffect>>                 GroupEffects;
+
+		AllEffects.MultiFind(WeightGroup, GroupEffects, true);
+
+		for (const auto& GameplayEffect : GroupEffects)
+		{
+			this->ActivatePassiveGameplayEffect(WeightGroup, GameplayEffect);
+		}
+
+		this->ActivatedWeightGroups.Add(WeightGroup);
+
+		return true;
+	}
+}
+
+bool UPF2AbilitySystemComponent::DeactivatePassiveGameplayEffects(const FName WeightGroup)
+{
+	if (!this->ActivatedWeightGroups.Contains(WeightGroup))
+	{
+		return false;
+	}
+	else
 	{
 		FGameplayEffectQuery Query;
+		int32                NumRemoved;
 
-		// TODO: Confirm it's all right for the source object to be the ASC rather than the character. In the Action RPG
-		// sample, the source was the actor, but it seems like as long as we're consistent about it here and in
-		// ActivatePassiveGameplayEffects, it doesn't matter. It feels cleaner to use the ASC since the ASC is what
-		// actually manages and applies the passive GEs.
 		Query.EffectSource = this;
 
-		this->RemoveActiveEffects(Query);
+		Query.EffectTagQuery =
+			FGameplayTagQuery::MakeQuery_MatchAnyTags(
+				FGameplayTagContainer(PF2GameplayAbilityUtilities::GetTag(WeightGroup))
+			);
 
-		this->bPassiveEffectsActivated = false;
+		NumRemoved = this->RemoveActiveEffects(Query);
+
+		this->ActivatedWeightGroups.Remove(WeightGroup);
+
+		return (NumRemoved > 0);
 	}
 }
 
 void UPF2AbilitySystemComponent::AddDynamicTag(const FGameplayTag Tag)
 {
-	this->InvokeAndReapplyPassiveGEs([this, Tag]
+	this->InvokeAndReapplyAllPassiveGEs([this, Tag]
 	{
 		UE_LOG(
 			LogPf2Core,
@@ -141,7 +221,7 @@ void UPF2AbilitySystemComponent::AddDynamicTag(const FGameplayTag Tag)
 
 void UPF2AbilitySystemComponent::AppendDynamicTags(const FGameplayTagContainer Tags)
 {
-	this->InvokeAndReapplyPassiveGEs([this, Tags]
+	this->InvokeAndReapplyAllPassiveGEs([this, Tags]
 	{
 		UE_LOG(
 			LogPf2Core,
@@ -157,7 +237,7 @@ void UPF2AbilitySystemComponent::AppendDynamicTags(const FGameplayTagContainer T
 
 void UPF2AbilitySystemComponent::SetDynamicTags(const FGameplayTagContainer Tags)
 {
-	this->InvokeAndReapplyPassiveGEs([this, Tags]
+	this->InvokeAndReapplyAllPassiveGEs([this, Tags]
 	{
 		UE_LOG(
 			LogPf2Core,
@@ -173,7 +253,7 @@ void UPF2AbilitySystemComponent::SetDynamicTags(const FGameplayTagContainer Tags
 
 void UPF2AbilitySystemComponent::RemoveDynamicTag(const FGameplayTag Tag)
 {
-	this->InvokeAndReapplyPassiveGEs([this, Tag]
+	this->InvokeAndReapplyAllPassiveGEs([this, Tag]
 	{
 		UE_LOG(
 			LogPf2Core,
@@ -189,7 +269,7 @@ void UPF2AbilitySystemComponent::RemoveDynamicTag(const FGameplayTag Tag)
 
 void UPF2AbilitySystemComponent::RemoveDynamicTags(const FGameplayTagContainer Tags)
 {
-	this->InvokeAndReapplyPassiveGEs([this, Tags]
+	this->InvokeAndReapplyAllPassiveGEs([this, Tags]
 	{
 		UE_LOG(
 			LogPf2Core,
@@ -205,7 +285,7 @@ void UPF2AbilitySystemComponent::RemoveDynamicTags(const FGameplayTagContainer T
 
 void UPF2AbilitySystemComponent::RemoveAllDynamicTags()
 {
-	this->InvokeAndReapplyPassiveGEs([this]
+	this->InvokeAndReapplyAllPassiveGEs([this]
 	{
 		UE_LOG(
 			LogPf2Core,
@@ -220,27 +300,102 @@ void UPF2AbilitySystemComponent::RemoveAllDynamicTags()
 
 void UPF2AbilitySystemComponent::ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore)
 {
-	this->InvokeAndReapplyPassiveGEs([this, TargetAbilityScore]
-	{
-		const TSubclassOf<UGameplayEffect> BoostEffect = this->AbilityBoostEffects[TargetAbilityScore];
+	const TSubclassOf<UGameplayEffect> BoostEffect = this->AbilityBoostEffects[TargetAbilityScore];
 
-		UE_LOG(
-			LogPf2Core,
-			VeryVerbose,
-			TEXT("Applying a boost to ability ('%s') through ASC for character ('%s') via GE ('%s')."),
-			*(PF2EnumUtils::ToString(TargetAbilityScore)),
-			*(this->GetOwnerActor()->GetName()),
-			*(BoostEffect->GetName())
+	// Allow boost GE to override the default weight group.
+	const FName WeightGroup =
+		PF2GameplayAbilityUtilities::GetWeightGroupOfGameplayEffect(
+			BoostEffect,
+			PF2CharacterConstants::GeWeightGroups::AbilityBoosts
 		);
 
-		this->PassiveGameplayEffects.Add(PF2CharacterConstants::GeWeights::ManagedEffects, BoostEffect);
-	});
+	UE_LOG(
+		LogPf2Core,
+		VeryVerbose,
+		TEXT("Applying a boost to ability ('%s') through ASC for character ('%s') via GE ('%s')."),
+		*(PF2EnumUtilities::ToString(TargetAbilityScore)),
+		*(this->GetOwnerActor()->GetName()),
+		*(BoostEffect->GetName())
+	);
+
+	this->AddPassiveGameplayEffectWithWeight(WeightGroup, BoostEffect);
 }
 
-FORCEINLINE TSubclassOf<UGameplayEffect> UPF2AbilitySystemComponent::GetBoostEffectForAbility(
-	const EPF2CharacterAbilityScoreType AbilityScore)
+TArray<UPF2GameplayAbility_BoostAbilityBase*> UPF2AbilitySystemComponent::GetPendingAbilityBoosts() const
 {
-	return this->AbilityBoostEffects[AbilityScore];
+	TArray<UPF2GameplayAbility_BoostAbilityBase*> MatchingGameplayAbilities;
+	TArray<FGameplayAbilitySpec*>                 MatchingGameplayAbilitySpecs;
+
+	this->GetActivatableGameplayAbilitySpecsByAllMatchingTags(
+		FGameplayTagContainer(PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.ApplyAbilityBoost"))),
+		MatchingGameplayAbilitySpecs,
+		false
+	);
+
+	MatchingGameplayAbilities =
+		PF2ArrayUtilities::Map<UPF2GameplayAbility_BoostAbilityBase*>(
+			MatchingGameplayAbilitySpecs,
+			[](const FGameplayAbilitySpec* AbilitySpec)
+			{
+				return Cast<UPF2GameplayAbility_BoostAbilityBase>(AbilitySpec->Ability);
+			}
+		);
+
+	return MatchingGameplayAbilities;
+}
+
+TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> UPF2AbilitySystemComponent::GetAbilityScoreValues() const
+{
+	const UPF2AttributeSet* AttributeSet =
+		Cast<UPF2AttributeSet>(this->GetAttributeSubobject(UPF2AttributeSet::StaticClass()));
+
+	const TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> Values =
+		{
+			{
+				EPF2CharacterAbilityScoreType::AbStrength,
+				FPF2AttributeModifierSnapshot(
+					AttributeSet->AbStrength.GetCurrentValue(),
+					AttributeSet->AbStrengthModifier.GetCurrentValue()
+				)
+			},
+			{
+				EPF2CharacterAbilityScoreType::AbDexterity,
+				FPF2AttributeModifierSnapshot(
+					AttributeSet->AbDexterity.GetCurrentValue(),
+					AttributeSet->AbDexterityModifier.GetCurrentValue()
+				)
+			},
+			{
+				EPF2CharacterAbilityScoreType::AbConstitution,
+				FPF2AttributeModifierSnapshot(
+					AttributeSet->AbConstitution.GetCurrentValue(),
+					AttributeSet->AbConstitutionModifier.GetCurrentValue()
+				)
+			},
+			{
+				EPF2CharacterAbilityScoreType::AbIntelligence,
+				FPF2AttributeModifierSnapshot(
+					AttributeSet->AbIntelligence.GetCurrentValue(),
+					AttributeSet->AbIntelligenceModifier.GetCurrentValue()
+				)
+			},
+			{
+				EPF2CharacterAbilityScoreType::AbWisdom,
+				FPF2AttributeModifierSnapshot(
+					AttributeSet->AbWisdom.GetCurrentValue(),
+					AttributeSet->AbWisdomModifier.GetCurrentValue()
+				)
+			},
+			{
+				EPF2CharacterAbilityScoreType::AbCharisma,
+				FPF2AttributeModifierSnapshot(
+					AttributeSet->AbCharisma.GetCurrentValue(),
+					AttributeSet->AbCharismaModifier.GetCurrentValue()
+				)
+			},
+		};
+
+	return Values;
 }
 
 FORCEINLINE int UPF2AbilitySystemComponent::GetCharacterLevel() const
@@ -257,20 +412,110 @@ FORCEINLINE int UPF2AbilitySystemComponent::GetCharacterLevel() const
 	}
 }
 
+TMultiMap<FName, TSubclassOf<UGameplayEffect>> UPF2AbilitySystemComponent::GetPassiveGameplayEffectsToApply()
+{
+	if (this->CachedPassiveGameplayEffectsToApply.Num() == 0)
+	{
+		this->CachedPassiveGameplayEffectsToApply = this->BuildPassiveGameplayEffectsToApply();
+	}
+
+	return this->CachedPassiveGameplayEffectsToApply;
+}
+
+TMultiMap<FName, TSubclassOf<UGameplayEffect>> UPF2AbilitySystemComponent::BuildPassiveGameplayEffectsToApply() const
+{
+	TMultiMap<FName, TSubclassOf<UGameplayEffect>> EffectsToApply = this->PassiveGameplayEffects;
+
+	// Add a pseudo-GE for the dynamic tags.
+	EffectsToApply.Add(PF2CharacterConstants::GeWeightGroups::InitializeBaseStats, this->DynamicTagsEffect);
+
+	// Ensure Passive GEs are always evaluated in weight order.
+	EffectsToApply.KeyStableSort(FNameLexicalLess());
+
+	return EffectsToApply;
+}
+
+void UPF2AbilitySystemComponent::ActivatePassiveGameplayEffect(
+	const FName                        WeightGroup,
+	const TSubclassOf<UGameplayEffect> GameplayEffect)
+{
+	FGameplayEffectContextHandle EffectContext = this->MakeEffectContext();
+	FGameplayEffectSpecHandle    NewHandle;
+	FGameplayEffectSpec*         GameplayEffectSpec;
+
+	EffectContext.AddSourceObject(this);
+
+	NewHandle = this->MakeOutgoingSpec(
+		GameplayEffect,
+		this->GetCharacterLevel(),
+		EffectContext
+	);
+
+	GameplayEffectSpec = NewHandle.Data.Get();
+
+	// Ensure that the GE spec is tagged with its weight no matter how the weight was set (either through API or through
+	// a tag in the InheritableGameplayEffectTags field on the GE definition class itself). Without this, only the tag
+	// from the GE definition spec would pass through.
+	GameplayEffectSpec->DynamicAssetTags.AddTag(PF2GameplayAbilityUtilities::GetTag(WeightGroup));
+
+	// Special case: If the GE being activated is our "dummy" GE for dynamic tags, apply tags to it.
+	//
+	// TODO: Find a different way to accomplish this without a GE. This feels very much like a kludge.
+	if (GameplayEffect->GetName() == PF2CharacterConstants::GeDynamicTagsClassName)
+	{
+		GameplayEffectSpec->DynamicGrantedTags.AppendTags(this->DynamicTags);
+	}
+
+	if (NewHandle.IsValid())
+	{
+		this->ApplyGameplayEffectSpecToTarget(*GameplayEffectSpec, this);
+	}
+}
+
 template <typename Func>
-void UPF2AbilitySystemComponent::InvokeAndReapplyPassiveGEs(Func Callable)
+void UPF2AbilitySystemComponent::InvokeAndReapplyAllPassiveGEs(const Func Callable)
 {
 	const bool WasActive = this->ArePassiveGameplayEffectsActive();
 
 	if (WasActive)
 	{
-		this->DeactivatePassiveGameplayEffects();
+		this->DeactivateAllPassiveGameplayEffects();
 	}
 
 	Callable();
 
 	if (WasActive)
 	{
-		this->ActivatePassiveGameplayEffects();
+		this->ActivateAllPassiveGameplayEffects();
+	}
+}
+
+template<typename Func>
+void UPF2AbilitySystemComponent::InvokeAndReapplyPassiveGEsInSubsequentWeightGroups(
+	const TSubclassOf<UGameplayEffect> Effect,
+	const Func Callable)
+{
+	FName WeightGroup = PF2GameplayAbilityUtilities::GetWeightGroupOfGameplayEffect(Effect);
+
+	this->InvokeAndReapplyPassiveGEsInSubsequentWeightGroups(WeightGroup, Callable);
+}
+
+
+template <typename Func>
+void UPF2AbilitySystemComponent::InvokeAndReapplyPassiveGEsInSubsequentWeightGroups(
+	const FName WeightGroup,
+	const Func Callable)
+{
+	// NOTE: If the group we are affecting isn't active, we don't bother to re-apply subsequent groups because they
+	// won't be affected.
+	const bool SubsequentGroupsWereActive =
+		this->ActivatedWeightGroups.Contains(WeightGroup) &&
+		(this->DeactivatePassiveGameplayEffectsAfter(WeightGroup).Num() != 0);
+
+	Callable();
+
+	if (SubsequentGroupsWereActive)
+	{
+		this->ActivatePassiveGameplayEffectsAfter(WeightGroup);
 	}
 }

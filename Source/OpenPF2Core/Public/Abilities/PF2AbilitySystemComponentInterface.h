@@ -1,4 +1,9 @@
-﻿#pragma once
+﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
+// distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+#pragma once
 
 #include <GameplayTagContainer.h>
 
@@ -33,18 +38,41 @@ public:
 	virtual bool ArePassiveGameplayEffectsActive() = 0;
 
 	/**
-	 * Adds a passively-applied Gameplay Effects with the current weight to this ASC.
+	 * Adds a passively-applied Gameplay Effect to this ASC.
 	 *
-	 * Different instances of the same type of GE can be added multiple times, even with the same weight. Each addition
-	 * adds an additional entry for that GE under the given weight.
+	 * The GE is added to the weight group specified by a tag on GE; this is known as the "default" weight group of the
+	 * GE.
 	 *
-	 * @param Weight
-	 *	The weight of that GE.
+	 * Different instances of the same type of GE can be added multiple times, even with the same weight group. Each
+	 * call adds an additional entry for that GE under the default weight.
+	 *
+	 * Any Passive GEs in weight groups after the default weight group of the GE are automatically re-applied.
+	 *
+	 * @param Effect
+	 *	The gameplay effect to add under the default weight of the GE.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual void AddPassiveGameplayEffect(const TSubclassOf<UGameplayEffect> Effect) = 0;
+
+	/**
+	 * Adds a passively-applied Gameplay Effect with the given weight to this ASC.
+	 *
+	 * Different instances of the same type of GE can be added multiple times, even with the same weight group. Each
+	 * call adds an additional entry for that GE under the given weight.
+	 *
+	 * Any Passive GEs in weight groups after the target weight group are automatically re-applied.
+	 *
+	 * @param WeightGroup
+	 *	The weight group of the GE. This controls how early or late the GE is evaluated, relative to other passive GEs
+	 *	on the ASC.
 	 * @param Effect
 	 *	The gameplay effect to add under the given weight.
 	 */
 	UFUNCTION(BlueprintCallable)
-	virtual void AddPassiveGameplayEffect(const int32 Weight, const TSubclassOf<UGameplayEffect> Effect) = 0;
+	virtual void AddPassiveGameplayEffectWithWeight(
+		const FName WeightGroup,
+		const TSubclassOf<UGameplayEffect> Effect
+	) = 0;
 
 	/**
 	 * Sets all of the passive Gameplay Effects on this ASC to the given set.
@@ -54,10 +82,10 @@ public:
 	 *
 	 * @param Effects
 	 *	The list of Gameplay Effects (GEs) to always passively apply to this ASC. Each value must be a gameplay effect
-	 *	and the key must be the weight of that GE. The weight controls the order that all GEs are applied. Lower weights
-	 *	are applied earlier than higher weights.
+	 *	and the key must be the weight group of that GE. The weight controls the order that all GEs are applied. Lower
+	 *	weights are applied earlier than higher weights.
 	 */
-	virtual void SetPassiveGameplayEffects(const TMultiMap<int32, TSubclassOf<UGameplayEffect>> Effects) = 0;
+	virtual void SetPassiveGameplayEffects(const TMultiMap<FName, TSubclassOf<UGameplayEffect>> Effects) = 0;
 
 	/**
 	 * Clears all of the passive Gameplay Effects on this ASC.
@@ -71,13 +99,67 @@ public:
 	 * Activates Gameplay Effects that should remain passively applied on this ASC until deactivated.
 	 */
 	UFUNCTION(BlueprintCallable)
-	virtual void ActivatePassiveGameplayEffects() = 0;
+	virtual void ActivateAllPassiveGameplayEffects() = 0;
 
 	/**
 	 * Removes all passive Gameplay Effects that were previously activated on this ASC.
 	 */
 	UFUNCTION(BlueprintCallable)
-	virtual void DeactivatePassiveGameplayEffects() = 0;
+	virtual void DeactivateAllPassiveGameplayEffects() = 0;
+
+	/**
+	 * Activates only Gameplay Effects that exist after the given weight group.
+	 *
+	 * The weight group itself is not activated.
+	 *
+	 * @param WeightGroup
+	 *	The weight group after which GEs should be activated.
+	 *
+	 * @return
+	 *	The names of all weight groups that were activated.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual TSet<FName> ActivatePassiveGameplayEffectsAfter(const FName WeightGroup) = 0;
+
+	/**
+	 * Deactivates only Gameplay Effects that exist after the given weight group.
+	 *
+	 * The weight group itself is not deactivated. This method has no effect if passive GEs have not been activated
+	 * previously.
+	 *
+	 * @param WeightGroup
+	 *	The weight group after which GEs should be deactivated.
+	 *
+	 * @return
+	 *	The names of all weight groups that were deactivated.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual TSet<FName> DeactivatePassiveGameplayEffectsAfter(const FName WeightGroup) = 0;
+
+	/**
+	 * Activates the specified weight group of Gameplay Effects.
+	 *
+	 * @param WeightGroup
+	 *	The name of the group to activate.
+	 *
+	 * @return
+	 *	true if the group was activated; or, false, if the group was not activated because it was already activated.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual bool ActivatePassiveGameplayEffects(const FName WeightGroup) = 0;
+
+	/**
+	 * Deactivates the specified weight group of Gameplay Effects.
+	 *
+	 * @param WeightGroup
+	 *	The name of the group to deactivate.
+	 *
+	 * @return
+	 *	true if the group was deactivated; or, false, if the group was not deactivated because it was already
+	 *	deactivated.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual bool DeactivatePassiveGameplayEffects(const FName WeightGroup) = 0;
 
 	/**
 	 * Applies a tag to this ASC that is otherwise not granted by a GE.

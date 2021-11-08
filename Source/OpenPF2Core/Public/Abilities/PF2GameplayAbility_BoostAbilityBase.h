@@ -4,6 +4,7 @@
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
 //   - System Reference Document, Copyright 2000, Wizards of the Coast, Inc.
 //   - Pathfinder Core Rulebook (Second Edition), Copyright 2019, Paizo Inc.
+//
 // Except for material designated as Product Identity, the game mechanics and logic in this file are Open Game Content,
 // as defined in the Open Game License version 1.0a, Section 1(d) (see accompanying LICENSE.TXT). No portion of this
 // file other than the material designated as Open Game Content may be reproduced in any form without written
@@ -12,6 +13,7 @@
 #pragma once
 
 #include "Abilities/GameplayAbility.h"
+#include "PF2GameplayAbilityUtilities.h"
 #include "PF2AbilityBoostRuleOption.h"
 #include "PF2AttributeSet.h"
 #include "PF2CharacterAbilitySystemComponentInterface.h"
@@ -32,28 +34,18 @@
  * must apply each one to a different score."
  */
 UCLASS(Abstract, HideCategories=("Triggers"))
+// ReSharper disable once CppClassCanBeFinal
 class OPENPF2CORE_API UPF2GameplayAbility_BoostAbilityBase : public UGameplayAbility
 {
 	GENERATED_BODY()
 
-public:
-	UPF2GameplayAbility_BoostAbilityBase();
-
-	static FORCEINLINE FGameplayTag GetTriggerTag()
-	{
-		return FGameplayTag(FGameplayTag::RequestGameplayTag(FName("TriggerTagCategory.ApplySelectedAbilityBoost")));
-	};
-
-	virtual bool CheckCost(const FGameplayAbilitySpecHandle Handle,
-	                       const FGameplayAbilityActorInfo* ActorInfo,
-	                       FGameplayTagContainer*           OptionalRelevantTags) const override;
-
-	virtual void ActivateAbility(const FGameplayAbilitySpecHandle     Handle,
-	                             const FGameplayAbilityActorInfo*     ActorInfo,
-	                             const FGameplayAbilityActivationInfo ActivationInfo,
-	                             const FGameplayEventData*            TriggerEventData) override;
-
 protected:
+	/**
+	 * The description of this boost, as shown to the player when they are being asked to make a selection.
+	 */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Description")
+	FText Description;
+
 	/**
 	 * The boost(s) this ability applies to the target.
 	 *
@@ -63,6 +55,26 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Ability Boost Options")
 	TArray<FPF2AbilityBoostRuleOption> BoostRuleOptions;
 
+public:
+	UPF2GameplayAbility_BoostAbilityBase();
+
+	static FORCEINLINE FGameplayTag GetTriggerTag()
+	{
+		return PF2GameplayAbilityUtilities::GetTag(FName("TriggerTagCategory.ApplySelectedAbilityBoost"));
+	};
+
+	virtual bool CheckCost(
+		const FGameplayAbilitySpecHandle Handle,
+		const FGameplayAbilityActorInfo* ActorInfo,
+		FGameplayTagContainer*           OptionalRelevantTags) const override;
+
+	virtual void ActivateAbility(
+		const FGameplayAbilitySpecHandle     Handle,
+		const FGameplayAbilityActorInfo*     ActorInfo,
+		const FGameplayAbilityActivationInfo ActivationInfo,
+		const FGameplayEventData*            TriggerEventData) override;
+
+protected:
 	/**
 	 * Gets which boosts were selected and passed-in to a GA activation.
 	 *

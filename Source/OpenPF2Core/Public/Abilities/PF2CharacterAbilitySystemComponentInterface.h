@@ -1,9 +1,19 @@
-﻿#pragma once
+﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
+// distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-#include "PF2AbilitySystemComponentInterface.h"
+#pragma once
+
 #include "Abilities/PF2CharacterAbilityScoreType.h"
+#include "PF2AbilitySystemComponentInterface.h"
+#include "PF2AttributeModifierSnapshot.h"
 
 #include "PF2CharacterAbilitySystemComponentInterface.generated.h"
+
+// Forward declaration; this is defined in "Abilities/PF2GameplayAbility_BoostAbilityBase.h", but that file depends on
+// this header file, so we have to break the recursive dependency.
+class UPF2GameplayAbility_BoostAbilityBase;
 
 UINTERFACE(MinimalAPI, meta = (CannotImplementInterfaceInBlueprint))
 class UPF2CharacterAbilitySystemComponentInterface : public UPF2AbilitySystemComponentInterface
@@ -24,6 +34,17 @@ class OPENPF2CORE_API IPF2CharacterAbilitySystemComponentInterface : public IPF2
 public:
 	/**
 	 * Adds a boost of the specified ability to the attribute set of the owning character.
+	 *
+	 * This results in a passive GE being added to the ASC of the character. The GE is added to the weight group
+	 * specified by a tag on GE; this is known as the "default" weight group of the GE.
+	 *
+	 * If the group into which the GE is being added is already active, then the GE for the boost is activated
+	 * immediately. In addition, any Passive GEs in weight groups after the default weight group of the GE are
+	 * automatically re-applied.
+	 *
+	 *
+	 * @param TargetAbilityScore
+	 *	The ability score that will be boosted.
 	 */
 	UFUNCTION(BlueprintCallable)
     virtual void ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore) = 0;
@@ -39,4 +60,22 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable)
 	virtual TSubclassOf<UGameplayEffect> GetBoostEffectForAbility(const EPF2CharacterAbilityScoreType AbilityScore) = 0;
+
+	/**
+	 * Gets all of the ability boosts that have been granted on this ASC.
+	 *
+	 * @return
+	 *	The ability boost GAs that are still pending for this character.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<UPF2GameplayAbility_BoostAbilityBase *> GetPendingAbilityBoosts() const = 0;
+
+	/**
+	 * Gets a snapshot from this ASC of all current character ability scores and their modifiers.
+	 *
+	 * @return
+	 *	A map from character ability scores to a snapshot of their values and modifiers.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> GetAbilityScoreValues() const = 0;
 };
