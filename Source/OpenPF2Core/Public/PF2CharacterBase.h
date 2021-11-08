@@ -352,6 +352,22 @@ public:
 		const TSubclassOf<class UPF2GameplayAbility_BoostAbilityBase> BoostGameplayAbility,
 		const TSet<EPF2CharacterAbilityScoreType>                     SelectedAbilities) override;
 
+	/**
+	 * Attempts to find and activate a pending ability boost Gameplay Ability for each Ability Boost selection on this
+	 * character.
+	 *
+	 * Pending ability boosts are registered on this character via calls to AddAbilityBoostSelection() before a call to
+	 * this method.
+	 *
+	 * The call flow for this is as follows:
+	 *	1. Ability boosts are added to this character via one or more calls to AddAbilityBoostSelection().
+	 *	2. This method is called.
+	 *	3. This method invokes ActivateAbilityBoost() once for each pending boost selection.
+	 *	4. ActivateAbilityBoost() is used to activate the boost Gameplay Ability (GA) that corresponds to a pending
+	 *	   boost selection.
+	 *	5. During activation, the boost GA calls the ApplyAbilityBoost() method on the ASC for this character to
+	 *	   activate each valid boost selection.
+	 */
 	UFUNCTION(BlueprintCallable)
 	virtual void ApplyAbilityBoostSelections() override;
 

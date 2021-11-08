@@ -86,8 +86,11 @@ public:
 		const TSet<EPF2CharacterAbilityScoreType>                     SelectedAbilities) = 0;
 
 	/**
-	 * Attempts to find and activate a pending ability boost Gameplay Ability for each Ability Boost Selection on this
+	 * Attempts to find and activate a pending ability boost Gameplay Ability for each Ability Boost selection on this
 	 * character.
+	 *
+	 * Pending ability boosts are registered on this character via calls to AddAbilityBoostSelection() before a call to
+	 * this method.
 	 */
 	UFUNCTION(BlueprintCallable)
 	virtual void ApplyAbilityBoostSelections() = 0;
