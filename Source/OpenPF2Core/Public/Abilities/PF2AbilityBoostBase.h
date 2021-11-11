@@ -18,7 +18,7 @@
 #include "PF2AttributeSet.h"
 #include "PF2CharacterAbilitySystemComponentInterface.h"
 
-#include "PF2GameplayAbility_BoostAbilityBase.generated.h"
+#include "PF2AbilityBoostBase.generated.h"
 
 /**
  * Base class for a Gameplay Ability that gives the player the option to boost one or more character abilities.
@@ -35,7 +35,7 @@
  */
 UCLASS(Abstract, HideCategories=("Triggers"))
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API UPF2GameplayAbility_BoostAbilityBase : public UGameplayAbility
+class OPENPF2CORE_API UPF2AbilityBoostBase : public UGameplayAbility
 {
 	GENERATED_BODY()
 
@@ -56,7 +56,7 @@ protected:
 	TArray<FPF2AbilityBoostRuleOption> BoostRuleOptions;
 
 public:
-	UPF2GameplayAbility_BoostAbilityBase();
+	UPF2AbilityBoostBase();
 
 	static FORCEINLINE FGameplayTag GetTriggerTag()
 	{

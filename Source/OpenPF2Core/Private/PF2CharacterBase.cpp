@@ -9,9 +9,9 @@
 #include <Net/UnrealNetwork.h>
 #include <UObject/ConstructorHelpers.h>
 
+#include "Abilities/PF2AbilityBoostBase.h"
 #include "Abilities/PF2AbilitySystemComponent.h"
 #include "Abilities/PF2GameplayAbilityTargetData_BoostAbility.h"
-#include "Abilities/PF2GameplayAbility_BoostAbilityBase.h"
 
 APF2CharacterBase::APF2CharacterBase() :
 	APF2CharacterBase(TPF2CharacterComponentFactory<UPF2AbilitySystemComponent, UPF2AttributeSet>())
@@ -59,14 +59,14 @@ int32 APF2CharacterBase::GetCharacterLevel() const
 	return this->CharacterLevel;
 }
 
-TArray<UPF2GameplayAbility_BoostAbilityBase *> APF2CharacterBase::GetPendingAbilityBoosts() const
+TArray<UPF2AbilityBoostBase *> APF2CharacterBase::GetPendingAbilityBoosts() const
 {
 	return this->GetCharacterAbilitySystemComponent()->GetPendingAbilityBoosts();
 }
 
 void APF2CharacterBase::AddAbilityBoostSelection(
-	const TSubclassOf<class UPF2GameplayAbility_BoostAbilityBase> BoostGameplayAbility,
-	const TSet<EPF2CharacterAbilityScoreType>                     SelectedAbilities)
+	const TSubclassOf<class UPF2AbilityBoostBase> BoostGameplayAbility,
+	const TSet<EPF2CharacterAbilityScoreType>     SelectedAbilities)
 {
 	this->AbilityBoostSelections.Add(FPF2CharacterAbilityBoostSelection(BoostGameplayAbility, SelectedAbilities));
 }
@@ -79,9 +79,9 @@ void APF2CharacterBase::ApplyAbilityBoostSelections()
 
 		for (const auto& AbilityBoostSelection : this->AbilityBoostSelections)
 		{
-			TSubclassOf<UPF2GameplayAbility_BoostAbilityBase> BoostGa   = AbilityBoostSelection.BoostGameplayAbility;
-			UAbilitySystemComponent*                          Asc       = this->GetAbilitySystemComponent();
-			FGameplayAbilitySpec*                             BoostSpec = Asc->FindAbilitySpecFromClass(BoostGa);
+			TSubclassOf<UPF2AbilityBoostBase> BoostGa   = AbilityBoostSelection.BoostGameplayAbility;
+			UAbilitySystemComponent*          Asc       = this->GetAbilitySystemComponent();
+			FGameplayAbilitySpec*             BoostSpec = Asc->FindAbilitySpecFromClass(BoostGa);
 
 			if (BoostSpec == nullptr)
 			{
@@ -147,9 +147,9 @@ void APF2CharacterBase::RemoveRedundantPendingAbilityBoosts()
 	{
 		for (const auto& AbilityBoostSelection : this->AppliedAbilityBoostSelections)
 		{
-			TSubclassOf<UPF2GameplayAbility_BoostAbilityBase> BoostGa   = AbilityBoostSelection.BoostGameplayAbility;
-			UAbilitySystemComponent*                          Asc       = this->GetAbilitySystemComponent();
-			FGameplayAbilitySpec*                             BoostSpec = Asc->FindAbilitySpecFromClass(BoostGa);
+			TSubclassOf<UPF2AbilityBoostBase> BoostGa   = AbilityBoostSelection.BoostGameplayAbility;
+			UAbilitySystemComponent*          Asc       = this->GetAbilitySystemComponent();
+			FGameplayAbilitySpec*             BoostSpec = Asc->FindAbilitySpecFromClass(BoostGa);
 
 			if (BoostSpec != nullptr)
 			{
@@ -186,7 +186,7 @@ void APF2CharacterBase::ActivateAbilityBoost(
 	Asc->TriggerAbilityFromGameplayEvent(
 		BoostSpec->Handle,
 		Asc->AbilityActorInfo.Get(),
-		UPF2GameplayAbility_BoostAbilityBase::GetTriggerTag(),
+		UPF2AbilityBoostBase::GetTriggerTag(),
 		&BoostEventInfo,
 		*Asc
 	);

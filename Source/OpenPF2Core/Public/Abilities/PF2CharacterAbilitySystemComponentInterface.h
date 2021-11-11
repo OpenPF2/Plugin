@@ -13,7 +13,7 @@
 
 // Forward declaration; this is defined in "Abilities/PF2GameplayAbility_BoostAbilityBase.h", but that file depends on
 // this header file, so we have to break the recursive dependency.
-class UPF2GameplayAbility_BoostAbilityBase;
+class UPF2AbilityBoostBase;
 
 UINTERFACE(MinimalAPI, meta = (CannotImplementInterfaceInBlueprint))
 class UPF2CharacterAbilitySystemComponentInterface : public UPF2AbilitySystemComponentInterface
@@ -68,7 +68,7 @@ public:
 	 *	The ability boost GAs that are still pending for this character.
 	 */
 	UFUNCTION(BlueprintCallable)
-	virtual TArray<UPF2GameplayAbility_BoostAbilityBase *> GetPendingAbilityBoosts() const = 0;
+	virtual TArray<UPF2AbilityBoostBase *> GetPendingAbilityBoosts() const = 0;
 
 	/**
 	 * Gets a snapshot from this ASC of all current character ability scores and their modifiers.

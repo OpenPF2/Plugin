@@ -321,10 +321,10 @@ void UPF2AbilitySystemComponent::ApplyAbilityBoost(const EPF2CharacterAbilitySco
 	this->AddPassiveGameplayEffectWithWeight(WeightGroup, BoostEffect);
 }
 
-TArray<UPF2GameplayAbility_BoostAbilityBase*> UPF2AbilitySystemComponent::GetPendingAbilityBoosts() const
+TArray<UPF2AbilityBoostBase*> UPF2AbilitySystemComponent::GetPendingAbilityBoosts() const
 {
-	TArray<UPF2GameplayAbility_BoostAbilityBase*> MatchingGameplayAbilities;
-	TArray<FGameplayAbilitySpec*>                 MatchingGameplayAbilitySpecs;
+	TArray<UPF2AbilityBoostBase*> MatchingGameplayAbilities;
+	TArray<FGameplayAbilitySpec*> MatchingGameplayAbilitySpecs;
 
 	this->GetActivatableGameplayAbilitySpecsByAllMatchingTags(
 		FGameplayTagContainer(PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.ApplyAbilityBoost"))),
@@ -333,11 +333,11 @@ TArray<UPF2GameplayAbility_BoostAbilityBase*> UPF2AbilitySystemComponent::GetPen
 	);
 
 	MatchingGameplayAbilities =
-		PF2ArrayUtilities::Map<UPF2GameplayAbility_BoostAbilityBase*>(
+		PF2ArrayUtilities::Map<UPF2AbilityBoostBase*>(
 			MatchingGameplayAbilitySpecs,
 			[](const FGameplayAbilitySpec* AbilitySpec)
 			{
-				return Cast<UPF2GameplayAbility_BoostAbilityBase>(AbilitySpec->Ability);
+				return Cast<UPF2AbilityBoostBase>(AbilitySpec->Ability);
 			}
 		);
 

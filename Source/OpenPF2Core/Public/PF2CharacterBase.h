@@ -59,7 +59,7 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostSelection
 	 *	The ability scores that the player selected, out of the options offered by the Boost GA.
 	 */
 	explicit FPF2CharacterAbilityBoostSelection(
-		TSubclassOf<class UPF2GameplayAbility_BoostAbilityBase> BoostGameplayAbility,
+		TSubclassOf<class UPF2AbilityBoostBase> BoostGameplayAbility,
 		TSet<EPF2CharacterAbilityScoreType>                     SelectedAbilities) :
 			BoostGameplayAbility(BoostGameplayAbility),
 			SelectedAbilities(SelectedAbilities)
@@ -69,7 +69,7 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostSelection
 	/**
 	 */
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<class UPF2GameplayAbility_BoostAbilityBase> BoostGameplayAbility;
+	TSubclassOf<class UPF2AbilityBoostBase> BoostGameplayAbility;
 
 	UPROPERTY(EditAnywhere)
 	TSet<EPF2CharacterAbilityScoreType> SelectedAbilities;
@@ -356,11 +356,11 @@ public:
 	virtual IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent() const override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual TArray<UPF2GameplayAbility_BoostAbilityBase*> GetPendingAbilityBoosts() const override;
+	virtual TArray<UPF2AbilityBoostBase*> GetPendingAbilityBoosts() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void AddAbilityBoostSelection(
-		const TSubclassOf<class UPF2GameplayAbility_BoostAbilityBase> BoostGameplayAbility,
+		const TSubclassOf<class UPF2AbilityBoostBase> BoostGameplayAbility,
 		const TSet<EPF2CharacterAbilityScoreType>                     SelectedAbilities) override;
 
 	/**

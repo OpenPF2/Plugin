@@ -11,7 +11,7 @@
 // permission.
 
 #pragma once
-#include "Abilities/PF2GameplayAbility_BoostAbilityBase.h"
+#include "Abilities/PF2AbilityBoostBase.h"
 
 #include "PF2CharacterInterface.generated.h"
 
@@ -65,7 +65,7 @@ public:
 	 *	The ability boost GAs that are still pending for this character.
 	 */
 	UFUNCTION(BlueprintCallable)
-	virtual TArray<UPF2GameplayAbility_BoostAbilityBase*> GetPendingAbilityBoosts() const = 0;
+	virtual TArray<UPF2AbilityBoostBase*> GetPendingAbilityBoosts() const = 0;
 
 	/**
 	 * Applies a single ability boost selection to this character.
@@ -82,8 +82,8 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable)
 	virtual void AddAbilityBoostSelection(
-		const TSubclassOf<class UPF2GameplayAbility_BoostAbilityBase> BoostGameplayAbility,
-		const TSet<EPF2CharacterAbilityScoreType>                     SelectedAbilities) = 0;
+	    const TSubclassOf<class UPF2AbilityBoostBase> BoostGameplayAbility,
+	    const TSet<EPF2CharacterAbilityScoreType>     SelectedAbilities) = 0;
 
 	/**
 	 * Attempts to find and activate a pending ability boost Gameplay Ability for each Ability Boost selection on this

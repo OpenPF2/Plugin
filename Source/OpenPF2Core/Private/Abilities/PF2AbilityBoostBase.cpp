@@ -3,14 +3,14 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-#include "Abilities/PF2GameplayAbility_BoostAbilityBase.h"
+#include "Abilities/PF2AbilityBoostBase.h"
 
 #include "Abilities/PF2AbilityBoostRuleOptionValidator.h"
 #include "Abilities/PF2AttributeSet.h"
 #include "Abilities/PF2CharacterAbilitySystemComponentInterface.h"
 #include "Abilities/PF2GameplayAbilityTargetData_BoostAbility.h"
 
-UPF2GameplayAbility_BoostAbilityBase::UPF2GameplayAbility_BoostAbilityBase()
+UPF2AbilityBoostBase::UPF2AbilityBoostBase()
 {
 	FAbilityTriggerData TriggerData;
 
@@ -25,7 +25,7 @@ UPF2GameplayAbility_BoostAbilityBase::UPF2GameplayAbility_BoostAbilityBase()
 	this->AbilityTags.AddTag(PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.ApplyAbilityBoost")));
 }
 
-bool UPF2GameplayAbility_BoostAbilityBase::CheckCost(
+bool UPF2AbilityBoostBase::CheckCost(
 	const FGameplayAbilitySpecHandle Handle,
 	const FGameplayAbilityActorInfo* ActorInfo,
 	FGameplayTagContainer*           OptionalRelevantTags) const
@@ -47,7 +47,7 @@ bool UPF2GameplayAbility_BoostAbilityBase::CheckCost(
 	}
 }
 
-void UPF2GameplayAbility_BoostAbilityBase::ActivateAbility(
+void UPF2AbilityBoostBase::ActivateAbility(
 	const FGameplayAbilitySpecHandle     Handle,
 	const FGameplayAbilityActorInfo*     ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo,
@@ -83,7 +83,7 @@ void UPF2GameplayAbility_BoostAbilityBase::ActivateAbility(
 	}
 }
 
-TSet<EPF2CharacterAbilityScoreType> UPF2GameplayAbility_BoostAbilityBase::GetBoostSelections(
+TSet<EPF2CharacterAbilityScoreType> UPF2AbilityBoostBase::GetBoostSelections(
 	const FGameplayEventData* TriggerEventData) const
 {
 	const FGameplayAbilityTargetDataHandle GameplayAbilityTargetDataHandle = TriggerEventData->TargetData;
@@ -99,7 +99,7 @@ TSet<EPF2CharacterAbilityScoreType> UPF2GameplayAbility_BoostAbilityBase::GetBoo
 	return BoostTargetData->SelectedAbilities;
 }
 
-FORCEINLINE IPF2CharacterAbilitySystemComponentInterface* UPF2GameplayAbility_BoostAbilityBase::GetCharacterAbilitySystemComponent(
+FORCEINLINE IPF2CharacterAbilitySystemComponentInterface* UPF2AbilityBoostBase::GetCharacterAbilitySystemComponent(
 	const FGameplayAbilityActorInfo* ActorInfo)
 {
 	IPF2CharacterAbilitySystemComponentInterface* CharacterAsc;
@@ -111,7 +111,7 @@ FORCEINLINE IPF2CharacterAbilitySystemComponentInterface* UPF2GameplayAbility_Bo
 	return CharacterAsc;
 }
 
-FORCEINLINE UAbilitySystemComponent* UPF2GameplayAbility_BoostAbilityBase::GetAbilitySystemComponent(
+FORCEINLINE UAbilitySystemComponent* UPF2AbilityBoostBase::GetAbilitySystemComponent(
 	const FGameplayAbilityActorInfo* ActorInfo)
 {
 	UAbilitySystemComponent* AbilitySystemComponent = ActorInfo->AbilitySystemComponent.Get();
@@ -120,7 +120,7 @@ FORCEINLINE UAbilitySystemComponent* UPF2GameplayAbility_BoostAbilityBase::GetAb
 	return AbilitySystemComponent;
 }
 
-FORCEINLINE const UPF2AttributeSet* UPF2GameplayAbility_BoostAbilityBase::GetAttributeSet(
+FORCEINLINE const UPF2AttributeSet* UPF2AbilityBoostBase::GetAttributeSet(
 	const FGameplayAbilityActorInfo* ActorInfo)
 {
 	const UAbilitySystemComponent* AbilitySystemComponent = GetAbilitySystemComponent(ActorInfo);

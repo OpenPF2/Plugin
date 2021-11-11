@@ -92,7 +92,7 @@ public:
 	}
 
 	UFUNCTION(BlueprintCallable)
-	virtual TArray<UPF2GameplayAbility_BoostAbilityBase *> GetPendingAbilityBoosts() const override;
+	virtual TArray<UPF2AbilityBoostBase *> GetPendingAbilityBoosts() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> GetAbilityScoreValues() const override;
