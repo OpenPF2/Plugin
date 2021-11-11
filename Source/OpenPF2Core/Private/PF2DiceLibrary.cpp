@@ -9,7 +9,7 @@
 
 const FRegexPattern UPF2DiceLibrary::DiceRollPattern = FRegexPattern(TEXT("^(\\d{1,})d(\\d{1,})$"));
 
-int32 UPF2DiceLibrary::RollStringSum(const FString RollExpression)
+int32 UPF2DiceLibrary::RollStringSum(const FName RollExpression)
 {
 	return PF2ArrayUtilities::Reduce(
 		RollString(RollExpression),
@@ -31,9 +31,9 @@ int32 UPF2DiceLibrary::RollSum(const int32 RollCount, const int32 SideCount)
 		});
 }
 
-TArray<int32> UPF2DiceLibrary::RollString(const FString RollExpression)
+TArray<int32> UPF2DiceLibrary::RollString(const FName RollExpression)
 {
-	FRegexMatcher ExpressionMatcher = FRegexMatcher(DiceRollPattern, RollExpression);
+	FRegexMatcher ExpressionMatcher = FRegexMatcher(DiceRollPattern, RollExpression.ToString().ToLower());
 
 	if (ExpressionMatcher.FindNext())
 	{

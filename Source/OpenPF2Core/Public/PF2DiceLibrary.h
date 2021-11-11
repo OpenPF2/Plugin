@@ -49,7 +49,7 @@ public:
 	 *	The sum of the dice roll(s).
 	 */
 	UFUNCTION(BlueprintPure)
-	static int32 RollStringSum(const FString RollExpression);
+	static int32 RollStringSum(const FName RollExpression);
 
 	/**
 	 * Returns the sum of a dice roll for the given numeric parameters.
@@ -79,7 +79,7 @@ public:
 	 *	The result of each dice roll.
 	 */
 	UFUNCTION(BlueprintPure)
-	static TArray<int32> RollString(const FString RollExpression);
+	static TArray<int32> RollString(const FName RollExpression);
 
 	/**
 	 * Returns the result of a dice roll for the given numeric parameters.
