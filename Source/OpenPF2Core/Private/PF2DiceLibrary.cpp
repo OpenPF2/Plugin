@@ -33,7 +33,7 @@ int32 UPF2DiceLibrary::RollSum(const int32 RollCount, const int32 SideCount)
 
 TArray<int32> UPF2DiceLibrary::RollString(const FName RollExpression)
 {
-	FRegexMatcher ExpressionMatcher = FRegexMatcher(DiceRollPattern, RollExpression.ToString().ToLower());
+	FRegexMatcher ExpressionMatcher = GetRollExpressionMatcher(RollExpression);
 
 	if (ExpressionMatcher.FindNext())
 	{
@@ -62,4 +62,42 @@ TArray<int32> UPF2DiceLibrary::Roll(const int32 RollCount, const int32 SideCount
 	}
 
 	return Rolls;
+}
+
+FRegexMatcher UPF2DiceLibrary::GetRollExpressionMatcher(const FName RollExpression)
+{
+	return FRegexMatcher(DiceRollPattern, RollExpression.ToString().ToLower());
+}
+
+FName UPF2DiceLibrary::NextSizeString(const FName RollExpression)
+{
+	FName Result;
+
+	FRegexMatcher ExpressionMatcher = GetRollExpressionMatcher(RollExpression);
+
+	if (ExpressionMatcher.FindNext())
+	{
+		const FString RollCountString = ExpressionMatcher.GetCaptureGroup(1),
+		              SideCountString = ExpressionMatcher.GetCaptureGroup(2);
+		const int32   SideCount       = FCString::Atoi(*SideCountString),
+		              NextSideCount   = NextSize(SideCount);
+
+		Result = FName(
+			FString::Format(
+				TEXT("{0}d{1}"),
+				{RollCountString, FString::FormatAsNumber(NextSideCount)}
+			)
+		);
+	}
+	else
+	{
+		Result = FName(TEXT("0d0"));
+	}
+
+	return Result;
+}
+
+int32 UPF2DiceLibrary::NextSize(const int32 SideCount)
+{
+	return SideCount + 2;
 }

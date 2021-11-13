@@ -94,4 +94,42 @@ public:
 	 */
 	UFUNCTION(BlueprintPure)
 	static TArray<int32> Roll(const int32 RollCount, const int32 SideCount);
+
+	/**
+	 * Increases the size of a given dice expression, returning the next dice size up,
+	 *
+	 * @param RollExpression
+	 *	The description of the roll, in "CdS" format, where "C" represents the count or number of dice to roll, and "S"
+	 *	represents the number of sides of each die. For example, "1d6" represents a single roll of a six-sided die,
+	 *	while "2d4" represents rolling two dice having four sides each.
+	 *
+	 * @return
+	 *	A roll expression for the next size up (for example, given "1d6" this would return "1d8"; given "2d4", this
+	 *	would return "2d6").
+	 */
+	UFUNCTION(BlueprintPure)
+	static FName NextSizeString(const FName RollExpression);
+
+	/**
+	 * Gets the number of sides of the next-largest die from a die having the given number of sides.
+	 *
+	 * @param SideCount
+	 *	The number of sides of the die.
+	 *
+	 * @return
+	 *	The number of sides on the die of the next size up.
+	 */
+	UFUNCTION(BlueprintPure)
+	static int32 NextSize(const int32 SideCount);
+
+	/**
+	 * Gets a regular expression matcher for the given roll expression.
+	 *
+	 * @param RollExpression
+	 *	The expression to parse/match with a regex.
+	 *
+	 * @return
+	 *	The matcher for parsing the expression.
+	 */
+	static FRegexMatcher GetRollExpressionMatcher(FName RollExpression);
 };
