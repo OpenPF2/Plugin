@@ -67,10 +67,14 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostSelection
 	}
 
 	/**
+	 * The "Boost GA" -- the Gameplay Ability for which ability score boost selections are being applied.
 	 */
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UPF2AbilityBoostBase> BoostGameplayAbility;
 
+	/**
+	 * The ability scores that the player selected, out of the options offered by the Boost GA.
+	 */
 	UPROPERTY(EditAnywhere)
 	TSet<EPF2CharacterAbilityScoreType> SelectedAbilities;
 };
