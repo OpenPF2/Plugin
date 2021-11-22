@@ -12,9 +12,10 @@
 
 #pragma once
 
-#include "PF2MonetaryValue.h"
-
 #include "Abilities/GameplayAbility.h"
+#include "PF2AbilityAttributes.h"
+#include "PF2CharacterAbilityScoreType.h"
+#include "PF2MonetaryValue.h"
 
 #include "PF2WeaponBase.generated.h"
 
@@ -62,6 +63,18 @@ protected:
 	 */
 	UPROPERTY(EditDefaultsOnly, meta=(Categories="WeaponProficiency"), Category="Weapon Statistics")
 	FGameplayTagContainer ProficiencyTagPrefixes;
+
+	/**
+	 * The type of ability modifier from the character's ASC that is added to *attack* rolls with this weapon.
+	 */
+	UPROPERTY(EditDefaultsOnly, Category="Weapon Statistics")
+	EPF2CharacterAbilityScoreType AttackAbilityModifier;
+
+	/**
+	 * The type of ability modifier from the character's ASC that is added to *damage* rolls with this weapon.
+	 */
+	UPROPERTY(EditDefaultsOnly, Category="Weapon Statistics")
+	EPF2CharacterAbilityScoreType DamageAbilityModifier;
 
 	/**
 	 * The value or price of this item.
