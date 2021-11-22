@@ -38,11 +38,36 @@ https://1drv.ms/x/s!AigXEMxuXyh0gpRnYs8NlW-gC2oMnA?e=K8dHvP
    [does not automatically scan or package config files provided by plugins](https://docs.unrealengine.com/4.27/en-US/ProductionPipelines/Plugins/#pluginsinprojects)._
 
 ## Licensing
+### Open-source Licenses
 Since this plug-in incorporates content and elements that were originally
-created by Paizo Publishing, the code in this repository is licensed under a mix
-of the Open Game License (OGL) version 1.0a. and the Mozilla Public License 
+created by Paizo Publishing, the code in this repository is licensed under a
+mix of the Open Game License (OGL) version 1.0a and the Mozilla Public License
 version 2.0. See [LICENSE.txt](LICENSE.txt) for details on what portions of the
 code base are covered by each license.
+
+All code in this project is licensed in a way that is compatible with the
+[Unreal Engine End User License Agreement For Publishing](https://www.unrealengine.com/en-US/eula/publishing).
+However, if you are attempting to use this code with other game engines
+(e.g., Unity) or projects that are not based on Unreal Engine, be aware that
+rare, select portions of the code are licensed from Epic Games only for use
+with Unreal Engine and will need to be removed from your copy of the project.
+
+For information about precisely which license applies to a source file, consult
+its file header. If you encounter a file that lacks a license in its header,
+please [file an issue](https://github.com/OpenPF2/PF2Core/issues/new). 
+
+### Alternate Licensing (for Proprietary Projects)
+If you are developing a commercial, proprietary, or closed-source game or
+project that is otherwise incompatible with the open-source licensing of this
+plug-in an alternate, custom license is an option. 
+
+The license will be among the following parties:
+* The licensee (you).
+* The author of this plug-in project (Guy Elsmore-Paddock).
+* Paizo Publishing (for Pathfinder 2E Core Mechanics).
+
+If you are interested in a custom license, please [DM me on 
+Twitter](https://twitter.com/guypaddock).
 
 ---
 <small>
