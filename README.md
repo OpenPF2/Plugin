@@ -69,6 +69,18 @@ The license will be among the following parties:
 If you are interested in a custom license, please [DM me on 
 Twitter](https://twitter.com/guypaddock).
 
+## Note on Units
+Pathfinder 2E materials—including the Core Rulebook—use imperial units
+(feet), but Unreal Engine uses metric units, so OpenPF2 does as well. In the
+real world, 1 foot is equal to 0.3048 meters; but, to avoid having to deal with
+decimal values, OpenPF2 uses a simple conversion of `1.5 meters per 5 feet`
+that slightly rounds values (1.5 meters equals ~4.92 feet in the real world).
+
+To convert units provided by Pathfinder 2E materials into those used in
+OpenPF2, simply multiply the provided value (in feet) by a ratio of `1.5/5`.
+For example, if a weapon has a range of 60 feet, then its range in OpenPF2 is
+`60 feet * 1.5 meters/5 feet = 18 meters`.
+
 ---
 <small>
 Paizo and Pathfinder are trademarks of Paizo Inc. Nothing in this project is
