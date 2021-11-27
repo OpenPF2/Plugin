@@ -160,7 +160,7 @@ protected:
 	 * "[Traits are keywords] that [convey] information about a rules element. Often a trait indicates how other rules
 	 * interact with an ability, creature, item, or other rules element with that trait."
 	 */
-	UPROPERTY(EditDefaultsOnly, meta=(Categories="Trait"), Category="Weapon Statistics")
+	UPROPERTY(EditDefaultsOnly, meta=(Categories="Trait.Weapon"), Category="Weapon Statistics")
 	FGameplayTagContainer Traits;
 
 public:
