@@ -6,6 +6,7 @@
 #pragma once
 
 #include <GameplayTagContainer.h>
+#include <UObject/Interface.h>
 
 #include "PF2AbilitySystemComponentInterface.generated.h"
 

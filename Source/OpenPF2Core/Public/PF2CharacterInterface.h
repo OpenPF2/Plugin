@@ -11,6 +11,9 @@
 // permission.
 
 #pragma once
+
+#include <UObject/Interface.h>
+
 #include "Abilities/PF2AbilityBoostBase.h"
 
 #include "PF2CharacterInterface.generated.h"
