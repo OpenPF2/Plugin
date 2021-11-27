@@ -32,7 +32,7 @@ bool UPF2AbilityBoostBase::CheckCost(
 {
 	if (Super::CheckCost(Handle, ActorInfo, OptionalRelevantTags))
 	{
-		const UPF2AttributeSet* AttributeSet  = this->GetAttributeSet(ActorInfo);
+		const UPF2AttributeSet* AttributeSet  = PF2GameplayAbilityUtilities::GetAttributeSet(ActorInfo);
 		const float             BoostsToApply = this->BoostRuleOptions.Num(),
 		                        BoostsApplied = AttributeSet->GetAbBoostCount(),
 		                        BoostLimit    = AttributeSet->GetAbBoostLimit();
@@ -58,7 +58,7 @@ void UPF2AbilityBoostBase::ActivateAbility(
 		const TSet<EPF2CharacterAbilityScoreType> BoostSelections = this->GetBoostSelections(TriggerEventData);
 
 		IPF2CharacterAbilitySystemComponentInterface* CharacterAsc =
-			this->GetCharacterAbilitySystemComponent(ActorInfo);
+			PF2GameplayAbilityUtilities::GetCharacterAbilitySystemComponent(ActorInfo);
 
 		UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -97,37 +97,4 @@ TSet<EPF2CharacterAbilityScoreType> UPF2AbilityBoostBase::GetBoostSelections(
 	check(BoostTargetData != nullptr);
 
 	return BoostTargetData->SelectedAbilities;
-}
-
-FORCEINLINE IPF2CharacterAbilitySystemComponentInterface* UPF2AbilityBoostBase::GetCharacterAbilitySystemComponent(
-	const FGameplayAbilityActorInfo* ActorInfo)
-{
-	IPF2CharacterAbilitySystemComponentInterface* CharacterAsc;
-	UAbilitySystemComponent*                      AbilitySystemComponent = GetAbilitySystemComponent(ActorInfo);
-
-	CharacterAsc = Cast<IPF2CharacterAbilitySystemComponentInterface>(AbilitySystemComponent);
-	check(CharacterAsc != nullptr);
-
-	return CharacterAsc;
-}
-
-FORCEINLINE UAbilitySystemComponent* UPF2AbilityBoostBase::GetAbilitySystemComponent(
-	const FGameplayAbilityActorInfo* ActorInfo)
-{
-	UAbilitySystemComponent* AbilitySystemComponent = ActorInfo->AbilitySystemComponent.Get();
-	check(AbilitySystemComponent != nullptr);
-
-	return AbilitySystemComponent;
-}
-
-FORCEINLINE const UPF2AttributeSet* UPF2AbilityBoostBase::GetAttributeSet(
-	const FGameplayAbilityActorInfo* ActorInfo)
-{
-	const UAbilitySystemComponent* AbilitySystemComponent = GetAbilitySystemComponent(ActorInfo);
-	const UPF2AttributeSet*        AttributeSet;
-
-	AttributeSet = AbilitySystemComponent->GetSet<UPF2AttributeSet>();
-	check(AttributeSet != nullptr);
-
-	return AttributeSet;
 }

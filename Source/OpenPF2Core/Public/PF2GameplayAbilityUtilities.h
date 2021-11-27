@@ -7,6 +7,8 @@
 
 #include <CoreMinimal.h>
 
+#include "Abilities/PF2AttributeSet.h"
+#include "Abilities/PF2CharacterAbilitySystemComponentInterface.h"
 #include "GameplayEffect.h"
 #include "GameplayEffectTypes.h"
 #include "GameplayTagContainer.h"
@@ -114,4 +116,46 @@ namespace PF2GameplayAbilityUtilities
 		const TSubclassOf<UGameplayEffect> GameplayEffect,
 		const FName DefaultWeight = PF2CharacterConstants::GeWeightGroups::PreAbilityBoosts
 	);
+
+	/**
+	 * Gets the ASC of the given actor, as an implementation of IPF2CharacterAbilitySystemComponentInterface.
+	 *
+	 * In development builds, the ASC is checked to ensure that it is non-null and implements the interface.
+	 *
+	 * @param ActorInfo
+	 *	Information on the actor holding the ASC.
+	 *
+	 * @return
+	 *	A pointer to the IPF2CharacterAbilitySystemComponentInterface interface of the Ability System Component for the
+	 *	actor described by the given info.
+	 */
+	OPENPF2CORE_API FORCEINLINE IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent(
+		const FGameplayAbilityActorInfo* ActorInfo);
+
+	/**
+	 * Gets the ASC of the given actor.
+	 *
+	 * In development builds, the ASC is checked to ensure that it is non-null.
+	 *
+	 * @param ActorInfo
+	 *	Information on the actor holding the ASC.
+	 *
+	 * @return
+	 *	A pointer to the Ability System Component for the actor described by the given info.
+	 */
+	OPENPF2CORE_API FORCEINLINE UAbilitySystemComponent* GetAbilitySystemComponent(
+		const FGameplayAbilityActorInfo* ActorInfo);
+
+	/**
+	 * Gets the PF2 attribute set of the given actor.
+	 *
+	 * In development builds, the attribute set is checked to ensure that it is non-null.
+	 *
+	 * @param ActorInfo
+	 *	Information on the actor holding the ASC.
+	 *
+	 * @return
+	 *	A pointer to the PF2 attribute set.
+	 */
+	OPENPF2CORE_API FORCEINLINE const UPF2AttributeSet* GetAttributeSet(const FGameplayAbilityActorInfo* ActorInfo);
 }

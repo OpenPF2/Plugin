@@ -13,10 +13,9 @@
 #pragma once
 
 #include "Abilities/GameplayAbility.h"
-#include "PF2GameplayAbilityUtilities.h"
 #include "PF2AbilityBoostRuleOption.h"
 #include "PF2AttributeSet.h"
-#include "PF2CharacterAbilitySystemComponentInterface.h"
+#include "PF2GameplayAbilityUtilities.h"
 
 #include "PF2AbilityBoostBase.generated.h"
 
@@ -83,45 +82,4 @@ protected:
 	 *	to which the choice corresponds.
 	 */
 	TSet<EPF2CharacterAbilityScoreType> GetBoostSelections(const FGameplayEventData* TriggerEventData) const;
-
-	/**
-	 * Gets the ASC of the given actor, as an implementation of IPF2CharacterAbilitySystemComponentInterface.
-	 *
-	 * In development builds, the ASC is checked to ensure that it is non-null and implements the interface.
-	 *
-	 * @param ActorInfo
-	 *	Information on the actor holding the ASC.
-	 *
-	 * @return
-	 *	A pointer to the IPF2CharacterAbilitySystemComponentInterface interface of the Ability System Component for the
-	 *	actor described by the given info.
-	 */
-	static IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent(
-		const FGameplayAbilityActorInfo* ActorInfo);
-
-	/**
-	 * Gets the ASC of the given actor.
-	 *
-	 * In development builds, the ASC is checked to ensure that it is non-null.
-	 *
-	 * @param ActorInfo
-	 *	Information on the actor holding the ASC.
-	 *
-	 * @return
-	 *	A pointer to the Ability System Component for the actor described by the given info.
-	 */
-	static UAbilitySystemComponent* GetAbilitySystemComponent(const FGameplayAbilityActorInfo* ActorInfo);
-
-	/**
-	 * Gets the PF2 attribute set of the given actor.
-	 *
-	 * In development builds, the attribute set is checked to ensure that it is non-null.
-	 *
-	 * @param ActorInfo
-	 *	Information on the actor holding the ASC.
-	 *
-	 * @return
-	 *	A pointer to the PF2 attribute set.
-	 */
-	static const UPF2AttributeSet* GetAttributeSet(const FGameplayAbilityActorInfo* ActorInfo);
 };
