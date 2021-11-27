@@ -16,6 +16,7 @@
 #include "PF2AbilityAttributes.h"
 #include "PF2CharacterAbilityScoreType.h"
 #include "PF2MonetaryValue.h"
+#include "PF2WeaponInterface.h"
 
 #include "PF2WeaponBase.generated.h"
 
@@ -35,7 +36,7 @@ enum class EPF2WeaponHandsRequirement : uint8
  */
 UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API UPF2WeaponBase : public UGameplayAbility
+class OPENPF2CORE_API UPF2WeaponBase : public UGameplayAbility, public IPF2WeaponInterface
 {
 	GENERATED_BODY()
 
