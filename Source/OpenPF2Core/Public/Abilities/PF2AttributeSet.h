@@ -483,13 +483,15 @@ public:
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, FeAncestryFeatLimit)
 
 	/**
-	 * Damage is a 'temporary' attribute used by the DamageExecution to calculate final damage.
+	 * A temporary attribute for tracking damage that the owner of this set is receiving from an instant damage GE.
 	 *
-	 * This turns into -HitPoints.
+	 * This value exists only on the server; it is not replicated. At the end of execution for a damage GE, this turns
+	 * into -HitPoints (i.e., it gets subtracted from the character's health). This allows other effects (e.g., passive
+	 * protection effects or armor) to lessen the impact of the damage.
 	 */
 	UPROPERTY(BlueprintReadOnly, Category = "Damage")
-	FGameplayAttributeData Damage;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, Damage)
+	FGameplayAttributeData DamageIncoming;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, DamageIncoming)
 
 	// =================================================================================================================
 	// Attribute Replication Callbacks
