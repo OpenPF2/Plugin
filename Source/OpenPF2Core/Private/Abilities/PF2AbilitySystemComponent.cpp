@@ -298,6 +298,17 @@ void UPF2AbilitySystemComponent::RemoveAllDynamicTags()
 	});
 }
 
+FGameplayTagContainer UPF2AbilitySystemComponent::GetActiveGameplayTags() const
+{
+	FGameplayTagContainer Tags;
+
+	Tags.Reset();
+
+	this->GetOwnedGameplayTags(Tags);
+
+	return Tags;
+}
+
 FORCEINLINE int32 UPF2AbilitySystemComponent::GetCharacterLevel() const
 {
 	IPF2CharacterInterface* OwningCharacter = Cast<IPF2CharacterInterface>(this->GetOwnerActor());

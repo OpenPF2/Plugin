@@ -78,6 +78,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void RemoveAllDynamicTags() override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual FGameplayTagContainer GetActiveGameplayTags() const override;
+
 	// =================================================================================================================
 	// Public Methods - IPF2CharacterAbilitySystemComponentInterface Implementation
 	// =================================================================================================================
