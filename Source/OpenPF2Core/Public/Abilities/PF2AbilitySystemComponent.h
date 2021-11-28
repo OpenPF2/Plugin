@@ -82,7 +82,7 @@ public:
 	// Public Methods - IPF2CharacterAbilitySystemComponentInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
-	virtual int GetCharacterLevel() const override;
+	virtual int32 GetCharacterLevel() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> GetAbilityScoreValues() const override;

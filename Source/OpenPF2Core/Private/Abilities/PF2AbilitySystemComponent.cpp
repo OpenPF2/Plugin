@@ -298,7 +298,7 @@ void UPF2AbilitySystemComponent::RemoveAllDynamicTags()
 	});
 }
 
-FORCEINLINE int UPF2AbilitySystemComponent::GetCharacterLevel() const
+FORCEINLINE int32 UPF2AbilitySystemComponent::GetCharacterLevel() const
 {
 	IPF2CharacterInterface* OwningCharacter = Cast<IPF2CharacterInterface>(this->GetOwnerActor());
 

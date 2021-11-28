@@ -42,7 +42,7 @@ public:
 	 *	The level of the owning character actor.
 	 */
 	UFUNCTION(BlueprintCallable)
-	virtual int GetCharacterLevel() const = 0;
+	virtual int32 GetCharacterLevel() const = 0;
 
 	/**
 	 * Gets a snapshot from this ASC of all current character ability scores and their modifiers.
