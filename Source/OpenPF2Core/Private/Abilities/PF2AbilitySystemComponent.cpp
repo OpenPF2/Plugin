@@ -298,6 +298,20 @@ void UPF2AbilitySystemComponent::RemoveAllDynamicTags()
 	});
 }
 
+FORCEINLINE int UPF2AbilitySystemComponent::GetCharacterLevel() const
+{
+	IPF2CharacterInterface* OwningCharacter = Cast<IPF2CharacterInterface>(this->GetOwnerActor());
+
+	if (OwningCharacter == nullptr)
+	{
+		return 1;
+	}
+	else
+	{
+		return OwningCharacter->GetCharacterLevel();
+	}
+}
+
 void UPF2AbilitySystemComponent::ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore)
 {
 	const TSubclassOf<UGameplayEffect> BoostEffect = this->AbilityBoostEffects[TargetAbilityScore];
@@ -396,20 +410,6 @@ TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> UPF2AbilitySy
 		};
 
 	return Values;
-}
-
-FORCEINLINE int UPF2AbilitySystemComponent::GetCharacterLevel() const
-{
-	IPF2CharacterInterface* OwningCharacter = Cast<IPF2CharacterInterface>(this->GetOwnerActor());
-
-	if (OwningCharacter == nullptr)
-	{
-		return 1;
-	}
-	else
-	{
-		return OwningCharacter->GetCharacterLevel();
-	}
 }
 
 TMultiMap<FName, TSubclassOf<UGameplayEffect>> UPF2AbilitySystemComponent::GetPassiveGameplayEffectsToApply()

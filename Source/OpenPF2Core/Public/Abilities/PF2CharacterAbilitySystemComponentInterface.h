@@ -33,6 +33,18 @@ class OPENPF2CORE_API IPF2CharacterAbilitySystemComponentInterface : public IPF2
 
 public:
 	/**
+	 * Gets the level of the owning character.
+	 *
+	 * This requires the owning actor to implement IPF2CharacterInterface. If the owning actor does not implement that
+	 * interface, the default level of 1 is returned instead.
+	 *
+	 * @return
+	 *	The level of the owning character actor.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual int GetCharacterLevel() const = 0;
+
+	/**
 	 * Adds a boost of the specified ability to the attribute set of the owning character.
 	 *
 	 * This results in a passive GE being added to the ASC of the character. The GE is added to the weight group
