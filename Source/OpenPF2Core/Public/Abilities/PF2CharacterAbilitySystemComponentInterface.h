@@ -45,6 +45,36 @@ public:
 	virtual int GetCharacterLevel() const = 0;
 
 	/**
+	 * Gets a snapshot from this ASC of all current character ability scores and their modifiers.
+	 *
+	 * @return
+	 *	A map from character ability scores to a snapshot of their values and modifiers.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> GetAbilityScoreValues() const = 0;
+
+	/**
+	 * Gets all of the ability boosts that have been granted on this ASC.
+	 *
+	 * @return
+	 *	The ability boost GAs that are still pending for this character.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<UPF2AbilityBoostBase *> GetPendingAbilityBoosts() const = 0;
+
+	/**
+	 * Gets the Gameplay Effect to use as a passive GE when boosting the specified character ability score.
+	 *
+	 * @param AbilityScore
+	 *	The ability score for which a boost is desired.
+	 *
+	 * @return
+	 *	The blueprint to apply as a passive GE to boost that ability.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual TSubclassOf<UGameplayEffect> GetBoostEffectForAbility(const EPF2CharacterAbilityScoreType AbilityScore) = 0;
+
+	/**
 	 * Adds a boost of the specified ability to the attribute set of the owning character.
 	 *
 	 * This results in a passive GE being added to the ASC of the character. The GE is added to the weight group
@@ -60,34 +90,4 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable)
     virtual void ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore) = 0;
-
-	/**
-	 * Gets the Gameplay Effect to use as a passive GE when boosting the specified character ability score.
-	 *
-	 * @param AbilityScore
-	 *	The ability score for which a boost is desired.
-	 *
-	 * @return
-	 *	The blueprint to apply as a passive GE to boost that ability.
-	 */
-	UFUNCTION(BlueprintCallable)
-	virtual TSubclassOf<UGameplayEffect> GetBoostEffectForAbility(const EPF2CharacterAbilityScoreType AbilityScore) = 0;
-
-	/**
-	 * Gets all of the ability boosts that have been granted on this ASC.
-	 *
-	 * @return
-	 *	The ability boost GAs that are still pending for this character.
-	 */
-	UFUNCTION(BlueprintCallable)
-	virtual TArray<UPF2AbilityBoostBase *> GetPendingAbilityBoosts() const = 0;
-
-	/**
-	 * Gets a snapshot from this ASC of all current character ability scores and their modifiers.
-	 *
-	 * @return
-	 *	A map from character ability scores to a snapshot of their values and modifiers.
-	 */
-	UFUNCTION(BlueprintCallable)
-	virtual TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> GetAbilityScoreValues() const = 0;
 };

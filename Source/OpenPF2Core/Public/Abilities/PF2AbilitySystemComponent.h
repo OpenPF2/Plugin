@@ -85,7 +85,10 @@ public:
 	virtual int GetCharacterLevel() const override;
 
 	UFUNCTION(BlueprintCallable)
-    virtual void ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore) override;
+	virtual TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> GetAbilityScoreValues() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<UPF2AbilityBoostBase *> GetPendingAbilityBoosts() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual FORCEINLINE TSubclassOf<UGameplayEffect> GetBoostEffectForAbility(
@@ -95,10 +98,7 @@ public:
 	}
 
 	UFUNCTION(BlueprintCallable)
-	virtual TArray<UPF2AbilityBoostBase *> GetPendingAbilityBoosts() const override;
-
-	UFUNCTION(BlueprintCallable)
-	virtual TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> GetAbilityScoreValues() const override;
+	virtual void ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore) override;
 
 protected:
 	// =================================================================================================================

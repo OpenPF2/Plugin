@@ -312,52 +312,6 @@ FORCEINLINE int UPF2AbilitySystemComponent::GetCharacterLevel() const
 	}
 }
 
-void UPF2AbilitySystemComponent::ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore)
-{
-	const TSubclassOf<UGameplayEffect> BoostEffect = this->AbilityBoostEffects[TargetAbilityScore];
-
-	// Allow boost GE to override the default weight group.
-	const FName WeightGroup =
-		PF2GameplayAbilityUtilities::GetWeightGroupOfGameplayEffect(
-			BoostEffect,
-			PF2CharacterConstants::GeWeightGroups::AbilityBoosts
-		);
-
-	UE_LOG(
-		LogPf2Core,
-		VeryVerbose,
-		TEXT("Applying a boost to ability ('%s') through ASC for character ('%s') via GE ('%s')."),
-		*(PF2EnumUtilities::ToString(TargetAbilityScore)),
-		*(this->GetOwnerActor()->GetName()),
-		*(BoostEffect->GetName())
-	);
-
-	this->AddPassiveGameplayEffectWithWeight(WeightGroup, BoostEffect);
-}
-
-TArray<UPF2AbilityBoostBase*> UPF2AbilitySystemComponent::GetPendingAbilityBoosts() const
-{
-	TArray<UPF2AbilityBoostBase*> MatchingGameplayAbilities;
-	TArray<FGameplayAbilitySpec*> MatchingGameplayAbilitySpecs;
-
-	this->GetActivatableGameplayAbilitySpecsByAllMatchingTags(
-		FGameplayTagContainer(PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.ApplyAbilityBoost"))),
-		MatchingGameplayAbilitySpecs,
-		false
-	);
-
-	MatchingGameplayAbilities =
-		PF2ArrayUtilities::Map<UPF2AbilityBoostBase*>(
-			MatchingGameplayAbilitySpecs,
-			[](const FGameplayAbilitySpec* AbilitySpec)
-			{
-				return Cast<UPF2AbilityBoostBase>(AbilitySpec->Ability);
-			}
-		);
-
-	return MatchingGameplayAbilities;
-}
-
 TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> UPF2AbilitySystemComponent::GetAbilityScoreValues() const
 {
 	const UPF2AttributeSet* AttributeSet =
@@ -410,6 +364,52 @@ TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> UPF2AbilitySy
 		};
 
 	return Values;
+}
+
+TArray<UPF2AbilityBoostBase*> UPF2AbilitySystemComponent::GetPendingAbilityBoosts() const
+{
+	TArray<UPF2AbilityBoostBase*> MatchingGameplayAbilities;
+	TArray<FGameplayAbilitySpec*> MatchingGameplayAbilitySpecs;
+
+	this->GetActivatableGameplayAbilitySpecsByAllMatchingTags(
+		FGameplayTagContainer(PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.ApplyAbilityBoost"))),
+		MatchingGameplayAbilitySpecs,
+		false
+	);
+
+	MatchingGameplayAbilities =
+		PF2ArrayUtilities::Map<UPF2AbilityBoostBase*>(
+			MatchingGameplayAbilitySpecs,
+			[](const FGameplayAbilitySpec* AbilitySpec)
+			{
+				return Cast<UPF2AbilityBoostBase>(AbilitySpec->Ability);
+			}
+		);
+
+	return MatchingGameplayAbilities;
+}
+
+void UPF2AbilitySystemComponent::ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore)
+{
+	const TSubclassOf<UGameplayEffect> BoostEffect = this->AbilityBoostEffects[TargetAbilityScore];
+
+	// Allow boost GE to override the default weight group.
+	const FName WeightGroup =
+		PF2GameplayAbilityUtilities::GetWeightGroupOfGameplayEffect(
+			BoostEffect,
+			PF2CharacterConstants::GeWeightGroups::AbilityBoosts
+		);
+
+	UE_LOG(
+		LogPf2Core,
+		VeryVerbose,
+		TEXT("Applying a boost to ability ('%s') through ASC for character ('%s') via GE ('%s')."),
+		*(PF2EnumUtilities::ToString(TargetAbilityScore)),
+		*(this->GetOwnerActor()->GetName()),
+		*(BoostEffect->GetName())
+	);
+
+	this->AddPassiveGameplayEffectWithWeight(WeightGroup, BoostEffect);
 }
 
 TMultiMap<FName, TSubclassOf<UGameplayEffect>> UPF2AbilitySystemComponent::GetPassiveGameplayEffectsToApply()
