@@ -69,13 +69,13 @@ protected:
 	 * The type of ability modifier from the character's ASC that is added to *attack* rolls with this weapon.
 	 */
 	UPROPERTY(EditDefaultsOnly, Category="Weapon Statistics")
-	EPF2CharacterAbilityScoreType AttackAbilityModifier;
+	EPF2CharacterAbilityScoreType AttackAbilityModifierType;
 
 	/**
 	 * The type of ability modifier from the character's ASC that is added to *damage* rolls with this weapon.
 	 */
 	UPROPERTY(EditDefaultsOnly, Category="Weapon Statistics")
-	EPF2CharacterAbilityScoreType DamageAbilityModifier;
+	EPF2CharacterAbilityScoreType DamageAbilityModifierType;
 
 	/**
 	 * The value or price of this item.
