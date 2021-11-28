@@ -29,34 +29,49 @@ protected:
 
 public:
 	/**
-	 * Creates and calculates a character's TEML proficiency in a stat based on the given prefix/root tag.
+	 * Constructor for FPF2TemlCalculation based on a the given prefix/root tag prefix and GE spec.
 	 *
 	 * @param TagPrefix
 	 *	The root/parent tag of tags that represent the TEML proficiency to examine; as a tag.
 	 * @param Spec
 	 *	The Gameplay Effect (GE) specification that provides information about the character and their proficiencies.
 	 */
-	FPF2TemlCalculation(const FGameplayTag TagPrefix, const FGameplayEffectSpec& Spec);
+	explicit FPF2TemlCalculation(const FGameplayTag TagPrefix, const FGameplayEffectSpec& Spec);
 
 	/**
-	 * Creates and calculates a character's TEML proficiency in a stat based on the given prefix/root tag.
+	 * Constructor for FPF2TemlCalculation based on a the given prefix/root tag prefix (as an FName) and GE spec.
 	 *
 	 * @param TagPrefix
 	 *	The root/parent tag of tags that represent the TEML proficiency to examine; as a tag name.
 	 * @param Spec
 	 *	The Gameplay Effect (GE) specification that provides information about the character and their proficiencies.
 	 */
-	FPF2TemlCalculation(const FName TagPrefix, const FGameplayEffectSpec& Spec);
+	explicit FPF2TemlCalculation(const FName TagPrefix, const FGameplayEffectSpec& Spec);
 
 	/**
-	 * Creates and calculates a character's TEML proficiency in a stat based on the given prefix/root tag.
+	 * Constructor for FPF2TemlCalculation based on a the given prefix/root tag prefix (as an FString) and GE spec.
 	 *
 	 * @param TagPrefix
 	 *	The root/parent tag of tags that represent the TEML proficiency to examine; as a string.
 	 * @param Spec
 	 *	The Gameplay Effect (GE) specification that provides information about the character and their proficiencies.
 	 */
-	FPF2TemlCalculation(const FString TagPrefix, const FGameplayEffectSpec& Spec);
+	explicit FPF2TemlCalculation(const FString TagPrefix, const FGameplayEffectSpec& Spec);
+
+	/**
+	 * Constructor for FPF2TemlCalculation based on a the given prefix/root tag prefix, tag container, and char. level.
+	 *
+	 * @param TagPrefix
+	 *	The root/parent tag of tags that represent the TEML proficiency to examine; as a string.
+	 * @param CharacterTags
+	 *	The tags on the character of interest, for which proficiencies will be determined.
+	 * @param CharacterLevel
+	 *	The level of the character, which affects the magnitude of the calculation.
+	 */
+	explicit FPF2TemlCalculation(
+		const FGameplayTag TagPrefix,
+		const FGameplayTagContainer* CharacterTags,
+		float CharacterLevel);
 
 	/**
 	 * Gets the calculated TEML proficiency.

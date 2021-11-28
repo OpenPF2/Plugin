@@ -24,16 +24,21 @@ FPF2TemlCalculation::FPF2TemlCalculation(const FName TagPrefix, const FGameplayE
 {
 }
 
-FPF2TemlCalculation::FPF2TemlCalculation(const FGameplayTag TagPrefix, const FGameplayEffectSpec& Spec)
+FPF2TemlCalculation::FPF2TemlCalculation(const FGameplayTag TagPrefix, const FGameplayEffectSpec& Spec) :
+	FPF2TemlCalculation(TagPrefix, Spec.CapturedSourceTags.GetAggregatedTags(), Spec.GetLevel())
 {
-	float                        ProficiencyBonus = 0.0f;
-	const FGameplayTagContainer* SourceTags       = Spec.CapturedSourceTags.GetAggregatedTags();
+}
+
+FPF2TemlCalculation::FPF2TemlCalculation(const FGameplayTag TagPrefix,
+										 const FGameplayTagContainer* CharacterTags,
+										 const float CharacterLevel)
+{
+	float ProficiencyBonus = 0.0f;
 
 	// Bypass additional checks if the character has no proficiency with this skill, to avoid checking every TEML
 	// option.
-	if (SourceTags->HasTag(TagPrefix))
+	if (CharacterTags->HasTag(TagPrefix))
 	{
-		const float   CharacterLevel  = Spec.GetLevel();
 		const FString TagPrefixString = TagPrefix.GetTagName().GetPlainNameString();
 
 		// "When attempting a check that involves something you have some training in, you will also add your
@@ -45,22 +50,22 @@ FPF2TemlCalculation::FPF2TemlCalculation(const FGameplayTag TagPrefix, const FGa
 		//
 		// Source: Pathfinder 2E Core Rulebook, page 444, "Step 1: Roll D20 and Identify The Modifiers, Bonuses, and
 		// Penalties That Apply".
-		if (PF2GameplayAbilityUtilities::HasTag(SourceTags, TagPrefixString + ".Legendary"))
+		if (PF2GameplayAbilityUtilities::HasTag(CharacterTags, TagPrefixString + ".Legendary"))
 		{
 			// Legendary -> Your level + 8
 			ProficiencyBonus = CharacterLevel + 8;
 		}
-		else if (PF2GameplayAbilityUtilities::HasTag(SourceTags, TagPrefixString + ".Master"))
+		else if (PF2GameplayAbilityUtilities::HasTag(CharacterTags, TagPrefixString + ".Master"))
 		{
 			// Master -> Your level + 6
 			ProficiencyBonus = CharacterLevel + 6;
 		}
-		else if (PF2GameplayAbilityUtilities::HasTag(SourceTags, TagPrefixString + ".Expert"))
+		else if (PF2GameplayAbilityUtilities::HasTag(CharacterTags, TagPrefixString + ".Expert"))
 		{
 			// Expert -> Your level + 4
 			ProficiencyBonus = CharacterLevel + 4;
 		}
-		else if (PF2GameplayAbilityUtilities::HasTag(SourceTags, TagPrefixString + ".Trained"))
+		else if (PF2GameplayAbilityUtilities::HasTag(CharacterTags, TagPrefixString + ".Trained"))
 		{
 			// Trained -> Your level + 2
 			ProficiencyBonus = CharacterLevel + 2;
