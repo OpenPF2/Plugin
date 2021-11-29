@@ -12,8 +12,8 @@
 
 #pragma once
 
-#include "PF2RangedWeaponAmmoBase.h"
-#include "PF2WeaponBase.h"
+#include "Abilities/Weapons/PF2RangedWeaponAmmoBase.h"
+#include "Abilities/Weapons/PF2WeaponBase.h"
 
 #include "PF2RangedWeaponBase.generated.h"
 

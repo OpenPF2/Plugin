@@ -13,10 +13,10 @@
 #pragma once
 
 #include "Abilities/GameplayAbility.h"
-#include "PF2AbilityAttributes.h"
-#include "PF2CharacterAbilityScoreType.h"
+#include "Abilities/PF2AbilityAttributes.h"
+#include "Abilities/PF2CharacterAbilityScoreType.h"
+#include "Abilities/Weapons/PF2WeaponInterface.h"
 #include "PF2MonetaryValue.h"
-#include "PF2WeaponInterface.h"
 
 #include "PF2WeaponBase.generated.h"
 
@@ -51,7 +51,7 @@ protected:
 	 * The root/parent tag of each set of tags that represent a character's TEML proficiencies with this weapon.
 	 *
 	 * Most weapons will typically define only one root tag here. However, ancestry-specific weapons that are affected
-	 * by a weapon familiarity feat will define at least two.
+	 * by a weapon familiarity feat will define at least two. The highest-granted proficiency wins.
 	 *
 	 * For example, a gnome martial weapon would have root gameplay tags of both "WeaponProficiency.Category.Martial"
 	 * and "WeaponProficiency.Category.MartialGnome". This would allow a character to have proficiency with the weapon
@@ -168,4 +168,52 @@ public:
 	UPF2WeaponBase(): DamageDie("1d6")
 	{
 	}
+
+	virtual void ActivateAbility(
+		const FGameplayAbilitySpecHandle     Handle,
+		const FGameplayAbilityActorInfo*     ActorInfo,
+		const FGameplayAbilityActivationInfo ActivationInfo,
+		const FGameplayEventData*            TriggerEventData) override;
+
+protected:
+	/**
+	 * Calculates the attack roll, which determines if an attack was successful (it hit its target).
+	 *
+	 * "When making an attack roll, determine the result by rolling 1d20 and adding your attack modifier for the weapon
+	 * or unarmed attack you’re using. Modifiers for melee and ranged attacks are calculated differently.
+	 *
+	 * Melee attack modifier = Strength modifier (or optionally Dexterity for a finesse weapon) + proficiency bonus +
+	 * other bonuses + penalties
+	 *
+	 * Ranged attack modifier = Dexterity modifier + proficiency bonus + other bonuses + penalties
+	 *
+	 * Bonuses, and penalties apply to these rolls just like with other types of checks. Weapons with potency runes add
+	 * an item bonus to your attack rolls."
+	 *
+	 * Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Attack Rolls".
+	 */
+	virtual float CalculateAttackRoll(const IPF2CharacterAbilitySystemComponentInterface* CharacterAsc);
+
+	/**
+	 * Calculates the damage roll, which determines how much of an effect an attack has on the target.
+	 *
+	 * "When the result of your attack roll with a weapon or unarmed attack equals or exceeds your target’s AC, you hit
+	 * your target! Roll the weapon or unarmed attack’s damage die and add the relevant modifiers, bonuses, and
+	 * penalties to determine the amount of damage you deal. Calculate a damage roll as follows.
+	 *
+	 * Melee damage roll = damage die of weapon or unarmed attack + Strength modifier + bonuses + penalties
+	 *
+	 * Ranged damage roll = damage die of weapon + Strength modifier for thrown weapons + bonuses + penalties"
+	 *
+	 * Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Damage Rolls".
+	 */
+	virtual float CalculateDamageRoll(const IPF2CharacterAbilitySystemComponentInterface* CharacterAsc);
+
+	/**
+	 * Gets the value of the specified ability.
+	 *
+	 * TODO: Re-work this to be a GE so we don't have to worry about snapshot timing and other GEs.
+	 */
+	static float GetAbilityModifierValue(const IPF2CharacterAbilitySystemComponentInterface* CharacterAsc,
+	                                     const EPF2CharacterAbilityScoreType                 AbilityScoreType);
 };
