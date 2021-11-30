@@ -67,6 +67,12 @@ protected:
 	int32 ReloadActionsRequired;
 
 	/**
+	 * The standard type of ammo this weapon comes loaded with.
+	 */
+	UPROPERTY(EditAnywhere, Category="Ammunition")
+	TSubclassOf<UPF2RangedWeaponAmmoBase> StandardAmmunitionType;
+
+	/**
 	 * The standard number of ammo units this weapon comes loaded with.
 	 *
 	 * From the Pathfinder 2E Core Rulebook, page 279, "Reload":
@@ -79,14 +85,14 @@ protected:
 	int32 StandardAmmunitionCount;
 
 	/**
-	 * The standard type of ammo this weapon comes loaded with.
+	 * The type of ammo currently loaded into this ranged weapon.
 	 */
 	UPROPERTY(EditAnywhere, Category="Ammunition")
-	TSubclassOf<UPF2RangedWeaponAmmoBase> StandardAmmunitionType;
+	TSubclassOf<UPF2RangedWeaponAmmoBase> LoadedAmmunitionType;
 
 	/**
-	 * A representation of each unit of ammo this ranged weapon accepts.
+	 * The number of ammo units this weapon currently has loaded.
 	 */
 	UPROPERTY(EditAnywhere, Category="Ammunition")
-	TArray<UPF2RangedWeaponAmmoBase*> LoadedAmmunition;
+	int32 LoadedAmmunitionCount;
 };
