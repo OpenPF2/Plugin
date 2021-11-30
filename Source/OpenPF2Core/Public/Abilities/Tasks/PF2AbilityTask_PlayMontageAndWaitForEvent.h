@@ -6,8 +6,6 @@
 #include <Abilities/Tasks/AbilityTask.h>
 #include "PF2AbilityTask_PlayMontageAndWaitForEvent.generated.h"
 
-class UPF2AbilitySystemComponent;
-
 /**
  * Event delegate/callback used for all pins of this type of event.
  *
@@ -210,7 +208,7 @@ private:
 	 * @return
 	 *	The ASC for the owning ability.
 	 */
-	FORCEINLINE UPF2AbilitySystemComponent* GetTargetAsc() const;
+	FORCEINLINE UAbilitySystemComponent* GetTargetAsc() const;
 
 	/**
 	 * Stops playing the montage, if it is playing.

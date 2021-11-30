@@ -7,7 +7,6 @@
 #include <AbilitySystemComponent.h>
 #include <AbilitySystemGlobals.h>
 #include <Animation/AnimInstance.h>
-#include "Abilities/PF2AbilitySystemComponent.h"
 
 UPF2AbilityTask_PlayMontageAndWaitForEvent* UPF2AbilityTask_PlayMontageAndWaitForEvent::PlayMontageAndWaitForEvent(
 	UGameplayAbility*           OwningAbility,
@@ -48,10 +47,10 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::Activate()
 		return;
 	}
 
-	bool                        bPlayedMontage            = false;
-	UPF2AbilitySystemComponent* PF2AbilitySystemComponent = this->GetTargetAsc();
+	bool                     bPlayedMontage = false;
+	UAbilitySystemComponent* Asc            = this->GetTargetAsc();
 
-	if (PF2AbilitySystemComponent != nullptr)
+	if (Asc != nullptr)
 	{
 		const FGameplayAbilityActorInfo* ActorInfo    = this->Ability->GetCurrentActorInfo();
 		UAnimInstance*                   AnimInstance = ActorInfo->GetAnimInstance();
@@ -59,7 +58,7 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::Activate()
 		if (AnimInstance != nullptr)
 		{
 			// Ask the ASC to notify us if a Gameplay Event with the given tag(s) is received.
-			this->EventHandle = PF2AbilitySystemComponent->AddGameplayEventTagContainerDelegate(
+			this->EventHandle = Asc->AddGameplayEventTagContainerDelegate(
 				this->EventTags,
 				FGameplayEventTagMulticastDelegate::FDelegate::CreateUObject(
 					this,
@@ -68,7 +67,7 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::Activate()
 			);
 
 			const float MontageDuration =
-				PF2AbilitySystemComponent->PlayMontage(
+				Asc->PlayMontage(
 					this->Ability,
 					this->Ability->GetCurrentActivationInfo(),
 					this->MontageToPlay,
@@ -177,11 +176,11 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::OnDestroy(const bool AbilityEnd
 		}
 	}
 
-	UPF2AbilitySystemComponent* PF2AbilitySystemComponent = this->GetTargetAsc();
+	UAbilitySystemComponent* Asc = this->GetTargetAsc();
 
-	if (PF2AbilitySystemComponent)
+	if (Asc != nullptr)
 	{
-		PF2AbilitySystemComponent->RemoveGameplayEventTagContainerDelegate(this->EventTags, this->EventHandle);
+		Asc->RemoveGameplayEventTagContainerDelegate(this->EventTags, this->EventHandle);
 	}
 
 	Super::OnDestroy(AbilityEnded);
@@ -219,9 +218,11 @@ FString UPF2AbilityTask_PlayMontageAndWaitForEvent::GetDebugString() const
 	return DebugString;
 }
 
-UPF2AbilitySystemComponent* UPF2AbilityTask_PlayMontageAndWaitForEvent::GetTargetAsc() const
+UAbilitySystemComponent* UPF2AbilityTask_PlayMontageAndWaitForEvent::GetTargetAsc() const
 {
-	return Cast<UPF2AbilitySystemComponent>(this->AbilitySystemComponent);
+	check(this->AbilitySystemComponent);
+
+	return this->AbilitySystemComponent;
 }
 
 bool UPF2AbilityTask_PlayMontageAndWaitForEvent::StopPlayingMontage() const
@@ -240,12 +241,14 @@ bool UPF2AbilityTask_PlayMontageAndWaitForEvent::StopPlayingMontage() const
 		return false;
 	}
 
+	UAbilitySystemComponent* Asc = this->GetTargetAsc();
+
 	// Check if the montage is still playing
 	// The ability would have been interrupted, in which case we should automatically stop the montage
-	if ((this->AbilitySystemComponent != nullptr) && (this->Ability != nullptr))
+	if ((Asc != nullptr) && (this->Ability != nullptr))
 	{
-		if ((this->AbilitySystemComponent->GetAnimatingAbility() == this->Ability) &&
-			(this->AbilitySystemComponent->GetCurrentMontage() == this->MontageToPlay))
+		if ((Asc->GetAnimatingAbility() == this->Ability) &&
+			(Asc->GetCurrentMontage() == this->MontageToPlay))
 		{
 			// Unbind delegates so they don't get called as well
 			FAnimMontageInstance* MontageInstance = AnimInstance->GetActiveInstanceForMontage(this->MontageToPlay);
@@ -256,7 +259,7 @@ bool UPF2AbilityTask_PlayMontageAndWaitForEvent::StopPlayingMontage() const
 				MontageInstance->OnMontageEnded.Unbind();
 			}
 
-			this->AbilitySystemComponent->CurrentMontageStop();
+			Asc->CurrentMontageStop();
 
 			return true;
 		}
@@ -298,7 +301,12 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::OnMontageBlendingOut(UAnimMonta
 		(this->Ability->GetCurrentMontage() == this->MontageToPlay) &&
 		(Montage == this->MontageToPlay))
 	{
-		this->AbilitySystemComponent->ClearAnimatingAbility(this->Ability);
+		UAbilitySystemComponent* Asc = this->GetTargetAsc();
+
+		if (Asc != nullptr)
+		{
+			Asc->ClearAnimatingAbility(this->Ability);
+		}
 
 		// Reset AnimRootMotionTranslationScale
 		ACharacter*    Character = Cast<ACharacter>(this->GetAvatarActor());
