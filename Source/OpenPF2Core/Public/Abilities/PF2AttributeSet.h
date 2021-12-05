@@ -301,6 +301,197 @@ public:
 	FGameplayAttributeData MaxHitPoints;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, MaxHitPoints)
 
+	/**
+	 * The character's resistance to Bludgeoning damage (DamageType.Physical.Bludgeoning).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Bludgeoning (B) damage comes from weapons and hazards that deal blunt-force trauma, like a hit from a club or
+	 * being dashed against rocks."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstPhysicalBludgeoning)
+	FGameplayAttributeData RstPhysicalBludgeoning;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstPhysicalBludgeoning)
+
+	/**
+	 * The character's resistance to Piercing damage (DamageType.Physical.Piercing).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Piercing (P) damage is dealt from stabs and punctures, whether from a dragon's fangs or the thrust of a spear."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstPhysicalPiercing)
+	FGameplayAttributeData RstPhysicalPiercing;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstPhysicalPiercing)
+
+	/**
+	 * The character's resistance to Slashing damage (DamageType.Physical.Slashing).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Slashing (S) damage is delivered by a cut, be it the swing of the sword or the blow from a scythe blades trap."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstPhysicalSlashing)
+	FGameplayAttributeData RstPhysicalSlashing;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstPhysicalSlashing)
+
+	/**
+	 * The character's resistance to Acid damage (DamageType.Energy.Acid).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Acid damage can be delivered by gases, liquids, and certain solids that dissolve flesh, and sometimes harder
+	 * materials."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstEnergyAcid)
+	FGameplayAttributeData RstEnergyAcid;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyAcid)
+
+	/**
+	 * The character's resistance to Cold damage (DamageType.Energy.Cold).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Cold damage freezes material by way of contact with chilling gases and ice. Electricity damage comes from the
+	 * discharge of powerful lightning and sparks."
+	 *
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstEnergyCold)
+	FGameplayAttributeData RstEnergyCold;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyCold)
+
+	/**
+	 * The character's resistance to Fire damage (DamageType.Energy.Fire).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Fire damage burns through heat and combustion."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstEnergyFire)
+	FGameplayAttributeData RstEnergyFire;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyFire)
+
+	/**
+	 * The character's resistance to Sonic damage (DamageType.Energy.Sonic).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Sonic damage assaults matter with high-frequency vibration and sound waves."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstEnergySonic)
+	FGameplayAttributeData RstEnergySonic;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergySonic)
+
+	/**
+	 * The character's resistance to Positive damage (DamageType.Energy.Positive).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Positive damage harms only undead creatures, withering undead bodies and disrupting incorporeal undead."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstEnergyPositive)
+	FGameplayAttributeData RstEnergyPositive;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyPositive)
+
+	/**
+	 * The character's resistance to Negative damage (DamageType.Energy.Negative).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Negative damage saps life, damaging only living creatures."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstEnergyNegative)
+	FGameplayAttributeData RstEnergyNegative;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyNegative)
+
+	/**
+	 * The character's resistance to Force damage (DamageType.Energy.Force).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Powerful and pure magical energy can manifest itself as force damage. Few things can resist this type of
+	 * damage—not even incorporeal creatures such as ghosts and wraiths."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstEnergyForce)
+	FGameplayAttributeData RstEnergyForce;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyForce)
+
+	/**
+	 * The character's resistance to Chaotic damage (DamageType.Alignment.Chaotic).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Chaotic damage harms only lawful creatures."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstAlignmentChaotic)
+	FGameplayAttributeData RstAlignmentChaotic;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstAlignmentChaotic)
+
+	/**
+	 * The character's resistance to Evil damage (DamageType.Alignment.Evil).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Evil damage harms only good creatures."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstAlignmentEvil)
+	FGameplayAttributeData RstAlignmentEvil;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstAlignmentEvil)
+
+	/**
+	 * The character's resistance to Good damage (DamageType.Alignment.Good).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Good damage harms only evil creatures."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstAlignmentGood)
+	FGameplayAttributeData RstAlignmentGood;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstAlignmentGood)
+
+	/**
+	 * The character's resistance to Lawful damage (DamageType.Alignment.Lawful).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Lawful damage harms only chaotic creatures."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstAlignmentLawful)
+	FGameplayAttributeData RstAlignmentLawful;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstAlignmentLawful)
+
+	/**
+	 * The character's resistance to Mental damage (DamageType.Mental).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Sometimes an effect can target the mind with enough psychic force to actually deal damage to the creature. When
+	 * it does, it deals mental damage. Mindless creatures and those with only programmed or rudimentary intelligence
+	 * are often immune to mental damage and effects."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstMental)
+	FGameplayAttributeData RstMental;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstMental)
+
+	/**
+	 * The character's resistance to Poison damage (DamageType.Poison).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Venoms, toxins and the like can deal poison damage, which affects creatures by way of contact, ingestion,
+	 * inhalation, or injury. In addition to coming from monster attacks, alchemical items, and spells, poison damage is
+	 * often caused by ongoing afflictions, which follow special rules."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstPoison)
+	FGameplayAttributeData RstPoison;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstPoison)
+
+	/**
+	 * The character's resistance to Bleed damage (DamageType.Bleed).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "This is persistent damage that represents loss of blood. As such, it has no effect on nonliving creatures or
+	 * living creatures that don't need blood to live."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstBleed)
+	FGameplayAttributeData RstBleed;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstBleed)
+
+	/**
+	 * The character's resistance to Precision damage (DamageType.Precision).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "When a character hits with an ability that grants precision damage, the character increase the attack's listed
+	 * damage, using the same damage type, rather than tracking a separate pool of damage."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstPrecision)
+	FGameplayAttributeData RstPrecision;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstPrecision)
+
 	// Perception ------------------------------------------------------------------------------------------------------
 	/**
 	 * Perception measures a character's ability to notice hidden objects or unusual situations and affects initiative.
@@ -581,6 +772,60 @@ public:
 
 	UFUNCTION()
 	virtual void OnRep_MaxHitPoints(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstPhysicalBludgeoning(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstPhysicalPiercing(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstPhysicalSlashing(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstEnergyAcid(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstEnergyCold(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstEnergyFire(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstEnergySonic(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstEnergyPositive(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstEnergyNegative(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstEnergyForce(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstAlignmentChaotic(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstAlignmentEvil(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstAlignmentGood(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstAlignmentLawful(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstMental(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstPoison(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstBleed(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstPrecision(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
 	virtual void OnRep_PerceptionModifier(const FGameplayAttributeData& OldValue);

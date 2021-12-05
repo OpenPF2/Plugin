@@ -39,6 +39,24 @@ UPF2AttributeSet::UPF2AttributeSet() :
 	StWillModifier(0.0f),
 	HitPoints(1.0f),
 	MaxHitPoints(1.0f),
+	RstPhysicalBludgeoning(0.0f),
+	RstPhysicalPiercing(0.0f),
+	RstPhysicalSlashing(0.0f),
+	RstEnergyAcid(0.0f),
+	RstEnergyCold(0.0f),
+	RstEnergyFire(0.0f),
+	RstEnergySonic(0.0f),
+	RstEnergyPositive(0.0f),
+	RstEnergyNegative(0.0f),
+	RstEnergyForce(0.0f),
+	RstAlignmentChaotic(0.0f),
+	RstAlignmentEvil(0.0f),
+	RstAlignmentGood(0.0f),
+	RstAlignmentLawful(0.0f),
+	RstMental(0.0f),
+	RstPoison(0.0f),
+	RstBleed(0.0f),
+	RstPrecision(0.0f),
 	PerceptionModifier(0.0f),
 	SkAcrobaticsModifier(0.0f),
 	SkArcanaModifier(0.0f),
@@ -94,6 +112,24 @@ void UPF2AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(UPF2AttributeSet, StWillModifier);
 	DOREPLIFETIME(UPF2AttributeSet, HitPoints);
 	DOREPLIFETIME(UPF2AttributeSet, MaxHitPoints);
+	DOREPLIFETIME(UPF2AttributeSet, RstPhysicalBludgeoning);
+	DOREPLIFETIME(UPF2AttributeSet, RstPhysicalPiercing);
+	DOREPLIFETIME(UPF2AttributeSet, RstPhysicalSlashing);
+	DOREPLIFETIME(UPF2AttributeSet, RstEnergyAcid);
+	DOREPLIFETIME(UPF2AttributeSet, RstEnergyCold);
+	DOREPLIFETIME(UPF2AttributeSet, RstEnergyFire);
+	DOREPLIFETIME(UPF2AttributeSet, RstEnergySonic);
+	DOREPLIFETIME(UPF2AttributeSet, RstEnergyPositive);
+	DOREPLIFETIME(UPF2AttributeSet, RstEnergyNegative);
+	DOREPLIFETIME(UPF2AttributeSet, RstEnergyForce);
+	DOREPLIFETIME(UPF2AttributeSet, RstAlignmentChaotic);
+	DOREPLIFETIME(UPF2AttributeSet, RstAlignmentEvil);
+	DOREPLIFETIME(UPF2AttributeSet, RstAlignmentGood);
+	DOREPLIFETIME(UPF2AttributeSet, RstAlignmentLawful);
+	DOREPLIFETIME(UPF2AttributeSet, RstMental);
+	DOREPLIFETIME(UPF2AttributeSet, RstPoison);
+	DOREPLIFETIME(UPF2AttributeSet, RstBleed);
+	DOREPLIFETIME(UPF2AttributeSet, RstPrecision);
 	DOREPLIFETIME(UPF2AttributeSet, PerceptionModifier);
 	DOREPLIFETIME(UPF2AttributeSet, SkAcrobaticsModifier);
 	DOREPLIFETIME(UPF2AttributeSet, SkArcanaModifier);
@@ -237,6 +273,96 @@ void UPF2AttributeSet::OnRep_HitPoints(const FGameplayAttributeData& OldValue)
 void UPF2AttributeSet::OnRep_MaxHitPoints(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, MaxHitPoints, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstPhysicalBludgeoning(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstPhysicalBludgeoning, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstPhysicalPiercing(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstPhysicalPiercing, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstPhysicalSlashing(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstPhysicalSlashing, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstEnergyAcid(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstEnergyAcid, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstEnergyCold(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstEnergyCold, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstEnergyFire(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstEnergyFire, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstEnergySonic(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstEnergySonic, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstEnergyPositive(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstEnergyPositive, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstEnergyNegative(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstEnergyNegative, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstEnergyForce(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstEnergyForce, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstAlignmentChaotic(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstAlignmentChaotic, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstAlignmentEvil(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstAlignmentEvil, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstAlignmentGood(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstAlignmentGood, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstAlignmentLawful(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstAlignmentLawful, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstMental(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstMental, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstPoison(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstPoison, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstBleed(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstBleed, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstPrecision(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstPrecision, OldValue);
 }
 
 void UPF2AttributeSet::OnRep_PerceptionModifier(const FGameplayAttributeData& OldValue)
