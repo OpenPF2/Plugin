@@ -47,6 +47,8 @@ public:
 	// =================================================================================================================
 	// Attributes - Stats Shared by Both PCs and NPCs
 	// =================================================================================================================
+
+	// Experience ------------------------------------------------------------------------------------------------------
 	/**
 	 * Experience Points (XP) track the knowledge a character has earned from facing beasts and traps.
 	 *
@@ -66,6 +68,7 @@ public:
 	FGameplayAttributeData Experience;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, Experience)
 
+	// Ability Scores --------------------------------------------------------------------------------------------------
 	/**
 	 * The number of ability boosts that this character currently has applied.
 	 *
@@ -212,6 +215,7 @@ public:
 	FGameplayAttributeData AbCharismaModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbCharismaModifier)
 
+	// Class DC --------------------------------------------------------------------------------------------------------
 	/**
 	 * The Difficulty Class (DC) modifier for this character.
 	 *
@@ -221,6 +225,7 @@ public:
 	FGameplayAttributeData ClassDifficultyClass;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, ClassDifficultyClass)
 
+	// Speed -----------------------------------------------------------------------------------------------------------
 	/**
 	 * How fast this character can move (in centimeters per second).
 	 */
@@ -235,6 +240,7 @@ public:
 	FGameplayAttributeData MaxSpeed;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, MaxSpeed)
 
+	// Armor Class -----------------------------------------------------------------------------------------------------
 	/**
 	 * The Armor Class, which represents how hard it is to hit and damage a creature.
 	 *
@@ -245,6 +251,7 @@ public:
 	FGameplayAttributeData ArmorClass;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, ArmorClass)
 
+	// Saving Throws ---------------------------------------------------------------------------------------------------
 	/**
 	 * Fortitude saving throws reduce the effects of abilities and afflictions that can debilitate the body.
 	 * (Pathfinder 2E Core Rulebook, page 449)
@@ -269,6 +276,7 @@ public:
 	FGameplayAttributeData StWillModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, StWillModifier)
 
+	// Hit Points ------------------------------------------------------------------------------------------------------
 	/**
 	 * All creatures and objects have Hit Points (HP).
 	 *
@@ -293,6 +301,7 @@ public:
 	FGameplayAttributeData MaxHitPoints;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, MaxHitPoints)
 
+	// Perception ------------------------------------------------------------------------------------------------------
 	/**
 	 * Perception measures a character's ability to notice hidden objects or unusual situations and affects initiative.
 	 * (Pathfinder 2E Core Rulebook, page 448)
@@ -301,6 +310,7 @@ public:
 	FGameplayAttributeData PerceptionModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, PerceptionModifier)
 
+	// Skills ------------------------------------------------------------------------------------------------------
 	/**
 	 * Acrobatics measures a character's ability to perform tasks requiring coordination and grace.
 	 * (Pathfinder 2E Core Rulebook, page 240)
@@ -463,6 +473,7 @@ public:
 	FGameplayAttributeData SpellDifficultyClass;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SpellDifficultyClass)
 
+	// Feats -----------------------------------------------------------------------------------------------------------
 	/**
 	 * The number of ancestry feats that this character currently has applied.
 	 *
@@ -482,6 +493,7 @@ public:
 	FGameplayAttributeData FeAncestryFeatLimit;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, FeAncestryFeatLimit)
 
+	// Transient/Temporary Attributes ----------------------------------------------------------------------------------
 	/**
 	 * A temporary attribute for tracking damage that the owner of this set is receiving from an instant damage GE.
 	 *
@@ -489,7 +501,7 @@ public:
 	 * into -HitPoints (i.e., it gets subtracted from the character's health). This allows other effects (e.g., passive
 	 * protection effects or armor) to lessen the impact of the damage.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Damage")
+	UPROPERTY(BlueprintReadOnly, Category = "Temporary Attributes")
 	FGameplayAttributeData DamageIncoming;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, DamageIncoming)
 
