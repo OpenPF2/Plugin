@@ -16,8 +16,6 @@
 
 UPF2AttributeSet::UPF2AttributeSet() :
 	Experience(0.0f),
-	HitPoints(1.0f),
-	MaxHitPoints(1.0f),
 	AbBoostCount(0.0f),
 	AbBoostLimit(0.0f),
 	AbStrength(10.0f),
@@ -39,6 +37,8 @@ UPF2AttributeSet::UPF2AttributeSet() :
 	StFortitudeModifier(0.0f),
 	StReflexModifier(0.0f),
 	StWillModifier(0.0f),
+	HitPoints(1.0f),
+	MaxHitPoints(1.0f),
 	PerceptionModifier(0.0f),
 	SkAcrobaticsModifier(0.0f),
 	SkArcanaModifier(0.0f),
@@ -71,8 +71,6 @@ void UPF2AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UPF2AttributeSet, Experience);
-	DOREPLIFETIME(UPF2AttributeSet, HitPoints);
-	DOREPLIFETIME(UPF2AttributeSet, MaxHitPoints);
 	DOREPLIFETIME(UPF2AttributeSet, AbBoostCount);
 	DOREPLIFETIME(UPF2AttributeSet, AbBoostLimit);
 	DOREPLIFETIME(UPF2AttributeSet, AbStrength);
@@ -94,6 +92,8 @@ void UPF2AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(UPF2AttributeSet, StFortitudeModifier);
 	DOREPLIFETIME(UPF2AttributeSet, StReflexModifier);
 	DOREPLIFETIME(UPF2AttributeSet, StWillModifier);
+	DOREPLIFETIME(UPF2AttributeSet, HitPoints);
+	DOREPLIFETIME(UPF2AttributeSet, MaxHitPoints);
 	DOREPLIFETIME(UPF2AttributeSet, PerceptionModifier);
 	DOREPLIFETIME(UPF2AttributeSet, SkAcrobaticsModifier);
 	DOREPLIFETIME(UPF2AttributeSet, SkArcanaModifier);
@@ -122,16 +122,6 @@ void UPF2AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 void UPF2AttributeSet::OnRep_Experience(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, Experience, OldValue);
-}
-
-void UPF2AttributeSet::OnRep_HitPoints(const FGameplayAttributeData& OldValue)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, HitPoints, OldValue);
-}
-
-void UPF2AttributeSet::OnRep_MaxHitPoints(const FGameplayAttributeData& OldValue)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, MaxHitPoints, OldValue);
 }
 
 void UPF2AttributeSet::OnRep_AbBoostCount(const FGameplayAttributeData& OldValue)
@@ -237,6 +227,16 @@ void UPF2AttributeSet::OnRep_StReflexModifier(const FGameplayAttributeData& OldV
 void UPF2AttributeSet::OnRep_StWillModifier(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, StWillModifier, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_HitPoints(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, HitPoints, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_MaxHitPoints(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, MaxHitPoints, OldValue);
 }
 
 void UPF2AttributeSet::OnRep_PerceptionModifier(const FGameplayAttributeData& OldValue)

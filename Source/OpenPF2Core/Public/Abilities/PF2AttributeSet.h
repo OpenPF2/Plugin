@@ -67,30 +67,6 @@ public:
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, Experience)
 
 	/**
-	 * All creatures and objects have Hit Points (HP).
-	 *
-	 * From the Pathfinder 2E Core Rulebook, page 459, "Knocked Out and Dying":
-	 * "Creatures cannot be reduced to fewer than 0 Hit Points. When most creatures reach 0 Hit Points, they die and are
-	 * removed from play unless the attack was nonlethal, in which case they are instead knocked out for a significant
-	 * amount of time (usually 1 minute or more).
-	 *
-	 * Player characters, their companions, and other significant characters and creatures don’t automatically die when
-	 * they reach 0 Hit Points. Instead, they are knocked out and are at risk of death."
-	 *
-	 * Capped by MaxHitPoints.
-	 */
-	UPROPERTY(BlueprintReadOnly, Category = "HitPoints", ReplicatedUsing=OnRep_HitPoints)
-	FGameplayAttributeData HitPoints;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, HitPoints)
-
-	/**
-	 * The maximum number of hit points for this character.
-	 */
-	UPROPERTY(BlueprintReadOnly, Category = "HitPoints", ReplicatedUsing=OnRep_MaxHitPoints)
-	FGameplayAttributeData MaxHitPoints;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, MaxHitPoints)
-
-	/**
 	 * The number of ability boosts that this character currently has applied.
 	 *
 	 * Capped by AbBoostLimit.
@@ -292,6 +268,30 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Saving Throws", ReplicatedUsing = OnRep_StWillModifier)
 	FGameplayAttributeData StWillModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, StWillModifier)
+
+	/**
+	 * All creatures and objects have Hit Points (HP).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, page 459, "Knocked Out and Dying":
+	 * "Creatures cannot be reduced to fewer than 0 Hit Points. When most creatures reach 0 Hit Points, they die and are
+	 * removed from play unless the attack was nonlethal, in which case they are instead knocked out for a significant
+	 * amount of time (usually 1 minute or more).
+	 *
+	 * Player characters, their companions, and other significant characters and creatures don’t automatically die when
+	 * they reach 0 Hit Points. Instead, they are knocked out and are at risk of death."
+	 *
+	 * Capped by MaxHitPoints.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_HitPoints)
+	FGameplayAttributeData HitPoints;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, HitPoints)
+
+	/**
+	 * The maximum number of hit points for this character.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_MaxHitPoints)
+	FGameplayAttributeData MaxHitPoints;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, MaxHitPoints)
 
 	/**
 	 * Perception measures a character's ability to notice hidden objects or unusual situations and affects initiative.
@@ -502,12 +502,6 @@ public:
     virtual void OnRep_Experience(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-	virtual void OnRep_HitPoints(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
-	virtual void OnRep_MaxHitPoints(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
 	virtual void OnRep_AbBoostCount(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
@@ -569,6 +563,12 @@ public:
 
 	UFUNCTION()
 	virtual void OnRep_StWillModifier(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_HitPoints(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_MaxHitPoints(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
 	virtual void OnRep_PerceptionModifier(const FGameplayAttributeData& OldValue);

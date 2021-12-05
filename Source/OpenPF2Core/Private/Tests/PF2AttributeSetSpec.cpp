@@ -34,8 +34,6 @@ void FPF2AttributeSetSpec::Define()
 			const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
 
 			TestEqual(TEXT("Experience"),             AttributeSet->GetExperience(),              0.0f);
-			TestEqual(TEXT("HitPoints"),              AttributeSet->GetHitPoints(),               1.0f);
-			TestEqual(TEXT("MaxHitPoints"),           AttributeSet->GetMaxHitPoints(),            1.0f);
 			TestEqual(TEXT("AbBoostCount"),           AttributeSet->GetAbBoostCount(),            0.0f);
 			TestEqual(TEXT("AbBoostLimit"),           AttributeSet->GetAbBoostLimit(),            0.0f);
 			TestEqual(TEXT("AbStrength"),             AttributeSet->GetAbStrength(),             10.0f);
@@ -57,6 +55,8 @@ void FPF2AttributeSetSpec::Define()
 			TestEqual(TEXT("StFortitudeModifier"),    AttributeSet->GetStFortitudeModifier(),     0.0f);
 			TestEqual(TEXT("StReflexModifier"),       AttributeSet->GetStReflexModifier(),        0.0f);
 			TestEqual(TEXT("StWillModifier"),         AttributeSet->GetStWillModifier(),          0.0f);
+			TestEqual(TEXT("HitPoints"),              AttributeSet->GetHitPoints(),               1.0f);
+			TestEqual(TEXT("MaxHitPoints"),           AttributeSet->GetMaxHitPoints(),            1.0f);
 			TestEqual(TEXT("PerceptionModifier"),     AttributeSet->GetPerceptionModifier(),      0.0f);
 			TestEqual(TEXT("SkAcrobaticsModifier"),   AttributeSet->GetSkAcrobaticsModifier(),    0.0f);
 			TestEqual(TEXT("SkArcanaModifier"),       AttributeSet->GetSkArcanaModifier(),        0.0f);
