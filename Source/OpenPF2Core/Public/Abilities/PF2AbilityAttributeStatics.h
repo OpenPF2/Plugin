@@ -55,6 +55,28 @@ public:
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AbWisdom);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AbWisdomModifier);
 
+	DECLARE_ATTRIBUTE_CAPTUREDEF(RstPhysicalBludgeoning);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(RstPhysicalPiercing);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(RstPhysicalSlashing);
+
+	DECLARE_ATTRIBUTE_CAPTUREDEF(RstEnergyAcid);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(RstEnergyCold);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(RstEnergyFire);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(RstEnergySonic);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(RstEnergyPositive);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(RstEnergyNegative);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(RstEnergyForce);
+
+	DECLARE_ATTRIBUTE_CAPTUREDEF(RstAlignmentChaotic);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(RstAlignmentEvil);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(RstAlignmentGood);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(RstAlignmentLawful);
+
+	DECLARE_ATTRIBUTE_CAPTUREDEF(RstMental);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(RstPoison);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(RstBleed);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(RstPrecision);
+
 	/**
 	 * Gets an instance of this container.
 	 *
@@ -172,5 +194,27 @@ private:
 		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbIntelligenceModifier, Target, false);
 		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbStrengthModifier, Target, false);
 		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbWisdomModifier, Target, false);
+
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstPhysicalBludgeoning, Target, false);
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstPhysicalPiercing, Target, false);
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstPhysicalSlashing, Target, false);
+
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstEnergyAcid, Target, false);
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstEnergyCold, Target, false);
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstEnergyFire, Target, false);
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstEnergySonic, Target, false);
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstEnergyPositive, Target, false);
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstEnergyNegative, Target, false);
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstEnergyForce, Target, false);
+
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstAlignmentChaotic, Target, false);
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstAlignmentEvil, Target, false);
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstAlignmentGood, Target, false);
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstAlignmentLawful, Target, false);
+
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet,RstMental, Target, false);
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet,RstPoison, Target, false);
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet,RstBleed, Target, false);
+		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet,RstPrecision, Target, false);
 	}
 };
