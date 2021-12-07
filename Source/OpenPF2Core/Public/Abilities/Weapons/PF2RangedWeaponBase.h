@@ -19,6 +19,9 @@
 
 /**
  * Base class for weapons that a character can use to attack another character from a distance.
+ *
+ * This is the top-most C++ base class for ranged weapons, but there are several Blueprint sub-classes of this class
+ * that offer functionality that tends to be a more complete fit for your own ranged weapon implementations.
  */
 UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal

@@ -33,6 +33,9 @@ enum class EPF2WeaponHandsRequirement : uint8
 
 /**
  * Base class for weapons a character can equip.
+ *
+ * This is the top-most C++ base class for weapons, but there are several Blueprint sub-classes of this class that offer
+ * functionality that tends to be a more complete fit for your own weapon implementations.
  */
 UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal
