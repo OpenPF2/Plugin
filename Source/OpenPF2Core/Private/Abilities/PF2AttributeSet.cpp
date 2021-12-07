@@ -80,7 +80,7 @@ UPF2AttributeSet::UPF2AttributeSet() :
 	SpellDifficultyClass(0.0f),
 	FeAncestryFeatCount(0.0f),
 	FeAncestryFeatLimit(0.0f),
-	DamageIncoming(0.0f)
+	TmpDamageIncoming(0.0f)
 {
 }
 

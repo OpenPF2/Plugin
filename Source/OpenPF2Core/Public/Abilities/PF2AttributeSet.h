@@ -693,8 +693,8 @@ public:
 	 * protection effects or armor) to lessen the impact of the damage.
 	 */
 	UPROPERTY(BlueprintReadOnly, Category = "Temporary Attributes")
-	FGameplayAttributeData DamageIncoming;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, DamageIncoming)
+	FGameplayAttributeData TmpDamageIncoming;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, TmpDamageIncoming)
 
 	// =================================================================================================================
 	// Attribute Replication Callbacks
