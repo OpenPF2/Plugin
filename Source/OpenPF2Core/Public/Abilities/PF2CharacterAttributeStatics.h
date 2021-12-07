@@ -27,14 +27,16 @@
 }
 
 /**
- * Singleton container for ability-related attribute capture definitions.
+ * Singleton container for PF2 character attribute capture definitions.
  *
  * This centralizes all static capture definitions for PF2 attributes instead of there being multiple, smaller "Statics"
  * definitions like those preferred by Epic's sample projects.
  */
-class OPENPF2CORE_API FPF2AbilityAttributeStatics final
+class OPENPF2CORE_API FPF2CharacterAttributeStatics final
 {
 public:
+	DECLARE_ATTRIBUTE_CAPTUREDEF(HitPoints);
+
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AbBoostCount);
 
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AbCharisma);
@@ -83,23 +85,23 @@ public:
 	 * @return
 	 *	A reference to the capture definition container.
 	 */
-	FORCEINLINE static const FPF2AbilityAttributeStatics& GetInstance()
+	FORCEINLINE static const FPF2CharacterAttributeStatics& GetInstance()
 	{
-		static FPF2AbilityAttributeStatics AbilityStatics;
+		static FPF2CharacterAttributeStatics AttributeStatics;
 
-		return AbilityStatics;
+		return AttributeStatics;
 	}
 
 	/**
-	 * Gets all of the ability-related capture definitions.
+	 * Gets all of the character capture definitions.
 	 *
 	 * @return
-	 *	An array of all the capture definitions for character abilities.
+	 *	An array of all the capture definitions for character attributes.
 	 */
 	TArray<FGameplayEffectAttributeCaptureDefinition> GetCaptureDefinitions() const;
 
 	/**
-	 * Gets the names of all ability-related attributes.
+	 * Gets the names of all character ability attributes.
 	 *
 	 * @return
 	 *	The name of each ability attribute.
@@ -121,7 +123,7 @@ public:
 	}
 
 	/**
-	 * Gets a capture definition for the given ability-related attribute.
+	 * Gets a capture definition for the given character attribute.
 	 *
 	 * @param Attribute
 	 *	The attribute for which a capture definition is desired.
@@ -137,7 +139,7 @@ public:
 	}
 
 	/**
-	 * Gets a capture definition for the specified ability-related attribute.
+	 * Gets a capture definition for the specified character attribute.
 	 *
 	 * @param Name
 	 *	The name of the attribute for which a capture definition is desired.
@@ -175,10 +177,11 @@ private:
 	TArray<FString> AbilityModifierNames;
 
 	/**
-	 * Constructor for FPF2AbilityAttributeStatics.
+	 * Constructor for FPF2CharacterAttributeStatics.
 	 */
-	FPF2AbilityAttributeStatics()
+	FPF2CharacterAttributeStatics()
 	{
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, HitPoints, Target, false);
 		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, AbBoostCount, Target, false);
 
 		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbCharisma, Target, false);
@@ -195,26 +198,26 @@ private:
 		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbStrengthModifier, Target, false);
 		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbWisdomModifier, Target, false);
 
-		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstPhysicalBludgeoning, Target, false);
-		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstPhysicalPiercing, Target, false);
-		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstPhysicalSlashing, Target, false);
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPhysicalBludgeoning, Target, false);
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPhysicalPiercing, Target, false);
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPhysicalSlashing, Target, false);
 
-		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstEnergyAcid, Target, false);
-		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstEnergyCold, Target, false);
-		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstEnergyFire, Target, false);
-		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstEnergySonic, Target, false);
-		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstEnergyPositive, Target, false);
-		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstEnergyNegative, Target, false);
-		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstEnergyForce, Target, false);
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstEnergyAcid, Target, false);
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstEnergyCold, Target, false);
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstEnergyFire, Target, false);
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstEnergySonic, Target, false);
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstEnergyPositive, Target, false);
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstEnergyNegative, Target, false);
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstEnergyForce, Target, false);
 
-		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstAlignmentChaotic, Target, false);
-		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstAlignmentEvil, Target, false);
-		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstAlignmentGood, Target, false);
-		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, RstAlignmentLawful, Target, false);
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstAlignmentChaotic, Target, false);
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstAlignmentEvil, Target, false);
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstAlignmentGood, Target, false);
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstAlignmentLawful, Target, false);
 
-		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet,RstMental, Target, false);
-		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet,RstPoison, Target, false);
-		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet,RstBleed, Target, false);
-		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet,RstPrecision, Target, false);
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstMental, Target, false);
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPoison, Target, false);
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstBleed, Target, false);
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPrecision, Target, false);
 	}
 };
