@@ -28,8 +28,11 @@
 
 /**
  * Singleton container for ability-related attribute capture definitions.
+ *
+ * This centralizes all static capture definitions for PF2 attributes instead of there being multiple, smaller "Statics"
+ * definitions like those preferred by Epic's sample projects.
  */
-class OPENPF2CORE_API FPF2AbilityAttributes final
+class OPENPF2CORE_API FPF2AbilityAttributeStatics final
 {
 public:
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AbBoostCount);
@@ -58,9 +61,9 @@ public:
 	 * @return
 	 *	A reference to the capture definition container.
 	 */
-	FORCEINLINE static const FPF2AbilityAttributes& GetInstance()
+	FORCEINLINE static const FPF2AbilityAttributeStatics& GetInstance()
 	{
-		static FPF2AbilityAttributes AbilityStatics;
+		static FPF2AbilityAttributeStatics AbilityStatics;
 
 		return AbilityStatics;
 	}
@@ -150,9 +153,9 @@ private:
 	TArray<FString> AbilityModifierNames;
 
 	/**
-	 * Constructor for FPF2AbilityAttributes.
+	 * Constructor for FPF2AbilityAttributeStatics.
 	 */
-	FPF2AbilityAttributes()
+	FPF2AbilityAttributeStatics()
 	{
 		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, AbBoostCount, Target, false);
 

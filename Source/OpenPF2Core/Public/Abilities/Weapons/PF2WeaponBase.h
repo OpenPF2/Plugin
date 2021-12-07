@@ -13,7 +13,7 @@
 #pragma once
 
 #include "Abilities/GameplayAbility.h"
-#include "Abilities/PF2AbilityAttributes.h"
+#include "Abilities/PF2AbilityAttributeStatics.h"
 #include "Abilities/PF2CharacterAbilityScoreType.h"
 #include "Abilities/Weapons/PF2WeaponInterface.h"
 #include "PF2MonetaryValue.h"
