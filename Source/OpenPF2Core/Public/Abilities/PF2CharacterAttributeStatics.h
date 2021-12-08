@@ -35,8 +35,6 @@
 class OPENPF2CORE_API FPF2CharacterAttributeStatics final
 {
 public:
-	DECLARE_ATTRIBUTE_CAPTUREDEF(HitPoints);
-
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AbBoostCount);
 
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AbCharisma);
@@ -56,6 +54,8 @@ public:
 
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AbWisdom);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AbWisdomModifier);
+
+	DECLARE_ATTRIBUTE_CAPTUREDEF(HitPoints);
 
 	DECLARE_ATTRIBUTE_CAPTUREDEF(RstPhysicalBludgeoning);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(RstPhysicalPiercing);
@@ -78,6 +78,8 @@ public:
 	DECLARE_ATTRIBUTE_CAPTUREDEF(RstPoison);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(RstBleed);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(RstPrecision);
+
+	DECLARE_ATTRIBUTE_CAPTUREDEF(TmpDamageIncoming);
 
 	/**
 	 * Gets an instance of this container.
@@ -181,7 +183,6 @@ private:
 	 */
 	FPF2CharacterAttributeStatics()
 	{
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, HitPoints, Target, false);
 		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, AbBoostCount, Target, false);
 
 		DEFINE_ABILITY_CAPTUREDEF(UPF2AttributeSet, AbCharisma, Target, false);
@@ -197,6 +198,8 @@ private:
 		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbIntelligenceModifier, Target, false);
 		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbStrengthModifier, Target, false);
 		DEFINE_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbWisdomModifier, Target, false);
+
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, HitPoints, Target, false);
 
 		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPhysicalBludgeoning, Target, false);
 		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPhysicalPiercing, Target, false);
@@ -219,5 +222,7 @@ private:
 		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPoison, Target, false);
 		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstBleed, Target, false);
 		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPrecision, Target, false);
+
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, TmpDamageIncoming, Target, false);
 	}
 };
