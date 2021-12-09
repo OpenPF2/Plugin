@@ -56,10 +56,11 @@ For information about precisely which license applies to a source file, consult
 its file header. If you encounter a file that lacks a license in its header,
 please [file an issue](https://github.com/OpenPF2/PF2Core/issues/new). 
 
-### Alternate Licensing (for Proprietary Projects)
+### Alternate, Commercial Licensing (for Proprietary Projects)
 If you are developing a commercial, proprietary, or closed-source game or
-project that is otherwise incompatible with the open-source licensing of this
-plug-in an alternate, custom license is an option. 
+project that is otherwise incompatible with the open-source OGL and MPL 
+licensing of this plug-in, the author is willing to discuss alternate, custom 
+licensing. 
 
 The license will be among the following parties:
 * The licensee (you).
