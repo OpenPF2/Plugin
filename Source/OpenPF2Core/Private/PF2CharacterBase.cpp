@@ -22,7 +22,7 @@ void APF2CharacterBase::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
-	if (this->AbilitySystemComponent)
+	if (this->AbilitySystemComponent != nullptr)
 	{
 		this->AbilitySystemComponent->InitAbilityActorInfo(this, this);
 
@@ -35,7 +35,7 @@ void APF2CharacterBase::OnRep_Controller()
 {
 	Super::OnRep_Controller();
 
-	if (this->AbilitySystemComponent)
+	if (this->AbilitySystemComponent != nullptr)
 	{
 		this->AbilitySystemComponent->RefreshAbilityActorInfo();
 	}
@@ -116,8 +116,8 @@ void APF2CharacterBase::ApplyAbilityBoostSelections()
 FORCEINLINE void APF2CharacterBase::GetCharacterAbilitySystemComponent(
 	TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const
 {
-	// This is weird, but the way that TScriptInterface objects work is it maintains a reference to a UObject that
-	// *implements* an interface along with a pointer to the part of the UObject that provides the interface
+	// BUGBUG: This is weird, but the way that a TScriptInterface object works is it maintains a reference to a UObject
+	// that *implements* an interface along with a pointer to the part of the UObject that provides the interface
 	// implementation, so we need to provide the concrete object instead of the interface type.
 	Output = this->AbilitySystemComponent;
 }

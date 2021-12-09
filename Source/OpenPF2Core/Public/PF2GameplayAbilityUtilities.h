@@ -64,7 +64,7 @@ namespace PF2GameplayAbilityUtilities
 	 *	- TRUE if given a tag prefix, and there is a tag present in the tag list that starts with that prefix.
 	 *	- FALSE, otherwise.
 	 */
-	FORCEINLINE bool HasTag(const FGameplayTagContainer *Tags, const FName TagNameOrPrefix)
+	FORCEINLINE bool HasTag(const FGameplayTagContainer* Tags, const FName TagNameOrPrefix)
 	{
 		return Tags->HasTag(GetTag(TagNameOrPrefix));
 	}
@@ -82,7 +82,7 @@ namespace PF2GameplayAbilityUtilities
 	 *	- TRUE if given a tag prefix, and there is a tag present in the tag list that starts with that prefix.
 	 *	- FALSE, otherwise.
 	 */
-	FORCEINLINE bool HasTag(const FGameplayTagContainer *Tags, const FString TagNameOrPrefix)
+	FORCEINLINE bool HasTag(const FGameplayTagContainer* Tags, const FString TagNameOrPrefix)
 	{
 		return Tags->HasTag(GetTag(TagNameOrPrefix));
 	}

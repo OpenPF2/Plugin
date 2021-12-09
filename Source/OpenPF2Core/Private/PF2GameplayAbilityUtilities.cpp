@@ -12,8 +12,7 @@
  */
 namespace PF2GameplayAbilityUtilities
 {
-	FGameplayEffectAttributeCaptureDefinition BuildSourceCaptureFor(
-		const FGameplayAttribute Attribute)
+	FGameplayEffectAttributeCaptureDefinition BuildSourceCaptureFor(const FGameplayAttribute Attribute)
 	{
 		FGameplayEffectAttributeCaptureDefinition CaptureDefinition;
 
@@ -24,9 +23,7 @@ namespace PF2GameplayAbilityUtilities
 		return CaptureDefinition;
 	}
 
-	FName GetWeightGroupOfGameplayEffect(
-		const TSubclassOf<UGameplayEffect> GameplayEffect,
-		const FName DefaultWeight)
+	FName GetWeightGroupOfGameplayEffect(const TSubclassOf<UGameplayEffect> GameplayEffect, const FName DefaultWeight)
 	{
 		FName                  WeightGroup;
 		const FGameplayTag     WeightTagParent = GetTag(FName(TEXT("GameplayEffect.WeightGroup")));

@@ -14,8 +14,12 @@
 
 #include <AttributeSet.h>
 #include <AbilitySystemComponent.h>
+
 #include "PF2AttributeSet.generated.h"
 
+// =====================================================================================================================
+// Macros
+// =====================================================================================================================
 // Uses macros from AttributeSet.h
 #define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
 	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
