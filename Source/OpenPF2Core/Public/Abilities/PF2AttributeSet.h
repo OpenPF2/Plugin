@@ -33,18 +33,6 @@ class OPENPF2CORE_API UPF2AttributeSet : public UAttributeSet
 
 public:
 	// =================================================================================================================
-	// Constructors
-	// =================================================================================================================
-	explicit UPF2AttributeSet();
-
-	// =================================================================================================================
-	// Callbacks
-	// =================================================================================================================
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
-	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
-
-	// =================================================================================================================
 	// Attributes - Stats Shared by Both PCs and NPCs
 	// =================================================================================================================
 
@@ -695,6 +683,18 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Temporary Attributes")
 	FGameplayAttributeData TmpDamageIncoming;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, TmpDamageIncoming)
+
+	// =================================================================================================================
+	// Constructors
+	// =================================================================================================================
+	explicit UPF2AttributeSet();
+
+	// =================================================================================================================
+	// UAttributeSet Callbacks
+	// =================================================================================================================
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
+	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
 	// =================================================================================================================
 	// Attribute Replication Callbacks
