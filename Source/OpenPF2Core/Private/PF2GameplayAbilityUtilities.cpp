@@ -7,6 +7,13 @@
 
 #include "PF2GameplayAbilityUtilities.h"
 
+#include <GameplayEffectExtension.h>
+#include <GameFramework/Pawn.h>
+#include <GameFramework/PlayerController.h>
+
+#include "PF2CharacterInterface.h"
+#include "Abilities/PF2CharacterAbilitySystemComponentInterface.h"
+
 /**
  * Utility logic for working with Gameplay Abilities.
  */
@@ -89,5 +96,64 @@ namespace PF2GameplayAbilityUtilities
 		check(AttributeSet != nullptr);
 
 		return AttributeSet;
+	}
+
+	IPF2CharacterInterface* GetEffectTarget(const FGameplayEffectModCallbackData* Data)
+	{
+		IPF2CharacterInterface*        TargetCharacter = nullptr;
+		const UAbilitySystemComponent& TargetAsc       = Data->Target;
+		const TWeakObjectPtr<AActor>   TargetActor     = GetAvatarActorOfOwner(&TargetAsc);
+
+		if (TargetActor.IsValid())
+		{
+			TargetCharacter = Cast<IPF2CharacterInterface>(TargetActor.Get());
+		}
+
+		return TargetCharacter;
+	}
+
+	IPF2CharacterInterface* GetEffectInstigator(const UAbilitySystemComponent* SourceAsc, AActor* DamageSource)
+	{
+		IPF2CharacterInterface* Instigator;
+		AController*            SourceController = SourceAsc->AbilityActorInfo->PlayerController.Get();
+
+		if ((SourceController == nullptr) && (DamageSource != nullptr))
+		{
+			const APawn* Pawn = Cast<APawn>(DamageSource);
+
+			if (Pawn != nullptr)
+			{
+				SourceController = Pawn->GetController();
+			}
+		}
+
+		if (SourceController != nullptr)
+		{
+			Instigator = Cast<IPF2CharacterInterface>(SourceController->GetPawn());
+		}
+		else
+		{
+			Instigator = Cast<IPF2CharacterInterface>(DamageSource);
+		}
+
+		return Instigator;
+	}
+
+	TWeakObjectPtr<AActor> GetAvatarActorOfOwner(const UAbilitySystemComponent* Asc)
+	{
+		TWeakObjectPtr<AActor>                AvatarActor;
+		TSharedPtr<FGameplayAbilityActorInfo> ActorInfo = nullptr;
+
+		if (Asc != nullptr)
+		{
+			ActorInfo = Asc->AbilityActorInfo;
+		}
+
+		if (ActorInfo.IsValid())
+		{
+			AvatarActor = ActorInfo->AvatarActor;
+		}
+
+		return AvatarActor;
 	}
 }

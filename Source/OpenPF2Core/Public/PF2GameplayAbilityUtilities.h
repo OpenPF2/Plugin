@@ -6,14 +6,23 @@
 #pragma once
 
 #include <CoreMinimal.h>
+#include <GameplayEffect.h>
+#include <GameplayEffectTypes.h>
+#include <GameplayTagContainer.h>
+#include <Abilities/GameplayAbilityTypes.h>
 
-#include "Abilities/PF2AttributeSet.h"
-#include "Abilities/PF2CharacterAbilitySystemComponentInterface.h"
-#include "GameplayEffect.h"
-#include "GameplayEffectTypes.h"
-#include "GameplayTagContainer.h"
 #include "PF2CharacterConstants.h"
 
+// =====================================================================================================================
+// Forward Declarations (to break recursive dependencies)
+// =====================================================================================================================
+class IPF2CharacterInterface;
+class IPF2CharacterAbilitySystemComponentInterface;
+class UPF2AttributeSet;
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 /**
  * Utility logic for working with the Gameplay Abilities System (GAS).
  */
@@ -158,4 +167,34 @@ namespace PF2GameplayAbilityUtilities
 	 *	A pointer to the PF2 attribute set.
 	 */
 	OPENPF2CORE_API FORCEINLINE const UPF2AttributeSet* GetAttributeSet(const FGameplayAbilityActorInfo* ActorInfo);
+
+	/**
+	 * Determines which PF2 character an activated GE has targeted.
+	 *
+	 * @param Data
+	 *	Information about the GE activation, including the GE spec, attribute modifications, and target spec.
+	 */
+	OPENPF2CORE_API IPF2CharacterInterface* GetEffectTarget(const FGameplayEffectModCallbackData* Data);
+
+	/**
+	 * Determines which PF2 character (if any) was ultimately the source of a GE activation.
+	 *
+	 * For example, if a target character is injured by an axe, the instigator of the damage GE for the axe is the
+	 * player character who is brandishing the axe. Similarly, if damage was caused by a rocket-propelled grenade (RPG),
+	 * the instigator is the player character who fired the RPG.
+	 */
+	OPENPF2CORE_API IPF2CharacterInterface* GetEffectInstigator(
+		const UAbilitySystemComponent* SourceAsc,
+		AActor* DamageSource);
+
+	/**
+	 * Gets the physical actor that represents the character who owns this ASC.
+	 *
+	 * @param Asc
+	 *	The ability system component for which an avatar actor is desired.
+	 *
+	 * @return
+	 *	The avatar actor of the ASC owner.
+	 */
+	OPENPF2CORE_API TWeakObjectPtr<AActor> GetAvatarActorOfOwner(const UAbilitySystemComponent* Asc);
 }
