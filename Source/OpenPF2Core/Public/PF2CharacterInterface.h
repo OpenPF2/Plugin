@@ -33,6 +33,17 @@ class OPENPF2CORE_API IPF2CharacterInterface
 
 public:
 	/**
+	 * Returns the name of this character, as set by the game designer.
+	 *
+	 * If no name has been set, then the UObject name of the character is returned instead.
+	 *
+	 * @return
+	 *	The name of this character.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual FText GetCharacterName() const = 0;
+
+	/**
 	 * Gets the current level of this character.
 	 *
 	 * The character level impacts the character's stats and how many boosts and feats the character can have.

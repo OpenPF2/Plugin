@@ -54,6 +54,18 @@ UAbilitySystemComponent* APF2CharacterBase::GetAbilitySystemComponent() const
 	return this->AbilitySystemComponent;
 }
 
+FText APF2CharacterBase::GetCharacterName() const
+{
+	FText Name = this->CharacterName;
+
+	if (Name.IsEmpty())
+	{
+		Name = FText::FromString(this->GetName());
+	}
+
+	return Name;
+}
+
 int32 APF2CharacterBase::GetCharacterLevel() const
 {
 	return this->CharacterLevel;
