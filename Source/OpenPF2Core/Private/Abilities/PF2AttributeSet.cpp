@@ -12,7 +12,12 @@
 
 #include "Abilities/PF2AttributeSet.h"
 
+#include <GameplayEffectExtension.h>
+#include <GameFramework/Controller.h>
 #include <Net/UnrealNetwork.h>
+
+#include "AbilitySystemBlueprintLibrary.h"
+#include "PF2CharacterInterface.h"
 
 UPF2AttributeSet::UPF2AttributeSet() :
 	Experience(0.0f),
@@ -488,4 +493,100 @@ void UPF2AttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, f
 void UPF2AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
+
+	const FGameplayEffectContextHandle Context   = Data.EffectSpec.GetContext();
+	const FGameplayTagContainer*       EventTags = Data.EffectSpec.CapturedSourceTags.GetAggregatedTags();
+
+	IPF2CharacterInterface* TargetCharacter = PF2GameplayAbilityUtilities::GetEffectTarget(&Data);
+
+	float ValueDelta = 0;
+
+	if (Data.EvaluatedData.ModifierOp == EGameplayModOp::Type::Additive)
+	{
+		ValueDelta = Data.EvaluatedData.Magnitude;
+	}
+
+	if (Data.EvaluatedData.Attribute == this->GetTmpDamageIncomingAttribute())
+	{
+		this->HandleDamageIncomingChanged(TargetCharacter, Context, ValueDelta, EventTags);
+	}
+	else if (Data.EvaluatedData.Attribute == this->GetHitPointsAttribute())
+	{
+		this->HandleHitPointsChanged(TargetCharacter, Context, ValueDelta, EventTags);
+	}
+}
+
+void UPF2AttributeSet::HandleDamageIncomingChanged(IPF2CharacterInterface*            TargetCharacter,
+                                                   const FGameplayEffectContextHandle Context,
+                                                   const float                        ValueDelta,
+                                                   const FGameplayTagContainer*       EventTags)
+{
+	const float LocalDamage = this->GetTmpDamageIncoming();
+
+	if (LocalDamage > 0.0f)
+	{
+		const float OldHitPoints        = this->GetHitPoints();
+		const float CurrentMaxHitPoints = this->GetMaxHitPoints();
+		const float NewHitPoints        = FMath::Clamp(OldHitPoints - LocalDamage, 0.0f, CurrentMaxHitPoints);
+
+		this->SetTmpDamageIncoming(0.0f);
+		this->SetHitPoints(NewHitPoints);
+
+		UE_LOG(
+			LogPf2CoreStatsDebug,
+			VeryVerbose,
+			TEXT("Damage: %s - Old HitPoints: %f, Damage: %f, New HitPoints: %f"),
+			*(TargetCharacter->GetCharacterName().ToString()),
+			OldHitPoints,
+			LocalDamage,
+			NewHitPoints
+		);
+
+		if (TargetCharacter != nullptr)
+		{
+			const UAbilitySystemComponent* SourceAsc = Context.GetOriginalInstigatorAbilitySystemComponent();
+
+			const FHitResult        HitResult    = UAbilitySystemBlueprintLibrary::EffectContextGetHitResult(Context);
+			IPF2CharacterInterface* Instigator   = nullptr;
+			AActor*                 DamageSource = nullptr;
+
+			const TWeakObjectPtr<AActor> SourceAvatarActor =
+				PF2GameplayAbilityUtilities::GetAvatarActorOfOwner(SourceAsc);
+
+			// Initially, assume that the source actor for damage is the physical damage source actor (e.g., the
+			// physical model of the weapon or projectile, such as the mesh for an axe).
+			if (SourceAvatarActor.IsValid())
+			{
+				DamageSource = SourceAvatarActor.Get();
+				Instigator   = PF2GameplayAbilityUtilities::GetEffectInstigator(SourceAsc, DamageSource);
+			}
+
+			// If we have been given an explicit GE "causer", use that instead of our default.
+			if (Context.GetEffectCauser() != nullptr)
+			{
+				// BUGBUG: Shouldn't the damage source be determined before we determine the instigator? The order in
+				//         which we determine the instigator and damage source here matches what the Action RPG sample
+				//         from Epic does, but it doesn't seem 100% correct.
+				DamageSource = Context.GetEffectCauser();
+			}
+
+			TargetCharacter->HandleDamageReceived(LocalDamage, Instigator, DamageSource, EventTags, HitResult);
+			TargetCharacter->HandleHitPointsChanged(-LocalDamage, EventTags);
+		}
+	}
+}
+
+void UPF2AttributeSet::HandleHitPointsChanged(IPF2CharacterInterface*            TargetCharacter,
+                                              const FGameplayEffectContextHandle Context,
+                                              const float                        ValueDelta,
+                                              const FGameplayTagContainer*       EventTags)
+{
+	const float ClampedHitPoints = FMath::Clamp(this->GetHitPoints(), 0.0f, this->GetMaxHitPoints());
+
+	this->SetHitPoints(ClampedHitPoints);
+
+	if (TargetCharacter != nullptr)
+	{
+		TargetCharacter->HandleHitPointsChanged(ValueDelta, EventTags);
+	}
 }

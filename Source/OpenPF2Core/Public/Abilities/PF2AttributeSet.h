@@ -27,6 +27,14 @@
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+// =====================================================================================================================
+// Forward Declarations (to break recursive dependencies)
+// =====================================================================================================================
+class IPF2CharacterInterface;
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 /**
  * This holds all of the attributes used by abilities, it instantiates a copy of this on every character.
  */
@@ -899,4 +907,42 @@ public:
 
 	UFUNCTION()
 	virtual void OnRep_SpellDifficultyClass(const FGameplayAttributeData& OldValue);
+
+protected:
+	/**
+	 * Notifies this ASC that the incoming damage attribute has changed.
+	 *
+	 * This updates the character's hit points appropriately, and then dispatches appropriate damage notifications to
+	 * the character.
+	 *
+	 * @param TargetCharacter
+	 *	The character receiving the damage. This is usually the same as the character who owns this ASC.
+	 * @param Context
+	 *	Wrapper around the context of the Gameplay Effect activation.
+	 * @param ValueDelta
+	 *	The amount of the change.
+	 * @param EventTags
+	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to damage.
+	 */
+	void HandleDamageIncomingChanged(IPF2CharacterInterface*            TargetCharacter,
+	                                 const FGameplayEffectContextHandle Context,
+	                                 const float                        ValueDelta,
+	                                 const FGameplayTagContainer*       EventTags);
+
+	/**
+	 * Notifies this ASC that the hit points attribute has changed.
+	 *
+	 * @param TargetCharacter
+	 *	The character receiving the hit point change. This is usually the same as the character who owns this ASC.
+	 * @param Context
+	 *	Wrapper around the context of the Gameplay Effect activation.
+	 * @param ValueDelta
+	 *	The amount of the change.
+	 * @param EventTags
+	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to hit points.
+	 */
+	void HandleHitPointsChanged(IPF2CharacterInterface*            TargetCharacter,
+	                            const FGameplayEffectContextHandle Context,
+	                            const float                        ValueDelta,
+	                            const FGameplayTagContainer*       EventTags);
 };

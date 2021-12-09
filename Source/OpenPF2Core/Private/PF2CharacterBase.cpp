@@ -264,6 +264,32 @@ void APF2CharacterBase::DeactivatePassiveGameplayEffects()
 	}
 }
 
+void APF2CharacterBase::HandleDamageReceived(const float                  Damage,
+                                             IPF2CharacterInterface*      InstigatorCharacter,
+                                             AActor*                      DamageSource,
+                                             const FGameplayTagContainer* EventTags,
+                                             const FHitResult             HitInfo)
+{
+	// BUGBUG: This is weird, but the way that a TScriptInterface object works is it maintains a reference to a UObject
+	// that *implements* an interface along with a pointer to the part of the UObject that provides the interface
+	// implementation, so we need to cast the instigator to a concrete object instead of the interface type.
+	AActor* InstigatorAsActor = Cast<AActor>(InstigatorCharacter);
+
+	this->OnDamageReceived(Damage, InstigatorAsActor, DamageSource, *EventTags, HitInfo);
+}
+
+void APF2CharacterBase::HandleHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags)
+{
+	if ((this->AbilitySystemComponent == nullptr) ||
+		!this->AbilitySystemComponent->ArePassiveGameplayEffectsActive())
+	{
+		// Stats are not presently initialized, so bail out to avoid firing off during initialization.
+		return;
+	}
+
+	this->OnHitPointsChanged(Delta, *EventTags);
+}
+
 void APF2CharacterBase::GenerateManagedPassiveGameplayEffects()
 {
 	if (this->IsAuthorityForEffects() && !this->bManagedPassiveEffectsGenerated)
