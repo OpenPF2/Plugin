@@ -48,7 +48,7 @@ public:
 	* @return
 	 *	The sum of the dice roll(s).
 	 */
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, Category = "OpenPF2|Dice")
 	static int32 RollStringSum(const FName RollExpression);
 
 	/**
@@ -62,7 +62,7 @@ public:
 	 * @return
 	 *	The sum of the dice roll(s).
 	 */
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, Category = "OpenPF2|Dice")
 	static int32 RollSum(const int32 RollCount, const int32 SideCount);
 
 	/**
@@ -78,7 +78,7 @@ public:
 	* @return
 	 *	The result of each dice roll.
 	 */
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, Category = "OpenPF2|Dice")
 	static TArray<int32> RollString(const FName RollExpression);
 
 	/**
@@ -92,7 +92,7 @@ public:
 	 * @return
 	 *	The result of each dice roll.
 	 */
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, Category = "OpenPF2|Dice")
 	static TArray<int32> Roll(const int32 RollCount, const int32 SideCount);
 
 	/**
@@ -107,7 +107,7 @@ public:
 	 *	A roll expression for the next size up (for example, given "1d6" this would return "1d8"; given "2d4", this
 	 *	would return "2d6").
 	 */
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, Category = "OpenPF2|Dice")
 	static FName NextSizeString(const FName RollExpression);
 
 	/**
@@ -119,7 +119,7 @@ public:
 	 * @return
 	 *	The number of sides on the die of the next size up.
 	 */
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, Category = "OpenPF2|Dice")
 	static int32 NextSize(const int32 SideCount);
 
 	/**
