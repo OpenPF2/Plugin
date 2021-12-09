@@ -12,12 +12,15 @@
 
 #include "Abilities/PF2AttributeSet.h"
 
+#include <GameplayEffectExtension.h>
+#include <GameFramework/Controller.h>
 #include <Net/UnrealNetwork.h>
+
+#include "AbilitySystemBlueprintLibrary.h"
+#include "PF2CharacterInterface.h"
 
 UPF2AttributeSet::UPF2AttributeSet() :
 	Experience(0.0f),
-	HitPoints(1.0f),
-	MaxHitPoints(1.0f),
 	AbBoostCount(0.0f),
 	AbBoostLimit(0.0f),
 	AbStrength(10.0f),
@@ -39,6 +42,26 @@ UPF2AttributeSet::UPF2AttributeSet() :
 	StFortitudeModifier(0.0f),
 	StReflexModifier(0.0f),
 	StWillModifier(0.0f),
+	HitPoints(1.0f),
+	MaxHitPoints(1.0f),
+	RstPhysicalBludgeoning(0.0f),
+	RstPhysicalPiercing(0.0f),
+	RstPhysicalSlashing(0.0f),
+	RstEnergyAcid(0.0f),
+	RstEnergyCold(0.0f),
+	RstEnergyFire(0.0f),
+	RstEnergySonic(0.0f),
+	RstEnergyPositive(0.0f),
+	RstEnergyNegative(0.0f),
+	RstEnergyForce(0.0f),
+	RstAlignmentChaotic(0.0f),
+	RstAlignmentEvil(0.0f),
+	RstAlignmentGood(0.0f),
+	RstAlignmentLawful(0.0f),
+	RstMental(0.0f),
+	RstPoison(0.0f),
+	RstBleed(0.0f),
+	RstPrecision(0.0f),
 	PerceptionModifier(0.0f),
 	SkAcrobaticsModifier(0.0f),
 	SkArcanaModifier(0.0f),
@@ -62,7 +85,7 @@ UPF2AttributeSet::UPF2AttributeSet() :
 	SpellDifficultyClass(0.0f),
 	FeAncestryFeatCount(0.0f),
 	FeAncestryFeatLimit(0.0f),
-	Damage(0.0f)
+	TmpDamageIncoming(0.0f)
 {
 }
 
@@ -71,8 +94,6 @@ void UPF2AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UPF2AttributeSet, Experience);
-	DOREPLIFETIME(UPF2AttributeSet, HitPoints);
-	DOREPLIFETIME(UPF2AttributeSet, MaxHitPoints);
 	DOREPLIFETIME(UPF2AttributeSet, AbBoostCount);
 	DOREPLIFETIME(UPF2AttributeSet, AbBoostLimit);
 	DOREPLIFETIME(UPF2AttributeSet, AbStrength);
@@ -94,6 +115,26 @@ void UPF2AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(UPF2AttributeSet, StFortitudeModifier);
 	DOREPLIFETIME(UPF2AttributeSet, StReflexModifier);
 	DOREPLIFETIME(UPF2AttributeSet, StWillModifier);
+	DOREPLIFETIME(UPF2AttributeSet, HitPoints);
+	DOREPLIFETIME(UPF2AttributeSet, MaxHitPoints);
+	DOREPLIFETIME(UPF2AttributeSet, RstPhysicalBludgeoning);
+	DOREPLIFETIME(UPF2AttributeSet, RstPhysicalPiercing);
+	DOREPLIFETIME(UPF2AttributeSet, RstPhysicalSlashing);
+	DOREPLIFETIME(UPF2AttributeSet, RstEnergyAcid);
+	DOREPLIFETIME(UPF2AttributeSet, RstEnergyCold);
+	DOREPLIFETIME(UPF2AttributeSet, RstEnergyFire);
+	DOREPLIFETIME(UPF2AttributeSet, RstEnergySonic);
+	DOREPLIFETIME(UPF2AttributeSet, RstEnergyPositive);
+	DOREPLIFETIME(UPF2AttributeSet, RstEnergyNegative);
+	DOREPLIFETIME(UPF2AttributeSet, RstEnergyForce);
+	DOREPLIFETIME(UPF2AttributeSet, RstAlignmentChaotic);
+	DOREPLIFETIME(UPF2AttributeSet, RstAlignmentEvil);
+	DOREPLIFETIME(UPF2AttributeSet, RstAlignmentGood);
+	DOREPLIFETIME(UPF2AttributeSet, RstAlignmentLawful);
+	DOREPLIFETIME(UPF2AttributeSet, RstMental);
+	DOREPLIFETIME(UPF2AttributeSet, RstPoison);
+	DOREPLIFETIME(UPF2AttributeSet, RstBleed);
+	DOREPLIFETIME(UPF2AttributeSet, RstPrecision);
 	DOREPLIFETIME(UPF2AttributeSet, PerceptionModifier);
 	DOREPLIFETIME(UPF2AttributeSet, SkAcrobaticsModifier);
 	DOREPLIFETIME(UPF2AttributeSet, SkArcanaModifier);
@@ -122,16 +163,6 @@ void UPF2AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 void UPF2AttributeSet::OnRep_Experience(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, Experience, OldValue);
-}
-
-void UPF2AttributeSet::OnRep_HitPoints(const FGameplayAttributeData& OldValue)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, HitPoints, OldValue);
-}
-
-void UPF2AttributeSet::OnRep_MaxHitPoints(const FGameplayAttributeData& OldValue)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, MaxHitPoints, OldValue);
 }
 
 void UPF2AttributeSet::OnRep_AbBoostCount(const FGameplayAttributeData& OldValue)
@@ -237,6 +268,106 @@ void UPF2AttributeSet::OnRep_StReflexModifier(const FGameplayAttributeData& OldV
 void UPF2AttributeSet::OnRep_StWillModifier(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, StWillModifier, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_HitPoints(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, HitPoints, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_MaxHitPoints(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, MaxHitPoints, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstPhysicalBludgeoning(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstPhysicalBludgeoning, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstPhysicalPiercing(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstPhysicalPiercing, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstPhysicalSlashing(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstPhysicalSlashing, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstEnergyAcid(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstEnergyAcid, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstEnergyCold(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstEnergyCold, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstEnergyFire(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstEnergyFire, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstEnergySonic(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstEnergySonic, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstEnergyPositive(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstEnergyPositive, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstEnergyNegative(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstEnergyNegative, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstEnergyForce(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstEnergyForce, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstAlignmentChaotic(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstAlignmentChaotic, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstAlignmentEvil(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstAlignmentEvil, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstAlignmentGood(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstAlignmentGood, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstAlignmentLawful(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstAlignmentLawful, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstMental(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstMental, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstPoison(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstPoison, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstBleed(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstBleed, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_RstPrecision(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, RstPrecision, OldValue);
 }
 
 void UPF2AttributeSet::OnRep_PerceptionModifier(const FGameplayAttributeData& OldValue)
@@ -362,4 +493,100 @@ void UPF2AttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, f
 void UPF2AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
+
+	const FGameplayEffectContextHandle Context   = Data.EffectSpec.GetContext();
+	const FGameplayTagContainer*       EventTags = Data.EffectSpec.CapturedSourceTags.GetAggregatedTags();
+
+	IPF2CharacterInterface* TargetCharacter = PF2GameplayAbilityUtilities::GetEffectTarget(&Data);
+
+	float ValueDelta = 0;
+
+	if (Data.EvaluatedData.ModifierOp == EGameplayModOp::Type::Additive)
+	{
+		ValueDelta = Data.EvaluatedData.Magnitude;
+	}
+
+	if (Data.EvaluatedData.Attribute == this->GetTmpDamageIncomingAttribute())
+	{
+		this->HandleDamageIncomingChanged(TargetCharacter, Context, ValueDelta, EventTags);
+	}
+	else if (Data.EvaluatedData.Attribute == this->GetHitPointsAttribute())
+	{
+		this->HandleHitPointsChanged(TargetCharacter, Context, ValueDelta, EventTags);
+	}
+}
+
+void UPF2AttributeSet::HandleDamageIncomingChanged(IPF2CharacterInterface*            TargetCharacter,
+                                                   const FGameplayEffectContextHandle Context,
+                                                   const float                        ValueDelta,
+                                                   const FGameplayTagContainer*       EventTags)
+{
+	const float LocalDamage = this->GetTmpDamageIncoming();
+
+	if (LocalDamage > 0.0f)
+	{
+		const float OldHitPoints        = this->GetHitPoints();
+		const float CurrentMaxHitPoints = this->GetMaxHitPoints();
+		const float NewHitPoints        = FMath::Clamp(OldHitPoints - LocalDamage, 0.0f, CurrentMaxHitPoints);
+
+		this->SetTmpDamageIncoming(0.0f);
+		this->SetHitPoints(NewHitPoints);
+
+		UE_LOG(
+			LogPf2CoreStatsDebug,
+			VeryVerbose,
+			TEXT("Damage: %s - Old HitPoints: %f, Damage: %f, New HitPoints: %f"),
+			*(TargetCharacter->GetCharacterName().ToString()),
+			OldHitPoints,
+			LocalDamage,
+			NewHitPoints
+		);
+
+		if (TargetCharacter != nullptr)
+		{
+			const UAbilitySystemComponent* SourceAsc = Context.GetOriginalInstigatorAbilitySystemComponent();
+
+			const FHitResult        HitResult    = UAbilitySystemBlueprintLibrary::EffectContextGetHitResult(Context);
+			IPF2CharacterInterface* Instigator   = nullptr;
+			AActor*                 DamageSource = nullptr;
+
+			const TWeakObjectPtr<AActor> SourceAvatarActor =
+				PF2GameplayAbilityUtilities::GetAvatarActorOfOwner(SourceAsc);
+
+			// Initially, assume that the source actor for damage is the physical damage source actor (e.g., the
+			// physical model of the weapon or projectile, such as the mesh for an axe).
+			if (SourceAvatarActor.IsValid())
+			{
+				DamageSource = SourceAvatarActor.Get();
+				Instigator   = PF2GameplayAbilityUtilities::GetEffectInstigator(SourceAsc, DamageSource);
+			}
+
+			// If we have been given an explicit GE "causer", use that instead of our default.
+			if (Context.GetEffectCauser() != nullptr)
+			{
+				// BUGBUG: Shouldn't the damage source be determined before we determine the instigator? The order in
+				//         which we determine the instigator and damage source here matches what the Action RPG sample
+				//         from Epic does, but it doesn't seem 100% correct.
+				DamageSource = Context.GetEffectCauser();
+			}
+
+			TargetCharacter->HandleDamageReceived(LocalDamage, Instigator, DamageSource, EventTags, HitResult);
+			TargetCharacter->HandleHitPointsChanged(-LocalDamage, EventTags);
+		}
+	}
+}
+
+void UPF2AttributeSet::HandleHitPointsChanged(IPF2CharacterInterface*            TargetCharacter,
+                                              const FGameplayEffectContextHandle Context,
+                                              const float                        ValueDelta,
+                                              const FGameplayTagContainer*       EventTags)
+{
+	const float ClampedHitPoints = FMath::Clamp(this->GetHitPoints(), 0.0f, this->GetMaxHitPoints());
+
+	this->SetHitPoints(ClampedHitPoints);
+
+	if (TargetCharacter != nullptr)
+	{
+		TargetCharacter->HandleHitPointsChanged(ValueDelta, EventTags);
+	}
 }

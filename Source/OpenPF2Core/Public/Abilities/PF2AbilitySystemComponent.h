@@ -78,11 +78,20 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void RemoveAllDynamicTags() override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual FGameplayTagContainer GetActiveGameplayTags() const override;
+
 	// =================================================================================================================
 	// Public Methods - IPF2CharacterAbilitySystemComponentInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
-    virtual void ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore) override;
+	virtual int32 GetCharacterLevel() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> GetAbilityScoreValues() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<UPF2AbilityBoostBase *> GetPendingAbilityBoosts() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual FORCEINLINE TSubclassOf<UGameplayEffect> GetBoostEffectForAbility(
@@ -92,10 +101,7 @@ public:
 	}
 
 	UFUNCTION(BlueprintCallable)
-	virtual TArray<UPF2GameplayAbility_BoostAbilityBase *> GetPendingAbilityBoosts() const override;
-
-	UFUNCTION(BlueprintCallable)
-	virtual TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> GetAbilityScoreValues() const override;
+	virtual void ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore) override;
 
 protected:
 	// =================================================================================================================
@@ -151,16 +157,6 @@ protected:
 	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
-	/**
-	 * Gets the level of the owning character.
-	 *
-	 * This requires the owning actor to implement IPF2CharacterInterface. If the owning actor does not implement that
-	 * interface, the default level of 1 is returned instead.
-	 *
-	 * @return
-	 *	The level of the owning character actor.
-	 */
-	int GetCharacterLevel() const;
 
 	/**
 	 * Gets or builds the list of all passive gameplay effects to activate, organized by weight group.

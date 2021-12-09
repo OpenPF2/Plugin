@@ -34,8 +34,6 @@ void FPF2AttributeSetSpec::Define()
 			const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
 
 			TestEqual(TEXT("Experience"),             AttributeSet->GetExperience(),              0.0f);
-			TestEqual(TEXT("HitPoints"),              AttributeSet->GetHitPoints(),               1.0f);
-			TestEqual(TEXT("MaxHitPoints"),           AttributeSet->GetMaxHitPoints(),            1.0f);
 			TestEqual(TEXT("AbBoostCount"),           AttributeSet->GetAbBoostCount(),            0.0f);
 			TestEqual(TEXT("AbBoostLimit"),           AttributeSet->GetAbBoostLimit(),            0.0f);
 			TestEqual(TEXT("AbStrength"),             AttributeSet->GetAbStrength(),             10.0f);
@@ -57,6 +55,26 @@ void FPF2AttributeSetSpec::Define()
 			TestEqual(TEXT("StFortitudeModifier"),    AttributeSet->GetStFortitudeModifier(),     0.0f);
 			TestEqual(TEXT("StReflexModifier"),       AttributeSet->GetStReflexModifier(),        0.0f);
 			TestEqual(TEXT("StWillModifier"),         AttributeSet->GetStWillModifier(),          0.0f);
+			TestEqual(TEXT("HitPoints"),              AttributeSet->GetHitPoints(),               1.0f);
+			TestEqual(TEXT("MaxHitPoints"),           AttributeSet->GetMaxHitPoints(),            1.0f);
+			TestEqual(TEXT("RstPhysicalBludgeoning"), AttributeSet->GetRstPhysicalBludgeoning(),  0.0f);
+			TestEqual(TEXT("RstPhysicalPiercing"),    AttributeSet->GetRstPhysicalPiercing(),     0.0f);
+			TestEqual(TEXT("RstPhysicalSlashing"),    AttributeSet->GetRstPhysicalSlashing(),     0.0f);
+			TestEqual(TEXT("RstEnergyAcid"),          AttributeSet->GetRstEnergyAcid(),           0.0f);
+			TestEqual(TEXT("RstEnergyCold"),          AttributeSet->GetRstEnergyCold(),           0.0f);
+			TestEqual(TEXT("RstEnergyFire"),          AttributeSet->GetRstEnergyFire(),           0.0f);
+			TestEqual(TEXT("RstEnergySonic"),         AttributeSet->GetRstEnergySonic(),          0.0f);
+			TestEqual(TEXT("RstEnergyPositive"),      AttributeSet->GetRstEnergyPositive(),       0.0f);
+			TestEqual(TEXT("RstEnergyNegative"),      AttributeSet->GetRstEnergyNegative(),       0.0f);
+			TestEqual(TEXT("RstEnergyForce"),         AttributeSet->GetRstEnergyForce(),          0.0f);
+			TestEqual(TEXT("RstAlignmentChaotic"),    AttributeSet->GetRstAlignmentChaotic(),     0.0f);
+			TestEqual(TEXT("RstAlignmentEvil"),       AttributeSet->GetRstAlignmentEvil(),        0.0f);
+			TestEqual(TEXT("RstAlignmentGood"),       AttributeSet->GetRstAlignmentGood(),        0.0f);
+			TestEqual(TEXT("RstAlignmentLawful"),     AttributeSet->GetRstAlignmentLawful(),      0.0f);
+			TestEqual(TEXT("RstMental"),              AttributeSet->GetRstMental(),               0.0f);
+			TestEqual(TEXT("RstPoison"),              AttributeSet->GetRstPoison(),               0.0f);
+			TestEqual(TEXT("RstBleed"),               AttributeSet->GetRstBleed(),                0.0f);
+			TestEqual(TEXT("RstPrecision"),           AttributeSet->GetRstPrecision(),            0.0f);
 			TestEqual(TEXT("PerceptionModifier"),     AttributeSet->GetPerceptionModifier(),      0.0f);
 			TestEqual(TEXT("SkAcrobaticsModifier"),   AttributeSet->GetSkAcrobaticsModifier(),    0.0f);
 			TestEqual(TEXT("SkArcanaModifier"),       AttributeSet->GetSkArcanaModifier(),        0.0f);
@@ -80,7 +98,7 @@ void FPF2AttributeSetSpec::Define()
 			TestEqual(TEXT("SpellDifficultyClass"),   AttributeSet->GetSpellDifficultyClass(),    0.0f);
 			TestEqual(TEXT("FeAncestryFeatCount"),    AttributeSet->GetFeAncestryFeatCount(),     0.0f);
 			TestEqual(TEXT("FeAncestryFeatLimit"),    AttributeSet->GetFeAncestryFeatLimit(),     0.0f);
-			TestEqual(TEXT("Damage"),                 AttributeSet->GetDamage(),                  0.0f);
+			TestEqual(TEXT("TmpDamageIncoming"),      AttributeSet->GetTmpDamageIncoming(),       0.0f);
 		});
 	});
 }

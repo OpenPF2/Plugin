@@ -6,6 +6,7 @@
 #pragma once
 
 #include <GameplayTagContainer.h>
+#include <UObject/Interface.h>
 
 #include "PF2AbilitySystemComponentInterface.generated.h"
 
@@ -237,4 +238,13 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable)
 	virtual void RemoveAllDynamicTags() = 0;
+
+	/**
+	 * Gets all of the tags that are active on this ASC as a result of active GEs and Gameplay Cues.
+	 *
+	 * @return
+	 *	A container wrapping the active tags.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual FGameplayTagContainer GetActiveGameplayTags() const = 0;
 };

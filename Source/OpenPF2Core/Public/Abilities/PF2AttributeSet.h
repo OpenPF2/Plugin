@@ -14,8 +14,12 @@
 
 #include <AttributeSet.h>
 #include <AbilitySystemComponent.h>
+
 #include "PF2AttributeSet.generated.h"
 
+// =====================================================================================================================
+// Macros
+// =====================================================================================================================
 // Uses macros from AttributeSet.h
 #define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
 	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
@@ -23,6 +27,14 @@
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+// =====================================================================================================================
+// Forward Declarations (to break recursive dependencies)
+// =====================================================================================================================
+class IPF2CharacterInterface;
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 /**
  * This holds all of the attributes used by abilities, it instantiates a copy of this on every character.
  */
@@ -33,20 +45,10 @@ class OPENPF2CORE_API UPF2AttributeSet : public UAttributeSet
 
 public:
 	// =================================================================================================================
-	// Constructors
-	// =================================================================================================================
-	explicit UPF2AttributeSet();
-
-	// =================================================================================================================
-	// Callbacks
-	// =================================================================================================================
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
-	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
-
-	// =================================================================================================================
 	// Attributes - Stats Shared by Both PCs and NPCs
 	// =================================================================================================================
+
+	// Experience ------------------------------------------------------------------------------------------------------
 	/**
 	 * Experience Points (XP) track the knowledge a character has earned from facing beasts and traps.
 	 *
@@ -66,30 +68,7 @@ public:
 	FGameplayAttributeData Experience;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, Experience)
 
-	/**
-	 * All creatures and objects have Hit Points (HP).
-	 *
-	 * From the Pathfinder 2E Core Rulebook, page 459, "Knocked Out and Dying":
-	 * "Creatures cannot be reduced to fewer than 0 Hit Points. When most creatures reach 0 Hit Points, they die and are
-	 * removed from play unless the attack was nonlethal, in which case they are instead knocked out for a significant
-	 * amount of time (usually 1 minute or more).
-	 *
-	 * Player characters, their companions, and other significant characters and creatures don’t automatically die when
-	 * they reach 0 Hit Points. Instead, they are knocked out and are at risk of death."
-	 *
-	 * Capped by MaxHitPoints.
-	 */
-	UPROPERTY(BlueprintReadOnly, Category = "HitPoints", ReplicatedUsing=OnRep_HitPoints)
-	FGameplayAttributeData HitPoints;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, HitPoints)
-
-	/**
-	 * The maximum number of hit points for this character.
-	 */
-	UPROPERTY(BlueprintReadOnly, Category = "HitPoints", ReplicatedUsing=OnRep_MaxHitPoints)
-	FGameplayAttributeData MaxHitPoints;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, MaxHitPoints)
-
+	// Ability Scores --------------------------------------------------------------------------------------------------
 	/**
 	 * The number of ability boosts that this character currently has applied.
 	 *
@@ -236,6 +215,7 @@ public:
 	FGameplayAttributeData AbCharismaModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbCharismaModifier)
 
+	// Class DC --------------------------------------------------------------------------------------------------------
 	/**
 	 * The Difficulty Class (DC) modifier for this character.
 	 *
@@ -245,6 +225,7 @@ public:
 	FGameplayAttributeData ClassDifficultyClass;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, ClassDifficultyClass)
 
+	// Speed -----------------------------------------------------------------------------------------------------------
 	/**
 	 * How fast this character can move (in centimeters per second).
 	 */
@@ -259,6 +240,7 @@ public:
 	FGameplayAttributeData MaxSpeed;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, MaxSpeed)
 
+	// Armor Class -----------------------------------------------------------------------------------------------------
 	/**
 	 * The Armor Class, which represents how hard it is to hit and damage a creature.
 	 *
@@ -269,6 +251,7 @@ public:
 	FGameplayAttributeData ArmorClass;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, ArmorClass)
 
+	// Saving Throws ---------------------------------------------------------------------------------------------------
 	/**
 	 * Fortitude saving throws reduce the effects of abilities and afflictions that can debilitate the body.
 	 * (Pathfinder 2E Core Rulebook, page 449)
@@ -293,6 +276,223 @@ public:
 	FGameplayAttributeData StWillModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, StWillModifier)
 
+	// Hit Points ------------------------------------------------------------------------------------------------------
+	/**
+	 * All creatures and objects have Hit Points (HP).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, page 459, "Knocked Out and Dying":
+	 * "Creatures cannot be reduced to fewer than 0 Hit Points. When most creatures reach 0 Hit Points, they die and are
+	 * removed from play unless the attack was nonlethal, in which case they are instead knocked out for a significant
+	 * amount of time (usually 1 minute or more).
+	 *
+	 * Player characters, their companions, and other significant characters and creatures don’t automatically die when
+	 * they reach 0 Hit Points. Instead, they are knocked out and are at risk of death."
+	 *
+	 * Capped by MaxHitPoints.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_HitPoints)
+	FGameplayAttributeData HitPoints;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, HitPoints)
+
+	/**
+	 * The maximum number of hit points for this character.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_MaxHitPoints)
+	FGameplayAttributeData MaxHitPoints;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, MaxHitPoints)
+
+	/**
+	 * The character's resistance to Bludgeoning damage (DamageType.Physical.Bludgeoning).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Bludgeoning (B) damage comes from weapons and hazards that deal blunt-force trauma, like a hit from a club or
+	 * being dashed against rocks."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstPhysicalBludgeoning)
+	FGameplayAttributeData RstPhysicalBludgeoning;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstPhysicalBludgeoning)
+
+	/**
+	 * The character's resistance to Piercing damage (DamageType.Physical.Piercing).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Piercing (P) damage is dealt from stabs and punctures, whether from a dragon's fangs or the thrust of a spear."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstPhysicalPiercing)
+	FGameplayAttributeData RstPhysicalPiercing;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstPhysicalPiercing)
+
+	/**
+	 * The character's resistance to Slashing damage (DamageType.Physical.Slashing).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Slashing (S) damage is delivered by a cut, be it the swing of the sword or the blow from a scythe blades trap."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstPhysicalSlashing)
+	FGameplayAttributeData RstPhysicalSlashing;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstPhysicalSlashing)
+
+	/**
+	 * The character's resistance to Acid damage (DamageType.Energy.Acid).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Acid damage can be delivered by gases, liquids, and certain solids that dissolve flesh, and sometimes harder
+	 * materials."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstEnergyAcid)
+	FGameplayAttributeData RstEnergyAcid;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyAcid)
+
+	/**
+	 * The character's resistance to Cold damage (DamageType.Energy.Cold).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Cold damage freezes material by way of contact with chilling gases and ice. Electricity damage comes from the
+	 * discharge of powerful lightning and sparks."
+	 *
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstEnergyCold)
+	FGameplayAttributeData RstEnergyCold;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyCold)
+
+	/**
+	 * The character's resistance to Fire damage (DamageType.Energy.Fire).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Fire damage burns through heat and combustion."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstEnergyFire)
+	FGameplayAttributeData RstEnergyFire;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyFire)
+
+	/**
+	 * The character's resistance to Sonic damage (DamageType.Energy.Sonic).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Sonic damage assaults matter with high-frequency vibration and sound waves."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstEnergySonic)
+	FGameplayAttributeData RstEnergySonic;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergySonic)
+
+	/**
+	 * The character's resistance to Positive damage (DamageType.Energy.Positive).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Positive damage harms only undead creatures, withering undead bodies and disrupting incorporeal undead."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstEnergyPositive)
+	FGameplayAttributeData RstEnergyPositive;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyPositive)
+
+	/**
+	 * The character's resistance to Negative damage (DamageType.Energy.Negative).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Negative damage saps life, damaging only living creatures."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstEnergyNegative)
+	FGameplayAttributeData RstEnergyNegative;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyNegative)
+
+	/**
+	 * The character's resistance to Force damage (DamageType.Energy.Force).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Powerful and pure magical energy can manifest itself as force damage. Few things can resist this type of
+	 * damage—not even incorporeal creatures such as ghosts and wraiths."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstEnergyForce)
+	FGameplayAttributeData RstEnergyForce;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyForce)
+
+	/**
+	 * The character's resistance to Chaotic damage (DamageType.Alignment.Chaotic).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Chaotic damage harms only lawful creatures."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstAlignmentChaotic)
+	FGameplayAttributeData RstAlignmentChaotic;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstAlignmentChaotic)
+
+	/**
+	 * The character's resistance to Evil damage (DamageType.Alignment.Evil).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Evil damage harms only good creatures."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstAlignmentEvil)
+	FGameplayAttributeData RstAlignmentEvil;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstAlignmentEvil)
+
+	/**
+	 * The character's resistance to Good damage (DamageType.Alignment.Good).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Good damage harms only evil creatures."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstAlignmentGood)
+	FGameplayAttributeData RstAlignmentGood;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstAlignmentGood)
+
+	/**
+	 * The character's resistance to Lawful damage (DamageType.Alignment.Lawful).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Lawful damage harms only chaotic creatures."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstAlignmentLawful)
+	FGameplayAttributeData RstAlignmentLawful;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstAlignmentLawful)
+
+	/**
+	 * The character's resistance to Mental damage (DamageType.Mental).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Sometimes an effect can target the mind with enough psychic force to actually deal damage to the creature. When
+	 * it does, it deals mental damage. Mindless creatures and those with only programmed or rudimentary intelligence
+	 * are often immune to mental damage and effects."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstMental)
+	FGameplayAttributeData RstMental;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstMental)
+
+	/**
+	 * The character's resistance to Poison damage (DamageType.Poison).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Venoms, toxins and the like can deal poison damage, which affects creatures by way of contact, ingestion,
+	 * inhalation, or injury. In addition to coming from monster attacks, alchemical items, and spells, poison damage is
+	 * often caused by ongoing afflictions, which follow special rules."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstPoison)
+	FGameplayAttributeData RstPoison;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstPoison)
+
+	/**
+	 * The character's resistance to Bleed damage (DamageType.Bleed).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "This is persistent damage that represents loss of blood. As such, it has no effect on nonliving creatures or
+	 * living creatures that don't need blood to live."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstBleed)
+	FGameplayAttributeData RstBleed;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstBleed)
+
+	/**
+	 * The character's resistance to Precision damage (DamageType.Precision).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "When a character hits with an ability that grants precision damage, the character increase the attack's listed
+	 * damage, using the same damage type, rather than tracking a separate pool of damage."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstPrecision)
+	FGameplayAttributeData RstPrecision;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstPrecision)
+
+	// Perception ------------------------------------------------------------------------------------------------------
 	/**
 	 * Perception measures a character's ability to notice hidden objects or unusual situations and affects initiative.
 	 * (Pathfinder 2E Core Rulebook, page 448)
@@ -301,6 +501,7 @@ public:
 	FGameplayAttributeData PerceptionModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, PerceptionModifier)
 
+	// Skills ------------------------------------------------------------------------------------------------------
 	/**
 	 * Acrobatics measures a character's ability to perform tasks requiring coordination and grace.
 	 * (Pathfinder 2E Core Rulebook, page 240)
@@ -463,6 +664,7 @@ public:
 	FGameplayAttributeData SpellDifficultyClass;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SpellDifficultyClass)
 
+	// Feats -----------------------------------------------------------------------------------------------------------
 	/**
 	 * The number of ancestry feats that this character currently has applied.
 	 *
@@ -482,14 +684,29 @@ public:
 	FGameplayAttributeData FeAncestryFeatLimit;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, FeAncestryFeatLimit)
 
+	// Transient/Temporary Attributes ----------------------------------------------------------------------------------
 	/**
-	 * Damage is a 'temporary' attribute used by the DamageExecution to calculate final damage.
+	 * A temporary attribute for tracking damage that the owner of this set is receiving from an instant damage GE.
 	 *
-	 * This turns into -HitPoints.
+	 * This value exists only on the server; it is not replicated. At the end of execution for a damage GE, this turns
+	 * into -HitPoints (i.e., it gets subtracted from the character's health). This allows other effects (e.g., passive
+	 * protection effects or armor) to lessen the impact of the damage.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Damage")
-	FGameplayAttributeData Damage;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, Damage)
+	UPROPERTY(BlueprintReadOnly, Category = "Temporary Attributes")
+	FGameplayAttributeData TmpDamageIncoming;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, TmpDamageIncoming)
+
+	// =================================================================================================================
+	// Constructors
+	// =================================================================================================================
+	explicit UPF2AttributeSet();
+
+	// =================================================================================================================
+	// UAttributeSet Callbacks
+	// =================================================================================================================
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
+	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
 	// =================================================================================================================
 	// Attribute Replication Callbacks
@@ -498,12 +715,6 @@ public:
 	// replication.
 	UFUNCTION()
     virtual void OnRep_Experience(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
-	virtual void OnRep_HitPoints(const FGameplayAttributeData& OldValue);
-
-	UFUNCTION()
-	virtual void OnRep_MaxHitPoints(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
 	virtual void OnRep_AbBoostCount(const FGameplayAttributeData& OldValue);
@@ -567,6 +778,66 @@ public:
 
 	UFUNCTION()
 	virtual void OnRep_StWillModifier(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_HitPoints(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_MaxHitPoints(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstPhysicalBludgeoning(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstPhysicalPiercing(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstPhysicalSlashing(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstEnergyAcid(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstEnergyCold(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstEnergyFire(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstEnergySonic(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstEnergyPositive(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstEnergyNegative(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstEnergyForce(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstAlignmentChaotic(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstAlignmentEvil(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstAlignmentGood(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstAlignmentLawful(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstMental(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstPoison(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstBleed(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstPrecision(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
 	virtual void OnRep_PerceptionModifier(const FGameplayAttributeData& OldValue);
@@ -636,4 +907,42 @@ public:
 
 	UFUNCTION()
 	virtual void OnRep_SpellDifficultyClass(const FGameplayAttributeData& OldValue);
+
+protected:
+	/**
+	 * Notifies this ASC that the incoming damage attribute has changed.
+	 *
+	 * This updates the character's hit points appropriately, and then dispatches appropriate damage notifications to
+	 * the character.
+	 *
+	 * @param TargetCharacter
+	 *	The character receiving the damage. This is usually the same as the character who owns this ASC.
+	 * @param Context
+	 *	Wrapper around the context of the Gameplay Effect activation.
+	 * @param ValueDelta
+	 *	The amount of the change.
+	 * @param EventTags
+	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to damage.
+	 */
+	void HandleDamageIncomingChanged(IPF2CharacterInterface*            TargetCharacter,
+	                                 const FGameplayEffectContextHandle Context,
+	                                 const float                        ValueDelta,
+	                                 const FGameplayTagContainer*       EventTags);
+
+	/**
+	 * Notifies this ASC that the hit points attribute has changed.
+	 *
+	 * @param TargetCharacter
+	 *	The character receiving the hit point change. This is usually the same as the character who owns this ASC.
+	 * @param Context
+	 *	Wrapper around the context of the Gameplay Effect activation.
+	 * @param ValueDelta
+	 *	The amount of the change.
+	 * @param EventTags
+	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to hit points.
+	 */
+	void HandleHitPointsChanged(IPF2CharacterInterface*            TargetCharacter,
+	                            const FGameplayEffectContextHandle Context,
+	                            const float                        ValueDelta,
+	                            const FGameplayTagContainer*       EventTags);
 };

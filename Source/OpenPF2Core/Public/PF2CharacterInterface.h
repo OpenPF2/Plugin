@@ -11,7 +11,9 @@
 // permission.
 
 #pragma once
-#include "Abilities/PF2GameplayAbility_BoostAbilityBase.h"
+
+#include <UObject/Interface.h>
+#include "Abilities/PF2AbilityBoostBase.h"
 
 #include "PF2CharacterInterface.generated.h"
 
@@ -29,6 +31,17 @@ class OPENPF2CORE_API IPF2CharacterInterface
     GENERATED_BODY()
 
 public:
+	/**
+	 * Returns the name of this character, as set by the game designer.
+	 *
+	 * If no name has been set, then the UObject name of the character is returned instead.
+	 *
+	 * @return
+	 *	The name of this character.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual FText GetCharacterName() const = 0;
+
 	/**
 	 * Gets the current level of this character.
 	 *
@@ -65,7 +78,7 @@ public:
 	 *	The ability boost GAs that are still pending for this character.
 	 */
 	UFUNCTION(BlueprintCallable)
-	virtual TArray<UPF2GameplayAbility_BoostAbilityBase*> GetPendingAbilityBoosts() const = 0;
+	virtual TArray<UPF2AbilityBoostBase*> GetPendingAbilityBoosts() const = 0;
 
 	/**
 	 * Applies a single ability boost selection to this character.
@@ -82,8 +95,8 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable)
 	virtual void AddAbilityBoostSelection(
-		const TSubclassOf<class UPF2GameplayAbility_BoostAbilityBase> BoostGameplayAbility,
-		const TSet<EPF2CharacterAbilityScoreType>                     SelectedAbilities) = 0;
+	    const TSubclassOf<class UPF2AbilityBoostBase> BoostGameplayAbility,
+	    const TSet<EPF2CharacterAbilityScoreType>     SelectedAbilities) = 0;
 
 	/**
 	 * Attempts to find and activate a pending ability boost Gameplay Ability for each Ability Boost selection on this
@@ -115,4 +128,42 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable)
 	virtual void DeactivatePassiveGameplayEffects() = 0;
+
+	/**
+	 * Notifies this character that it has received damage.
+	 *
+	 * This should only be invoked by the character's attribute set. This does NOT actually modify the character's stats.
+	 * Once invoked, this method fires off appropriate callbacks into the character's Blueprint event graph.
+	 *
+	 * @param Damage
+	 *	The amount of the damage.
+	 * @param InstigatorCharacter
+	 *	The character that is ultimately responsible for the damage. This can be null if the damage is caused by the
+	 *	environment.
+	 * @param DamageSource
+	 *	The actor that directly inflicted the damage, such as a weapon or projectile.
+	 * @param EventTags
+	 *	Tags passed along with the damage Gameplay Event. This is typically set by an attack montage to indicate the
+	 *	nature of the attack that was performed.
+	 * @param HitInfo
+	 *	Hit result information, including who was hit and where the damage was inflicted.
+	 */
+    virtual void HandleDamageReceived(const float                  Damage,
+                                      IPF2CharacterInterface*      InstigatorCharacter,
+                                      AActor*                      DamageSource,
+                                      const FGameplayTagContainer* EventTags,
+                                      const FHitResult             HitInfo) = 0;
+
+	/**
+	 * Notifies this character that its hit points (i.e., health) have changed.
+	 *
+	 * This should only be invoked by the character's attribute set. This does NOT actually modify the character's stats.
+	 * Once invoked, this method fires off appropriate callbacks into the character's Blueprint event graph.
+	 *
+	 * @param Delta
+	 *	The amount that the character's hit points should change.
+	 * @param EventTags
+	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to hit points.
+	 */
+    virtual void HandleHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags) = 0;
 };

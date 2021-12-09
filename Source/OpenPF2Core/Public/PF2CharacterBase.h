@@ -59,7 +59,7 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostSelection
 	 *	The ability scores that the player selected, out of the options offered by the Boost GA.
 	 */
 	explicit FPF2CharacterAbilityBoostSelection(
-		TSubclassOf<class UPF2GameplayAbility_BoostAbilityBase> BoostGameplayAbility,
+		TSubclassOf<class UPF2AbilityBoostBase> BoostGameplayAbility,
 		TSet<EPF2CharacterAbilityScoreType>                     SelectedAbilities) :
 			BoostGameplayAbility(BoostGameplayAbility),
 			SelectedAbilities(SelectedAbilities)
@@ -67,10 +67,14 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostSelection
 	}
 
 	/**
+	 * The "Boost GA" -- the Gameplay Ability for which ability score boost selections are being applied.
 	 */
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<class UPF2GameplayAbility_BoostAbilityBase> BoostGameplayAbility;
+	TSubclassOf<class UPF2AbilityBoostBase> BoostGameplayAbility;
 
+	/**
+	 * The ability scores that the player selected, out of the options offered by the Boost GA.
+	 */
 	UPROPERTY(EditAnywhere)
 	TSet<EPF2CharacterAbilityScoreType> SelectedAbilities;
 };
@@ -348,19 +352,23 @@ public:
 	// Public Methods - IPF2CharacterInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
+	virtual FText GetCharacterName() const override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual int32 GetCharacterLevel() const override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void GetCharacterAbilitySystemComponent(TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const override;
+	virtual void GetCharacterAbilitySystemComponent(
+		TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const override;
 
 	virtual IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent() const override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual TArray<UPF2GameplayAbility_BoostAbilityBase*> GetPendingAbilityBoosts() const override;
+	virtual TArray<UPF2AbilityBoostBase*> GetPendingAbilityBoosts() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void AddAbilityBoostSelection(
-		const TSubclassOf<class UPF2GameplayAbility_BoostAbilityBase> BoostGameplayAbility,
+		const TSubclassOf<class UPF2AbilityBoostBase> BoostGameplayAbility,
 		const TSet<EPF2CharacterAbilityScoreType>                     SelectedAbilities) override;
 
 	/**
@@ -387,6 +395,14 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual void DeactivatePassiveGameplayEffects() override;
+
+	virtual void HandleDamageReceived(const float                         Damage,
+									  IPF2CharacterInterface*             InstigatorCharacter,
+									  AActor*                             DamageSource,
+									  const struct FGameplayTagContainer* EventTags,
+									  const FHitResult                    HitInfo) override;
+
+	virtual void HandleHitPointsChanged(const float Delta, const struct FGameplayTagContainer* EventTags) override;
 
 	// =================================================================================================================
 	// Public Methods - Blueprint Callable
@@ -506,6 +522,40 @@ protected:
 	 */
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnCharacterLevelChanged(float OldLevel, float NewLevel);
+
+	/**
+	 * BP event invoked when this character receives damage.
+	 *
+	 * @param Damage
+	 *	The amount of the damage.
+	 * @param InstigatorCharacter
+	 *	The character that is ultimately responsible for the damage. This can be null if the damage is caused by the
+	 *	environment.
+	 * @param DamageSource
+	 *	The actor that directly inflicted the damage, such as a weapon or projectile.
+	 * @param EventTags
+	 *	Tags passed along with the damage Gameplay Event. This is typically set by an attack montage to indicate the
+	 *	nature of the attack that was performed.
+	 * @param HitInfo
+	 *	Hit result information, including who was hit and where the damage was inflicted.
+	 */
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnDamageReceived(const float                                     Damage,
+	                      const TScriptInterface<IPF2CharacterInterface>& InstigatorCharacter,
+	                      AActor*                                         DamageSource,
+	                      const FGameplayTagContainer&                    EventTags,
+	                      const FHitResult                                HitInfo);
+
+	/**
+	 * BP event invoked when this character's hit points (i.e., health) have changed.
+	 *
+	 * @param Delta
+	 *	The amount that the character's hit points have changed.
+	 * @param EventTags
+	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to hit points.
+	 */
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnHitPointsChanged(float Delta, const struct FGameplayTagContainer& EventTags);
 };
 
 /**

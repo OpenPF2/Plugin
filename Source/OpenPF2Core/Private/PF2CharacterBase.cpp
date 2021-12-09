@@ -9,9 +9,9 @@
 #include <Net/UnrealNetwork.h>
 #include <UObject/ConstructorHelpers.h>
 
+#include "Abilities/PF2AbilityBoostBase.h"
 #include "Abilities/PF2AbilitySystemComponent.h"
 #include "Abilities/PF2GameplayAbilityTargetData_BoostAbility.h"
-#include "Abilities/PF2GameplayAbility_BoostAbilityBase.h"
 
 APF2CharacterBase::APF2CharacterBase() :
 	APF2CharacterBase(TPF2CharacterComponentFactory<UPF2AbilitySystemComponent, UPF2AttributeSet>())
@@ -22,7 +22,7 @@ void APF2CharacterBase::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
-	if (this->AbilitySystemComponent)
+	if (this->AbilitySystemComponent != nullptr)
 	{
 		this->AbilitySystemComponent->InitAbilityActorInfo(this, this);
 
@@ -35,7 +35,7 @@ void APF2CharacterBase::OnRep_Controller()
 {
 	Super::OnRep_Controller();
 
-	if (this->AbilitySystemComponent)
+	if (this->AbilitySystemComponent != nullptr)
 	{
 		this->AbilitySystemComponent->RefreshAbilityActorInfo();
 	}
@@ -54,19 +54,31 @@ UAbilitySystemComponent* APF2CharacterBase::GetAbilitySystemComponent() const
 	return this->AbilitySystemComponent;
 }
 
+FText APF2CharacterBase::GetCharacterName() const
+{
+	FText Name = this->CharacterName;
+
+	if (Name.IsEmpty())
+	{
+		Name = FText::FromString(this->GetName());
+	}
+
+	return Name;
+}
+
 int32 APF2CharacterBase::GetCharacterLevel() const
 {
 	return this->CharacterLevel;
 }
 
-TArray<UPF2GameplayAbility_BoostAbilityBase *> APF2CharacterBase::GetPendingAbilityBoosts() const
+TArray<UPF2AbilityBoostBase *> APF2CharacterBase::GetPendingAbilityBoosts() const
 {
 	return this->GetCharacterAbilitySystemComponent()->GetPendingAbilityBoosts();
 }
 
 void APF2CharacterBase::AddAbilityBoostSelection(
-	const TSubclassOf<class UPF2GameplayAbility_BoostAbilityBase> BoostGameplayAbility,
-	const TSet<EPF2CharacterAbilityScoreType>                     SelectedAbilities)
+	const TSubclassOf<class UPF2AbilityBoostBase> BoostGameplayAbility,
+	const TSet<EPF2CharacterAbilityScoreType>     SelectedAbilities)
 {
 	this->AbilityBoostSelections.Add(FPF2CharacterAbilityBoostSelection(BoostGameplayAbility, SelectedAbilities));
 }
@@ -79,9 +91,9 @@ void APF2CharacterBase::ApplyAbilityBoostSelections()
 
 		for (const auto& AbilityBoostSelection : this->AbilityBoostSelections)
 		{
-			TSubclassOf<UPF2GameplayAbility_BoostAbilityBase> BoostGa   = AbilityBoostSelection.BoostGameplayAbility;
-			UAbilitySystemComponent*                          Asc       = this->GetAbilitySystemComponent();
-			FGameplayAbilitySpec*                             BoostSpec = Asc->FindAbilitySpecFromClass(BoostGa);
+			TSubclassOf<UPF2AbilityBoostBase> BoostGa   = AbilityBoostSelection.BoostGameplayAbility;
+			UAbilitySystemComponent*          Asc       = this->GetAbilitySystemComponent();
+			FGameplayAbilitySpec*             BoostSpec = Asc->FindAbilitySpecFromClass(BoostGa);
 
 			if (BoostSpec == nullptr)
 			{
@@ -104,8 +116,8 @@ void APF2CharacterBase::ApplyAbilityBoostSelections()
 FORCEINLINE void APF2CharacterBase::GetCharacterAbilitySystemComponent(
 	TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const
 {
-	// This is weird, but the way that TScriptInterface objects work is it maintains a reference to a UObject that
-	// *implements* an interface along with a pointer to the part of the UObject that provides the interface
+	// BUGBUG: This is weird, but the way that a TScriptInterface object works is it maintains a reference to a UObject
+	// that *implements* an interface along with a pointer to the part of the UObject that provides the interface
 	// implementation, so we need to provide the concrete object instead of the interface type.
 	Output = this->AbilitySystemComponent;
 }
@@ -147,9 +159,9 @@ void APF2CharacterBase::RemoveRedundantPendingAbilityBoosts()
 	{
 		for (const auto& AbilityBoostSelection : this->AppliedAbilityBoostSelections)
 		{
-			TSubclassOf<UPF2GameplayAbility_BoostAbilityBase> BoostGa   = AbilityBoostSelection.BoostGameplayAbility;
-			UAbilitySystemComponent*                          Asc       = this->GetAbilitySystemComponent();
-			FGameplayAbilitySpec*                             BoostSpec = Asc->FindAbilitySpecFromClass(BoostGa);
+			TSubclassOf<UPF2AbilityBoostBase> BoostGa   = AbilityBoostSelection.BoostGameplayAbility;
+			UAbilitySystemComponent*          Asc       = this->GetAbilitySystemComponent();
+			FGameplayAbilitySpec*             BoostSpec = Asc->FindAbilitySpecFromClass(BoostGa);
 
 			if (BoostSpec != nullptr)
 			{
@@ -186,7 +198,7 @@ void APF2CharacterBase::ActivateAbilityBoost(
 	Asc->TriggerAbilityFromGameplayEvent(
 		BoostSpec->Handle,
 		Asc->AbilityActorInfo.Get(),
-		UPF2GameplayAbility_BoostAbilityBase::GetTriggerTag(),
+		UPF2AbilityBoostBase::GetTriggerTag(),
 		&BoostEventInfo,
 		*Asc
 	);
@@ -250,6 +262,32 @@ void APF2CharacterBase::DeactivatePassiveGameplayEffects()
 	{
 		this->GetCharacterAbilitySystemComponent()->DeactivateAllPassiveGameplayEffects();
 	}
+}
+
+void APF2CharacterBase::HandleDamageReceived(const float                  Damage,
+                                             IPF2CharacterInterface*      InstigatorCharacter,
+                                             AActor*                      DamageSource,
+                                             const FGameplayTagContainer* EventTags,
+                                             const FHitResult             HitInfo)
+{
+	// BUGBUG: This is weird, but the way that a TScriptInterface object works is it maintains a reference to a UObject
+	// that *implements* an interface along with a pointer to the part of the UObject that provides the interface
+	// implementation, so we need to cast the instigator to a concrete object instead of the interface type.
+	AActor* InstigatorAsActor = Cast<AActor>(InstigatorCharacter);
+
+	this->OnDamageReceived(Damage, InstigatorAsActor, DamageSource, *EventTags, HitInfo);
+}
+
+void APF2CharacterBase::HandleHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags)
+{
+	if ((this->AbilitySystemComponent == nullptr) ||
+		!this->AbilitySystemComponent->ArePassiveGameplayEffectsActive())
+	{
+		// Stats are not presently initialized, so bail out to avoid firing off during initialization.
+		return;
+	}
+
+	this->OnHitPointsChanged(Delta, *EventTags);
 }
 
 void APF2CharacterBase::GenerateManagedPassiveGameplayEffects()

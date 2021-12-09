@@ -298,50 +298,29 @@ void UPF2AbilitySystemComponent::RemoveAllDynamicTags()
 	});
 }
 
-void UPF2AbilitySystemComponent::ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore)
+FGameplayTagContainer UPF2AbilitySystemComponent::GetActiveGameplayTags() const
 {
-	const TSubclassOf<UGameplayEffect> BoostEffect = this->AbilityBoostEffects[TargetAbilityScore];
+	FGameplayTagContainer Tags;
 
-	// Allow boost GE to override the default weight group.
-	const FName WeightGroup =
-		PF2GameplayAbilityUtilities::GetWeightGroupOfGameplayEffect(
-			BoostEffect,
-			PF2CharacterConstants::GeWeightGroups::AbilityBoosts
-		);
+	Tags.Reset();
 
-	UE_LOG(
-		LogPf2Core,
-		VeryVerbose,
-		TEXT("Applying a boost to ability ('%s') through ASC for character ('%s') via GE ('%s')."),
-		*(PF2EnumUtilities::ToString(TargetAbilityScore)),
-		*(this->GetOwnerActor()->GetName()),
-		*(BoostEffect->GetName())
-	);
+	this->GetOwnedGameplayTags(Tags);
 
-	this->AddPassiveGameplayEffectWithWeight(WeightGroup, BoostEffect);
+	return Tags;
 }
 
-TArray<UPF2GameplayAbility_BoostAbilityBase*> UPF2AbilitySystemComponent::GetPendingAbilityBoosts() const
+FORCEINLINE int32 UPF2AbilitySystemComponent::GetCharacterLevel() const
 {
-	TArray<UPF2GameplayAbility_BoostAbilityBase*> MatchingGameplayAbilities;
-	TArray<FGameplayAbilitySpec*>                 MatchingGameplayAbilitySpecs;
+	IPF2CharacterInterface* OwningCharacter = Cast<IPF2CharacterInterface>(this->GetOwnerActor());
 
-	this->GetActivatableGameplayAbilitySpecsByAllMatchingTags(
-		FGameplayTagContainer(PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.ApplyAbilityBoost"))),
-		MatchingGameplayAbilitySpecs,
-		false
-	);
-
-	MatchingGameplayAbilities =
-		PF2ArrayUtilities::Map<UPF2GameplayAbility_BoostAbilityBase*>(
-			MatchingGameplayAbilitySpecs,
-			[](const FGameplayAbilitySpec* AbilitySpec)
-			{
-				return Cast<UPF2GameplayAbility_BoostAbilityBase>(AbilitySpec->Ability);
-			}
-		);
-
-	return MatchingGameplayAbilities;
+	if (OwningCharacter == nullptr)
+	{
+		return 1;
+	}
+	else
+	{
+		return OwningCharacter->GetCharacterLevel();
+	}
 }
 
 TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> UPF2AbilitySystemComponent::GetAbilityScoreValues() const
@@ -398,18 +377,50 @@ TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> UPF2AbilitySy
 	return Values;
 }
 
-FORCEINLINE int UPF2AbilitySystemComponent::GetCharacterLevel() const
+TArray<UPF2AbilityBoostBase*> UPF2AbilitySystemComponent::GetPendingAbilityBoosts() const
 {
-	IPF2CharacterInterface* OwningCharacter = Cast<IPF2CharacterInterface>(this->GetOwnerActor());
+	TArray<UPF2AbilityBoostBase*> MatchingGameplayAbilities;
+	TArray<FGameplayAbilitySpec*> MatchingGameplayAbilitySpecs;
 
-	if (OwningCharacter == nullptr)
-	{
-		return 1;
-	}
-	else
-	{
-		return OwningCharacter->GetCharacterLevel();
-	}
+	this->GetActivatableGameplayAbilitySpecsByAllMatchingTags(
+		FGameplayTagContainer(PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.ApplyAbilityBoost"))),
+		MatchingGameplayAbilitySpecs,
+		false
+	);
+
+	MatchingGameplayAbilities =
+		PF2ArrayUtilities::Map<UPF2AbilityBoostBase*>(
+			MatchingGameplayAbilitySpecs,
+			[](const FGameplayAbilitySpec* AbilitySpec)
+			{
+				return Cast<UPF2AbilityBoostBase>(AbilitySpec->Ability);
+			}
+		);
+
+	return MatchingGameplayAbilities;
+}
+
+void UPF2AbilitySystemComponent::ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore)
+{
+	const TSubclassOf<UGameplayEffect> BoostEffect = this->AbilityBoostEffects[TargetAbilityScore];
+
+	// Allow boost GE to override the default weight group.
+	const FName WeightGroup =
+		PF2GameplayAbilityUtilities::GetWeightGroupOfGameplayEffect(
+			BoostEffect,
+			PF2CharacterConstants::GeWeightGroups::AbilityBoosts
+		);
+
+	UE_LOG(
+		LogPf2Core,
+		VeryVerbose,
+		TEXT("Applying a boost to ability ('%s') through ASC for character ('%s') via GE ('%s')."),
+		*(PF2EnumUtilities::ToString(TargetAbilityScore)),
+		*(this->GetOwnerActor()->GetName()),
+		*(BoostEffect->GetName())
+	);
+
+	this->AddPassiveGameplayEffectWithWeight(WeightGroup, BoostEffect);
 }
 
 TMultiMap<FName, TSubclassOf<UGameplayEffect>> UPF2AbilitySystemComponent::GetPassiveGameplayEffectsToApply()
