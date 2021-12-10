@@ -108,7 +108,7 @@ namespace PF2CharacterConstants
 		TEXT("GE_CalcSavingThrowModifiers"),
 		TEXT("GE_CalcSpellAttackRoll"),
 		TEXT("GE_CalcSpellDifficultyClass"),
-		TEXT("GE_CalcSkillModifiers"),
+		TEXT("Skills/GE_CalcSkillModifiers"),
 		TEXT("GE_CalcAncestryFeatLimit"),
 	};
 
