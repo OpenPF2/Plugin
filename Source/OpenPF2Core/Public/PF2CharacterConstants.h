@@ -101,7 +101,7 @@ namespace PF2CharacterConstants
 		TEXT("GE_CalcKeyAbilityBoost"),
 
 		// Finalize stats.
-		TEXT("GE_CalcAbilityModifiers"),
+		TEXT("AbilityModifiers/GE_CalcAbilityModifiers"),
 		TEXT("GE_CalcClassDifficultyClass"),
 		TEXT("GE_CalcArmorClass"),
 		TEXT("GE_CalcPerceptionModifier"),
