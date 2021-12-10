@@ -63,7 +63,12 @@ namespace PF2CharacterConstants
 	/**
 	 * The path to the folder that contains GE blueprints.
 	 */
-	static const FString BlueprintBasePath = TEXT("/OpenPF2Core/OpenPF2/Core/");
+	static const FString BlueprintBasePath = TEXT("/OpenPF2Core/OpenPF2/Core");
+
+	/**
+	 * The path to the folder that contains Ability Boost blueprints.
+	 */
+	static const FString BoostBlueprintBasePath = FString::Format(TEXT("{0}/AbilityBoosts"), { BlueprintBasePath });
 
 	/**
 	 * Format string for the name of the Gameplay Effect blueprint that boosts abilities.
@@ -118,6 +123,6 @@ namespace PF2CharacterConstants
 	 */
 	FORCEINLINE static FString GetBlueprintPath(FName Name)
 	{
-		return FString::Format(TEXT("{0}{1}.{1}_C"), { BlueprintBasePath, Name.ToString() });
+		return FString::Format(TEXT("{0}/{1}.{1}_C"), { BlueprintBasePath, Name.ToString() });
 	}
 }
