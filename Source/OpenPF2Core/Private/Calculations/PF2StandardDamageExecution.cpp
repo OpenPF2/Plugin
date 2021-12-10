@@ -19,8 +19,8 @@ UPF2StandardDamageExecution::UPF2StandardDamageExecution() :
 	DamageParameterTag(FGameplayTag::RequestGameplayTag(this->DamageParameterTagName)),
 	ResistanceParameterTag(FGameplayTag::RequestGameplayTag(this->ResistanceParameterTagName))
 {
-	ValidTransientAggregatorIdentifiers.AddTag(this->DamageParameterTag);
-	ValidTransientAggregatorIdentifiers.AddTag(this->ResistanceParameterTag);
+	this->ValidTransientAggregatorIdentifiers.AddTag(this->DamageParameterTag);
+	this->ValidTransientAggregatorIdentifiers.AddTag(this->ResistanceParameterTag);
 }
 
 void UPF2StandardDamageExecution::Execute_Implementation(
