@@ -63,12 +63,32 @@ namespace PF2CharacterConstants
 	/**
 	 * The path to the folder that contains GE blueprints.
 	 */
-	static const FString BlueprintBasePath = TEXT("/OpenPF2Core/OpenPF2/Core");
+	static const FString BlueprintBasePath = TEXT("/OpenPF2Core/OpenPF2/Core/");
 
 	/**
-	 * The path to the folder that contains Ability Boost blueprints.
+	 * The top-most sub-folder underneath the root blueprint base path.
 	 */
-	static const FString BoostBlueprintBasePath = FString::Format(TEXT("{0}/AbilityBoosts"), { BlueprintBasePath });
+	static const FString BlueprintSubfolderRoot = "";
+
+	/**
+	 * The path under the blueprint base path that contains calculation blueprints.
+	 */
+	static const FString BlueprintSubfolderCalculations = TEXT("Calculations/");
+
+	/**
+	 * The path under the blueprint base path that contains Ability Boost blueprints.
+	 */
+	static const FString BlueprintSubfolderBoosts = TEXT("AbilityBoosts/");
+
+	/**
+	 * The path under the blueprint base path that contains ability modifier calculation blueprints.
+	 */
+	static const FString BlueprintSubfolderAbilityModCalculations = TEXT("Calculations/AbilityModifiers/");
+
+	/**
+	 * The path under the blueprint base path that contains skill calculation blueprints.
+	 */
+	static const FString BlueprintSubfolderSkillCalculations = TEXT("Calculations/Skills/");
 
 	/**
 	 * Format string for the name of the Gameplay Effect blueprint that boosts abilities.
@@ -92,24 +112,26 @@ namespace PF2CharacterConstants
 	 * first, followed by ancestry and class GEs, ability boost GEs, additional passive GEs, and then all other core
 	 * GEs. GEs that have the same weight group are applied in the order they have been added/listed here.
 	 *
+	 * Each key in this map is the sub-folder that contains the GE, while the value is the name of the GE.
+	 *
 	 * TODO: Consider whether we want to move this list into a Blueprint UPROPERTY, so that it's not hard-coded.
 	 */
-	static const TArray<FName> GeCoreCharacterBlueprintPaths = {
+	static const TMap<FString, FName> GeCoreCharacterBlueprintPaths = {
 		// Initialize base stats.
-		TEXT("GE_ApplyBaseCharacterStats"),
-		TEXT("GE_GrantCharacterBaseAbilities"),
-		TEXT("GE_CalcKeyAbilityBoost"),
+		{BlueprintSubfolderRoot,                   TEXT("GE_ApplyBaseCharacterStats")     },
+		{BlueprintSubfolderRoot,                   TEXT("GE_GrantCharacterBaseAbilities") },
+		{BlueprintSubfolderCalculations,           TEXT("GE_CalcKeyAbilityBoost")         },
 
 		// Finalize stats.
-		TEXT("AbilityModifiers/GE_CalcAbilityModifiers"),
-		TEXT("GE_CalcClassDifficultyClass"),
-		TEXT("GE_CalcArmorClass"),
-		TEXT("GE_CalcPerceptionModifier"),
-		TEXT("GE_CalcSavingThrowModifiers"),
-		TEXT("GE_CalcSpellAttackRoll"),
-		TEXT("GE_CalcSpellDifficultyClass"),
-		TEXT("Skills/GE_CalcSkillModifiers"),
-		TEXT("GE_CalcAncestryFeatLimit"),
+		{BlueprintSubfolderAbilityModCalculations, TEXT("GE_CalcAbilityModifiers")        },
+		{BlueprintSubfolderCalculations,           TEXT("GE_CalcClassDifficultyClass")    },
+		{BlueprintSubfolderCalculations,           TEXT("GE_CalcArmorClass")              },
+		{BlueprintSubfolderCalculations,           TEXT("GE_CalcPerceptionModifier")      },
+		{BlueprintSubfolderCalculations,           TEXT("GE_CalcSavingThrowModifiers")    },
+		{BlueprintSubfolderCalculations,           TEXT("GE_CalcSpellAttackRoll")         },
+		{BlueprintSubfolderCalculations,           TEXT("GE_CalcSpellDifficultyClass")    },
+		{BlueprintSubfolderSkillCalculations,      TEXT("GE_CalcSkillModifiers")          },
+		{BlueprintSubfolderCalculations,           TEXT("GE_CalcAncestryFeatLimit")       },
 	};
 
 	/**
@@ -117,12 +139,15 @@ namespace PF2CharacterConstants
 	 *
 	 * @param Name
 	 *	The name of the blueprint for which a path is desired.
+	 * @param Subfolder
+	 *	Optionally, the name of the folder in the base path where the blueprint is expected to be found. Defaults to
+	 *	BlueprintSubfolderRoot, indicating the blueprint will be found at the root of the blueprint base path.
 	 *
 	 * @return
 	 *	The path to the blueprint.
 	 */
-	FORCEINLINE static FString GetBlueprintPath(FName Name)
+	FORCEINLINE static FString GetBlueprintPath(const FName Name, const FString Subfolder = BlueprintSubfolderRoot)
 	{
-		return FString::Format(TEXT("{0}/{1}.{1}_C"), { BlueprintBasePath, Name.ToString() });
+		return FString::Format(TEXT("{0}{1}{2}.{2}_C"), { BlueprintBasePath, Subfolder, Name.ToString() });
 	}
 }
