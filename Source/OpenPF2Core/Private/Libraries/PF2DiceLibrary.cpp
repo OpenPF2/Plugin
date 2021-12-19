@@ -20,10 +20,10 @@ int32 UPF2DiceLibrary::RollStringSum(const FName RollExpression)
 		});
 }
 
-int32 UPF2DiceLibrary::RollSum(const int32 RollCount, const int32 SideCount)
+int32 UPF2DiceLibrary::RollSum(const int32 RollCount, const int32 DieSize)
 {
 	return PF2ArrayUtilities::Reduce(
-		Roll(RollCount, SideCount),
+		Roll(RollCount, DieSize),
 		0,
 		[](const int32 PreviousValue, const int32 CurrentValue)
 		{
@@ -50,13 +50,13 @@ TArray<int32> UPF2DiceLibrary::RollString(const FName RollExpression)
 	}
 }
 
-TArray<int32> UPF2DiceLibrary::Roll(const int32 RollCount, const int32 SideCount)
+TArray<int32> UPF2DiceLibrary::Roll(const int32 RollCount, const int32 DieSize)
 {
 	TArray<int32> Rolls;
 
 	for (int32 RollIndex = 0; RollIndex < RollCount; ++RollIndex)
 	{
-		int32 Roll = FMath::RandRange(1, SideCount);
+		int32 Roll = FMath::RandRange(1, DieSize);
 
 		Rolls.Add(Roll);
 	}
@@ -97,7 +97,7 @@ FName UPF2DiceLibrary::NextSizeString(const FName RollExpression)
 	return Result;
 }
 
-int32 UPF2DiceLibrary::NextSize(const int32 SideCount)
+int32 UPF2DiceLibrary::NextSize(const int32 DieSize)
 {
-	return SideCount + 2;
+	return DieSize + 2;
 }

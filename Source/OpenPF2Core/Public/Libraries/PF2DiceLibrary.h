@@ -42,8 +42,8 @@ public:
 	 *
 	 * @param RollExpression
 	 *	The description of the roll, in "CdS" format, where "C" represents the count or number of dice to roll, and "S"
-	 *	represents the number of sides of each die. For example, "1d6" represents a single roll of a six-sided die,
-	 *	while "2d4" represents rolling two dice having four sides each.
+	 *	represents the number of sides of each die (the die size). For example, "1d6" represents a single roll of a
+	 *	six-sided die, while "2d4" represents rolling two dice having four sides each.
 	 *
 	* @return
 	 *	The sum of the dice roll(s).
@@ -56,14 +56,14 @@ public:
 	 *
 	 * @param RollCount
 	 *	The count or number of dice to roll.
-	 * @param SideCount
+	 * @param DieSize
 	 *	The number of sides of each die.
 	 *
 	 * @return
 	 *	The sum of the dice roll(s).
 	 */
 	UFUNCTION(BlueprintPure, Category = "OpenPF2|Dice")
-	static int32 RollSum(const int32 RollCount, const int32 SideCount);
+	static int32 RollSum(const int32 RollCount, const int32 DieSize);
 
 	/**
 	 * Returns the result of a dice roll for the given dice roll expression string.
@@ -72,8 +72,8 @@ public:
 	 *
 	 * @param RollExpression
 	 *	The description of the roll, in "CdS" format, where "C" represents the count or number of dice to roll, and "S"
-	 *	represents the number of sides of each die. For example, "1d6" represents a single roll of a six-sided die,
-	 *	while "2d4" represents rolling two dice having four sides each.
+	 *	represents the number of sides of each die (the die size). For example, "1d6" represents a single roll of a
+	 *	six-sided die, while "2d4" represents rolling two dice having four sides each.
 	 *
 	* @return
 	 *	The result of each dice roll.
@@ -86,22 +86,22 @@ public:
 	 *
 	 * @param RollCount
 	 *	The count or number of dice to roll.
-	 * @param SideCount
+	 * @param DieSize
 	 *	The number of sides of each die.
 	 *
 	 * @return
 	 *	The result of each dice roll.
 	 */
 	UFUNCTION(BlueprintPure, Category = "OpenPF2|Dice")
-	static TArray<int32> Roll(const int32 RollCount, const int32 SideCount);
+	static TArray<int32> Roll(const int32 RollCount, const int32 DieSize);
 
 	/**
 	 * Increases the size of a given dice expression, returning the next dice size up,
 	 *
 	 * @param RollExpression
 	 *	The description of the roll, in "CdS" format, where "C" represents the count or number of dice to roll, and "S"
-	 *	represents the number of sides of each die. For example, "1d6" represents a single roll of a six-sided die,
-	 *	while "2d4" represents rolling two dice having four sides each.
+	 *	represents the number of sides of each die (the die size). For example, "1d6" represents a single roll of a
+	 *	six-sided die, while "2d4" represents rolling two dice having four sides each.
 	 *
 	 * @return
 	 *	A roll expression for the next size up (for example, given "1d6" this would return "1d8"; given "2d4", this
@@ -113,14 +113,14 @@ public:
 	/**
 	 * Gets the number of sides of the next-largest die from a die having the given number of sides.
 	 *
-	 * @param SideCount
+	 * @param DieSize
 	 *	The number of sides of the die.
 	 *
 	 * @return
 	 *	The number of sides on the die of the next size up.
 	 */
 	UFUNCTION(BlueprintPure, Category = "OpenPF2|Dice")
-	static int32 NextSize(const int32 SideCount);
+	static int32 NextSize(const int32 DieSize);
 
 	/**
 	 * Gets a regular expression matcher for the given roll expression.
