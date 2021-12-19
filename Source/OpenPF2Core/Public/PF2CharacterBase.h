@@ -353,25 +353,19 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2CharacterInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual FText GetCharacterName() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual int32 GetCharacterLevel() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void GetCharacterAbilitySystemComponent(
 		TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const override;
 
 	virtual IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TArray<UPF2AbilityBoostBase*> GetPendingAbilityBoosts() const override;
 
-	UFUNCTION(BlueprintCallable)
-	virtual void AddAbilityBoostSelection(
-		const TSubclassOf<class UPF2AbilityBoostBase> BoostGameplayAbility,
-		const TSet<EPF2CharacterAbilityScoreType>                     SelectedAbilities) override;
+	virtual void AddAbilityBoostSelection(const TSubclassOf<class UPF2AbilityBoostBase> BoostGameplayAbility,
+	                                      const TSet<EPF2CharacterAbilityScoreType>     SelectedAbilities) override;
 
 	/**
 	 * Attempts to find and activate a pending ability boost Gameplay Ability for each Ability Boost selection on this
@@ -389,20 +383,17 @@ public:
 	 *	5. During activation, the boost GA calls the ApplyAbilityBoost() method on the ASC for this character to
 	 *	   activate each valid boost selection.
 	 */
-	UFUNCTION(BlueprintCallable)
 	virtual void ApplyAbilityBoostSelections() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void ActivatePassiveGameplayEffects() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void DeactivatePassiveGameplayEffects() override;
 
 	virtual void HandleDamageReceived(const float                         Damage,
-									  IPF2CharacterInterface*             InstigatorCharacter,
-									  AActor*                             DamageSource,
-									  const struct FGameplayTagContainer* EventTags,
-									  const FHitResult                    HitInfo) override;
+	                                  IPF2CharacterInterface*             InstigatorCharacter,
+	                                  AActor*                             DamageSource,
+	                                  const struct FGameplayTagContainer* EventTags,
+	                                  const FHitResult                    HitInfo) override;
 
 	virtual void HandleHitPointsChanged(const float Delta, const struct FGameplayTagContainer* EventTags) override;
 

@@ -22,16 +22,13 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2AbilitySystemComponentInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintPure)
 	virtual bool ArePassiveGameplayEffectsActive() override
 	{
 		return this->ActivatedWeightGroups.Num() != 0;
 	}
 
-	UFUNCTION(BlueprintCallable)
 	virtual void AddPassiveGameplayEffect(TSubclassOf<UGameplayEffect> Effect) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void AddPassiveGameplayEffectWithWeight(
 		const FName WeightGroup,
 		const TSubclassOf<UGameplayEffect> Effect
@@ -39,68 +36,49 @@ public:
 
 	virtual void SetPassiveGameplayEffects(const TMultiMap<FName, TSubclassOf<UGameplayEffect>> Effects) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void RemoveAllPassiveGameplayEffects() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void ActivateAllPassiveGameplayEffects() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void DeactivateAllPassiveGameplayEffects() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TSet<FName> ActivatePassiveGameplayEffectsAfter(const FName StartingWeightGroup) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TSet<FName> DeactivatePassiveGameplayEffectsAfter(const FName StartingWeightGroup) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual bool ActivatePassiveGameplayEffects(const FName WeightGroup) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual bool DeactivatePassiveGameplayEffects(const FName WeightGroup) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void AddDynamicTag(const FGameplayTag Tag) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void AppendDynamicTags(const FGameplayTagContainer Tags) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void SetDynamicTags(const FGameplayTagContainer Tags) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void RemoveDynamicTag(const FGameplayTag Tag) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void RemoveDynamicTags(const FGameplayTagContainer Tags) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void RemoveAllDynamicTags() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual FGameplayTagContainer GetActiveGameplayTags() const override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2CharacterAbilitySystemComponentInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual int32 GetCharacterLevel() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> GetAbilityScoreValues() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TArray<UPF2AbilityBoostBase *> GetPendingAbilityBoosts() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual FORCEINLINE TSubclassOf<UGameplayEffect> GetBoostEffectForAbility(
 		const EPF2CharacterAbilityScoreType AbilityScore) override
 	{
 		return this->AbilityBoostEffects[AbilityScore];
 	}
 
-	UFUNCTION(BlueprintCallable)
 	virtual void ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore) override;
 
 protected:
