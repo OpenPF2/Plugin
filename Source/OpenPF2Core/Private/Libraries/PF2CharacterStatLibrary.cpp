@@ -39,3 +39,11 @@ float UPF2CharacterStatLibrary::CalculateAbilityBoostAmount(const float Starting
 
 	return BoostAmount;
 }
+
+float UPF2CharacterStatLibrary::CalculateAncestryFeatCap(const float CharacterLevel)
+{
+	// From the Pathfinder 2E Core Rulebook, pages 36, 40, 44, 48, 52, and 56:
+	// "At 1st level, you gain one ancestry feat, and you gain an additional ancestry feat every 4 levels thereafter (at
+	// 5th, 9th, 13th, and 17th level)."
+	return 1.0f + FMath::FloorToFloat((CharacterLevel - 1.0f) / 4.0f);
+}

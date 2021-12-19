@@ -8,7 +8,7 @@
 #include "Tests/PF2SpecBase.h"
 
 BEGIN_DEFINE_PF_SPEC(FPF2CharacterStatLibrarySpec,
-                     "OpenPF2.CharacterStatLibrary",
+                     "OpenPF2.Libraries.CharacterStat",
                      EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 END_DEFINE_PF_SPEC(FPF2CharacterStatLibrarySpec)
 
@@ -83,6 +83,46 @@ void FPF2CharacterStatLibrarySpec::Define()
 						TEXT("Result"),
 						UPF2CharacterStatLibrary::CalculateAbilityBoostAmount(StartingAbilityScore, BoostCount),
 						ExpectedBoostAmount
+					);
+				});
+			});
+		}
+	});
+
+	Describe(TEXT("CalculateAncestryFeatCap"), [=, this]
+	{
+		struct FFeatCapTestTuple
+		{
+			float CharacterLevel;
+			float ExpectedFeatCap;
+		};
+
+		const TArray<FFeatCapTestTuple> TestParameters =
+		{
+			{  1, 1 },
+			{  2, 1 },
+			{  3, 1 },
+			{  4, 1 },
+			{  5, 2 },
+			{  6, 2 },
+			{  9, 3 },
+			{ 13, 4 },
+			{ 17, 5 },
+		};
+
+		for (const auto& CurrentTestParameters : TestParameters)
+		{
+			const float CharacterLevel  = CurrentTestParameters.CharacterLevel,
+			            ExpectedFeatCap = CurrentTestParameters.ExpectedFeatCap;
+
+			Describe(FString::Format(TEXT("when the character level is '{0}'"), {FString::FormatAsNumber(CharacterLevel)}), [=, this]
+			{
+				It(FString::Format(TEXT("returns '{0}'"), {FString::FormatAsNumber(ExpectedFeatCap)}), [=, this]
+				{
+					TestEqual(
+						TEXT("Result"),
+						UPF2CharacterStatLibrary::CalculateAncestryFeatCap(CharacterLevel),
+						ExpectedFeatCap
 					);
 				});
 			});

@@ -76,4 +76,16 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, Category = "OpenPF2|Character Stats")
 	static float CalculateAbilityBoostAmount(const float StartingAbilityScoreValue, const int BoostCount = 1);
+
+	/**
+	 * Calculates how many ancestry feats a character is entitled to have at their current level.
+	 *
+	 * @param CharacterLevel
+	 *	The character's current level.
+	 *
+	 * @return
+	 *	The number of ancestry feats the character is entitled to have at their level.
+	 */
+	UFUNCTION(BlueprintPure, Category = "OpenPF2|Character Stats")
+	static float CalculateAncestryFeatCap(const float CharacterLevel);
 };
