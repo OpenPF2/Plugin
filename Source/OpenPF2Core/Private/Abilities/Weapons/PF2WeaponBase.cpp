@@ -12,8 +12,8 @@
 
 #include "Abilities/Weapons/PF2WeaponBase.h"
 
-#include "PF2TemlCalculation.h"
 #include "Abilities/PF2CharacterAbilitySystemComponentInterface.h"
+#include "Calculations/PF2TemlCalculation.h"
 #include "Libraries/PF2DiceLibrary.h"
 
 void UPF2WeaponBase::ActivateAbility(

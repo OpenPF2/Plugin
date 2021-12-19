@@ -10,7 +10,7 @@
 // file other than the material designated as Open Game Content may be reproduced in any form without written
 // permission.
 
-#include "PF2TemlCalculation.h"
+#include "Calculations/PF2TemlCalculation.h"
 #include "PF2GameplayAbilityUtilities.h"
 #include <CoreMinimal.h>
 

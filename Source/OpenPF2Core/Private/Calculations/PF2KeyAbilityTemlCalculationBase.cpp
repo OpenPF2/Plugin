@@ -14,9 +14,8 @@
 
 #include "OpenPF2Core.h"
 #include "PF2GameplayAbilityUtilities.h"
-#include "PF2TemlCalculation.h"
-
 #include "Abilities/PF2AttributeSet.h"
+#include "Calculations/PF2TemlCalculation.h"
 
 UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase() :
 	UPF2KeyAbilityTemlCalculationBase(

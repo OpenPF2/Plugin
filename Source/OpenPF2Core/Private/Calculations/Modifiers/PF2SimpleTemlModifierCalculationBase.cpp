@@ -11,9 +11,10 @@
 // permission.
 
 #include "Calculations/Modifiers/PF2SimpleTemlModifierCalculationBase.h"
+
 #include "OpenPF2Core.h"
-#include "PF2TemlCalculation.h"
 #include "Abilities/PF2AttributeSet.h"
+#include "Calculations/PF2TemlCalculation.h"
 
 float UPF2SimpleTemlModifierCalculationBase::DoCalculation(
 	const FGameplayEffectSpec& Spec,
