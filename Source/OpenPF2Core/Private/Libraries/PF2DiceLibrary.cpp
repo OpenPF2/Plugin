@@ -56,7 +56,18 @@ TArray<int32> UPF2DiceLibrary::Roll(const int32 RollCount, const int32 DieSize)
 
 	for (int32 RollIndex = 0; RollIndex < RollCount; ++RollIndex)
 	{
-		int32 Roll = FMath::RandRange(1, DieSize);
+		int32 Roll;
+
+		if (DieSize == 0)
+		{
+			// Edge case: Unlikely to happen, but just in case, we need to make sure that rolling a zero-sided die does
+			// not return 1. Could happen if the die size is passed-in dynamically.
+			Roll = 0;
+		}
+		else
+		{
+			Roll = FMath::RandRange(1, DieSize);
+		}
 
 		Rolls.Add(Roll);
 	}
