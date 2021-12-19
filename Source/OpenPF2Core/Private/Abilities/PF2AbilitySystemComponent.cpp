@@ -27,7 +27,8 @@ UPF2AbilitySystemComponent::UPF2AbilitySystemComponent()
 
 		const FString Filename =
 			PF2CharacterConstants::GetBlueprintPath(
-				FName(FString::Format(*PF2CharacterConstants::GeBlueprintBoostNameFormat, {AbilityName}))
+				FName(FString::Format(*PF2CharacterConstants::GeBlueprintBoostNameFormat, {AbilityName})),
+				PF2CharacterConstants::BlueprintSubfolderBoosts
 			);
 
 		const ConstructorHelpers::FObjectFinder<UClass> BoostGeFinder(*Filename);

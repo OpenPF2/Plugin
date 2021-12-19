@@ -322,9 +322,11 @@ protected:
 		this->AbilitySystemComponent = ComponentFactory.CreateAbilitySystemComponent(this);
 		this->AttributeSet           = ComponentFactory.CreateAttributeSet(this);
 
-		for (const auto& EffectName : PF2CharacterConstants::GeCoreCharacterBlueprintPaths)
+		for (const TTuple<FString, FName>& EffectInfo : PF2CharacterConstants::GeCoreCharacterBlueprintPaths)
 		{
-			const FString EffectPath = PF2CharacterConstants::GetBlueprintPath(EffectName);
+			const FString Subfolder  = EffectInfo.Key;
+			const FName   EffectName = EffectInfo.Value;
+			const FString EffectPath = PF2CharacterConstants::GetBlueprintPath(EffectName, Subfolder);
 
 			const ConstructorHelpers::FObjectFinder<UClass> EffectFinder(*EffectPath);
 			const TSubclassOf<UGameplayEffect>              GameplayEffect = EffectFinder.Object;

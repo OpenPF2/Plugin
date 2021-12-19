@@ -32,8 +32,15 @@ https://1drv.ms/x/s!AigXEMxuXyh0gpRnYs8NlW-gC2oMnA?e=K8dHvP
    ]
    ```
 3. Re-generate Visual Studio/Rider project files.
-4. Compile your project.
-5. Copy the `Config/Tags/` folder from the plug-in into your project's `Config` folder.
+4. Edit the `*.Build.cs` file and add `"OpenPF2Core"` to the `PrivateDependencyModuleNames` section:
+   ```C#
+   PrivateDependencyModuleNames.AddRange(new string[]
+   {
+       "OpenPF2Core",
+   });
+   ```
+5. Compile your project.
+6. Copy the `Config/Tags/` folder from the plug-in into your project's `Config` folder.
    _Even in UE 4.27, this is still required. The engine
    [does not automatically scan or package config files provided by plugins](https://docs.unrealengine.com/4.27/en-US/ProductionPipelines/Plugins/#pluginsinprojects)._
 
