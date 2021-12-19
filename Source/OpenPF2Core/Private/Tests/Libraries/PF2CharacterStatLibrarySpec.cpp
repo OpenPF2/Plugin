@@ -7,13 +7,6 @@
 
 #include "Tests/PF2SpecBase.h"
 
-struct FAbilityBoostTestTuple
-{
-	float StartingAbilityScore;
-	float BoostCount;
-	float ExpectedBoostAmount;
-};
-
 BEGIN_DEFINE_PF_SPEC(FPF2CharacterStatLibrarySpec,
                      "OpenPF2.CharacterStatLibrary",
                      EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
@@ -21,8 +14,53 @@ END_DEFINE_PF_SPEC(FPF2CharacterStatLibrarySpec)
 
 void FPF2CharacterStatLibrarySpec::Define()
 {
+	Describe(TEXT("CalculateAbilityModifier"), [=, this]
+	{
+		struct FAbilityModifierTestTuple
+		{
+			float AbilityScoreValue;
+			float ExpectedModifier;
+		};
+
+		const TArray<FAbilityModifierTestTuple> TestParameters =
+		{
+			{  1, -5 },
+			{  2, -4 },
+			{  3, -4 },
+			{ 10,  0 },
+			{ 11,  0 },
+			{ 24,  7 },
+			{ 25,  7 },
+		};
+
+		for (const auto& CurrentTestParameters : TestParameters)
+		{
+			const float AbilityScoreValue = CurrentTestParameters.AbilityScoreValue,
+			            ExpectedModifier  = CurrentTestParameters.ExpectedModifier;
+
+			Describe(FString::Format(TEXT("when the ability score value is '{0}'"), {FString::FormatAsNumber(AbilityScoreValue)}), [=, this]
+			{
+				It(FString::Format(TEXT("returns '{0}'"), {FString::FormatAsNumber(ExpectedModifier)}), [=, this]
+				{
+					TestEqual(
+						TEXT("Result"),
+						UPF2CharacterStatLibrary::CalculateAbilityModifier(AbilityScoreValue),
+						ExpectedModifier
+					);
+				});
+			});
+		}
+	});
+
 	Describe(TEXT("CalculateAbilityBoostAmount"), [=, this]
 	{
+		struct FAbilityBoostTestTuple
+		{
+			float StartingAbilityScore;
+			float BoostCount;
+			float ExpectedBoostAmount;
+		};
+
 		const TArray<FAbilityBoostTestTuple> TestParameters =
 		{
 			{ 10, 1, 2 },

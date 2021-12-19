@@ -26,6 +26,34 @@ class UPF2CharacterStatLibrary final : public UBlueprintFunctionLibrary
 
 public:
 	/**
+	 * Calculates the modifier for an ability score value.
+	 *
+	 * According to "Table 1-1: Ability Modifiers" in the Pathfinder 2E Core Rulebook, the ability modifier for an
+	 * ability is equal to:
+	 *
+	 * Floor(Score / 2) - 5
+	 *
+	 * So:
+	 *  1 => -5
+	 *  2 => -4
+	 *  3 => -4
+	 * 10 =>  0
+	 * 11 =>  0
+	 * 24 => +7
+	 * 25 => +7
+	 *
+	 * ... and so on.
+	 *
+	 * @param AbilityScore
+	 *	The value of the ability attribute.
+	 *
+	 * @return
+	 *	The modifier value for the ability.
+	 */
+	UFUNCTION(BlueprintPure, Category = "OpenPF2|Character Stats")
+	static float CalculateAbilityModifier(const float AbilityScore);
+
+	/**
 	 * Calculates how much the specified number of ability boosts adds to an ability with the given ability score value.
 	 *
 	 * From the Pathfinder 2E Core Rulebook, page 68, "Ability Boosts":

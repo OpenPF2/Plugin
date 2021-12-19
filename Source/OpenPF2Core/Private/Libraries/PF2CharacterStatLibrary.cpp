@@ -12,6 +12,12 @@
 
 #include "Libraries/PF2CharacterStatLibrary.h"
 
+float UPF2CharacterStatLibrary::CalculateAbilityModifier(const float AbilityScore)
+{
+	// Source: Pathfinder 2E Core Rulebook, page 20, Table 1-1: Ability Modifiers.
+	return FMath::FloorToFloat(AbilityScore / 2.0f) - 5.0f;
+}
+
 float UPF2CharacterStatLibrary::CalculateAbilityBoostAmount(const float StartingAbilityScoreValue,
                                                             const int   BoostCount)
 {
