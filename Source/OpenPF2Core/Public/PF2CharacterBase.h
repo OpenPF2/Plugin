@@ -84,7 +84,7 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostSelection
  *
  * PF2-based games must extend this class if they have custom character attributes or abilities.
  */
-UCLASS()
+UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal
 class OPENPF2CORE_API APF2CharacterBase :
 	public ACharacter,
