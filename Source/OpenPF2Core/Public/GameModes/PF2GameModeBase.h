@@ -7,7 +7,7 @@
 
 #include <GameFramework/GameModeBase.h>
 
-#include "PF2GameModeInterface.h"
+#include "GameModes/PF2GameModeInterface.h"
 #include "PF2GameStateInterface.h"
 
 #include "PF2GameModeBase.generated.h"

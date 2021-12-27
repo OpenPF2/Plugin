@@ -8,6 +8,7 @@
 #include <GameFramework/GameStateBase.h>
 
 #include "PF2GameStateInterface.h"
+#include "GameModes/PF2ModeOfPlay.h"
 
 #include "PF2GameStateBase.generated.h"
 

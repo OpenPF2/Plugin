@@ -8,6 +8,7 @@
 #include <UObject/Interface.h>
 
 #include "PF2GameStateInterface.h"
+#include "GameModes/PF2ModeOfPlay.h"
 
 #include "PF2PlayerControllerInterface.generated.h"
 
