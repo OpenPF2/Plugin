@@ -15,7 +15,9 @@
 #include <GameFramework/Character.h>
 #include <AbilitySystemInterface.h>
 #include <UObject/ConstructorHelpers.h>
+#include <UObject/ScriptInterface.h>
 
+#include "Abilities/PF2AbilityBoostBase.h"
 #include "Abilities/PF2AbilitySystemComponent.h"
 #include "Abilities/PF2AttributeSet.h"
 #include "Abilities/PF2CharacterAbilityScoreType.h"
@@ -59,7 +61,7 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostSelection
 	 *	The ability scores that the player selected, out of the options offered by the Boost GA.
 	 */
 	explicit FPF2CharacterAbilityBoostSelection(
-		TSubclassOf<class UPF2AbilityBoostBase> BoostGameplayAbility,
+		TSubclassOf<UPF2AbilityBoostBase> BoostGameplayAbility,
 		TSet<EPF2CharacterAbilityScoreType>                     SelectedAbilities) :
 			BoostGameplayAbility(BoostGameplayAbility),
 			SelectedAbilities(SelectedAbilities)
@@ -70,7 +72,7 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostSelection
 	 * The "Boost GA" -- the Gameplay Ability for which ability score boost selections are being applied.
 	 */
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<class UPF2AbilityBoostBase> BoostGameplayAbility;
+	TSubclassOf<UPF2AbilityBoostBase> BoostGameplayAbility;
 
 	/**
 	 * The ability scores that the player selected, out of the options offered by the Boost GA.
@@ -364,8 +366,8 @@ public:
 
 	virtual TArray<UPF2AbilityBoostBase*> GetPendingAbilityBoosts() const override;
 
-	virtual void AddAbilityBoostSelection(const TSubclassOf<class UPF2AbilityBoostBase> BoostGameplayAbility,
-	                                      const TSet<EPF2CharacterAbilityScoreType>     SelectedAbilities) override;
+	virtual void AddAbilityBoostSelection(const TSubclassOf<UPF2AbilityBoostBase>   BoostGameplayAbility,
+	                                      const TSet<EPF2CharacterAbilityScoreType> SelectedAbilities) override;
 
 	/**
 	 * Attempts to find and activate a pending ability boost Gameplay Ability for each Ability Boost selection on this
