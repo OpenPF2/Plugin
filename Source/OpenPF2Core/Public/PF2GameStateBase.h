@@ -6,9 +6,10 @@
 #pragma once
 
 #include <GameFramework/GameStateBase.h>
+#include <UObject/ScriptInterface.h>
 
 #include "PF2GameStateInterface.h"
-#include "GameModes/PF2ModeOfPlay.h"
+#include "GameModes/PF2ModeOfPlayType.h"
 
 #include "PF2GameStateBase.generated.h"
 
@@ -33,7 +34,15 @@ protected:
 	 * @see IPF2GameStateInterface::GetModeOfPlay
 	 */
 	UPROPERTY(BlueprintReadOnly, VisibleInstanceOnly, Category = GameState, ReplicatedUsing=OnRep_ModeOfPlay)
-	EPF2ModeOfPlay ModeOfPlay;
+	EPF2ModeOfPlayType ModeOfPlay;
+
+	/**
+	 * The set of rules that govern how the game behaves in the current play mode.
+	 *
+	 * @see IPF2ModeOfPlayRuleSet
+	 */
+	UPROPERTY(Transient, BlueprintReadOnly, Category = GameState)
+	TScriptInterface<IPF2ModeOfPlayRuleSet> ModeOfPlayRuleSet;
 
 public:
 	// =================================================================================================================
@@ -52,12 +61,18 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2GameStateInterface Implementation
 	// =================================================================================================================
-	virtual FORCEINLINE EPF2ModeOfPlay GetModeOfPlay() override
+	virtual FORCEINLINE EPF2ModeOfPlayType GetModeOfPlay() override
 	{
 		return this->ModeOfPlay;
 	}
 
-	virtual void SwitchModeOfPlay(const EPF2ModeOfPlay NewMode) override;
+	virtual TScriptInterface<IPF2ModeOfPlayRuleSet> GetModeOfPlayRuleSet() override
+	{
+		return this->ModeOfPlayRuleSet;
+	}
+
+	virtual void SwitchModeOfPlay(const EPF2ModeOfPlayType                NewMode,
+	                              TScriptInterface<IPF2ModeOfPlayRuleSet> NewRuleSet) override;
 
 protected:
 	// =================================================================================================================

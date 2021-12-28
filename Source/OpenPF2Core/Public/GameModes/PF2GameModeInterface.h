@@ -6,7 +6,9 @@
 #pragma once
 
 #include <UObject/Interface.h>
+#include <UObject/ScriptInterface.h>
 
+#include "PF2ModeOfPlayRuleSet.h"
 #include "PF2GameModeInterface.generated.h"
 
 UINTERFACE(MinimalAPI, meta = (CannotImplementInterfaceInBlueprint))
@@ -21,6 +23,15 @@ class UPF2GameModeInterface : public UInterface
 class OPENPF2CORE_API IPF2GameModeInterface
 {
 	GENERATED_BODY()
+
+public:
+	/**
+	 * Creates the appropriate rule set for the given mode of play.
+	 *
+	 * @return
+	 *	The rule set for the current mode of play.
+	 */
+	virtual TScriptInterface<IPF2ModeOfPlayRuleSet> CreateModeOfPlayRuleSet(const EPF2ModeOfPlayType ModeOfPlay) = 0;
 
 protected:
 	/**

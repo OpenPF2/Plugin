@@ -5,11 +5,12 @@
 
 #include "PF2GameStateBase.h"
 
+#include <Engine/World.h>
 #include <Net/UnrealNetwork.h>
 
+#include "OpenPF2Core.h"
+#include "PF2EnumUtilities.h"
 #include "PF2PlayerControllerInterface.h"
-
-#include "Engine/World.h"
 
 APF2GameStateBase::APF2GameStateBase()
 {
@@ -22,11 +23,21 @@ void APF2GameStateBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME(APF2GameStateBase, ModeOfPlay);
 }
 
-void APF2GameStateBase::SwitchModeOfPlay(const EPF2ModeOfPlay NewMode)
+void APF2GameStateBase::SwitchModeOfPlay(const EPF2ModeOfPlayType                      NewMode,
+                                         const TScriptInterface<IPF2ModeOfPlayRuleSet> NewRuleSet)
 {
 	if (this->HasAuthority())
 	{
-		this->ModeOfPlay = NewMode;
+		UE_LOG(
+			LogPf2Core,
+			Verbose,
+			TEXT("Transitioning from current mode of play (%s) to new mode (%s)."),
+			*PF2EnumUtilities::ToString(this->ModeOfPlay),
+			*PF2EnumUtilities::ToString(NewMode)
+		);
+
+		this->ModeOfPlay        = NewMode;
+		this->ModeOfPlayRuleSet = NewRuleSet;
 	}
 }
 

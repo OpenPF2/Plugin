@@ -21,8 +21,13 @@
  * sorts of actions and reactions in each."
  */
 UENUM(BlueprintType)
-enum class EPF2ModeOfPlay : uint8
+enum class EPF2ModeOfPlayType : uint8
 {
+	/**
+	 * No mode of play is currently initialized.
+	 */
+	None,
+
 	/**
 	 * Encounter mode.
 	 *

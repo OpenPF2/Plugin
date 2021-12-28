@@ -6,9 +6,9 @@
 #pragma once
 
 #include <GameFramework/GameModeBase.h>
+#include <UObject/ScriptInterface.h>
 
 #include "GameModes/PF2GameModeInterface.h"
-#include "PF2GameStateInterface.h"
 
 #include "PF2GameModeBase.generated.h"
 
@@ -23,6 +23,14 @@ class OPENPF2CORE_API APF2GameModeBase : public AGameModeBase, public IPF2GameMo
 {
 	GENERATED_BODY()
 
+public:
+	// =================================================================================================================
+	// Public Methods - IPF2GameModeInterface Implementation
+	// =================================================================================================================
+	virtual TScriptInterface<IPF2ModeOfPlayRuleSet> CreateModeOfPlayRuleSet(
+		const EPF2ModeOfPlayType ModeOfPlay) override
+	PURE_VIRTUAL(APF2GameModeBase::CreateModeOfPlayRuleSet, return TScriptInterface<IPF2ModeOfPlayRuleSet>(););
+
 protected:
 	// =================================================================================================================
 	// Protected Methods - IPF2GameModeInterface Implementation
@@ -32,17 +40,24 @@ protected:
 	virtual void StartDowntimeMode() override;
 
 	// =================================================================================================================
+	// Protected Methods - AActor Overrides
+	// =================================================================================================================
+	virtual void BeginPlay() override;
+
+	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
 	/**
-	 * Sets the current play mode for all characters in the loaded level.
+	 * Attempts to change the current play mode for all characters in the loaded level.
 	 *
-	 * The play mode is updated and replicated out through the game state.
+	 * The mode of play is only changed if the rule set for the current mode of play allows the transition. If the mode
+	 * of play is changed, all player controllers are notified of the change in mode via game state replication. If the
+	 * mode of play is not changed, nothing happens.
 	 *
 	 * @see EPF2ModeOfPlay
 	 *
 	 * @param NewMode
 	 *	The new play mode.
 	 */
-	void SwitchModeOfPlay(const EPF2ModeOfPlay NewMode) const;
+	void AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewMode);
 };

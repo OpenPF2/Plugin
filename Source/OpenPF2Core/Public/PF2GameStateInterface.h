@@ -13,11 +13,20 @@
 #pragma once
 
 #include <UObject/Interface.h>
+#include <UObject/ScriptInterface.h>
 
-#include "GameModes/PF2ModeOfPlay.h"
+#include "GameModes/PF2ModeOfPlayType.h"
 
 #include "PF2GameStateInterface.generated.h"
 
+// =====================================================================================================================
+// Forward Declarations (to break recursive dependencies)
+// =====================================================================================================================
+class IPF2ModeOfPlayRuleSet;
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 UINTERFACE(MinimalAPI, meta = (CannotImplementInterfaceInBlueprint))
 class UPF2GameStateInterface : public UInterface
 {
@@ -54,7 +63,16 @@ public:
 	 * assailant or the party have been killed or have fled.
 	 */
 	UFUNCTION(BlueprintCallable)
-	virtual EPF2ModeOfPlay GetModeOfPlay() = 0;
+	virtual EPF2ModeOfPlayType GetModeOfPlay() = 0;
+
+	/**
+	 * Gets the set of rules that govern how the game behaves in the current play mode.
+	 *
+	 * @return
+	 *	The current rule set for the current mode of play.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual TScriptInterface<IPF2ModeOfPlayRuleSet> GetModeOfPlayRuleSet() = 0;
 
 	/**
 	 * Sets the current play mode for all characters in the loaded level.
@@ -65,6 +83,8 @@ public:
 	 *
 	 * @param NewMode
 	 *	The new play mode.
+	 * @param NewRuleSet
+	 *	The rules that govern how the game will behave while in the new play mode.
 	 */
-	virtual void SwitchModeOfPlay(const EPF2ModeOfPlay NewMode) = 0;
+	virtual void SwitchModeOfPlay(const EPF2ModeOfPlayType NewMode, TScriptInterface<IPF2ModeOfPlayRuleSet> NewRuleSet) = 0;
 };

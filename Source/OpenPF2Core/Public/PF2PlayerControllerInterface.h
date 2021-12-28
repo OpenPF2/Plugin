@@ -8,7 +8,7 @@
 #include <UObject/Interface.h>
 
 #include "PF2GameStateInterface.h"
-#include "GameModes/PF2ModeOfPlay.h"
+#include "GameModes/PF2ModeOfPlayType.h"
 
 #include "PF2PlayerControllerInterface.generated.h"
 
@@ -34,5 +34,5 @@ public:
 	 * @see EPF2ModeOfPlay
 	 */
 	UFUNCTION(BlueprintImplementableEvent)
-	void OnModeOfPlayChanged(EPF2ModeOfPlay NewMode);
+	void OnModeOfPlayChanged(EPF2ModeOfPlayType NewMode);
 };
