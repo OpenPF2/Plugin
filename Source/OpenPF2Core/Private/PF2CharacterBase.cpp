@@ -9,8 +9,6 @@
 #include <Net/UnrealNetwork.h>
 #include <UObject/ConstructorHelpers.h>
 
-#include "Abilities/PF2AbilityBoostBase.h"
-#include "Abilities/PF2AbilitySystemComponent.h"
 #include "Abilities/PF2GameplayAbilityTargetData_BoostAbility.h"
 
 APF2CharacterBase::APF2CharacterBase() :
