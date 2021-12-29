@@ -67,4 +67,14 @@ protected:
 	 *	The new play mode.
 	 */
 	void AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeOfPlay);
+
+	/**
+	 * Immediately switches the current play mode for all characters in the loaded level.
+	 *
+	 * All player controllers are notified of the change in mode via game state replication.
+	 *
+	 * @param NewModeOfPlay
+	 *	The mode of play to switch to.
+	 */
+	void ForceSwitchModeOfPlay(const EPF2ModeOfPlayType NewModeOfPlay);
 };
