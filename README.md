@@ -1,6 +1,6 @@
 ﻿# OpenPF2 for Unreal Engine
 
-<img src="./Logo.png#gh-light-mode-only" title="OpenPF2 Logo" alt="Tabletop made of four arrows pointing toward the center of the table, with the tagline 'Just add story.'" width="256">
+<img src="./Logo.png#gh-light-mode-only" title="OpenPF2 Logo" alt="Tabletop made of four arrows pointing toward the center of the table, with the tagline 'Just add story.'" width="512">
 
 A plug-in for Unreal Engine that provides logic and content for building an RPG
 with mechanics similar to Pathfinder&trade; 2nd Edition by Paizo Publishing.
