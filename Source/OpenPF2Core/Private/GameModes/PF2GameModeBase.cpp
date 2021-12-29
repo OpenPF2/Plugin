@@ -8,6 +8,21 @@
 #include "PF2EnumUtilities.h"
 #include "GameModes/PF2ModeOfPlayRuleSet.h"
 
+TScriptInterface<IPF2ModeOfPlayRuleSet> APF2GameModeBase::CreateModeOfPlayRuleSet(const EPF2ModeOfPlayType ModeOfPlay)
+{
+	TScriptInterface<IPF2ModeOfPlayRuleSet> RuleSetWrapper;
+
+	if (this->ModeRuleSets.Contains(ModeOfPlay))
+	{
+		const UClass* const RuleSetType = this->ModeRuleSets[ModeOfPlay];
+		UObject*            NewRuleSet  = NewObject<UObject>(this, RuleSetType);
+
+		RuleSetWrapper = TScriptInterface<IPF2ModeOfPlayRuleSet>(NewRuleSet);
+	}
+
+	return RuleSetWrapper;
+}
+
 void APF2GameModeBase::StartEncounterMode()
 {
 	this->AttemptModeOfPlaySwitch(EPF2ModeOfPlayType::Encounter);
@@ -31,42 +46,44 @@ void APF2GameModeBase::BeginPlay()
 	this->AttemptModeOfPlaySwitch(EPF2ModeOfPlayType::Exploration);
 }
 
-void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewMode)
+void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeOfPlay)
 {
-	IPF2GameStateInterface* Pf2GameState = this->GetGameState<IPF2GameStateInterface>();
+	IPF2GameStateInterface*                        Pf2GameStateInterface = this->GetGameState<IPF2GameStateInterface>();
+	const TScriptInterface<IPF2GameStateInterface> Pf2GameState          = Cast<UObject>(Pf2GameStateInterface);
 
 	if (Pf2GameState != nullptr)
 	{
-		const IPF2ModeOfPlayRuleSet* RuleSet =
-			Cast<IPF2ModeOfPlayRuleSet>(Pf2GameState->GetModeOfPlayRuleSet().GetObject());
+		const EPF2ModeOfPlayType                      OldModeOfPlay    = Pf2GameState->GetModeOfPlay();
+		const TScriptInterface<IPF2ModeOfPlayRuleSet> OldRuleSet       = Pf2GameState->GetModeOfPlayRuleSet();
+		UObject*                                      OldRuleSetObject = OldRuleSet.GetObject();
 
 		bool CanTransition;
 
-		if (Pf2GameState->GetModeOfPlay() == EPF2ModeOfPlayType::None)
+		if (OldModeOfPlay == EPF2ModeOfPlayType::None)
 		{
 			// We're not in any mode.
 			CanTransition = true;
 		}
-		else if (RuleSet == nullptr)
+		else if (OldRuleSetObject == nullptr)
 		{
 			UE_LOG(
 				LogPf2Core,
 				Error,
 				TEXT("Cannot transition from current mode of play (%s) to new mode (%s) because there is no loaded rule set."),
 				*PF2EnumUtilities::ToString(Pf2GameState->GetModeOfPlay()),
-				*PF2EnumUtilities::ToString(NewMode)
+				*PF2EnumUtilities::ToString(NewModeOfPlay)
 			);
 
 			CanTransition = false;
 		}
-		else if (!RuleSet->CanTransitionTo(Pf2GameState, NewMode))
+		else if (!OldRuleSet->Execute_CanTransitionTo(OldRuleSetObject, Pf2GameState, NewModeOfPlay))
 		{
 			UE_LOG(
 				LogPf2Core,
 				Warning,
 				TEXT("Refusing to transition from current mode of play (%s) to new mode (%s) because loaded rule set does not allow the transition."),
 				*PF2EnumUtilities::ToString(Pf2GameState->GetModeOfPlay()),
-				*PF2EnumUtilities::ToString(NewMode)
+				*PF2EnumUtilities::ToString(NewModeOfPlay)
 			);
 
 			CanTransition = false;
@@ -78,9 +95,21 @@ void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewMode)
 
 		if (CanTransition)
 		{
-			const TScriptInterface<IPF2ModeOfPlayRuleSet> NewRuleSet = this->CreateModeOfPlayRuleSet(NewMode);
+			const TScriptInterface<IPF2ModeOfPlayRuleSet> NewRuleSet = this->CreateModeOfPlayRuleSet(NewModeOfPlay);
 
-			Pf2GameState->SwitchModeOfPlay(NewMode, NewRuleSet);
+			UObject* const NewRuleSetObject = NewRuleSet.GetObject();
+
+			if (OldRuleSetObject != nullptr)
+			{
+				OldRuleSet->Execute_OnModeOfPlayEnd(OldRuleSetObject, OldModeOfPlay);
+			}
+
+			Pf2GameState->SwitchModeOfPlay(NewModeOfPlay, NewRuleSet);
+
+			if (NewRuleSetObject != nullptr)
+			{
+				NewRuleSet->Execute_OnModeOfPlayStart(NewRuleSetObject, NewModeOfPlay);
+			}
 		}
 	}
 }

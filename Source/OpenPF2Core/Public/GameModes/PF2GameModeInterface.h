@@ -9,6 +9,7 @@
 #include <UObject/ScriptInterface.h>
 
 #include "PF2ModeOfPlayRuleSet.h"
+
 #include "PF2GameModeInterface.generated.h"
 
 UINTERFACE(MinimalAPI, meta = (CannotImplementInterfaceInBlueprint))
@@ -33,9 +34,11 @@ public:
 	 */
 	virtual TScriptInterface<IPF2ModeOfPlayRuleSet> CreateModeOfPlayRuleSet(const EPF2ModeOfPlayType ModeOfPlay) = 0;
 
-protected:
 	/**
-	 * Switches the play mode to encounter mode.
+	 * Requests a switch of the play mode to encounter mode.
+	 *
+	 * The request is subject to any business rules of the game mode. If the switch is not allowed by current game
+	 * rules, the game mode will not be changed.
 	 *
 	 * @see EPF2ModeOfPlay
 	 */
@@ -43,7 +46,10 @@ protected:
 	virtual void StartEncounterMode() = 0;
 
 	/**
-	 * Switches the play mode to exploration mode.
+	 * Requests a switch of the play mode to exploration mode.
+	 *
+	 * The request is subject to any business rules of the game mode. If the switch is not allowed by current game
+	 * rules, the game mode will not be changed.
 	 *
 	 * @see EPF2ModeOfPlay
 	 */
@@ -51,7 +57,10 @@ protected:
 	virtual void StartExplorationMode() = 0;
 
 	/**
-	 * Switches the play mode to downtime mode.
+	 * Requests a switch of the play mode to downtime mode.
+	 *
+	 * The request is subject to any business rules of the game mode. If the switch is not allowed by current game
+	 * rules, the game mode will not be changed.
 	 *
 	 * @see EPF2ModeOfPlay
 	 */

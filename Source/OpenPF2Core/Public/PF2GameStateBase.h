@@ -33,7 +33,7 @@ protected:
 	 *
 	 * @see IPF2GameStateInterface::GetModeOfPlay
 	 */
-	UPROPERTY(BlueprintReadOnly, VisibleInstanceOnly, Category = GameState, ReplicatedUsing=OnRep_ModeOfPlay)
+	UPROPERTY(BlueprintReadOnly, VisibleInstanceOnly, Category=GameState, ReplicatedUsing=OnRep_ModeOfPlay)
 	EPF2ModeOfPlayType ModeOfPlay;
 
 	/**
@@ -41,7 +41,7 @@ protected:
 	 *
 	 * @see IPF2ModeOfPlayRuleSet
 	 */
-	UPROPERTY(Transient, BlueprintReadOnly, Category = GameState)
+	UPROPERTY(Transient, BlueprintReadOnly, Replicated, Category=GameState)
 	TScriptInterface<IPF2ModeOfPlayRuleSet> ModeOfPlayRuleSet;
 
 public:

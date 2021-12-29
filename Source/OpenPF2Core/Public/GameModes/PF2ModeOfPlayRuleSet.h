@@ -8,6 +8,8 @@
 #include <UObject/Interface.h>
 
 #include "PF2GameStateInterface.h"
+#include "PF2ModeOfPlayType.h"
+
 #include "PF2ModeOfPlayRuleset.generated.h"
 
 UINTERFACE()
@@ -34,8 +36,31 @@ class OPENPF2CORE_API IPF2ModeOfPlayRuleSet
 
 public:
 	/**
-	 * Determines whether the rules of the current mode allow transitioning to the specified mode of play with the given
-	 * game state.
+	 * Function called to notify this rule set that the mode of play that invoked it is now active.
+	 *
+	 * The rule set should use this as an opportunity to initialize its state (e.g., roll initiative, assemble a list of
+	 * enemies, etc.).
+	 *
+	 * @param ModeOfPlay
+	 *	The mode of play that is just starting.
+	 */
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnModeOfPlayStart(EPF2ModeOfPlayType ModeOfPlay);
+
+	/**
+	 * Function called to notify this rule set to wrap-up prior to a change in mode of play.
+	 *
+	 * The rule set should use this as an opportunity to apply any long-lasting effects of the mode (e.g., calculate
+	 * experience and hero points, end encounter-only gameplay effects or abilities, etc.).
+	 *
+	 * @param ModeOfPlay
+	 *	The mode of play that is ending.
+	 */
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnModeOfPlayEnd(EPF2ModeOfPlayType ModeOfPlay);
+
+	/**
+	 * Determines whether this rule set allows transitioning to the specified mode of play with the given game state.
 	 *
 	 * Some modes freely allow transitions to other game modes, while others place restrictions on transitions so that
 	 * they depend on certain conditions being met. For example, it is common that encounters prevent players from
@@ -48,5 +73,7 @@ public:
 	 * @param TargetMode
 	 *	The mode of play to which the game is attempting to transition.
 	 */
-	virtual bool CanTransitionTo(const IPF2GameStateInterface* PF2GameState, EPF2ModeOfPlayType TargetMode) const = 0;
+	UFUNCTION(BlueprintImplementableEvent)
+	bool CanTransitionTo(const TScriptInterface<IPF2GameStateInterface>& PF2GameState,
+	                     const EPF2ModeOfPlayType                        TargetMode) const;
 };

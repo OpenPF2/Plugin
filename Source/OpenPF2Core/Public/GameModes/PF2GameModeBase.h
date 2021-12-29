@@ -8,6 +8,7 @@
 #include <GameFramework/GameModeBase.h>
 #include <UObject/ScriptInterface.h>
 
+#include "GameModes/PF2ModeOfPlayRuleSetBase.h"
 #include "GameModes/PF2GameModeInterface.h"
 
 #include "PF2GameModeBase.generated.h"
@@ -23,22 +24,28 @@ class OPENPF2CORE_API APF2GameModeBase : public AGameModeBase, public IPF2GameMo
 {
 	GENERATED_BODY()
 
+protected:
+	// =================================================================================================================
+	// Protected Constants
+	// =================================================================================================================
+	/**
+	 * Map from Modes of Play to the Rule Set to use for each mode.
+	 */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Mode of Play Rules")
+	TMap<EPF2ModeOfPlayType, TSubclassOf<UPF2ModeOfPlayRuleSetBase>> ModeRuleSets;
+
 public:
 	// =================================================================================================================
 	// Public Methods - IPF2GameModeInterface Implementation
 	// =================================================================================================================
-	virtual TScriptInterface<IPF2ModeOfPlayRuleSet> CreateModeOfPlayRuleSet(
-		const EPF2ModeOfPlayType ModeOfPlay) override
-	PURE_VIRTUAL(APF2GameModeBase::CreateModeOfPlayRuleSet, return TScriptInterface<IPF2ModeOfPlayRuleSet>(););
+	virtual FORCEINLINE TScriptInterface<IPF2ModeOfPlayRuleSet> CreateModeOfPlayRuleSet(
+		const EPF2ModeOfPlayType ModeOfPlay) override;
 
-protected:
-	// =================================================================================================================
-	// Protected Methods - IPF2GameModeInterface Implementation
-	// =================================================================================================================
 	virtual void StartEncounterMode() override;
 	virtual void StartExplorationMode() override;
 	virtual void StartDowntimeMode() override;
 
+protected:
 	// =================================================================================================================
 	// Protected Methods - AActor Overrides
 	// =================================================================================================================
@@ -56,8 +63,8 @@ protected:
 	 *
 	 * @see EPF2ModeOfPlay
 	 *
-	 * @param NewMode
+	 * @param NewModeOfPlay
 	 *	The new play mode.
 	 */
-	void AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewMode);
+	void AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeOfPlay);
 };
