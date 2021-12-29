@@ -43,7 +43,7 @@ public:
 	 * @see EPF2ModeOfPlay
 	 */
 	UFUNCTION(BlueprintCallable)
-	virtual void StartEncounterMode() = 0;
+	virtual void RequestEncounterMode() = 0;
 
 	/**
 	 * Requests a switch of the play mode to exploration mode.
@@ -54,7 +54,7 @@ public:
 	 * @see EPF2ModeOfPlay
 	 */
 	UFUNCTION(BlueprintCallable)
-	virtual void StartExplorationMode() = 0;
+	virtual void RequestExplorationMode() = 0;
 
 	/**
 	 * Requests a switch of the play mode to downtime mode.
@@ -65,5 +65,5 @@ public:
 	 * @see EPF2ModeOfPlay
 	 */
 	UFUNCTION(BlueprintCallable)
-	virtual void StartDowntimeMode() = 0;
+	virtual void RequestDowntimeMode() = 0;
 };

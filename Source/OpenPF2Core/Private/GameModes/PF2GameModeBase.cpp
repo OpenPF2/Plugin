@@ -23,17 +23,17 @@ TScriptInterface<IPF2ModeOfPlayRuleSet> APF2GameModeBase::CreateModeOfPlayRuleSe
 	return RuleSetWrapper;
 }
 
-void APF2GameModeBase::StartEncounterMode()
+void APF2GameModeBase::RequestEncounterMode()
 {
 	this->AttemptModeOfPlaySwitch(EPF2ModeOfPlayType::Encounter);
 }
 
-void APF2GameModeBase::StartExplorationMode()
+void APF2GameModeBase::RequestExplorationMode()
 {
 	this->AttemptModeOfPlaySwitch(EPF2ModeOfPlayType::Exploration);
 }
 
-void APF2GameModeBase::StartDowntimeMode()
+void APF2GameModeBase::RequestDowntimeMode()
 {
 	this->AttemptModeOfPlaySwitch(EPF2ModeOfPlayType::Downtime);
 }

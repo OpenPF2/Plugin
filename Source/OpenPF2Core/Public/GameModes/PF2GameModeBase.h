@@ -41,9 +41,9 @@ public:
 	virtual FORCEINLINE TScriptInterface<IPF2ModeOfPlayRuleSet> CreateModeOfPlayRuleSet(
 		const EPF2ModeOfPlayType ModeOfPlay) override;
 
-	virtual void StartEncounterMode() override;
-	virtual void StartExplorationMode() override;
-	virtual void StartDowntimeMode() override;
+	virtual void RequestEncounterMode() override;
+	virtual void RequestExplorationMode() override;
+	virtual void RequestDowntimeMode() override;
 
 protected:
 	// =================================================================================================================
