@@ -7,6 +7,7 @@
 
 #include <UObject/Interface.h>
 
+#include "PF2CharacterInterface.h"
 #include "PF2GameStateInterface.h"
 #include "PF2ModeOfPlayType.h"
 
@@ -48,16 +49,15 @@ public:
 	void OnModeOfPlayStart(EPF2ModeOfPlayType ModeOfPlay);
 
 	/**
-	 * Function called to notify this rule set to wrap-up prior to a change in mode of play.
+	 * Function called to notify this rule set of the start of a frame.
 	 *
-	 * The rule set should use this as an opportunity to apply any long-lasting effects of the mode (e.g., calculate
-	 * experience and hero points, end encounter-only gameplay effects or abilities, etc.).
+	 * The rule set should use this as an opportunity to update time-based state (e.g., expire time-based initiative).
 	 *
-	 * @param ModeOfPlay
-	 *	The mode of play that is ending.
+	 * @param DeltaSeconds
+	 *	The amount of time (in seconds) that's elapsed since the last tick event.
 	 */
 	UFUNCTION(BlueprintImplementableEvent)
-	void OnModeOfPlayEnd(EPF2ModeOfPlayType ModeOfPlay);
+	void OnTick(float DeltaSeconds);
 
 	/**
 	 * Determines whether this rule set allows transitioning to the specified mode of play with the given game state.
@@ -76,4 +76,16 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	bool CanTransitionTo(const TScriptInterface<IPF2GameStateInterface>& PF2GameState,
 	                     const EPF2ModeOfPlayType                        TargetMode) const;
+
+	/**
+	 * Function called to notify this rule set to wrap-up prior to a change in mode of play.
+	 *
+	 * The rule set should use this as an opportunity to apply any long-lasting effects of the mode (e.g., calculate
+	 * experience and hero points, end encounter-only gameplay effects or abilities, etc.).
+	 *
+	 * @param ModeOfPlay
+	 *	The mode of play that is ending.
+	 */
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnModeOfPlayEnd(EPF2ModeOfPlayType ModeOfPlay);
 };

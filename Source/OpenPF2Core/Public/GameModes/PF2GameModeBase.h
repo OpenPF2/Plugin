@@ -50,6 +50,7 @@ protected:
 	// Protected Methods - AActor Overrides
 	// =================================================================================================================
 	virtual void BeginPlay() override;
+	virtual void Tick(const float DeltaSeconds) override;
 
 	// =================================================================================================================
 	// Protected Methods

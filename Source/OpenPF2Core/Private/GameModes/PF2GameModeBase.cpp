@@ -46,6 +46,23 @@ void APF2GameModeBase::BeginPlay()
 	this->AttemptModeOfPlaySwitch(EPF2ModeOfPlayType::Exploration);
 }
 
+void APF2GameModeBase::Tick(const float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	IPF2GameStateInterface* Pf2GameState = this->GetGameState<IPF2GameStateInterface>();
+
+	if (Pf2GameState != nullptr)
+	{
+		const TScriptInterface<IPF2ModeOfPlayRuleSet> RuleSet = Pf2GameState->GetModeOfPlayRuleSet();
+
+		if (RuleSet != nullptr)
+		{
+			RuleSet->Execute_OnTick(RuleSet.GetObject(), DeltaSeconds);
+		}
+	}
+}
+
 void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeOfPlay)
 {
 	IPF2GameStateInterface*                        Pf2GameStateInterface = this->GetGameState<IPF2GameStateInterface>();
