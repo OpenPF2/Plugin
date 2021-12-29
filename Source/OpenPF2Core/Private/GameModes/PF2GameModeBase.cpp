@@ -79,18 +79,16 @@ void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeO
 	}
 	else
 	{
-		const EPF2ModeOfPlayType                      OldModeOfPlay    = Pf2GameState->GetModeOfPlay();
-		const TScriptInterface<IPF2ModeOfPlayRuleSet> OldRuleSet       = Pf2GameState->GetModeOfPlayRuleSet();
-		UObject*                                      OldRuleSetObject = OldRuleSet.GetObject();
-
-		bool CanTransition;
+		const EPF2ModeOfPlayType                      OldModeOfPlay = Pf2GameState->GetModeOfPlay();
+		const TScriptInterface<IPF2ModeOfPlayRuleSet> OldRuleSet    = Pf2GameState->GetModeOfPlayRuleSet();
+		bool                                          CanTransition;
 
 		if (OldModeOfPlay == EPF2ModeOfPlayType::None)
 		{
 			// We're not in any mode.
 			CanTransition = true;
 		}
-		else if (OldRuleSetObject == nullptr)
+		else if (OldRuleSet == nullptr)
 		{
 			UE_LOG(
 				LogPf2Core,
@@ -102,7 +100,7 @@ void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeO
 
 			CanTransition = false;
 		}
-		else if (!OldRuleSet->Execute_CanTransitionTo(OldRuleSetObject, Pf2GameState, NewModeOfPlay))
+		else if (!OldRuleSet->Execute_CanTransitionTo(OldRuleSet.GetObject(), Pf2GameState, NewModeOfPlay))
 		{
 			UE_LOG(
 				LogPf2Core,
@@ -144,20 +142,18 @@ void APF2GameModeBase::ForceSwitchModeOfPlay(const EPF2ModeOfPlayType NewModeOfP
 	{
 		const EPF2ModeOfPlayType                      OldModeOfPlay    = Pf2GameState->GetModeOfPlay();
 		const TScriptInterface<IPF2ModeOfPlayRuleSet> OldRuleSet       = Pf2GameState->GetModeOfPlayRuleSet();
-		UObject*                                      OldRuleSetObject = OldRuleSet.GetObject();
 		const TScriptInterface<IPF2ModeOfPlayRuleSet> NewRuleSet       = this->CreateModeOfPlayRuleSet(NewModeOfPlay);
-		UObject*                                      NewRuleSetObject = NewRuleSet.GetObject();
 
-		if (OldRuleSetObject != nullptr)
+		if (OldRuleSet != nullptr)
 		{
-			OldRuleSet->Execute_OnModeOfPlayEnd(OldRuleSetObject, OldModeOfPlay);
+			OldRuleSet->Execute_OnModeOfPlayEnd(OldRuleSet.GetObject(), OldModeOfPlay);
 		}
 
 		Pf2GameState->SwitchModeOfPlay(NewModeOfPlay, NewRuleSet);
 
-		if (NewRuleSetObject != nullptr)
+		if (NewRuleSet != nullptr)
 		{
-			NewRuleSet->Execute_OnModeOfPlayStart(NewRuleSetObject, NewModeOfPlay);
+			NewRuleSet->Execute_OnModeOfPlayStart(NewRuleSet.GetObject(), NewModeOfPlay);
 		}
 	}
 }
