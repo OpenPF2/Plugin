@@ -97,7 +97,7 @@ class OPENPF2CORE_API APF2CharacterBase :
 
 protected:
 	// =================================================================================================================
-	// Protected Properties - Blueprint Accessible
+	// Protected Fields
 	// =================================================================================================================
 	/**
 	 * The Ability System Component (ASC) used for interfacing this character with the Gameplay Abilities System (GAS).
@@ -111,6 +111,43 @@ protected:
 	UPROPERTY()
 	UPF2AttributeSet* AttributeSet;
 
+	/**
+	 * Whether or not managed passive Gameplay Effects have been generated for this character.
+	 */
+	UPROPERTY()
+	bool bManagedPassiveEffectsGenerated;
+
+	/**
+	 * The Gameplay Effects that drive stats for every character.
+	 */
+	TMultiMap<FName, TSubclassOf<UGameplayEffect>> CoreGameplayEffects;
+
+	/**
+	 * The list of passive Gameplay Effects (GEs) that are generated from other values specified on this character.
+	 *
+	 * Each value is a gameplay effect and the key is the weight group of that GE (sorted alphanumerically). The weight
+	 * controls the order that all GEs are applied. Lower weights are applied earlier than higher weights.
+	 *
+	 * The names of each group are exposed as tags in the "GameplayEffect.WeightGroup" tag list so that they can be
+	 * applied to GEs by game designers to control the default group that a GE gets added to. A GE can also be
+	 * explicitly added to a group via the AddPassiveGameplayEffectWithWeight() method on the Character ASC.
+	 */
+	TMultiMap<FName, TSubclassOf<UGameplayEffect>> ManagedGameplayEffects;
+
+	/**
+	 * The ability boost selections that have already been applied to this character.
+	 *
+	 * This is used to keep track of which boosts to disregard in the event that a character's passive GEs are disabled
+	 * and then re-enabled (as happens during character leveling). Without this, when a passive GE that grants an
+	 * ability boost is re-activated, the player would have the option to choose another set of ability boosts even
+	 * though their prior selections are still in effect on the player's character.
+	 */
+	UPROPERTY()
+	TArray<FPF2CharacterAbilityBoostSelection> AppliedAbilityBoostSelections;
+
+	// =================================================================================================================
+	// Protected Fields - Blueprint Accessible
+	// =================================================================================================================
 	/**
 	 * The human-friendly name of this character.
 	 *
@@ -224,30 +261,6 @@ protected:
 	TArray<TSubclassOf<UGameplayEffect>> AdditionalPassiveGameplayEffects;
 
 	/**
-	 * Whether or not managed passive Gameplay Effects have been generated for this character.
-	 */
-	UPROPERTY()
-	// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
-	int32 bManagedPassiveEffectsGenerated;
-
-	/**
-	 * The Gameplay Effects that drive stats for every character.
-	 */
-	TMultiMap<FName, TSubclassOf<UGameplayEffect>> CoreGameplayEffects;
-
-	/**
-	 * The list of passive Gameplay Effects (GEs) that are generated from other values specified on this character.
-	 *
-	 * Each value is a gameplay effect and the key is the weight group of that GE (sorted alphanumerically). The weight
-	 * controls the order that all GEs are applied. Lower weights are applied earlier than higher weights.
-	 *
-	 * The names of each group are exposed as tags in the "GameplayEffect.WeightGroup" tag list so that they can be
-	 * applied to GEs by game designers to control the default group that a GE gets added to. A GE can also be
-	 * explicitly added to a group via the AddPassiveGameplayEffectWithWeight() method on the Character ASC.
-	 */
-	TMultiMap<FName, TSubclassOf<UGameplayEffect>> ManagedGameplayEffects;
-
-	/**
 	 * The abilities to boost, as chosen by the player or a game designer, out of what ability boosts are pending.
 	 *
 	 * At the start of play, or upon a call to ApplyAbilityBoostSelections(), an attempt is made to match up
@@ -285,17 +298,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Ability Boosts")
 	TArray<FPF2CharacterAbilityBoostSelection> AbilityBoostSelections;
 
-	/**
-	 * The ability boost selections that have already been applied to this character.
-	 *
-	 * This is used to keep track of which boosts to disregard in the event that a character's passive GEs are disabled
-	 * and then re-enabled (as happens during character leveling). Without this, when a passive GE that grants an
-	 * ability boost is re-activated, the player would have the option to choose another set of ability boosts even
-	 * though their prior selections are still in effect on the player's character.
-	 */
-	UPROPERTY()
-	TArray<FPF2CharacterAbilityBoostSelection> AppliedAbilityBoostSelections;
-
 public:
 	// =================================================================================================================
 	// Public Constructors
@@ -317,9 +319,9 @@ protected:
 	 */
 	template<class AscType, class AttributeSetType>
 	explicit APF2CharacterBase(TPF2CharacterComponentFactory<AscType, AttributeSetType> ComponentFactory) :
+		bManagedPassiveEffectsGenerated(false),
 		CharacterName(FText::FromString(TEXT("Character"))),
-		CharacterLevel(1),
-		bManagedPassiveEffectsGenerated(false)
+		CharacterLevel(1)
 	{
 		this->AbilitySystemComponent = ComponentFactory.CreateAbilitySystemComponent(this);
 		this->AttributeSet           = ComponentFactory.CreateAttributeSet(this);
