@@ -26,6 +26,7 @@ void APF2CharacterBase::PossessedBy(AController* NewController)
 
 		this->ActivatePassiveGameplayEffects();
 		this->ApplyAbilityBoostSelections();
+		this->GrantAdditionalAbilities();
 	}
 }
 
@@ -321,6 +322,23 @@ void APF2CharacterBase::ClearManagedPassiveGameplayEffects()
 	this->ManagedGameplayEffects.Empty();
 
 	this->bManagedPassiveEffectsGenerated = false;
+}
+
+void APF2CharacterBase::GrantAdditionalAbilities()
+{
+	if ((this->GrantedAdditionalAbilities.Num() == 0) && this->IsAuthorityForEffects())
+	{
+		UAbilitySystemComponent* Asc          = this->GetAbilitySystemComponent();
+		const int32              AbilityLevel = this->GetCharacterLevel();
+
+		for (const TSubclassOf<UGameplayAbility>& Ability : this->AdditionalGameplayAbilities)
+		{
+			FGameplayAbilitySpec       Spec       = FGameplayAbilitySpec(Ability, AbilityLevel, INDEX_NONE, this);
+			FGameplayAbilitySpecHandle SpecHandle = Asc->GiveAbility(Spec);
+
+			this->GrantedAdditionalAbilities.Add(Ability, SpecHandle);
+		}
+	}
 }
 
 void APF2CharacterBase::HandleCharacterLevelChanged(const float OldLevel, const float NewLevel)

@@ -261,6 +261,16 @@ protected:
 	TArray<TSubclassOf<UGameplayEffect>> AdditionalPassiveGameplayEffects;
 
 	/**
+	 * Additional Gameplay Abilities (GAs) that are granted to the character at the start of play.
+	 *
+	 * This list is combined with any abilities that are separately granted by the character's ancestry, background,
+	 * heritage, or skills. You should only grant custom abilities here that are needed for story or special character
+	 * interactions; otherwise, abilities should only be granted through the aforementioned, more standard means.
+	 */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Character")
+	TArray<TSubclassOf<UGameplayAbility>> AdditionalGameplayAbilities;
+
+	/**
 	 * The abilities to boost, as chosen by the player or a game designer, out of what ability boosts are pending.
 	 *
 	 * At the start of play, or upon a call to ApplyAbilityBoostSelections(), an attempt is made to match up
@@ -297,6 +307,16 @@ protected:
 	 */
 	UPROPERTY(EditAnywhere, Category="Ability Boosts")
 	TArray<FPF2CharacterAbilityBoostSelection> AbilityBoostSelections;
+
+	/**
+	 * Handles for all additional abilities that have been granted to this character.
+	 *
+	 * This will be empty if the additional gameplay abilities are yet to be granted.
+	 *
+	 * @see AdditionalGameplayAbilities
+	 */
+	UPROPERTY(BlueprintReadOnly)
+	TMap<TSubclassOf<UGameplayAbility>, FGameplayAbilitySpecHandle> GrantedAdditionalAbilities;
 
 public:
 	// =================================================================================================================
@@ -495,6 +515,13 @@ protected:
 	 * must call DeactivateAllPassiveGameplayEffects() first.
 	 */
 	void ClearManagedPassiveGameplayEffects();
+
+	/**
+	 * Grants any gameplay abilities that have been configured on this character by the game designer.
+	 *
+	 * This method is idempotent. If the character has already been granted the abilities, this method has no effect.
+	 */
+	void GrantAdditionalAbilities();
 
 	/**
 	 * Callback invoked when a character's level has changed, to allow logic that depends on levels to be refreshed.
