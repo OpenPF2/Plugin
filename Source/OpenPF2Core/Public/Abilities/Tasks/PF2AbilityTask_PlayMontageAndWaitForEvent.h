@@ -5,6 +5,9 @@
 #pragma once
 
 #include <Abilities/Tasks/AbilityTask.h>
+
+#include "PF2AbilityTaskBase.h"
+
 #include "PF2AbilityTask_PlayMontageAndWaitForEvent.generated.h"
 
 /**
@@ -28,7 +31,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
  * combat or action sequence where multiple types of damage are possible).
  */
 UCLASS()
-class OPENPF2CORE_API UPF2AbilityTask_PlayMontageAndWaitForEvent : public UAbilityTask
+class OPENPF2CORE_API UPF2AbilityTask_PlayMontageAndWaitForEvent : public UPF2AbilityTaskBase
 {
 	GENERATED_BODY()
 
