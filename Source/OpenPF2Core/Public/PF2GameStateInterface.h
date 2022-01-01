@@ -22,7 +22,9 @@
 // =====================================================================================================================
 // Forward Declarations (to break recursive dependencies)
 // =====================================================================================================================
+class IPF2CharacterInterface;
 class IPF2ModeOfPlayRuleSet;
+class IPF2QueuedActionInterface;
 
 // =====================================================================================================================
 // Normal Declarations
@@ -86,5 +88,46 @@ public:
 	 * @param NewRuleSet
 	 *	The rules that govern how the game will behave while in the new play mode.
 	 */
-	virtual void SwitchModeOfPlay(const EPF2ModeOfPlayType NewMode, TScriptInterface<IPF2ModeOfPlayRuleSet> NewRuleSet) = 0;
+	virtual void SwitchModeOfPlay(const EPF2ModeOfPlayType                NewMode,
+	                              TScriptInterface<IPF2ModeOfPlayRuleSet> NewRuleSet) = 0;
+
+	/**
+	 * Notifies the Mode of Play Rule Set (MoPRS) that a character wishes to perform an action.
+	 *
+	 * If the current Mode of Play is structured (e.g., Encounter mode), then the action will be placed into a queue of
+	 * actions for the character -- preserving the order that the actions were queued -- and the action will be executed
+	 * when it is the character's turn (e.g., according to initiative order). On the other hand, if the current Mode of
+	 * Play allows characters to perform actions immediately, the action will not be queued and will instead be given
+	 * the opportunity to run before this call returns.
+	 *
+	 * This should only get called on the server.
+	 *
+	 * @param Character
+	 *	The character for which the action is being queued.
+	 * @param Action
+	 *	The action being queued.
+	 */
+	virtual void QueueActionForInitiativeTurn(const IPF2CharacterInterface*    Character,
+	                                          const IPF2QueuedActionInterface* Action) = 0;
+
+	/**
+	 * Notifies the Mode of Play Rule Set (MoPRS) that a character no longer wishes to perform a previously-queued
+	 * action.
+	 *
+	 * This should be used if the action is being garbage collected/destroyed; or if the action has been canceled by
+	 * other means, such as via a HUD or UMG widget that a player has used to second-guess an action decision they have
+	 * previously made.
+	 *
+	 * If the specified action is not in the queue for the specified character, no changes are made to the action queue
+	 * and this method simply returns.
+	 *
+	 * This should only get called on the server.
+	 *
+	 * @param Character
+	 *	The character for which the action was previously queued.
+	 * @param Action
+	 *	The action to remove from the queue.
+	 */
+	virtual void CancelActionQueuedForInitiativeTurn(const IPF2CharacterInterface*    Character,
+	                                                 const IPF2QueuedActionInterface* Action) = 0;
 };

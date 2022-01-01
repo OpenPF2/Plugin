@@ -41,6 +41,18 @@ void APF2GameStateBase::SwitchModeOfPlay(const EPF2ModeOfPlayType               
 	}
 }
 
+void APF2GameStateBase::QueueActionForInitiativeTurn(const IPF2CharacterInterface* Character,
+	const IPF2QueuedActionInterface* Action)
+{
+	// @todo Implement me
+}
+
+void APF2GameStateBase::CancelActionQueuedForInitiativeTurn(const IPF2CharacterInterface* Character,
+	const IPF2QueuedActionInterface* Action)
+{
+	// @todo Implement me
+}
+
 void APF2GameStateBase::OnRep_ModeOfPlay()
 {
 	const UWorld* const World = this->GetWorld();
