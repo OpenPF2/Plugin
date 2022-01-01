@@ -54,4 +54,16 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable)
 	virtual void PerformQueuedAction() = 0;
+
+	/**
+	 * Notifies this action that it will not be performed and is instead being canceled.
+	 *
+	 * The action may have been canceled by a player, or as a consequence of a change in mode of play (e.g., leaving an
+	 * encounter with some actions still queued).
+	 *
+	 * After the call, the caller should remove this action from the queue of actions to perform; the queued action does
+	 * not do so on its own.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual void CancelQueuedAction() = 0;
 };

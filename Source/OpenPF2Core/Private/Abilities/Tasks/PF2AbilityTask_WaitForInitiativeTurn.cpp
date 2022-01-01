@@ -42,6 +42,19 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate()
 	}
 }
 
+void UPF2AbilityTask_WaitForInitiativeTurn::ExternalCancel()
+{
+	if (this->HasAbility())
+	{
+		if (this->ShouldBroadcastAbilityTaskDelegates())
+		{
+			this->OnCancelled.Broadcast();
+		}
+
+		Super::ExternalCancel();
+	}
+}
+
 void UPF2AbilityTask_WaitForInitiativeTurn::OnDestroy(bool AbilityEnded)
 {
 	if ((this->WaitingCharacter != nullptr) && (this->GameState != nullptr))
@@ -71,4 +84,9 @@ void UPF2AbilityTask_WaitForInitiativeTurn::PerformQueuedAction()
 
 		this->EndTask();
 	}
+}
+
+void UPF2AbilityTask_WaitForInitiativeTurn::CancelQueuedAction()
+{
+	this->ExternalCancel();
 }

@@ -40,7 +40,8 @@ public:
 	 *
 	 * Execution pins work as follows:
 	 *	- OnReadyToAct will fire when the character's "turn" in initiative order comes up.
-	 *	- OnCancelled is called if the ability or task is cancelled.
+	 *	- OnCancelled is called if the ability or task is cancelled, by either a player or the rule set (e.g., due to a
+	 *	  change in mode of play).
 	 *
 	 * @param OwningAbility
 	 *	A reference to the ability instance that is triggering this task. (This is automatically populated by Blueprint
@@ -99,10 +100,18 @@ protected:
 	UPROPERTY(BlueprintAssignable)
 	FGenericGameplayTaskDelegate OnReadyToAct;
 
+	/**
+	 * Execution pin fired if the action gets canceled by a player or the rule set (e.g., due to a change in mode of
+	 * play).
+	 */
+	UPROPERTY(BlueprintAssignable)
+	FGenericGameplayTaskDelegate OnCancelled;
+
 	// =================================================================================================================
 	// Public Methods - UAbilityTask Overrides
 	// =================================================================================================================
 	virtual void Activate() override;
+	virtual void ExternalCancel() override;
 	virtual void OnDestroy(bool AbilityEnded) override;
 
 	// =================================================================================================================
@@ -111,4 +120,5 @@ protected:
 	virtual FText GetActionName() override;
 	virtual FSlateBrush GetActionIcon() override;
 	virtual void PerformQueuedAction() override;
+	virtual void CancelQueuedAction() override;
 };
