@@ -71,9 +71,14 @@ public:
 	UFUNCTION(
 		BlueprintCallable,
 		Category="Ability|Tasks",
-		meta = (HidePin = "OwningAbility", DefaultToSelf = "OwningAbility", BlueprintInternalUseOnly = "TRUE")
+		meta=(
+			HidePin="OwningAbility",
+			DefaultToSelf="OwningAbility",
+			BlueprintInternalUseOnly="TRUE",
+			DisplayName="PlayMontageAndWaitForEvent"
+		)
 	)
-	static UPF2AbilityTask_PlayMontageAndWaitForEvent* PlayMontageAndWaitForEvent(
+	static UPF2AbilityTask_PlayMontageAndWaitForEvent* CreatePlayMontageAndWaitForEvent(
 		UGameplayAbility*           OwningAbility,
 		const FName                 TaskInstanceName,
 		UAnimMontage*               MontageToPlay,
@@ -82,56 +87,6 @@ public:
 		const FName                 StartSection                   = NAME_None,
 		const bool                  bStopWhenAbilityEnds           = true,
 		const float                 AnimRootMotionTranslationScale = 1.0f);
-
-	// =================================================================================================================
-	// Constructors
-	// =================================================================================================================
-	explicit UPF2AbilityTask_PlayMontageAndWaitForEvent(const FObjectInitializer& ObjectInitializer);
-
-	// =================================================================================================================
-	// Public Methods - UAbilityTask Overrides
-	// =================================================================================================================
-	virtual void Activate() override;
-	virtual void ExternalCancel() override;
-	virtual void OnDestroy(bool AbilityEnded) override;
-	virtual FString GetDebugString() const override;
-
-	// =================================================================================================================
-	// Public Delegates/Execution Pins
-	// =================================================================================================================
-	/**
-	 * Execution pin fired if a gameplay event with one of the tags of interest has been received.
-	 */
-	UPROPERTY(BlueprintAssignable)
-	FPF2PlayMontageAndWaitForEventDelegate OnEventReceived;
-
-	/**
-	 * Execution pin fired when the montage that was triggered has completely finished playing.
-	 */
-	UPROPERTY(BlueprintAssignable)
-	FPF2PlayMontageAndWaitForEventDelegate OnCompleted;
-
-	/**
-	 * Execution pin fired when the montage that was triggered starts to blend out.
-	 *
-	 * Not all montages are configured to blend out; this is specifically for montages with a "blend out time" that
-	 * represents a duration of time at the end of montage playback during which the character will blend back to its
-	 * original pose.
-	 */
-	UPROPERTY(BlueprintAssignable)
-	FPF2PlayMontageAndWaitForEventDelegate OnBlendOut;
-
-	/**
-	 * Execution pin fired if the montage gets interrupted without completing.
-	 */
-	UPROPERTY(BlueprintAssignable)
-	FPF2PlayMontageAndWaitForEventDelegate OnInterrupted;
-
-	/**
-	 * Execution pin fired if the ability task has been canceled by another ability.
-	 */
-	UPROPERTY(BlueprintAssignable)
-	FPF2PlayMontageAndWaitForEventDelegate OnCancelled;
 
 private:
 	// =================================================================================================================
@@ -199,6 +154,56 @@ private:
 	 */
 	UPROPERTY()
 	bool bStopWhenAbilityEnds;
+
+	// =================================================================================================================
+	// Constructors
+	// =================================================================================================================
+	explicit UPF2AbilityTask_PlayMontageAndWaitForEvent(const FObjectInitializer& ObjectInitializer);
+
+	// =================================================================================================================
+	// Public Methods - UAbilityTask Overrides
+	// =================================================================================================================
+	virtual void Activate() override;
+	virtual void ExternalCancel() override;
+	virtual void OnDestroy(bool AbilityEnded) override;
+	virtual FString GetDebugString() const override;
+
+	// =================================================================================================================
+	// Public Delegates/Execution Pins
+	// =================================================================================================================
+	/**
+	 * Execution pin fired if a gameplay event with one of the tags of interest has been received.
+	 */
+	UPROPERTY(BlueprintAssignable)
+	FPF2PlayMontageAndWaitForEventDelegate OnEventReceived;
+
+	/**
+	 * Execution pin fired when the montage that was triggered has completely finished playing.
+	 */
+	UPROPERTY(BlueprintAssignable)
+	FPF2PlayMontageAndWaitForEventDelegate OnCompleted;
+
+	/**
+	 * Execution pin fired when the montage that was triggered starts to blend out.
+	 *
+	 * Not all montages are configured to blend out; this is specifically for montages with a "blend out time" that
+	 * represents a duration of time at the end of montage playback during which the character will blend back to its
+	 * original pose.
+	 */
+	UPROPERTY(BlueprintAssignable)
+	FPF2PlayMontageAndWaitForEventDelegate OnBlendOut;
+
+	/**
+	 * Execution pin fired if the montage gets interrupted without completing.
+	 */
+	UPROPERTY(BlueprintAssignable)
+	FPF2PlayMontageAndWaitForEventDelegate OnInterrupted;
+
+	/**
+	 * Execution pin fired if the ability task has been canceled by another ability.
+	 */
+	UPROPERTY(BlueprintAssignable)
+	FPF2PlayMontageAndWaitForEventDelegate OnCancelled;
 
 	// =================================================================================================================
 	// Private Methods

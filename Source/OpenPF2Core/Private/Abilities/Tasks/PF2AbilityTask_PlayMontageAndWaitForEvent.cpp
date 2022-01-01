@@ -9,7 +9,7 @@
 #include <AbilitySystemGlobals.h>
 #include <Animation/AnimInstance.h>
 
-UPF2AbilityTask_PlayMontageAndWaitForEvent* UPF2AbilityTask_PlayMontageAndWaitForEvent::PlayMontageAndWaitForEvent(
+UPF2AbilityTask_PlayMontageAndWaitForEvent* UPF2AbilityTask_PlayMontageAndWaitForEvent::CreatePlayMontageAndWaitForEvent(
 	UGameplayAbility*           OwningAbility,
 	const FName                 TaskInstanceName,
 	UAnimMontage*               MontageToPlay,
