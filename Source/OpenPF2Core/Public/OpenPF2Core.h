@@ -11,12 +11,17 @@
 /**
  * Log category for logic evaluated by the OpenPF2 core code.
  */
-OPENPF2CORE_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2Core, VeryVerbose, VeryVerbose);
+OPENPF2CORE_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2Core, Log, VeryVerbose);
+
+/**
+ * Log category for logic evaluated by OpenPF2 code that executes abilities and actions.
+ */
+OPENPF2CORE_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2CoreAbilities, Log, VeryVerbose);
 
 /**
  * Log category for logging character abilities and stats (very verbose).
  */
-OPENPF2CORE_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2CoreStatsDebug, VeryVerbose, VeryVerbose);
+OPENPF2CORE_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2CoreStatsDebug, Log, VeryVerbose);
 
 /**
  * Top-level module for responding to events for the OpenPF2 plug-in.
