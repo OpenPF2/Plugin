@@ -156,4 +156,17 @@ namespace PF2GameplayAbilityUtilities
 
 		return AvatarActor;
 	}
+
+	template<class InterfaceType>
+	OPENPF2CORE_API TScriptInterface<InterfaceType> ToScriptInterface(InterfaceType* InterfaceObject)
+	{
+		UObject* Object = Cast<UObject>(InterfaceObject);
+
+		checkf(
+			Object != nullptr,
+			TEXT("Only a UObject that implements the interface can be provided to this method. TScriptInterface does not support unmanaged object types.")
+		);
+
+		return TScriptInterface<InterfaceType>(Object);
+	}
 }

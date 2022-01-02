@@ -9,7 +9,6 @@
 #include <GameplayEffect.h>
 #include <GameplayEffectTypes.h>
 #include <GameplayTagContainer.h>
-#include <Abilities/GameplayAbilityTypes.h>
 
 #include "PF2CharacterConstants.h"
 
@@ -197,4 +196,20 @@ namespace PF2GameplayAbilityUtilities
 	 *	The avatar actor of the ASC owner.
 	 */
 	OPENPF2CORE_API TWeakObjectPtr<AActor> GetAvatarActorOfOwner(const UAbilitySystemComponent* Asc);
+
+	/**
+	 * Converts a UObject that implements an interface into a TScriptInterface object.
+	 *
+	 * The provided object MUST be a UObject or the conversion will fail. This is because Blueprint can only interact
+	 * with UObjects so TScriptInterface has to wrap a UObject.
+	 *
+	 * This can be used to reduce impedance between parts of the PF2 API that use TScriptInterface (because they're
+	 * exposed to Blueprint) and parts that use interfaces (because they are not exposed to Blueprint). When possible,
+	 * use TScriptInterface to avoid having to use this method.
+	 *
+	 * @param InterfaceObject
+	 *	The interface object to convert to being wrapped in a script interface object. This must be a UObject.
+	 */
+	template<class InterfaceType>
+	OPENPF2CORE_API TScriptInterface<InterfaceType> ToScriptInterface(InterfaceType* InterfaceObject);
 }
