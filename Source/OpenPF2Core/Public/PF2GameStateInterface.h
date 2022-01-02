@@ -107,8 +107,8 @@ public:
 	 * @param Action
 	 *	The action being queued.
 	 */
-	virtual void QueueActionForInitiativeTurn(const IPF2CharacterInterface*    Character,
-	                                          const IPF2QueuedActionInterface* Action) = 0;
+	virtual void QueueActionForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
+	                                          TScriptInterface<IPF2QueuedActionInterface>& Action) = 0;
 
 	/**
 	 * Notifies the Mode of Play Rule Set (MoPRS) that a character no longer wishes to perform a previously-queued
@@ -128,6 +128,6 @@ public:
 	 * @param Action
 	 *	The action to remove from the queue.
 	 */
-	virtual void CancelActionQueuedForInitiativeTurn(const IPF2CharacterInterface*    Character,
-	                                                 const IPF2QueuedActionInterface* Action) = 0;
+	virtual void CancelActionQueuedForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
+	                                                 TScriptInterface<IPF2QueuedActionInterface>& Action) = 0;
 };

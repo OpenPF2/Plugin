@@ -74,11 +74,11 @@ public:
 	virtual void SwitchModeOfPlay(const EPF2ModeOfPlayType                NewMode,
 	                              TScriptInterface<IPF2ModeOfPlayRuleSet> NewRuleSet) override;
 
-	virtual void QueueActionForInitiativeTurn(const IPF2CharacterInterface*    Character,
-	                                          const IPF2QueuedActionInterface* Action) override;
+	virtual void QueueActionForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
+	                                          TScriptInterface<IPF2QueuedActionInterface>& Action) override;
 
-	virtual void CancelActionQueuedForInitiativeTurn(const IPF2CharacterInterface*    Character,
-	                                                 const IPF2QueuedActionInterface* Action) override;
+	virtual void CancelActionQueuedForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
+	                                                 TScriptInterface<IPF2QueuedActionInterface>& Action) override;
 
 protected:
 	// =================================================================================================================

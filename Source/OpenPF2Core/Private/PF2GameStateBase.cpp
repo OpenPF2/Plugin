@@ -11,6 +11,9 @@
 #include "OpenPF2Core.h"
 #include "PF2EnumUtilities.h"
 #include "PF2PlayerControllerInterface.h"
+#include "PF2QueuedActionInterface.h"
+
+#include "GameModes/PF2ModeOfPlayRuleSet.h"
 
 APF2GameStateBase::APF2GameStateBase()
 {
@@ -41,16 +44,52 @@ void APF2GameStateBase::SwitchModeOfPlay(const EPF2ModeOfPlayType               
 	}
 }
 
-void APF2GameStateBase::QueueActionForInitiativeTurn(const IPF2CharacterInterface* Character,
-	const IPF2QueuedActionInterface* Action)
+void APF2GameStateBase::QueueActionForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
+                                                     TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
-	// @todo Implement me
+	if (this->HasAuthority())
+	{
+		const TScriptInterface<IPF2ModeOfPlayRuleSet> RuleSet = this->GetModeOfPlayRuleSet();
+
+		if (RuleSet == nullptr)
+		{
+			UE_LOG(
+				LogPf2CoreAbilities,
+				Error,
+				TEXT("No MoPRS is set. Performing action (%s) without queuing."),
+				*(Action->GetActionName().ToString())
+			);
+
+			Action->PerformQueuedAction();
+		}
+		else
+		{
+			RuleSet->Execute_OnQueueAction(RuleSet.GetObject(), Character, Action);
+		}
+	}
 }
 
-void APF2GameStateBase::CancelActionQueuedForInitiativeTurn(const IPF2CharacterInterface* Character,
-	const IPF2QueuedActionInterface* Action)
+void APF2GameStateBase::CancelActionQueuedForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
+                                                            TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
-	// @todo Implement me
+	if (this->HasAuthority())
+	{
+		const TScriptInterface<IPF2ModeOfPlayRuleSet> RuleSet = this->GetModeOfPlayRuleSet();
+
+		if (RuleSet == nullptr)
+		{
+			UE_LOG(
+				LogPf2CoreAbilities,
+				Error,
+				TEXT("No MoPRS is set. Ignoring request to remove action (%s) from queue."),
+				*(Action->GetActionName().ToString())
+			);
+		}
+		else
+		{
+			RuleSet->Execute_OnCancelQueuedAction(RuleSet.GetObject(), Character, Action);
+		}
+	}
 }
 
 void APF2GameStateBase::OnRep_ModeOfPlay()

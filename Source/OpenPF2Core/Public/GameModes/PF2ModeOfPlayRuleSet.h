@@ -60,6 +60,37 @@ public:
 	void OnTick(float DeltaSeconds);
 
 	/**
+	 * Function called to notify this rule set that a character wishes to queue-up an action (usually a GA).
+	 *
+	 * This gives the rule set control over when the action should be performed (e.g., to enforce initiative order).
+	 * The action may not get executed if the encounter ends before it has been activated. In such a situation, the
+	 * action will be canceled instead.
+	 *
+	 * @param Character
+	 *	The character that is queuing the action up.
+	 * @param Action
+	 *	The action that is being queued.
+	 */
+	UFUNCTION(BlueprintNativeEvent)
+	void OnQueueAction(TScriptInterface<IPF2CharacterInterface>&    Character,
+	                   TScriptInterface<IPF2QueuedActionInterface>& Action);
+
+	/**
+	 * Function called to notify this rule set that a character wishes to cancel a queued-up an action (usually a GA).
+	 *
+	 * If the specified action is not in the queue for the specified character, no changes are made to the action queue
+	 * and this method simply returns.
+	 *
+	 * @param Character
+	 *	The character that queued-up the action.
+	 * @param Action
+	 *	The previously-queued action that is being canceled.
+	 */
+	UFUNCTION(BlueprintNativeEvent)
+	void OnCancelQueuedAction(TScriptInterface<IPF2CharacterInterface>&    Character,
+	                          TScriptInterface<IPF2QueuedActionInterface>& Action);
+
+	/**
 	 * Determines whether this rule set allows transitioning to the specified mode of play with the given game state.
 	 *
 	 * Some modes freely allow transitions to other game modes, while others place restrictions on transitions so that

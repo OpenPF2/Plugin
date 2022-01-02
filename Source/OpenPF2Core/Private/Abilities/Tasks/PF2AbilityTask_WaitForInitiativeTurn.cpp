@@ -6,6 +6,7 @@
 #include "Abilities/Tasks/PF2AbilityTask_WaitForInitiativeTurn.h"
 
 #include "PF2CharacterInterface.h"
+#include "PF2GameplayAbilityUtilities.h"
 
 UPF2AbilityTask_WaitForInitiativeTurn* UPF2AbilityTask_WaitForInitiativeTurn::CreateWaitMovementModeChange(
 	UGameplayAbility* OwningAbility,
@@ -33,10 +34,17 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate()
 
 		if (PF2GameState != nullptr)
 		{
+			TScriptInterface<IPF2CharacterInterface> CharacterScriptInterface =
+				PF2GameplayAbilityUtilities::ToScriptInterface<IPF2CharacterInterface>(PF2Character);
+
+			TScriptInterface<IPF2QueuedActionInterface> ThisScriptInterface =
+				PF2GameplayAbilityUtilities::ToScriptInterface<IPF2QueuedActionInterface>(this);
+
 			this->WaitingCharacter = PF2Character;
 			this->GameState        = PF2GameState;
 
-			PF2GameState->QueueActionForInitiativeTurn(PF2Character, this);
+			PF2GameState->QueueActionForInitiativeTurn(CharacterScriptInterface, ThisScriptInterface);
+
 			this->SetWaitingOnRemotePlayerData();
 		}
 	}
@@ -59,7 +67,13 @@ void UPF2AbilityTask_WaitForInitiativeTurn::OnDestroy(bool AbilityEnded)
 {
 	if ((this->WaitingCharacter != nullptr) && (this->GameState != nullptr))
 	{
-		this->GameState->CancelActionQueuedForInitiativeTurn(this->WaitingCharacter.Get(), this);
+		TScriptInterface<IPF2CharacterInterface> CharacterScriptInterface =
+			PF2GameplayAbilityUtilities::ToScriptInterface<IPF2CharacterInterface>(this->WaitingCharacter.Get());
+
+		TScriptInterface<IPF2QueuedActionInterface> ThisScriptInterface =
+			PF2GameplayAbilityUtilities::ToScriptInterface<IPF2QueuedActionInterface>(this);
+
+		this->GameState->CancelActionQueuedForInitiativeTurn(CharacterScriptInterface, ThisScriptInterface);
 	}
 }
 

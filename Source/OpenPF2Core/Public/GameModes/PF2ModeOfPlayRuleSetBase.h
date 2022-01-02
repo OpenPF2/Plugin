@@ -19,4 +19,10 @@ UCLASS(Abstract, Blueprintable)
 class OPENPF2CORE_API UPF2ModeOfPlayRuleSetBase : public UObject, public IPF2ModeOfPlayRuleSet
 {
 	GENERATED_BODY()
+
+	virtual void OnQueueAction_Implementation(TScriptInterface<IPF2CharacterInterface>&    Character,
+	                                          TScriptInterface<IPF2QueuedActionInterface>& Action) override;
+
+	virtual void OnCancelQueuedAction_Implementation(TScriptInterface<IPF2CharacterInterface>&    Character,
+	                                                 TScriptInterface<IPF2QueuedActionInterface>& Action) override;
 };
