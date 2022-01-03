@@ -225,4 +225,23 @@ namespace PF2GameplayAbilityUtilities
 
 		return TScriptInterface<InterfaceType>(Object);
 	}
+
+	/**
+	 * Unwraps the interface object inside a TScriptInterface object into the appropriate "raw" interface type.
+	 *
+	 * This can be used to reduce impedance between parts of the PF2 API that use TScriptInterface (because they're
+	 * exposed to Blueprint) and parts that use interfaces (because they are not exposed to Blueprint). When possible,
+	 * use TScriptInterface all the way through to avoid having to use this method.
+	 *
+	 * @param ScriptInterface
+	 *	The script interface object that wraps the interface object.
+	 *
+	 * @return
+	 *	The unwrapped interface object.
+	 */
+	template<class InterfaceType>
+	FORCEINLINE OPENPF2CORE_API InterfaceType* FromScriptInterface(TScriptInterface<InterfaceType> ScriptInterface)
+	{
+		return static_cast<InterfaceType*>(ScriptInterface.GetInterface());
+	}
 }
