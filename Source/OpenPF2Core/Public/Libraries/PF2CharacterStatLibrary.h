@@ -50,7 +50,7 @@ public:
 	 * @return
 	 *	The modifier value for the ability.
 	 */
-	UFUNCTION(BlueprintPure, Category = "OpenPF2|Character Stats")
+	UFUNCTION(BlueprintPure, Category="OpenPF2|Character Stats")
 	static float CalculateAbilityModifier(const float AbilityScore);
 
 	/**
@@ -74,7 +74,7 @@ public:
 	 *	The amount of the boost to apply to the ability score. (This is just the boost amount; the starting ability
 	 *	score value is not added to the result).
 	 */
-	UFUNCTION(BlueprintPure, Category = "OpenPF2|Character Stats")
+	UFUNCTION(BlueprintPure, Category="OpenPF2|Character Stats")
 	static float CalculateAbilityBoostAmount(const float StartingAbilityScoreValue, const int BoostCount = 1);
 
 	/**
@@ -86,6 +86,6 @@ public:
 	 * @return
 	 *	The number of ancestry feats the character is entitled to have at their level.
 	 */
-	UFUNCTION(BlueprintPure, Category = "OpenPF2|Character Stats")
+	UFUNCTION(BlueprintPure, Category="OpenPF2|Character Stats")
 	static float CalculateAncestryFeatCap(const float CharacterLevel);
 };
