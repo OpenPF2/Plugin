@@ -6,7 +6,7 @@
 #include "Abilities/Tasks/PF2AbilityTask_WaitForInitiativeTurn.h"
 
 #include "PF2CharacterInterface.h"
-#include "PF2GameplayAbilityUtilities.h"
+#include "PF2InterfaceUtilities.h"
 
 UPF2AbilityTask_WaitForInitiativeTurn* UPF2AbilityTask_WaitForInitiativeTurn::CreateWaitMovementModeChange(
 	UGameplayAbility* OwningAbility,
@@ -35,10 +35,10 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate()
 		if (PF2GameState != nullptr)
 		{
 			TScriptInterface<IPF2CharacterInterface> CharacterScriptInterface =
-				PF2GameplayAbilityUtilities::ToScriptInterface<IPF2CharacterInterface>(PF2Character);
+				PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterInterface>(PF2Character);
 
 			TScriptInterface<IPF2QueuedActionInterface> ThisScriptInterface =
-				PF2GameplayAbilityUtilities::ToScriptInterface<IPF2QueuedActionInterface>(this);
+				PF2InterfaceUtilities::ToScriptInterface<IPF2QueuedActionInterface>(this);
 
 			this->WaitingCharacter = PF2Character;
 			this->GameState        = PF2GameState;
@@ -67,11 +67,10 @@ void UPF2AbilityTask_WaitForInitiativeTurn::OnDestroy(bool AbilityEnded)
 {
 	if ((this->WaitingCharacter != nullptr) && (this->GameState != nullptr))
 	{
-		TScriptInterface<IPF2CharacterInterface> CharacterScriptInterface =
-			PF2GameplayAbilityUtilities::ToScriptInterface<IPF2CharacterInterface>(this->WaitingCharacter.Get());
+		TScriptInterface<IPF2CharacterInterface> CharacterScriptInterface = this->WaitingCharacter.ToScriptInterface();
 
 		TScriptInterface<IPF2QueuedActionInterface> ThisScriptInterface =
-			PF2GameplayAbilityUtilities::ToScriptInterface<IPF2QueuedActionInterface>(this);
+			PF2InterfaceUtilities::ToScriptInterface<IPF2QueuedActionInterface>(this);
 
 		this->GameState->CancelActionQueuedForInitiativeTurn(CharacterScriptInterface, ThisScriptInterface);
 	}
