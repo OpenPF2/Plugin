@@ -119,6 +119,6 @@ protected:
 	// =================================================================================================================
 	virtual FText GetActionName() override;
 	virtual FSlateBrush GetActionIcon() override;
-	virtual void PerformQueuedAction() override;
-	virtual void CancelQueuedAction() override;
+	virtual void PerformAction() override;
+	virtual void CancelAction() override;
 };

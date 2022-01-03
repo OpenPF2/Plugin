@@ -53,7 +53,7 @@ public:
 	 * not do so on its own.
 	 */
 	UFUNCTION(BlueprintCallable)
-	virtual void PerformQueuedAction() = 0;
+	virtual void PerformAction() = 0;
 
 	/**
 	 * Notifies this action that it will not be performed and is instead being canceled.
@@ -65,5 +65,5 @@ public:
 	 * not do so on its own.
 	 */
 	UFUNCTION(BlueprintCallable)
-	virtual void CancelQueuedAction() = 0;
+	virtual void CancelAction() = 0;
 };

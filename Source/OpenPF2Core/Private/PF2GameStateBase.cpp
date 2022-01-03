@@ -60,7 +60,7 @@ void APF2GameStateBase::QueueActionForInitiativeTurn(TScriptInterface<IPF2Charac
 				*(Action->GetActionName().ToString())
 			);
 
-			Action->PerformQueuedAction();
+			Action->PerformAction();
 		}
 		else
 		{

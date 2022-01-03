@@ -12,7 +12,7 @@ void UPF2ModeOfPlayRuleSetBase::OnQueueAction_Implementation(
 	const TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
 	// By default there is no queue, so we perform the action immediately.
-	Action->PerformQueuedAction();
+	Action->PerformAction();
 }
 
 void UPF2ModeOfPlayRuleSetBase::OnCancelQueuedAction_Implementation(

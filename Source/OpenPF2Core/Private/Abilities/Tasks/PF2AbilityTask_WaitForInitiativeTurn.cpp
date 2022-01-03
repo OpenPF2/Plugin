@@ -87,7 +87,7 @@ FSlateBrush UPF2AbilityTask_WaitForInitiativeTurn::GetActionIcon()
 	return this->ActionIcon;
 }
 
-void UPF2AbilityTask_WaitForInitiativeTurn::PerformQueuedAction()
+void UPF2AbilityTask_WaitForInitiativeTurn::PerformAction()
 {
 	if (this->HasAbility())
 	{
@@ -100,7 +100,7 @@ void UPF2AbilityTask_WaitForInitiativeTurn::PerformQueuedAction()
 	}
 }
 
-void UPF2AbilityTask_WaitForInitiativeTurn::CancelQueuedAction()
+void UPF2AbilityTask_WaitForInitiativeTurn::CancelAction()
 {
 	this->ExternalCancel();
 }
