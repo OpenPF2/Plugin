@@ -7,15 +7,17 @@
 
 #include "PF2QueuedActionInterface.h"
 
-void UPF2ModeOfPlayRuleSetBase::OnQueueAction_Implementation(TScriptInterface<IPF2CharacterInterface>& Character,
-                                                             TScriptInterface<IPF2QueuedActionInterface>& Action)
+void UPF2ModeOfPlayRuleSetBase::OnQueueAction_Implementation(
+	const TScriptInterface<IPF2CharacterInterface>&    Character,
+	const TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
 	// By default there is no queue, so we perform the action immediately.
 	Action->PerformQueuedAction();
 }
 
-void UPF2ModeOfPlayRuleSetBase::OnCancelQueuedAction_Implementation(TScriptInterface<IPF2CharacterInterface>& Character,
-                                                                    TScriptInterface<IPF2QueuedActionInterface>& Action)
+void UPF2ModeOfPlayRuleSetBase::OnCancelQueuedAction_Implementation(
+	const TScriptInterface<IPF2CharacterInterface>&    Character,
+	const TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
 	// By default there is no queue, so we do nothing.
 }

@@ -20,9 +20,12 @@ class OPENPF2CORE_API UPF2ModeOfPlayRuleSetBase : public UObject, public IPF2Mod
 {
 	GENERATED_BODY()
 
-	virtual void OnQueueAction_Implementation(TScriptInterface<IPF2CharacterInterface>&    Character,
-	                                          TScriptInterface<IPF2QueuedActionInterface>& Action) override;
+public:
+	virtual void OnQueueAction_Implementation(
+		const TScriptInterface<IPF2CharacterInterface>&    Character,
+		const TScriptInterface<IPF2QueuedActionInterface>& Action) override;
 
-	virtual void OnCancelQueuedAction_Implementation(TScriptInterface<IPF2CharacterInterface>&    Character,
-	                                                 TScriptInterface<IPF2QueuedActionInterface>& Action) override;
+	virtual void OnCancelQueuedAction_Implementation(
+		const TScriptInterface<IPF2CharacterInterface>&    Character,
+		const TScriptInterface<IPF2QueuedActionInterface>& Action) override;
 };

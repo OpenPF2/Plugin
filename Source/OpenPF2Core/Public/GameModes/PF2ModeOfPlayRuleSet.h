@@ -72,8 +72,8 @@ public:
 	 *	The action that is being queued.
 	 */
 	UFUNCTION(BlueprintNativeEvent)
-	void OnQueueAction(TScriptInterface<IPF2CharacterInterface>&    Character,
-	                   TScriptInterface<IPF2QueuedActionInterface>& Action);
+	void OnQueueAction(const TScriptInterface<IPF2CharacterInterface>&    Character,
+	                   const TScriptInterface<IPF2QueuedActionInterface>& Action);
 
 	/**
 	 * Function called to notify this rule set that a character wishes to cancel a queued-up an action (usually a GA).
@@ -87,8 +87,8 @@ public:
 	 *	The previously-queued action that is being canceled.
 	 */
 	UFUNCTION(BlueprintNativeEvent)
-	void OnCancelQueuedAction(TScriptInterface<IPF2CharacterInterface>&    Character,
-	                          TScriptInterface<IPF2QueuedActionInterface>& Action);
+	void OnCancelQueuedAction(const TScriptInterface<IPF2CharacterInterface>&    Character,
+	                          const TScriptInterface<IPF2QueuedActionInterface>& Action);
 
 	/**
 	 * Determines whether this rule set allows transitioning to the specified mode of play with the given game state.
@@ -99,13 +99,13 @@ public:
 	 * successfully; or 3) forced remaining enemies to retreat. Meanwhile, it is common for players to be able to leave
 	 * exploration and downtime modes of play without any conditions.
 	 *
-	 * @param PF2GameState
+	 * @param GameState
 	 *	The current game state.
 	 * @param TargetMode
 	 *	The mode of play to which the game is attempting to transition.
 	 */
 	UFUNCTION(BlueprintImplementableEvent)
-	bool CanTransitionTo(const TScriptInterface<IPF2GameStateInterface>& PF2GameState,
+	bool CanTransitionTo(const TScriptInterface<IPF2GameStateInterface>& GameState,
 	                     const EPF2ModeOfPlayType                        TargetMode) const;
 
 	/**
