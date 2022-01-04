@@ -9,8 +9,9 @@
 #include <GameFramework/Character.h>
 
 #include "PF2AbilityTaskBase.h"
-#include "PF2GameStateInterface.h"
 #include "PF2QueuedActionInterface.h"
+
+#include "GameModes/PF2GameModeInterface.h"
 
 #include "PF2AbilityTask_WaitForInitiativeTurn.generated.h"
 
@@ -87,9 +88,9 @@ protected:
 	TWeakInterfacePtr<IPF2CharacterInterface> WaitingCharacter;
 
 	/**
-	 * The game state that is responsible for tracking character initiative order.
+	 * The game mode that is responsible for managing character initiative order.
 	 */
-	TWeakInterfacePtr<IPF2GameStateInterface> GameState;
+	TWeakInterfacePtr<IPF2GameModeInterface> GameMode;
 
 	// =================================================================================================================
 	// Public Delegates/Execution Pins

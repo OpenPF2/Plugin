@@ -6,6 +6,9 @@
 #include "GameModes/PF2GameModeBase.h"
 
 #include "PF2EnumUtilities.h"
+#include "PF2CharacterInterface.h"
+#include "PF2QueuedActionInterface.h"
+
 #include "GameModes/PF2ModeOfPlayRuleSet.h"
 
 TScriptInterface<IPF2ModeOfPlayRuleSet> APF2GameModeBase::CreateModeOfPlayRuleSet(const EPF2ModeOfPlayType ModeOfPlay)
@@ -38,6 +41,86 @@ void APF2GameModeBase::RequestDowntimeMode()
 	this->AttemptModeOfPlaySwitch(EPF2ModeOfPlayType::Downtime);
 }
 
+void APF2GameModeBase::AddCharacterToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character)
+{
+	const TScriptInterface<IPF2ModeOfPlayRuleSet> RuleSet = this->GetModeOfPlayRuleSet();
+
+	if (RuleSet == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("No MoPRS is set. Ignoring request to add character (%s) to encounter."),
+			*(Character->GetCharacterName().ToString())
+		);
+	}
+	else
+	{
+		RuleSet->Execute_OnCharacterAddedToEncounter(RuleSet.GetObject(), Character);
+	}
+}
+
+void APF2GameModeBase::RemoveCharacterFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character)
+{
+	const TScriptInterface<IPF2ModeOfPlayRuleSet> RuleSet = this->GetModeOfPlayRuleSet();
+
+	if (RuleSet == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("No MoPRS is set. Ignoring request to remove character (%s) from encounter."),
+			*(Character->GetCharacterName().ToString())
+		);
+	}
+	else
+	{
+		RuleSet->Execute_OnCharacterRemovedFromEncounter(RuleSet.GetObject(), Character);
+	}
+}
+
+void APF2GameModeBase::QueueActionForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
+                                                    TScriptInterface<IPF2QueuedActionInterface>& Action)
+{
+	const TScriptInterface<IPF2ModeOfPlayRuleSet> RuleSet = this->GetModeOfPlayRuleSet();
+
+	if (RuleSet == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("No MoPRS is set. Performing action (%s) without queuing."),
+			*(Action->GetActionName().ToString())
+		);
+
+		Action->PerformAction();
+	}
+	else
+	{
+		RuleSet->Execute_OnQueueAction(RuleSet.GetObject(), Character, Action);
+	}
+}
+
+void APF2GameModeBase::CancelActionQueuedForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
+                                                            TScriptInterface<IPF2QueuedActionInterface>& Action)
+{
+	const TScriptInterface<IPF2ModeOfPlayRuleSet> RuleSet = this->GetModeOfPlayRuleSet();
+
+	if (RuleSet == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("No MoPRS is set. Ignoring request to remove action (%s) from queue."),
+			*(Action->GetActionName().ToString())
+		);
+	}
+	else
+	{
+		RuleSet->Execute_OnCancelQueuedAction(RuleSet.GetObject(), Character, Action);
+	}
+}
+
 void APF2GameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
@@ -48,18 +131,13 @@ void APF2GameModeBase::BeginPlay()
 
 void APF2GameModeBase::Tick(const float DeltaSeconds)
 {
+	const TScriptInterface<IPF2ModeOfPlayRuleSet> RuleSet = this->GetModeOfPlayRuleSet();
+
 	Super::Tick(DeltaSeconds);
 
-	IPF2GameStateInterface* Pf2GameState = this->GetGameState<IPF2GameStateInterface>();
-
-	if (Pf2GameState != nullptr)
+	if (RuleSet != nullptr)
 	{
-		const TScriptInterface<IPF2ModeOfPlayRuleSet> RuleSet = Pf2GameState->GetModeOfPlayRuleSet();
-
-		if (RuleSet != nullptr)
-		{
-			RuleSet->Execute_OnTick(RuleSet.GetObject(), DeltaSeconds);
-		}
+		RuleSet->Execute_OnTick(RuleSet.GetObject(), DeltaSeconds);
 	}
 }
 

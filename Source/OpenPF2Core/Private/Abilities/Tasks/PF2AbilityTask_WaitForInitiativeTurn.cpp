@@ -9,6 +9,8 @@
 #include "PF2CharacterInterface.h"
 #include "PF2InterfaceUtilities.h"
 
+#include "GameModes/PF2GameModeInterface.h"
+
 UPF2AbilityTask_WaitForInitiativeTurn* UPF2AbilityTask_WaitForInitiativeTurn::CreateWaitMovementModeChange(
 	UGameplayAbility* OwningAbility,
 	const FName       TaskInstanceName,
@@ -31,9 +33,9 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate()
 
 	if ((World != nullptr) && (PF2Character != nullptr) && this->HasAbility())
 	{
-		IPF2GameStateInterface* PF2GameState = Cast<IPF2GameStateInterface>(World->GetGameState());
+		IPF2GameModeInterface* PF2GameMode = Cast<IPF2GameModeInterface>(World->GetAuthGameMode());
 
-		if (PF2GameState != nullptr)
+		if (PF2GameMode != nullptr)
 		{
 			TScriptInterface<IPF2CharacterInterface> CharacterScriptInterface =
 				PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterInterface>(PF2Character);
@@ -42,9 +44,9 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate()
 				PF2InterfaceUtilities::ToScriptInterface<IPF2QueuedActionInterface>(this);
 
 			this->WaitingCharacter = PF2Character;
-			this->GameState        = PF2GameState;
+			this->GameMode         = PF2GameMode;
 
-			PF2GameState->QueueActionForInitiativeTurn(CharacterScriptInterface, ThisScriptInterface);
+			PF2GameMode->QueueActionForInitiativeTurn(CharacterScriptInterface, ThisScriptInterface);
 
 			this->SetWaitingOnRemotePlayerData();
 		}
@@ -66,14 +68,14 @@ void UPF2AbilityTask_WaitForInitiativeTurn::ExternalCancel()
 
 void UPF2AbilityTask_WaitForInitiativeTurn::OnDestroy(bool AbilityEnded)
 {
-	if ((this->WaitingCharacter != nullptr) && (this->GameState != nullptr))
+	if ((this->WaitingCharacter != nullptr) && (this->GameMode != nullptr))
 	{
 		TScriptInterface<IPF2CharacterInterface> CharacterScriptInterface = this->WaitingCharacter.ToScriptInterface();
 
 		TScriptInterface<IPF2QueuedActionInterface> ThisScriptInterface =
 			PF2InterfaceUtilities::ToScriptInterface<IPF2QueuedActionInterface>(this);
 
-		this->GameState->CancelActionQueuedForInitiativeTurn(CharacterScriptInterface, ThisScriptInterface);
+		this->GameMode->CancelActionQueuedForInitiativeTurn(CharacterScriptInterface, ThisScriptInterface);
 	}
 }
 

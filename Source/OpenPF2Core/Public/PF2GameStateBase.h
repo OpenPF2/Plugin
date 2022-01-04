@@ -9,6 +9,7 @@
 #include <UObject/ScriptInterface.h>
 
 #include "PF2GameStateInterface.h"
+
 #include "GameModes/PF2ModeOfPlayType.h"
 
 #include "PF2GameStateBase.generated.h"
@@ -66,23 +67,13 @@ public:
 		return this->ModeOfPlay;
 	}
 
-	virtual TScriptInterface<IPF2ModeOfPlayRuleSet> GetModeOfPlayRuleSet() override
+	virtual FORCEINLINE TScriptInterface<IPF2ModeOfPlayRuleSet> GetModeOfPlayRuleSet() override
 	{
 		return this->ModeOfPlayRuleSet;
 	}
 
-	virtual void AddCharacterToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
-
-	virtual void RemoveCharacterFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
-
 	virtual void SwitchModeOfPlay(const EPF2ModeOfPlayType                NewMode,
 	                              TScriptInterface<IPF2ModeOfPlayRuleSet> NewRuleSet) override;
-
-	virtual void QueueActionForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
-	                                          TScriptInterface<IPF2QueuedActionInterface>& Action) override;
-
-	virtual void CancelActionQueuedForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
-	                                                 TScriptInterface<IPF2QueuedActionInterface>& Action) override;
 
 protected:
 	// =================================================================================================================

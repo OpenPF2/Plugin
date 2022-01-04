@@ -8,6 +8,8 @@
 #include <GameFramework/GameModeBase.h>
 #include <UObject/ScriptInterface.h>
 
+#include "OpenPF2Core.h"
+
 #include "GameModes/PF2ModeOfPlayRuleSetBase.h"
 #include "GameModes/PF2GameModeInterface.h"
 
@@ -45,6 +47,16 @@ public:
 	virtual void RequestExplorationMode() override;
 	virtual void RequestDowntimeMode() override;
 
+	virtual void AddCharacterToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
+
+	virtual void RemoveCharacterFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
+
+	virtual void QueueActionForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
+	                                          TScriptInterface<IPF2QueuedActionInterface>& Action) override;
+
+	virtual void CancelActionQueuedForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
+	                                                 TScriptInterface<IPF2QueuedActionInterface>& Action) override;
+
 protected:
 	// =================================================================================================================
 	// Protected Methods - AActor Overrides
@@ -55,6 +67,37 @@ protected:
 	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
+
+	/**
+	 * Gets the active Mode of Play Rule Set (MoPRS) from the game state.
+	 *
+	 * @return
+	 *	The active MoPRS, wrapped in a script interface (for Blueprint). If there is not a compatible game state loaded,
+	 *	or there is no active MoPRS, the script interface wraps nullptr.
+	 */
+	virtual FORCEINLINE TScriptInterface<IPF2ModeOfPlayRuleSet> GetModeOfPlayRuleSet()
+	{
+		TScriptInterface<IPF2ModeOfPlayRuleSet> RuleSet;
+		IPF2GameStateInterface*                 Pf2GameState = this->GetGameState<IPF2GameStateInterface>();
+
+		if (Pf2GameState == nullptr)
+		{
+			UE_LOG(
+				LogPf2Core,
+				Error,
+				TEXT("Mode of Play Rule Set (MoPRS) support is not enabled because the current game state is not compatible with PF2.")
+			);
+
+			RuleSet = TScriptInterface<IPF2ModeOfPlayRuleSet>();
+		}
+		else
+		{
+			RuleSet = Pf2GameState->GetModeOfPlayRuleSet();
+		}
+
+		return RuleSet;
+	}
+
 	/**
 	 * Attempts to change the current play mode for all characters in the loaded level.
 	 *
