@@ -6,7 +6,46 @@
 #include "GameModes/PF2QueuedModeOfPlayRuleSetBase.h"
 
 #include "OpenPF2Core.h"
+#include "PF2ArrayUtilities.h"
 #include "PF2InterfaceUtilities.h"
+#include "PF2MapUtilities.h"
+
+void UPF2QueuedModeOfPlayRuleSetBase::SetCharacterInitiative(const TScriptInterface<IPF2CharacterInterface>& Character,
+                                                             const int32                                     Initiative)
+{
+	IPF2CharacterInterface* Pf2Character = PF2InterfaceUtilities::FromScriptInterface(Character);
+
+	this->CharacterInitiatives.Add(Pf2Character, Initiative);
+	this->CharacterInitiatives.ValueStableSort(TGreater<int32>());
+}
+
+void UPF2QueuedModeOfPlayRuleSetBase::ClearInitiativeForCharacter(
+	const TScriptInterface<IPF2CharacterInterface>& Character)
+{
+	const IPF2CharacterInterface* Pf2Character = PF2InterfaceUtilities::FromScriptInterface(Character);
+
+	this->CharacterInitiatives.Remove(Pf2Character);
+}
+
+void UPF2QueuedModeOfPlayRuleSetBase::ClearInitiativeForAllCharacters()
+{
+	this->CharacterInitiatives.Empty();
+}
+
+void UPF2QueuedModeOfPlayRuleSetBase::GetCharactersInInitiativeOrder(
+	TArray<TScriptInterface<IPF2CharacterInterface>>& Characters) const
+{
+	const TArray<IPF2CharacterInterface*> Pf2Characters = PF2MapUtilities::GetKeys(this->CharacterInitiatives);
+
+	Characters =
+		PF2ArrayUtilities::Map<TScriptInterface<IPF2CharacterInterface>>(
+			Pf2Characters,
+			[](IPF2CharacterInterface* Pf2Character)
+			{
+				return PF2InterfaceUtilities::ToScriptInterface(Pf2Character);
+			}
+		);
+}
 
 void UPF2QueuedModeOfPlayRuleSetBase::QueueActionForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character,

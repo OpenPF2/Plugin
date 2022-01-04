@@ -29,6 +29,62 @@ protected:
 	TMultiMap<const IPF2CharacterInterface*, IPF2QueuedActionInterface *> CharacterQueues;
 
 	/**
+	 * A map of characters to their initiative.
+	 *
+	 * From the Pathfinder 2E Core Rulebook, page 13, "Initiative":
+	 * "At the start of an encounter, all creatures involved roll for initiative to determine the order in which they
+	 * act. The higher the result of its roll, the earlier a creature gets to act."
+	 */
+	TMap<IPF2CharacterInterface*, int> CharacterInitiatives;
+
+	/**
+	 * Sets the initiative of the specified character.
+	 *
+	 * From the Pathfinder 2E Core Rulebook, page 13, "Initiative":
+	 * "At the start of an encounter, all creatures involved roll for initiative to determine the order in which they
+	 * act. The higher the result of its roll, the earlier a creature gets to act."
+	 *
+	 * @param Character
+	 *	The character for which initiative is being set.
+	 * @param Initiative
+	 *	The initiative value to use for the specified character.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Initiative")
+	void SetCharacterInitiative(const TScriptInterface<IPF2CharacterInterface>& Character, const int32 Initiative);
+
+	/**
+	 * Clears any initiative value set for the specified character.
+	 *
+	 * If the character does not have any initiative set, this has no effect.
+	 *
+	 * @param Character
+	 *	The character for which initiative is being cleared.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Initiative")
+	void ClearInitiativeForCharacter(const TScriptInterface<IPF2CharacterInterface>& Character);
+
+	/**
+	 * Clears all initiative values set for all characters.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Initiative")
+	void ClearInitiativeForAllCharacters();
+
+	/**
+	 * Gets all characters in the order of their initiative.
+	 *
+	 * From the Pathfinder 2E Core Rulebook, page 13, "Initiative":
+	 * "At the start of an encounter, all creatures involved roll for initiative to determine the order in which they
+	 * act. The higher the result of its roll, the earlier a creature gets to act."
+	 *
+	 * Only characters that have an initiative set are returned; all others are excluded.
+	 *
+	 * @param Characters
+	 *	The list of characters, sorted in order of highest to lowest initiative.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Initiative")
+	void GetCharactersInInitiativeOrder(TArray<TScriptInterface<IPF2CharacterInterface>>& Characters) const;
+
+	/**
 	 * Adds the specified action to the queue of actions being maintained for the specified PF2 character.
 	 *
 	 * @param Character
