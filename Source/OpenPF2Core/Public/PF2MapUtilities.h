@@ -5,13 +5,55 @@
 
 #pragma once
 
-#include "UObject/ObjectMacros.h"
-
 /**
  * Various utilities for functional programming with maps and similar structures.
  */
 namespace PF2MapUtilities
 {
+	/**
+	 * Gets all of the keys of the given map, in the order they appear when iterating over the map.
+	 *
+	 * @param Map
+	 *	The map from which keys are desired.
+	 *
+	 * @return
+	 *	The keys of the map.
+	 */
+	template<typename Key, typename Value>
+	TArray<Key> GetKeys(const TMap<Key, Value> Map)
+	{
+		TArray<Key> Keys;
+
+		for (const auto& Pair : Map)
+		{
+			Keys.Add(Pair.Key);
+		}
+
+		return Keys;
+	}
+
+	/**
+	 * Gets all of the values of the given map, in the order they appear when iterating over the map.
+	 *
+	 * @param Map
+	 *	The map from which values are desired.
+	 *
+	 * @return
+	 *	The values of the map.
+	 */
+	template<typename Key, typename Value>
+	TArray<Value> GetValues(const TMap<Key, Value> Map)
+	{
+		TArray<Value> Values;
+
+		for (const auto& Pair : Map)
+		{
+			Values.Add(Pair.Value);
+		}
+
+		return Values;
+	}
+
 	/**
 	 * Inverts the keys and values of a map, so that for each pair the key becomes the value and vice-versa.
 	 *
