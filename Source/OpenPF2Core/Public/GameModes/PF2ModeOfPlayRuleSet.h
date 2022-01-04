@@ -37,7 +37,7 @@ class OPENPF2CORE_API IPF2ModeOfPlayRuleSet
 
 public:
 	/**
-	 * Function called to notify this rule set that the mode of play that invoked it is now active.
+	 * Callback to notify this rule set that the mode of play that invoked it is now active.
 	 *
 	 * The rule set should use this as an opportunity to initialize its state (e.g., roll initiative, assemble a list of
 	 * enemies, etc.).
@@ -49,7 +49,7 @@ public:
 	void OnModeOfPlayStart(EPF2ModeOfPlayType ModeOfPlay);
 
 	/**
-	 * Function called to notify this rule set of the start of a frame.
+	 * Callback to notify this rule set of the start of a frame.
 	 *
 	 * The rule set should use this as an opportunity to update time-based state (e.g., expire time-based initiative).
 	 *
@@ -76,7 +76,7 @@ public:
 	                   const TScriptInterface<IPF2QueuedActionInterface>& Action);
 
 	/**
-	 * Function called to notify this rule set that a character wishes to cancel a queued-up an action (usually a GA).
+	 * Callback to notify this rule set that a character wishes to cancel a queued-up an action (usually a GA).
 	 *
 	 * If the specified action is not in the queue for the specified character, no changes are made to the action queue
 	 * and this method simply returns.
@@ -109,7 +109,7 @@ public:
 	                     const EPF2ModeOfPlayType                        TargetMode) const;
 
 	/**
-	 * Function called to notify this rule set to wrap-up prior to a change in mode of play.
+	 * Callback to notify this rule set to wrap-up prior to a change in mode of play.
 	 *
 	 * The rule set should use this as an opportunity to apply any long-lasting effects of the mode (e.g., calculate
 	 * experience and hero points, end encounter-only gameplay effects or abilities, etc.).
