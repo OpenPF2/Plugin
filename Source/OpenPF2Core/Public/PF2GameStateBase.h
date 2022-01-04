@@ -71,6 +71,10 @@ public:
 		return this->ModeOfPlayRuleSet;
 	}
 
+	virtual void AddCharacterToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
+
+	virtual void RemoveCharacterFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
+
 	virtual void SwitchModeOfPlay(const EPF2ModeOfPlayType                NewMode,
 	                              TScriptInterface<IPF2ModeOfPlayRuleSet> NewRuleSet) override;
 

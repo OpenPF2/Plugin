@@ -26,6 +26,50 @@ void APF2GameStateBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME(APF2GameStateBase, ModeOfPlay);
 }
 
+void APF2GameStateBase::AddCharacterToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character)
+{
+	if (this->HasAuthority())
+	{
+		const TScriptInterface<IPF2ModeOfPlayRuleSet> RuleSet = this->GetModeOfPlayRuleSet();
+
+		if (RuleSet == nullptr)
+		{
+			UE_LOG(
+				LogPf2CoreAbilities,
+				Error,
+				TEXT("No MoPRS is set. Ignoring request to add character (%s) to encounter."),
+				*(Character->GetCharacterName().ToString())
+			);
+		}
+		else
+		{
+			RuleSet->Execute_OnCharacterAddedToEncounter(RuleSet.GetObject(), Character);
+		}
+	}
+}
+
+void APF2GameStateBase::RemoveCharacterFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character)
+{
+	if (this->HasAuthority())
+	{
+		const TScriptInterface<IPF2ModeOfPlayRuleSet> RuleSet = this->GetModeOfPlayRuleSet();
+
+		if (RuleSet == nullptr)
+		{
+			UE_LOG(
+				LogPf2CoreAbilities,
+				Error,
+				TEXT("No MoPRS is set. Ignoring request to remove character (%s) from encounter."),
+				*(Character->GetCharacterName().ToString())
+			);
+		}
+		else
+		{
+			RuleSet->Execute_OnCharacterRemovedFromEncounter(RuleSet.GetObject(), Character);
+		}
+	}
+}
+
 void APF2GameStateBase::SwitchModeOfPlay(const EPF2ModeOfPlayType                      NewMode,
                                          const TScriptInterface<IPF2ModeOfPlayRuleSet> NewRuleSet)
 {

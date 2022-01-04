@@ -60,7 +60,31 @@ public:
 	void OnTick(float DeltaSeconds);
 
 	/**
-	 * Function called to notify this rule set that a character wishes to queue-up an action (usually a GA).
+	 * Callback to notify this rule set that a character should be added to the current encounter.
+	 *
+	 * The rule set can choose to ignore this event if it's not applicable (e.g., this rule set is not for an
+	 * encounter). This callback should also be ignored if the given character is already part of the encounter.
+	 *
+	 * @param Character
+	 *	The character being added to the encounter.
+	 */
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnCharacterAddedToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character);
+
+	/**
+	 * Callback to notify this rule set that a character should be removed from the current encounter.
+	 *
+	* The rule set can choose to ignore this event if it's not applicable (e.g., this rule set is not for an
+	 * encounter). This callback should also be ignored if the given character is not part of the encounter.
+	 *
+	 * @param Character
+	 *	The character being removed from the encounter.
+	 */
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnCharacterRemovedFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character);
+
+	/**
+	 * Callback to notify this rule set that a character wishes to queue-up an action (usually a GA).
 	 *
 	 * This gives the rule set control over when the action should be performed (e.g., to enforce initiative order).
 	 * The action may not get executed if the encounter ends before it has been activated. In such a situation, the

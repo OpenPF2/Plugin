@@ -92,6 +92,32 @@ public:
 	                              TScriptInterface<IPF2ModeOfPlayRuleSet> NewRuleSet) = 0;
 
 	/**
+	 * Adds a character to the current encounter, if an encounter is active.
+	 *
+	 * This call will have no effect under the following circumstances:
+	 *	- If there is no active encounter according to the current Mode of Play Rule Set (MoPRS).
+	 *  - If there is an active encounter and the given character is already part of the encounter.
+	 *
+	 * @param Character
+	 *	The character being added to the encounter.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual void AddCharacterToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) = 0;
+
+	/**
+	 * Removes a character from the current encounter, if an encounter is active.
+	 *
+	 * This call will have no effect under the following circumstances:
+	 *	- If there is no active encounter according to the current Mode of Play Rule Set (MoPRS).
+	 *	- If there is an active encounter but the given character is not already part of the encounter.
+	 *
+	 * @param Character
+	 *	The character being added to the encounter.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual void RemoveCharacterFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) = 0;
+
+	/**
 	 * Notifies the Mode of Play Rule Set (MoPRS) that a character wishes to perform an action.
 	 *
 	 * If the current Mode of Play is structured (e.g., Encounter mode), then the action will be placed into a queue of
