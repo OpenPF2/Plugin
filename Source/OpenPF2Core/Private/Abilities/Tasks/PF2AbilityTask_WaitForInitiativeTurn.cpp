@@ -5,6 +5,7 @@
 
 #include "Abilities/Tasks/PF2AbilityTask_WaitForInitiativeTurn.h"
 
+#include "OpenPF2Core.h"
 #include "PF2CharacterInterface.h"
 #include "PF2InterfaceUtilities.h"
 
@@ -90,6 +91,14 @@ void UPF2AbilityTask_WaitForInitiativeTurn::PerformAction()
 {
 	if (this->HasAbility())
 	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			VeryVerbose,
+			TEXT("Performing action ('%s') for character ('%s')."),
+			*(this->GetActionName().ToString()),
+			*(this->WaitingCharacter->GetCharacterName().ToString())
+		);
+
 		if (this->ShouldBroadcastAbilityTaskDelegates())
 		{
 			this->OnReadyToAct.Broadcast();

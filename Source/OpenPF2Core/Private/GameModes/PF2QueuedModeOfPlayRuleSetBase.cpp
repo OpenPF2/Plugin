@@ -5,12 +5,21 @@
 
 #include "GameModes/PF2QueuedModeOfPlayRuleSetBase.h"
 
+#include "OpenPF2Core.h"
 #include "PF2InterfaceUtilities.h"
 
 void UPF2QueuedModeOfPlayRuleSetBase::QueueActionForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character,
 	const TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
+	UE_LOG(
+		LogPf2CoreAbilities,
+		VeryVerbose,
+		TEXT("Queuing action ('%s') for character ('%s')."),
+		*(Action->GetActionName().ToString()),
+		*(Character->GetCharacterName().ToString())
+	);
+
 	this->CharacterQueues.Add(
 		PF2InterfaceUtilities::FromScriptInterface(Character),
 		PF2InterfaceUtilities::FromScriptInterface(Action)
@@ -21,6 +30,14 @@ void UPF2QueuedModeOfPlayRuleSetBase::RemoveQueuedActionForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character,
 	const TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
+	UE_LOG(
+		LogPf2CoreAbilities,
+		VeryVerbose,
+		TEXT("Removing queued action ('%s') for character ('%s')."),
+		*(Action->GetActionName().ToString()),
+		*(Character->GetCharacterName().ToString())
+	);
+
 	this->CharacterQueues.RemoveSingle(
 		PF2InterfaceUtilities::FromScriptInterface(Character),
 		PF2InterfaceUtilities::FromScriptInterface(Action)
@@ -37,10 +54,25 @@ bool UPF2QueuedModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
 
 	if (NextAction == nullptr)
 	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			VeryVerbose,
+			TEXT("There are currently no remaining queued actions for character ('%s')."),
+			*(Character->GetCharacterName().ToString())
+		);
+
 		ActionExecuted = false;
 	}
 	else
 	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			VeryVerbose,
+			TEXT("Executing next queued action ('%s') for character ('%s')."),
+			*(NextAction->GetActionName().ToString()),
+			*(Character->GetCharacterName().ToString())
+		);
+
 		NextAction->PerformAction();
 
 		ActionExecuted = true;
