@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "Modules/ModuleManager.h"
+#include <CoreMinimal.h>
+#include <Modules/ModuleManager.h>
 
 /**
  * Log category for logic evaluated by the OpenPF2 core code.
@@ -26,7 +26,7 @@ OPENPF2CORE_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2CoreStatsDebug, Log, VeryVerbo
 /**
  * Top-level module for responding to events for the OpenPF2 plug-in.
  */
-class FOpenPF2CoreModule : public IModuleInterface
+class FOpenPF2CoreModule final : public IModuleInterface
 {
 public:
 	// =================================================================================================================
