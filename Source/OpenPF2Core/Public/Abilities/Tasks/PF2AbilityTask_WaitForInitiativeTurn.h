@@ -122,4 +122,35 @@ protected:
 	virtual FSlateBrush GetActionIcon() override;
 	virtual void PerformAction() override;
 	virtual void CancelAction() override;
+
+protected:
+	// =================================================================================================================
+	// Protected Methods
+	// =================================================================================================================
+	/**
+	 * Performs activation of this ability task when running on the client side.
+	 *
+	 * This consists of waiting until the character's turn comes up in initiative order.
+	 */
+	void Activate_Client();
+
+	/**
+	 * Performs activation of this ability task when running on the server side.
+	 *
+	 * This consists of registering a callback for the ability with the game mode, so that it can be invoked when the
+	 * character's turn comes up according to initiative order. The server will also notify the client to proceed with
+	 * local prediction of the ability by way of a generic signal.
+	 *
+	 * @param PF2Character
+	 *	The character for which the ability task is being activated. The ability will not proceed until this character
+	 *	is eligible to act.
+	 */
+	void Activate_Server(IPF2CharacterInterface* PF2Character);
+
+	/**
+	 * Callback invoked by the server on the client when the ability is ready to be performed.
+	 *
+	 * This method does not get called on the server side; it only runs on the client side.
+	 */
+	void OnServerActionCallback();
 };

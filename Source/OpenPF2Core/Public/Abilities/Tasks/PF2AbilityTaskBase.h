@@ -29,4 +29,15 @@ protected:
 	{
 		return this->Ability != nullptr;
 	}
+
+	/**
+	 * Gets whether this ability task has a valid Ability System Component.
+	 *
+	 * @return
+	 *	true if the ASC in this task is properly set; or false if it is null.
+	 */
+	FORCEINLINE bool HasAsc() const
+	{
+		return this->AbilitySystemComponent != nullptr;
+	}
 };
