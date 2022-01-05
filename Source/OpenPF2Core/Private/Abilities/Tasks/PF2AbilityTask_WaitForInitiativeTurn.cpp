@@ -8,6 +8,7 @@
 #include "OpenPF2Core.h"
 #include "PF2CharacterInterface.h"
 #include "PF2InterfaceUtilities.h"
+#include "PF2LogUtilities.h"
 
 #include "GameModes/PF2GameModeInterface.h"
 
@@ -96,7 +97,8 @@ void UPF2AbilityTask_WaitForInitiativeTurn::PerformAction()
 		UE_LOG(
 			LogPf2CoreAbilities,
 			VeryVerbose,
-			TEXT("Performing action ('%s') for character ('%s')."),
+			TEXT("[%s] Performing action ('%s') for character ('%s')."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 			*(this->GetActionName().ToString()),
 			*(this->WaitingCharacter->GetCharacterName().ToString())
 		);

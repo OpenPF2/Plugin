@@ -8,6 +8,7 @@
 #include "OpenPF2Core.h"
 #include "PF2ArrayUtilities.h"
 #include "PF2InterfaceUtilities.h"
+#include "PF2LogUtilities.h"
 #include "PF2MapUtilities.h"
 
 void UPF2QueuedModeOfPlayRuleSetBase::SetCharacterInitiative(const TScriptInterface<IPF2CharacterInterface>& Character,
@@ -54,7 +55,8 @@ void UPF2QueuedModeOfPlayRuleSetBase::QueueActionForCharacter(
 	UE_LOG(
 		LogPf2CoreAbilities,
 		VeryVerbose,
-		TEXT("Queuing action ('%s') for character ('%s')."),
+		TEXT("[%s] Queuing action ('%s') for character ('%s')."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		*(Action->GetActionName().ToString()),
 		*(Character->GetCharacterName().ToString())
 	);
@@ -72,7 +74,8 @@ void UPF2QueuedModeOfPlayRuleSetBase::RemoveQueuedActionForCharacter(
 	UE_LOG(
 		LogPf2CoreAbilities,
 		VeryVerbose,
-		TEXT("Removing queued action ('%s') for character ('%s')."),
+		TEXT("[%s] Removing queued action ('%s') for character ('%s')."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		*(Action->GetActionName().ToString()),
 		*(Character->GetCharacterName().ToString())
 	);
@@ -96,7 +99,8 @@ bool UPF2QueuedModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
 		UE_LOG(
 			LogPf2CoreAbilities,
 			VeryVerbose,
-			TEXT("There are currently no remaining queued actions for character ('%s')."),
+			TEXT("[%s] No actions are currently queued for character ('%s')."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 			*(Character->GetCharacterName().ToString())
 		);
 
@@ -107,7 +111,8 @@ bool UPF2QueuedModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
 		UE_LOG(
 			LogPf2CoreAbilities,
 			VeryVerbose,
-			TEXT("Executing next queued action ('%s') for character ('%s')."),
+			TEXT("[%s] Executing next queued action ('%s') for character ('%s')."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 			*(NextAction->GetActionName().ToString()),
 			*(Character->GetCharacterName().ToString())
 		);
