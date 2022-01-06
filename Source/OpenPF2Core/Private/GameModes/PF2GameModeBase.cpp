@@ -11,6 +11,11 @@
 
 #include "GameModes/PF2ModeOfPlayRuleSet.h"
 
+APF2GameModeBase::APF2GameModeBase()
+{
+	this->PrimaryActorTick.bCanEverTick = true;
+}
+
 TScriptInterface<IPF2ModeOfPlayRuleSet> APF2GameModeBase::CreateModeOfPlayRuleSet(const EPF2ModeOfPlayType ModeOfPlay)
 {
 	TScriptInterface<IPF2ModeOfPlayRuleSet> RuleSetWrapper;
