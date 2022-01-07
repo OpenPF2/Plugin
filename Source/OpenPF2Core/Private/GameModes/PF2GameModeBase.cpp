@@ -53,7 +53,7 @@ void APF2GameModeBase::AddCharacterToEncounter(const TScriptInterface<IPF2Charac
 	if (RuleSet == nullptr)
 	{
 		UE_LOG(
-			LogPf2CoreAbilities,
+			LogPf2CoreEncounters,
 			Error,
 			TEXT("No MoPRS is set. Ignoring request to add character (%s) to encounter."),
 			*(Character->GetCharacterName().ToString())
@@ -72,7 +72,7 @@ void APF2GameModeBase::RemoveCharacterFromEncounter(const TScriptInterface<IPF2C
 	if (RuleSet == nullptr)
 	{
 		UE_LOG(
-			LogPf2CoreAbilities,
+			LogPf2CoreEncounters,
 			Error,
 			TEXT("No MoPRS is set. Ignoring request to remove character (%s) from encounter."),
 			*(Character->GetCharacterName().ToString())
@@ -92,7 +92,7 @@ void APF2GameModeBase::QueueActionForInitiativeTurn(TScriptInterface<IPF2Charact
 	if (RuleSet == nullptr)
 	{
 		UE_LOG(
-			LogPf2CoreAbilities,
+			LogPf2CoreEncounters,
 			Error,
 			TEXT("No MoPRS is set. Performing action (%s) without queuing."),
 			*(Action->GetActionName().ToString())
@@ -114,7 +114,7 @@ void APF2GameModeBase::CancelActionQueuedForInitiativeTurn(TScriptInterface<IPF2
 	if (RuleSet == nullptr)
 	{
 		UE_LOG(
-			LogPf2CoreAbilities,
+			LogPf2CoreEncounters,
 			Error,
 			TEXT("No MoPRS is set. Ignoring request to remove action (%s) from queue."),
 			*(Action->GetActionName().ToString())

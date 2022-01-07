@@ -84,7 +84,7 @@ void UPF2AbilityTask_WaitForInitiativeTurn::PerformAction()
 	if (this->HasAbility() && !this->IsPendingKill())
 	{
 		UE_LOG(
-			LogPf2CoreAbilities,
+			LogPf2CoreEncounters,
 			VeryVerbose,
 			TEXT("[%s] Performing action ('%s') for character ('%s')."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),

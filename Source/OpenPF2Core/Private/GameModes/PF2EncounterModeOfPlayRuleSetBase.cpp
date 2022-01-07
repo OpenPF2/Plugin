@@ -54,7 +54,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::QueueActionForCharacter(
 	const TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
 	UE_LOG(
-		LogPf2CoreAbilities,
+		LogPf2CoreEncounters,
 		VeryVerbose,
 		TEXT("[%s] Queuing action ('%s') for character ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
@@ -73,7 +73,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::RemoveQueuedActionForCharacter(
 	const TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
 	UE_LOG(
-		LogPf2CoreAbilities,
+		LogPf2CoreEncounters,
 		VeryVerbose,
 		TEXT("[%s] Removing queued action ('%s') for character ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
@@ -98,7 +98,7 @@ bool UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
 	if (NextAction == nullptr)
 	{
 		UE_LOG(
-			LogPf2CoreAbilities,
+			LogPf2CoreEncounters,
 			VeryVerbose,
 			TEXT("[%s] No actions are currently queued for character ('%s')."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
@@ -110,7 +110,7 @@ bool UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
 	else
 	{
 		UE_LOG(
-			LogPf2CoreAbilities,
+			LogPf2CoreEncounters,
 			VeryVerbose,
 			TEXT("[%s] Executing next queued action ('%s') for character ('%s')."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
