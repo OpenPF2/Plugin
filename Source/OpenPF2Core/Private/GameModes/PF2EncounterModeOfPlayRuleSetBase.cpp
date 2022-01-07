@@ -17,6 +17,15 @@ void UPF2EncounterModeOfPlayRuleSetBase::SetCharacterInitiative(
 {
 	IPF2CharacterInterface* Pf2Character = PF2InterfaceUtilities::FromScriptInterface(Character);
 
+	UE_LOG(
+		LogPf2CoreEncounters,
+		VeryVerbose,
+		TEXT("[%s] Initiative ('%d') set for character ('%s')."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		Initiative,
+		*(Character->GetCharacterName().ToString())
+	);
+
 	this->CharacterInitiatives.Add(Pf2Character, Initiative);
 	this->CharacterInitiatives.ValueStableSort(TGreater<int32>());
 }
@@ -26,11 +35,26 @@ void UPF2EncounterModeOfPlayRuleSetBase::ClearInitiativeForCharacter(
 {
 	const IPF2CharacterInterface* Pf2Character = PF2InterfaceUtilities::FromScriptInterface(Character);
 
+	UE_LOG(
+		LogPf2CoreEncounters,
+		VeryVerbose,
+		TEXT("[%s] Initiative cleared for character ('%s')."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(Character->GetCharacterName().ToString())
+	);
+
 	this->CharacterInitiatives.Remove(Pf2Character);
 }
 
 void UPF2EncounterModeOfPlayRuleSetBase::ClearInitiativeForAllCharacters()
 {
+	UE_LOG(
+		LogPf2CoreEncounters,
+		VeryVerbose,
+		TEXT("[%s] Initiative cleared for all characters."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld()))
+	);
+
 	this->CharacterInitiatives.Empty();
 }
 
