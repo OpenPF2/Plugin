@@ -11,14 +11,19 @@
 #include "PF2ModeOfPlayRuleSetBase.h"
 #include "PF2QueuedActionInterface.h"
 
-#include "PF2QueuedModeOfPlayRuleSetBase.generated.h"
+#include "PF2EncounterModeOfPlayRuleSetBase.generated.h"
 
 /**
- * Base class for PF2 Mode of Play Rule Sets (MoPRS) that maintain a queue actions for each character.
+ * Base class for PF2 Mode of Play Rule Sets (MoPRS) that need encounter logic, including initiative and queued actions.
+ *
+ * Encounters often involve each character "rolling" for their initiative order, and then performing attacks in order of
+ * their initiative. Since OpenPF2 is intended to support action RPGs just as well as turn-based RPGs, this base class
+ * provides the ability for characters to "queue-up" abilities/actions that they want to perform when it is their turn
+ * to keep combat flowing despite the turn-based nature of PF2 rules.
  */
 UCLASS(Abstract, Blueprintable)
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API UPF2QueuedModeOfPlayRuleSetBase : public UPF2ModeOfPlayRuleSetBase
+class OPENPF2CORE_API UPF2EncounterModeOfPlayRuleSetBase : public UPF2ModeOfPlayRuleSetBase
 {
 	GENERATED_BODY()
 

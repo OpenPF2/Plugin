@@ -3,7 +3,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-#include "GameModes/PF2QueuedModeOfPlayRuleSetBase.h"
+#include "GameModes/PF2EncounterModeOfPlayRuleSetBase.h"
 
 #include "OpenPF2Core.h"
 #include "PF2ArrayUtilities.h"
@@ -11,8 +11,9 @@
 #include "PF2LogUtilities.h"
 #include "PF2MapUtilities.h"
 
-void UPF2QueuedModeOfPlayRuleSetBase::SetCharacterInitiative(const TScriptInterface<IPF2CharacterInterface>& Character,
-                                                             const int32                                     Initiative)
+void UPF2EncounterModeOfPlayRuleSetBase::SetCharacterInitiative(
+	const TScriptInterface<IPF2CharacterInterface>& Character,
+    const int32                                     Initiative)
 {
 	IPF2CharacterInterface* Pf2Character = PF2InterfaceUtilities::FromScriptInterface(Character);
 
@@ -20,7 +21,7 @@ void UPF2QueuedModeOfPlayRuleSetBase::SetCharacterInitiative(const TScriptInterf
 	this->CharacterInitiatives.ValueStableSort(TGreater<int32>());
 }
 
-void UPF2QueuedModeOfPlayRuleSetBase::ClearInitiativeForCharacter(
+void UPF2EncounterModeOfPlayRuleSetBase::ClearInitiativeForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character)
 {
 	const IPF2CharacterInterface* Pf2Character = PF2InterfaceUtilities::FromScriptInterface(Character);
@@ -28,12 +29,12 @@ void UPF2QueuedModeOfPlayRuleSetBase::ClearInitiativeForCharacter(
 	this->CharacterInitiatives.Remove(Pf2Character);
 }
 
-void UPF2QueuedModeOfPlayRuleSetBase::ClearInitiativeForAllCharacters()
+void UPF2EncounterModeOfPlayRuleSetBase::ClearInitiativeForAllCharacters()
 {
 	this->CharacterInitiatives.Empty();
 }
 
-void UPF2QueuedModeOfPlayRuleSetBase::GetCharactersInInitiativeOrder(
+void UPF2EncounterModeOfPlayRuleSetBase::GetCharactersInInitiativeOrder(
 	TArray<TScriptInterface<IPF2CharacterInterface>>& Characters) const
 {
 	const TArray<IPF2CharacterInterface*> Pf2Characters = PF2MapUtilities::GetKeys(this->CharacterInitiatives);
@@ -48,7 +49,7 @@ void UPF2QueuedModeOfPlayRuleSetBase::GetCharactersInInitiativeOrder(
 		);
 }
 
-void UPF2QueuedModeOfPlayRuleSetBase::QueueActionForCharacter(
+void UPF2EncounterModeOfPlayRuleSetBase::QueueActionForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character,
 	const TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
@@ -67,7 +68,7 @@ void UPF2QueuedModeOfPlayRuleSetBase::QueueActionForCharacter(
 	);
 }
 
-void UPF2QueuedModeOfPlayRuleSetBase::RemoveQueuedActionForCharacter(
+void UPF2EncounterModeOfPlayRuleSetBase::RemoveQueuedActionForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character,
 	const TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
@@ -86,7 +87,7 @@ void UPF2QueuedModeOfPlayRuleSetBase::RemoveQueuedActionForCharacter(
 	);
 }
 
-bool UPF2QueuedModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
+bool UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character)
 {
 	bool                                        ActionExecuted;
@@ -125,7 +126,7 @@ bool UPF2QueuedModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
 	return ActionExecuted;
 }
 
-void UPF2QueuedModeOfPlayRuleSetBase::PeekNextQueuedActionForCharacter(
+void UPF2EncounterModeOfPlayRuleSetBase::PeekNextQueuedActionForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character,
 	TScriptInterface<IPF2QueuedActionInterface>& NextAction) const
 {
@@ -142,7 +143,7 @@ void UPF2QueuedModeOfPlayRuleSetBase::PeekNextQueuedActionForCharacter(
 	}
 }
 
-void UPF2QueuedModeOfPlayRuleSetBase::PopNextActionQueuedForCharacter(
+void UPF2EncounterModeOfPlayRuleSetBase::PopNextActionQueuedForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character,
 	TScriptInterface<IPF2QueuedActionInterface>& NextAction)
 {
