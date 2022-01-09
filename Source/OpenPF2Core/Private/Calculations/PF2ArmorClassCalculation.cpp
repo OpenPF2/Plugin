@@ -13,10 +13,10 @@
 #include "Calculations/PF2ArmorClassCalculation.h"
 
 #include "OpenPF2Core.h"
-#include "PF2GameplayAbilityUtilities.h"
 #include "Abilities/PF2CharacterAttributeStatics.h"
 #include "Abilities/PF2AttributeSet.h"
 #include "Calculations/PF2TemlCalculation.h"
+#include "Utilities/PF2GameplayAbilityUtilities.h"
 
 UPF2ArmorClassCalculation::UPF2ArmorClassCalculation() :
 	DexterityModifierCaptureDefinition(FPF2CharacterAttributeStatics::GetInstance().AbDexterityModifierDef)

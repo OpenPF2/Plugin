@@ -5,8 +5,8 @@
 
 #include "Tests/PF2SpecBase.h"
 
-#include "PF2GameplayAbilityUtilities.h"
 #include "Abilities/PF2AttributeSet.h"
+#include "Utilities/PF2GameplayAbilityUtilities.h"
 
 template <typename BlueprintType>
 TSubclassOf<BlueprintType> FPF2SpecBase::LoadBlueprint(const FString FolderPath, const FString BlueprintName)

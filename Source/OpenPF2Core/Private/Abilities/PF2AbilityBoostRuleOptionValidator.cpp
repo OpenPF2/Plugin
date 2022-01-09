@@ -4,7 +4,8 @@
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "Abilities/PF2AbilityBoostRuleOptionValidator.h"
-#include "PF2EnumUtilities.h"
+
+#include "Utilities/PF2EnumUtilities.h"
 
 void UPF2AbilityBoostRuleOptionValidator::AppendRuleOptions(const TArray<FPF2AbilityBoostRuleOption> NewRuleOptions)
 {

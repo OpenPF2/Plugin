@@ -7,10 +7,9 @@
 
 #include "OpenPF2Core.h"
 #include "PF2CharacterInterface.h"
-#include "PF2InterfaceUtilities.h"
-#include "PF2LogUtilities.h"
-
 #include "GameModes/PF2GameModeInterface.h"
+#include "Utilities/PF2InterfaceUtilities.h"
+#include "Utilities/PF2LogUtilities.h"
 
 UPF2AbilityTask_WaitForInitiativeTurn* UPF2AbilityTask_WaitForInitiativeTurn::CreateWaitMovementModeChange(
 	UGameplayAbility* OwningAbility,

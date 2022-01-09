@@ -5,11 +5,11 @@
 
 #include "GameModes/PF2GameModeBase.h"
 
-#include "PF2EnumUtilities.h"
 #include "PF2CharacterInterface.h"
 #include "PF2QueuedActionInterface.h"
 
 #include "GameModes/PF2ModeOfPlayRuleSet.h"
+#include "Utilities/PF2EnumUtilities.h"
 
 APF2GameModeBase::APF2GameModeBase()
 {

@@ -13,7 +13,7 @@
 #include "Calculations/PF2StandardDamageExecution.h"
 
 #include "Abilities/PF2CharacterAttributeStatics.h"
-#include "PF2GameplayAbilityUtilities.h"
+#include "Utilities/PF2GameplayAbilityUtilities.h"
 
 UPF2StandardDamageExecution::UPF2StandardDamageExecution() :
 	DamageParameterTag(FGameplayTag::RequestGameplayTag(this->DamageParameterTagName)),

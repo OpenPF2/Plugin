@@ -5,7 +5,7 @@
 
 #include "Libraries/PF2DiceLibrary.h"
 
-#include "PF2ArrayUtilities.h"
+#include "Utilities/PF2ArrayUtilities.h"
 
 const FRegexPattern UPF2DiceLibrary::DiceRollPattern = FRegexPattern(TEXT("^(\\d{1,})d(\\d{1,})$"));
 

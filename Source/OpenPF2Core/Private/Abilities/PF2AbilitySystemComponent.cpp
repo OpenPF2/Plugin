@@ -7,10 +7,10 @@
 
 #include <UObject/ConstructorHelpers.h>
 
-#include "PF2ArrayUtilities.h"
 #include "PF2CharacterConstants.h"
 #include "PF2CharacterInterface.h"
-#include "PF2EnumUtilities.h"
+#include "Utilities/PF2ArrayUtilities.h"
+#include "Utilities/PF2EnumUtilities.h"
 
 UPF2AbilitySystemComponent::UPF2AbilitySystemComponent()
 {

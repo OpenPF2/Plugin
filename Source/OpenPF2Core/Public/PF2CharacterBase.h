@@ -17,16 +17,16 @@
 #include <UObject/ConstructorHelpers.h>
 #include <UObject/ScriptInterface.h>
 
-#include "Abilities/PF2AbilityBoostBase.h"
-#include "Abilities/PF2AbilitySystemComponent.h"
-#include "Abilities/PF2AttributeSet.h"
-#include "Abilities/PF2CharacterAbilityScoreType.h"
 #include "PF2AncestryAndHeritageGameplayEffectBase.h"
 #include "PF2BackgroundGameplayEffectBase.h"
 #include "PF2CharacterConstants.h"
 #include "PF2CharacterInterface.h"
 #include "PF2ClassGameplayEffectBase.h"
-#include "PF2GameplayAbilityUtilities.h"
+#include "Abilities/PF2AbilityBoostBase.h"
+#include "Abilities/PF2AbilitySystemComponent.h"
+#include "Abilities/PF2AttributeSet.h"
+#include "Abilities/PF2CharacterAbilityScoreType.h"
+#include "Utilities/PF2GameplayAbilityUtilities.h"
 
 #include "PF2CharacterBase.generated.h"
 

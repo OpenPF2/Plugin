@@ -4,8 +4,9 @@
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #pragma once
+
 #include "GameplayTagContainer.h"
-#include "PF2GameplayAbilityUtilities.h"
+#include "Utilities/PF2GameplayAbilityUtilities.h"
 
 #include "PF2MonetaryValue.generated.h"
 

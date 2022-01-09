@@ -9,10 +9,9 @@
 #include <Net/UnrealNetwork.h>
 
 #include "OpenPF2Core.h"
-#include "PF2EnumUtilities.h"
 #include "PF2PlayerControllerInterface.h"
-
 #include "GameModes/PF2ModeOfPlayRuleSet.h"
+#include "Utilities/PF2EnumUtilities.h"
 
 APF2GameStateBase::APF2GameStateBase()
 {

@@ -6,10 +6,10 @@
 #include "GameModes/PF2EncounterModeOfPlayRuleSetBase.h"
 
 #include "OpenPF2Core.h"
-#include "PF2ArrayUtilities.h"
-#include "PF2InterfaceUtilities.h"
-#include "PF2LogUtilities.h"
-#include "PF2MapUtilities.h"
+#include "Utilities/PF2ArrayUtilities.h"
+#include "Utilities/PF2InterfaceUtilities.h"
+#include "Utilities/PF2LogUtilities.h"
+#include "Utilities/PF2MapUtilities.h"
 
 void UPF2EncounterModeOfPlayRuleSetBase::SetCharacterInitiative(
 	const TScriptInterface<IPF2CharacterInterface>& Character,

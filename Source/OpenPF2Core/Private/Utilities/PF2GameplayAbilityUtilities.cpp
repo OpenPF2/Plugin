@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "PF2GameplayAbilityUtilities.h"
+#include "Utilities/PF2GameplayAbilityUtilities.h"
 
 #include <GameplayEffectExtension.h>
 #include <GameFramework/Pawn.h>
