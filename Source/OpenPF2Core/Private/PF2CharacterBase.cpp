@@ -10,6 +10,7 @@
 #include <UObject/ConstructorHelpers.h>
 
 #include "Abilities/PF2GameplayAbilityTargetData_BoostAbility.h"
+#include "Utilities/PF2InterfaceUtilities.h"
 
 APF2CharacterBase::APF2CharacterBase() :
 	APF2CharacterBase(TPF2CharacterComponentFactory<UPF2AbilitySystemComponent, UPF2AttributeSet>())
@@ -176,12 +177,13 @@ void APF2CharacterBase::HandleDamageReceived(const float                  Damage
                                              const FGameplayTagContainer* EventTags,
                                              const FHitResult             HitInfo)
 {
-	// BUGBUG: This is weird, but the way that a TScriptInterface object works is it maintains a reference to a UObject
-	// that *implements* an interface along with a pointer to the part of the UObject that provides the interface
-	// implementation, so we need to cast the instigator to a concrete object instead of the interface type.
-	AActor* InstigatorAsActor = Cast<AActor>(InstigatorCharacter);
-
-	this->OnDamageReceived(Damage, InstigatorAsActor, DamageSource, *EventTags, HitInfo);
+	this->OnDamageReceived(
+		Damage,
+		PF2InterfaceUtilities::ToScriptInterface(InstigatorCharacter),
+		DamageSource,
+		*EventTags,
+		HitInfo
+	);
 }
 
 void APF2CharacterBase::HandleHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags)
