@@ -27,6 +27,8 @@ public:
 		return this->ActivatedWeightGroups.Num() != 0;
 	}
 
+	virtual UAbilitySystemComponent* ToAbilitySystemComponent() override;
+
 	virtual void AddPassiveGameplayEffect(TSubclassOf<UGameplayEffect> Effect) override;
 
 	virtual void AddPassiveGameplayEffectWithWeight(

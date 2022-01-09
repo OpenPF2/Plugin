@@ -39,6 +39,15 @@ public:
 	virtual bool ArePassiveGameplayEffectsActive() = 0;
 
 	/**
+	 * Gets this Ability System Component as a standard ASC.
+	 *
+	 * @return
+	 *	This ASC, as a UObject.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Ability System Components")
+	virtual UAbilitySystemComponent* ToAbilitySystemComponent() = 0;
+
+	/**
 	 * Adds a passively-applied Gameplay Effect to this ASC.
 	 *
 	 * The GE is added to the weight group specified by a tag on GE; this is known as the "default" weight group of the

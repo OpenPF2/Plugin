@@ -38,6 +38,11 @@ UPF2AbilitySystemComponent::UPF2AbilitySystemComponent()
 	}
 }
 
+UAbilitySystemComponent* UPF2AbilitySystemComponent::ToAbilitySystemComponent()
+{
+	return Cast<UAbilitySystemComponent>(this);
+}
+
 void UPF2AbilitySystemComponent::AddPassiveGameplayEffect(const TSubclassOf<UGameplayEffect> Effect)
 {
 	const FName WeightGroup = PF2GameplayAbilityUtilities::GetWeightGroupOfGameplayEffect(Effect);
