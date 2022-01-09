@@ -415,6 +415,8 @@ public:
 
 	virtual void DeactivatePassiveGameplayEffects() override;
 
+	virtual void AddAndActivateGameplayAbility(const TSubclassOf<UGameplayAbility> Ability) override;
+
 	virtual void HandleDamageReceived(const float                         Damage,
 	                                  IPF2CharacterInterface*             InstigatorCharacter,
 	                                  AActor*                             DamageSource,

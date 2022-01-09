@@ -142,6 +142,19 @@ public:
 	virtual void DeactivatePassiveGameplayEffects() = 0;
 
 	/**
+	 * Adds a Gameplay Ability (GA) to this character and then immediately activates it.
+	 *
+	 * This method is intended for use by one-shot GAs that react to events in the environment or game story. As such,
+	 * the GA is NOT added to the character's "AdditionalGameplayAbilities" property, as that property is intended to
+	 * control the GAs that are added to the character at creation time.
+	 *
+	 * @param Ability
+	 *	The type of ability to add and activate on the character.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual void AddAndActivateGameplayAbility(const TSubclassOf<UGameplayAbility> Ability) = 0;
+
+	/**
 	 * Notifies this character that it has received damage.
 	 *
 	 * This should only be invoked by the character's attribute set. This does NOT actually modify the character's stats.

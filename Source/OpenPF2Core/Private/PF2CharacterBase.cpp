@@ -268,6 +268,15 @@ void APF2CharacterBase::DeactivatePassiveGameplayEffects()
 	}
 }
 
+void APF2CharacterBase::AddAndActivateGameplayAbility(const TSubclassOf<UGameplayAbility> Ability)
+{
+	UAbilitySystemComponent* Asc          = this->GetAbilitySystemComponent();
+	const int32              AbilityLevel = this->GetCharacterLevel();
+	FGameplayAbilitySpec     Spec         = FGameplayAbilitySpec(Ability, AbilityLevel, INDEX_NONE, this);
+
+	Asc->GiveAbilityAndActivateOnce(Spec);
+}
+
 void APF2CharacterBase::HandleDamageReceived(const float                  Damage,
                                              IPF2CharacterInterface*      InstigatorCharacter,
                                              AActor*                      DamageSource,
