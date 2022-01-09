@@ -90,7 +90,6 @@ UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal
 class OPENPF2CORE_API APF2CharacterBase :
 	public ACharacter,
-	public IAbilitySystemInterface,
 	public IPF2CharacterInterface
 {
 	GENERATED_BODY()

@@ -12,7 +12,7 @@
 
 #pragma once
 
-#include <UObject/Interface.h>
+#include <AbilitySystemInterface.h>
 #include <UObject/ScriptInterface.h>
 
 #include "Abilities/PF2AbilityBoostBase.h"
@@ -20,7 +20,7 @@
 #include "PF2CharacterInterface.generated.h"
 
 UINTERFACE(MinimalAPI, meta=(CannotImplementInterfaceInBlueprint))
-class UPF2CharacterInterface : public UInterface
+class UPF2CharacterInterface : public UAbilitySystemInterface
 {
     GENERATED_BODY()
 };
@@ -28,7 +28,7 @@ class UPF2CharacterInterface : public UInterface
 /**
  * An interface for OpenPF2 characters.
  */
-class OPENPF2CORE_API IPF2CharacterInterface
+class OPENPF2CORE_API IPF2CharacterInterface: public IAbilitySystemInterface
 {
     GENERATED_BODY()
 
@@ -57,7 +57,16 @@ public:
 	virtual int32 GetCharacterLevel() const = 0;
 
 	/**
-	 * Gets a PF2-specific version of the ASC sub-component of this character.
+	 * Gets the UObject version of the Ability System Component (ASC) for this character.
+	 *
+	 * @return
+	 *	The ASC for this character.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override = 0;
+
+	/**
+	 * Gets a PF2-specific version of the Ability System Component (ASC) for this character.
 	 *
 	 * @param Output
 	 *	The ASC, as an implementation of the interface for character ASCs.
