@@ -388,6 +388,8 @@ public:
 
 	virtual TArray<UPF2AbilityBoostBase*> GetPendingAbilityBoosts() const override;
 
+	virtual AActor* ToActor() override;
+
 	virtual void AddAbilityBoostSelection(const TSubclassOf<UPF2AbilityBoostBase>   BoostGameplayAbility,
 	                                      const TSet<EPF2CharacterAbilityScoreType> SelectedAbilities) override;
 

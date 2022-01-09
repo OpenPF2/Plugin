@@ -84,6 +84,15 @@ public:
 	virtual TArray<UPF2AbilityBoostBase*> GetPendingAbilityBoosts() const = 0;
 
 	/**
+	 * Gets the actor that is implementing this interface.
+	 *
+	 * @return
+	 *	This character, as an actor.
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual AActor* ToActor() = 0;
+
+	/**
 	 * Applies a single ability boost selection to this character.
 	 *
 	 * The ability score selections must be compatible with the rule options of the Boost GA.

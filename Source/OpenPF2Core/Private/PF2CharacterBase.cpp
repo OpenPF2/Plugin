@@ -75,6 +75,11 @@ TArray<UPF2AbilityBoostBase *> APF2CharacterBase::GetPendingAbilityBoosts() cons
 	return this->GetCharacterAbilitySystemComponent()->GetPendingAbilityBoosts();
 }
 
+AActor* APF2CharacterBase::ToActor()
+{
+	return Cast<AActor>(this);
+}
+
 void APF2CharacterBase::AddAbilityBoostSelection(
 	const TSubclassOf<class UPF2AbilityBoostBase> BoostGameplayAbility,
 	const TSet<EPF2CharacterAbilityScoreType>     SelectedAbilities)
