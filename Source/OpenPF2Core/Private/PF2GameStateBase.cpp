@@ -22,6 +22,7 @@ void APF2GameStateBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(APF2GameStateBase, ModeOfPlay);
+	DOREPLIFETIME(APF2GameStateBase, ModeOfPlayRuleSet);
 }
 
 void APF2GameStateBase::SwitchModeOfPlay(const EPF2ModeOfPlayType                      NewMode,
