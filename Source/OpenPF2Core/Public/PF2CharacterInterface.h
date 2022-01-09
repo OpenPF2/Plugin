@@ -19,7 +19,7 @@
 
 #include "PF2CharacterInterface.generated.h"
 
-UINTERFACE(MinimalAPI, meta = (CannotImplementInterfaceInBlueprint))
+UINTERFACE(MinimalAPI, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2CharacterInterface : public UInterface
 {
     GENERATED_BODY()
@@ -157,8 +157,8 @@ public:
 	/**
 	 * Notifies this character that it has received damage.
 	 *
-	 * This should only be invoked by the character's attribute set. This does NOT actually modify the character's stats.
-	 * Once invoked, this method fires off appropriate callbacks into the character's Blueprint event graph.
+	 * This should only be invoked by the character's attribute set. This does NOT actually modify the character's
+	 * stats. Once invoked, this method fires off appropriate callbacks into the character's Blueprint event graph.
 	 *
 	 * @param Damage
 	 *	The amount of the damage.
@@ -182,8 +182,8 @@ public:
 	/**
 	 * Notifies this character that its hit points (i.e., health) have changed.
 	 *
-	 * This should only be invoked by the character's attribute set. This does NOT actually modify the character's stats.
-	 * Once invoked, this method fires off appropriate callbacks into the character's Blueprint event graph.
+	 * This should only be invoked by the character's attribute set. This does NOT actually modify the character's
+	 * stats. Once invoked, this method fires off appropriate callbacks into the character's Blueprint event graph.
 	 *
 	 * @param Delta
 	 *	The amount that the character's hit points should change.

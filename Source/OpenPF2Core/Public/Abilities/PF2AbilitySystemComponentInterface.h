@@ -10,7 +10,7 @@
 
 #include "PF2AbilitySystemComponentInterface.generated.h"
 
-UINTERFACE(MinimalAPI, meta = (CannotImplementInterfaceInBlueprint))
+UINTERFACE(MinimalAPI, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2AbilitySystemComponentInterface : public UInterface
 {
     GENERATED_BODY()

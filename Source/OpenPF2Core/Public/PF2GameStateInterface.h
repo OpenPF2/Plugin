@@ -29,7 +29,7 @@ class IPF2QueuedActionInterface;
 // =====================================================================================================================
 // Normal Declarations
 // =====================================================================================================================
-UINTERFACE(MinimalAPI, meta = (CannotImplementInterfaceInBlueprint))
+UINTERFACE(MinimalAPI, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2GameStateInterface : public UInterface
 {
 	GENERATED_BODY()

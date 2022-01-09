@@ -9,7 +9,6 @@
 #include <UObject/ScriptInterface.h>
 
 #include "PF2GameStateInterface.h"
-
 #include "GameModes/PF2ModeOfPlayType.h"
 
 #include "PF2GameStateBase.generated.h"
