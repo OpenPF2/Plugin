@@ -63,7 +63,8 @@ public:
 	 *	The ASC, as an implementation of the interface for character ASCs.
 	 */
 	UFUNCTION(BlueprintCallable)
-	virtual void GetCharacterAbilitySystemComponent(TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const = 0;
+	virtual void GetCharacterAbilitySystemComponent(
+		TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const = 0;
 
 	/**
 	 * Gets a PF2-specific version of the ASC sub-component of this character.
