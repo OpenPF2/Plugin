@@ -70,6 +70,26 @@ int32 APF2CharacterBase::GetCharacterLevel() const
 	return this->CharacterLevel;
 }
 
+FORCEINLINE void APF2CharacterBase::GetCharacterAbilitySystemComponent(
+	TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const
+{
+	// BUGBUG: This is weird, but the way that a TScriptInterface object works is it maintains a reference to a UObject
+	// that *implements* an interface along with a pointer to the part of the UObject that provides the interface
+	// implementation, so we need to provide the concrete object instead of the interface type.
+	Output = this->AbilitySystemComponent;
+}
+
+FORCEINLINE IPF2CharacterAbilitySystemComponentInterface* APF2CharacterBase::GetCharacterAbilitySystemComponent() const
+{
+	// Too bad that ASCs in UE don't implement an interface; otherwise we could extend it so casts like this aren't
+	// needed.
+	IPF2CharacterAbilitySystemComponentInterface* CharacterAsc =
+		Cast<IPF2CharacterAbilitySystemComponentInterface>(this->AbilitySystemComponent);
+
+	check(CharacterAsc);
+	return CharacterAsc;
+}
+
 TArray<UPF2AbilityBoostBase *> APF2CharacterBase::GetPendingAbilityBoosts() const
 {
 	return this->GetCharacterAbilitySystemComponent()->GetPendingAbilityBoosts();
@@ -81,8 +101,8 @@ AActor* APF2CharacterBase::ToActor()
 }
 
 void APF2CharacterBase::AddAbilityBoostSelection(
-	const TSubclassOf<class UPF2AbilityBoostBase> BoostGameplayAbility,
-	const TSet<EPF2CharacterAbilityScoreType>     SelectedAbilities)
+	const TSubclassOf<UPF2AbilityBoostBase>   BoostGameplayAbility,
+	const TSet<EPF2CharacterAbilityScoreType> SelectedAbilities)
 {
 	this->AbilityBoostSelections.Add(FPF2CharacterAbilityBoostSelection(BoostGameplayAbility, SelectedAbilities));
 }
@@ -117,24 +137,63 @@ void APF2CharacterBase::ApplyAbilityBoostSelections()
 	}
 }
 
-FORCEINLINE void APF2CharacterBase::GetCharacterAbilitySystemComponent(
-	TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const
+void APF2CharacterBase::ActivatePassiveGameplayEffects()
+{
+	IPF2CharacterAbilitySystemComponentInterface* CharacterAsc = this->GetCharacterAbilitySystemComponent();
+
+	if (this->IsAuthorityForEffects() && !CharacterAsc->ArePassiveGameplayEffectsActive())
+	{
+		this->PopulatePassiveGameplayEffects();
+		this->ApplyDynamicTags();
+
+		CharacterAsc->ActivateAllPassiveGameplayEffects();
+
+		// Ensure we do not re-prompt for boosts that have already chosen and applied to this character.
+		this->RemoveRedundantPendingAbilityBoosts();
+	}
+}
+
+void APF2CharacterBase::DeactivatePassiveGameplayEffects()
+{
+	if (this->IsAuthorityForEffects())
+	{
+		this->GetCharacterAbilitySystemComponent()->DeactivateAllPassiveGameplayEffects();
+	}
+}
+
+void APF2CharacterBase::AddAndActivateGameplayAbility(const TSubclassOf<UGameplayAbility> Ability)
+{
+	UAbilitySystemComponent* Asc          = this->GetAbilitySystemComponent();
+	const int32              AbilityLevel = this->GetCharacterLevel();
+	FGameplayAbilitySpec     Spec         = FGameplayAbilitySpec(Ability, AbilityLevel, INDEX_NONE, this);
+
+	Asc->GiveAbilityAndActivateOnce(Spec);
+}
+
+void APF2CharacterBase::HandleDamageReceived(const float                  Damage,
+                                             IPF2CharacterInterface*      InstigatorCharacter,
+                                             AActor*                      DamageSource,
+                                             const FGameplayTagContainer* EventTags,
+                                             const FHitResult             HitInfo)
 {
 	// BUGBUG: This is weird, but the way that a TScriptInterface object works is it maintains a reference to a UObject
 	// that *implements* an interface along with a pointer to the part of the UObject that provides the interface
-	// implementation, so we need to provide the concrete object instead of the interface type.
-	Output = this->AbilitySystemComponent;
+	// implementation, so we need to cast the instigator to a concrete object instead of the interface type.
+	AActor* InstigatorAsActor = Cast<AActor>(InstigatorCharacter);
+
+	this->OnDamageReceived(Damage, InstigatorAsActor, DamageSource, *EventTags, HitInfo);
 }
 
-FORCEINLINE IPF2CharacterAbilitySystemComponentInterface* APF2CharacterBase::GetCharacterAbilitySystemComponent() const
+void APF2CharacterBase::HandleHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags)
 {
-	// Too bad that ASCs in UE don't implement an interface; otherwise we could extend it so casts like this aren't
-	// needed.
-	IPF2CharacterAbilitySystemComponentInterface* CharacterAsc =
-		Cast<IPF2CharacterAbilitySystemComponentInterface>(this->AbilitySystemComponent);
+	if ((this->AbilitySystemComponent == nullptr) ||
+		!this->AbilitySystemComponent->ArePassiveGameplayEffectsActive())
+	{
+		// Stats are not presently initialized, so bail out to avoid firing off during initialization.
+		return;
+	}
 
-	check(CharacterAsc);
-	return CharacterAsc;
+	this->OnHitPointsChanged(Delta, *EventTags);
 }
 
 bool APF2CharacterBase::SetCharacterLevel(const int32 NewLevel)
@@ -208,22 +267,6 @@ void APF2CharacterBase::ActivateAbilityBoost(
 	);
 }
 
-void APF2CharacterBase::ActivatePassiveGameplayEffects()
-{
-	IPF2CharacterAbilitySystemComponentInterface* CharacterAsc = this->GetCharacterAbilitySystemComponent();
-
-	if (this->IsAuthorityForEffects() && !CharacterAsc->ArePassiveGameplayEffectsActive())
-	{
-		this->PopulatePassiveGameplayEffects();
-		this->ApplyDynamicTags();
-
-		CharacterAsc->ActivateAllPassiveGameplayEffects();
-
-		// Ensure we do not re-prompt for boosts that have already chosen and applied to this character.
-		this->RemoveRedundantPendingAbilityBoosts();
-	}
-}
-
 void APF2CharacterBase::PopulatePassiveGameplayEffects()
 {
 	TMultiMap<FName, TSubclassOf<UGameplayEffect>> GameplayEffects;
@@ -257,50 +300,6 @@ void APF2CharacterBase::ApplyDynamicTags() const
 	DynamicTags.AppendTags(this->AdditionalSkillProficiencies);
 
 	this->GetCharacterAbilitySystemComponent()->AppendDynamicTags(DynamicTags);
-}
-
-// ReSharper disable once CppMemberFunctionMayBeConst
-void APF2CharacterBase::DeactivatePassiveGameplayEffects()
-{
-	if (this->IsAuthorityForEffects())
-	{
-		this->GetCharacterAbilitySystemComponent()->DeactivateAllPassiveGameplayEffects();
-	}
-}
-
-void APF2CharacterBase::AddAndActivateGameplayAbility(const TSubclassOf<UGameplayAbility> Ability)
-{
-	UAbilitySystemComponent* Asc          = this->GetAbilitySystemComponent();
-	const int32              AbilityLevel = this->GetCharacterLevel();
-	FGameplayAbilitySpec     Spec         = FGameplayAbilitySpec(Ability, AbilityLevel, INDEX_NONE, this);
-
-	Asc->GiveAbilityAndActivateOnce(Spec);
-}
-
-void APF2CharacterBase::HandleDamageReceived(const float                  Damage,
-                                             IPF2CharacterInterface*      InstigatorCharacter,
-                                             AActor*                      DamageSource,
-                                             const FGameplayTagContainer* EventTags,
-                                             const FHitResult             HitInfo)
-{
-	// BUGBUG: This is weird, but the way that a TScriptInterface object works is it maintains a reference to a UObject
-	// that *implements* an interface along with a pointer to the part of the UObject that provides the interface
-	// implementation, so we need to cast the instigator to a concrete object instead of the interface type.
-	AActor* InstigatorAsActor = Cast<AActor>(InstigatorCharacter);
-
-	this->OnDamageReceived(Damage, InstigatorAsActor, DamageSource, *EventTags, HitInfo);
-}
-
-void APF2CharacterBase::HandleHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags)
-{
-	if ((this->AbilitySystemComponent == nullptr) ||
-		!this->AbilitySystemComponent->ArePassiveGameplayEffectsActive())
-	{
-		// Stats are not presently initialized, so bail out to avoid firing off during initialization.
-		return;
-	}
-
-	this->OnHitPointsChanged(Delta, *EventTags);
 }
 
 void APF2CharacterBase::GenerateManagedPassiveGameplayEffects()
