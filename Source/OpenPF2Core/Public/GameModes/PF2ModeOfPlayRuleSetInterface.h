@@ -45,7 +45,7 @@ public:
 	 * @param ModeOfPlay
 	 *	The mode of play that is just starting.
 	 */
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Mode of Play Rule Sets")
 	void OnModeOfPlayStart(EPF2ModeOfPlayType ModeOfPlay);
 
 	/**
@@ -56,7 +56,7 @@ public:
 	 * @param DeltaSeconds
 	 *	The amount of time (in seconds) that's elapsed since the last tick event.
 	 */
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Mode of Play Rule Sets")
 	void OnTick(float DeltaSeconds);
 
 	/**
@@ -68,7 +68,7 @@ public:
 	 * @param Character
 	 *	The character being added to the encounter.
 	 */
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Mode of Play Rule Sets")
 	void OnCharacterAddedToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character);
 
 	/**
@@ -80,7 +80,7 @@ public:
 	 * @param Character
 	 *	The character being removed from the encounter.
 	 */
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Mode of Play Rule Sets")
 	void OnCharacterRemovedFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character);
 
 	/**
@@ -95,7 +95,7 @@ public:
 	 * @param Action
 	 *	The action that is being queued.
 	 */
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintNativeEvent, Category="OpenPF2|Mode of Play Rule Sets")
 	void OnQueueAction(const TScriptInterface<IPF2CharacterInterface>&    Character,
 	                   const TScriptInterface<IPF2QueuedActionInterface>& Action);
 
@@ -110,7 +110,7 @@ public:
 	 * @param Action
 	 *	The previously-queued action that is being canceled.
 	 */
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintNativeEvent, Category="OpenPF2|Mode of Play Rule Sets")
 	void OnCancelQueuedAction(const TScriptInterface<IPF2CharacterInterface>&    Character,
 	                          const TScriptInterface<IPF2QueuedActionInterface>& Action);
 
@@ -128,7 +128,7 @@ public:
 	 * @param TargetMode
 	 *	The mode of play to which the game is attempting to transition.
 	 */
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Mode of Play Rule Sets")
 	bool CanTransitionTo(const TScriptInterface<IPF2GameStateInterface>& GameState,
 	                     const EPF2ModeOfPlayType                        TargetMode) const;
 
@@ -141,6 +141,6 @@ public:
 	 * @param ModeOfPlay
 	 *	The mode of play that is ending.
 	 */
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Mode of Play Rule Sets")
 	void OnModeOfPlayEnd(EPF2ModeOfPlayType ModeOfPlay);
 };

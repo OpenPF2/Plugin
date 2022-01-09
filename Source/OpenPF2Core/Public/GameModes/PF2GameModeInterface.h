@@ -42,7 +42,7 @@ public:
 	 *
 	 * @see EPF2ModeOfPlay
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Modes")
 	virtual void RequestEncounterMode() = 0;
 
 	/**
@@ -53,7 +53,7 @@ public:
 	 *
 	 * @see EPF2ModeOfPlay
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Modes")
 	virtual void RequestExplorationMode() = 0;
 
 	/**
@@ -64,7 +64,7 @@ public:
 	 *
 	 * @see EPF2ModeOfPlay
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Modes")
 	virtual void RequestDowntimeMode() = 0;
 
 	/**
@@ -77,7 +77,7 @@ public:
 	 * @param Character
 	 *	The character being added to the encounter.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Modes")
 	virtual void AddCharacterToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) = 0;
 
 	/**
@@ -90,7 +90,7 @@ public:
 	 * @param Character
 	 *	The character being added to the encounter.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Modes")
 	virtual void RemoveCharacterFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) = 0;
 
 	/**

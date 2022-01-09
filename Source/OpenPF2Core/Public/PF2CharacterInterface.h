@@ -41,7 +41,7 @@ public:
 	 * @return
 	 *	The name of this character.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual FText GetCharacterName() const = 0;
 
 	/**
@@ -53,7 +53,7 @@ public:
 	 * "Each level grants greater skill, increased resiliency, and new capabilities, allowing your character to face
 	 * even greater challenges and go on to earn even more impressive rewards."
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual int32 GetCharacterLevel() const = 0;
 
 	/**
@@ -71,7 +71,7 @@ public:
 	 * @param Output
 	 *	The ASC, as an implementation of the interface for character ASCs.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual void GetCharacterAbilitySystemComponent(
 		TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const = 0;
 
@@ -89,7 +89,7 @@ public:
 	 * @return
 	 *	The ability boost GAs that are still pending for this character.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual TArray<UPF2AbilityBoostBase*> GetPendingAbilityBoosts() const = 0;
 
 	/**
@@ -98,7 +98,7 @@ public:
 	 * @return
 	 *	This character, as an actor.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual AActor* ToActor() = 0;
 
 	/**
@@ -114,7 +114,7 @@ public:
 	 * @param SelectedAbilities
 	 *	The ability scores that the player selected, out of the options offered by the Boost GA.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual void AddAbilityBoostSelection(
 	    const TSubclassOf<class UPF2AbilityBoostBase> BoostGameplayAbility,
 	    const TSet<EPF2CharacterAbilityScoreType>     SelectedAbilities) = 0;
@@ -126,7 +126,7 @@ public:
 	 * Pending ability boosts are registered on this character via calls to AddAbilityBoostSelection() before a call to
 	 * this method.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual void ApplyAbilityBoostSelections() = 0;
 
 	/**
@@ -136,7 +136,7 @@ public:
 	 * toggling passive GEs on the character's ASC, as this method automatically skips out of offering boost selections
 	 * for which a player or game designer has already made choices.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual void ActivatePassiveGameplayEffects() = 0;
 
 	/**
@@ -147,7 +147,7 @@ public:
 	 * the character a chance to react to the change before involving the ASC. For example, if the state of any GAs
 	 * needs to be recorded so that they are re-applied correctly after passive GEs are re-activated.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual void DeactivatePassiveGameplayEffects() = 0;
 
 	/**
@@ -160,7 +160,7 @@ public:
 	 * @param Ability
 	 *	The type of ability to add and activate on the character.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual void AddAndActivateGameplayAbility(const TSubclassOf<UGameplayAbility> Ability) = 0;
 
 	/**

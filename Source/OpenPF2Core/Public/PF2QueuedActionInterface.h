@@ -34,7 +34,7 @@ public:
 	 * @return
 	 *	A textual description of this action.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Queued Actions")
 	virtual FText GetActionName() = 0;
 
 	/**
@@ -43,7 +43,7 @@ public:
 	 * @return
 	 *	A graphical representation of this action.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Queued Actions")
 	virtual FSlateBrush GetActionIcon() = 0;
 
 	/**
@@ -52,7 +52,7 @@ public:
 	 * Once performed, the caller should remove this action from the queue of actions to perform; the queued action does
 	 * not do so on its own.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Queued Actions")
 	virtual void PerformAction() = 0;
 
 	/**
@@ -64,6 +64,6 @@ public:
 	 * After the call, the caller should remove this action from the queue of actions to perform; the queued action does
 	 * not do so on its own.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Queued Actions")
 	virtual void CancelAction() = 0;
 };

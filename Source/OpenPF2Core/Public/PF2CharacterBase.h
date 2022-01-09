@@ -443,7 +443,7 @@ public:
 	 *	true if the level was valid and changed; or, false, if the level was either invalid or did not change (the
 	 *	character was already the specified level).
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual bool SetCharacterLevel(int32 NewLevel);
 
 	/**
@@ -453,7 +453,7 @@ public:
 	 * Additional Ability Boosts on this character are updated to ensure that the boost survives passive GEs being
 	 * recalculated/reapplied, as would happen during character leveling.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
     virtual void ApplyAbilityBoost(EPF2CharacterAbilityScoreType TargetAbilityScore);
 
 	/**
@@ -465,7 +465,7 @@ public:
 	 * called when passive GAs are being re-enabled after being toggled off; otherwise, we run the risk of skipping over
 	 * a new ability boost GA that just happens to have the same class as one that was already applied.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual void RemoveRedundantPendingAbilityBoosts();
 
 protected:
@@ -547,7 +547,7 @@ protected:
 	 * @param NewLevel
 	 *	The new level for this character.
 	 */
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
 	void OnCharacterLevelChanged(float OldLevel, float NewLevel);
 
 	/**
@@ -566,7 +566,7 @@ protected:
 	 * @param HitInfo
 	 *	Hit result information, including who was hit and where the damage was inflicted.
 	 */
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
 	void OnDamageReceived(const float                                     Damage,
 	                      const TScriptInterface<IPF2CharacterInterface>& InstigatorCharacter,
 	                      AActor*                                         DamageSource,
@@ -581,7 +581,7 @@ protected:
 	 * @param EventTags
 	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to hit points.
 	 */
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
 	void OnHitPointsChanged(float Delta, const struct FGameplayTagContainer& EventTags);
 };
 
