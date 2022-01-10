@@ -8,7 +8,7 @@
 #include "PF2CharacterInterface.h"
 #include "PF2QueuedActionInterface.h"
 
-#include "GameModes/PF2ModeOfPlayRuleSet.h"
+#include "GameModes/PF2ModeOfPlayRuleSetInterface.h"
 #include "Utilities/PF2EnumUtilities.h"
 
 APF2GameModeBase::APF2GameModeBase()
@@ -16,16 +16,17 @@ APF2GameModeBase::APF2GameModeBase()
 	this->PrimaryActorTick.bCanEverTick = true;
 }
 
-TScriptInterface<IPF2ModeOfPlayRuleSet> APF2GameModeBase::CreateModeOfPlayRuleSet(const EPF2ModeOfPlayType ModeOfPlay)
+TScriptInterface<IPF2ModeOfPlayRuleSetInterface> APF2GameModeBase::CreateModeOfPlayRuleSet(
+	const EPF2ModeOfPlayType ModeOfPlay)
 {
-	TScriptInterface<IPF2ModeOfPlayRuleSet> RuleSetWrapper;
+	TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSetWrapper;
 
 	if (this->ModeRuleSets.Contains(ModeOfPlay))
 	{
 		const UClass* const RuleSetType = this->ModeRuleSets[ModeOfPlay];
 		UObject*            NewRuleSet  = NewObject<UObject>(this, RuleSetType);
 
-		RuleSetWrapper = TScriptInterface<IPF2ModeOfPlayRuleSet>(NewRuleSet);
+		RuleSetWrapper = TScriptInterface<IPF2ModeOfPlayRuleSetInterface>(NewRuleSet);
 	}
 
 	return RuleSetWrapper;
@@ -48,7 +49,7 @@ void APF2GameModeBase::RequestDowntimeMode()
 
 void APF2GameModeBase::AddCharacterToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character)
 {
-	const TScriptInterface<IPF2ModeOfPlayRuleSet> RuleSet = this->GetModeOfPlayRuleSet();
+	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
 
 	if (RuleSet == nullptr)
 	{
@@ -67,7 +68,7 @@ void APF2GameModeBase::AddCharacterToEncounter(const TScriptInterface<IPF2Charac
 
 void APF2GameModeBase::RemoveCharacterFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character)
 {
-	const TScriptInterface<IPF2ModeOfPlayRuleSet> RuleSet = this->GetModeOfPlayRuleSet();
+	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
 
 	if (RuleSet == nullptr)
 	{
@@ -87,7 +88,7 @@ void APF2GameModeBase::RemoveCharacterFromEncounter(const TScriptInterface<IPF2C
 void APF2GameModeBase::QueueActionForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
                                                     TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
-	const TScriptInterface<IPF2ModeOfPlayRuleSet> RuleSet = this->GetModeOfPlayRuleSet();
+	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
 
 	if (RuleSet == nullptr)
 	{
@@ -107,9 +108,9 @@ void APF2GameModeBase::QueueActionForInitiativeTurn(TScriptInterface<IPF2Charact
 }
 
 void APF2GameModeBase::CancelActionQueuedForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
-                                                            TScriptInterface<IPF2QueuedActionInterface>& Action)
+                                                           TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
-	const TScriptInterface<IPF2ModeOfPlayRuleSet> RuleSet = this->GetModeOfPlayRuleSet();
+	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
 
 	if (RuleSet == nullptr)
 	{
@@ -136,7 +137,7 @@ void APF2GameModeBase::BeginPlay()
 
 void APF2GameModeBase::Tick(const float DeltaSeconds)
 {
-	const TScriptInterface<IPF2ModeOfPlayRuleSet> RuleSet = this->GetModeOfPlayRuleSet();
+	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
 
 	Super::Tick(DeltaSeconds);
 
@@ -162,9 +163,9 @@ void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeO
 	}
 	else
 	{
-		const EPF2ModeOfPlayType                      OldModeOfPlay = Pf2GameState->GetModeOfPlay();
-		const TScriptInterface<IPF2ModeOfPlayRuleSet> OldRuleSet    = Pf2GameState->GetModeOfPlayRuleSet();
-		bool                                          CanTransition;
+		const EPF2ModeOfPlayType                               OldModeOfPlay = Pf2GameState->GetModeOfPlay();
+		const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> OldRuleSet    = Pf2GameState->GetModeOfPlayRuleSet();
+		bool                                                   CanTransition;
 
 		if (OldModeOfPlay == EPF2ModeOfPlayType::None)
 		{
@@ -223,9 +224,9 @@ void APF2GameModeBase::ForceSwitchModeOfPlay(const EPF2ModeOfPlayType NewModeOfP
 	}
 	else
 	{
-		const EPF2ModeOfPlayType                      OldModeOfPlay    = Pf2GameState->GetModeOfPlay();
-		const TScriptInterface<IPF2ModeOfPlayRuleSet> OldRuleSet       = Pf2GameState->GetModeOfPlayRuleSet();
-		const TScriptInterface<IPF2ModeOfPlayRuleSet> NewRuleSet       = this->CreateModeOfPlayRuleSet(NewModeOfPlay);
+		const EPF2ModeOfPlayType                               OldModeOfPlay = Pf2GameState->GetModeOfPlay();
+		const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> OldRuleSet    = Pf2GameState->GetModeOfPlayRuleSet();
+		const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> NewRuleSet    = this->CreateModeOfPlayRuleSet(NewModeOfPlay);
 
 		if (OldRuleSet != nullptr)
 		{

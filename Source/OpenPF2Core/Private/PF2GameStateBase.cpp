@@ -10,7 +10,7 @@
 
 #include "OpenPF2Core.h"
 #include "PF2PlayerControllerInterface.h"
-#include "GameModes/PF2ModeOfPlayRuleSet.h"
+#include "GameModes/PF2ModeOfPlayRuleSetInterface.h"
 #include "Utilities/PF2EnumUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
@@ -26,8 +26,8 @@ void APF2GameStateBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME(APF2GameStateBase, ModeOfPlayRuleSet);
 }
 
-void APF2GameStateBase::SwitchModeOfPlay(const EPF2ModeOfPlayType                      NewMode,
-                                         const TScriptInterface<IPF2ModeOfPlayRuleSet> NewRuleSet)
+void APF2GameStateBase::SwitchModeOfPlay(const EPF2ModeOfPlayType                               NewMode,
+                                         const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> NewRuleSet)
 {
 	if (this->HasAuthority())
 	{

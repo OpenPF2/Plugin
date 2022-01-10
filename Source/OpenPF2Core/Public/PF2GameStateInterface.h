@@ -23,7 +23,7 @@
 // Forward Declarations (to break recursive dependencies)
 // =====================================================================================================================
 class IPF2CharacterInterface;
-class IPF2ModeOfPlayRuleSet;
+class IPF2ModeOfPlayRuleSetInterface;
 class IPF2QueuedActionInterface;
 
 // =====================================================================================================================
@@ -74,7 +74,7 @@ public:
 	 *	The current rule set for the current mode of play.
 	 */
 	UFUNCTION(BlueprintCallable)
-	virtual TScriptInterface<IPF2ModeOfPlayRuleSet> GetModeOfPlayRuleSet() = 0;
+	virtual TScriptInterface<IPF2ModeOfPlayRuleSetInterface> GetModeOfPlayRuleSet() = 0;
 
 	/**
 	 * Sets the current play mode for all characters in the loaded level.
@@ -88,6 +88,6 @@ public:
 	 * @param NewRuleSet
 	 *	The rules that govern how the game will behave while in the new play mode.
 	 */
-	virtual void SwitchModeOfPlay(const EPF2ModeOfPlayType                NewMode,
-	                              TScriptInterface<IPF2ModeOfPlayRuleSet> NewRuleSet) = 0;
+	virtual void SwitchModeOfPlay(const EPF2ModeOfPlayType                         NewMode,
+	                              TScriptInterface<IPF2ModeOfPlayRuleSetInterface> NewRuleSet) = 0;
 };

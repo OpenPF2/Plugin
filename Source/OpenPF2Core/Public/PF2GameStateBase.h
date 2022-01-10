@@ -42,7 +42,7 @@ protected:
 	 * @see IPF2ModeOfPlayRuleSet
 	 */
 	UPROPERTY(Transient, BlueprintReadOnly, Replicated, Category=GameState)
-	TScriptInterface<IPF2ModeOfPlayRuleSet> ModeOfPlayRuleSet;
+	TScriptInterface<IPF2ModeOfPlayRuleSetInterface> ModeOfPlayRuleSet;
 
 public:
 	// =================================================================================================================
@@ -66,13 +66,13 @@ public:
 		return this->ModeOfPlay;
 	}
 
-	virtual FORCEINLINE TScriptInterface<IPF2ModeOfPlayRuleSet> GetModeOfPlayRuleSet() override
+	virtual FORCEINLINE TScriptInterface<IPF2ModeOfPlayRuleSetInterface> GetModeOfPlayRuleSet() override
 	{
 		return this->ModeOfPlayRuleSet;
 	}
 
-	virtual void SwitchModeOfPlay(const EPF2ModeOfPlayType                NewMode,
-	                              TScriptInterface<IPF2ModeOfPlayRuleSet> NewRuleSet) override;
+	virtual void SwitchModeOfPlay(const EPF2ModeOfPlayType                         NewMode,
+	                              TScriptInterface<IPF2ModeOfPlayRuleSetInterface> NewRuleSet) override;
 
 protected:
 	// =================================================================================================================

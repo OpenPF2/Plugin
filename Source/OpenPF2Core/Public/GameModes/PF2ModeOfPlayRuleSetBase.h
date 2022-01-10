@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "PF2ModeOfPlayRuleSet.h"
+#include "PF2ModeOfPlayRuleSetInterface.h"
 
 #include "PF2ModeOfPlayRuleSetBase.generated.h"
 
@@ -16,7 +16,7 @@
  */
 UCLASS(Abstract, Blueprintable)
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API UPF2ModeOfPlayRuleSetBase : public UObject, public IPF2ModeOfPlayRuleSet
+class OPENPF2CORE_API UPF2ModeOfPlayRuleSetBase : public UObject, public IPF2ModeOfPlayRuleSetInterface
 {
 	GENERATED_BODY()
 

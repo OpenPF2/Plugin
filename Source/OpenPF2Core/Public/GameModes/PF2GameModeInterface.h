@@ -8,7 +8,7 @@
 #include <UObject/Interface.h>
 #include <UObject/ScriptInterface.h>
 
-#include "PF2ModeOfPlayRuleSet.h"
+#include "PF2ModeOfPlayRuleSetInterface.h"
 
 #include "PF2GameModeInterface.generated.h"
 
@@ -32,7 +32,7 @@ public:
 	 * @return
 	 *	The rule set for the current mode of play.
 	 */
-	virtual TScriptInterface<IPF2ModeOfPlayRuleSet> CreateModeOfPlayRuleSet(const EPF2ModeOfPlayType ModeOfPlay) = 0;
+	virtual TScriptInterface<IPF2ModeOfPlayRuleSetInterface> CreateModeOfPlayRuleSet(const EPF2ModeOfPlayType ModeOfPlay) = 0;
 
 	/**
 	 * Requests a switch of the play mode to encounter mode.

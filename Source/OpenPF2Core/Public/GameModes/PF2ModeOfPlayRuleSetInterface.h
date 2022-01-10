@@ -11,10 +11,10 @@
 #include "PF2GameStateInterface.h"
 #include "PF2ModeOfPlayType.h"
 
-#include "PF2ModeOfPlayRuleset.generated.h"
+#include "PF2ModeOfPlayRuleSetInterface.generated.h"
 
 UINTERFACE()
-class OPENPF2CORE_API UPF2ModeOfPlayRuleSet : public UInterface
+class OPENPF2CORE_API UPF2ModeOfPlayRuleSetInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -31,7 +31,7 @@ class OPENPF2CORE_API UPF2ModeOfPlayRuleSet : public UInterface
  *
  * @see EPF2ModeOfPlayType
  */
-class OPENPF2CORE_API IPF2ModeOfPlayRuleSet
+class OPENPF2CORE_API IPF2ModeOfPlayRuleSetInterface
 {
 	GENERATED_BODY()
 

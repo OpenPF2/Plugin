@@ -48,7 +48,7 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2GameModeInterface Implementation
 	// =================================================================================================================
-	virtual FORCEINLINE TScriptInterface<IPF2ModeOfPlayRuleSet> CreateModeOfPlayRuleSet(
+	virtual FORCEINLINE TScriptInterface<IPF2ModeOfPlayRuleSetInterface> CreateModeOfPlayRuleSet(
 		const EPF2ModeOfPlayType ModeOfPlay) override;
 
 	virtual void RequestEncounterMode() override;
@@ -83,10 +83,10 @@ protected:
 	 *	The active MoPRS, wrapped in a script interface (for Blueprint). If there is not a compatible game state loaded,
 	 *	or there is no active MoPRS, the script interface wraps nullptr.
 	 */
-	virtual FORCEINLINE TScriptInterface<IPF2ModeOfPlayRuleSet> GetModeOfPlayRuleSet()
+	virtual FORCEINLINE TScriptInterface<IPF2ModeOfPlayRuleSetInterface> GetModeOfPlayRuleSet()
 	{
-		TScriptInterface<IPF2ModeOfPlayRuleSet> RuleSet;
-		IPF2GameStateInterface*                 Pf2GameState = this->GetGameState<IPF2GameStateInterface>();
+		TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet;
+		IPF2GameStateInterface*                          Pf2GameState = this->GetGameState<IPF2GameStateInterface>();
 
 		if (Pf2GameState == nullptr)
 		{
@@ -96,7 +96,7 @@ protected:
 				TEXT("Mode of Play Rule Set (MoPRS) support is not enabled because the current game state is not compatible with PF2.")
 			);
 
-			RuleSet = TScriptInterface<IPF2ModeOfPlayRuleSet>();
+			RuleSet = TScriptInterface<IPF2ModeOfPlayRuleSetInterface>();
 		}
 		else
 		{
