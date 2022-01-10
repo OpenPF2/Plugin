@@ -6,6 +6,7 @@
 #pragma once
 
 #include "PF2ModeOfPlayRuleSetInterface.h"
+#include "PF2PlayerControllerInterface.h"
 
 #include "PF2ModeOfPlayRuleSetBase.generated.h"
 
@@ -21,6 +22,9 @@ class OPENPF2CORE_API UPF2ModeOfPlayRuleSetBase : public UObject, public IPF2Mod
 	GENERATED_BODY()
 
 public:
+	// =================================================================================================================
+	// Public Methods - UPF2ModeOfPlayRuleSetBase Implementation
+	// =================================================================================================================
 	virtual void OnQueueAction_Implementation(
 		const TScriptInterface<IPF2CharacterInterface>&    Character,
 		const TScriptInterface<IPF2QueuedActionInterface>& Action) override;
@@ -28,4 +32,26 @@ public:
 	virtual void OnCancelQueuedAction_Implementation(
 		const TScriptInterface<IPF2CharacterInterface>&    Character,
 		const TScriptInterface<IPF2QueuedActionInterface>& Action) override;
+
+protected:
+	// =================================================================================================================
+	// Protected Methods
+	// =================================================================================================================
+	/**
+	 * Gets controllers for all the characters in the world.
+	 *
+	 * @return
+	 *	PF2-specific controllers for all players in the world.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Characters")
+	TArray<TScriptInterface<IPF2PlayerControllerInterface>> GetPlayerControllers() const;
+
+	/**
+	 * Gets all of the player-controlled PF2 characters in the world.
+	 *
+	 * @return
+	 *	PF2-specific controllers for all players in the world.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Characters")
+	TArray<TScriptInterface<IPF2CharacterInterface>> GetPlayerControlledCharacters() const;
 };
