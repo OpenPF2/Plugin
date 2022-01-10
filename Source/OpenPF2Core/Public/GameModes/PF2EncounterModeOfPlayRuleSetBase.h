@@ -58,6 +58,19 @@ protected:
 	void SetCharacterInitiative(const TScriptInterface<IPF2CharacterInterface>& Character, const int32 Initiative);
 
 	/**
+	 * Determines if the specified character has an initiative set.
+	 *
+	 * @param Character
+	 *	The character for which initiative is being checked.
+	 *
+	 * @return
+	 *	- true if the character has an initiative set.
+	 *	- false if the character does not have any initiative set.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Initiative")
+	bool IsInitiativeSetForCharacter(const TScriptInterface<IPF2CharacterInterface>& Character);
+
+	/**
 	 * Clears any initiative value set for the specified character.
 	 *
 	 * If the character does not have any initiative set, this has no effect.

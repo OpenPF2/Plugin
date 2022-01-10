@@ -30,6 +30,14 @@ void UPF2EncounterModeOfPlayRuleSetBase::SetCharacterInitiative(
 	this->CharacterInitiatives.ValueStableSort(TGreater<int32>());
 }
 
+bool UPF2EncounterModeOfPlayRuleSetBase::IsInitiativeSetForCharacter(
+	const TScriptInterface<IPF2CharacterInterface>& Character)
+{
+	const IPF2CharacterInterface* Pf2Character = PF2InterfaceUtilities::FromScriptInterface(Character);
+
+	return this->CharacterInitiatives.Contains(Pf2Character);
+}
+
 void UPF2EncounterModeOfPlayRuleSetBase::ClearInitiativeForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character)
 {
