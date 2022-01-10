@@ -4,3 +4,10 @@
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "PF2PlayerControllerBase.h"
+
+#include "PF2CharacterInterface.h"
+
+TScriptInterface<IPF2CharacterInterface> APF2PlayerControllerBase::GetControlledCharacter_Implementation()
+{
+	return this->GetPawn();
+}

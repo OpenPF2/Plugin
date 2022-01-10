@@ -20,4 +20,16 @@ UCLASS(Abstract)
 class OPENPF2CORE_API APF2PlayerControllerBase : public APlayerController, public IPF2PlayerControllerInterface
 {
 	GENERATED_BODY()
+
+public:
+	// =================================================================================================================
+	// Public Methods - IPF2PlayerControllerInterface Implementation
+	// =================================================================================================================
+	/**
+	 * Gets the character that this player controller is controlling.
+	 *
+	 * @return
+	 *	The pawn that this player controller is controlling, as a PF2 character.
+	 */
+	virtual TScriptInterface<IPF2CharacterInterface> GetControlledCharacter_Implementation() override;
 };

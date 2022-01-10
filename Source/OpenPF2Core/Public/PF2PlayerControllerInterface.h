@@ -33,6 +33,12 @@ public:
 	 *
 	 * @see EPF2ModeOfPlay
 	 */
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player Controllers")
 	void OnModeOfPlayChanged(EPF2ModeOfPlayType NewMode);
+
+	/**
+	 * Gets the character that this player controller is controlling.
+	 */
+	UFUNCTION(BlueprintNativeEvent, Category="OpenPF2|Player Controllers")
+	TScriptInterface<IPF2CharacterInterface> GetControlledCharacter();
 };
