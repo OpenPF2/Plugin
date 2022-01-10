@@ -20,9 +20,10 @@ void UPF2EncounterModeOfPlayRuleSetBase::SetCharacterInitiative(
 	UE_LOG(
 		LogPf2CoreEncounters,
 		VeryVerbose,
-		TEXT("[%s] Initiative ('%d') set for character ('%s')."),
+		TEXT("[%s] Initiative ('%d') set for character ('%s.%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		Initiative,
+		*(Cast<AActor>(Character.GetObject())->GetName()),
 		*(Character->GetCharacterName().ToString())
 	);
 
@@ -46,8 +47,9 @@ void UPF2EncounterModeOfPlayRuleSetBase::ClearInitiativeForCharacter(
 	UE_LOG(
 		LogPf2CoreEncounters,
 		VeryVerbose,
-		TEXT("[%s] Initiative cleared for character ('%s')."),
+		TEXT("[%s] Initiative cleared for character ('%s.%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(Cast<AActor>(Character.GetObject())->GetName()),
 		*(Character->GetCharacterName().ToString())
 	);
 
@@ -88,9 +90,10 @@ void UPF2EncounterModeOfPlayRuleSetBase::QueueActionForCharacter(
 	UE_LOG(
 		LogPf2CoreEncounters,
 		VeryVerbose,
-		TEXT("[%s] Queuing action ('%s') for character ('%s')."),
+		TEXT("[%s] Queuing action ('%s') for character ('%s.%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		*(Action->GetActionName().ToString()),
+		*(Cast<AActor>(Character.GetObject())->GetName()),
 		*(Character->GetCharacterName().ToString())
 	);
 
@@ -107,9 +110,10 @@ void UPF2EncounterModeOfPlayRuleSetBase::RemoveQueuedActionForCharacter(
 	UE_LOG(
 		LogPf2CoreEncounters,
 		VeryVerbose,
-		TEXT("[%s] Removing queued action ('%s') for character ('%s')."),
+		TEXT("[%s] Removing queued action ('%s') for character ('%s.%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		*(Action->GetActionName().ToString()),
+		*(Cast<AActor>(Character.GetObject())->GetName()),
 		*(Character->GetCharacterName().ToString())
 	);
 
@@ -132,8 +136,9 @@ bool UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
 		UE_LOG(
 			LogPf2CoreEncounters,
 			VeryVerbose,
-			TEXT("[%s] No actions are currently queued for character ('%s')."),
+			TEXT("[%s] No actions are currently queued for character ('%s.%s')."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(Cast<AActor>(Character.GetObject())->GetName()),
 			*(Character->GetCharacterName().ToString())
 		);
 
@@ -144,9 +149,10 @@ bool UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
 		UE_LOG(
 			LogPf2CoreEncounters,
 			VeryVerbose,
-			TEXT("[%s] Executing next queued action ('%s') for character ('%s')."),
+			TEXT("[%s] Executing next queued action ('%s') for character ('%s.%s')."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 			*(NextAction->GetActionName().ToString()),
+			*(Cast<AActor>(Character.GetObject())->GetName()),
 			*(Character->GetCharacterName().ToString())
 		);
 
