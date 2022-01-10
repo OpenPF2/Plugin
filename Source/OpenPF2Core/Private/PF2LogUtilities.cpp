@@ -7,7 +7,7 @@
 
 namespace PF2LogUtilities
 {
-	FString GetHostNetId(UWorld* World)
+	FString GetHostNetId(const UWorld* World)
 	{
 		FString NetPrefix = TEXT("UNK");
 

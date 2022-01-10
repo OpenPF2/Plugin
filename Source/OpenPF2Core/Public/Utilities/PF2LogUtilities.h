@@ -21,5 +21,5 @@ namespace PF2LogUtilities
 	 * @return
 	 *	An identifier that can be added to logs to identify the host that is running the current code.
 	 */
-	FString GetHostNetId(UWorld* World);
+	FString GetHostNetId(const UWorld* World);
 }
