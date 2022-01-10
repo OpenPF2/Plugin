@@ -12,6 +12,7 @@
 #include "PF2PlayerControllerInterface.h"
 #include "GameModes/PF2ModeOfPlayRuleSet.h"
 #include "Utilities/PF2EnumUtilities.h"
+#include "Utilities/PF2LogUtilities.h"
 
 APF2GameStateBase::APF2GameStateBase()
 {
@@ -40,10 +41,26 @@ void APF2GameStateBase::SwitchModeOfPlay(const EPF2ModeOfPlayType               
 
 		this->ModeOfPlay        = NewMode;
 		this->ModeOfPlayRuleSet = NewRuleSet;
+
+		// We're running on the server; notify server copies of the game state that we have received a mode of play.
+		this->OnReceivedModeOfPlay();
 	}
 }
 
 void APF2GameStateBase::OnRep_ModeOfPlay()
+{
+	UE_LOG(
+		LogPf2Core,
+		VeryVerbose,
+		TEXT("[%s] Mode of play has been replicated."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld()))
+	);
+
+	// We're running on the client; notify the client that we have received a mode of play.
+	this->OnReceivedModeOfPlay();
+}
+
+void APF2GameStateBase::OnReceivedModeOfPlay()
 {
 	const UWorld* const World = this->GetWorld();
 
@@ -56,6 +73,15 @@ void APF2GameStateBase::OnRep_ModeOfPlay()
 
 		if (PF2PlayerController != nullptr)
 		{
+			UE_LOG(
+				LogPf2Core,
+				VeryVerbose,
+				TEXT("[%s] Notifying player controller ('%s') that mode of play has changed to '%s'."),
+				*(PF2LogUtilities::GetHostNetId(World)),
+				*(PlayerController->GetName()),
+				*(PF2EnumUtilities::ToString(this->ModeOfPlay))
+			);
+
 			PF2PlayerController->Execute_OnModeOfPlayChanged(PlayerController, this->ModeOfPlay);
 		}
 	}

@@ -86,4 +86,14 @@ protected:
 	 */
 	UFUNCTION()
 	virtual void OnRep_ModeOfPlay();
+
+	/**
+	 * Notifies this copy of the game state that the mode of play has been updated by the server.
+	 *
+	 * - On listen servers: this is invoked AFTER this change has been replicated to clients.
+	 * - On clients: this is invoked AFTER the change has been replicated from the server.
+	 *
+	 * It has no effect on dedicated servers.
+	 */
+	virtual void OnReceivedModeOfPlay();
 };
