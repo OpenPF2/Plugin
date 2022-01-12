@@ -37,19 +37,55 @@ protected:
 	TMultiMap<const IPF2CharacterInterface*, IPF2QueuedActionInterface *> CharacterQueues;
 
 	/**
-	 * A map of characters to their initiative.
+	 * A map of initiative to characters.
 	 *
 	 * From the Pathfinder 2E Core Rulebook, page 13, "Initiative":
 	 * "At the start of an encounter, all creatures involved roll for initiative to determine the order in which they
 	 * act. The higher the result of its roll, the earlier a creature gets to act."
+	 *
+	 * From the Pathfinder 2E Core Rulebook, page 468, "Step 1: Roll Initiative":
+	 * "If your result is tied with a foe’s result, the adversary goes first. If your result is tied with another PC’s,
+	 * you can decide between yourselves who goes first when you reach that place in the initiative order. After that,
+	 * your places in the initiative order usually don’t change during the encounter."
 	 */
-	TMap<IPF2CharacterInterface*, int> CharacterInitiatives;
+	TMultiMap<int, IPF2CharacterInterface*> CharactersByInitiatives;
 
+	/**
+	 * All of the characters in the initiative, ordered from highest to lowest initiative.
+	 *
+	 * This array is rebuilt whenever characters are added or removed from the encounter.
+	 */
+	TArray<IPF2CharacterInterface*> CurrentCharacterSequence;
+
+	/**
+	 * The last character that was returned by GetNextCharacterByInitiative().
+	 */
+	IPF2CharacterInterface* PreviousCharacter;
+
+	/**
+	 * The initiative of the last character that was returned by GetNextCharacterByInitiative().
+	 */
+	int32 PreviousCharacterIndex;
+
+public:
+	// =================================================================================================================
+	// Public Constructors
+	// =================================================================================================================
+	/**
+	 * Default constructor for UPF2EncounterModeOfPlayRuleSetBase.
+	 */
+	explicit UPF2EncounterModeOfPlayRuleSetBase() : PreviousCharacter(nullptr), PreviousCharacterIndex(-1)
+	{
+	}
+
+protected:
 	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
 	/**
 	 * Sets the initiative of the specified character.
+	 *
+	 * If the character already has an initiative set, the character's initiative is changed to the specified value.
 	 *
 	 * From the Pathfinder 2E Core Rulebook, page 13, "Initiative":
 	 * "At the start of an encounter, all creatures involved roll for initiative to determine the order in which they
@@ -94,6 +130,37 @@ protected:
 	void ClearInitiativeForAllCharacters();
 
 	/**
+	 * Gets the next character in initiative order, looping around to the first character when at the end of the list.
+	 *
+	 * From the Pathfinder 2E Core Rulebook, page 468, "Step 2: Play a Round":
+	 * "A round begins when the participant with the highest initiative roll result starts their turn, and it ends when
+	 * the one with the lowest initiative ends their turn."
+	 *
+	 * From the Pathfinder 2E Core Rulebook, page 468, "Step 3: Begin the Next Round":
+	 * "Once everyone in the encounter has taken a turn, the round is over and the next one begins. Don’t roll
+	 * initiative again; the new round proceeds in the same order as the previous one, repeating the cycle until the
+	 * encounter ends."
+	 *
+	 * This method maintains an internal iterator in this rule set. If initiative is set, changed, or cleared for
+	 * characters in the encounter after iteration has begun, the iterator can make only the following two guarantees
+	 * about the next character to be returned relative to the character that was returned the last time this method was
+	 * called:
+	 * 1. The next character will be a different character than the last character, unless there is only one character
+	 *    in the encounter.
+	 * 2. The next character will have either a lower initiative or an equal initiative to the last character, unless
+	 *    the last character returned was the character in the encounter with the lowest initiative in the encounter.
+	 *
+	 * Only characters that have an initiative set are returned; all others are ignored.
+	 *
+	 * @return
+	 *	The next character in the encounter who has an initiative equal to or lower than the character that was last
+	 *	returned; or, if at the end of the list of characters, the character with the highest initiative in the
+	 *	encounter.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Initiative")
+	TScriptInterface<IPF2CharacterInterface> GetNextCharacterByInitiative();
+
+	/**
 	 * Gets all characters in the order of their initiative.
 	 *
 	 * From the Pathfinder 2E Core Rulebook, page 13, "Initiative":
@@ -102,11 +169,11 @@ protected:
 	 *
 	 * Only characters that have an initiative set are returned; all others are excluded.
 	 *
-	 * @param Characters
+	 * @return
 	 *	The list of characters, sorted in order of highest to lowest initiative.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Initiative")
-	void GetCharactersInInitiativeOrder(TArray<TScriptInterface<IPF2CharacterInterface>>& Characters) const;
+	TArray<TScriptInterface<IPF2CharacterInterface>> GetCharactersInInitiativeOrder() const;
 
 	/**
 	 * Adds the specified action to the queue of actions being maintained for the specified PF2 character.
@@ -181,4 +248,39 @@ protected:
 	void PopNextActionQueuedForCharacter(
 		const TScriptInterface<IPF2CharacterInterface>& Character,
 		TScriptInterface<IPF2QueuedActionInterface>& NextAction);
+
+	/**
+	 * Rebuilds the sequence of characters according to initiative order.
+	 *
+	 * All characters are sorted from highest to lowest initiative order in the rebuilt list. If two characters have the
+	 * same initiative, their order will be adjusted so that one goes before the other. Per PF2 rules (see below),
+	 * Playable Characters (PCs) with the same initiative as Non-Playable Characters (NPCs) are sorted after NPCs so
+	 * that NPCs take turns first. Unlike with standard PF2 rules, though, if multiple characters of the same type --
+	 * either two PCs or two NPCs -- we randomize their order rather than give each character a choice of preferred
+	 * order. This helps to keep combat fluid by avoiding having to prompt players for input at the start of encounters.
+	 *
+	 * From the Pathfinder 2E Core Rulebook, page 13, "Initiative":
+	 * "At the start of an encounter, all creatures involved roll for initiative to determine the order in which they
+	 * act. The higher the result of its roll, the earlier a creature gets to act."
+	 *
+	 * From the Pathfinder 2E Core Rulebook, page 468, "Step 1: Roll Initiative":
+	 * "If your result is tied with a foe’s result, the adversary goes first. If your result is tied with another PC’s,
+	 * you can decide between yourselves who goes first when you reach that place in the initiative order. After that,
+	 * your places in the initiative order usually don’t change during the encounter."
+	 *
+	 * This method performs a lot of sorting and is expensive. It should only be called when the list of characters has
+	 * changed.
+	 */
+	void RebuildCharacterSequence();
+
+	/**
+	 * Attempts to locate the specified character in the initiative map and then remove them.
+	 *
+	 * This method does not rebuild the character sequence. In most cases, you will want to use
+	 * ClearInitiativeForCharacter() instead, as that method calls this method and then rebuilds the character sequence.
+	 *
+	 * @param Character
+	 *	The character being removed from the map.
+	 */
+	void RemoveCharacterFromInitiativeMap(const IPF2CharacterInterface* Character);
 };
