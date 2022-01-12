@@ -28,6 +28,9 @@ class OPENPF2CORE_API UPF2EncounterModeOfPlayRuleSetBase : public UPF2ModeOfPlay
 	GENERATED_BODY()
 
 protected:
+	// =================================================================================================================
+	// Protected Fields
+	// =================================================================================================================
 	/**
 	 * The queue of actions for each character in the encounter.
 	 */
@@ -42,6 +45,9 @@ protected:
 	 */
 	TMap<IPF2CharacterInterface*, int> CharacterInitiatives;
 
+	// =================================================================================================================
+	// Protected Methods
+	// =================================================================================================================
 	/**
 	 * Sets the initiative of the specified character.
 	 *
