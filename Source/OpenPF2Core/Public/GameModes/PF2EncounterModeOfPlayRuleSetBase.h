@@ -166,7 +166,7 @@ protected:
 	 * The action is removed from the queue.
 	 *
 	 * @param Character
-	*	The character for which an action is desired.
+	 *	The character for which an action is desired.
 	 * @param NextAction
 	 *	The output -- either the next action for the specified character; or an invalid reference if the character does
 	 *	not have any more queued actions.

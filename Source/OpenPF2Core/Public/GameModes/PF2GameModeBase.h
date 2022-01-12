@@ -28,7 +28,7 @@ class OPENPF2CORE_API APF2GameModeBase : public AGameModeBase, public IPF2GameMo
 
 protected:
 	// =================================================================================================================
-	// Protected Constants
+	// Protected Properties
 	// =================================================================================================================
 	/**
 	 * Map from Modes of Play to the Rule Set to use for each mode.
