@@ -33,6 +33,28 @@ namespace PF2MapUtilities
 	}
 
 	/**
+	 * Gets all of the keys of the given multi-map, in the order they appear when iterating over the map.
+	 *
+	 * @param Map
+	 *	The multi-map from which keys are desired.
+	 *
+	 * @return
+	 *	The keys of the map.
+	 */
+	template<typename Key, typename Value>
+	TArray<Key> GetKeys(const TMultiMap<Key, Value> Map)
+	{
+		TArray<Key> Keys;
+
+		for (const auto& Pair : Map)
+		{
+			Keys.Add(Pair.Key);
+		}
+
+		return Keys;
+	}
+
+	/**
 	 * Gets all of the values of the given map, in the order they appear when iterating over the map.
 	 *
 	 * @param Map
@@ -43,6 +65,28 @@ namespace PF2MapUtilities
 	 */
 	template<typename Key, typename Value>
 	TArray<Value> GetValues(const TMap<Key, Value> Map)
+	{
+		TArray<Value> Values;
+
+		for (const auto& Pair : Map)
+		{
+			Values.Add(Pair.Value);
+		}
+
+		return Values;
+	}
+
+	/**
+	 * Gets all of the values of the given multi-map, in the order they appear when iterating over the map.
+	 *
+	 * @param Map
+	 *	The multi-map from which values are desired.
+	 *
+	 * @return
+	 *	The values of the map.
+	 */
+	template<typename Key, typename Value>
+	TArray<Value> GetValues(const TMultiMap<Key, Value> Map)
 	{
 		TArray<Value> Values;
 
