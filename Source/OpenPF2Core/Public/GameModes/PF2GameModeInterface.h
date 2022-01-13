@@ -12,7 +12,7 @@
 
 #include "PF2GameModeInterface.generated.h"
 
-UINTERFACE(MinimalAPI, meta=(CannotImplementInterfaceInBlueprint))
+UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2GameModeInterface : public UInterface
 {
 	GENERATED_BODY()

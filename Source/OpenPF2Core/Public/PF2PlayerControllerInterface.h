@@ -12,7 +12,7 @@
 
 #include "PF2PlayerControllerInterface.generated.h"
 
-UINTERFACE(MinimalAPI)
+UINTERFACE(MinimalAPI, BlueprintType)
 class UPF2PlayerControllerInterface : public UInterface
 {
 	GENERATED_BODY()

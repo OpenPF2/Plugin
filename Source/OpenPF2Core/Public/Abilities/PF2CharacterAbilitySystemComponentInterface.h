@@ -15,7 +15,7 @@
 // this header file, so we have to break the recursive dependency.
 class UPF2AbilityBoostBase;
 
-UINTERFACE(MinimalAPI, meta=(CannotImplementInterfaceInBlueprint))
+UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2CharacterAbilitySystemComponentInterface : public UPF2AbilitySystemComponentInterface
 {
     GENERATED_BODY()

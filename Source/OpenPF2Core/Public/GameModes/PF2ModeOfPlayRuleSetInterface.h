@@ -13,7 +13,7 @@
 
 #include "PF2ModeOfPlayRuleSetInterface.generated.h"
 
-UINTERFACE()
+UINTERFACE(BlueprintType)
 class OPENPF2CORE_API UPF2ModeOfPlayRuleSetInterface : public UInterface
 {
 	GENERATED_BODY()

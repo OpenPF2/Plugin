@@ -11,7 +11,7 @@
 
 #include "PF2QueuedActionInterface.generated.h"
 
-UINTERFACE(MinimalAPI, meta=(CannotImplementInterfaceInBlueprint))
+UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2QueuedActionInterface : public UInterface
 {
 	GENERATED_BODY()

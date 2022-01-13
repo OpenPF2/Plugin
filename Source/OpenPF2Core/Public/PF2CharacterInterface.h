@@ -19,7 +19,7 @@
 
 #include "PF2CharacterInterface.generated.h"
 
-UINTERFACE(MinimalAPI, meta=(CannotImplementInterfaceInBlueprint))
+UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2CharacterInterface : public UAbilitySystemInterface
 {
     GENERATED_BODY()
