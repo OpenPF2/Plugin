@@ -85,6 +85,8 @@ UPF2AttributeSet::UPF2AttributeSet() :
 	SpellDifficultyClass(0.0f),
 	FeAncestryFeatCount(0.0f),
 	FeAncestryFeatLimit(0.0f),
+	EncFreeActionPoints(0.0f),
+	EncActionPoints(0.0f),
 	TmpDamageIncoming(0.0f)
 {
 }
@@ -158,6 +160,8 @@ void UPF2AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(UPF2AttributeSet, SpellDifficultyClass);
 	DOREPLIFETIME(UPF2AttributeSet, FeAncestryFeatCount);
 	DOREPLIFETIME(UPF2AttributeSet, FeAncestryFeatLimit);
+	DOREPLIFETIME(UPF2AttributeSet, EncFreeActionPoints);
+	DOREPLIFETIME(UPF2AttributeSet, EncActionPoints);
 }
 
 void UPF2AttributeSet::OnRep_Experience(const FGameplayAttributeData& OldValue)
@@ -483,6 +487,16 @@ void UPF2AttributeSet::OnRep_FeAncestryFeatCount(const FGameplayAttributeData& O
 void UPF2AttributeSet::OnRep_FeAncestryFeatLimit(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, FeAncestryFeatLimit, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_EncFreeActionPoints(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, EncFreeActionPoints, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_EncActionPoints(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, EncActionPoints, OldValue);
 }
 
 void UPF2AttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)

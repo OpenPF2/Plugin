@@ -684,6 +684,34 @@ public:
 	FGameplayAttributeData FeAncestryFeatLimit;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, FeAncestryFeatLimit)
 
+	// Encounters ------------------------------------------------------------------------------------------------------
+	/**
+	 * The number of free action points this character has available in the current encounter.
+	 *
+	 * Free action points get automatically reset to 1 at the start of this character's next turn.
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 468-469, "Step 1: Start Your Turn":
+	 * "Many things happen automatically at the start of your turn...
+	 *
+	 * You can use 1 free action or reaction with a trigger of “Your turn begins” or something similar."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Encounters", ReplicatedUsing=OnRep_EncFreeActionPoints)
+	FGameplayAttributeData EncFreeActionPoints;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, EncFreeActionPoints)
+	/**
+	 * The number of action points this character has available in the current encounter.
+	 *
+	 * The action points get automatically reset to 3 at the start of this character's next turn.
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 468-469, "Step 1: Start Your Turn":
+	 * "The last step of starting your turn is always the same.
+	 * Regain your 3 actions and 1 reaction. If you haven't spent your reaction from your last turn, you lose it—you
+	 * can't "save" actions or reactions from one turn to use during the next turn."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Encounters", ReplicatedUsing=OnRep_EncActionPoints)
+	FGameplayAttributeData EncActionPoints;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, EncActionPoints)
+
 	// Transient/Temporary Attributes ----------------------------------------------------------------------------------
 	/**
 	 * A temporary attribute for tracking damage that the owner of this set is receiving from an instant damage GE.
@@ -907,6 +935,12 @@ public:
 
 	UFUNCTION()
 	virtual void OnRep_SpellDifficultyClass(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_EncFreeActionPoints(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_EncActionPoints(const FGameplayAttributeData& OldValue);
 
 protected:
 	/**
