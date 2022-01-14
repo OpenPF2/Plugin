@@ -385,6 +385,8 @@ public:
 
 	virtual IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent() const override;
 
+	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerController() const override;
+
 	virtual TArray<UPF2AbilityBoostBase*> GetPendingAbilityBoosts() const override;
 
 	virtual AActor* ToActor() override;

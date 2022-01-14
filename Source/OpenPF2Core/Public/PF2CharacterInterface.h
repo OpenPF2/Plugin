@@ -15,6 +15,8 @@
 #include <AbilitySystemInterface.h>
 #include <UObject/ScriptInterface.h>
 
+#include "PF2PlayerControllerInterface.h"
+
 #include "Abilities/PF2AbilityBoostBase.h"
 
 #include "PF2CharacterInterface.generated.h"
@@ -82,6 +84,16 @@ public:
 	 *	The ASC, as an implementation of the interface for character ASCs.
 	 */
 	virtual IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent() const = 0;
+
+	/**
+	 * Gets the player controller for this character, if this character is being controlled by a player.
+	 *
+	 * @return
+	 *	Either the player controller for this character, or a null player controller reference if this is not a playable
+	 *	character.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerController() const = 0;
 
 	/**
 	 * Gets all of the ability boosts that have been granted to this character that require choices from the player.

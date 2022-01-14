@@ -91,6 +91,11 @@ FORCEINLINE IPF2CharacterAbilitySystemComponentInterface* APF2CharacterBase::Get
 	return CharacterAsc;
 }
 
+TScriptInterface<IPF2PlayerControllerInterface> APF2CharacterBase::GetPlayerController() const
+{
+	return this->GetController();
+}
+
 TArray<UPF2AbilityBoostBase *> APF2CharacterBase::GetPendingAbilityBoosts() const
 {
 	return this->GetCharacterAbilitySystemComponent()->GetPendingAbilityBoosts();
@@ -98,7 +103,7 @@ TArray<UPF2AbilityBoostBase *> APF2CharacterBase::GetPendingAbilityBoosts() cons
 
 AActor* APF2CharacterBase::ToActor()
 {
-	return Cast<AActor>(this);
+	return this;
 }
 
 void APF2CharacterBase::AddAbilityBoostSelection(
