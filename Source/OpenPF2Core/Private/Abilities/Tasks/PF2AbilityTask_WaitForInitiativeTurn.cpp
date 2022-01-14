@@ -57,7 +57,7 @@ void UPF2AbilityTask_WaitForInitiativeTurn::ExternalCancel()
 
 void UPF2AbilityTask_WaitForInitiativeTurn::OnDestroy(bool AbilityEnded)
 {
-	if ((this->WaitingCharacter != nullptr) && (this->GameMode != nullptr))
+	if ((this->WaitingCharacter != nullptr) && (this->GameMode != nullptr) && !this->WasActionPerformed)
 	{
 		TScriptInterface<IPF2CharacterInterface> CharacterScriptInterface = this->WaitingCharacter.ToScriptInterface();
 
@@ -106,13 +106,18 @@ void UPF2AbilityTask_WaitForInitiativeTurn::PerformAction()
 			);
 		}
 
+		this->WasActionPerformed = true;
+
 		this->EndTask();
 	}
 }
 
 void UPF2AbilityTask_WaitForInitiativeTurn::CancelAction()
 {
-	this->ExternalCancel();
+	if (!this->WasActionPerformed)
+	{
+		this->ExternalCancel();
+	}
 }
 
 void UPF2AbilityTask_WaitForInitiativeTurn::Activate_Client()

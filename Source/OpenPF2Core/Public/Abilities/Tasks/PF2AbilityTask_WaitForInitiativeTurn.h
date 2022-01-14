@@ -98,6 +98,11 @@ protected:
 	 */
 	TWeakInterfacePtr<IPF2GameModeInterface> GameMode;
 
+	/**
+	 * Whether this instance of the task has already been executed/performed.
+	 */
+	bool WasActionPerformed;
+
 	// =================================================================================================================
 	// Delegates/Execution Pins
 	// =================================================================================================================
@@ -115,6 +120,16 @@ protected:
 	FGenericGameplayTaskDelegate OnCancelled;
 
 public:
+	// =================================================================================================================
+	// Public Constructors
+	// =================================================================================================================
+	/**
+	 * Default constructor for UPF2AbilityTask_WaitForInitiativeTurn.
+	 */
+	explicit UPF2AbilityTask_WaitForInitiativeTurn() : WasActionPerformed(false)
+	{
+	}
+
 	// =================================================================================================================
 	// Public Methods - UAbilityTask Overrides
 	// =================================================================================================================
