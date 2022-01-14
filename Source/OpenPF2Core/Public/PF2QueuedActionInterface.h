@@ -7,6 +7,8 @@
 
 #include <UObject/Interface.h>
 
+#include "Abilities/PF2AbilityActivationOutcomeType.h"
+
 #include "Styling/SlateBrush.h"
 
 #include "PF2QueuedActionInterface.generated.h"
@@ -53,7 +55,7 @@ public:
 	 * not do so on its own.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Queued Actions")
-	virtual void PerformAction() = 0;
+	virtual EPF2AbilityActivationOutcomeType PerformAction() = 0;
 
 	/**
 	 * Notifies this action that it will not be performed and is instead being canceled.

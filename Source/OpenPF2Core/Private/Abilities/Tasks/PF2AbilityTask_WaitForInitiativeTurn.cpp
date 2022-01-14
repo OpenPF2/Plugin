@@ -47,17 +47,20 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate()
 
 void UPF2AbilityTask_WaitForInitiativeTurn::ExternalCancel()
 {
-	if (this->ShouldBroadcastAbilityTaskDelegates())
+	if (!this->WasActivated())
 	{
-		this->OnCancelled.Broadcast();
-	}
+		if (this->ShouldBroadcastAbilityTaskDelegates())
+		{
+			this->OnCancelled.Broadcast();
+		}
 
-	Super::ExternalCancel();
+		Super::ExternalCancel();
+	}
 }
 
 void UPF2AbilityTask_WaitForInitiativeTurn::OnDestroy(bool AbilityEnded)
 {
-	if ((this->WaitingCharacter != nullptr) && (this->GameMode != nullptr) && !this->WasActionPerformed)
+	if ((this->WaitingCharacter != nullptr) && (this->GameMode != nullptr) && !this->WasActivated())
 	{
 		TScriptInterface<IPF2CharacterInterface> CharacterScriptInterface = this->WaitingCharacter.ToScriptInterface();
 
@@ -78,9 +81,9 @@ FSlateBrush UPF2AbilityTask_WaitForInitiativeTurn::GetActionIcon()
 	return this->ActionIcon;
 }
 
-void UPF2AbilityTask_WaitForInitiativeTurn::PerformAction()
+EPF2AbilityActivationOutcomeType UPF2AbilityTask_WaitForInitiativeTurn::PerformAction()
 {
-	if (this->HasAbility() && !this->IsPendingKill())
+	if (this->HasAbility() && !this->IsPendingKill() && !this->WasActivated())
 	{
 		UE_LOG(
 			LogPf2CoreEncounters,
@@ -106,18 +109,17 @@ void UPF2AbilityTask_WaitForInitiativeTurn::PerformAction()
 			);
 		}
 
-		this->WasActionPerformed = true;
+		this->ActivationOutcome = EPF2AbilityActivationOutcomeType::Activated;
 
 		this->EndTask();
 	}
+
+	return this->ActivationOutcome;
 }
 
 void UPF2AbilityTask_WaitForInitiativeTurn::CancelAction()
 {
-	if (!this->WasActionPerformed)
-	{
-		this->ExternalCancel();
-	}
+	this->ExternalCancel();
 }
 
 void UPF2AbilityTask_WaitForInitiativeTurn::Activate_Client()

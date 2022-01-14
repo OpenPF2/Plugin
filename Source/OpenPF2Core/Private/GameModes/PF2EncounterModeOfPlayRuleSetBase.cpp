@@ -174,10 +174,10 @@ void UPF2EncounterModeOfPlayRuleSetBase::RemoveQueuedActionForCharacter(
 bool UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character)
 {
-	bool                                        ActionExecuted;
+	bool                                        ActionExecuted = false;
 	TScriptInterface<IPF2QueuedActionInterface> NextAction;
 
-	this->PopNextActionQueuedForCharacter(Character, NextAction);
+	this->PeekNextQueuedActionForCharacter(Character, NextAction);
 
 	if (NextAction == nullptr)
 	{
@@ -189,8 +189,6 @@ bool UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
 			*(Cast<AActor>(Character.GetObject())->GetName()),
 			*(Character->GetCharacterName().ToString())
 		);
-
-		ActionExecuted = false;
 	}
 	else
 	{
@@ -204,9 +202,12 @@ bool UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
 			*(Character->GetCharacterName().ToString())
 		);
 
-		NextAction->PerformAction();
+		if (NextAction->PerformAction() == EPF2AbilityActivationOutcomeType::Activated)
+		{
+			this->RemoveQueuedActionForCharacter(Character, NextAction);
 
-		ActionExecuted = true;
+			ActionExecuted = true;
+		}
 	}
 
 	return ActionExecuted;
@@ -237,10 +238,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::PopNextActionQueuedForCharacter(
 
 	if (NextAction != nullptr)
 	{
-		const IPF2CharacterInterface* CharacterInterface = PF2InterfaceUtilities::FromScriptInterface(Character);
-		IPF2QueuedActionInterface*    ActionInterface    = PF2InterfaceUtilities::FromScriptInterface(NextAction);
-
-		this->CharacterQueues.RemoveSingle(CharacterInterface, ActionInterface);
+		this->RemoveQueuedActionForCharacter(Character, NextAction);
 	}
 }
 

@@ -11,6 +11,8 @@
 #include "PF2AbilityTaskBase.h"
 #include "PF2QueuedActionInterface.h"
 
+#include "Abilities/PF2AbilityActivationOutcomeType.h"
+
 #include "GameModes/PF2GameModeInterface.h"
 
 #include "PF2AbilityTask_WaitForInitiativeTurn.generated.h"
@@ -85,6 +87,12 @@ protected:
 	UPROPERTY()
 	FSlateBrush ActionIcon;
 
+	/**
+	 * The result of this ability task (e.g., whether it was executed or not, blocked, etc.).
+	 */
+	UPROPERTY(BlueprintReadOnly)
+	EPF2AbilityActivationOutcomeType ActivationOutcome;
+
 	// =================================================================================================================
 	// Protected Fields
 	// =================================================================================================================
@@ -97,11 +105,6 @@ protected:
 	 * The game mode that is responsible for managing character initiative order.
 	 */
 	TWeakInterfacePtr<IPF2GameModeInterface> GameMode;
-
-	/**
-	 * Whether this instance of the task has already been executed/performed.
-	 */
-	bool WasActionPerformed;
 
 	// =================================================================================================================
 	// Delegates/Execution Pins
@@ -126,7 +129,7 @@ public:
 	/**
 	 * Default constructor for UPF2AbilityTask_WaitForInitiativeTurn.
 	 */
-	explicit UPF2AbilityTask_WaitForInitiativeTurn() : WasActionPerformed(false)
+	explicit UPF2AbilityTask_WaitForInitiativeTurn() : ActivationOutcome(EPF2AbilityActivationOutcomeType::None)
 	{
 	}
 
@@ -142,13 +145,25 @@ public:
 	// =================================================================================================================
 	virtual FText GetActionName() override;
 	virtual FSlateBrush GetActionIcon() override;
-	virtual void PerformAction() override;
+	virtual EPF2AbilityActivationOutcomeType PerformAction() override;
 	virtual void CancelAction() override;
 
 protected:
 	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
+	/**
+	 * Gets whether this ability task was executed after being queued.
+	 *
+	 * @return
+	 *	- true if this ability task was executed after being queued.
+	 *	- false if this ability task has not yet been queued and/or executed.
+	 */
+	FORCEINLINE bool WasActivated() const
+	{
+		return (this->ActivationOutcome != EPF2AbilityActivationOutcomeType::None);
+	}
+
 	/**
 	 * Performs activation of this ability task when running on the client side.
 	 *
