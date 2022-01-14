@@ -70,6 +70,9 @@ public:
 	                                                                           const FSlateBrush ActionIcon);
 
 protected:
+	// =================================================================================================================
+	// Protected Properties
+	// =================================================================================================================
 	/**
 	 * The name to display for this action when queued, if the queue of actions are displayed to the player/user.
 	 */
@@ -82,6 +85,9 @@ protected:
 	UPROPERTY()
 	FSlateBrush ActionIcon;
 
+	// =================================================================================================================
+	// Protected Fields
+	// =================================================================================================================
 	/**
 	 * The character who is waiting on a turn to continue the GA that invoked this task.
 	 */
@@ -93,7 +99,7 @@ protected:
 	TWeakInterfacePtr<IPF2GameModeInterface> GameMode;
 
 	// =================================================================================================================
-	// Public Delegates/Execution Pins
+	// Delegates/Execution Pins
 	// =================================================================================================================
 	/**
 	 * Execution pin fired when the character's turn to act has come up according to initiative order.
@@ -108,6 +114,7 @@ protected:
 	UPROPERTY(BlueprintAssignable)
 	FGenericGameplayTaskDelegate OnCancelled;
 
+public:
 	// =================================================================================================================
 	// Public Methods - UAbilityTask Overrides
 	// =================================================================================================================
