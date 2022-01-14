@@ -25,11 +25,6 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2PlayerControllerInterface Implementation
 	// =================================================================================================================
-	/**
-	 * Gets the character that this player controller is controlling.
-	 *
-	 * @return
-	 *	The pawn that this player controller is controlling, as a PF2 character.
-	 */
 	virtual TScriptInterface<IPF2CharacterInterface> GetControlledCharacter_Implementation() override;
+	virtual APlayerController* ToPlayerController_Implementation() override;
 };

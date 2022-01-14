@@ -11,3 +11,8 @@ TScriptInterface<IPF2CharacterInterface> APF2PlayerControllerBase::GetControlled
 {
 	return this->GetPawn();
 }
+
+APlayerController* APF2PlayerControllerBase::ToPlayerController_Implementation()
+{
+	return this;
+}

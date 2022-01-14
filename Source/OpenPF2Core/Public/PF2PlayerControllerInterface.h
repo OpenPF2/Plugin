@@ -6,6 +6,7 @@
 #pragma once
 
 #include <UObject/Interface.h>
+#include <GameFramework/PlayerController.h>
 
 #include "PF2GameStateInterface.h"
 #include "GameModes/PF2ModeOfPlayType.h"
@@ -38,7 +39,20 @@ public:
 
 	/**
 	 * Gets the character that this player controller is controlling.
+	 *
+	 * @return
+	 *	Either the controller character (if this controller is controlling a PF2 character), or a null character
+	 *	reference.
 	 */
 	UFUNCTION(BlueprintNativeEvent, Category="OpenPF2|Player Controllers")
 	TScriptInterface<IPF2CharacterInterface> GetControlledCharacter();
+
+	/**
+	 * Gets the player controller that is implementing this interface.
+	 *
+	 * @return
+	 *	This player controller, as a player controller actor.
+	 */
+	UFUNCTION(BlueprintNativeEvent, Category="OpenPF2|Player Controllers")
+	APlayerController* ToPlayerController();
 };
