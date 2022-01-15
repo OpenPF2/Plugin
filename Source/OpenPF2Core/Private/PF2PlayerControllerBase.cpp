@@ -7,12 +7,17 @@
 
 #include "PF2CharacterInterface.h"
 
-TScriptInterface<IPF2CharacterInterface> APF2PlayerControllerBase::GetControlledCharacter_Implementation()
+void APF2PlayerControllerBase::HandleModeOfPlayChanged(const EPF2ModeOfPlayType NewMode)
+{
+	this->OnModeOfPlayChanged(NewMode);
+}
+
+TScriptInterface<IPF2CharacterInterface> APF2PlayerControllerBase::GetControlledCharacter()
 {
 	return this->GetPawn();
 }
 
-APlayerController* APF2PlayerControllerBase::ToPlayerController_Implementation()
+APlayerController* APF2PlayerControllerBase::ToPlayerController()
 {
 	return this;
 }

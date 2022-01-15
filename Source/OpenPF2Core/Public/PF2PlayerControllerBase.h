@@ -25,6 +25,21 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2PlayerControllerInterface Implementation
 	// =================================================================================================================
-	virtual TScriptInterface<IPF2CharacterInterface> GetControlledCharacter_Implementation() override;
-	virtual APlayerController* ToPlayerController_Implementation() override;
+	virtual void HandleModeOfPlayChanged(EPF2ModeOfPlayType NewMode) override;
+	virtual TScriptInterface<IPF2CharacterInterface> GetControlledCharacter() override;
+	virtual APlayerController* ToPlayerController() override;
+
+protected:
+	// =================================================================================================================
+	// Blueprint Event Callbacks
+	// =================================================================================================================
+	/**
+	 * BP event invoked when the mode of play has changed.
+	 *
+	 * @param NewMode
+	 *	The new mode of play.
+	 */
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player Controllers")
+	void OnModeOfPlayChanged(EPF2ModeOfPlayType NewMode);
+
 };

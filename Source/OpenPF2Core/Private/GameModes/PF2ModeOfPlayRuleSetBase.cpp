@@ -52,6 +52,6 @@ TArray<TScriptInterface<IPF2CharacterInterface>> UPF2ModeOfPlayRuleSetBase::GetP
 		this->GetPlayerControllers(),
 		[](const TScriptInterface<IPF2PlayerControllerInterface> PlayerController)
 		{
-			return PlayerController->Execute_GetControlledCharacter(PlayerController.GetObject());
+			return PlayerController->GetControlledCharacter();
 		});
 }

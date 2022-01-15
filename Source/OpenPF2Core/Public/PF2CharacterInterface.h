@@ -211,5 +211,5 @@ public:
 	 * @param EventTags
 	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to hit points.
 	 */
-    virtual void HandleHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags) = 0;
+	virtual void HandleHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags) = 0;
 };

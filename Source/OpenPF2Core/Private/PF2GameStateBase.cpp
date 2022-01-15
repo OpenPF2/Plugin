@@ -82,7 +82,7 @@ void APF2GameStateBase::OnReceivedModeOfPlay()
 				*(PF2EnumUtilities::ToString(this->ModeOfPlay))
 			);
 
-			PF2PlayerController->Execute_OnModeOfPlayChanged(PlayerController, this->ModeOfPlay);
+			PF2PlayerController->HandleModeOfPlayChanged(this->ModeOfPlay);
 		}
 	}
 }

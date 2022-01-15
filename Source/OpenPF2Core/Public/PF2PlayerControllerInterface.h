@@ -13,7 +13,7 @@
 
 #include "PF2PlayerControllerInterface.generated.h"
 
-UINTERFACE(MinimalAPI, BlueprintType)
+UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2PlayerControllerInterface : public UInterface
 {
 	GENERATED_BODY()
@@ -33,9 +33,12 @@ public:
 	 * (This should normally be invoked only by the game state).
 	 *
 	 * @see EPF2ModeOfPlay
+	 *
+	 * @param NewMode
+	 *	The new mode of play.
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player Controllers")
-	void OnModeOfPlayChanged(EPF2ModeOfPlayType NewMode);
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
+	virtual void HandleModeOfPlayChanged(EPF2ModeOfPlayType NewMode) = 0;
 
 	/**
 	 * Gets the character that this player controller is controlling.
@@ -44,8 +47,8 @@ public:
 	 *	Either the controller character (if this controller is controlling a PF2 character), or a null character
 	 *	reference.
 	 */
-	UFUNCTION(BlueprintNativeEvent, Category="OpenPF2|Player Controllers")
-	TScriptInterface<IPF2CharacterInterface> GetControlledCharacter();
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
+	virtual TScriptInterface<IPF2CharacterInterface> GetControlledCharacter() = 0;
 
 	/**
 	 * Gets the player controller that is implementing this interface.
@@ -53,6 +56,6 @@ public:
 	 * @return
 	 *	This player controller, as a player controller actor.
 	 */
-	UFUNCTION(BlueprintNativeEvent, Category="OpenPF2|Player Controllers")
-	APlayerController* ToPlayerController();
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
+	virtual APlayerController* ToPlayerController() = 0;
 };
