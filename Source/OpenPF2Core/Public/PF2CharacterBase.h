@@ -413,10 +413,10 @@ public:
 	virtual void ApplyAbilityBoostSelections() override;
 
 	virtual void ActivatePassiveGameplayEffects() override;
-
 	virtual void DeactivatePassiveGameplayEffects() override;
-
 	virtual void AddAndActivateGameplayAbility(const TSubclassOf<UGameplayAbility> Ability) override;
+	virtual void HandleActionQueued(const TScriptInterface<IPF2QueuedActionInterface>& Action) override;
+	virtual void HandleActionDequeued(const TScriptInterface<IPF2QueuedActionInterface>& Action) override;
 
 	virtual void HandleDamageReceived(const float                         Damage,
 	                                  IPF2CharacterInterface*             InstigatorCharacter,
@@ -585,6 +585,30 @@ protected:
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
 	void OnHitPointsChanged(float Delta, const struct FGameplayTagContainer& EventTags);
+
+	/**
+	 * BP event invoked when an action/ability this character has attempted to execute has been queued-up.
+	 *
+	 * This happens if the active Mode of Play Rule Set (MoPRS) is requiring characters to queue up execution of
+	 * abilities until their turn to attack/act.
+	 *
+	 * @param Action
+	 *	The ability that has been queued up.
+	 */
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
+	void OnActionQueued(const TScriptInterface<IPF2QueuedActionInterface>& Action);
+
+	/**
+	 * BP event invoked when a previously queued action/ability for this character has been removed from the queue.
+	 *
+	 * This happens if an action queued through the active Mode of Play Rule Set (MoPRS) was executed, canceled by the
+	 * player, removed by game rules, or removed/canceled by something in the world.
+	 *
+	 * @param Action
+	 *	The ability that has been removed.
+	 */
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
+	void OnActionDequeued(const TScriptInterface<IPF2QueuedActionInterface>& Action);
 };
 
 /**

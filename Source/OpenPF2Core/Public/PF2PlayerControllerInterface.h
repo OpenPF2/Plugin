@@ -41,6 +41,31 @@ public:
 	virtual void HandleModeOfPlayChanged(EPF2ModeOfPlayType NewMode) = 0;
 
 	/**
+	 * Notifies this player controller that an action/ability for the character being controlled has been queued-up.
+	 *
+	 * This happens if the active Mode of Play Rule Set (MoPRS) is requiring characters to queue up execution of
+	 * abilities until their turn to attack/act.
+	 *
+	 * (This should normally be invoked only by the MoPRS).
+	 *
+	 * @param Action
+	 *	The ability that was queued.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
+	virtual void HandleActionQueued(const TScriptInterface<IPF2QueuedActionInterface>& Action) = 0;
+
+	/**
+	 * Notifies this player controller a previously queued action/ability has been removed from the queue.
+	 *
+	 * (This should normally be invoked only by the MoPRS).
+	 *
+	 * @param Action
+	 *	The ability that has been removed.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
+	virtual void HandleActionDequeued(const TScriptInterface<IPF2QueuedActionInterface>& Action) = 0;
+
+	/**
 	 * Gets the character that this player controller is controlling.
 	 *
 	 * @return

@@ -12,6 +12,16 @@ void APF2PlayerControllerBase::HandleModeOfPlayChanged(const EPF2ModeOfPlayType 
 	this->OnModeOfPlayChanged(NewMode);
 }
 
+void APF2PlayerControllerBase::HandleActionQueued(const TScriptInterface<IPF2QueuedActionInterface>& Action)
+{
+	this->OnActionQueued(Action);
+}
+
+void APF2PlayerControllerBase::HandleActionDequeued(const TScriptInterface<IPF2QueuedActionInterface>& Action)
+{
+	this->OnActionDequeued(Action);
+}
+
 TScriptInterface<IPF2CharacterInterface> APF2PlayerControllerBase::GetControlledCharacter()
 {
 	return this->GetPawn();

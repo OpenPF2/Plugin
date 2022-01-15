@@ -135,6 +135,11 @@ void UPF2EncounterModeOfPlayRuleSetBase::QueueActionForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character,
 	const TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
+	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
+
+	check(Character != nullptr);
+	check(Action != nullptr);
+
 	UE_LOG(
 		LogPf2CoreEncounters,
 		VeryVerbose,
@@ -149,12 +154,24 @@ void UPF2EncounterModeOfPlayRuleSetBase::QueueActionForCharacter(
 		PF2InterfaceUtilities::FromScriptInterface(Character),
 		PF2InterfaceUtilities::FromScriptInterface(Action)
 	);
+
+	if (PlayerController != nullptr)
+	{
+		PlayerController->HandleActionQueued(Action);
+	}
+
+	Character->HandleActionQueued(Action);
 }
 
 void UPF2EncounterModeOfPlayRuleSetBase::RemoveQueuedActionForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character,
 	const TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
+	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
+
+	check(Character != nullptr);
+	check(Action != nullptr);
+
 	UE_LOG(
 		LogPf2CoreEncounters,
 		VeryVerbose,
@@ -169,6 +186,13 @@ void UPF2EncounterModeOfPlayRuleSetBase::RemoveQueuedActionForCharacter(
 		PF2InterfaceUtilities::FromScriptInterface(Character),
 		PF2InterfaceUtilities::FromScriptInterface(Action)
 	);
+
+	if (PlayerController != nullptr)
+	{
+		PlayerController->HandleActionDequeued(Action);
+	}
+
+	Character->HandleActionDequeued(Action);
 }
 
 bool UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(

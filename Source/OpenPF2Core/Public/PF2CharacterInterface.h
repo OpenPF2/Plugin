@@ -176,6 +176,28 @@ public:
 	virtual void AddAndActivateGameplayAbility(const TSubclassOf<UGameplayAbility> Ability) = 0;
 
 	/**
+	 * Notifies this character that an action/ability they have attempted to execute has been queued-up.
+	 *
+	 * (This should normally be invoked only by the MoPRS).
+	 *
+	 * @param Action
+	 *	The ability that has been queued up.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual void HandleActionQueued(const TScriptInterface<IPF2QueuedActionInterface>& Action) = 0;
+
+	/**
+	 * Notifies this character that a previously queued action/ability has been removed from the queue.
+	 *
+	 * (This should normally be invoked only by the MoPRS).
+	 *
+	 * @param Action
+	 *	The ability that has been removed.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual void HandleActionDequeued(const TScriptInterface<IPF2QueuedActionInterface>& Action) = 0;
+
+	/**
 	 * Notifies this character that it has received damage.
 	 *
 	 * This should only be invoked by the character's attribute set. This does NOT actually modify the character's
