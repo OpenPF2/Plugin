@@ -6,6 +6,8 @@
 #include "GameModes/PF2EncounterModeOfPlayRuleSetBase.h"
 
 #include "OpenPF2Core.h"
+#include "PF2PlayerControllerBase.h"
+
 #include "Utilities/PF2ArrayUtilities.h"
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
