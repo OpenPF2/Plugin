@@ -157,10 +157,10 @@ void UPF2EncounterModeOfPlayRuleSetBase::QueueActionForCharacter(
 
 	if (PlayerController != nullptr)
 	{
-		PlayerController->HandleActionQueued(Action);
+		PlayerController->Execute_HandleActionQueued(PlayerController.GetObject(), Action);
 	}
 
-	Character->HandleActionQueued(Action);
+	Character->Execute_HandleActionQueued(Character.GetObject(), Action);
 }
 
 void UPF2EncounterModeOfPlayRuleSetBase::RemoveQueuedActionForCharacter(
@@ -189,10 +189,10 @@ void UPF2EncounterModeOfPlayRuleSetBase::RemoveQueuedActionForCharacter(
 
 	if (PlayerController != nullptr)
 	{
-		PlayerController->HandleActionDequeued(Action);
+		PlayerController->Execute_HandleActionDequeued(PlayerController.GetObject(), Action);
 	}
 
-	Character->HandleActionDequeued(Action);
+	Character->Execute_HandleActionDequeued(Character.GetObject(), Action);
 }
 
 bool UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(

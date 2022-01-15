@@ -51,8 +51,8 @@ public:
 	 * @param Action
 	 *	The ability that was queued.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
-	virtual void HandleActionQueued(const TScriptInterface<IPF2QueuedActionInterface>& Action) = 0;
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
+	virtual void HandleActionQueued(const TScriptInterface<IPF2QueuedActionInterface>& Action);
 
 	/**
 	 * Notifies this player controller a previously queued action/ability has been removed from the queue.
@@ -62,8 +62,8 @@ public:
 	 * @param Action
 	 *	The ability that has been removed.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
-	virtual void HandleActionDequeued(const TScriptInterface<IPF2QueuedActionInterface>& Action) = 0;
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
+	virtual void HandleActionDequeued(const TScriptInterface<IPF2QueuedActionInterface>& Action);
 
 	/**
 	 * Gets the character that this player controller is controlling.

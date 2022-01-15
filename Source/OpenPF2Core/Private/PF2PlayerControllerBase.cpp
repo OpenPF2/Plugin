@@ -12,12 +12,12 @@ void APF2PlayerControllerBase::HandleModeOfPlayChanged(const EPF2ModeOfPlayType 
 	this->OnModeOfPlayChanged(NewMode);
 }
 
-void APF2PlayerControllerBase::HandleActionQueued(const TScriptInterface<IPF2QueuedActionInterface>& Action)
+void APF2PlayerControllerBase::HandleActionQueued_Implementation(const TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
 	this->OnActionQueued(Action);
 }
 
-void APF2PlayerControllerBase::HandleActionDequeued(const TScriptInterface<IPF2QueuedActionInterface>& Action)
+void APF2PlayerControllerBase::HandleActionDequeued_Implementation(const TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
 	this->OnActionDequeued(Action);
 }

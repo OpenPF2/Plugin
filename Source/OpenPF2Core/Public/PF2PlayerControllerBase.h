@@ -26,8 +26,8 @@ public:
 	// Public Methods - IPF2PlayerControllerInterface Implementation
 	// =================================================================================================================
 	virtual void HandleModeOfPlayChanged(EPF2ModeOfPlayType NewMode) override;
-	virtual void HandleActionQueued(const TScriptInterface<IPF2QueuedActionInterface>& Action) override;
-	virtual void HandleActionDequeued(const TScriptInterface<IPF2QueuedActionInterface>& Action) override;
+	virtual void HandleActionQueued_Implementation(const TScriptInterface<IPF2QueuedActionInterface>& Action);
+	virtual void HandleActionDequeued_Implementation(const TScriptInterface<IPF2QueuedActionInterface>& Action);
 	virtual TScriptInterface<IPF2CharacterInterface> GetControlledCharacter() override;
 	virtual APlayerController* ToPlayerController() override;
 

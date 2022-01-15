@@ -415,8 +415,8 @@ public:
 	virtual void ActivatePassiveGameplayEffects() override;
 	virtual void DeactivatePassiveGameplayEffects() override;
 	virtual void AddAndActivateGameplayAbility(const TSubclassOf<UGameplayAbility> Ability) override;
-	virtual void HandleActionQueued(const TScriptInterface<IPF2QueuedActionInterface>& Action) override;
-	virtual void HandleActionDequeued(const TScriptInterface<IPF2QueuedActionInterface>& Action) override;
+	virtual void HandleActionQueued_Implementation(const TScriptInterface<IPF2QueuedActionInterface>& Action);
+	virtual void HandleActionDequeued_Implementation(const TScriptInterface<IPF2QueuedActionInterface>& Action);
 
 	virtual void HandleDamageReceived(const float                         Damage,
 	                                  IPF2CharacterInterface*             InstigatorCharacter,
