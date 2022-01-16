@@ -51,17 +51,26 @@ public:
 	virtual FORCEINLINE TScriptInterface<IPF2ModeOfPlayRuleSetInterface> CreateModeOfPlayRuleSet(
 		const EPF2ModeOfPlayType ModeOfPlay) override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual void RequestEncounterMode() override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual void RequestExplorationMode() override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual void RequestDowntimeMode() override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual void AddCharacterToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual void RemoveCharacterFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual void QueueActionForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
 	                                          TScriptInterface<IPF2QueuedActionInterface>& Action) override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual void CancelActionQueuedForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
 	                                                 TScriptInterface<IPF2QueuedActionInterface>& Action) override;
 

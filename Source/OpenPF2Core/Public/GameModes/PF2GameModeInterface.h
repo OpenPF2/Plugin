@@ -102,13 +102,12 @@ public:
 	 * allows characters to perform actions immediately, the action will not be queued and will instead be given the
 	 * opportunity to run before this call returns.
 	 *
-	 * This should only get called on the server.
-	 *
 	 * @param Character
 	 *	The character for which the action is being queued.
 	 * @param Action
 	 *	The action being queued.
 	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Modes")
 	virtual void QueueActionForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
 	                                          TScriptInterface<IPF2QueuedActionInterface>& Action) = 0;
 
@@ -130,6 +129,7 @@ public:
 	 * @param Action
 	 *	The action to remove from the queue.
 	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Modes")
 	virtual void CancelActionQueuedForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
 	                                                 TScriptInterface<IPF2QueuedActionInterface>& Action) = 0;
 };

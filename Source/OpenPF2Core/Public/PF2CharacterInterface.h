@@ -128,8 +128,8 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual void AddAbilityBoostSelection(
-	    const TSubclassOf<class UPF2AbilityBoostBase> BoostGameplayAbility,
-	    const TSet<EPF2CharacterAbilityScoreType>     SelectedAbilities) = 0;
+	    const TSubclassOf<UPF2AbilityBoostBase>   BoostGameplayAbility,
+	    const TSet<EPF2CharacterAbilityScoreType> SelectedAbilities) = 0;
 
 	/**
 	 * Attempts to find and activate a pending ability boost Gameplay Ability for each Ability Boost selection on this

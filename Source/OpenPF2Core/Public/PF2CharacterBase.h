@@ -371,26 +371,34 @@ public:
 	// =================================================================================================================
 	// Public Methods - IAbilitySystemInterface Implementation
 	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2CharacterInterface Implementation
 	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
 	virtual FText GetCharacterName() const override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual int32 GetCharacterLevel() const override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual void GetCharacterAbilitySystemComponent(
 		TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const override;
 
 	virtual IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent() const override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerController() const override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual TArray<UPF2AbilityBoostBase*> GetPendingAbilityBoosts() const override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual AActor* ToActor() override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual void AddAbilityBoostSelection(const TSubclassOf<UPF2AbilityBoostBase>   BoostGameplayAbility,
 	                                      const TSet<EPF2CharacterAbilityScoreType> SelectedAbilities) override;
 
@@ -410,16 +418,22 @@ public:
 	 *	5. During activation, the boost GA calls the ApplyAbilityBoost() method on the ASC for this character to
 	 *	   activate each valid boost selection.
 	 */
+	UFUNCTION(BlueprintCallable)
 	virtual void ApplyAbilityBoostSelections() override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual void ActivatePassiveGameplayEffects() override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual void DeactivatePassiveGameplayEffects() override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual void AddAndActivateGameplayAbility(const TSubclassOf<UGameplayAbility> Ability) override;
 
-	UFUNCTION(BlueprintCallable, NetMulticast, Reliable, Category="OpenPF2|Characters")
+	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
 	virtual void HandleActionQueued(const TScriptInterface<IPF2QueuedActionInterface>& Action) override;
 
-	UFUNCTION(BlueprintCallable, NetMulticast, Reliable, Category="OpenPF2|Characters")
+	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
 	virtual void HandleActionDequeued(const TScriptInterface<IPF2QueuedActionInterface>& Action) override;
 
 	virtual void HandleDamageReceived(const float                         Damage,

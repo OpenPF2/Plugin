@@ -61,11 +61,13 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2GameStateInterface Implementation
 	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
 	virtual FORCEINLINE EPF2ModeOfPlayType GetModeOfPlay() override
 	{
 		return this->ModeOfPlay;
 	}
 
+	UFUNCTION(BlueprintCallable)
 	virtual FORCEINLINE TScriptInterface<IPF2ModeOfPlayRuleSetInterface> GetModeOfPlayRuleSet() override
 	{
 		return this->ModeOfPlayRuleSet;
