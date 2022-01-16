@@ -16,6 +16,7 @@
 #include <UObject/ScriptInterface.h>
 
 #include "PF2PlayerControllerInterface.h"
+#include "PF2QueuedActionHandle.h"
 
 #include "Abilities/PF2AbilityBoostBase.h"
 
@@ -180,22 +181,22 @@ public:
 	 *
 	 * (This should normally be invoked only by the MoPRS).
 	 *
-	 * @param Action
-	 *	The ability that has been queued up.
+	 * @param ActionHandle
+	 *	Information about the ability that has been queued up.
 	 */
 	UFUNCTION(BlueprintCallable, NetMulticast, Reliable, Category="OpenPF2|Characters")
-	virtual void HandleActionQueued(const TScriptInterface<IPF2QueuedActionInterface>& Action) = 0;
+	virtual void HandleActionQueued(const FPF2QueuedActionHandle ActionHandle) = 0;
 
 	/**
 	 * Notifies this character that a previously queued action/ability has been removed from the queue.
 	 *
 	 * (This should normally be invoked only by the MoPRS).
 	 *
-	 * @param Action
-	 *	The ability that has been removed.
+	 * @param ActionHandle
+	 *	Information about the ability that has been removed.
 	 */
 	UFUNCTION(BlueprintCallable, NetMulticast, Reliable, Category="OpenPF2|Characters")
-	virtual void HandleActionDequeued(const TScriptInterface<IPF2QueuedActionInterface>& Action) = 0;
+	virtual void HandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) = 0;
 
 	/**
 	 * Notifies this character that it has received damage.

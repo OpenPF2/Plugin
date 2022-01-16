@@ -9,6 +9,8 @@
 #include <GameFramework/PlayerController.h>
 
 #include "PF2GameStateInterface.h"
+#include "PF2QueuedActionHandle.h"
+
 #include "GameModes/PF2ModeOfPlayType.h"
 
 #include "PF2PlayerControllerInterface.generated.h"
@@ -48,22 +50,22 @@ public:
 	 *
 	 * (This should normally be invoked only by the MoPRS).
 	 *
-	 * @param Action
-	 *	The ability that was queued.
+	 * @param ActionHandle
+	 *	Information about the ability that was queued.
 	 */
 	UFUNCTION(BlueprintCallable, NetMulticast, Reliable, Category="OpenPF2|Player Controllers")
-	virtual void HandleActionQueued(const TScriptInterface<IPF2QueuedActionInterface>& Action) = 0;
+	virtual void HandleActionQueued(const FPF2QueuedActionHandle ActionHandle) = 0;
 
 	/**
 	 * Notifies this player controller a previously queued action/ability has been removed from the queue.
 	 *
 	 * (This should normally be invoked only by the MoPRS).
 	 *
-	 * @param Action
-	 *	The ability that has been removed.
+	 * @param ActionHandle
+	 *	Information about the ability that has been removed.
 	 */
 	UFUNCTION(BlueprintCallable, NetMulticast, Reliable, Category="OpenPF2|Player Controllers")
-	virtual void HandleActionDequeued(const TScriptInterface<IPF2QueuedActionInterface>& Action) = 0;
+	virtual void HandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) = 0;
 
 	/**
 	 * Gets the character that this player controller is controlling.

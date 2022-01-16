@@ -67,6 +67,16 @@ protected:
 	 */
 	int32 PreviousCharacterIndex;
 
+	/**
+	 * A look-up from queued action to handle.
+	 */
+	TMap<const IPF2QueuedActionInterface*, const FPF2QueuedActionHandle> ActionHandles;
+
+	/**
+	 * The next ID to assign to an action handle.
+	 */
+	int32 NextActionHandleId;
+
 public:
 	// =================================================================================================================
 	// Public Constructors
@@ -74,7 +84,10 @@ public:
 	/**
 	 * Default constructor for UPF2EncounterModeOfPlayRuleSetBase.
 	 */
-	explicit UPF2EncounterModeOfPlayRuleSetBase() : PreviousCharacter(nullptr), PreviousCharacterIndex(-1)
+	explicit UPF2EncounterModeOfPlayRuleSetBase() :
+		PreviousCharacter(nullptr),
+		PreviousCharacterIndex(-1),
+		NextActionHandleId(0)
 	{
 	}
 
@@ -110,7 +123,7 @@ protected:
 	 *	- false if the character does not have any initiative set.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Initiative")
-	bool IsInitiativeSetForCharacter(const TScriptInterface<IPF2CharacterInterface>& Character);
+	bool IsInitiativeSetForCharacter(const TScriptInterface<IPF2CharacterInterface>& Character) const;
 
 	/**
 	 * Clears any initiative value set for the specified character.
@@ -231,7 +244,7 @@ protected:
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Action Queue")
 	void PeekNextQueuedActionForCharacter(
 		const TScriptInterface<IPF2CharacterInterface>& Character,
-		TScriptInterface<IPF2QueuedActionInterface>& NextAction) const;
+		TScriptInterface<IPF2QueuedActionInterface>&    NextAction) const;
 
 	/**
 	 * Removes and returns the next action in the specified character's queue of actions (if there is one).
@@ -247,7 +260,7 @@ protected:
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Action Queue")
 	void PopNextActionQueuedForCharacter(
 		const TScriptInterface<IPF2CharacterInterface>& Character,
-		TScriptInterface<IPF2QueuedActionInterface>& NextAction);
+		TScriptInterface<IPF2QueuedActionInterface>&    NextAction);
 
 	/**
 	 * Rebuilds the sequence of characters according to initiative order.

@@ -8,6 +8,7 @@
 #include <GameFramework/PlayerController.h>
 
 #include "PF2PlayerControllerInterface.h"
+#include "PF2QueuedActionHandle.h"
 #include "PF2PlayerControllerBase.generated.h"
 
 /**
@@ -29,10 +30,10 @@ public:
 	virtual void HandleModeOfPlayChanged(EPF2ModeOfPlayType NewMode) override;
 
 	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
-	virtual void HandleActionQueued(const TScriptInterface<IPF2QueuedActionInterface>& Action) override;
+	virtual void HandleActionQueued(const FPF2QueuedActionHandle ActionHandle) override;
 
 	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
-	virtual void HandleActionDequeued(const TScriptInterface<IPF2QueuedActionInterface>& Action) override;
+	virtual void HandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2CharacterInterface> GetControlledCharacter() override;
@@ -56,11 +57,11 @@ protected:
 	/**
 	 * BP event invoked when an action/ability has been queued-up for the controlled character.
 	 *
-	 * @param Action
-	 *	The ability that has been queued-up.
+	 * @param ActionHandle
+	 *	Information about the ability that has been queued-up.
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player Controllers")
-	void OnActionQueued(const TScriptInterface<IPF2QueuedActionInterface>& Action);
+	void OnActionQueued(const FPF2QueuedActionHandle ActionHandle);
 
 	/**
 	 * BP event invoked when a previously queued action/ability for the controlled character has been cancelled.
@@ -68,9 +69,9 @@ protected:
 	 * This happens if an action queued through the active Mode of Play Rule Set (MoPRS) was canceled by the player,
 	 * by game rules, or something in the world.
 	 *
-	 * @param Action
-	 *	The ability that has been canceled.
+	 * @param ActionHandle
+	 *	Information about the ability that has been canceled.
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player Controllers")
-	void OnActionDequeued(const TScriptInterface<IPF2QueuedActionInterface>& Action);
+	void OnActionDequeued(const FPF2QueuedActionHandle ActionHandle);
 };

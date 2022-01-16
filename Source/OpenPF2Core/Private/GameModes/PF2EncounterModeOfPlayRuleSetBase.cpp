@@ -7,6 +7,7 @@
 
 #include "OpenPF2Core.h"
 #include "PF2PlayerControllerBase.h"
+#include "PF2QueuedActionHandle.h"
 
 #include "Utilities/PF2ArrayUtilities.h"
 #include "Utilities/PF2InterfaceUtilities.h"
@@ -37,7 +38,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::SetCharacterInitiative(
 }
 
 bool UPF2EncounterModeOfPlayRuleSetBase::IsInitiativeSetForCharacter(
-	const TScriptInterface<IPF2CharacterInterface>& Character)
+	const TScriptInterface<IPF2CharacterInterface>& Character) const
 {
 	const IPF2CharacterInterface* Pf2Character = PF2InterfaceUtilities::FromScriptInterface(Character);
 
@@ -134,10 +135,13 @@ TArray<TScriptInterface<IPF2CharacterInterface>> UPF2EncounterModeOfPlayRuleSetB
 }
 
 void UPF2EncounterModeOfPlayRuleSetBase::QueueActionForCharacter(
-	const TScriptInterface<IPF2CharacterInterface>& Character,
+	const TScriptInterface<IPF2CharacterInterface>&    Character,
 	const TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
 	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
+
+	IPF2QueuedActionInterface* Pf2Action    = PF2InterfaceUtilities::FromScriptInterface(Action);
+	FPF2QueuedActionHandle     ActionHandle;
 
 	check(Character != nullptr);
 	check(Action != nullptr);
@@ -152,24 +156,29 @@ void UPF2EncounterModeOfPlayRuleSetBase::QueueActionForCharacter(
 		*(Character->GetCharacterName().ToString())
 	);
 
-	this->CharacterQueues.Add(
-		PF2InterfaceUtilities::FromScriptInterface(Character),
-		PF2InterfaceUtilities::FromScriptInterface(Action)
-	);
+	ActionHandle.Populate(this->NextActionHandleId, Pf2Action);
+
+	this->CharacterQueues.Add(PF2InterfaceUtilities::FromScriptInterface(Character), Pf2Action);
+	this->ActionHandles.Add(Pf2Action, ActionHandle);
 
 	if (PlayerController != nullptr)
 	{
-		PlayerController->Execute_HandleActionQueued(PlayerController.GetObject(), Action);
+		PlayerController->Execute_HandleActionQueued(PlayerController.GetObject(), ActionHandle);
 	}
 
-	Character->Execute_HandleActionQueued(Character.GetObject(), Action);
+	Character->Execute_HandleActionQueued(Character.GetObject(), ActionHandle);
 }
 
 void UPF2EncounterModeOfPlayRuleSetBase::RemoveQueuedActionForCharacter(
-	const TScriptInterface<IPF2CharacterInterface>& Character,
+	const TScriptInterface<IPF2CharacterInterface>&    Character,
 	const TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
 	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
+	IPF2QueuedActionInterface* Pf2Action = PF2InterfaceUtilities::FromScriptInterface(Action);
+
+	check(this->ActionHandles.Contains(Pf2Action));
+
+	const FPF2QueuedActionHandle ActionHandle = this->ActionHandles[Pf2Action];
 
 	check(Character != nullptr);
 	check(Action != nullptr);
@@ -184,17 +193,15 @@ void UPF2EncounterModeOfPlayRuleSetBase::RemoveQueuedActionForCharacter(
 		*(Character->GetCharacterName().ToString())
 	);
 
-	this->CharacterQueues.RemoveSingle(
-		PF2InterfaceUtilities::FromScriptInterface(Character),
-		PF2InterfaceUtilities::FromScriptInterface(Action)
-	);
+	this->CharacterQueues.RemoveSingle(PF2InterfaceUtilities::FromScriptInterface(Character), Pf2Action);
+	this->ActionHandles.Remove(Pf2Action);
 
 	if (PlayerController != nullptr)
 	{
-		PlayerController->Execute_HandleActionDequeued(PlayerController.GetObject(), Action);
+		PlayerController->Execute_HandleActionDequeued(PlayerController.GetObject(), ActionHandle);
 	}
 
-	Character->Execute_HandleActionDequeued(Character.GetObject(), Action);
+	Character->Execute_HandleActionDequeued(Character.GetObject(), ActionHandle);
 }
 
 bool UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
@@ -241,7 +248,7 @@ bool UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
 
 void UPF2EncounterModeOfPlayRuleSetBase::PeekNextQueuedActionForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character,
-	TScriptInterface<IPF2QueuedActionInterface>& NextAction) const
+	TScriptInterface<IPF2QueuedActionInterface>&    NextAction) const
 {
 	const IPF2CharacterInterface*      PF2Character = PF2InterfaceUtilities::FromScriptInterface(Character);
 	TArray<IPF2QueuedActionInterface*> CharacterActions;
@@ -258,7 +265,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::PeekNextQueuedActionForCharacter(
 
 void UPF2EncounterModeOfPlayRuleSetBase::PopNextActionQueuedForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character,
-	TScriptInterface<IPF2QueuedActionInterface>& NextAction)
+	TScriptInterface<IPF2QueuedActionInterface>&    NextAction)
 {
 	this->PeekNextQueuedActionForCharacter(Character, NextAction);
 

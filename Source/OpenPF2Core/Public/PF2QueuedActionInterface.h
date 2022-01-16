@@ -6,10 +6,9 @@
 #pragma once
 
 #include <UObject/Interface.h>
+#include <Styling/SlateBrush.h>
 
 #include "Abilities/PF2AbilityActivationOutcomeType.h"
-
-#include "Styling/SlateBrush.h"
 
 #include "PF2QueuedActionInterface.generated.h"
 

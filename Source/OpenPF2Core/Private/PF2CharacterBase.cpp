@@ -176,14 +176,14 @@ void APF2CharacterBase::AddAndActivateGameplayAbility(const TSubclassOf<UGamepla
 	Asc->GiveAbilityAndActivateOnce(Spec);
 }
 
-void APF2CharacterBase::HandleActionQueued_Implementation(const TScriptInterface<IPF2QueuedActionInterface>& Action)
+void APF2CharacterBase::HandleActionQueued_Implementation(const FPF2QueuedActionHandle ActionHandle)
 {
-	this->OnActionQueued(Action);
+	this->OnActionQueued(ActionHandle);
 }
 
-void APF2CharacterBase::HandleActionDequeued_Implementation(const TScriptInterface<IPF2QueuedActionInterface>& Action)
+void APF2CharacterBase::HandleActionDequeued_Implementation(const FPF2QueuedActionHandle ActionHandle)
 {
-	this->OnActionDequeued(Action);
+	this->OnActionDequeued(ActionHandle);
 }
 
 void APF2CharacterBase::HandleDamageReceived(const float                  Damage,

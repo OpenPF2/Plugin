@@ -22,6 +22,8 @@
 #include "PF2CharacterConstants.h"
 #include "PF2CharacterInterface.h"
 #include "PF2ClassGameplayEffectBase.h"
+#include "PF2QueuedActionHandle.h"
+
 #include "Abilities/PF2AbilityBoostBase.h"
 #include "Abilities/PF2AbilitySystemComponent.h"
 #include "Abilities/PF2AttributeSet.h"
@@ -431,10 +433,10 @@ public:
 	virtual void AddAndActivateGameplayAbility(const TSubclassOf<UGameplayAbility> Ability) override;
 
 	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
-	virtual void HandleActionQueued(const TScriptInterface<IPF2QueuedActionInterface>& Action) override;
+	virtual void HandleActionQueued(const FPF2QueuedActionHandle ActionHandle) override;
 
 	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
-	virtual void HandleActionDequeued(const TScriptInterface<IPF2QueuedActionInterface>& Action) override;
+	virtual void HandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) override;
 
 	virtual void HandleDamageReceived(const float                         Damage,
 	                                  IPF2CharacterInterface*             InstigatorCharacter,
@@ -610,11 +612,11 @@ protected:
 	 * This happens if the active Mode of Play Rule Set (MoPRS) is requiring characters to queue up execution of
 	 * abilities until their turn to attack/act.
 	 *
-	 * @param Action
-	 *	The ability that has been queued up.
+	 * @param ActionHandle
+	 *	Information about the ability that has been queued up.
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
-	void OnActionQueued(const TScriptInterface<IPF2QueuedActionInterface>& Action);
+	void OnActionQueued(const FPF2QueuedActionHandle ActionHandle);
 
 	/**
 	 * BP event invoked when a previously queued action/ability for this character has been removed from the queue.
@@ -622,11 +624,11 @@ protected:
 	 * This happens if an action queued through the active Mode of Play Rule Set (MoPRS) was executed, canceled by the
 	 * player, removed by game rules, or removed/canceled by something in the world.
 	 *
-	 * @param Action
-	 *	The ability that has been removed.
+	 * @param ActionHandle
+	 *	Information about the ability that has been removed.
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
-	void OnActionDequeued(const TScriptInterface<IPF2QueuedActionInterface>& Action);
+	void OnActionDequeued(const FPF2QueuedActionHandle ActionHandle);
 };
 
 /**
