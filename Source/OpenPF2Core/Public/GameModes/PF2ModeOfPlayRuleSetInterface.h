@@ -74,7 +74,7 @@ public:
 	/**
 	 * Callback to notify this rule set that a character should be removed from the current encounter.
 	 *
-	* The rule set can choose to ignore this event if it's not applicable (e.g., this rule set is not for an
+	 * The rule set can choose to ignore this event if it's not applicable (e.g., this rule set is not for an
 	 * encounter). This callback should also be ignored if the given character is not part of the encounter.
 	 *
 	 * @param Character
