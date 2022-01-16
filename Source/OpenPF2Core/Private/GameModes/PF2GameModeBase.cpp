@@ -6,6 +6,7 @@
 #include "GameModes/PF2GameModeBase.h"
 
 #include "PF2CharacterInterface.h"
+#include "PF2GameStateInterface.h"
 #include "PF2QueuedActionInterface.h"
 
 #include "GameModes/PF2ModeOfPlayRuleSetInterface.h"
@@ -146,6 +147,30 @@ void APF2GameModeBase::Tick(const float DeltaSeconds)
 		RuleSet->Execute_OnTick(RuleSet.GetObject(), DeltaSeconds);
 	}
 }
+
+TScriptInterface<IPF2ModeOfPlayRuleSetInterface> APF2GameModeBase::GetModeOfPlayRuleSet()
+{
+	TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet;
+	IPF2GameStateInterface*                          Pf2GameState = this->GetGameState<IPF2GameStateInterface>();
+
+	if (Pf2GameState == nullptr)
+	{
+		UE_LOG(
+			LogPf2Core,
+			Error,
+			TEXT("Mode of Play Rule Set (MoPRS) support is not enabled because the current game state is not compatible with PF2.")
+		);
+
+		RuleSet = TScriptInterface<IPF2ModeOfPlayRuleSetInterface>();
+	}
+	else
+	{
+		RuleSet = Pf2GameState->GetModeOfPlayRuleSet();
+	}
+
+	return RuleSet;
+}
+
 
 void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeOfPlay)
 {
