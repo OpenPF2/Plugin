@@ -7,6 +7,16 @@
 
 #include "PF2CharacterInterface.h"
 
+TScriptInterface<IPF2CharacterInterface> APF2PlayerControllerBase::GetControlledCharacter()
+{
+	return this->GetPawn();
+}
+
+APlayerController* APF2PlayerControllerBase::ToPlayerController()
+{
+	return this;
+}
+
 void APF2PlayerControllerBase::HandleModeOfPlayChanged(const EPF2ModeOfPlayType NewMode)
 {
 	this->OnModeOfPlayChanged(NewMode);
@@ -20,14 +30,4 @@ void APF2PlayerControllerBase::HandleActionQueued_Implementation(const FPF2Queue
 void APF2PlayerControllerBase::HandleActionDequeued_Implementation(const FPF2QueuedActionHandle ActionHandle)
 {
 	this->OnActionDequeued(ActionHandle);
-}
-
-TScriptInterface<IPF2CharacterInterface> APF2PlayerControllerBase::GetControlledCharacter()
-{
-	return this->GetPawn();
-}
-
-APlayerController* APF2PlayerControllerBase::ToPlayerController()
-{
-	return this;
 }

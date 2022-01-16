@@ -27,19 +27,20 @@ public:
 	// Public Methods - IPF2PlayerControllerInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
-	virtual void HandleModeOfPlayChanged(EPF2ModeOfPlayType NewMode) override;
-
-	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
-	virtual void HandleActionQueued(const FPF2QueuedActionHandle ActionHandle) override;
-
-	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
-	virtual void HandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) override;
-
-	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2CharacterInterface> GetControlledCharacter() override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual APlayerController* ToPlayerController() override;
+
+	UFUNCTION()
+	virtual void HandleModeOfPlayChanged(EPF2ModeOfPlayType NewMode) override;
+
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void HandleActionQueued(const FPF2QueuedActionHandle ActionHandle) override;
+
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void HandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) override;
+
 
 protected:
 	// =================================================================================================================

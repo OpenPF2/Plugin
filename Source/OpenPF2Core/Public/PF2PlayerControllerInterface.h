@@ -6,7 +6,6 @@
 #pragma once
 
 #include <UObject/Interface.h>
-#include <GameFramework/PlayerController.h>
 
 #include "PF2GameStateInterface.h"
 #include "PF2QueuedActionHandle.h"
@@ -29,44 +28,9 @@ class OPENPF2CORE_API IPF2PlayerControllerInterface
 	GENERATED_BODY()
 
 public:
-	/**
-	 * Notifies this player controller that the mode of play has changed.
-	 *
-	 * (This should normally be invoked only by the game state).
-	 *
-	 * @see EPF2ModeOfPlay
-	 *
-	 * @param NewMode
-	 *	The new mode of play.
-	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
-	virtual void HandleModeOfPlayChanged(EPF2ModeOfPlayType NewMode) = 0;
-
-	/**
-	 * Notifies this player controller that an action/ability for the character being controlled has been queued-up.
-	 *
-	 * This happens if the active Mode of Play Rule Set (MoPRS) is requiring characters to queue up execution of
-	 * abilities until their turn to attack/act.
-	 *
-	 * (This should normally be invoked only by the MoPRS).
-	 *
-	 * @param ActionHandle
-	 *	Information about the ability that was queued.
-	 */
-	UFUNCTION(BlueprintCallable, NetMulticast, Reliable, Category="OpenPF2|Player Controllers")
-	virtual void HandleActionQueued(const FPF2QueuedActionHandle ActionHandle) = 0;
-
-	/**
-	 * Notifies this player controller a previously queued action/ability has been removed from the queue.
-	 *
-	 * (This should normally be invoked only by the MoPRS).
-	 *
-	 * @param ActionHandle
-	 *	Information about the ability that has been removed.
-	 */
-	UFUNCTION(BlueprintCallable, NetMulticast, Reliable, Category="OpenPF2|Player Controllers")
-	virtual void HandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) = 0;
-
+	// =================================================================================================================
+	// Public Methods
+	// =================================================================================================================
 	/**
 	 * Gets the character that this player controller is controlling.
 	 *
@@ -85,4 +49,48 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
 	virtual APlayerController* ToPlayerController() = 0;
+
+	// =================================================================================================================
+	// Public Event Notifications from the Game State
+	// =================================================================================================================
+	/**
+	 * Notifies this player controller that the mode of play has changed.
+	 *
+	 * (This should normally be invoked only by the game state).
+	 *
+	 * @see EPF2ModeOfPlay
+	 *
+	 * @param NewMode
+	 *	The new mode of play.
+	 */
+	UFUNCTION()
+	virtual void HandleModeOfPlayChanged(EPF2ModeOfPlayType NewMode) = 0;
+
+	// =================================================================================================================
+	// Public Event Notifications from Mode of Play Rule Sets (MoPRS)
+	// =================================================================================================================
+	/**
+	 * Notifies this player controller that an action/ability for the character being controlled has been queued-up.
+	 *
+	 * This happens if the active Mode of Play Rule Set (MoPRS) is requiring characters to queue up execution of
+	 * abilities until their turn to attack/act.
+	 *
+	 * (This should normally be invoked only by the MoPRS).
+	 *
+	 * @param ActionHandle
+	 *	Information about the ability that was queued.
+	 */
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void HandleActionQueued(const FPF2QueuedActionHandle ActionHandle) = 0;
+
+	/**
+	 * Notifies this player controller a previously queued action/ability has been removed from the queue.
+	 *
+	 * (This should normally be invoked only by the MoPRS).
+	 *
+	 * @param ActionHandle
+	 *	Information about the ability that has been removed.
+	 */
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void HandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) = 0;
 };

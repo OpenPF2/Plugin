@@ -432,12 +432,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void AddAndActivateGameplayAbility(const TSubclassOf<UGameplayAbility> Ability) override;
 
-	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
-	virtual void HandleActionQueued(const FPF2QueuedActionHandle ActionHandle) override;
-
-	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
-	virtual void HandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) override;
-
 	virtual void HandleDamageReceived(const float                         Damage,
 	                                  IPF2CharacterInterface*             InstigatorCharacter,
 	                                  AActor*                             DamageSource,
@@ -445,6 +439,12 @@ public:
 	                                  const FHitResult                    HitInfo) override;
 
 	virtual void HandleHitPointsChanged(const float Delta, const struct FGameplayTagContainer* EventTags) override;
+
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void HandleActionQueued(const FPF2QueuedActionHandle ActionHandle) override;
+
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void HandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) override;
 
 	// =================================================================================================================
 	// Public Methods - Blueprint Callable

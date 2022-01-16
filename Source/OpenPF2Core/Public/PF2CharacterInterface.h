@@ -36,6 +36,9 @@ class OPENPF2CORE_API IPF2CharacterInterface: public IAbilitySystemInterface
     GENERATED_BODY()
 
 public:
+	// =================================================================================================================
+	// Public Methods
+	// =================================================================================================================
 	/**
 	 * Returns the name of this character, as set by the game designer.
 	 *
@@ -176,28 +179,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual void AddAndActivateGameplayAbility(const TSubclassOf<UGameplayAbility> Ability) = 0;
 
-	/**
-	 * Notifies this character that an action/ability they have attempted to execute has been queued-up.
-	 *
-	 * (This should normally be invoked only by the MoPRS).
-	 *
-	 * @param ActionHandle
-	 *	Information about the ability that has been queued up.
-	 */
-	UFUNCTION(BlueprintCallable, NetMulticast, Reliable, Category="OpenPF2|Characters")
-	virtual void HandleActionQueued(const FPF2QueuedActionHandle ActionHandle) = 0;
-
-	/**
-	 * Notifies this character that a previously queued action/ability has been removed from the queue.
-	 *
-	 * (This should normally be invoked only by the MoPRS).
-	 *
-	 * @param ActionHandle
-	 *	Information about the ability that has been removed.
-	 */
-	UFUNCTION(BlueprintCallable, NetMulticast, Reliable, Category="OpenPF2|Characters")
-	virtual void HandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) = 0;
-
+	// =================================================================================================================
+	// Public Event Notifications from Attribute Set
+	// =================================================================================================================
 	/**
 	 * Notifies this character that it has received damage.
 	 *
@@ -235,4 +219,29 @@ public:
 	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to hit points.
 	 */
 	virtual void HandleHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags) = 0;
+
+	// =================================================================================================================
+	// Public Event Notifications from Mode of Play Rule Sets (MoPRS)
+	// =================================================================================================================
+	/**
+	 * Notifies this character that an action/ability they have attempted to execute has been queued-up.
+	 *
+	 * (This should normally be invoked only by the MoPRS).
+	 *
+	 * @param ActionHandle
+	 *	Information about the ability that has been queued up.
+	 */
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void HandleActionQueued(const FPF2QueuedActionHandle ActionHandle) = 0;
+
+	/**
+	 * Notifies this character that a previously queued action/ability has been removed from the queue.
+	 *
+	 * (This should normally be invoked only by the MoPRS).
+	 *
+	 * @param ActionHandle
+	 *	Information about the ability that has been removed.
+	 */
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void HandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) = 0;
 };
