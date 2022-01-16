@@ -141,7 +141,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::QueueActionForCharacter(
 	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
 
 	IPF2QueuedActionInterface* Pf2Action    = PF2InterfaceUtilities::FromScriptInterface(Action);
-	FPF2QueuedActionHandle     ActionHandle;
+	FPF2QueuedActionHandle     ActionHandle = FPF2QueuedActionHandle(this->NextActionHandleId++, Pf2Action);
 
 	check(Character != nullptr);
 	check(Action != nullptr);
@@ -156,10 +156,9 @@ void UPF2EncounterModeOfPlayRuleSetBase::QueueActionForCharacter(
 		*(Character->GetCharacterName().ToString())
 	);
 
-	ActionHandle.Populate(this->NextActionHandleId, Pf2Action);
-
 	this->CharacterQueues.Add(PF2InterfaceUtilities::FromScriptInterface(Character), Pf2Action);
 	this->ActionHandles.Add(Pf2Action, ActionHandle);
+	this->ActionsByHandle.Add(ActionHandle.HandleId, Pf2Action);
 
 	if (PlayerController != nullptr)
 	{
@@ -195,6 +194,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::RemoveQueuedActionForCharacter(
 
 	this->CharacterQueues.RemoveSingle(PF2InterfaceUtilities::FromScriptInterface(Character), Pf2Action);
 	this->ActionHandles.Remove(Pf2Action);
+	this->ActionsByHandle.Remove(ActionHandle.HandleId);
 
 	if (PlayerController != nullptr)
 	{

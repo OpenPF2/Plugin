@@ -78,7 +78,7 @@ public:
 	 * (This should normally be invoked only by the MoPRS).
 	 *
 	 * @param ActionHandle
-	 *	Information about the ability that was queued.
+	 *	A reference to the ability that was queued.
 	 */
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void HandleActionQueued(const FPF2QueuedActionHandle ActionHandle) = 0;
@@ -89,7 +89,7 @@ public:
 	 * (This should normally be invoked only by the MoPRS).
 	 *
 	 * @param ActionHandle
-	 *	Information about the ability that has been removed.
+	 *	A reference to the ability that has been removed.
 	 */
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void HandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) = 0;

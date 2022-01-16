@@ -73,6 +73,11 @@ protected:
 	TMap<const IPF2QueuedActionInterface*, const FPF2QueuedActionHandle> ActionHandles;
 
 	/**
+	 * A look-up from queued action handles to the actual actions.
+	 */
+	TMap<int32, const IPF2QueuedActionInterface*> ActionsByHandle;
+
+	/**
 	 * The next ID to assign to an action handle.
 	 */
 	int32 NextActionHandleId;

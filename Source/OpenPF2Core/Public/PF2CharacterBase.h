@@ -613,7 +613,7 @@ protected:
 	 * abilities until their turn to attack/act.
 	 *
 	 * @param ActionHandle
-	 *	Information about the ability that has been queued up.
+	 *	A reference to the ability that has been queued up.
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
 	void OnActionQueued(const FPF2QueuedActionHandle ActionHandle);
@@ -625,7 +625,7 @@ protected:
 	 * player, removed by game rules, or removed/canceled by something in the world.
 	 *
 	 * @param ActionHandle
-	 *	Information about the ability that has been removed.
+	 *	A reference to the ability that has been removed.
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
 	void OnActionDequeued(const FPF2QueuedActionHandle ActionHandle);

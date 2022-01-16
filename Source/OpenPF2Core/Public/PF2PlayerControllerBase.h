@@ -59,7 +59,7 @@ protected:
 	 * BP event invoked when an action/ability has been queued-up for the controlled character.
 	 *
 	 * @param ActionHandle
-	 *	Information about the ability that has been queued-up.
+	 *	A reference to the ability that has been queued-up.
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player Controllers")
 	void OnActionQueued(const FPF2QueuedActionHandle ActionHandle);
@@ -71,7 +71,7 @@ protected:
 	 * by game rules, or something in the world.
 	 *
 	 * @param ActionHandle
-	 *	Information about the ability that has been canceled.
+	 *	A reference to the ability that has been canceled.
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player Controllers")
 	void OnActionDequeued(const FPF2QueuedActionHandle ActionHandle);

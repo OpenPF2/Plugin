@@ -6,32 +6,70 @@
 #pragma once
 
 #include <Styling/SlateBrush.h>
-#include <UObject/WeakInterfacePtr.h>
 
 #include "PF2QueuedActionInterface.h"
 #include "PF2QueuedActionHandle.generated.h"
 
+/**
+ * A partially-opaque handle to a queued action on the server.
+ *
+ * Queued action handles support replication and expose information for display to players. A handle can also be used to
+ * cancel a queued action, in case a player needs the option to cancel it.
+ */
 USTRUCT(BlueprintType)
 struct FPF2QueuedActionHandle
 {
 	GENERATED_BODY()
 
+	/**
+	 * The unique identifier for this queued action on the server.
+	 *
+	 * Do not modify.
+	 */
 	UPROPERTY(BlueprintReadOnly)
 	int32 HandleId;
 
+	/**
+	 * The name of the action.
+	 *
+	 * Do not modify.
+	 */
 	UPROPERTY(BlueprintReadOnly)
 	FText ActionName;
 
+	/**
+	 * An icon representing the action.
+	 *
+	 * Do not modify.
+	 */
 	UPROPERTY(BlueprintReadOnly)
 	FSlateBrush ActionIcon;
 
-	TWeakInterfacePtr<IPF2QueuedActionInterface> Action;
-
-	void Populate(const int32 NewHandleId, IPF2QueuedActionInterface* NewAction)
+	// =================================================================================================================
+	// Public Constructors
+	// =================================================================================================================
+	/**
+	 * Default constructor for FPF2QueuedActionHandle.
+	 */
+	explicit FPF2QueuedActionHandle() :
+		HandleId(-1),
+		ActionName(FText()),
+		ActionIcon(FSlateBrush())
 	{
-		this->HandleId   = NewHandleId;
-		this->ActionName = NewAction->GetActionName();
-		this->ActionIcon = NewAction->GetActionIcon();
-		this->Action     = NewAction;
+	}
+
+	/**
+	 * Constructor for FPF2QueuedActionHandle that initializes a handle from ID and action reference.
+	 *
+	 * @param HandleId
+	 *	The unique ID for the action, as assigned by the server.
+	 * @param Action
+	 *	The action for which a handle is being instantiated.
+	 */
+	explicit FPF2QueuedActionHandle(const int32 HandleId, IPF2QueuedActionInterface* Action) :
+		HandleId(HandleId),
+		ActionName(Action->GetActionName()),
+		ActionIcon(Action->GetActionIcon())
+	{
 	}
 };
