@@ -144,10 +144,10 @@ public:
 	// Public Methods - IPF2QueuedActionInterface
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
-	virtual FText GetActionName() override;
+	virtual FText GetActionName() const override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual FSlateBrush GetActionIcon() override;
+	virtual FSlateBrush GetActionIcon() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual EPF2AbilityActivationOutcomeType PerformAction() override;

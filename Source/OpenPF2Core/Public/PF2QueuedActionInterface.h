@@ -36,7 +36,7 @@ public:
 	 *	A textual description of this action.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Queued Actions")
-	virtual FText GetActionName() = 0;
+	virtual FText GetActionName() const = 0;
 
 	/**
 	 * Gets the icon to display for this action if the queue of actions are displayed to the player/user.
@@ -45,7 +45,7 @@ public:
 	 *	A graphical representation of this action.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Queued Actions")
-	virtual FSlateBrush GetActionIcon() = 0;
+	virtual FSlateBrush GetActionIcon() const = 0;
 
 	/**
 	 * Performs this action.

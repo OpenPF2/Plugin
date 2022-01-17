@@ -71,12 +71,12 @@ void UPF2AbilityTask_WaitForInitiativeTurn::OnDestroy(bool AbilityEnded)
 	}
 }
 
-FText UPF2AbilityTask_WaitForInitiativeTurn::GetActionName()
+FText UPF2AbilityTask_WaitForInitiativeTurn::GetActionName() const
 {
 	return this->ActionName;
 }
 
-FSlateBrush UPF2AbilityTask_WaitForInitiativeTurn::GetActionIcon()
+FSlateBrush UPF2AbilityTask_WaitForInitiativeTurn::GetActionIcon() const
 {
 	return this->ActionIcon;
 }
