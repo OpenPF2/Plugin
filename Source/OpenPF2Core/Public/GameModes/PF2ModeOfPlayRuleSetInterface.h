@@ -96,7 +96,8 @@ public:
 	 *	The action that is being queued.
 	 *
 	 * @return
-	 *	If the action was queued: a handle to refer to the action on the server in the future.
+	 *	- If the action was queued: a valid handle to refer to the action on the server in the future.
+	 *	- Otherwise: An invalid, placeholder handle to indicate that the action was not queued.
 	 */
 	UFUNCTION(BlueprintNativeEvent, Category="OpenPF2|Mode of Play Rule Sets")
 	FPF2QueuedActionHandle OnQueueAction(const TScriptInterface<IPF2CharacterInterface>&    Character,

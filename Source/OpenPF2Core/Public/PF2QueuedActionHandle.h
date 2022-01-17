@@ -66,10 +66,31 @@ struct FPF2QueuedActionHandle
 	 * @param Action
 	 *	The action for which a handle is being instantiated.
 	 */
-	explicit FPF2QueuedActionHandle(const int32 HandleId, IPF2QueuedActionInterface* Action) :
+	explicit FPF2QueuedActionHandle(const int32 HandleId, const IPF2QueuedActionInterface* Action) :
 		HandleId(HandleId),
 		ActionName(Action->GetActionName()),
 		ActionIcon(Action->GetActionIcon())
 	{
+	}
+
+	// =================================================================================================================
+	// Public Methods
+	// =================================================================================================================
+	/**
+	 * Gets whether this handle is a valid reference to a queued action.
+	 *
+	 * Mode of Play Rule Sets (MoPRS) can return an invalid handle if they do not support action queueing.
+	 *
+	 * This is only a local check. The handle is still considered valid even after the queued action has been executed
+	 * or canceled remotely, as checking the status of the handle would require an RPC connection to the server.
+	 *
+	 * @return
+	 *	- true if this handle is a valid reference to a queued action on the server, even if the queued action has
+	 *	  already been canceled or has been completed.
+	 *	- false if this handle does not reference any queued actions on the server.
+	 */
+	bool FORCEINLINE IsValid() const
+	{
+		return (this->HandleId != -1);
 	}
 };
