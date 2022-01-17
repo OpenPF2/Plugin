@@ -36,10 +36,10 @@ public:
 	virtual void HandleModeOfPlayChanged(EPF2ModeOfPlayType NewMode) override;
 
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void HandleActionQueued(const FPF2QueuedActionHandle ActionHandle) override;
+	virtual void MulticastHandleActionQueued(const FPF2QueuedActionHandle ActionHandle) override;
 
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void HandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) override;
+	virtual void MulticastHandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) override;
 
 	UFUNCTION(BlueprintCallable, Server, Unreliable, DisplayName="Cancel Queued Action")
 	virtual void ServerCancelQueuedAction(const FPF2QueuedActionHandle ActionHandle) override;

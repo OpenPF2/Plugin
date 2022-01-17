@@ -441,10 +441,10 @@ public:
 	virtual void HandleHitPointsChanged(const float Delta, const struct FGameplayTagContainer* EventTags) override;
 
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void HandleActionQueued(const FPF2QueuedActionHandle ActionHandle) override;
+	virtual void MulticastHandleActionQueued(const FPF2QueuedActionHandle ActionHandle) override;
 
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void HandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) override;
+	virtual void MulticastHandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) override;
 
 	// =================================================================================================================
 	// Public Methods - Blueprint Callable

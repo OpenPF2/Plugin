@@ -24,12 +24,12 @@ void APF2PlayerControllerBase::HandleModeOfPlayChanged(const EPF2ModeOfPlayType 
 	this->OnModeOfPlayChanged(NewMode);
 }
 
-void APF2PlayerControllerBase::HandleActionQueued_Implementation(const FPF2QueuedActionHandle ActionHandle)
+void APF2PlayerControllerBase::MulticastHandleActionQueued_Implementation(const FPF2QueuedActionHandle ActionHandle)
 {
 	this->OnActionQueued(ActionHandle);
 }
 
-void APF2PlayerControllerBase::HandleActionDequeued_Implementation(const FPF2QueuedActionHandle ActionHandle)
+void APF2PlayerControllerBase::MulticastHandleActionDequeued_Implementation(const FPF2QueuedActionHandle ActionHandle)
 {
 	this->OnActionDequeued(ActionHandle);
 }

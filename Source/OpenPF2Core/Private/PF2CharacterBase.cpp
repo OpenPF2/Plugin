@@ -203,12 +203,12 @@ void APF2CharacterBase::HandleHitPointsChanged(const float Delta, const FGamepla
 	this->OnHitPointsChanged(Delta, *EventTags);
 }
 
-void APF2CharacterBase::HandleActionQueued_Implementation(const FPF2QueuedActionHandle ActionHandle)
+void APF2CharacterBase::MulticastHandleActionQueued_Implementation(const FPF2QueuedActionHandle ActionHandle)
 {
 	this->OnActionQueued(ActionHandle);
 }
 
-void APF2CharacterBase::HandleActionDequeued_Implementation(const FPF2QueuedActionHandle ActionHandle)
+void APF2CharacterBase::MulticastHandleActionDequeued_Implementation(const FPF2QueuedActionHandle ActionHandle)
 {
 	this->OnActionDequeued(ActionHandle);
 }

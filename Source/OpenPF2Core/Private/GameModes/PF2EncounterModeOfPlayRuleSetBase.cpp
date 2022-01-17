@@ -167,10 +167,10 @@ FPF2QueuedActionHandle UPF2EncounterModeOfPlayRuleSetBase::QueueActionForCharact
 
 	if (PlayerController != nullptr)
 	{
-		PlayerController->Execute_HandleActionQueued(PlayerController.GetObject(), ActionHandle);
+		PlayerController->Execute_MulticastHandleActionQueued(PlayerController.GetObject(), ActionHandle);
 	}
 
-	Character->Execute_HandleActionQueued(Character.GetObject(), ActionHandle);
+	Character->Execute_MulticastHandleActionQueued(Character.GetObject(), ActionHandle);
 
 	return ActionHandle;
 }
@@ -228,10 +228,10 @@ void UPF2EncounterModeOfPlayRuleSetBase::RemoveQueuedActionForCharacter(
 
 		if (PlayerController != nullptr)
 		{
-			PlayerController->Execute_HandleActionDequeued(PlayerController.GetObject(), ActionHandle);
+			PlayerController->Execute_MulticastHandleActionDequeued(PlayerController.GetObject(), ActionHandle);
 		}
 
-		Character->Execute_HandleActionDequeued(Character.GetObject(), ActionHandle);
+		Character->Execute_MulticastHandleActionDequeued(Character.GetObject(), ActionHandle);
 	}
 }
 

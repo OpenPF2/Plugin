@@ -95,7 +95,7 @@ public:
 	 *	A reference to the ability that was queued.
 	 */
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void HandleActionQueued(const FPF2QueuedActionHandle ActionHandle) = 0;
+	virtual void MulticastHandleActionQueued(const FPF2QueuedActionHandle ActionHandle) = 0;
 
 	/**
 	 * Notifies this player controller a previously queued action/ability has been removed from the queue.
@@ -106,5 +106,5 @@ public:
 	 *	A reference to the ability that has been removed.
 	 */
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void HandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) = 0;
+	virtual void MulticastHandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) = 0;
 };

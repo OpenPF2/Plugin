@@ -232,7 +232,7 @@ public:
 	 *	A reference to the ability that has been queued up.
 	 */
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void HandleActionQueued(const FPF2QueuedActionHandle ActionHandle) = 0;
+	virtual void MulticastHandleActionQueued(const FPF2QueuedActionHandle ActionHandle) = 0;
 
 	/**
 	 * Notifies this character that a previously queued action/ability has been removed from the queue.
@@ -243,5 +243,5 @@ public:
 	 *	A reference to the ability that has been removed.
 	 */
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void HandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) = 0;
+	virtual void MulticastHandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) = 0;
 };
