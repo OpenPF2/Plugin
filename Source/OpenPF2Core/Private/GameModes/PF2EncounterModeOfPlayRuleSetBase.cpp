@@ -16,7 +16,7 @@
 
 void UPF2EncounterModeOfPlayRuleSetBase::SetCharacterInitiative(
 	const TScriptInterface<IPF2CharacterInterface>& Character,
-    const int32                                     Initiative)
+	const int32                                     Initiative)
 {
 	IPF2CharacterInterface* Pf2Character = PF2InterfaceUtilities::FromScriptInterface(Character);
 
@@ -140,9 +140,9 @@ FPF2QueuedActionHandle UPF2EncounterModeOfPlayRuleSetBase::QueueActionForCharact
 {
 	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
 
-	IPF2QueuedActionInterface*          Pf2Action     = PF2InterfaceUtilities::FromScriptInterface(Action);
-	const IPF2CharacterInterface*       Pf2Character  = PF2InterfaceUtilities::FromScriptInterface(Character);
-	FPF2QueuedActionHandle              ActionHandle  = FPF2QueuedActionHandle(this->NextActionHandleId++, Pf2Action);
+	IPF2QueuedActionInterface*    Pf2Action    = PF2InterfaceUtilities::FromScriptInterface(Action);
+	const IPF2CharacterInterface* Pf2Character = PF2InterfaceUtilities::FromScriptInterface(Character);
+	FPF2QueuedActionHandle        ActionHandle = FPF2QueuedActionHandle(this->NextActionHandleId++, Pf2Action);
 
 	const FPF2QueuedActionHandleDetails HandleDetails =
 		FPF2QueuedActionHandleDetails(ActionHandle, Pf2Character, Pf2Action);

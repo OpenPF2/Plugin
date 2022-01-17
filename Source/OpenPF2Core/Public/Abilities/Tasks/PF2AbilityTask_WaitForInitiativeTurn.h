@@ -10,9 +10,7 @@
 
 #include "PF2AbilityTaskBase.h"
 #include "PF2QueuedActionInterface.h"
-
 #include "Abilities/PF2AbilityActivationOutcomeType.h"
-
 #include "GameModes/PF2GameModeInterface.h"
 
 #include "PF2AbilityTask_WaitForInitiativeTurn.generated.h"
