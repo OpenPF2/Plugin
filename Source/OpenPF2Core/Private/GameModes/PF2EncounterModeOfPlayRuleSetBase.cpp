@@ -238,7 +238,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::RemoveQueuedActionForCharacter(
 bool UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character)
 {
-	bool                                        ActionExecuted = false;
+	bool                                        bActionExecuted = false;
 	TScriptInterface<IPF2QueuedActionInterface> NextAction;
 
 	this->PeekNextQueuedActionForCharacter(Character, NextAction);
@@ -270,11 +270,11 @@ bool UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
 		{
 			this->RemoveQueuedActionForCharacter(Character, NextAction);
 
-			ActionExecuted = true;
+			bActionExecuted = true;
 		}
 	}
 
-	return ActionExecuted;
+	return bActionExecuted;
 }
 
 void UPF2EncounterModeOfPlayRuleSetBase::PeekNextQueuedActionForCharacter(
@@ -330,14 +330,14 @@ void UPF2EncounterModeOfPlayRuleSetBase::RebuildCharacterSequence()
 		CharactersForInitiative.StableSort(
 			[PlayableCharacters](IPF2CharacterInterface& A, IPF2CharacterInterface& B)
 			{
-				bool       CharacterAComesFirst  = false;
+				bool       bCharacterAComesFirst = false;
 				const bool bIsCharacterAPlayable = PlayableCharacters.Contains(&A),
 				           bIsCharacterBPlayable = PlayableCharacters.Contains(&B);
 
 				if (bIsCharacterAPlayable && !bIsCharacterBPlayable)
 				{
 					// PCs come after NPCs.
-					CharacterAComesFirst = false;
+					bCharacterAComesFirst = false;
 				}
 				else if (bIsCharacterAPlayable == bIsCharacterBPlayable)
 				{
@@ -345,20 +345,20 @@ void UPF2EncounterModeOfPlayRuleSetBase::RebuildCharacterSequence()
 					// We use the IDs of the objects so that any given pair sorts the same way in future rebuilds.
 					if (A.ToActor()->GetUniqueID() < B.ToActor()->GetUniqueID())
 					{
-						CharacterAComesFirst = true;
+						bCharacterAComesFirst = true;
 					}
 					else
 					{
-						CharacterAComesFirst = false;
+						bCharacterAComesFirst = false;
 					}
 				}
 				else if (!bIsCharacterAPlayable && bIsCharacterBPlayable)
 				{
 					// NPCs come before PCs.
-					CharacterAComesFirst = true;
+					bCharacterAComesFirst = true;
 				}
 
-				return CharacterAComesFirst;
+				return bCharacterAComesFirst;
 			}
 		);
 

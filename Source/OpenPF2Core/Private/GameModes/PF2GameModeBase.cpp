@@ -212,14 +212,14 @@ void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeO
 	}
 	else
 	{
-		const EPF2ModeOfPlayType                               OldModeOfPlay = Pf2GameState->GetModeOfPlay();
-		const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> OldRuleSet    = Pf2GameState->GetModeOfPlayRuleSet();
-		bool                                                   CanTransition;
+		const EPF2ModeOfPlayType                               OldModeOfPlay  = Pf2GameState->GetModeOfPlay();
+		const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> OldRuleSet     = Pf2GameState->GetModeOfPlayRuleSet();
+		bool                                                   bCanTransition;
 
 		if (OldModeOfPlay == EPF2ModeOfPlayType::None)
 		{
 			// We're not in any mode.
-			CanTransition = true;
+			bCanTransition = true;
 		}
 		else if (OldRuleSet == nullptr)
 		{
@@ -231,7 +231,7 @@ void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeO
 				*PF2EnumUtilities::ToString(NewModeOfPlay)
 			);
 
-			CanTransition = false;
+			bCanTransition = false;
 		}
 		else if (!OldRuleSet->Execute_CanTransitionTo(OldRuleSet.GetObject(), Pf2GameState, NewModeOfPlay))
 		{
@@ -243,14 +243,14 @@ void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeO
 				*PF2EnumUtilities::ToString(NewModeOfPlay)
 			);
 
-			CanTransition = false;
+			bCanTransition = false;
 		}
 		else
 		{
-			CanTransition = true;
+			bCanTransition = true;
 		}
 
-		if (CanTransition)
+		if (bCanTransition)
 		{
 			this->ForceSwitchModeOfPlay(NewModeOfPlay);
 		}

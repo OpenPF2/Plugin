@@ -58,7 +58,7 @@ void UPF2AbilityTask_WaitForInitiativeTurn::ExternalCancel()
 	}
 }
 
-void UPF2AbilityTask_WaitForInitiativeTurn::OnDestroy(bool AbilityEnded)
+void UPF2AbilityTask_WaitForInitiativeTurn::OnDestroy(bool bAbilityEnded)
 {
 	if ((this->WaitingCharacter != nullptr) && (this->GameMode != nullptr) && !this->WasActivated())
 	{

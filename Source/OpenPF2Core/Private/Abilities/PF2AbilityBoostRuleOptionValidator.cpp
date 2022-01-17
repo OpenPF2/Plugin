@@ -76,7 +76,7 @@ void UPF2AbilityBoostRuleOptionValidator::AddRuleOption(const FPF2AbilityBoostRu
 
 bool UPF2AbilityBoostRuleOptionValidator::CanApplyAbilityBoost(const EPF2CharacterAbilityScoreType AbilityScoreType)
 {
-	bool                                CanApply                 = false;
+	bool                                bCanApply                = false;
 	TSet<EPF2CharacterAbilityScoreType> AbilityScoreTypesToMatch = this->UsedAbilities;
 
 	// We can't apply more boosts than we have rules.
@@ -106,10 +106,10 @@ bool UPF2AbilityBoostRuleOptionValidator::CanApplyAbilityBoost(const EPF2Charact
 			}
 		}
 
-		CanApply = (RemainingPermutations.Num() != 0);
+		bCanApply = (RemainingPermutations.Num() != 0);
 	}
 
-	return CanApply;
+	return bCanApply;
 }
 
 void UPF2AbilityBoostRuleOptionValidator::ApplyAbilityBoost(const EPF2CharacterAbilityScoreType AbilityScoreType)

@@ -18,8 +18,8 @@ struct OPENPF2CORE_API FPF2AbilityBoostRuleOption
 	{
 	}
 
-	explicit FPF2AbilityBoostRuleOption(const bool IsFreeAbilityBoost) :
-		bIsFreeBoost(IsFreeAbilityBoost)
+	explicit FPF2AbilityBoostRuleOption(const bool bIsFreeAbilityBoost) :
+		bIsFreeBoost(bIsFreeAbilityBoost)
 	{
 
 	}

@@ -138,7 +138,7 @@ public:
 	// =================================================================================================================
 	virtual void Activate() override;
 	virtual void ExternalCancel() override;
-	virtual void OnDestroy(bool AbilityEnded) override;
+	virtual void OnDestroy(bool bAbilityEnded) override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2QueuedActionInterface

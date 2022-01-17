@@ -160,7 +160,7 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::ExternalCancel()
 	Super::ExternalCancel();
 }
 
-void UPF2AbilityTask_PlayMontageAndWaitForEvent::OnDestroy(const bool AbilityEnded)
+void UPF2AbilityTask_PlayMontageAndWaitForEvent::OnDestroy(const bool bAbilityEnded)
 {
 	// Note: Clearing montage end delegate isn't necessary since its not a multicast and will be cleared when the next
 	// montage plays. (If we are destroyed, it will detect this and not do anything)
@@ -170,7 +170,7 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::OnDestroy(const bool AbilityEnd
 	{
 		this->Ability->OnGameplayAbilityCancelled.Remove(this->CancelledHandle);
 
-		if (AbilityEnded && this->bStopWhenAbilityEnds)
+		if (bAbilityEnded && this->bStopWhenAbilityEnds)
 		{
 			// ReSharper disable once CppExpressionWithoutSideEffects
 			this->StopPlayingMontage();
@@ -184,7 +184,7 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::OnDestroy(const bool AbilityEnd
 		Asc->RemoveGameplayEventTagContainerDelegate(this->EventTags, this->EventHandle);
 	}
 
-	Super::OnDestroy(AbilityEnded);
+	Super::OnDestroy(bAbilityEnded);
 }
 
 FString UPF2AbilityTask_PlayMontageAndWaitForEvent::GetDebugString() const
