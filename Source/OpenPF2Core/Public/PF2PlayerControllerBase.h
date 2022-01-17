@@ -41,6 +41,8 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void HandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) override;
 
+	UFUNCTION(BlueprintCallable, Server, Unreliable, DisplayName="Cancel Queued Action")
+	virtual void ServerCancelQueuedAction(const FPF2QueuedActionHandle ActionHandle) override;
 
 protected:
 	// =================================================================================================================

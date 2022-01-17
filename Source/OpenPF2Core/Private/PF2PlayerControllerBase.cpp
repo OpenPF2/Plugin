@@ -7,6 +7,8 @@
 
 #include "PF2CharacterInterface.h"
 
+#include "GameModes/PF2GameModeInterface.h"
+
 TScriptInterface<IPF2CharacterInterface> APF2PlayerControllerBase::GetControlledCharacter()
 {
 	return this->GetPawn();
@@ -30,4 +32,15 @@ void APF2PlayerControllerBase::HandleActionQueued_Implementation(const FPF2Queue
 void APF2PlayerControllerBase::HandleActionDequeued_Implementation(const FPF2QueuedActionHandle ActionHandle)
 {
 	this->OnActionDequeued(ActionHandle);
+}
+
+void APF2PlayerControllerBase::ServerCancelQueuedAction_Implementation(const FPF2QueuedActionHandle ActionHandle)
+{
+	const UWorld*          World    = this->GetWorld();
+	IPF2GameModeInterface* GameMode = Cast<IPF2GameModeInterface>(World->GetAuthGameMode());
+
+	if (GameMode != nullptr)
+	{
+		GameMode->CancelActionQueuedForInitiativeTurnByHandle(ActionHandle);
+	}
 }

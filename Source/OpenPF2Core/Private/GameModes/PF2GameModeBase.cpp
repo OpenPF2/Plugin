@@ -86,9 +86,11 @@ void APF2GameModeBase::RemoveCharacterFromEncounter(const TScriptInterface<IPF2C
 	}
 }
 
-void APF2GameModeBase::QueueActionForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
-                                                    TScriptInterface<IPF2QueuedActionInterface>& Action)
+FPF2QueuedActionHandle APF2GameModeBase::QueueActionForInitiativeTurn(
+	TScriptInterface<IPF2CharacterInterface>&    Character,
+    TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
+	FPF2QueuedActionHandle                                 Result;
 	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
 
 	if (RuleSet == nullptr)
@@ -104,12 +106,34 @@ void APF2GameModeBase::QueueActionForInitiativeTurn(TScriptInterface<IPF2Charact
 	}
 	else
 	{
-		RuleSet->Execute_OnQueueAction(RuleSet.GetObject(), Character, Action);
+		Result = RuleSet->Execute_OnQueueAction(RuleSet.GetObject(), Character, Action);
+	}
+
+	return Result;
+}
+
+void APF2GameModeBase::CancelActionQueuedForInitiativeTurnByHandle(const FPF2QueuedActionHandle ActionHandle)
+{
+	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
+
+	if (RuleSet == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreEncounters,
+			Error,
+			TEXT("No MoPRS is set. Ignoring request to remove action (%s, handle: %d) from queue."),
+			*(ActionHandle.ActionName.ToString()),
+			ActionHandle.HandleId
+		);
+	}
+	else
+	{
+		RuleSet->Execute_OnCancelQueuedActionByHandle(RuleSet.GetObject(), ActionHandle);
 	}
 }
 
-void APF2GameModeBase::CancelActionQueuedForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
-                                                           TScriptInterface<IPF2QueuedActionInterface>& Action)
+void APF2GameModeBase::CancelActionQueuedForInitiativeTurn(const TScriptInterface<IPF2CharacterInterface>&    Character,
+                                                           const TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
 	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
 

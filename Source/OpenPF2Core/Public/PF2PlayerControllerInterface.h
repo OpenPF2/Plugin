@@ -50,6 +50,20 @@ public:
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
 	virtual APlayerController* ToPlayerController() = 0;
 
+	/**
+	 * Cancels an action that was previously queued for this character.
+	 *
+	 * @param ActionHandle
+	 *	A reference to the ability that has been queued-up.
+	 */
+	UFUNCTION(
+		BlueprintCallable,
+		Server,
+		Unreliable,
+		DisplayName="Cancel Queued Action",
+		Category="OpenPF2|Player Controllers")
+	virtual void ServerCancelQueuedAction(const FPF2QueuedActionHandle ActionHandle) = 0;
+
 	// =================================================================================================================
 	// Public Event Notifications from the Game State
 	// =================================================================================================================

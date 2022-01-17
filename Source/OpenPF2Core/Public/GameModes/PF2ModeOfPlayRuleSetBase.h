@@ -25,7 +25,7 @@ public:
 	// =================================================================================================================
 	// Public Methods - UPF2ModeOfPlayRuleSetBase Implementation
 	// =================================================================================================================
-	virtual void OnQueueAction_Implementation(
+	virtual FPF2QueuedActionHandle OnQueueAction_Implementation(
 		const TScriptInterface<IPF2CharacterInterface>&    Character,
 		const TScriptInterface<IPF2QueuedActionInterface>& Action) override;
 

@@ -10,12 +10,14 @@
 #include "Utilities/PF2ArrayUtilities.h"
 #include "Utilities/PF2InterfaceUtilities.h"
 
-void UPF2ModeOfPlayRuleSetBase::OnQueueAction_Implementation(
+FPF2QueuedActionHandle UPF2ModeOfPlayRuleSetBase::OnQueueAction_Implementation(
 	const TScriptInterface<IPF2CharacterInterface>&    Character,
 	const TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
 	// By default there is no queue, so we perform the action immediately.
 	Action->PerformAction();
+
+	return FPF2QueuedActionHandle();
 }
 
 void UPF2ModeOfPlayRuleSetBase::OnCancelQueuedAction_Implementation(

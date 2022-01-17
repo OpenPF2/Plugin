@@ -29,6 +29,42 @@ class OPENPF2CORE_API UPF2EncounterModeOfPlayRuleSetBase : public UPF2ModeOfPlay
 
 protected:
 	// =================================================================================================================
+	// Internal Classes
+	// =================================================================================================================
+	/**
+	 * Internal structure used for associating a queued action handle with the character and action for it.
+	 */
+	struct FPF2QueuedActionHandleDetails
+	{
+		/**
+		 * The handle itself.
+		 */
+		const FPF2QueuedActionHandle Handle;
+
+		/**
+		 * The character for which the action was queued.
+		 */
+		const TWeakInterfacePtr<IPF2CharacterInterface> Character;
+
+		/**
+		 * The action that was queued.
+		 */
+		const TWeakInterfacePtr<IPF2QueuedActionInterface> Action;
+
+		/**
+		 * Constructor for FPF2QueuedActionHandleDetails.
+		 */
+		FPF2QueuedActionHandleDetails(const FPF2QueuedActionHandle     Handle,
+		                              const IPF2CharacterInterface*    Character,
+		                              const IPF2QueuedActionInterface* Action) :
+			Handle(Handle),
+			Character(const_cast<IPF2CharacterInterface*>(Character)),
+			Action(const_cast<IPF2QueuedActionInterface*>(Action))
+		{
+		}
+	};
+
+	// =================================================================================================================
 	// Protected Fields
 	// =================================================================================================================
 	/**
@@ -68,14 +104,14 @@ protected:
 	int32 PreviousCharacterIndex;
 
 	/**
-	 * A look-up from queued action to handle.
+	 * A look-up from handle IDs to information about issued handles.
 	 */
-	TMap<const IPF2QueuedActionInterface*, const FPF2QueuedActionHandle> ActionHandles;
+	TMap<int32, FPF2QueuedActionHandleDetails> IssuedActionHandles;
 
 	/**
-	 * A look-up from queued action handles to the actual actions.
+	 * A look-up from queued actions to the handles that reference them.
 	 */
-	TMap<int32, const IPF2QueuedActionInterface*> ActionsByHandle;
+	TMap<const IPF2QueuedActionInterface*, const FPF2QueuedActionHandle> ActionHandles;
 
 	/**
 	 * The next ID to assign to an action handle.
@@ -202,9 +238,18 @@ protected:
 	 *	The action that is being queued.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Action Queue")
-	void QueueActionForCharacter(
+	FPF2QueuedActionHandle QueueActionForCharacter(
 		const TScriptInterface<IPF2CharacterInterface>&    Character,
 		const TScriptInterface<IPF2QueuedActionInterface>& Action);
+
+	/**
+	 * Removes the specified action from the queue of actions being maintained for the specified PF2 character.
+	 *
+	 * @param ActionHandle
+	 *	A reference to the previously-queued action that is being canceled.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Action Queue")
+	void RemoveQueuedActionForCharacterByHandle(const FPF2QueuedActionHandle ActionHandle);
 
 	/**
 	 * Removes the specified action from the queue of actions being maintained for the specified PF2 character.

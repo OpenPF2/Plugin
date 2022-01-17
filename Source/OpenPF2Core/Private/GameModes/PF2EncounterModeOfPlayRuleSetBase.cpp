@@ -134,14 +134,18 @@ TArray<TScriptInterface<IPF2CharacterInterface>> UPF2EncounterModeOfPlayRuleSetB
 	);
 }
 
-void UPF2EncounterModeOfPlayRuleSetBase::QueueActionForCharacter(
+FPF2QueuedActionHandle UPF2EncounterModeOfPlayRuleSetBase::QueueActionForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>&    Character,
 	const TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
 	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
 
-	IPF2QueuedActionInterface* Pf2Action    = PF2InterfaceUtilities::FromScriptInterface(Action);
-	FPF2QueuedActionHandle     ActionHandle = FPF2QueuedActionHandle(this->NextActionHandleId++, Pf2Action);
+	IPF2QueuedActionInterface*          Pf2Action     = PF2InterfaceUtilities::FromScriptInterface(Action);
+	const IPF2CharacterInterface*       Pf2Character  = PF2InterfaceUtilities::FromScriptInterface(Character);
+	FPF2QueuedActionHandle              ActionHandle  = FPF2QueuedActionHandle(this->NextActionHandleId++, Pf2Action);
+
+	const FPF2QueuedActionHandleDetails HandleDetails =
+		FPF2QueuedActionHandleDetails(ActionHandle, Pf2Character, Pf2Action);
 
 	check(Character != nullptr);
 	check(Action != nullptr);
@@ -157,8 +161,9 @@ void UPF2EncounterModeOfPlayRuleSetBase::QueueActionForCharacter(
 	);
 
 	this->CharacterQueues.Add(PF2InterfaceUtilities::FromScriptInterface(Character), Pf2Action);
+
 	this->ActionHandles.Add(Pf2Action, ActionHandle);
-	this->ActionsByHandle.Add(ActionHandle.HandleId, Pf2Action);
+	this->IssuedActionHandles.Add(ActionHandle.HandleId, HandleDetails);
 
 	if (PlayerController != nullptr)
 	{
@@ -166,42 +171,68 @@ void UPF2EncounterModeOfPlayRuleSetBase::QueueActionForCharacter(
 	}
 
 	Character->Execute_HandleActionQueued(Character.GetObject(), ActionHandle);
+
+	return ActionHandle;
+}
+
+void UPF2EncounterModeOfPlayRuleSetBase::RemoveQueuedActionForCharacterByHandle(
+	const FPF2QueuedActionHandle ActionHandle)
+{
+	const int32 HandleId = ActionHandle.HandleId;
+
+	if (this->IssuedActionHandles.Contains(HandleId))
+	{
+		const FPF2QueuedActionHandleDetails HandleDetails = this->IssuedActionHandles[HandleId];
+
+		if (HandleDetails.Character.IsValid() && HandleDetails.Action.IsValid())
+		{
+			IPF2CharacterInterface*    Character    = HandleDetails.Character.Get();
+			IPF2QueuedActionInterface* QueuedAction = HandleDetails.Action.Get();
+
+			this->RemoveQueuedActionForCharacter(
+				PF2InterfaceUtilities::ToScriptInterface(Character),
+				PF2InterfaceUtilities::ToScriptInterface(QueuedAction)
+			);
+		}
+	}
 }
 
 void UPF2EncounterModeOfPlayRuleSetBase::RemoveQueuedActionForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>&    Character,
 	const TScriptInterface<IPF2QueuedActionInterface>& Action)
 {
-	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
 	IPF2QueuedActionInterface* Pf2Action = PF2InterfaceUtilities::FromScriptInterface(Action);
 
-	check(this->ActionHandles.Contains(Pf2Action));
-
-	const FPF2QueuedActionHandle ActionHandle = this->ActionHandles[Pf2Action];
-
-	check(Character != nullptr);
-	check(Action != nullptr);
-
-	UE_LOG(
-		LogPf2CoreEncounters,
-		VeryVerbose,
-		TEXT("[%s] Removing queued action ('%s') for character ('%s.%s')."),
-		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(Action->GetActionName().ToString()),
-		*(Cast<AActor>(Character.GetObject())->GetName()),
-		*(Character->GetCharacterName().ToString())
-	);
-
-	this->CharacterQueues.RemoveSingle(PF2InterfaceUtilities::FromScriptInterface(Character), Pf2Action);
-	this->ActionHandles.Remove(Pf2Action);
-	this->ActionsByHandle.Remove(ActionHandle.HandleId);
-
-	if (PlayerController != nullptr)
+	// Action may be missing from the handle map if it was previously canceled OR was issued by a prior MoPRS.
+	if (this->ActionHandles.Contains(Pf2Action))
 	{
-		PlayerController->Execute_HandleActionDequeued(PlayerController.GetObject(), ActionHandle);
-	}
+		const FPF2QueuedActionHandle                          ActionHandle     = this->ActionHandles[Pf2Action];
+		const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
 
-	Character->Execute_HandleActionDequeued(Character.GetObject(), ActionHandle);
+		check(Character != nullptr);
+		check(Action != nullptr);
+
+		UE_LOG(
+			LogPf2CoreEncounters,
+			VeryVerbose,
+			TEXT("[%s] Removing queued action ('%s') for character ('%s.%s')."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(Action->GetActionName().ToString()),
+			*(Cast<AActor>(Character.GetObject())->GetName()),
+			*(Character->GetCharacterName().ToString())
+		);
+
+		this->CharacterQueues.RemoveSingle(PF2InterfaceUtilities::FromScriptInterface(Character), Pf2Action);
+		this->ActionHandles.Remove(Pf2Action);
+		this->IssuedActionHandles.Remove(ActionHandle.HandleId);
+
+		if (PlayerController != nullptr)
+		{
+			PlayerController->Execute_HandleActionDequeued(PlayerController.GetObject(), ActionHandle);
+		}
+
+		Character->Execute_HandleActionDequeued(Character.GetObject(), ActionHandle);
+	}
 }
 
 bool UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
@@ -250,7 +281,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::PeekNextQueuedActionForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character,
 	TScriptInterface<IPF2QueuedActionInterface>&    NextAction) const
 {
-	const IPF2CharacterInterface*      PF2Character = PF2InterfaceUtilities::FromScriptInterface(Character);
+	const IPF2CharacterInterface*      PF2Character     = PF2InterfaceUtilities::FromScriptInterface(Character);
 	TArray<IPF2QueuedActionInterface*> CharacterActions;
 
 	this->CharacterQueues.MultiFind(PF2Character, CharacterActions);

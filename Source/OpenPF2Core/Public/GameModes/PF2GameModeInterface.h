@@ -106,10 +106,33 @@ public:
 	 *	The character for which the action is being queued.
 	 * @param Action
 	 *	The action being queued.
+	 *
+	 * @return
+	 *	If the action was queued: a handle to refer to the action on the server in the future.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Modes")
-	virtual void QueueActionForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
-	                                          TScriptInterface<IPF2QueuedActionInterface>& Action) = 0;
+	virtual FPF2QueuedActionHandle QueueActionForInitiativeTurn(
+		TScriptInterface<IPF2CharacterInterface>&    Character,
+		TScriptInterface<IPF2QueuedActionInterface>& Action) = 0;
+
+	/**
+	 * Notifies the game rules and/or the Mode of Play Rule Set (MoPRS) that a character no longer wishes to perform a
+	 * previously-queued action.
+	 *
+	 * This should be used if the action is being garbage collected/destroyed; or if the action has been canceled by
+	 * other means, such as via a HUD or UMG widget that a player has used to second-guess an action decision they have
+	 * previously made.
+	 *
+	 * If the specified action is not in the queue for the specified character, no changes are made to the action queue
+	 * and this method simply returns.
+	 *
+	 * This should only get called on the server.
+	 *
+	 * @param ActionHandle
+	 *	A reference to the action to remove from the queue.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Modes")
+	virtual void CancelActionQueuedForInitiativeTurnByHandle(const FPF2QueuedActionHandle ActionHandle) = 0;
 
 	/**
 	 * Notifies the game rules and/or the Mode of Play Rule Set (MoPRS) that a character no longer wishes to perform a
@@ -130,6 +153,6 @@ public:
 	 *	The action to remove from the queue.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Modes")
-	virtual void CancelActionQueuedForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
-	                                                 TScriptInterface<IPF2QueuedActionInterface>& Action) = 0;
+	virtual void CancelActionQueuedForInitiativeTurn(const TScriptInterface<IPF2CharacterInterface>&    Character,
+	                                                 const TScriptInterface<IPF2QueuedActionInterface>& Action) = 0;
 };

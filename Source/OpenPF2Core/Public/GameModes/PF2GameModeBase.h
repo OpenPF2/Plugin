@@ -65,12 +65,17 @@ public:
 	virtual void RemoveCharacterFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void QueueActionForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
-	                                          TScriptInterface<IPF2QueuedActionInterface>& Action) override;
+	virtual FPF2QueuedActionHandle QueueActionForInitiativeTurn(
+		TScriptInterface<IPF2CharacterInterface>&    Character,
+		TScriptInterface<IPF2QueuedActionInterface>& Action) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void CancelActionQueuedForInitiativeTurn(TScriptInterface<IPF2CharacterInterface>&    Character,
-	                                                 TScriptInterface<IPF2QueuedActionInterface>& Action) override;
+	virtual void CancelActionQueuedForInitiativeTurnByHandle(const FPF2QueuedActionHandle ActionHandle) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void CancelActionQueuedForInitiativeTurn(
+		const TScriptInterface<IPF2CharacterInterface>&    Character,
+		const TScriptInterface<IPF2QueuedActionInterface>& Action) override;
 
 protected:
 	// =================================================================================================================
