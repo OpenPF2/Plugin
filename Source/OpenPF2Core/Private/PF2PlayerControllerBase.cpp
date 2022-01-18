@@ -24,6 +24,16 @@ void APF2PlayerControllerBase::HandleModeOfPlayChanged(const EPF2ModeOfPlayType 
 	this->OnModeOfPlayChanged(NewMode);
 }
 
+void APF2PlayerControllerBase::MulticastHandleEncounterTurnStarted_Implementation()
+{
+	this->OnEncounterTurnStarted();
+}
+
+void APF2PlayerControllerBase::MulticastHandleEncounterTurnEnded_Implementation()
+{
+	this->OnEncounterTurnEnded();
+}
+
 void APF2PlayerControllerBase::MulticastHandleActionQueued_Implementation(const FPF2QueuedActionHandle ActionHandle)
 {
 	this->OnActionQueued(ActionHandle);

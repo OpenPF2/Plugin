@@ -224,6 +224,22 @@ public:
 	// Public Event Notifications from Mode of Play Rule Sets (MoPRS)
 	// =================================================================================================================
 	/**
+	 * Notifies this character that their turn during an encounter has started.
+	 *
+	 * (This should normally be invoked only by the MoPRS).
+	 */
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastHandleEncounterTurnStarted() = 0;
+
+	/**
+	 * Notifies this character that their turn during an encounter has ended.
+	 *
+	 * (This should normally be invoked only by the MoPRS).
+	 */
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastHandleEncounterTurnEnded() = 0;
+
+	/**
 	 * Notifies this character that an action/ability they have attempted to execute has been queued-up.
 	 *
 	 * (This should normally be invoked only by the MoPRS).

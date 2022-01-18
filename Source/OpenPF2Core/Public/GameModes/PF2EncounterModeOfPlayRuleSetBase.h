@@ -137,6 +137,24 @@ protected:
 	// Protected Methods
 	// =================================================================================================================
 	/**
+	 * Signals the start of the specified character's turn.
+	 *
+	 * @param Character
+	 *	The character for whom a turn is starting.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Turns")
+	void StartTurnForCharacter(const TScriptInterface<IPF2CharacterInterface> Character);
+
+	/**
+	 * Signals the end of the specified character's turn.
+	*
+	 * @param Character
+	 *	The character for whom a turn is ending.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Turns")
+	void EndTurnForCharacter(const TScriptInterface<IPF2CharacterInterface> Character);
+
+	/**
 	 * Sets the initiative of the specified character.
 	 *
 	 * If the character already has an initiative set, the character's initiative is changed to the specified value.

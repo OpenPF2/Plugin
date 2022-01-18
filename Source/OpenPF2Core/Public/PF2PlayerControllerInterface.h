@@ -84,6 +84,22 @@ public:
 	// Public Event Notifications from Mode of Play Rule Sets (MoPRS)
 	// =================================================================================================================
 	/**
+	 * Notifies this player controller that the pawn's turn during an encounter has started.
+	 *
+	 * (This should normally be invoked only by the MoPRS).
+	 */
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastHandleEncounterTurnStarted() = 0;
+
+	/**
+	 *  Notifies this player controller that the pawn's turn during an encounter has ended.
+	 *
+	 * (This should normally be invoked only by the MoPRS).
+	 */
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastHandleEncounterTurnEnded() = 0;
+
+	/**
 	 * Notifies this player controller that an action/ability for the character being controlled has been queued-up.
 	 *
 	 * This happens if the active Mode of Play Rule Set (MoPRS) is requiring characters to queue up execution of

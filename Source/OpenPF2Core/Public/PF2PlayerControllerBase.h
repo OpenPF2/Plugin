@@ -36,6 +36,12 @@ public:
 	virtual void HandleModeOfPlayChanged(EPF2ModeOfPlayType NewMode) override;
 
 	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastHandleEncounterTurnStarted() override;
+
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastHandleEncounterTurnEnded() override;
+
+	UFUNCTION(NetMulticast, Reliable)
 	virtual void MulticastHandleActionQueued(const FPF2QueuedActionHandle ActionHandle) override;
 
 	UFUNCTION(NetMulticast, Reliable)
@@ -56,6 +62,18 @@ protected:
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player Controllers")
 	void OnModeOfPlayChanged(EPF2ModeOfPlayType NewMode);
+
+	/**
+	 * BP event invoked when the pawn's turn during an encounter has started.
+	 */
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player Controllers")
+	void OnEncounterTurnStarted();
+
+	/**
+	 * BP event invoked when the pawn's turn during an encounter has ended.
+	 */
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player Controllers")
+	void OnEncounterTurnEnded();
 
 	/**
 	 * BP event invoked when an action/ability has been queued-up for the controlled character.

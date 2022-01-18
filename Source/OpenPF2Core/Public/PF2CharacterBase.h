@@ -441,6 +441,12 @@ public:
 	virtual void HandleHitPointsChanged(const float Delta, const struct FGameplayTagContainer* EventTags) override;
 
 	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastHandleEncounterTurnStarted() override;
+
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastHandleEncounterTurnEnded() override;
+
+	UFUNCTION(NetMulticast, Reliable)
 	virtual void MulticastHandleActionQueued(const FPF2QueuedActionHandle ActionHandle) override;
 
 	UFUNCTION(NetMulticast, Reliable)
@@ -494,7 +500,6 @@ protected:
 	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
-
 	/**
 	 * Gets whether the local machine has authoritative control over this character actor.
 	 *
@@ -594,6 +599,18 @@ protected:
 	                      AActor*                                         DamageSource,
 	                      const FGameplayTagContainer&                    EventTags,
 	                      const FHitResult                                HitInfo);
+
+	/**
+	 * BP event invoked when this character's turn during an encounter has started.
+	 */
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
+	void OnEncounterTurnStarted();
+
+	/**
+	 * BP event invoked when this character's turn during an encounter has ended.
+	 */
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
+	void OnEncounterTurnEnded();
 
 	/**
 	 * BP event invoked when this character's hit points (i.e., health) have changed.

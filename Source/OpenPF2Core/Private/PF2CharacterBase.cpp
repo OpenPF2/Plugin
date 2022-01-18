@@ -203,6 +203,16 @@ void APF2CharacterBase::HandleHitPointsChanged(const float Delta, const FGamepla
 	this->OnHitPointsChanged(Delta, *EventTags);
 }
 
+void APF2CharacterBase::MulticastHandleEncounterTurnStarted_Implementation()
+{
+	this->OnEncounterTurnStarted();
+}
+
+void APF2CharacterBase::MulticastHandleEncounterTurnEnded_Implementation()
+{
+	this->OnEncounterTurnEnded();
+}
+
 void APF2CharacterBase::MulticastHandleActionQueued_Implementation(const FPF2QueuedActionHandle ActionHandle)
 {
 	this->OnActionQueued(ActionHandle);

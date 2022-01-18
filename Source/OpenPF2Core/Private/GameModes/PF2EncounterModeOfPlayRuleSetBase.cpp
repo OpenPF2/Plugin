@@ -14,6 +14,52 @@
 #include "Utilities/PF2LogUtilities.h"
 #include "Utilities/PF2MapUtilities.h"
 
+void UPF2EncounterModeOfPlayRuleSetBase::StartTurnForCharacter(const TScriptInterface<IPF2CharacterInterface> Character)
+{
+	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
+
+	check(Character != nullptr);
+
+	UE_LOG(
+		LogPf2CoreEncounters,
+		VeryVerbose,
+		TEXT("[%s] Starting turn for character ('%s.%s')."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(Cast<AActor>(Character.GetObject())->GetName()),
+		*(Character->GetCharacterName().ToString())
+	);
+
+	if (PlayerController != nullptr)
+	{
+		PlayerController->Execute_MulticastHandleEncounterTurnStarted(PlayerController.GetObject());
+	}
+
+	Character->Execute_MulticastHandleEncounterTurnStarted(Character.GetObject());
+}
+
+void UPF2EncounterModeOfPlayRuleSetBase::EndTurnForCharacter(const TScriptInterface<IPF2CharacterInterface> Character)
+{
+	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
+
+	check(Character != nullptr);
+
+	UE_LOG(
+		LogPf2CoreEncounters,
+		VeryVerbose,
+		TEXT("[%s] Ending turn for character ('%s.%s')."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(Cast<AActor>(Character.GetObject())->GetName()),
+		*(Character->GetCharacterName().ToString())
+	);
+
+	if (PlayerController != nullptr)
+	{
+		PlayerController->Execute_MulticastHandleEncounterTurnEnded(PlayerController.GetObject());
+	}
+
+	Character->Execute_MulticastHandleEncounterTurnEnded(Character.GetObject());
+}
+
 void UPF2EncounterModeOfPlayRuleSetBase::SetCharacterInitiative(
 	const TScriptInterface<IPF2CharacterInterface>& Character,
 	const int32                                     Initiative)
