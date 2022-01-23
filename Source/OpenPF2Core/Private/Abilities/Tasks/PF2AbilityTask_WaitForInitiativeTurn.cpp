@@ -119,9 +119,7 @@ EPF2AbilityActivationResult UPF2AbilityTask_WaitForInitiativeTurn::PerformAction
 				TEXT("[%s] Performing action ('%s') for character ('%s')."),
 				*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 				*(this->GetActionName().ToString()),
-				*((this->WaitingCharacter != nullptr) ?
-					this->WaitingCharacter->GetCharacterName().ToString() :
-					TEXT("UNK"))
+				((this->WaitingCharacter != nullptr) ? *(this->WaitingCharacter->GetCharacterIdForLogs()) : TEXT("UNK"))
 			);
 
 			this->EnableAbilityBlocking();
@@ -153,9 +151,7 @@ EPF2AbilityActivationResult UPF2AbilityTask_WaitForInitiativeTurn::PerformAction
 				TEXT("[%s] Action ('%s') blocked for character ('%s')."),
 				*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 				*(this->GetActionName().ToString()),
-				*((this->WaitingCharacter != nullptr) ?
-					this->WaitingCharacter->GetCharacterName().ToString() :
-					TEXT("UNK"))
+				((this->WaitingCharacter != nullptr) ? *(this->WaitingCharacter->GetCharacterIdForLogs()) : TEXT("UNK"))
 			);
 
 			Result = EPF2AbilityActivationResult::Blocked;

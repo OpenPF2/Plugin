@@ -23,10 +23,9 @@ void UPF2EncounterModeOfPlayRuleSetBase::StartTurnForCharacter(const TScriptInte
 	UE_LOG(
 		LogPf2CoreEncounters,
 		VeryVerbose,
-		TEXT("[%s] Starting turn for character ('%s.%s')."),
+		TEXT("[%s] Starting turn for character ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(Cast<AActor>(Character.GetObject())->GetName()),
-		*(Character->GetCharacterName().ToString())
+		*(Character->GetCharacterIdForLogs())
 	);
 
 	if (PlayerController != nullptr)
@@ -46,10 +45,9 @@ void UPF2EncounterModeOfPlayRuleSetBase::EndTurnForCharacter(const TScriptInterf
 	UE_LOG(
 		LogPf2CoreEncounters,
 		VeryVerbose,
-		TEXT("[%s] Ending turn for character ('%s.%s')."),
+		TEXT("[%s] Ending turn for character ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(Cast<AActor>(Character.GetObject())->GetName()),
-		*(Character->GetCharacterName().ToString())
+		*(Character->GetCharacterIdForLogs())
 	);
 
 	if (PlayerController != nullptr)
@@ -69,11 +67,10 @@ void UPF2EncounterModeOfPlayRuleSetBase::SetCharacterInitiative(
 	UE_LOG(
 		LogPf2CoreEncounters,
 		VeryVerbose,
-		TEXT("[%s] Initiative ('%d') set for character ('%s.%s')."),
+		TEXT("[%s] Initiative ('%d') set for character ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		Initiative,
-		*(Cast<AActor>(Character.GetObject())->GetName()),
-		*(Character->GetCharacterName().ToString())
+		*(Character->GetCharacterIdForLogs())
 	);
 
 	// Ensure any existing initiative for this character is cleared.
@@ -99,10 +96,9 @@ void UPF2EncounterModeOfPlayRuleSetBase::ClearInitiativeForCharacter(
 	UE_LOG(
 		LogPf2CoreEncounters,
 		VeryVerbose,
-		TEXT("[%s] Initiative cleared for character ('%s.%s')."),
+		TEXT("[%s] Initiative cleared for character ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(Cast<AActor>(Character.GetObject())->GetName()),
-		*(Character->GetCharacterName().ToString())
+		*(Character->GetCharacterIdForLogs())
 	);
 
 	this->RemoveCharacterFromInitiativeMap(Pf2Character);
@@ -199,11 +195,10 @@ FPF2QueuedActionHandle UPF2EncounterModeOfPlayRuleSetBase::QueueActionForCharact
 	UE_LOG(
 		LogPf2CoreEncounters,
 		VeryVerbose,
-		TEXT("[%s] Queuing action ('%s') for character ('%s.%s')."),
+		TEXT("[%s] Queuing action ('%s') for character ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		*(Action->GetActionName().ToString()),
-		*(Cast<AActor>(Character.GetObject())->GetName()),
-		*(Character->GetCharacterName().ToString())
+		*(Character->GetCharacterIdForLogs())
 	);
 
 	this->CharacterQueues.Add(PF2InterfaceUtilities::FromScriptInterface(Character), Pf2Action);
@@ -261,11 +256,10 @@ void UPF2EncounterModeOfPlayRuleSetBase::RemoveQueuedActionForCharacter(
 		UE_LOG(
 			LogPf2CoreEncounters,
 			VeryVerbose,
-			TEXT("[%s] Removing queued action ('%s') for character ('%s.%s')."),
+			TEXT("[%s] Removing queued action ('%s') for character ('%s')."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 			*(Action->GetActionName().ToString()),
-			*(Cast<AActor>(Character.GetObject())->GetName()),
-			*(Character->GetCharacterName().ToString())
+			*(Character->GetCharacterIdForLogs())
 		);
 
 		this->CharacterQueues.RemoveSingle(PF2InterfaceUtilities::FromScriptInterface(Character), Pf2Action);
@@ -294,10 +288,9 @@ EPF2AbilityActivationResult UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueue
 		UE_LOG(
 			LogPf2CoreEncounters,
 			VeryVerbose,
-			TEXT("[%s] No actions are currently queued for character ('%s.%s')."),
+			TEXT("[%s] No actions are currently queued for character ('%s')."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-			*(Cast<AActor>(Character.GetObject())->GetName()),
-			*(Character->GetCharacterName().ToString())
+			*(Character->GetCharacterIdForLogs())
 		);
 
 		Result = EPF2AbilityActivationResult::None;
@@ -307,11 +300,10 @@ EPF2AbilityActivationResult UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueue
 		UE_LOG(
 			LogPf2CoreEncounters,
 			VeryVerbose,
-			TEXT("[%s] Executing next queued action ('%s') for character ('%s.%s')."),
+			TEXT("[%s] Executing next queued action ('%s') for character ('%s')."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 			*(NextAction->GetActionName().ToString()),
-			*(Cast<AActor>(Character.GetObject())->GetName()),
-			*(Character->GetCharacterName().ToString())
+			*(Character->GetCharacterIdForLogs())
 		);
 
 		Result = NextAction->PerformAction();

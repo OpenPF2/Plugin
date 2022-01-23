@@ -51,6 +51,15 @@ public:
 	virtual FText GetCharacterName() const = 0;
 
 	/**
+	 * Returns a unique identifier for this character, for debugging purposes.
+	 *
+	 * @return
+	 *	A unique identifier for this character in debug logs.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual FString GetCharacterIdForLogs() const = 0;
+
+	/**
 	 * Gets the current level of this character.
 	 *
 	 * The character level impacts the character's stats and how many boosts and feats the character can have.

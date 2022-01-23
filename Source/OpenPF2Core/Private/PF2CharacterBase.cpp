@@ -66,6 +66,12 @@ FText APF2CharacterBase::GetCharacterName() const
 	return Name;
 }
 
+FString APF2CharacterBase::GetCharacterIdForLogs() const
+{
+	// ReSharper disable once CppRedundantParentheses
+	return FString::Format(TEXT("{0}.{1}"), { *this->GetName(), *(this->GetCharacterName().ToString()) });
+}
+
 int32 APF2CharacterBase::GetCharacterLevel() const
 {
 	return this->CharacterLevel;

@@ -383,6 +383,9 @@ public:
 	virtual FText GetCharacterName() const override;
 
 	UFUNCTION(BlueprintCallable)
+	virtual FString GetCharacterIdForLogs() const override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual int32 GetCharacterLevel() const override;
 
 	UFUNCTION(BlueprintCallable)
