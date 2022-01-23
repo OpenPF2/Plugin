@@ -291,12 +291,15 @@ protected:
 	 *	The character whose turn it is to act.
 	 *
 	 * @return
-	 *	- true if the character had an action queued up that was executed
-	 *	- false if no action was executed because the character is out of actions to execute.
+	 *	- EPF2AbilityActivationResult::None if the character is out of actions to execute.
+	 *	- EPF2AbilityActivationResult::Activated if the character had an action queued up that was executed.
+	 *	- EPF2AbilityActivationResult::Blocked if the character has an action to execute but it cannot be executed yet,
+	 *	  typically because it is blocked by another ability that is active on the character.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Action Queue")
-	UPARAM(DisplayName = "Was Executed")
-	bool ExecuteNextQueuedActionForCharacter(const TScriptInterface<IPF2CharacterInterface>& Character);
+	UPARAM(DisplayName = "Activation Result")
+	EPF2AbilityActivationResult ExecuteNextQueuedActionForCharacter(
+		const TScriptInterface<IPF2CharacterInterface>& Character);
 
 	/**
 	 * Returns the next action in the specified character's queue of actions (if there is one).

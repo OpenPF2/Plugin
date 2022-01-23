@@ -281,10 +281,10 @@ void UPF2EncounterModeOfPlayRuleSetBase::RemoveQueuedActionForCharacter(
 	}
 }
 
-bool UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
+EPF2AbilityActivationResult UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character)
 {
-	bool                                        bActionExecuted = false;
+	EPF2AbilityActivationResult                 Result;
 	TScriptInterface<IPF2QueuedActionInterface> NextAction;
 
 	this->PeekNextQueuedActionForCharacter(Character, NextAction);
@@ -299,6 +299,8 @@ bool UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
 			*(Cast<AActor>(Character.GetObject())->GetName()),
 			*(Character->GetCharacterName().ToString())
 		);
+
+		Result = EPF2AbilityActivationResult::None;
 	}
 	else
 	{
@@ -312,15 +314,15 @@ bool UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
 			*(Character->GetCharacterName().ToString())
 		);
 
-		if (NextAction->PerformAction() == EPF2AbilityActivationResult::Activated)
+		Result = NextAction->PerformAction();
+
+		if (Result == EPF2AbilityActivationResult::Activated)
 		{
 			this->RemoveQueuedActionForCharacter(Character, NextAction);
-
-			bActionExecuted = true;
 		}
 	}
 
-	return bActionExecuted;
+	return Result;
 }
 
 void UPF2EncounterModeOfPlayRuleSetBase::PeekNextQueuedActionForCharacter(
