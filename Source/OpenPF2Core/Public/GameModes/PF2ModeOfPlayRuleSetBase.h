@@ -27,7 +27,8 @@ public:
 	// =================================================================================================================
 	virtual FPF2QueuedActionHandle OnQueueAction_Implementation(
 		const TScriptInterface<IPF2CharacterInterface>&    Character,
-		const TScriptInterface<IPF2QueuedActionInterface>& Action) override;
+		const TScriptInterface<IPF2QueuedActionInterface>& Action,
+		EPF2ActionQueueResult&                             OutQueueResult) override;
 
 	virtual void OnCancelQueuedAction_Implementation(
 		const TScriptInterface<IPF2CharacterInterface>&    Character,

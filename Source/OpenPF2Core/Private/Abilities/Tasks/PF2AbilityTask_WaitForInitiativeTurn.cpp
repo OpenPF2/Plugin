@@ -7,7 +7,11 @@
 
 #include "OpenPF2Core.h"
 #include "PF2CharacterInterface.h"
+
+#include "Abilities/PF2ActionQueueResult.h"
+
 #include "GameModes/PF2GameModeInterface.h"
+
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
@@ -62,9 +66,10 @@ void UPF2AbilityTask_WaitForInitiativeTurn::OnDestroy(bool bAbilityEnded)
 {
 	if ((this->WaitingCharacter != nullptr) && (this->GameMode != nullptr) && !this->WasActivated())
 	{
-		TScriptInterface<IPF2CharacterInterface> CharacterScriptInterface = this->WaitingCharacter.ToScriptInterface();
+		const TScriptInterface<IPF2CharacterInterface> CharacterScriptInterface =
+			this->WaitingCharacter.ToScriptInterface();
 
-		TScriptInterface<IPF2QueuedActionInterface> ThisScriptInterface =
+		const TScriptInterface<IPF2QueuedActionInterface> ThisScriptInterface =
 			PF2InterfaceUtilities::ToScriptInterface<IPF2QueuedActionInterface>(this);
 
 		this->GameMode->CancelActionQueuedForInitiativeTurn(CharacterScriptInterface, ThisScriptInterface);
@@ -154,11 +159,28 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate_Server(IPF2CharacterInterfa
 			TScriptInterface<IPF2QueuedActionInterface> ThisScriptInterface =
 				PF2InterfaceUtilities::ToScriptInterface<IPF2QueuedActionInterface>(this);
 
+			EPF2ActionQueueResult QueueResult;
+
 			this->GameMode = PF2GameMode;
 
-			PF2GameMode->QueueActionForInitiativeTurn(CharacterScriptInterface, ThisScriptInterface);
+			PF2GameMode->QueueActionForInitiativeTurn(CharacterScriptInterface, ThisScriptInterface, QueueResult);
 
-			this->SetWaitingOnRemotePlayerData();
+			switch (QueueResult)
+			{
+			case EPF2ActionQueueResult::Refused:
+				this->CancelAction();
+				break;
+
+			case EPF2ActionQueueResult::ExecutedImmediately:
+				// Nothing to do.
+				break;
+
+			default:
+			case EPF2ActionQueueResult::Queued:
+				this->OnQueued.Broadcast();
+				this->SetWaitingOnRemotePlayerData();
+				break;
+			}
 		}
 	}
 }

@@ -3,19 +3,24 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-#include "GameModes/PF2ModeOfPlayRuleSetBase.h"
-
 #include "PF2QueuedActionInterface.h"
+
+#include "Abilities/PF2ActionQueueResult.h"
+
+#include "GameModes/PF2ModeOfPlayRuleSetBase.h"
 
 #include "Utilities/PF2ArrayUtilities.h"
 #include "Utilities/PF2InterfaceUtilities.h"
 
 FPF2QueuedActionHandle UPF2ModeOfPlayRuleSetBase::OnQueueAction_Implementation(
 	const TScriptInterface<IPF2CharacterInterface>&    Character,
-	const TScriptInterface<IPF2QueuedActionInterface>& Action)
+	const TScriptInterface<IPF2QueuedActionInterface>& Action,
+	EPF2ActionQueueResult&                             OutQueueResult)
 {
 	// By default there is no queue, so we perform the action immediately.
 	Action->PerformAction();
+
+	OutQueueResult = EPF2ActionQueueResult::ExecutedImmediately;
 
 	return FPF2QueuedActionHandle();
 }

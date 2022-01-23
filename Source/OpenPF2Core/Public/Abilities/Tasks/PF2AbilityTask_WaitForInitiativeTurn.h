@@ -10,7 +10,9 @@
 
 #include "PF2AbilityTaskBase.h"
 #include "PF2QueuedActionInterface.h"
+
 #include "Abilities/PF2AbilityActivationResult.h"
+
 #include "GameModes/PF2GameModeInterface.h"
 
 #include "PF2AbilityTask_WaitForInitiativeTurn.generated.h"
@@ -40,7 +42,9 @@ public:
 	 * exploration or downtime mode, it is executed immediately, without delay.
 	 *
 	 * Execution pins work as follows:
-	 *	- OnReadyToAct will fire when the character's "turn" in initiative order comes up.
+	 *	- OnQueued is called if the ability is queued, in case it needs to suspend itself while it is queued.
+	 *	- OnReadyToAct is called when the character's "turn" in initiative order comes up. If the current Mode of Play
+	 *	  Rule Set does not queue actions, this will fire immediately.
 	 *	- OnCancelled is called if the ability or task is cancelled, by either a player or the rule set (e.g., due to a
 	 *	  change in mode of play).
 	 *
@@ -112,6 +116,15 @@ protected:
 	 */
 	UPROPERTY(BlueprintAssignable)
 	FGenericGameplayTaskDelegate OnReadyToAct;
+
+	/**
+	 * Execution pin fired if the ability has been queued, in case it needs to suspend itself while it is queued.
+	 *
+	 * This execution pin is optional. This pin is fired upon queuing; then, when it is time for the ability to proceed,
+	 * the "OnReadyToAct" execution pin will be fired to allow the ability to resume anything that was suspended.
+	 */
+	UPROPERTY(BlueprintAssignable)
+	FGenericGameplayTaskDelegate OnQueued;
 
 	/**
 	 * Execution pin fired if the action gets canceled by a player or the rule set (e.g., due to a change in mode of

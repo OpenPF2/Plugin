@@ -8,6 +8,8 @@
 #include <GameFramework/GameModeBase.h>
 #include <UObject/ScriptInterface.h>
 
+#include "Abilities/PF2ActionQueueResult.h"
+
 #include "GameModes/PF2ModeOfPlayRuleSetBase.h"
 #include "GameModes/PF2GameModeInterface.h"
 
@@ -67,7 +69,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual FPF2QueuedActionHandle QueueActionForInitiativeTurn(
 		TScriptInterface<IPF2CharacterInterface>&    Character,
-		TScriptInterface<IPF2QueuedActionInterface>& Action) override;
+		TScriptInterface<IPF2QueuedActionInterface>& Action,
+		EPF2ActionQueueResult&                       OutQueueResult) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void CancelActionQueuedForInitiativeTurnByHandle(const FPF2QueuedActionHandle ActionHandle) override;

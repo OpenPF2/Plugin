@@ -88,7 +88,8 @@ void APF2GameModeBase::RemoveCharacterFromEncounter(const TScriptInterface<IPF2C
 
 FPF2QueuedActionHandle APF2GameModeBase::QueueActionForInitiativeTurn(
 	TScriptInterface<IPF2CharacterInterface>&    Character,
-	TScriptInterface<IPF2QueuedActionInterface>& Action)
+	TScriptInterface<IPF2QueuedActionInterface>& Action,
+	EPF2ActionQueueResult&                       OutQueueResult)
 {
 	FPF2QueuedActionHandle                                 Result;
 	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
@@ -106,7 +107,7 @@ FPF2QueuedActionHandle APF2GameModeBase::QueueActionForInitiativeTurn(
 	}
 	else
 	{
-		Result = RuleSet->Execute_OnQueueAction(RuleSet.GetObject(), Character, Action);
+		Result = RuleSet->Execute_OnQueueAction(RuleSet.GetObject(), Character, Action, OutQueueResult);
 	}
 
 	return Result;

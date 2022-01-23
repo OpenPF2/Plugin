@@ -94,6 +94,9 @@ public:
 	 *	The character that is queuing the action up.
 	 * @param Action
 	 *	The action that is being queued.
+	 * @param OutQueueResult
+	 *	An optional output parameter to be notified of whether the action was actually queued, executed immediately,
+	 *	or refused.
 	 *
 	 * @return
 	 *	- If the action was queued: a valid handle to refer to the action on the server in the future.
@@ -101,7 +104,8 @@ public:
 	 */
 	UFUNCTION(BlueprintNativeEvent, Category="OpenPF2|Mode of Play Rule Sets")
 	FPF2QueuedActionHandle OnQueueAction(const TScriptInterface<IPF2CharacterInterface>&    Character,
-	                                     const TScriptInterface<IPF2QueuedActionInterface>& Action);
+	                                     const TScriptInterface<IPF2QueuedActionInterface>& Action,
+	                                     EPF2ActionQueueResult&                             OutQueueResult);
 
 	/**
 	 * Callback to notify this rule set that a character wishes to cancel a queued-up an action (usually a GA).

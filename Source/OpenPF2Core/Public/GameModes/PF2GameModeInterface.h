@@ -10,6 +10,8 @@
 
 #include "PF2ModeOfPlayRuleSetInterface.h"
 
+#include "Abilities/PF2ActionQueueResult.h"
+
 #include "PF2GameModeInterface.generated.h"
 
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
@@ -106,14 +108,17 @@ public:
 	 *	The character for which the action is being queued.
 	 * @param Action
 	 *	The action being queued.
-	 *
+	 * @param OutQueueResult
+	 *	An optional output parameter to be notified of whether the action was actually queued, executed immediately,
+	 *	or refused.
 	 * @return
 	 *	If the action was queued: a handle to refer to the action on the server in the future.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Modes")
 	virtual FPF2QueuedActionHandle QueueActionForInitiativeTurn(
 		TScriptInterface<IPF2CharacterInterface>&    Character,
-		TScriptInterface<IPF2QueuedActionInterface>& Action) = 0;
+		TScriptInterface<IPF2QueuedActionInterface>& Action,
+		EPF2ActionQueueResult&                       OutQueueResult) = 0;
 
 	/**
 	 * Notifies the game rules and/or the Mode of Play Rule Set (MoPRS) that a character no longer wishes to perform a
