@@ -16,7 +16,61 @@ class OPENPF2CORE_API UPF2AbilitySystemComponent :
 {
 	GENERATED_BODY()
 
+protected:
+	// =================================================================================================================
+	// Protected Properties - Blueprint Accessible
+	// =================================================================================================================
+	/**
+	 * The Gameplay Effects used to boost abilities.
+	 *
+	 * For each pair in the map, the key is the type ability score that the effect boosts and the value is the GE for
+	 * boosting that ability.
+	 */
+	UPROPERTY()
+	TMap<EPF2CharacterAbilityScoreType, TSubclassOf<UGameplayEffect>> AbilityBoostEffects;
+
+	/**
+	 * The list of tags on this ASC that are otherwise not granted by a GE.
+	 *
+	 * These are used to apply replicated tags that are specific to a particular character instance, such as age, size,
+	 * skill proficiency, etc.
+	 */
+	UPROPERTY(VisibleAnywhere)
+	FGameplayTagContainer DynamicTags;
+
+	/**
+	 * The weight groups of Gameplay Effects that have been activated on this ASC.
+	 */
+	UPROPERTY(VisibleAnywhere)
+	TSet<FName> ActivatedWeightGroups;
+
+	/**
+	 * A special, "dummy" GE that is used for applying dynamic tags.
+	 *
+	 * TODO: Find a different way to accomplish this without a GE. This feels very much like a kludge.
+	 */
+	UPROPERTY()
+	TSubclassOf<UGameplayEffect> DynamicTagsEffect;
+
+	/**
+	 * The list of Gameplay Effects (GEs) that are always passively applied to this ASC.
+	 *
+	 * This is typically a superset of the owning character's managed passive GEs and additional passive GEs. Each value
+	 * is a gameplay effect and the key is the weight group of that GE. The weight controls the order that all GEs are
+	 * applied. Lower weights are applied earlier than higher weights.
+	 */
+	TMultiMap<FName, TSubclassOf<UGameplayEffect>> PassiveGameplayEffects;
+
+	/**
+	 * The cached list of all Gameplay Effects registered on this ASC with AddPassiveGameplayEffect() or
+	 * AddPassiveGameplayEffectWithWeight.
+	 */
+	TMultiMap<FName, TSubclassOf<UGameplayEffect>> CachedPassiveGameplayEffectsToApply;
+
 public:
+	// =================================================================================================================
+	// Public Constructors
+	// =================================================================================================================
 	UPF2AbilitySystemComponent();
 
 	// =================================================================================================================
@@ -107,56 +161,6 @@ public:
 	virtual void ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore) override;
 
 protected:
-	// =================================================================================================================
-	// Protected Properties - Blueprint Accessible
-	// =================================================================================================================
-	/**
-	 * The Gameplay Effects used to boost abilities.
-	 *
-	 * For each pair in the map, the key is the type ability score that the effect boosts and the value is the GE for
-	 * boosting that ability.
-	 */
-	UPROPERTY()
-	TMap<EPF2CharacterAbilityScoreType, TSubclassOf<UGameplayEffect>> AbilityBoostEffects;
-
-	/**
-	 * The list of tags on this ASC that are otherwise not granted by a GE.
-	 *
-	 * These are used to apply replicated tags that are specific to a particular character instance, such as age, size,
-	 * skill proficiency, etc.
-	 */
-	UPROPERTY(VisibleAnywhere)
-	FGameplayTagContainer DynamicTags;
-
-	/**
-	 * The weight groups of Gameplay Effects that have been activated on this ASC.
-	 */
-	UPROPERTY(VisibleAnywhere)
-	TSet<FName> ActivatedWeightGroups;
-
-	/**
-	 * A special, "dummy" GE that is used for applying dynamic tags.
-	 *
-	 * TODO: Find a different way to accomplish this without a GE. This feels very much like a kludge.
-	 */
-	UPROPERTY()
-	TSubclassOf<UGameplayEffect> DynamicTagsEffect;
-
-	/**
-	 * The list of Gameplay Effects (GEs) that are always passively applied to this ASC.
-	 *
-	 * This is typically a superset of the owning character's managed passive GEs and additional passive GEs. Each value
-	 * is a gameplay effect and the key is the weight group of that GE. The weight controls the order that all GEs are
-	 * applied. Lower weights are applied earlier than higher weights.
-	 */
-	TMultiMap<FName, TSubclassOf<UGameplayEffect>> PassiveGameplayEffects;
-
-	/**
-	 * The cached list of all Gameplay Effects registered on this ASC with AddPassiveGameplayEffect() or
-	 * AddPassiveGameplayEffectWithWeight.
-	 */
-	TMultiMap<FName, TSubclassOf<UGameplayEffect>> CachedPassiveGameplayEffectsToApply;
-
 	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
