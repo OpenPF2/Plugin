@@ -141,7 +141,7 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate_Client()
 			EAbilityGenericReplicatedEvent::GenericSignalFromServer,
 			FSimpleMulticastDelegate::FDelegate::CreateUObject(
 				this,
-				&UPF2AbilityTask_WaitForInitiativeTurn::OnServerActionCallback
+				&UPF2AbilityTask_WaitForInitiativeTurn::OnPerformAction_Client
 			)
 		);
 	}
@@ -190,7 +190,7 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate_Server(IPF2CharacterInterfa
 	}
 }
 
-void UPF2AbilityTask_WaitForInitiativeTurn::OnServerActionCallback()
+void UPF2AbilityTask_WaitForInitiativeTurn::OnPerformAction_Client()
 {
 	if (this->HasAsc())
 	{

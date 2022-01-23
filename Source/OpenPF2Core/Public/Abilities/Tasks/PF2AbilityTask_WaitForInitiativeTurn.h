@@ -207,5 +207,5 @@ protected:
 	 *
 	 * This method does not get called on the server side; it only runs on the client side.
 	 */
-	void OnServerActionCallback();
+	void OnPerformAction_Client();
 };
