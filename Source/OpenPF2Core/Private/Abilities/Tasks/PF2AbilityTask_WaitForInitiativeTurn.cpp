@@ -53,11 +53,6 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate()
 {
 	IPF2CharacterInterface* PF2Character = Cast<IPF2CharacterInterface>(this->GetOwnerActor());
 
-	checkf(
-		this->Ability->GetInstancingPolicy() == EGameplayAbilityInstancingPolicy::InstancedPerExecution,
-		TEXT("WaitForInitiativeTurn can only be used on abilites 'Instanced per Execution'.")
-	)
-
 	if ((PF2Character != nullptr) && this->HasAbility())
 	{
 		this->WaitingCharacter = PF2Character;

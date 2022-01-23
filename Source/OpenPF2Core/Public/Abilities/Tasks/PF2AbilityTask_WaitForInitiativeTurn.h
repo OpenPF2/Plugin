@@ -22,9 +22,6 @@
  *
  * Only GAs activated in encounter mode are subject to initiative. GAs activated while the game is in exploration or
  * downtime mode are typically executed immediately, without delay.
- *
- * This ability task can only be used with GAs that are instanced per execution. This is necessary so that a GA can be
- * queued multiple times and each queued activation does not affect the other activations.
  */
 UCLASS()
 // ReSharper disable once CppClassCanBeFinal
