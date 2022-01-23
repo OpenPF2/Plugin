@@ -296,4 +296,14 @@ protected:
 	 *	- false if the ability is blocked and cannot be resumed at this time (may be resumed in the future).
 	 */
 	bool CanAbilityProceed() const;
+
+	/**
+	 * Prevents the ability that owns this task from blocking activations of other abilities.
+	 */
+	void DisableAbilityBlocking() const;
+
+	/**
+	 * Allows the ability that owns this task from blocking activations of other abilities.
+	 */
+	void EnableAbilityBlocking() const;
 };

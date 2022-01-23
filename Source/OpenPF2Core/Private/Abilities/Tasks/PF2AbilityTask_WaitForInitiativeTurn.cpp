@@ -111,7 +111,7 @@ bool UPF2AbilityTask_WaitForInitiativeTurn::CanAbilityProceed() const
 	const FGameplayAbilityActorInfo  ActorInfo         = this->Ability->GetActorInfo();
 
 	// Prevent blocking ourselves.
-	this->Ability->SetShouldBlockOtherAbilities(false);
+	this->DisableAbilityBlocking();
 
 	return this->Ability->CanActivateAbility(AbilitySpecHandle, &ActorInfo, this->SourceTags, this->TargetTags);
 }
@@ -135,7 +135,7 @@ EPF2AbilityActivationResult UPF2AbilityTask_WaitForInitiativeTurn::PerformAction
 					TEXT("UNK"))
 			);
 
-			this->Ability->SetShouldBlockOtherAbilities(true);
+			this->EnableAbilityBlocking();
 
 			if (this->ShouldBroadcastAbilityTaskDelegates())
 			{
@@ -189,7 +189,7 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate_Client()
 	{
 		FScopedPredictionWindow ScopedPrediction(this->AbilitySystemComponent, true);
 
-		this->Ability->SetShouldBlockOtherAbilities(false);
+		this->DisableAbilityBlocking();
 
 		this->CallOrAddReplicatedDelegate(
 			EAbilityGenericReplicatedEvent::GenericSignalFromServer,
@@ -236,10 +236,10 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate_Server(IPF2CharacterInterfa
 
 			default:
 			case EPF2ActionQueueResult::Queued:
-				// The MoPRS queued the action for later execution. Notify the ability and temporarily unblock this
-				// ability from blocking other abilities that would otherwise be incompatible.
+				// The MoPRS queued the action for later execution. Temporarily unblock this ability from blocking other
+				// abilities that would otherwise be incompatible, and then notify the ability.
+				this->DisableAbilityBlocking();
 				this->OnQueued.Broadcast();
-				this->Ability->SetShouldBlockOtherAbilities(false);
 
 				this->SetWaitingOnRemotePlayerData();
 				break;
@@ -260,4 +260,30 @@ void UPF2AbilityTask_WaitForInitiativeTurn::OnPerformAction_Client()
 	}
 
 	this->PerformAction();
+}
+
+void UPF2AbilityTask_WaitForInitiativeTurn::DisableAbilityBlocking() const
+{
+	UE_LOG(
+		LogPf2CoreEncounters,
+		VeryVerbose,
+		TEXT("[%s] Ability blocking disabled for action ('%s')."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(this->GetName())
+	);
+
+	return this->Ability->SetShouldBlockOtherAbilities(false);
+}
+
+void UPF2AbilityTask_WaitForInitiativeTurn::EnableAbilityBlocking() const
+{
+	UE_LOG(
+		LogPf2CoreEncounters,
+		VeryVerbose,
+		TEXT("[%s] Ability blocking enabled for action ('%s')."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(this->GetName())
+	);
+
+	return this->Ability->SetShouldBlockOtherAbilities(true);
 }
