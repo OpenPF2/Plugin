@@ -10,7 +10,7 @@
 
 #include "PF2AbilityTaskBase.h"
 #include "PF2QueuedActionInterface.h"
-#include "Abilities/PF2AbilityActivationOutcomeType.h"
+#include "Abilities/PF2AbilityActivationResult.h"
 #include "GameModes/PF2GameModeInterface.h"
 
 #include "PF2AbilityTask_WaitForInitiativeTurn.generated.h"
@@ -89,7 +89,7 @@ protected:
 	 * The result of this ability task (e.g., whether it was executed or not, blocked, etc.).
 	 */
 	UPROPERTY(BlueprintReadOnly)
-	EPF2AbilityActivationOutcomeType ActivationOutcome;
+	EPF2AbilityActivationResult ActivationOutcome;
 
 	// =================================================================================================================
 	// Protected Fields
@@ -127,7 +127,7 @@ public:
 	/**
 	 * Default constructor for UPF2AbilityTask_WaitForInitiativeTurn.
 	 */
-	explicit UPF2AbilityTask_WaitForInitiativeTurn() : ActivationOutcome(EPF2AbilityActivationOutcomeType::None)
+	explicit UPF2AbilityTask_WaitForInitiativeTurn() : ActivationOutcome(EPF2AbilityActivationResult::None)
 	{
 	}
 
@@ -148,7 +148,7 @@ public:
 	virtual FSlateBrush GetActionIcon() const override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual EPF2AbilityActivationOutcomeType PerformAction() override;
+	virtual EPF2AbilityActivationResult PerformAction() override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void CancelAction() override;
@@ -166,7 +166,7 @@ protected:
 	 */
 	FORCEINLINE bool WasActivated() const
 	{
-		return (this->ActivationOutcome != EPF2AbilityActivationOutcomeType::None);
+		return (this->ActivationOutcome != EPF2AbilityActivationResult::None);
 	}
 
 	/**

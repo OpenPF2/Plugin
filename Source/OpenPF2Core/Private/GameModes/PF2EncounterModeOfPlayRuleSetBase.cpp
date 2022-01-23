@@ -312,7 +312,7 @@ bool UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedActionForCharacter(
 			*(Character->GetCharacterName().ToString())
 		);
 
-		if (NextAction->PerformAction() == EPF2AbilityActivationOutcomeType::Activated)
+		if (NextAction->PerformAction() == EPF2AbilityActivationResult::Activated)
 		{
 			this->RemoveQueuedActionForCharacter(Character, NextAction);
 

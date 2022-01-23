@@ -11,7 +11,7 @@
  * An enumeration of the different outcomes from attempting to activate a queued character ability.
  */
 UENUM(BlueprintType)
-enum class EPF2AbilityActivationOutcomeType : uint8
+enum class EPF2AbilityActivationResult : uint8
 {
 	/**
 	 * No result yet.

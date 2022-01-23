@@ -81,7 +81,7 @@ FSlateBrush UPF2AbilityTask_WaitForInitiativeTurn::GetActionIcon() const
 	return this->ActionIcon;
 }
 
-EPF2AbilityActivationOutcomeType UPF2AbilityTask_WaitForInitiativeTurn::PerformAction()
+EPF2AbilityActivationResult UPF2AbilityTask_WaitForInitiativeTurn::PerformAction()
 {
 	if (this->HasAbility() && !this->IsPendingKill() && !this->WasActivated())
 	{
@@ -109,7 +109,7 @@ EPF2AbilityActivationOutcomeType UPF2AbilityTask_WaitForInitiativeTurn::PerformA
 			);
 		}
 
-		this->ActivationOutcome = EPF2AbilityActivationOutcomeType::Activated;
+		this->ActivationOutcome = EPF2AbilityActivationResult::Activated;
 
 		this->EndTask();
 	}
