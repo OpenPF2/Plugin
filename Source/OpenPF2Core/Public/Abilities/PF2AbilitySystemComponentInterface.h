@@ -35,7 +35,6 @@ public:
 	/**
 	 * Gets whether passively-applied Gameplay Effects are currently active on this ASC.
 	 */
-	UFUNCTION()
 	virtual bool ArePassiveGameplayEffectsActive() = 0;
 
 	/**

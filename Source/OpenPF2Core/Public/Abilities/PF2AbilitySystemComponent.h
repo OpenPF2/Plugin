@@ -76,7 +76,6 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2AbilitySystemComponentInterface Implementation
 	// =================================================================================================================
-	UFUNCTION()
 	virtual bool ArePassiveGameplayEffectsActive() override
 	{
 		return this->ActivatedWeightGroups.Num() != 0;
