@@ -99,6 +99,8 @@ EPF2AbilityActivationResult UPF2AbilityTask_WaitForInitiativeTurn::PerformAction
 			*((this->WaitingCharacter != nullptr) ? this->WaitingCharacter->GetCharacterName().ToString() : TEXT("UNK"))
 		);
 
+		this->Ability->SetShouldBlockOtherAbilities(true);
+
 		if (this->ShouldBroadcastAbilityTaskDelegates())
 		{
 			this->OnReadyToAct.Broadcast();
@@ -132,6 +134,8 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate_Client()
 	if (this->HasAsc())
 	{
 		FScopedPredictionWindow ScopedPrediction(this->AbilitySystemComponent, true);
+
+		this->Ability->SetShouldBlockOtherAbilities(false);
 
 		this->CallOrAddReplicatedDelegate(
 			EAbilityGenericReplicatedEvent::GenericSignalFromServer,
@@ -178,6 +182,7 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate_Server(IPF2CharacterInterfa
 			default:
 			case EPF2ActionQueueResult::Queued:
 				this->OnQueued.Broadcast();
+				this->Ability->SetShouldBlockOtherAbilities(false);
 				this->SetWaitingOnRemotePlayerData();
 				break;
 			}
