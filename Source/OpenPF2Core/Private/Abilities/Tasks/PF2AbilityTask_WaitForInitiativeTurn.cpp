@@ -105,17 +105,6 @@ FSlateBrush UPF2AbilityTask_WaitForInitiativeTurn::GetActionIcon() const
 	return this->ActionIcon;
 }
 
-bool UPF2AbilityTask_WaitForInitiativeTurn::CanAbilityProceed() const
-{
-	const FGameplayAbilitySpecHandle AbilitySpecHandle = this->Ability->GetCurrentAbilitySpecHandle();
-	const FGameplayAbilityActorInfo  ActorInfo         = this->Ability->GetActorInfo();
-
-	// Prevent blocking ourselves.
-	this->DisableAbilityBlocking();
-
-	return this->Ability->CanActivateAbility(AbilitySpecHandle, &ActorInfo, this->SourceTags, this->TargetTags);
-}
-
 EPF2AbilityActivationResult UPF2AbilityTask_WaitForInitiativeTurn::PerformAction()
 {
 	EPF2AbilityActivationResult Result = this->ActivationOutcome;
@@ -260,6 +249,17 @@ void UPF2AbilityTask_WaitForInitiativeTurn::OnPerformAction_Client()
 	}
 
 	this->PerformAction();
+}
+
+bool UPF2AbilityTask_WaitForInitiativeTurn::CanAbilityProceed() const
+{
+	const FGameplayAbilitySpecHandle AbilitySpecHandle = this->Ability->GetCurrentAbilitySpecHandle();
+	const FGameplayAbilityActorInfo  ActorInfo         = this->Ability->GetActorInfo();
+
+	// Prevent blocking ourselves.
+	this->DisableAbilityBlocking();
+
+	return this->Ability->CanActivateAbility(AbilitySpecHandle, &ActorInfo, this->SourceTags, this->TargetTags);
 }
 
 void UPF2AbilityTask_WaitForInitiativeTurn::DisableAbilityBlocking() const
