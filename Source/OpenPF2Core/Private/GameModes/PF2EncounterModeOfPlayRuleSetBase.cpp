@@ -24,7 +24,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::StartTurnForCharacter(const TScriptInte
 
 	UE_LOG(
 		LogPf2CoreEncounters,
-		VeryVerbose,
+		Verbose,
 		TEXT("[%s] Starting turn for character ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		*(Character->GetIdForLogs())
@@ -46,7 +46,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::EndTurnForCharacter(const TScriptInterf
 
 	UE_LOG(
 		LogPf2CoreEncounters,
-		VeryVerbose,
+		Verbose,
 		TEXT("[%s] Ending turn for character ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		*(Character->GetIdForLogs())
