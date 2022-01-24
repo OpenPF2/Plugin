@@ -10,10 +10,12 @@
 
 #include "Abilities/PF2AbilityActivationResult.h"
 
+#include "Utilities/PF2LogIdentifiableInterface.h"
+
 #include "PF2QueuedActionInterface.generated.h"
 
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
-class UPF2QueuedActionInterface : public UInterface
+class UPF2QueuedActionInterface : public UPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 };
@@ -24,7 +26,7 @@ class UPF2QueuedActionInterface : public UInterface
  * The order in which actions are executed is usually based on the "initiative order" of each character and the order in
  * which the actions were queued.
  */
-class OPENPF2CORE_API IPF2QueuedActionInterface
+class OPENPF2CORE_API IPF2QueuedActionInterface : public IPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 

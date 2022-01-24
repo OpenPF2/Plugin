@@ -25,7 +25,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::StartTurnForCharacter(const TScriptInte
 		VeryVerbose,
 		TEXT("[%s] Starting turn for character ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(Character->GetCharacterIdForLogs())
+		*(Character->GetIdForLogs())
 	);
 
 	if (PlayerController != nullptr)
@@ -47,7 +47,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::EndTurnForCharacter(const TScriptInterf
 		VeryVerbose,
 		TEXT("[%s] Ending turn for character ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(Character->GetCharacterIdForLogs())
+		*(Character->GetIdForLogs())
 	);
 
 	if (PlayerController != nullptr)
@@ -70,7 +70,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::SetCharacterInitiative(
 		TEXT("[%s] Initiative ('%d') set for character ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		Initiative,
-		*(Character->GetCharacterIdForLogs())
+		*(Character->GetIdForLogs())
 	);
 
 	// Ensure any existing initiative for this character is cleared.
@@ -98,7 +98,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::ClearInitiativeForCharacter(
 		VeryVerbose,
 		TEXT("[%s] Initiative cleared for character ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(Character->GetCharacterIdForLogs())
+		*(Character->GetIdForLogs())
 	);
 
 	this->RemoveCharacterFromInitiativeMap(Pf2Character);
@@ -197,8 +197,8 @@ FPF2QueuedActionHandle UPF2EncounterModeOfPlayRuleSetBase::QueueActionForCharact
 		VeryVerbose,
 		TEXT("[%s] Queuing action ('%s') for character ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(Action->GetActionName().ToString()),
-		*(Character->GetCharacterIdForLogs())
+		*(Action->GetIdForLogs()),
+		*(Character->GetIdForLogs())
 	);
 
 	this->CharacterQueues.Add(PF2InterfaceUtilities::FromScriptInterface(Character), Pf2Action);
@@ -258,8 +258,8 @@ void UPF2EncounterModeOfPlayRuleSetBase::RemoveQueuedActionForCharacter(
 			VeryVerbose,
 			TEXT("[%s] Removing queued action ('%s') for character ('%s')."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-			*(Action->GetActionName().ToString()),
-			*(Character->GetCharacterIdForLogs())
+			*(Action->GetIdForLogs()),
+			*(Character->GetIdForLogs())
 		);
 
 		this->CharacterQueues.RemoveSingle(PF2InterfaceUtilities::FromScriptInterface(Character), Pf2Action);
@@ -290,7 +290,7 @@ EPF2AbilityActivationResult UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueue
 			VeryVerbose,
 			TEXT("[%s] No actions are currently queued for character ('%s')."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-			*(Character->GetCharacterIdForLogs())
+			*(Character->GetIdForLogs())
 		);
 
 		Result = EPF2AbilityActivationResult::None;
@@ -302,8 +302,8 @@ EPF2AbilityActivationResult UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueue
 			VeryVerbose,
 			TEXT("[%s] Executing next queued action ('%s') for character ('%s')."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-			*(NextAction->GetActionName().ToString()),
-			*(Character->GetCharacterIdForLogs())
+			*(NextAction->GetIdForLogs()),
+			*(Character->GetIdForLogs())
 		);
 
 		Result = NextAction->PerformAction();

@@ -48,6 +48,12 @@ void APF2CharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME(APF2CharacterBase, CharacterLevel);
 }
 
+FString APF2CharacterBase::GetIdForLogs() const
+{
+	// ReSharper disable twice CppRedundantParentheses
+	return FString::Format(TEXT("{0}[{1}]"), { *(this->GetCharacterName().ToString()), *(this->GetName()) });
+}
+
 UAbilitySystemComponent* APF2CharacterBase::GetAbilitySystemComponent() const
 {
 	check(this->AbilitySystemComponent);
@@ -64,12 +70,6 @@ FText APF2CharacterBase::GetCharacterName() const
 	}
 
 	return Name;
-}
-
-FString APF2CharacterBase::GetCharacterIdForLogs() const
-{
-	// ReSharper disable once CppRedundantParentheses
-	return FString::Format(TEXT("{0}.{1}"), { *this->GetName(), *(this->GetCharacterName().ToString()) });
 }
 
 int32 APF2CharacterBase::GetCharacterLevel() const

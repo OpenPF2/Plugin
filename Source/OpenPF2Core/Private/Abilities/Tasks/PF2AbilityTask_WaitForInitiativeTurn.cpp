@@ -13,6 +13,7 @@
 #include "GameModes/PF2GameModeInterface.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
+#include "Utilities/PF2LogIdentifiableInterface.h"
 #include "Utilities/PF2LogUtilities.h"
 
 UPF2AbilityTask_WaitForInitiativeTurn* UPF2AbilityTask_WaitForInitiativeTurn::CreateWaitInitiativeTurn(
@@ -95,6 +96,21 @@ void UPF2AbilityTask_WaitForInitiativeTurn::OnDestroy(bool bAbilityEnded)
 	}
 }
 
+FString UPF2AbilityTask_WaitForInitiativeTurn::GetIdForLogs() const
+{
+	check(this->HasAbility());
+
+	// ReSharper disable CppRedundantParentheses
+	return FString::Format(
+		TEXT("{0}[{1}.{2}]"),
+		{
+			*(this->GetActionName().ToString()),
+			*(this->Ability->GetName()),
+			*(this->GetName())
+		}
+	);
+}
+
 FText UPF2AbilityTask_WaitForInitiativeTurn::GetActionName() const
 {
 	return this->ActionName;
@@ -118,8 +134,8 @@ EPF2AbilityActivationResult UPF2AbilityTask_WaitForInitiativeTurn::PerformAction
 				VeryVerbose,
 				TEXT("[%s] Performing action ('%s') for character ('%s')."),
 				*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-				*(this->GetActionName().ToString()),
-				((this->WaitingCharacter != nullptr) ? *(this->WaitingCharacter->GetCharacterIdForLogs()) : TEXT("UNK"))
+				*(this->GetIdForLogs()),
+				((this->WaitingCharacter != nullptr) ? *(this->WaitingCharacter->GetIdForLogs()) : TEXT("UNK"))
 			);
 
 			this->EnableAbilityBlocking();
@@ -150,8 +166,8 @@ EPF2AbilityActivationResult UPF2AbilityTask_WaitForInitiativeTurn::PerformAction
 				VeryVerbose,
 				TEXT("[%s] Action ('%s') blocked for character ('%s')."),
 				*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-				*(this->GetActionName().ToString()),
-				((this->WaitingCharacter != nullptr) ? *(this->WaitingCharacter->GetCharacterIdForLogs()) : TEXT("UNK"))
+				*(this->GetIdForLogs()),
+				((this->WaitingCharacter != nullptr) ? *(this->WaitingCharacter->GetIdForLogs()) : TEXT("UNK"))
 			);
 
 			Result = EPF2AbilityActivationResult::Blocked;
@@ -265,7 +281,7 @@ void UPF2AbilityTask_WaitForInitiativeTurn::DisableAbilityBlocking() const
 		VeryVerbose,
 		TEXT("[%s] Ability blocking disabled for action ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(this->GetName())
+		*(this->GetIdForLogs()),
 	);
 
 	return this->Ability->SetShouldBlockOtherAbilities(false);
@@ -278,7 +294,7 @@ void UPF2AbilityTask_WaitForInitiativeTurn::EnableAbilityBlocking() const
 		VeryVerbose,
 		TEXT("[%s] Ability blocking enabled for action ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(this->GetName())
+		*(this->GetIdForLogs()),
 	);
 
 	return this->Ability->SetShouldBlockOtherAbilities(true);

@@ -222,6 +222,12 @@ public:
 	virtual void OnDestroy(bool bAbilityEnded) override;
 
 	// =================================================================================================================
+	// Public Methods - IPF2LogIdentifiableInterface Implementation
+	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual FString GetIdForLogs() const override;
+
+	// =================================================================================================================
 	// Public Methods - IPF2QueuedActionInterface
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)

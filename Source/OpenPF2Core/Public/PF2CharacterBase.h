@@ -92,7 +92,8 @@ UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal
 class OPENPF2CORE_API APF2CharacterBase :
 	public ACharacter,
-	public IPF2CharacterInterface
+	public IPF2CharacterInterface,
+	public IPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 
@@ -371,6 +372,12 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	// =================================================================================================================
+	// Public Methods - IPF2LogIdentifiableInterface Implementation
+	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual FString GetIdForLogs() const override;
+
+	// =================================================================================================================
 	// Public Methods - IAbilitySystemInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
@@ -381,9 +388,6 @@ public:
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
 	virtual FText GetCharacterName() const override;
-
-	UFUNCTION(BlueprintCallable)
-	virtual FString GetCharacterIdForLogs() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual int32 GetCharacterLevel() const override;

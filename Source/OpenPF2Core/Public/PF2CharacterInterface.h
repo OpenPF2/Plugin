@@ -31,7 +31,7 @@ class UPF2CharacterInterface : public UAbilitySystemInterface
 /**
  * An interface for OpenPF2 characters.
  */
-class OPENPF2CORE_API IPF2CharacterInterface: public IAbilitySystemInterface
+class OPENPF2CORE_API IPF2CharacterInterface : public IAbilitySystemInterface
 {
     GENERATED_BODY()
 
@@ -39,6 +39,18 @@ public:
 	// =================================================================================================================
 	// Public Methods
 	// =================================================================================================================
+	/**
+	 * Returns a unique identifier for this object, for logging and debugging purposes.
+	 *
+	 * BUGBUG: This duplicates IPF2LogIdentifiableInterface::GetIdForLogs() because it seems that UE does not generate
+	 * code properly for interfaces that extend *multiple* other interfaces.
+	 *
+	 * @return
+	 *	A unique identifier for object in debug logs.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual FString GetIdForLogs() const = 0;
+
 	/**
 	 * Returns the name of this character, as set by the game designer.
 	 *
@@ -49,15 +61,6 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual FText GetCharacterName() const = 0;
-
-	/**
-	 * Returns a unique identifier for this character, for debugging purposes.
-	 *
-	 * @return
-	 *	A unique identifier for this character in debug logs.
-	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
-	virtual FString GetCharacterIdForLogs() const = 0;
 
 	/**
 	 * Gets the current level of this character.
