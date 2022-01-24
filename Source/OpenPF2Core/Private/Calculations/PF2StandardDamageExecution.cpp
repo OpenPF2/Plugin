@@ -25,7 +25,7 @@ UPF2StandardDamageExecution::UPF2StandardDamageExecution() :
 
 void UPF2StandardDamageExecution::Execute_Implementation(
 	const FGameplayEffectCustomExecutionParameters& ExecutionParams,
-	FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
+	OUT FGameplayEffectCustomExecutionOutput&       OutExecutionOutput) const
 {
 	float IncomingDamage = 0.0f,
 	      Resistance     = 0.0f,

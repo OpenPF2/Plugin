@@ -15,7 +15,7 @@
 FPF2QueuedActionHandle UPF2ModeOfPlayRuleSetBase::OnQueueAction_Implementation(
 	const TScriptInterface<IPF2CharacterInterface>&    Character,
 	const TScriptInterface<IPF2QueuedActionInterface>& Action,
-	EPF2ActionQueueResult&                             OutQueueResult)
+	OUT EPF2ActionQueueResult&                         OutQueueResult)
 {
 	// By default there is no queue, so we perform the action immediately.
 	Action->PerformAction();
