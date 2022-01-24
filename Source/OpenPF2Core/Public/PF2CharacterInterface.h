@@ -37,6 +37,18 @@ class OPENPF2CORE_API IPF2CharacterInterface : public IAbilitySystemInterface
 
 public:
 	// =================================================================================================================
+	// Public Methods - IAbilitySystemInterface Implementation
+	// =================================================================================================================
+	/**
+	 * Gets the UObject version of the Ability System Component (ASC) for this character.
+	 *
+	 * @return
+	 *	The ASC for this character.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override = 0;
+
+	// =================================================================================================================
 	// Public Methods
 	// =================================================================================================================
 	/**
@@ -73,15 +85,6 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual int32 GetCharacterLevel() const = 0;
-
-	/**
-	 * Gets the UObject version of the Ability System Component (ASC) for this character.
-	 *
-	 * @return
-	 *	The ASC for this character.
-	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override = 0;
 
 	/**
 	 * Gets a PF2-specific version of the Ability System Component (ASC) for this character.
