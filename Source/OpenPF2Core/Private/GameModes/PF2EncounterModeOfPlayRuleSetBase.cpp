@@ -319,6 +319,16 @@ EPF2AbilityActivationResult UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueue
 	return Result;
 }
 
+bool UPF2EncounterModeOfPlayRuleSetBase::DoesCharacterHaveNextActionQueued(
+	const TScriptInterface<IPF2CharacterInterface>& Character) const
+{
+	TScriptInterface<IPF2QueuedActionInterface> NextAction;
+
+	this->PeekNextQueuedActionForCharacter(Character, NextAction);
+
+	return (NextAction.GetObject() != nullptr);
+}
+
 void UPF2EncounterModeOfPlayRuleSetBase::PeekNextQueuedActionForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character,
 	TScriptInterface<IPF2QueuedActionInterface>&    NextAction) const

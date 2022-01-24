@@ -302,6 +302,15 @@ protected:
 		const TScriptInterface<IPF2CharacterInterface>& Character);
 
 	/**
+	 * Returns whether there is another action queued for the specified character.
+	 *
+	 * @param Character
+	 *	The character for which actions will be inspected.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Action Queue")
+	bool DoesCharacterHaveNextActionQueued(const TScriptInterface<IPF2CharacterInterface>& Character) const;
+
+	/**
 	 * Returns the next action in the specified character's queue of actions (if there is one).
 	 *
 	 * The action is not removed from the queue.
