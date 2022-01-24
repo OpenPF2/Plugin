@@ -13,6 +13,7 @@
 
 #include "GameModes/PF2GameModeInterface.h"
 
+#include "Utilities/PF2EnumUtilities.h"
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
@@ -53,6 +54,14 @@ UPF2AbilityTask_WaitForInitiativeTurn* UPF2AbilityTask_WaitForInitiativeTurn::Cr
 void UPF2AbilityTask_WaitForInitiativeTurn::Activate()
 {
 	IPF2CharacterInterface* PF2Character = Cast<IPF2CharacterInterface>(this->GetOwnerActor());
+
+	UE_LOG(
+		LogPf2CoreEncounters,
+		VeryVerbose,
+		TEXT("[%s] Activate() called on ability task ('%s')."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(this->GetName())
+	);
 
 	if ((PF2Character != nullptr) && this->HasAbility())
 	{
@@ -186,6 +195,14 @@ void UPF2AbilityTask_WaitForInitiativeTurn::CancelAction()
 
 void UPF2AbilityTask_WaitForInitiativeTurn::Activate_Client()
 {
+	UE_LOG(
+		LogPf2CoreEncounters,
+		VeryVerbose,
+		TEXT("[%s] Activate_Client() called on ability task ('%s')."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(this->GetName())
+	);
+
 	if (this->HasAsc())
 	{
 		FScopedPredictionWindow ScopedPrediction(this->AbilitySystemComponent, true);
@@ -206,6 +223,14 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate_Server(IPF2CharacterInterfa
 {
 	const UWorld* const World = this->GetWorld();
 
+	UE_LOG(
+		LogPf2CoreEncounters,
+		VeryVerbose,
+		TEXT("[%s] Activate_Server() called on ability task ('%s')."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(this->GetName())
+	);
+
 	if (World != nullptr)
 	{
 		IPF2GameModeInterface* PF2GameMode = Cast<IPF2GameModeInterface>(World->GetAuthGameMode());
@@ -223,6 +248,15 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate_Server(IPF2CharacterInterfa
 			this->GameMode = PF2GameMode;
 
 			PF2GameMode->QueueActionForInitiativeTurn(CharacterScriptInterface, ThisScriptInterface, QueueResult);
+
+			UE_LOG(
+				LogPf2CoreEncounters,
+				VeryVerbose,
+				TEXT("[%s] Result of queueing action ('%s') was: '%s'"),
+				*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+				*(this->GetIdForLogs()),
+				*(PF2EnumUtilities::ToString(QueueResult))
+			);
 
 			switch (QueueResult)
 			{
@@ -279,9 +313,10 @@ void UPF2AbilityTask_WaitForInitiativeTurn::DisableAbilityBlocking() const
 	UE_LOG(
 		LogPf2CoreEncounters,
 		VeryVerbose,
-		TEXT("[%s] Ability blocking disabled for action ('%s')."),
+		TEXT("[%s] Ability blocking 'disabled' for action ('%s'). Previous state was: '%s'"),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		*(this->GetIdForLogs()),
+		(this->Ability->IsBlockingOtherAbilities() ? TEXT("enabled") : TEXT("disabled"))
 	);
 
 	return this->Ability->SetShouldBlockOtherAbilities(false);
@@ -292,9 +327,10 @@ void UPF2AbilityTask_WaitForInitiativeTurn::EnableAbilityBlocking() const
 	UE_LOG(
 		LogPf2CoreEncounters,
 		VeryVerbose,
-		TEXT("[%s] Ability blocking enabled for action ('%s')."),
+		TEXT("[%s] Ability blocking 'enabled' for action ('%s'). Previous state was: '%s'"),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		*(this->GetIdForLogs()),
+		(this->Ability->IsBlockingOtherAbilities() ? TEXT("enabled") : TEXT("disabled"))
 	);
 
 	return this->Ability->SetShouldBlockOtherAbilities(true);
