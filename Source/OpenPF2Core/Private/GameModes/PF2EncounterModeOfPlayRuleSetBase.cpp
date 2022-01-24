@@ -6,7 +6,9 @@
 #include "GameModes/PF2EncounterModeOfPlayRuleSetBase.h"
 
 #include "OpenPF2Core.h"
+#include "PF2CharacterInterface.h"
 #include "PF2PlayerControllerBase.h"
+#include "PF2PlayerControllerInterface.h"
 #include "PF2QueuedActionHandle.h"
 
 #include "Utilities/PF2ArrayUtilities.h"

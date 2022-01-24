@@ -8,6 +8,8 @@
 #include "PF2ModeOfPlayRuleSetInterface.h"
 #include "PF2PlayerControllerInterface.h"
 
+#include "Abilities/PF2ActionQueueResult.h"
+
 #include "PF2ModeOfPlayRuleSetBase.generated.h"
 
 /**

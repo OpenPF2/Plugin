@@ -8,12 +8,12 @@
 #include "OpenPF2Core.h"
 #include "PF2CharacterInterface.h"
 
+#include "Abilities/PF2AbilitySystemComponentInterface.h"
 #include "Abilities/PF2ActionQueueResult.h"
 
 #include "GameModes/PF2GameModeInterface.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
-#include "Utilities/PF2LogIdentifiableInterface.h"
 #include "Utilities/PF2LogUtilities.h"
 
 UPF2AbilityTask_WaitForInitiativeTurn* UPF2AbilityTask_WaitForInitiativeTurn::CreateWaitInitiativeTurn(

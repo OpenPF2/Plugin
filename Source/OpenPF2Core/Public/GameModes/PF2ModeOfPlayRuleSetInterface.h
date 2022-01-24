@@ -11,6 +11,8 @@
 #include "PF2GameStateInterface.h"
 #include "PF2ModeOfPlayType.h"
 
+#include "Abilities/PF2ActionQueueResult.h"
+
 #include "PF2ModeOfPlayRuleSetInterface.generated.h"
 
 UINTERFACE(BlueprintType)
