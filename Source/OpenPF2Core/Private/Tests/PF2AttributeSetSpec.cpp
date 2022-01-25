@@ -98,8 +98,8 @@ void FPF2AttributeSetSpec::Define()
 			TestEqual(TEXT("SpellDifficultyClass"),   AttributeSet->GetSpellDifficultyClass(),    0.0f);
 			TestEqual(TEXT("FeAncestryFeatCount"),    AttributeSet->GetFeAncestryFeatCount(),     0.0f);
 			TestEqual(TEXT("FeAncestryFeatLimit"),    AttributeSet->GetFeAncestryFeatLimit(),     0.0f);
-			TestEqual(TEXT("EncFreeActionPoints"),    AttributeSet->GetEncFreeActionPoints(),     0.0f);
 			TestEqual(TEXT("EncActionPoints"),        AttributeSet->GetEncActionPoints(),         0.0f);
+			TestEqual(TEXT("EncReactionPoints"),      AttributeSet->GetEncReactionPoints(),       0.0f);
 			TestEqual(TEXT("TmpDamageIncoming"),      AttributeSet->GetTmpDamageIncoming(),       0.0f);
 		});
 	});
