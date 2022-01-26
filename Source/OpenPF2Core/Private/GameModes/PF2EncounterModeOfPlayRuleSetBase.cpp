@@ -32,10 +32,10 @@ void UPF2EncounterModeOfPlayRuleSetBase::StartTurnForCharacter(const TScriptInte
 
 	if (PlayerController != nullptr)
 	{
-		PlayerController->Execute_MulticastHandleEncounterTurnStarted(PlayerController.GetObject());
+		IPF2PlayerControllerInterface::Execute_MulticastHandleEncounterTurnStarted(PlayerController.GetObject());
 	}
 
-	Character->Execute_MulticastHandleEncounterTurnStarted(Character.GetObject());
+	IPF2CharacterInterface::Execute_MulticastHandleEncounterTurnStarted(Character.GetObject());
 }
 
 void UPF2EncounterModeOfPlayRuleSetBase::EndTurnForCharacter(const TScriptInterface<IPF2CharacterInterface> Character)
@@ -54,10 +54,10 @@ void UPF2EncounterModeOfPlayRuleSetBase::EndTurnForCharacter(const TScriptInterf
 
 	if (PlayerController != nullptr)
 	{
-		PlayerController->Execute_MulticastHandleEncounterTurnEnded(PlayerController.GetObject());
+		IPF2PlayerControllerInterface::Execute_MulticastHandleEncounterTurnEnded(PlayerController.GetObject());
 	}
 
-	Character->Execute_MulticastHandleEncounterTurnEnded(Character.GetObject());
+	IPF2CharacterInterface::Execute_MulticastHandleEncounterTurnEnded(Character.GetObject());
 }
 
 void UPF2EncounterModeOfPlayRuleSetBase::SetCharacterInitiative(
@@ -210,10 +210,10 @@ FPF2QueuedActionHandle UPF2EncounterModeOfPlayRuleSetBase::QueueActionForCharact
 
 	if (PlayerController != nullptr)
 	{
-		PlayerController->Execute_MulticastHandleActionQueued(PlayerController.GetObject(), ActionHandle);
+		IPF2PlayerControllerInterface::Execute_MulticastHandleActionQueued(PlayerController.GetObject(), ActionHandle);
 	}
 
-	Character->Execute_MulticastHandleActionQueued(Character.GetObject(), ActionHandle);
+	IPF2CharacterInterface::Execute_MulticastHandleActionQueued(Character.GetObject(), ActionHandle);
 
 	return ActionHandle;
 }
@@ -270,10 +270,13 @@ void UPF2EncounterModeOfPlayRuleSetBase::RemoveQueuedActionForCharacter(
 
 		if (PlayerController != nullptr)
 		{
-			PlayerController->Execute_MulticastHandleActionDequeued(PlayerController.GetObject(), ActionHandle);
+			IPF2PlayerControllerInterface::Execute_MulticastHandleActionDequeued(
+				PlayerController.GetObject(),
+				ActionHandle
+			);
 		}
 
-		Character->Execute_MulticastHandleActionDequeued(Character.GetObject(), ActionHandle);
+		IPF2CharacterInterface::Execute_MulticastHandleActionDequeued(Character.GetObject(), ActionHandle);
 	}
 }
 

@@ -63,7 +63,7 @@ void APF2GameModeBase::AddCharacterToEncounter(const TScriptInterface<IPF2Charac
 	}
 	else
 	{
-		RuleSet->Execute_OnCharacterAddedToEncounter(RuleSet.GetObject(), Character);
+		IPF2ModeOfPlayRuleSetInterface::Execute_OnCharacterAddedToEncounter(RuleSet.GetObject(), Character);
 	}
 }
 
@@ -82,7 +82,7 @@ void APF2GameModeBase::RemoveCharacterFromEncounter(const TScriptInterface<IPF2C
 	}
 	else
 	{
-		RuleSet->Execute_OnCharacterRemovedFromEncounter(RuleSet.GetObject(), Character);
+		IPF2ModeOfPlayRuleSetInterface::Execute_OnCharacterRemovedFromEncounter(RuleSet.GetObject(), Character);
 	}
 }
 
@@ -107,7 +107,13 @@ FPF2QueuedActionHandle APF2GameModeBase::QueueActionForInitiativeTurn(
 	}
 	else
 	{
-		Result = RuleSet->Execute_OnQueueAction(RuleSet.GetObject(), Character, Action, OutQueueResult);
+		Result =
+			IPF2ModeOfPlayRuleSetInterface::Execute_OnQueueAction(
+				RuleSet.GetObject(),
+				Character,
+				Action,
+				OutQueueResult
+			);
 	}
 
 	return Result;
@@ -129,7 +135,7 @@ void APF2GameModeBase::CancelActionQueuedForInitiativeTurnByHandle(const FPF2Que
 	}
 	else
 	{
-		RuleSet->Execute_OnCancelQueuedActionByHandle(RuleSet.GetObject(), ActionHandle);
+		IPF2ModeOfPlayRuleSetInterface::Execute_OnCancelQueuedActionByHandle(RuleSet.GetObject(), ActionHandle);
 	}
 }
 
@@ -149,7 +155,7 @@ void APF2GameModeBase::CancelActionQueuedForInitiativeTurn(const TScriptInterfac
 	}
 	else
 	{
-		RuleSet->Execute_OnCancelQueuedAction(RuleSet.GetObject(), Character, Action);
+		IPF2ModeOfPlayRuleSetInterface::Execute_OnCancelQueuedAction(RuleSet.GetObject(), Character, Action);
 	}
 }
 
@@ -169,7 +175,7 @@ void APF2GameModeBase::Tick(const float DeltaSeconds)
 
 	if (RuleSet != nullptr)
 	{
-		RuleSet->Execute_OnTick(RuleSet.GetObject(), DeltaSeconds);
+		IPF2ModeOfPlayRuleSetInterface::Execute_OnTick(RuleSet.GetObject(), DeltaSeconds);
 	}
 }
 
@@ -234,7 +240,7 @@ void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeO
 
 			bCanTransition = false;
 		}
-		else if (!OldRuleSet->Execute_CanTransitionTo(OldRuleSet.GetObject(), Pf2GameState, NewModeOfPlay))
+		else if (!IPF2ModeOfPlayRuleSetInterface::Execute_CanTransitionTo(OldRuleSet.GetObject(), Pf2GameState, NewModeOfPlay))
 		{
 			UE_LOG(
 				LogPf2Core,
@@ -280,14 +286,14 @@ void APF2GameModeBase::ForceSwitchModeOfPlay(const EPF2ModeOfPlayType NewModeOfP
 
 		if (OldRuleSet != nullptr)
 		{
-			OldRuleSet->Execute_OnModeOfPlayEnd(OldRuleSet.GetObject(), OldModeOfPlay);
+			IPF2ModeOfPlayRuleSetInterface::Execute_OnModeOfPlayEnd(OldRuleSet.GetObject(), OldModeOfPlay);
 		}
 
 		Pf2GameState->SwitchModeOfPlay(NewModeOfPlay, NewRuleSet);
 
 		if (NewRuleSet != nullptr)
 		{
-			NewRuleSet->Execute_OnModeOfPlayStart(NewRuleSet.GetObject(), NewModeOfPlay);
+			IPF2ModeOfPlayRuleSetInterface::Execute_OnModeOfPlayStart(NewRuleSet.GetObject(), NewModeOfPlay);
 		}
 	}
 }
