@@ -51,6 +51,19 @@ public:
 	void OnModeOfPlayStart(EPF2ModeOfPlayType ModeOfPlay);
 
 	/**
+	 * Callback to notify this rule set that a playable character has just joined the game.
+	 *
+	 * This only fires if a player joins the game while this rule set is already active. The rule set should use this as
+	 * an opportunity to update character-tracking logic (e.g., add the player to an existing, on-going encounter,
+	 * etc.).
+	 *
+	 * @param Character
+	 *	The character of the player who just connected.
+	 */
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Mode of Play Rule Sets")
+	void OnPlayableCharacterStarting(const TScriptInterface<IPF2CharacterInterface>& Character);
+
+	/**
 	 * Callback to notify this rule set of the start of a frame.
 	 *
 	 * The rule set should use this as an opportunity to update time-based state (e.g., expire time-based initiative).

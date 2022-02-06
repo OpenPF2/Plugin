@@ -179,6 +179,23 @@ void APF2GameModeBase::Tick(const float DeltaSeconds)
 	}
 }
 
+void APF2GameModeBase::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
+{
+	TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet;
+
+	Super::HandleStartingNewPlayer_Implementation(NewPlayer);
+
+	RuleSet = this->GetModeOfPlayRuleSet();
+
+	if (RuleSet != nullptr)
+	{
+		IPF2ModeOfPlayRuleSetInterface::Execute_OnPlayableCharacterStarting(
+			RuleSet.GetObject(),
+			NewPlayer->GetCharacter()
+		);
+	}
+}
+
 TScriptInterface<IPF2ModeOfPlayRuleSetInterface> APF2GameModeBase::GetModeOfPlayRuleSet()
 {
 	TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet;
