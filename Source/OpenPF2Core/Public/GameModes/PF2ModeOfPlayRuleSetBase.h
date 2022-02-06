@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include "PF2GameModeInterface.h"
 #include "PF2ModeOfPlayRuleSetInterface.h"
 #include "PF2PlayerControllerInterface.h"
 
@@ -40,6 +41,15 @@ protected:
 	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
+	/**
+	 * Gets the game mode.
+	 *
+	 * @return
+	 *	PF2-specific game mode.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets")
+	TScriptInterface<IPF2GameModeInterface> GetGameMode() const;
+
 	/**
 	 * Gets controllers for all the characters in the world.
 	 *

@@ -32,6 +32,15 @@ void UPF2ModeOfPlayRuleSetBase::OnCancelQueuedAction_Implementation(
 	// By default there is no queue, so we do nothing.
 }
 
+TScriptInterface<IPF2GameModeInterface> UPF2ModeOfPlayRuleSetBase::GetGameMode() const
+{
+	AGameModeBase* GameMode = this->GetWorld()->GetAuthGameMode();
+
+	check(GameMode);
+
+	return TScriptInterface<IPF2GameModeInterface>(GameMode);
+}
+
 TArray<TScriptInterface<IPF2PlayerControllerInterface>> UPF2ModeOfPlayRuleSetBase::GetPlayerControllers() const
 {
 	TArray<TScriptInterface<IPF2PlayerControllerInterface>> PlayerControllers;
