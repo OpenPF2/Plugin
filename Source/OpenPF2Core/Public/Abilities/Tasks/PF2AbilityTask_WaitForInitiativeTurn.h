@@ -1,4 +1,4 @@
-// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -12,6 +12,7 @@
 #include "PF2QueuedActionInterface.h"
 
 #include "Abilities/PF2AbilityActivationResult.h"
+#include "Abilities/PF2GameplayAbilityInterface.h"
 
 #include "GameModes/PF2GameModeInterface.h"
 
@@ -304,12 +305,14 @@ protected:
 	bool CanAbilityProceed() const;
 
 	/**
-	 * Prevents the ability that owns this task from blocking activations of other abilities.
+	 * Gets the owning ability as a PF2-compatible Gameplay Ability.
+	 *
+	 * If the owning ability is not PF2-compatible, a warning is logged and null is returned instead.
+	 *
+	 * @return
+	 *	Either:
+	 *	- The owning ability, as a PF2-compatible GA; or
+	 *	- nullptr, if this ability task was invoked by an ability that is not PF2-compatible.
 	 */
-	void DisableAbilityBlocking() const;
-
-	/**
-	 * Allows the ability that owns this task from blocking activations of other abilities.
-	 */
-	void EnableAbilityBlocking() const;
+	IPF2GameplayAbilityInterface* GetOwningPf2Ability() const;
 };

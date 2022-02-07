@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -10,6 +10,7 @@
 
 #include "Abilities/PF2AbilitySystemComponentInterface.h"
 #include "Abilities/PF2ActionQueueResult.h"
+#include "Abilities/PF2GameplayAbilityInterface.h"
 
 #include "GameModes/PF2GameModeInterface.h"
 
@@ -138,6 +139,8 @@ EPF2AbilityActivationResult UPF2AbilityTask_WaitForInitiativeTurn::PerformAction
 	{
 		if (this->CanAbilityProceed())
 		{
+			IPF2GameplayAbilityInterface* Pf2Ability = this->GetOwningPf2Ability();
+
 			UE_LOG(
 				LogPf2CoreEncounters,
 				VeryVerbose,
@@ -147,7 +150,10 @@ EPF2AbilityActivationResult UPF2AbilityTask_WaitForInitiativeTurn::PerformAction
 				((this->WaitingCharacter != nullptr) ? *(this->WaitingCharacter->GetIdForLogs()) : TEXT("UNK"))
 			);
 
-			this->EnableAbilityBlocking();
+			if (Pf2Ability != nullptr)
+			{
+				Pf2Ability->OnDequeued();
+			}
 
 			if (this->ShouldBroadcastAbilityTaskDelegates())
 			{
@@ -205,9 +211,13 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate_Client()
 
 	if (this->HasAsc())
 	{
-		FScopedPredictionWindow ScopedPrediction(this->AbilitySystemComponent, true);
+		FScopedPredictionWindow       ScopedPrediction = FScopedPredictionWindow(this->AbilitySystemComponent, true);
+		IPF2GameplayAbilityInterface* Pf2Ability       = this->GetOwningPf2Ability();
 
-		this->DisableAbilityBlocking();
+		if (Pf2Ability != nullptr)
+		{
+			Pf2Ability->OnQueued();
+		}
 
 		this->CallOrAddReplicatedDelegate(
 			EAbilityGenericReplicatedEvent::GenericSignalFromServer,
@@ -271,11 +281,16 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate_Server(IPF2CharacterInterfa
 
 			default:
 			case EPF2ActionQueueResult::Queued:
-				// The MoPRS queued the action for later execution. Temporarily unblock this ability from blocking other
-				// abilities that would otherwise be incompatible, and then notify the ability.
-				this->DisableAbilityBlocking();
-				this->OnQueued.Broadcast();
+				IPF2GameplayAbilityInterface* Pf2Ability = this->GetOwningPf2Ability();
 
+				if (Pf2Ability != nullptr)
+				{
+					// The MoPRS queued the action for later execution. Give the ability the chance to temporarily
+					// unblock other abilities that would otherwise be incompatible with it.
+					Pf2Ability->OnQueued();
+				}
+
+				this->OnQueued.Broadcast();
 				this->SetWaitingOnRemotePlayerData();
 				break;
 			}
@@ -299,39 +314,46 @@ void UPF2AbilityTask_WaitForInitiativeTurn::OnPerformAction_Client()
 
 bool UPF2AbilityTask_WaitForInitiativeTurn::CanAbilityProceed() const
 {
+	bool                             bCanProceed;
 	const FGameplayAbilitySpecHandle AbilitySpecHandle = this->Ability->GetCurrentAbilitySpecHandle();
 	const FGameplayAbilityActorInfo  ActorInfo         = this->Ability->GetActorInfo();
+	IPF2GameplayAbilityInterface*    Pf2Ability        = this->GetOwningPf2Ability();
 
-	// Prevent blocking ourselves.
-	this->DisableAbilityBlocking();
+	if (Pf2Ability != nullptr)
+	{
+		// Prevent blocking ourselves.
+		Pf2Ability->ForceSuspendBlocking();
+	}
 
-	return this->Ability->CanActivateAbility(AbilitySpecHandle, &ActorInfo, this->SourceTags, this->TargetTags);
+	bCanProceed = this->Ability->CanActivateAbility(AbilitySpecHandle, &ActorInfo, this->SourceTags, this->TargetTags);
+
+	if (Pf2Ability != nullptr)
+	{
+		Pf2Ability->ForceResumeBlocking();
+	}
+
+	return bCanProceed;
 }
 
-void UPF2AbilityTask_WaitForInitiativeTurn::DisableAbilityBlocking() const
+IPF2GameplayAbilityInterface* UPF2AbilityTask_WaitForInitiativeTurn::GetOwningPf2Ability() const
 {
-	UE_LOG(
-		LogPf2CoreEncounters,
-		VeryVerbose,
-		TEXT("[%s] Ability blocking 'disabled' for action ('%s'). Previous state was: '%s'"),
-		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(this->GetIdForLogs()),
-		(this->Ability->IsBlockingOtherAbilities() ? TEXT("enabled") : TEXT("disabled"))
-	);
+	IPF2GameplayAbilityInterface* Pf2Ability;
 
-	return this->Ability->SetShouldBlockOtherAbilities(false);
-}
+	ensure(this->HasAbility());
 
-void UPF2AbilityTask_WaitForInitiativeTurn::EnableAbilityBlocking() const
-{
-	UE_LOG(
-		LogPf2CoreEncounters,
-		VeryVerbose,
-		TEXT("[%s] Ability blocking 'enabled' for action ('%s'). Previous state was: '%s'"),
-		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(this->GetIdForLogs()),
-		(this->Ability->IsBlockingOtherAbilities() ? TEXT("enabled") : TEXT("disabled"))
-	);
+	Pf2Ability = Cast<IPF2GameplayAbilityInterface>(this->Ability);
 
-	return this->Ability->SetShouldBlockOtherAbilities(true);
+	if (Pf2Ability == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreEncounters,
+			Warning,
+			TEXT("[%s] %s invoked on a non-PF2 GA. The ability may not behave as expected if queued during encounters."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(this->GetClass()->GetName()),
+			*(this->GetIdForLogs())
+		);
+	}
+
+	return Pf2Ability;
 }
