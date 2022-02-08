@@ -1,4 +1,4 @@
-// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -17,16 +17,18 @@
 #include <UObject/ConstructorHelpers.h>
 #include <UObject/ScriptInterface.h>
 
-#include "Abilities/PF2AbilityBoostBase.h"
-#include "Abilities/PF2AbilitySystemComponent.h"
-#include "Abilities/PF2AttributeSet.h"
-#include "Abilities/PF2CharacterAbilityScoreType.h"
 #include "PF2AncestryAndHeritageGameplayEffectBase.h"
 #include "PF2BackgroundGameplayEffectBase.h"
 #include "PF2CharacterConstants.h"
 #include "PF2CharacterInterface.h"
 #include "PF2ClassGameplayEffectBase.h"
-#include "PF2GameplayAbilityUtilities.h"
+#include "PF2QueuedActionHandle.h"
+
+#include "Abilities/PF2AbilityBoostBase.h"
+#include "Abilities/PF2AbilitySystemComponent.h"
+#include "Abilities/PF2AttributeSet.h"
+#include "Abilities/PF2CharacterAbilityScoreType.h"
+#include "Utilities/PF2GameplayAbilityUtilities.h"
 
 #include "PF2CharacterBase.generated.h"
 
@@ -90,14 +92,14 @@ UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal
 class OPENPF2CORE_API APF2CharacterBase :
 	public ACharacter,
-	public IAbilitySystemInterface,
-	public IPF2CharacterInterface
+	public IPF2CharacterInterface,
+	public IPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 
 protected:
 	// =================================================================================================================
-	// Protected Properties - Blueprint Accessible
+	// Protected Fields
 	// =================================================================================================================
 	/**
 	 * The Ability System Component (ASC) used for interfacing this character with the Gameplay Abilities System (GAS).
@@ -111,6 +113,43 @@ protected:
 	UPROPERTY()
 	UPF2AttributeSet* AttributeSet;
 
+	/**
+	 * Whether or not managed passive Gameplay Effects have been generated for this character.
+	 */
+	UPROPERTY()
+	bool bManagedPassiveEffectsGenerated;
+
+	/**
+	 * The Gameplay Effects that drive stats for every character.
+	 */
+	TMultiMap<FName, TSubclassOf<UGameplayEffect>> CoreGameplayEffects;
+
+	/**
+	 * The list of passive Gameplay Effects (GEs) that are generated from other values specified on this character.
+	 *
+	 * Each value is a gameplay effect and the key is the weight group of that GE (sorted alphanumerically). The weight
+	 * controls the order that all GEs are applied. Lower weights are applied earlier than higher weights.
+	 *
+	 * The names of each group are exposed as tags in the "GameplayEffect.WeightGroup" tag list so that they can be
+	 * applied to GEs by game designers to control the default group that a GE gets added to. A GE can also be
+	 * explicitly added to a group via the AddPassiveGameplayEffectWithWeight() method on the Character ASC.
+	 */
+	TMultiMap<FName, TSubclassOf<UGameplayEffect>> ManagedGameplayEffects;
+
+	/**
+	 * The ability boost selections that have already been applied to this character.
+	 *
+	 * This is used to keep track of which boosts to disregard in the event that a character's passive GEs are disabled
+	 * and then re-enabled (as happens during character leveling). Without this, when a passive GE that grants an
+	 * ability boost is re-activated, the player would have the option to choose another set of ability boosts even
+	 * though their prior selections are still in effect on the player's character.
+	 */
+	UPROPERTY()
+	TArray<FPF2CharacterAbilityBoostSelection> AppliedAbilityBoostSelections;
+
+	// =================================================================================================================
+	// Protected Fields - Blueprint Accessible
+	// =================================================================================================================
 	/**
 	 * The human-friendly name of this character.
 	 *
@@ -224,28 +263,14 @@ protected:
 	TArray<TSubclassOf<UGameplayEffect>> AdditionalPassiveGameplayEffects;
 
 	/**
-	 * Whether or not managed passive Gameplay Effects have been generated for this character.
-	 */
-	UPROPERTY()
-	// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
-	int32 bManagedPassiveEffectsGenerated;
-
-	/**
-	 * The Gameplay Effects that drive stats for every character.
-	 */
-	TMultiMap<FName, TSubclassOf<UGameplayEffect>> CoreGameplayEffects;
-
-	/**
-	 * The list of passive Gameplay Effects (GEs) that are generated from other values specified on this character.
+	 * Additional Gameplay Abilities (GAs) that are granted to the character at the start of play.
 	 *
-	 * Each value is a gameplay effect and the key is the weight group of that GE (sorted alphanumerically). The weight
-	 * controls the order that all GEs are applied. Lower weights are applied earlier than higher weights.
-	 *
-	 * The names of each group are exposed as tags in the "GameplayEffect.WeightGroup" tag list so that they can be
-	 * applied to GEs by game designers to control the default group that a GE gets added to. A GE can also be
-	 * explicitly added to a group via the AddPassiveGameplayEffectWithWeight() method on the Character ASC.
+	 * This list is combined with any abilities that are separately granted by the character's ancestry, background,
+	 * heritage, or skills. You should only grant custom abilities here that are needed for story or special character
+	 * interactions; otherwise, abilities should only be granted through the aforementioned, more standard means.
 	 */
-	TMultiMap<FName, TSubclassOf<UGameplayEffect>> ManagedGameplayEffects;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Character")
+	TArray<TSubclassOf<UGameplayAbility>> AdditionalGameplayAbilities;
 
 	/**
 	 * The abilities to boost, as chosen by the player or a game designer, out of what ability boosts are pending.
@@ -286,15 +311,14 @@ protected:
 	TArray<FPF2CharacterAbilityBoostSelection> AbilityBoostSelections;
 
 	/**
-	 * The ability boost selections that have already been applied to this character.
+	 * Handles for all additional abilities that have been granted to this character.
 	 *
-	 * This is used to keep track of which boosts to disregard in the event that a character's passive GEs are disabled
-	 * and then re-enabled (as happens during character leveling). Without this, when a passive GE that grants an
-	 * ability boost is re-activated, the player would have the option to choose another set of ability boosts even
-	 * though their prior selections are still in effect on the player's character.
+	 * This will be empty if the additional gameplay abilities are yet to be granted.
+	 *
+	 * @see AdditionalGameplayAbilities
 	 */
-	UPROPERTY()
-	TArray<FPF2CharacterAbilityBoostSelection> AppliedAbilityBoostSelections;
+	UPROPERTY(BlueprintReadOnly)
+	TMap<TSubclassOf<UGameplayAbility>, FGameplayAbilitySpecHandle> GrantedAdditionalAbilities;
 
 public:
 	// =================================================================================================================
@@ -317,9 +341,9 @@ protected:
 	 */
 	template<class AscType, class AttributeSetType>
 	explicit APF2CharacterBase(TPF2CharacterComponentFactory<AscType, AttributeSetType> ComponentFactory) :
+		bManagedPassiveEffectsGenerated(false),
 		CharacterName(FText::FromString(TEXT("Character"))),
-		CharacterLevel(1),
-		bManagedPassiveEffectsGenerated(false)
+		CharacterLevel(1)
 	{
 		this->AbilitySystemComponent = ComponentFactory.CreateAbilitySystemComponent(this);
 		this->AttributeSet           = ComponentFactory.CreateAttributeSet(this);
@@ -348,24 +372,42 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	// =================================================================================================================
+	// Public Methods - IPF2LogIdentifiableInterface Implementation
+	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual FString GetIdForLogs() const override;
+
+	// =================================================================================================================
 	// Public Methods - IAbilitySystemInterface Implementation
 	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2CharacterInterface Implementation
 	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
 	virtual FText GetCharacterName() const override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual int32 GetCharacterLevel() const override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual void GetCharacterAbilitySystemComponent(
 		TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const override;
 
 	virtual IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent() const override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerController() const override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual TArray<UPF2AbilityBoostBase*> GetPendingAbilityBoosts() const override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual AActor* ToActor() override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual void AddAbilityBoostSelection(const TSubclassOf<UPF2AbilityBoostBase>   BoostGameplayAbility,
 	                                      const TSet<EPF2CharacterAbilityScoreType> SelectedAbilities) override;
 
@@ -385,11 +427,17 @@ public:
 	 *	5. During activation, the boost GA calls the ApplyAbilityBoost() method on the ASC for this character to
 	 *	   activate each valid boost selection.
 	 */
+	UFUNCTION(BlueprintCallable)
 	virtual void ApplyAbilityBoostSelections() override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual void ActivatePassiveGameplayEffects() override;
 
+	UFUNCTION(BlueprintCallable)
 	virtual void DeactivatePassiveGameplayEffects() override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void AddAndActivateGameplayAbility(const TSubclassOf<UGameplayAbility> Ability) override;
 
 	virtual void HandleDamageReceived(const float                         Damage,
 	                                  IPF2CharacterInterface*             InstigatorCharacter,
@@ -398,6 +446,18 @@ public:
 	                                  const FHitResult                    HitInfo) override;
 
 	virtual void HandleHitPointsChanged(const float Delta, const struct FGameplayTagContainer* EventTags) override;
+
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastHandleEncounterTurnStarted() override;
+
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastHandleEncounterTurnEnded() override;
+
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastHandleActionQueued(const FPF2QueuedActionHandle ActionHandle) override;
+
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastHandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) override;
 
 	// =================================================================================================================
 	// Public Methods - Blueprint Callable
@@ -418,7 +478,7 @@ public:
 	 *	true if the level was valid and changed; or, false, if the level was either invalid or did not change (the
 	 *	character was already the specified level).
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual bool SetCharacterLevel(int32 NewLevel);
 
 	/**
@@ -428,7 +488,7 @@ public:
 	 * Additional Ability Boosts on this character are updated to ensure that the boost survives passive GEs being
 	 * recalculated/reapplied, as would happen during character leveling.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
     virtual void ApplyAbilityBoost(EPF2CharacterAbilityScoreType TargetAbilityScore);
 
 	/**
@@ -440,14 +500,13 @@ public:
 	 * called when passive GAs are being re-enabled after being toggled off; otherwise, we run the risk of skipping over
 	 * a new ability boost GA that just happens to have the same class as one that was already applied.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual void RemoveRedundantPendingAbilityBoosts();
 
 protected:
 	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
-
 	/**
 	 * Gets whether the local machine has authoritative control over this character actor.
 	 *
@@ -495,6 +554,13 @@ protected:
 	void ClearManagedPassiveGameplayEffects();
 
 	/**
+	 * Grants any gameplay abilities that have been configured on this character by the game designer.
+	 *
+	 * This method is idempotent. If the character has already been granted the abilities, this method has no effect.
+	 */
+	void GrantAdditionalAbilities();
+
+	/**
 	 * Callback invoked when a character's level has changed, to allow logic that depends on levels to be refreshed.
 	 *
 	 * @param OldLevel
@@ -515,7 +581,7 @@ protected:
 	 * @param NewLevel
 	 *	The new level for this character.
 	 */
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
 	void OnCharacterLevelChanged(float OldLevel, float NewLevel);
 
 	/**
@@ -534,12 +600,24 @@ protected:
 	 * @param HitInfo
 	 *	Hit result information, including who was hit and where the damage was inflicted.
 	 */
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
 	void OnDamageReceived(const float                                     Damage,
 	                      const TScriptInterface<IPF2CharacterInterface>& InstigatorCharacter,
 	                      AActor*                                         DamageSource,
 	                      const FGameplayTagContainer&                    EventTags,
 	                      const FHitResult                                HitInfo);
+
+	/**
+	 * BP event invoked when this character's turn during an encounter has started.
+	 */
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
+	void OnEncounterTurnStarted();
+
+	/**
+	 * BP event invoked when this character's turn during an encounter has ended.
+	 */
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
+	void OnEncounterTurnEnded();
 
 	/**
 	 * BP event invoked when this character's hit points (i.e., health) have changed.
@@ -549,8 +627,32 @@ protected:
 	 * @param EventTags
 	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to hit points.
 	 */
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
 	void OnHitPointsChanged(float Delta, const struct FGameplayTagContainer& EventTags);
+
+	/**
+	 * BP event invoked when an action/ability this character has attempted to execute has been queued-up.
+	 *
+	 * This happens if the active Mode of Play Rule Set (MoPRS) is requiring characters to queue up execution of
+	 * abilities until their turn to attack/act.
+	 *
+	 * @param ActionHandle
+	 *	A reference to the ability that has been queued up.
+	 */
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
+	void OnActionQueued(const FPF2QueuedActionHandle ActionHandle);
+
+	/**
+	 * BP event invoked when a previously queued action/ability for this character has been removed from the queue.
+	 *
+	 * This happens if an action queued through the active Mode of Play Rule Set (MoPRS) was executed, canceled by the
+	 * player, removed by game rules, or removed/canceled by something in the world.
+	 *
+	 * @param ActionHandle
+	 *	A reference to the ability that has been removed.
+	 */
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
+	void OnActionDequeued(const FPF2QueuedActionHandle ActionHandle);
 };
 
 /**

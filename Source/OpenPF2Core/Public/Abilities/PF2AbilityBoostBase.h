@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -12,10 +12,10 @@
 
 #pragma once
 
-#include "Abilities/GameplayAbility.h"
 #include "PF2AbilityBoostRuleOption.h"
 #include "PF2AttributeSet.h"
-#include "PF2GameplayAbilityUtilities.h"
+#include "Abilities/GameplayAbility.h"
+#include "Utilities/PF2GameplayAbilityUtilities.h"
 
 #include "PF2AbilityBoostBase.generated.h"
 
@@ -59,7 +59,7 @@ public:
 
 	static FORCEINLINE FGameplayTag GetTriggerTag()
 	{
-		return PF2GameplayAbilityUtilities::GetTag(FName("TriggerTagCategory.ApplySelectedAbilityBoost"));
+		return PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.Type.AbilityBoost"));
 	};
 
 	virtual bool CheckCost(

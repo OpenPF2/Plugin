@@ -1,4 +1,4 @@
-// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -7,10 +7,10 @@
 
 #include <UObject/ConstructorHelpers.h>
 
-#include "PF2ArrayUtilities.h"
 #include "PF2CharacterConstants.h"
 #include "PF2CharacterInterface.h"
-#include "PF2EnumUtilities.h"
+#include "Utilities/PF2ArrayUtilities.h"
+#include "Utilities/PF2EnumUtilities.h"
 
 UPF2AbilitySystemComponent::UPF2AbilitySystemComponent()
 {
@@ -36,6 +36,11 @@ UPF2AbilitySystemComponent::UPF2AbilitySystemComponent()
 		// Allow boost effects to be looked-up by ability name later.
 		this->AbilityBoostEffects.Add(Ability, BoostGeFinder.Object);
 	}
+}
+
+UAbilitySystemComponent* UPF2AbilitySystemComponent::ToAbilitySystemComponent()
+{
+	return Cast<UAbilitySystemComponent>(this);
 }
 
 void UPF2AbilitySystemComponent::AddPassiveGameplayEffect(const TSubclassOf<UGameplayEffect> Effect)
@@ -384,7 +389,7 @@ TArray<UPF2AbilityBoostBase*> UPF2AbilitySystemComponent::GetPendingAbilityBoost
 	TArray<FGameplayAbilitySpec*> MatchingGameplayAbilitySpecs;
 
 	this->GetActivatableGameplayAbilitySpecsByAllMatchingTags(
-		FGameplayTagContainer(PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.ApplyAbilityBoost"))),
+		FGameplayTagContainer(PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.Type.AbilityBoost"))),
 		MatchingGameplayAbilitySpecs,
 		false
 	);
@@ -487,16 +492,16 @@ void UPF2AbilitySystemComponent::ActivatePassiveGameplayEffect(
 template <typename Func>
 void UPF2AbilitySystemComponent::InvokeAndReapplyAllPassiveGEs(const Func Callable)
 {
-	const bool WasActive = this->ArePassiveGameplayEffectsActive();
+	const bool bWasActive = this->ArePassiveGameplayEffectsActive();
 
-	if (WasActive)
+	if (bWasActive)
 	{
 		this->DeactivateAllPassiveGameplayEffects();
 	}
 
 	Callable();
 
-	if (WasActive)
+	if (bWasActive)
 	{
 		this->ActivateAllPassiveGameplayEffects();
 	}
@@ -520,13 +525,13 @@ void UPF2AbilitySystemComponent::InvokeAndReapplyPassiveGEsInSubsequentWeightGro
 {
 	// NOTE: If the group we are affecting isn't active, we don't bother to re-apply subsequent groups because they
 	// won't be affected.
-	const bool SubsequentGroupsWereActive =
+	const bool bSubsequentGroupsWereActive =
 		this->ActivatedWeightGroups.Contains(WeightGroup) &&
 		(this->DeactivatePassiveGameplayEffectsAfter(WeightGroup).Num() != 0);
 
 	Callable();
 
-	if (SubsequentGroupsWereActive)
+	if (bSubsequentGroupsWereActive)
 	{
 		this->ActivatePassiveGameplayEffectsAfter(WeightGroup);
 	}

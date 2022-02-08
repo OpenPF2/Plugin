@@ -1,4 +1,4 @@
-// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -85,6 +85,8 @@ UPF2AttributeSet::UPF2AttributeSet() :
 	SpellDifficultyClass(0.0f),
 	FeAncestryFeatCount(0.0f),
 	FeAncestryFeatLimit(0.0f),
+	EncActionPoints(0.0f),
+	EncReactionPoints(0.0f),
 	TmpDamageIncoming(0.0f)
 {
 }
@@ -158,6 +160,8 @@ void UPF2AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(UPF2AttributeSet, SpellDifficultyClass);
 	DOREPLIFETIME(UPF2AttributeSet, FeAncestryFeatCount);
 	DOREPLIFETIME(UPF2AttributeSet, FeAncestryFeatLimit);
+	DOREPLIFETIME(UPF2AttributeSet, EncActionPoints);
+	DOREPLIFETIME(UPF2AttributeSet, EncReactionPoints);
 }
 
 void UPF2AttributeSet::OnRep_Experience(const FGameplayAttributeData& OldValue)
@@ -483,6 +487,16 @@ void UPF2AttributeSet::OnRep_FeAncestryFeatCount(const FGameplayAttributeData& O
 void UPF2AttributeSet::OnRep_FeAncestryFeatLimit(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, FeAncestryFeatLimit, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_EncActionPoints(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, EncActionPoints, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_EncReactionPoints(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, EncReactionPoints, OldValue);
 }
 
 void UPF2AttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)

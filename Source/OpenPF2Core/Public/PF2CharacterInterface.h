@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -12,15 +12,18 @@
 
 #pragma once
 
-#include <UObject/Interface.h>
+#include <AbilitySystemInterface.h>
 #include <UObject/ScriptInterface.h>
+
+#include "PF2PlayerControllerInterface.h"
+#include "PF2QueuedActionHandle.h"
 
 #include "Abilities/PF2AbilityBoostBase.h"
 
 #include "PF2CharacterInterface.generated.h"
 
-UINTERFACE(MinimalAPI, meta = (CannotImplementInterfaceInBlueprint))
-class UPF2CharacterInterface : public UInterface
+UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
+class UPF2CharacterInterface : public UAbilitySystemInterface
 {
     GENERATED_BODY()
 };
@@ -28,11 +31,38 @@ class UPF2CharacterInterface : public UInterface
 /**
  * An interface for OpenPF2 characters.
  */
-class OPENPF2CORE_API IPF2CharacterInterface
+class OPENPF2CORE_API IPF2CharacterInterface : public IAbilitySystemInterface
 {
     GENERATED_BODY()
 
 public:
+	// =================================================================================================================
+	// Public Methods - IAbilitySystemInterface Implementation
+	// =================================================================================================================
+	/**
+	 * Gets the UObject version of the Ability System Component (ASC) for this character.
+	 *
+	 * @return
+	 *	The ASC for this character.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override = 0;
+
+	// =================================================================================================================
+	// Public Methods
+	// =================================================================================================================
+	/**
+	 * Returns a unique identifier for this object, for logging and debugging purposes.
+	 *
+	 * BUGBUG: This duplicates IPF2LogIdentifiableInterface::GetIdForLogs() because it seems that UE does not generate
+	 * code properly for interfaces that extend *multiple* other interfaces.
+	 *
+	 * @return
+	 *	A unique identifier for object in debug logs.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual FString GetIdForLogs() const = 0;
+
 	/**
 	 * Returns the name of this character, as set by the game designer.
 	 *
@@ -41,7 +71,7 @@ public:
 	 * @return
 	 *	The name of this character.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual FText GetCharacterName() const = 0;
 
 	/**
@@ -53,17 +83,18 @@ public:
 	 * "Each level grants greater skill, increased resiliency, and new capabilities, allowing your character to face
 	 * even greater challenges and go on to earn even more impressive rewards."
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual int32 GetCharacterLevel() const = 0;
 
 	/**
-	 * Gets a PF2-specific version of the ASC sub-component of this character.
+	 * Gets a PF2-specific version of the Ability System Component (ASC) for this character.
 	 *
 	 * @param Output
 	 *	The ASC, as an implementation of the interface for character ASCs.
 	 */
-	UFUNCTION(BlueprintCallable)
-	virtual void GetCharacterAbilitySystemComponent(TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const = 0;
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual void GetCharacterAbilitySystemComponent(
+		TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const = 0;
 
 	/**
 	 * Gets a PF2-specific version of the ASC sub-component of this character.
@@ -74,13 +105,32 @@ public:
 	virtual IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent() const = 0;
 
 	/**
+	 * Gets the player controller for this character, if this character is being controlled by a player.
+	 *
+	 * @return
+	 *	Either the player controller for this character, or a null player controller reference if this is not a playable
+	 *	character.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerController() const = 0;
+
+	/**
 	 * Gets all of the ability boosts that have been granted to this character that require choices from the player.
 	 *
 	 * @return
 	 *	The ability boost GAs that are still pending for this character.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual TArray<UPF2AbilityBoostBase*> GetPendingAbilityBoosts() const = 0;
+
+	/**
+	 * Gets the actor that is implementing this interface.
+	 *
+	 * @return
+	 *	This character, as an actor.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual AActor* ToActor() = 0;
 
 	/**
 	 * Applies a single ability boost selection to this character.
@@ -95,10 +145,10 @@ public:
 	 * @param SelectedAbilities
 	 *	The ability scores that the player selected, out of the options offered by the Boost GA.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual void AddAbilityBoostSelection(
-	    const TSubclassOf<class UPF2AbilityBoostBase> BoostGameplayAbility,
-	    const TSet<EPF2CharacterAbilityScoreType>     SelectedAbilities) = 0;
+	    const TSubclassOf<UPF2AbilityBoostBase>   BoostGameplayAbility,
+	    const TSet<EPF2CharacterAbilityScoreType> SelectedAbilities) = 0;
 
 	/**
 	 * Attempts to find and activate a pending ability boost Gameplay Ability for each Ability Boost selection on this
@@ -107,7 +157,7 @@ public:
 	 * Pending ability boosts are registered on this character via calls to AddAbilityBoostSelection() before a call to
 	 * this method.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual void ApplyAbilityBoostSelections() = 0;
 
 	/**
@@ -117,7 +167,7 @@ public:
 	 * toggling passive GEs on the character's ASC, as this method automatically skips out of offering boost selections
 	 * for which a player or game designer has already made choices.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual void ActivatePassiveGameplayEffects() = 0;
 
 	/**
@@ -128,14 +178,30 @@ public:
 	 * the character a chance to react to the change before involving the ASC. For example, if the state of any GAs
 	 * needs to be recorded so that they are re-applied correctly after passive GEs are re-activated.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual void DeactivatePassiveGameplayEffects() = 0;
 
 	/**
+	 * Adds a Gameplay Ability (GA) to this character and then immediately activates it.
+	 *
+	 * This method is intended for use by one-shot GAs that react to events in the environment or game story. As such,
+	 * the GA is NOT added to the character's "AdditionalGameplayAbilities" property, as that property is intended to
+	 * control the GAs that are added to the character at creation time.
+	 *
+	 * @param Ability
+	 *	The type of ability to add and activate on the character.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual void AddAndActivateGameplayAbility(const TSubclassOf<UGameplayAbility> Ability) = 0;
+
+	// =================================================================================================================
+	// Public Event Notifications from Attribute Set
+	// =================================================================================================================
+	/**
 	 * Notifies this character that it has received damage.
 	 *
-	 * This should only be invoked by the character's attribute set. This does NOT actually modify the character's stats.
-	 * Once invoked, this method fires off appropriate callbacks into the character's Blueprint event graph.
+	 * This should only be invoked by the character's attribute set. This does NOT actually modify the character's
+	 * stats. Once invoked, this method fires off appropriate callbacks into the character's Blueprint event graph.
 	 *
 	 * @param Damage
 	 *	The amount of the damage.
@@ -159,13 +225,54 @@ public:
 	/**
 	 * Notifies this character that its hit points (i.e., health) have changed.
 	 *
-	 * This should only be invoked by the character's attribute set. This does NOT actually modify the character's stats.
-	 * Once invoked, this method fires off appropriate callbacks into the character's Blueprint event graph.
+	 * This should only be invoked by the character's attribute set. This does NOT actually modify the character's
+	 * stats. Once invoked, this method fires off appropriate callbacks into the character's Blueprint event graph.
 	 *
 	 * @param Delta
 	 *	The amount that the character's hit points should change.
 	 * @param EventTags
 	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to hit points.
 	 */
-    virtual void HandleHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags) = 0;
+	virtual void HandleHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags) = 0;
+
+	// =================================================================================================================
+	// Public Event Notifications from Mode of Play Rule Sets (MoPRS)
+	// =================================================================================================================
+	/**
+	 * Notifies this character that their turn during an encounter has started.
+	 *
+	 * (This should normally be invoked only by the MoPRS).
+	 */
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastHandleEncounterTurnStarted() = 0;
+
+	/**
+	 * Notifies this character that their turn during an encounter has ended.
+	 *
+	 * (This should normally be invoked only by the MoPRS).
+	 */
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastHandleEncounterTurnEnded() = 0;
+
+	/**
+	 * Notifies this character that an action/ability they have attempted to execute has been queued-up.
+	 *
+	 * (This should normally be invoked only by the MoPRS).
+	 *
+	 * @param ActionHandle
+	 *	A reference to the ability that has been queued up.
+	 */
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastHandleActionQueued(const FPF2QueuedActionHandle ActionHandle) = 0;
+
+	/**
+	 * Notifies this character that a previously queued action/ability has been removed from the queue.
+	 *
+	 * (This should normally be invoked only by the MoPRS).
+	 *
+	 * @param ActionHandle
+	 *	A reference to the ability that has been removed.
+	 */
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastHandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) = 0;
 };

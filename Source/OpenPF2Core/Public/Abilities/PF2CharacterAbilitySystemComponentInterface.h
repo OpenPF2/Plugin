@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -15,7 +15,7 @@
 // this header file, so we have to break the recursive dependency.
 class UPF2AbilityBoostBase;
 
-UINTERFACE(MinimalAPI, meta = (CannotImplementInterfaceInBlueprint))
+UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2CharacterAbilitySystemComponentInterface : public UPF2AbilitySystemComponentInterface
 {
     GENERATED_BODY()
@@ -41,7 +41,7 @@ public:
 	 * @return
 	 *	The level of the owning character actor.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Ability System Components")
 	virtual int32 GetCharacterLevel() const = 0;
 
 	/**
@@ -50,7 +50,7 @@ public:
 	 * @return
 	 *	A map from character ability scores to a snapshot of their values and modifiers.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Ability System Components")
 	virtual TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> GetAbilityScoreValues() const = 0;
 
 	/**
@@ -59,7 +59,7 @@ public:
 	 * @return
 	 *	The ability boost GAs that are still pending for this character.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Ability System Components")
 	virtual TArray<UPF2AbilityBoostBase *> GetPendingAbilityBoosts() const = 0;
 
 	/**
@@ -71,7 +71,7 @@ public:
 	 * @return
 	 *	The blueprint to apply as a passive GE to boost that ability.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Ability System Components")
 	virtual TSubclassOf<UGameplayEffect> GetBoostEffectForAbility(const EPF2CharacterAbilityScoreType AbilityScore) = 0;
 
 	/**
@@ -88,6 +88,6 @@ public:
 	 * @param TargetAbilityScore
 	 *	The ability score that will be boosted.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Ability System Components")
     virtual void ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore) = 0;
 };

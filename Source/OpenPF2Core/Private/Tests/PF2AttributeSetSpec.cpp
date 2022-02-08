@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -98,6 +98,8 @@ void FPF2AttributeSetSpec::Define()
 			TestEqual(TEXT("SpellDifficultyClass"),   AttributeSet->GetSpellDifficultyClass(),    0.0f);
 			TestEqual(TEXT("FeAncestryFeatCount"),    AttributeSet->GetFeAncestryFeatCount(),     0.0f);
 			TestEqual(TEXT("FeAncestryFeatLimit"),    AttributeSet->GetFeAncestryFeatLimit(),     0.0f);
+			TestEqual(TEXT("EncActionPoints"),        AttributeSet->GetEncActionPoints(),         0.0f);
+			TestEqual(TEXT("EncReactionPoints"),      AttributeSet->GetEncReactionPoints(),       0.0f);
 			TestEqual(TEXT("TmpDamageIncoming"),      AttributeSet->GetTmpDamageIncoming(),       0.0f);
 		});
 	});

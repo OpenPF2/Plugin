@@ -1,4 +1,4 @@
-// Copyright 2021 Guy Elsmore-Paddock. All Rights Reserved.
+// Copyright 2021-2022 Guy Elsmore-Paddock. All Rights Reserved.
 // Adapted from content that is Copyright Epic Games, Inc. (Action RPG Sample).
 // Licensed only for use with Unreal Engine.
 
@@ -9,7 +9,7 @@
 #include <AbilitySystemGlobals.h>
 #include <Animation/AnimInstance.h>
 
-UPF2AbilityTask_PlayMontageAndWaitForEvent* UPF2AbilityTask_PlayMontageAndWaitForEvent::PlayMontageAndWaitForEvent(
+UPF2AbilityTask_PlayMontageAndWaitForEvent* UPF2AbilityTask_PlayMontageAndWaitForEvent::CreatePlayMontageAndWaitForEvent(
 	UGameplayAbility*           OwningAbility,
 	const FName                 TaskInstanceName,
 	UAnimMontage*               MontageToPlay,
@@ -160,17 +160,17 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::ExternalCancel()
 	Super::ExternalCancel();
 }
 
-void UPF2AbilityTask_PlayMontageAndWaitForEvent::OnDestroy(const bool AbilityEnded)
+void UPF2AbilityTask_PlayMontageAndWaitForEvent::OnDestroy(const bool bAbilityEnded)
 {
 	// Note: Clearing montage end delegate isn't necessary since its not a multicast and will be cleared when the next
 	// montage plays. (If we are destroyed, it will detect this and not do anything)
 
 	// This delegate, however, should be cleared as it is a multicast
-	if (this->Ability != nullptr)
+	if (this->HasAbility())
 	{
 		this->Ability->OnGameplayAbilityCancelled.Remove(this->CancelledHandle);
 
-		if (AbilityEnded && this->bStopWhenAbilityEnds)
+		if (bAbilityEnded && this->bStopWhenAbilityEnds)
 		{
 			// ReSharper disable once CppExpressionWithoutSideEffects
 			this->StopPlayingMontage();
@@ -184,14 +184,14 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::OnDestroy(const bool AbilityEnd
 		Asc->RemoveGameplayEventTagContainerDelegate(this->EventTags, this->EventHandle);
 	}
 
-	Super::OnDestroy(AbilityEnded);
+	Super::OnDestroy(bAbilityEnded);
 }
 
 FString UPF2AbilityTask_PlayMontageAndWaitForEvent::GetDebugString() const
 {
 	const UAnimMontage* PlayingMontage = nullptr;
 
-	if (this->Ability != nullptr)
+	if (this->HasAbility())
 	{
 		const FGameplayAbilityActorInfo* ActorInfo    = Ability->GetCurrentActorInfo();
 		UAnimInstance*                   AnimInstance = ActorInfo->GetAnimInstance();
@@ -246,7 +246,7 @@ bool UPF2AbilityTask_PlayMontageAndWaitForEvent::StopPlayingMontage() const
 
 	// Check if the montage is still playing
 	// The ability would have been interrupted, in which case we should automatically stop the montage
-	if ((Asc != nullptr) && (this->Ability != nullptr))
+	if ((Asc != nullptr) && this->HasAbility())
 	{
 		if ((Asc->GetAnimatingAbility() == this->Ability) &&
 			(Asc->GetCurrentMontage() == this->MontageToPlay))
@@ -298,7 +298,7 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::OnMontageEnded(UAnimMontage* Mo
 void UPF2AbilityTask_PlayMontageAndWaitForEvent::OnMontageBlendingOut(UAnimMontage* Montage,
                                                                       const bool    bInterrupted) const
 {
-	if ((this->Ability != nullptr) &&
+	if (this->HasAbility() &&
 		(this->Ability->GetCurrentMontage() == this->MontageToPlay) &&
 		(Montage == this->MontageToPlay))
 	{

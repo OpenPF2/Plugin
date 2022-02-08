@@ -1,4 +1,4 @@
-// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -13,7 +13,7 @@
 #include "Calculations/PF2StandardDamageExecution.h"
 
 #include "Abilities/PF2CharacterAttributeStatics.h"
-#include "PF2GameplayAbilityUtilities.h"
+#include "Utilities/PF2GameplayAbilityUtilities.h"
 
 UPF2StandardDamageExecution::UPF2StandardDamageExecution() :
 	DamageParameterTag(FGameplayTag::RequestGameplayTag(this->DamageParameterTagName)),
@@ -25,7 +25,7 @@ UPF2StandardDamageExecution::UPF2StandardDamageExecution() :
 
 void UPF2StandardDamageExecution::Execute_Implementation(
 	const FGameplayEffectCustomExecutionParameters& ExecutionParams,
-	FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
+	OUT FGameplayEffectCustomExecutionOutput&       OutExecutionOutput) const
 {
 	float IncomingDamage = 0.0f,
 	      Resistance     = 0.0f,

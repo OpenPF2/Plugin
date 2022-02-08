@@ -1,10 +1,11 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "Abilities/PF2AbilityBoostRuleOptionValidator.h"
-#include "PF2EnumUtilities.h"
+
+#include "Utilities/PF2EnumUtilities.h"
 
 void UPF2AbilityBoostRuleOptionValidator::AppendRuleOptions(const TArray<FPF2AbilityBoostRuleOption> NewRuleOptions)
 {
@@ -75,7 +76,7 @@ void UPF2AbilityBoostRuleOptionValidator::AddRuleOption(const FPF2AbilityBoostRu
 
 bool UPF2AbilityBoostRuleOptionValidator::CanApplyAbilityBoost(const EPF2CharacterAbilityScoreType AbilityScoreType)
 {
-	bool                                CanApply                 = false;
+	bool                                bCanApply                = false;
 	TSet<EPF2CharacterAbilityScoreType> AbilityScoreTypesToMatch = this->UsedAbilities;
 
 	// We can't apply more boosts than we have rules.
@@ -105,10 +106,10 @@ bool UPF2AbilityBoostRuleOptionValidator::CanApplyAbilityBoost(const EPF2Charact
 			}
 		}
 
-		CanApply = (RemainingPermutations.Num() != 0);
+		bCanApply = (RemainingPermutations.Num() != 0);
 	}
 
-	return CanApply;
+	return bCanApply;
 }
 
 void UPF2AbilityBoostRuleOptionValidator::ApplyAbilityBoost(const EPF2CharacterAbilityScoreType AbilityScoreType)
