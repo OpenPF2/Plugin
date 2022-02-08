@@ -16,10 +16,15 @@
 /**
  * Base class for PF2 Mode of Play Rule Sets (MoPRS) that need encounter logic, including initiative and queued actions.
  *
- * Encounters often involve each character "rolling" for their initiative order, and then performing attacks in order of
- * their initiative. Since OpenPF2 is intended to support action RPGs just as well as turn-based RPGs, this base class
- * provides the ability for characters to "queue-up" abilities/actions that they want to perform when it is their turn
- * to keep combat flowing despite the turn-based nature of PF2 rules.
+ * Encounters often involve each character "rolling" for their initiative order, and then performing attacks in order
+ * from highest to lowest initiative score. This class provides several convenience methods for Blueprint sub-classes to
+ * set initiatives for characters and then iterate through characters in order of their initiative.
+ *
+ * Since OpenPF2 is intended to support action RPGs just as well as turn-based RPGs, this base class also provides
+ * convenience methods to support the ability for characters to "queue-up" abilities/actions that they want to perform
+ * when it is their turn. This gives Blueprint sub-classes full control over how they want to implement combat, either
+ * allowing each character to act one-by-one; or, cycling through characters at a rapid clip to keep combat flowing
+ * despite the turn-based nature of PF2 rules.
  */
 UCLASS(Abstract, Blueprintable)
 // ReSharper disable once CppClassCanBeFinal
@@ -220,7 +225,7 @@ protected:
 	 * 1. The next character will be a different character than the last character, unless there is only one character
 	 *    in the encounter.
 	 * 2. The next character will have either a lower initiative or an equal initiative to the last character, unless
-	 *    the last character returned was the character in the encounter with the lowest initiative in the encounter.
+	 *    the last character returned was the character in the encounter with the lowest initiative.
 	 *
 	 * Only characters that have an initiative set are returned; all others are ignored.
 	 *

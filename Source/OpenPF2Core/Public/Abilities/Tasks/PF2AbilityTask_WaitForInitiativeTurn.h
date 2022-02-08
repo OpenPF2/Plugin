@@ -42,8 +42,8 @@ public:
 	 * This only affects the GA if it is activated in encounter mode. If this GA is activated while the game is in
 	 * exploration or downtime mode, it is executed immediately, without delay.
 	 *
-	 * The GA is only "resumed" after being queued if the ability is not otherwise blocked (e.g., but other abilities
-	 * that are active on the character at the time that it is being resumed).
+	 * The GA is only "resumed" after being queued if the ability is not otherwise blocked (e.g., other abilities are
+	 * active on the character at the time that it is being resumed).
 	 *
 	 * Execution pins work as follows:
 	 *	- OnQueued is called if the ability is queued, in case it needs to suspend itself while it is queued.
@@ -84,12 +84,12 @@ public:
 	 * This only affects the GA if it is activated in encounter mode. If this GA is activated while the game is in
 	 * exploration or downtime mode, it is executed immediately, without delay.
 	 *
-	 * The GA is only "resumed" after being queued if the ability is not otherwise blocked (e.g., but other abilities
-	 * that are active on the character at the time that it is being resumed). In addition, this variation of the
-	 * "Wait for Initiative Turn" task also factors in the tags of both the source/instigator and the target, and is
-	 * intended to be used by abilities activated from events. The tags are evaluated at the time that the GA is being
-	 * dequeued, so they should be provided from "live" objects rather than snapshotted objects to ensure that the tags
-	 * are an accurate reflection of the world.
+	 * The GA is only "resumed" after being queued if the ability is not otherwise blocked (e.g., other abilities are
+	 * active on the character at the time that it is being resumed). In addition, this variation of the "Wait for
+	 * Initiative Turn" task also factors in the tags of both the source/instigator and the target, and is intended to
+	 * be used by abilities activated from events. The tags are evaluated at the time that the GA is being dequeued, so
+	 * they should be provided from "live" objects rather than snapshot-ed objects to ensure that the tags are an
+	 * accurate reflection of the world.
 	 *
 	 * Execution pins work as follows:
 	 *	- OnQueued is called if the ability is queued, in case it needs to suspend itself while it is queued.
@@ -307,7 +307,7 @@ protected:
 	/**
 	 * Gets the owning ability as a PF2-compatible Gameplay Ability.
 	 *
-	 * If the owning ability is not PF2-compatible, a warning is logged and null is returned instead.
+	 * If the ability is not PF2-compatible, a warning is logged and null is returned instead.
 	 *
 	 * @return
 	 *	Either:
