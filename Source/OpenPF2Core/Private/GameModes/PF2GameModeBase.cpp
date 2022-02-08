@@ -248,15 +248,17 @@ void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeO
 		}
 		else if (OldRuleSet == nullptr)
 		{
+			// This typically should not happen. If it does, then the game designer is missing a rule set mapping. By
+			// default, we'll allow the transition since we have no rule set to veto it.
 			UE_LOG(
 				LogPf2Core,
-				Error,
-				TEXT("Cannot transition from current mode of play (%s) to new mode (%s) because there is no loaded rule set."),
-				*PF2EnumUtilities::ToString(Pf2GameState->GetModeOfPlay()),
+				Warning,
+				TEXT("There is no loaded rule set, so a requested transition from the current mode of play (%s) to a new mode of play (%s) has automatically been allowed."),
+				*PF2EnumUtilities::ToString(OldModeOfPlay),
 				*PF2EnumUtilities::ToString(NewModeOfPlay)
 			);
 
-			bCanTransition = false;
+			bCanTransition = true;
 		}
 		else if (!IPF2ModeOfPlayRuleSetInterface::Execute_CanTransitionTo(OldRuleSet.GetObject(), Pf2GameState, NewModeOfPlay))
 		{
