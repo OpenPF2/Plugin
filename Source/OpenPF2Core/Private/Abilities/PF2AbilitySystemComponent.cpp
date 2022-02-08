@@ -389,7 +389,7 @@ TArray<UPF2AbilityBoostBase*> UPF2AbilitySystemComponent::GetPendingAbilityBoost
 	TArray<FGameplayAbilitySpec*> MatchingGameplayAbilitySpecs;
 
 	this->GetActivatableGameplayAbilitySpecsByAllMatchingTags(
-		FGameplayTagContainer(PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.ApplyAbilityBoost"))),
+		FGameplayTagContainer(PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.Type.AbilityBoost"))),
 		MatchingGameplayAbilitySpecs,
 		false
 	);
