@@ -104,6 +104,7 @@ FPF2QueuedActionHandle APF2GameModeBase::QueueActionForInitiativeTurn(
 		);
 
 		Action->PerformAction();
+		OutQueueResult = EPF2ActionQueueResult::ExecutedImmediately;
 	}
 	else
 	{
