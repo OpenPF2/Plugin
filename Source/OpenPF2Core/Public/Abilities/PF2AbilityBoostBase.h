@@ -59,7 +59,7 @@ public:
 
 	static FORCEINLINE FGameplayTag GetTriggerTag()
 	{
-		return PF2GameplayAbilityUtilities::GetTag(FName("TriggerTagCategory.ApplySelectedAbilityBoost"));
+		return PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.Type.AbilityBoost"));
 	};
 
 	virtual bool CheckCost(
