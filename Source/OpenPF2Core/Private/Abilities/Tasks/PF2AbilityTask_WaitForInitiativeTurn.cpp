@@ -57,7 +57,7 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate()
 	IPF2CharacterInterface* PF2Character = Cast<IPF2CharacterInterface>(this->GetOwnerActor());
 
 	UE_LOG(
-		LogPf2CoreEncounters,
+		LogPf2CoreAbilities,
 		VeryVerbose,
 		TEXT("[%s] Activate() called on ability task ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
@@ -142,7 +142,7 @@ EPF2AbilityActivationResult UPF2AbilityTask_WaitForInitiativeTurn::PerformAction
 			IPF2GameplayAbilityInterface* Pf2Ability = this->GetOwningPf2Ability();
 
 			UE_LOG(
-				LogPf2CoreEncounters,
+				LogPf2CoreAbilities,
 				VeryVerbose,
 				TEXT("[%s] Performing action ('%s') for character ('%s')."),
 				*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
@@ -177,7 +177,7 @@ EPF2AbilityActivationResult UPF2AbilityTask_WaitForInitiativeTurn::PerformAction
 		else
 		{
 			UE_LOG(
-				LogPf2CoreEncounters,
+				LogPf2CoreAbilities,
 				VeryVerbose,
 				TEXT("[%s] Action ('%s') blocked for character ('%s')."),
 				*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
@@ -202,7 +202,7 @@ void UPF2AbilityTask_WaitForInitiativeTurn::CancelAction()
 void UPF2AbilityTask_WaitForInitiativeTurn::Activate_Client()
 {
 	UE_LOG(
-		LogPf2CoreEncounters,
+		LogPf2CoreAbilities,
 		VeryVerbose,
 		TEXT("[%s] Activate_Client() called on ability task ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
@@ -234,7 +234,7 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate_Server(IPF2CharacterInterfa
 	const UWorld* const World = this->GetWorld();
 
 	UE_LOG(
-		LogPf2CoreEncounters,
+		LogPf2CoreAbilities,
 		VeryVerbose,
 		TEXT("[%s] Activate_Server() called on ability task ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
@@ -260,7 +260,7 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate_Server(IPF2CharacterInterfa
 			PF2GameMode->QueueActionForInitiativeTurn(CharacterScriptInterface, ThisScriptInterface, QueueResult);
 
 			UE_LOG(
-				LogPf2CoreEncounters,
+				LogPf2CoreAbilities,
 				VeryVerbose,
 				TEXT("[%s] Result of queueing action ('%s') was: '%s'"),
 				*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
@@ -346,7 +346,7 @@ IPF2GameplayAbilityInterface* UPF2AbilityTask_WaitForInitiativeTurn::GetOwningPf
 	if (Pf2Ability == nullptr)
 	{
 		UE_LOG(
-			LogPf2CoreEncounters,
+			LogPf2CoreAbilities,
 			Warning,
 			TEXT("[%s] %s invoked on a non-PF2 GA. The ability may not behave as expected if queued during encounters."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),

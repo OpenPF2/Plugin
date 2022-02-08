@@ -50,7 +50,7 @@ void UPF2GameplayAbilityBase::OnDequeued()
 void UPF2GameplayAbilityBase::ForceSuspendBlocking()
 {
 	UE_LOG(
-		LogPf2CoreEncounters,
+		LogPf2CoreAbilities,
 		VeryVerbose,
 		TEXT("[%s] Ability blocking 'disabled' for action ('%s'). Previous state was: '%s'"),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
@@ -64,7 +64,7 @@ void UPF2GameplayAbilityBase::ForceSuspendBlocking()
 void UPF2GameplayAbilityBase::ForceResumeBlocking()
 {
 	UE_LOG(
-		LogPf2CoreEncounters,
+		LogPf2CoreAbilities,
 		VeryVerbose,
 		TEXT("[%s] Ability blocking 'enabled' for action ('%s'). Previous state was: '%s'"),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
