@@ -9,7 +9,7 @@
 
 bool UPF2GameplayAbilityBase::CheckCost(const FGameplayAbilitySpecHandle Handle,
                                         const FGameplayAbilityActorInfo* ActorInfo,
-                                        FGameplayTagContainer* OptionalRelevantTags) const
+                                        FGameplayTagContainer*           OptionalRelevantTags) const
 {
 	if (this->bEnforcingCosts)
 	{

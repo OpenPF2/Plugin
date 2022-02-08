@@ -19,10 +19,10 @@
 #include "Utilities/PF2LogUtilities.h"
 
 UPF2AbilityTask_WaitForInitiativeTurn* UPF2AbilityTask_WaitForInitiativeTurn::CreateWaitInitiativeTurn(
-	UGameplayAbility*            OwningAbility,
-	const FName                  TaskInstanceName,
-	const FText                  ActionName,
-	const FSlateBrush            ActionIcon)
+	UGameplayAbility* OwningAbility,
+	const FName       TaskInstanceName,
+	const FText       ActionName,
+	const FSlateBrush ActionIcon)
 {
 	UPF2AbilityTask_WaitForInitiativeTurn* Task =
 		NewAbilityTask<UPF2AbilityTask_WaitForInitiativeTurn>(OwningAbility, TaskInstanceName);
