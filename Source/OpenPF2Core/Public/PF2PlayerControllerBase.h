@@ -72,6 +72,8 @@ protected:
 	/**
 	 * BP event invoked when the mode of play has changed.
 	 *
+	 * This is invoked on both the owning client and server.
+	 *
 	 * @param NewMode
 	 *	The new mode of play.
 	 */
@@ -80,18 +82,24 @@ protected:
 
 	/**
 	 * BP event invoked when the pawn's turn during an encounter has started.
+	 *
+	 * This is invoked on both the owning client and server.
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player Controllers")
 	void OnEncounterTurnStarted();
 
 	/**
 	 * BP event invoked when the pawn's turn during an encounter has ended.
+	 *
+	 * This is invoked on both the owning client and server.
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player Controllers")
 	void OnEncounterTurnEnded();
 
 	/**
 	 * BP event invoked when an action/ability has been queued-up for the controlled character.
+	 *
+	 * This is invoked on both the owning client and server.
 	 *
 	 * @param ActionHandle
 	 *	A reference to the ability that has been queued-up.
@@ -101,6 +109,8 @@ protected:
 
 	/**
 	 * BP event invoked when a previously queued action/ability for the controlled character has been cancelled.
+	 *
+	 * This is invoked on both the owning client and server.
 	 *
 	 * This happens if an action queued through the active Mode of Play Rule Set (MoPRS) was canceled by the player,
 	 * by game rules, or something in the world.
