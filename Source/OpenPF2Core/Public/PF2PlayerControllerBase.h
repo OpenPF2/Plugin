@@ -6,9 +6,11 @@
 #pragma once
 
 #include <GameFramework/PlayerController.h>
+#include <UObject/WeakInterfacePtr.h>
 
 #include "PF2PlayerControllerInterface.h"
 #include "PF2QueuedActionHandle.h"
+
 #include "PF2PlayerControllerBase.generated.h"
 
 /**
@@ -22,12 +24,20 @@ class OPENPF2CORE_API APF2PlayerControllerBase : public APlayerController, publi
 {
 	GENERATED_BODY()
 
+protected:
+	/**
+	 * The characters that can be controlled by this player controller.
+	 *
+	 * Depending on the game, this may represent this player's "party" or "squad".
+	 */
+	TArray<TWeakInterfacePtr<IPF2CharacterInterface>> ControlledCharacters;
+
 public:
 	// =================================================================================================================
 	// Public Methods - IPF2PlayerControllerInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
-	virtual TScriptInterface<IPF2CharacterInterface> GetControlledCharacter() override;
+	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetControlledCharacters() override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual APlayerController* ToPlayerController() override;
@@ -51,6 +61,11 @@ public:
 	virtual void ServerCancelQueuedAction(const FPF2QueuedActionHandle ActionHandle) override;
 
 protected:
+	// =================================================================================================================
+	// Protected Methods - APlayerController Overrides
+	// =================================================================================================================
+	virtual void OnPossess(APawn* NewPawn) override;
+
 	// =================================================================================================================
 	// Blueprint Event Callbacks
 	// =================================================================================================================
