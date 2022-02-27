@@ -28,7 +28,7 @@ namespace PF2ArrayUtilities
 	{
 		TArray<Out> Result;
 
-		for (const auto& Element : Elements)
+		for (const In& Element : Elements)
 		{
 			const Out MappingOutput = Callable(Element);
 
