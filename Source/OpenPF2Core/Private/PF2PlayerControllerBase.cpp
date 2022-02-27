@@ -11,6 +11,36 @@
 
 #include "Utilities/PF2ArrayUtilities.h"
 #include "Utilities/PF2InterfaceUtilities.h"
+#include "Utilities/PF2LogUtilities.h"
+
+void APF2PlayerControllerBase::SetPawn(APawn* NewPawn)
+{
+	IPF2CharacterInterface* Pf2Pawn = Cast<IPF2CharacterInterface>(NewPawn);
+
+	UE_LOG(
+		LogPf2Core,
+		VeryVerbose,
+		TEXT("[%s] Player controller ('%s') has taken possession of pawn ('%s')."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(this->GetName()),
+		(NewPawn == nullptr) ? TEXT("null") : *(NewPawn->GetName())
+	);
+
+	Super::SetPawn(NewPawn);
+
+	if (Pf2Pawn != nullptr)
+	{
+		const TWeakInterfacePtr<IPF2CharacterInterface> WeakPf2Pawn =
+			TWeakInterfacePtr<IPF2CharacterInterface>(Pf2Pawn);
+
+		if (!this->ControlledCharacters.Contains(WeakPf2Pawn))
+		{
+			// TODO (#22): Expose an explicit way to manage party members and to switch between which one is being
+			// controlled.
+			this->ControlledCharacters.Add(WeakPf2Pawn);
+		}
+	}
+}
 
 TArray<TScriptInterface<IPF2CharacterInterface>> APF2PlayerControllerBase::GetControlledCharacters()
 {
@@ -37,26 +67,6 @@ APlayerController* APF2PlayerControllerBase::ToPlayerController()
 void APF2PlayerControllerBase::HandleModeOfPlayChanged(const EPF2ModeOfPlayType NewMode)
 {
 	this->OnModeOfPlayChanged(NewMode);
-}
-
-void APF2PlayerControllerBase::OnPossess(APawn* NewPawn)
-{
-	IPF2CharacterInterface* Pf2Pawn = Cast<IPF2CharacterInterface>(NewPawn);
-
-	Super::OnPossess(NewPawn);
-
-	if (Pf2Pawn != nullptr)
-	{
-		const TWeakInterfacePtr<IPF2CharacterInterface> WeakPf2Pawn =
-			TWeakInterfacePtr<IPF2CharacterInterface>(Pf2Pawn);
-
-		if (!this->ControlledCharacters.Contains(WeakPf2Pawn))
-		{
-			// TODO (#22): Expose an explicit way to manage party members and to switch between which one is being
-			// controlled.
-			this->ControlledCharacters.Add(WeakPf2Pawn);
-		}
-	}
 }
 
 void APF2PlayerControllerBase::MulticastHandleEncounterTurnStarted_Implementation()
