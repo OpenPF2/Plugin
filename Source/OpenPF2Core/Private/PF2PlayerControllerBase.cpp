@@ -10,6 +10,7 @@
 #include "GameModes/PF2GameModeInterface.h"
 
 #include "Utilities/PF2ArrayUtilities.h"
+#include "Utilities/PF2EnumUtilities.h"
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
@@ -23,7 +24,7 @@ void APF2PlayerControllerBase::SetPawn(APawn* NewPawn)
 		TEXT("[%s] Player controller ('%s') has taken possession of pawn ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		*(this->GetName()),
-		(NewPawn == nullptr) ? TEXT("null") : *(NewPawn->GetName())
+		(NewPawn == nullptr) ? TEXT("null") : *(NewPawn->GetFullName())
 	);
 
 	Super::SetPawn(NewPawn);
@@ -66,6 +67,15 @@ APlayerController* APF2PlayerControllerBase::ToPlayerController()
 
 void APF2PlayerControllerBase::HandleModeOfPlayChanged(const EPF2ModeOfPlayType NewMode)
 {
+	UE_LOG(
+		LogPf2Core,
+		VeryVerbose,
+		TEXT("[%s] Player controller ('%s') has been notified of a change in mode of play to '%s'."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(this->GetName()),
+		*(PF2EnumUtilities::ToString(NewMode))
+	);
+
 	this->OnModeOfPlayChanged(NewMode);
 }
 
