@@ -79,6 +79,12 @@ protected:
 	float CameraZoomSpeed;
 
 	/**
+	 * How fast to tilt the camera while rotating, in percentage of input/sec, where (0 => 0%, and 1.0 => 100%).
+	 */
+	UPROPERTY(EditDefaultsOnly, Category = "Camera Control", meta = (ClampMin = 0.0f, ClampMax = 5.0f))
+	float CameraTiltZoomSpeed;
+
+	/**
 	 * The minimum distance of the camera from the pawn, in cm.
 	 */
 	UPROPERTY(EditDefaultsOnly, Category = "Camera Control", meta = (ClampMin = 0))
@@ -116,6 +122,14 @@ protected:
 	 * negative value.
 	 */
 	float CameraZoomAxisValue;
+
+	/**
+	 * The amount of tilt-and-zoom camera movement to apply.
+	 *
+	 * This is the amount that was set by axis inputs in the previous frame. Tilting up and zooming out is a positive
+	 * value, while tilting down and zooming in is a negative value.
+	 */
+	float CameraTiltZoomAxisValue;
 
 	// =================================================================================================================
 	// Protected Methods - APawn Overrides
@@ -156,10 +170,36 @@ protected:
 	void ZoomCamera(const float Value);
 
 	/**
+	 * Applies a tilt zoom input to camera movement.
+	 *
+	 * @param Value
+	 *	The amount, as a float between -1.0 and 1.0, to tilt and zoom the camera down-in or up-out during the next
+	 *	frame:
+	 *	  -  1.0 represents 100% of camera movement speed up and outwards (in screen space).
+	 *	  - -1.0 represents 100% of camera movement speed down and inwards (in screen space).
+	 */
+	void TiltZoomCamera(const float Value);
+
+	/**
 	 * Gets the distance from the camera to an object in the level.
 	 *
 	 * @return
 	 *	The distance from the camera to the object, in centimeters (cm).
 	 */
 	float GetCameraDistance() const;
+
+	// =================================================================================================================
+	// Blueprint Event Callbacks
+	// =================================================================================================================
+	/**
+	 * BP event invoked to apply a camera tilt-zoom input to the strategic camera.
+	 *
+	 * This is invoked during the tick for this pawn whenever there is a non-zero input for tilt zoom to apply.
+	 *
+	 * @param TiltAmount
+	 *   The amount of tilt zoom to apply, as a float from -1.0 to 1.0. This amount has already been scaled by the tilt
+	 *   zoom camera speed and should be added to the current tilt zoom amount.
+	 */
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnApplyTiltZoom(const float TiltAmount);
 };

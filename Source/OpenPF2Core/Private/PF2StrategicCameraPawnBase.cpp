@@ -14,8 +14,9 @@
 
 APF2StrategicCameraPawnBase::APF2StrategicCameraPawnBase() : Super()
 {
-	this->CameraSpeed     = 1000.0f;
-	this->CameraZoomSpeed = 4000.0f;
+	this->CameraSpeed         = 1000.0f;
+	this->CameraZoomSpeed     = 4000.0f;
+	this->CameraTiltZoomSpeed = 2.0f;
 
 	this->MinCameraDistance = 500.0f;
 	this->MaxCameraDistance = 2500.0f;
@@ -25,16 +26,17 @@ void APF2StrategicCameraPawnBase::Tick(const float DeltaSeconds)
 {
 	FVector           Location;
 	UCameraComponent* PlayerPawnCamera;
+	const float       CameraRightLeftInput  = FMath::Clamp(this->CameraRightLeftAxisValue, -1.0f, +1.0f);
+	const float       CameraUpDownAxisInput = FMath::Clamp(this->CameraUpDownAxisValue,    -1.0f, +1.0f);
+	const float       TiltZoomInput         = FMath::Clamp(this->CameraTiltZoomAxisValue,  -1.0f, +1.0f),
+	                  TiltZoomValue         = this->CameraTiltZoomSpeed * TiltZoomInput * DeltaSeconds;
 
 	Super::Tick(DeltaSeconds);
 
-    // Apply input.
-    this->CameraRightLeftAxisValue = FMath::Clamp(this->CameraRightLeftAxisValue, -1.0f, +1.0f);
-    this->CameraUpDownAxisValue    = FMath::Clamp(this->CameraUpDownAxisValue,    -1.0f, +1.0f);
-
+	// Apply lateral input.
     Location = this->GetActorLocation();
-    Location += FVector::RightVector   * this->CameraSpeed * this->CameraRightLeftAxisValue * DeltaSeconds;
-    Location += FVector::ForwardVector * this->CameraSpeed * this->CameraUpDownAxisValue    * DeltaSeconds;
+    Location += FVector::RightVector   * this->CameraSpeed * CameraRightLeftInput  * DeltaSeconds;
+    Location += FVector::ForwardVector * this->CameraSpeed * CameraUpDownAxisInput * DeltaSeconds;
 
 	this->SetActorLocation(Location);
 
@@ -50,6 +52,13 @@ void APF2StrategicCameraPawnBase::Tick(const float DeltaSeconds)
 
     	PlayerPawnCamera->SetRelativeLocation(CameraLocation);
     }
+
+	// Apply tilt-zoom input.
+	if (TiltZoomValue != 0.0f)
+	{
+		this->OnApplyTiltZoom(TiltZoomValue);
+	}
+
 }
 
 void APF2StrategicCameraPawnBase::FocusCameraOnActor(AActor* Actor)
@@ -104,6 +113,7 @@ void APF2StrategicCameraPawnBase::SetupPlayerInputComponent(UInputComponent* Pla
 	PlayerInputComponent->BindAxis(TEXT("MoveCameraRightLeft"), this, &APF2StrategicCameraPawnBase::MoveCameraRightLeft);
 	PlayerInputComponent->BindAxis(TEXT("MoveCameraUpDown"),    this, &APF2StrategicCameraPawnBase::MoveCameraUpDown);
     PlayerInputComponent->BindAxis(TEXT("ZoomCamera"),          this, &APF2StrategicCameraPawnBase::ZoomCamera);
+    PlayerInputComponent->BindAxis(TEXT("TiltZoomCamera"),      this, &APF2StrategicCameraPawnBase::TiltZoomCamera);
 }
 
 void APF2StrategicCameraPawnBase::MoveCameraRightLeft(const float Value)
@@ -119,6 +129,11 @@ void APF2StrategicCameraPawnBase::MoveCameraUpDown(const float Value)
 void APF2StrategicCameraPawnBase::ZoomCamera(const float Value)
 {
     this->CameraZoomAxisValue = Value;
+}
+
+void APF2StrategicCameraPawnBase::TiltZoomCamera(const float Value)
+{
+	this->CameraTiltZoomAxisValue = Value;
 }
 
 float APF2StrategicCameraPawnBase::GetCameraDistance() const
