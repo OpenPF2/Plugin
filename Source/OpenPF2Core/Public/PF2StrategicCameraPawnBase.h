@@ -69,25 +69,25 @@ protected:
 	/**
 	 * The horizontal and vertical camera movement speed in cm/sec.
 	 */
-	UPROPERTY(EditDefaultsOnly, Category = "RTS|Camera", meta = (ClampMin = 0))
+	UPROPERTY(EditDefaultsOnly, Category = "Camera Control", meta = (ClampMin = 0))
 	float CameraSpeed;
 
 	/**
 	 * The speed (in cm/sec) at which the camera zooms in and out.
 	 */
-	UPROPERTY(EditDefaultsOnly, Category = "RTS|Camera", meta = (ClampMin = 0))
+	UPROPERTY(EditDefaultsOnly, Category = "Camera Control", meta = (ClampMin = 0))
 	float CameraZoomSpeed;
 
 	/**
 	 * The minimum distance of the camera from the pawn, in cm.
 	 */
-	UPROPERTY(EditDefaultsOnly, Category = "RTS|Camera", meta = (ClampMin = 0))
+	UPROPERTY(EditDefaultsOnly, Category = "Camera Control", meta = (ClampMin = 0))
 	float MinCameraDistance;
 
 	/**
 	 * The maximum distance of the camera from the pawn, in cm.
 	 */
-	UPROPERTY(EditDefaultsOnly, Category = "RTS|Camera", meta = (ClampMin = 0))
+	UPROPERTY(EditDefaultsOnly, Category = "Camera Control", meta = (ClampMin = 0))
 	float MaxCameraDistance;
 
 	// =================================================================================================================
@@ -133,7 +133,7 @@ protected:
 	 *	  -  1.0 represents 100% of camera movement speed to the right (in screen space).
 	 *	  - -1.0 represents 100% of camera movement speed to the left (in screen space).
 	 */
-	void MoveCameraRightLeft(float Value);
+	void MoveCameraRightLeft(const float Value);
 
 	/**
 	 * Applies a vertical axis input to camera movement.
@@ -143,7 +143,7 @@ protected:
 	 *	  -  1.0 represents 100% of camera movement speed up (in screen space).
 	 *	  - -1.0 represents 100% of camera movement speed down (in screen space).
 	 */
-	void MoveCameraUpDown(float Value);
+	void MoveCameraUpDown(const float Value);
 
 	/**
 	 * Applies a zoom input to camera movement.
@@ -153,7 +153,7 @@ protected:
 	 *	  -  1.0 represents 100% of camera movement speed outwards (in screen space).
 	 *	  - -1.0 represents 100% of camera movement speed inwards (in screen space).
 	 */
-	void ZoomCamera(float Value);
+	void ZoomCamera(const float Value);
 
 	/**
 	 * Gets the distance from the camera to an object in the level.
