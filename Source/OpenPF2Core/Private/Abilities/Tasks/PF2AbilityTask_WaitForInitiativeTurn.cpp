@@ -352,8 +352,7 @@ IPF2GameplayAbilityInterface* UPF2AbilityTask_WaitForInitiativeTurn::GetOwningPf
 			Warning,
 			TEXT("[%s] %s invoked on a non-PF2 GA. The ability may not behave as expected if queued during encounters."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-			*(this->GetClass()->GetName()),
-			*(this->GetIdForLogs())
+			*(this->GetClass()->GetName())
 		);
 	}
 
