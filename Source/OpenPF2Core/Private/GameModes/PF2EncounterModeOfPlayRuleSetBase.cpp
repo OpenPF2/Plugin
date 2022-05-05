@@ -185,7 +185,7 @@ FPF2QueuedActionHandle UPF2EncounterModeOfPlayRuleSetBase::QueueActionForCharact
 	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
 
 	IPF2QueuedActionInterface*    Pf2Action    = PF2InterfaceUtilities::FromScriptInterface(Action);
-	const IPF2CharacterInterface* Pf2Character = PF2InterfaceUtilities::FromScriptInterface(Character);
+	IPF2CharacterInterface*       Pf2Character = PF2InterfaceUtilities::FromScriptInterface(Character);
 	FPF2QueuedActionHandle        ActionHandle = FPF2QueuedActionHandle(this->NextActionHandleId++, Pf2Action);
 
 	const FPF2QueuedActionHandleDetails HandleDetails =
@@ -203,7 +203,7 @@ FPF2QueuedActionHandle UPF2EncounterModeOfPlayRuleSetBase::QueueActionForCharact
 		*(Character->GetIdForLogs())
 	);
 
-	this->CharacterQueues.Add(PF2InterfaceUtilities::FromScriptInterface(Character), Pf2Action);
+	this->CharacterQueues.Add(Pf2Character, Pf2Action);
 
 	this->ActionHandles.Add(Pf2Action, ActionHandle);
 	this->IssuedActionHandles.Add(ActionHandle.HandleId, HandleDetails);
