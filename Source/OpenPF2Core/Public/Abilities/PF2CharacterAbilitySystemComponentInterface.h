@@ -11,10 +11,16 @@
 
 #include "PF2CharacterAbilitySystemComponentInterface.generated.h"
 
-// Forward declaration; this is defined in "Abilities/PF2GameplayAbility_BoostAbilityBase.h", but that file depends on
-// this header file, so we have to break the recursive dependency.
+// =====================================================================================================================
+// Forward Declarations (to break recursive dependencies)
+// =====================================================================================================================
+// This is defined in "Abilities/PF2GameplayAbility_BoostAbilityBase.h", but that file depends on this header file, so
+// we have to break the recursive dependency.
 class UPF2AbilityBoostBase;
 
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2CharacterAbilitySystemComponentInterface : public UPF2AbilitySystemComponentInterface
 {

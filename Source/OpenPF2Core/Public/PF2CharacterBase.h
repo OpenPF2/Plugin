@@ -32,10 +32,15 @@
 
 #include "PF2CharacterBase.generated.h"
 
-// Forward declaration; this is defined at the end of the file.
+// =====================================================================================================================
+// Forward Declarations (to break recursive dependencies)
+// =====================================================================================================================
 template<class AscType, class AttributeSetType>
 class TPF2CharacterComponentFactory;
 
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 /**
  * Struct for representing the selection of what ability/abilities to boost when activating a specific boost GA.
  */
