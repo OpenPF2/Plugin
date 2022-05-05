@@ -75,7 +75,7 @@ protected:
 	/**
 	 * The queue of actions for each character in the encounter.
 	 */
-	TMultiMap<IPF2CharacterInterface*, IPF2QueuedActionInterface *> CharacterQueues;
+	TMultiMap<IPF2CharacterInterface*, IPF2QueuedActionInterface*> CharacterQueues;
 
 	/**
 	 * A map of initiative to characters.
