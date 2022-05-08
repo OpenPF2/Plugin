@@ -111,7 +111,7 @@ protected:
 	 * The Ability System Component (ASC) used for interfacing this character with the Gameplay Abilities System (GAS).
 	 */
 	UPROPERTY()
-	UPF2AbilitySystemComponent* AbilitySystemComponent;
+	UAbilitySystemComponent* AbilitySystemComponent;
 
 	/**
 	 * The sub-component that tracks commands for this character queued during encounters.

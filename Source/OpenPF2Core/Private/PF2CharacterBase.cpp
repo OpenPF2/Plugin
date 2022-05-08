@@ -208,7 +208,7 @@ void APF2CharacterBase::HandleDamageReceived(const float                  Damage
 void APF2CharacterBase::HandleHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags)
 {
 	if ((this->AbilitySystemComponent == nullptr) ||
-		!this->AbilitySystemComponent->ArePassiveGameplayEffectsActive())
+		!this->GetCharacterAbilitySystemComponent()->ArePassiveGameplayEffectsActive())
 	{
 		// Stats are not presently initialized, so bail out to avoid firing off during initialization.
 		return;
