@@ -10,10 +10,13 @@
 #include <UObject/ConstructorHelpers.h>
 
 #include "Abilities/PF2GameplayAbilityTargetData_BoostAbility.h"
+#include "Commands/PF2CommandQueueComponent.h"
 #include "Utilities/PF2InterfaceUtilities.h"
 
 APF2CharacterBase::APF2CharacterBase() :
-	APF2CharacterBase(TPF2CharacterComponentFactory<UPF2AbilitySystemComponent, UPF2AttributeSet>())
+	APF2CharacterBase(TPF2CharacterComponentFactory<UPF2AbilitySystemComponent,
+	                                                UPF2AttributeSet,
+	                                                UPF2CommandQueueComponent>())
 {
 }
 
@@ -95,6 +98,11 @@ FORCEINLINE IPF2CharacterAbilitySystemComponentInterface* APF2CharacterBase::Get
 
 	check(CharacterAsc);
 	return CharacterAsc;
+}
+
+TScriptInterface<IPF2CommandQueueInterface> APF2CharacterBase::GetCommandQueueComponent() const
+{
+	return this->CommandQueue;
 }
 
 TScriptInterface<IPF2PlayerControllerInterface> APF2CharacterBase::GetPlayerController() const

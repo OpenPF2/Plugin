@@ -15,13 +15,20 @@
 #include <AbilitySystemInterface.h>
 #include <UObject/ScriptInterface.h>
 
-#include "PF2PlayerControllerInterface.h"
 #include "PF2QueuedActionHandle.h"
-
 #include "Abilities/PF2AbilityBoostBase.h"
 
 #include "PF2CharacterInterface.generated.h"
 
+// =====================================================================================================================
+// Forward Declarations (to break recursive dependencies)
+// =====================================================================================================================
+class IPF2PlayerControllerInterface;
+class IPF2CommandQueueInterface;
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2CharacterInterface : public UAbilitySystemInterface
 {
@@ -103,6 +110,15 @@ public:
 	 *	The ASC, as an implementation of the interface for character ASCs.
 	 */
 	virtual IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent() const = 0;
+
+	/**
+	 * Gets the sub-component of this character that is used to track commands queued during encounters.
+	 *
+	 * @return
+	 *	The command queue component.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual TScriptInterface<IPF2CommandQueueInterface> GetCommandQueueComponent() const = 0;
 
 	/**
 	 * Gets the player controller for this character, if this character is being controlled by a player.

@@ -29,13 +29,14 @@
 #include "Abilities/PF2AttributeSet.h"
 #include "Abilities/PF2CharacterAbilityScoreType.h"
 #include "Utilities/PF2GameplayAbilityUtilities.h"
+#include "Utilities/PF2InterfaceUtilities.h"
 
 #include "PF2CharacterBase.generated.h"
 
 // =====================================================================================================================
 // Forward Declarations (to break recursive dependencies)
 // =====================================================================================================================
-template<class AscType, class AttributeSetType>
+template<class AscType, class AttributeSetType, class CommandQueueType>
 class TPF2CharacterComponentFactory;
 
 // =====================================================================================================================
@@ -111,6 +112,12 @@ protected:
 	 */
 	UPROPERTY()
 	UPF2AbilitySystemComponent* AbilitySystemComponent;
+
+	/**
+	 * The sub-component that tracks commands for this character queued during encounters.
+	 */
+	UPROPERTY()
+	TScriptInterface<IPF2CommandQueueInterface> CommandQueue;
 
 	/**
 	 * The attributes of this character.
@@ -344,14 +351,21 @@ protected:
 	 * @param ComponentFactory
 	 *   The factory component to use for generating the ASC and Attribute Set.
 	 */
-	template<class AscType, class AttributeSetType>
-	explicit APF2CharacterBase(TPF2CharacterComponentFactory<AscType, AttributeSetType> ComponentFactory) :
+	template<class AscType, class AttributeSetType, class CommandQueueType>
+	explicit APF2CharacterBase(TPF2CharacterComponentFactory<AscType,
+	                                                         AttributeSetType,
+	                                                         CommandQueueType> ComponentFactory) :
 		bManagedPassiveEffectsGenerated(false),
 		CharacterName(FText::FromString(TEXT("Character"))),
 		CharacterLevel(1)
 	{
 		this->AbilitySystemComponent = ComponentFactory.CreateAbilitySystemComponent(this);
 		this->AttributeSet           = ComponentFactory.CreateAttributeSet(this);
+
+		this->CommandQueue =
+			PF2InterfaceUtilities::ToScriptInterface<IPF2CommandQueueInterface>(
+				ComponentFactory.CreateCommandQueue(this)
+			);
 
 		for (const TTuple<FString, FName>& EffectInfo : PF2CharacterConstants::GeCoreCharacterBlueprintPaths)
 		{
@@ -402,6 +416,9 @@ public:
 		TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const override;
 
 	virtual IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual TScriptInterface<IPF2CommandQueueInterface> GetCommandQueueComponent() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerController() const override;
@@ -661,17 +678,26 @@ protected:
 };
 
 /**
- * Type of object for instantiating the ASC and attribute set for this type of character.
+ * Type of object for instantiating sub-components for a character.
  *
  * This is in a separate object to allow these types to be parameterized/templated so sub-classes can swap out the type
- * of ASC and attribute set just by supplying different types in their constructors.
+ * of each sub-component in their constructors. UE4 does not allow a sub-class to create a default sub-component having
+ * the same name as one that was defined in the parent class.
+ *
+ * This approach is used as a workaround for a gap in UE4 constructor behavior. Prior to UE 4.23, it appears that the
+ * standard pattern would have been to use ObjectInitializer.SetDefaultSubobjectClass() from within
+ * UObject(const FObjectInitializer& ObjectInitializer), but that constructor was deprecated in 4.23. In UE5 it looks
+ * like there is now a "Change Subobject Class" method through the "Subobject Data Subsystem".
+ *
+ * Discussion here:
+ * https://stackoverflow.com/questions/69351471/how-can-i-create-a-ue4-uclass-base-class-that-uses-createdefaultsubobject-but
  */
-template<class AscType, class AttributeSetType>
+template<class AscType, class AttributeSetType, class CommandQueueType>
 class TPF2CharacterComponentFactory
 {
 public:
 	/**
-	 * Creates an Ability System Component (ASC) for this character.
+	 * Creates an Ability System Component (ASC) for a character.
 	 *
 	 * The ASC is automatically created as a default sub-object of the character, with the name
 	 * "AbilitySystemComponent".
@@ -692,7 +718,7 @@ public:
 	}
 
 	/**
-	 * Creates an Attribute Set for this character.
+	 * Creates an Attribute Set for a character.
 	 *
 	 * The attribute set is automatically created as a default sub-object of the character, with the name
 	 * "AttributeSet".
@@ -706,5 +732,22 @@ public:
 	static AttributeSetType* CreateAttributeSet(APF2CharacterBase* Character)
 	{
 		return Character->CreateDefaultSubobject<AttributeSetType>(TEXT("AttributeSet"));
+	}
+
+	/**
+	 * Creates a Command Queue Component for a character.
+	 *
+	 * The component is automatically created as a default sub-object of the character, with the name
+	 * "CommandQueue".
+	 *
+	 * @param Character
+	 *	The character for which the command queue will be created.
+	 *
+	 * @return
+	 *	The new command queue.
+	 */
+	static CommandQueueType* CreateCommandQueue(APF2CharacterBase* Character)
+	{
+		return Character->CreateDefaultSubobject<CommandQueueType>(TEXT("CommandQueue"));
 	}
 };
