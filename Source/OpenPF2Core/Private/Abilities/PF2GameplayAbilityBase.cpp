@@ -7,72 +7,19 @@
 
 #include "Utilities/PF2LogUtilities.h"
 
-bool UPF2GameplayAbilityBase::CheckCost(const FGameplayAbilitySpecHandle Handle,
-                                        const FGameplayAbilityActorInfo* ActorInfo,
-                                        FGameplayTagContainer*           OptionalRelevantTags) const
+UTexture2D* UPF2GameplayAbilityBase::GetAbilityIcon() const
 {
-	if (this->bEnforcingCosts)
-	{
-		return Super::CheckCost(Handle, ActorInfo, OptionalRelevantTags);
-	}
-	else
-	{
-		return true;
-	}
+	return this->Icon;
 }
 
-void UPF2GameplayAbilityBase::OnQueued()
+FText UPF2GameplayAbilityBase::GetAbilityLabel() const
 {
-	if (!this->bShouldBlockWhenQueued)
-	{
-		this->ForceSuspendBlocking();
-	}
-
-	if (!this->bShouldEnforceCostWhenQueued)
-	{
-		this->bEnforcingCosts = false;
-	}
+	return this->Label;
 }
 
-void UPF2GameplayAbilityBase::OnDequeued()
+FText UPF2GameplayAbilityBase::GetAbilityDescription() const
 {
-	if (!this->bShouldBlockWhenQueued)
-	{
-		this->ForceResumeBlocking();
-	}
-
-	if (!this->bShouldEnforceCostWhenQueued)
-	{
-		this->bEnforcingCosts = true;
-	}
-}
-
-void UPF2GameplayAbilityBase::ForceSuspendBlocking()
-{
-	UE_LOG(
-		LogPf2CoreAbilities,
-		VeryVerbose,
-		TEXT("[%s] Ability blocking 'disabled' for action ('%s'). Previous state was: '%s'"),
-		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(this->GetIdForLogs()),
-		(this->IsBlockingOtherAbilities() ? TEXT("enabled") : TEXT("disabled"))
-	);
-
-	this->SetShouldBlockOtherAbilities(false);
-}
-
-void UPF2GameplayAbilityBase::ForceResumeBlocking()
-{
-	UE_LOG(
-		LogPf2CoreAbilities,
-		VeryVerbose,
-		TEXT("[%s] Ability blocking 'enabled' for action ('%s'). Previous state was: '%s'"),
-		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(this->GetIdForLogs()),
-		(this->IsBlockingOtherAbilities() ? TEXT("enabled") : TEXT("disabled"))
-	);
-
-	this->SetShouldBlockOtherAbilities(true);
+	return this->Description;
 }
 
 FString UPF2GameplayAbilityBase::GetIdForLogs() const

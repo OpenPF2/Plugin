@@ -152,10 +152,10 @@ EPF2AbilityActivationResult UPF2AbilityTask_WaitForInitiativeTurn::PerformAction
 				((this->WaitingCharacter != nullptr) ? *(this->WaitingCharacter->GetIdForLogs()) : TEXT("UNK"))
 			);
 
-			if (Pf2Ability != nullptr)
-			{
-				Pf2Ability->OnDequeued();
-			}
+			// if (Pf2Ability != nullptr)
+			// {
+			// 	Pf2Ability->OnDequeued();
+			// }
 
 			if (this->ShouldBroadcastAbilityTaskDelegates())
 			{
@@ -216,10 +216,10 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate_Client()
 		FScopedPredictionWindow       ScopedPrediction = FScopedPredictionWindow(this->AbilitySystemComponent, true);
 		IPF2GameplayAbilityInterface* Pf2Ability       = this->GetOwningPf2Ability();
 
-		if (Pf2Ability != nullptr)
-		{
-			Pf2Ability->OnQueued();
-		}
+		// if (Pf2Ability != nullptr)
+		// {
+		// 	Pf2Ability->OnQueued();
+		// }
 
 		this->CallOrAddReplicatedDelegate(
 			EAbilityGenericReplicatedEvent::GenericSignalFromServer,
@@ -285,12 +285,12 @@ void UPF2AbilityTask_WaitForInitiativeTurn::Activate_Server(IPF2CharacterInterfa
 			case EPF2ActionQueueResult::Queued:
 				IPF2GameplayAbilityInterface* Pf2Ability = this->GetOwningPf2Ability();
 
-				if (Pf2Ability != nullptr)
-				{
-					// The MoPRS queued the action for later execution. Give the ability the chance to temporarily
-					// unblock other abilities that would otherwise be incompatible with it.
-					Pf2Ability->OnQueued();
-				}
+				// if (Pf2Ability != nullptr)
+				// {
+				// 	// The MoPRS queued the action for later execution. Give the ability the chance to temporarily
+				// 	// unblock other abilities that would otherwise be incompatible with it.
+				// 	Pf2Ability->OnQueued();
+				// }
 
 				this->OnQueued.Broadcast();
 				this->SetWaitingOnRemotePlayerData();
@@ -321,18 +321,18 @@ bool UPF2AbilityTask_WaitForInitiativeTurn::CanAbilityProceed() const
 	const FGameplayAbilityActorInfo  ActorInfo         = this->Ability->GetActorInfo();
 	IPF2GameplayAbilityInterface*    Pf2Ability        = this->GetOwningPf2Ability();
 
-	if (Pf2Ability != nullptr)
-	{
-		// Prevent blocking ourselves.
-		Pf2Ability->ForceSuspendBlocking();
-	}
+	// if (Pf2Ability != nullptr)
+	// {
+	// 	// Prevent blocking ourselves.
+	// 	Pf2Ability->ForceSuspendBlocking();
+	// }
 
 	bCanProceed = this->Ability->CanActivateAbility(AbilitySpecHandle, &ActorInfo, this->SourceTags, this->TargetTags);
 
-	if (Pf2Ability != nullptr)
-	{
-		Pf2Ability->ForceResumeBlocking();
-	}
+	// if (Pf2Ability != nullptr)
+	// {
+	// 	Pf2Ability->ForceResumeBlocking();
+	// }
 
 	return bCanProceed;
 }

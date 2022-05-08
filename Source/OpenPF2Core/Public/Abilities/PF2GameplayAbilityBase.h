@@ -8,7 +8,6 @@
 #include <Abilities/GameplayAbility.h>
 
 #include "Abilities/PF2GameplayAbilityInterface.h"
-
 #include "Utilities/PF2LogIdentifiableInterface.h"
 
 #include "PF2GameplayAbilityBase.generated.h"
@@ -34,66 +33,39 @@ class UPF2GameplayAbilityBase :
 	GENERATED_BODY()
 
 protected:
+	// =================================================================================================================
+	// Protected Properties
+	// =================================================================================================================
 	/**
-	 * Controls whether blocking tags on this ability have any effect while it is queued, or whether it continues to
-	 * block until it is finally de-queued and executed.
-	 *
-	 * The default is false, to allow a character to queue up multiple instances of this ability without limitation. If
-	 * this is changed to true, the character will have to wait for a queued instance to be activated before queuing
-	 * another instance.
-	 *
-	 * This only affects GAs that have blocking tags.
+	 * The icon to represent this ability, for whenever it is displayed to players/users.
 	 */
-	UPROPERTY(EditDefaultsOnly, Category="Encounter Queuing Behaviors")
-	bool bShouldBlockWhenQueued;
+	UPROPERTY(BlueprintReadWrite)
+	UTexture2D* Icon;
 
 	/**
-	 * Controls whether this type of ability enforces cost checks while any instance of it has been queued.
-	 *
-	 * The default is false, to allow a character to queue up multiple instances of this ability even when they cannot
-	 * afford those queued-up instances at the present moment (the cost will have to be satisfied at the time that the
-	 * task is being dequeued, or it will not fire). If this is changed to true, and the character does not currently
-	 * have enough to afford the cost of this ability, the character will not be able to queue up the ability until they
-	 * can satisfy the cost.
-	 *
-	 * This only affects GAs that have a cost Gameplay Effect.
+	 * The name of this ability, for whenever it is displayed to players/users.
 	 */
-	UPROPERTY(EditDefaultsOnly, Category="Encounter Queuing Behaviors")
-	bool bShouldEnforceCostWhenQueued;
+	UPROPERTY(BlueprintReadWrite)
+	FText Label;
 
 	/**
-	 * Indicates whether this ability is currently checking costs before activation.
+	 * The description of this ability, for whenever it is displayed to players/users.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category="OpenPF2|Gameplay Abilities")
-	bool bEnforcingCosts;
+	UPROPERTY(BlueprintReadWrite)
+	FText Description;
 
 public:
 	// =================================================================================================================
-	// Public Constructors
-	// =================================================================================================================
-	/**
-	 * Constructor for UPF2GameplayAbilityBase.
-	 */
-	explicit UPF2GameplayAbilityBase() :
-		bShouldBlockWhenQueued(false),
-		bShouldEnforceCostWhenQueued(false)
-	{
-	}
-
-	// =================================================================================================================
-	// Public Methods - UGameplayAbility Overrides
-	// =================================================================================================================
-	virtual bool CheckCost(const FGameplayAbilitySpecHandle Handle,
-	                       const FGameplayAbilityActorInfo* ActorInfo,
-	                       FGameplayTagContainer*           OptionalRelevantTags) const override;
-
-	// =================================================================================================================
 	// Public Methods - IPF2GameplayAbilityInterface Overrides
 	// =================================================================================================================
-	virtual void OnQueued() override;
-	virtual void OnDequeued() override;
-	virtual void ForceSuspendBlocking() override;
-	virtual void ForceResumeBlocking() override;
+	UFUNCTION(BlueprintCallable)
+	virtual UTexture2D* GetAbilityIcon() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual FText GetAbilityLabel() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual FText GetAbilityDescription() const override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Overrides
