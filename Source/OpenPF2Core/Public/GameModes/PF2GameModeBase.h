@@ -8,8 +8,6 @@
 #include <GameFramework/GameModeBase.h>
 #include <UObject/ScriptInterface.h>
 
-#include "Abilities/PF2ActionQueueResult.h"
-
 #include "GameModes/PF2ModeOfPlayRuleSetBase.h"
 #include "GameModes/PF2GameModeInterface.h"
 
@@ -67,18 +65,9 @@ public:
 	virtual void RemoveCharacterFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual FPF2QueuedActionHandle QueueActionForInitiativeTurn(
-		TScriptInterface<IPF2CharacterInterface>&    Character,
-		TScriptInterface<IPF2QueuedActionInterface>& Action,
-		EPF2ActionQueueResult&                       OutQueueResult) override;
-
-	UFUNCTION(BlueprintCallable)
-	virtual void CancelActionQueuedForInitiativeTurnByHandle(const FPF2QueuedActionHandle ActionHandle) override;
-
-	UFUNCTION(BlueprintCallable)
-	virtual void CancelActionQueuedForInitiativeTurn(
-		const TScriptInterface<IPF2CharacterInterface>&    Character,
-		const TScriptInterface<IPF2QueuedActionInterface>& Action) override;
+	virtual EPF2CommandExecuteOrQueueResult AttemptExecuteOrQueueCommand(
+		TScriptInterface<IPF2CharacterInterface>&        Character,
+		TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
 protected:
 	// =================================================================================================================

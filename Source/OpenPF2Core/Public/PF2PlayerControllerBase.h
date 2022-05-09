@@ -9,10 +9,18 @@
 #include <UObject/WeakInterfacePtr.h>
 
 #include "PF2PlayerControllerInterface.h"
-#include "PF2QueuedActionHandle.h"
 
 #include "PF2PlayerControllerBase.generated.h"
 
+// =====================================================================================================================
+// Forward Declarations (to break recursive dependencies)
+// =====================================================================================================================
+class IPF2CharacterInterface;
+class IPF2CharacterCommandInterface;
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 /**
  * Default base class for PF2 Player Controllers.
  *
@@ -57,13 +65,10 @@ public:
 	virtual void MulticastHandleEncounterTurnEnded() override;
 
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleActionQueued(const FPF2QueuedActionHandle ActionHandle) override;
+	virtual void MulticastHandleCommandQueued(const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) override;
-
-	UFUNCTION(BlueprintCallable, Server, Unreliable, DisplayName="Cancel Queued Action")
-	virtual void ServerCancelQueuedAction(const FPF2QueuedActionHandle ActionHandle) override;
+	virtual void MulticastHandleCommandRemoved(const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
 protected:
 	// =================================================================================================================
@@ -101,11 +106,11 @@ protected:
 	 *
 	 * This is invoked on both the owning client and server.
 	 *
-	 * @param ActionHandle
-	 *	A reference to the ability that has been queued-up.
+	 * @param Command
+	 *	The command that was queued.
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player Controllers")
-	void OnActionQueued(const FPF2QueuedActionHandle ActionHandle);
+	void OnCommandQueued(const TScriptInterface<IPF2CharacterCommandInterface>& Command);
 
 	/**
 	 * BP event invoked when a previously queued action/ability for the controlled character has been cancelled.
@@ -115,9 +120,9 @@ protected:
 	 * This happens if an action queued through the active Mode of Play Rule Set (MoPRS) was canceled by the player,
 	 * by game rules, or something in the world.
 	 *
-	 * @param ActionHandle
-	 *	A reference to the ability that has been canceled.
+	 * @param Command
+	 *	The command that was removed.
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player Controllers")
-	void OnActionDequeued(const FPF2QueuedActionHandle ActionHandle);
+	void OnCommandRemoved(const TScriptInterface<IPF2CharacterCommandInterface>& Command);
 };

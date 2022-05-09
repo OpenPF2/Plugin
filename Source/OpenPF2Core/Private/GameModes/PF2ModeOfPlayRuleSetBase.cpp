@@ -5,31 +5,19 @@
 
 #include "GameModes/PF2ModeOfPlayRuleSetBase.h"
 
-#include "PF2QueuedActionInterface.h"
-
-#include "Abilities/PF2ActionQueueResult.h"
-
 #include "Utilities/PF2ArrayUtilities.h"
 #include "Utilities/PF2InterfaceUtilities.h"
 
-FPF2QueuedActionHandle UPF2ModeOfPlayRuleSetBase::OnQueueAction_Implementation(
-	const TScriptInterface<IPF2CharacterInterface>&    Character,
-	const TScriptInterface<IPF2QueuedActionInterface>& Action,
-	OUT EPF2ActionQueueResult&                         OutQueueResult)
+EPF2CommandExecuteOrQueueResult UPF2ModeOfPlayRuleSetBase::AttemptExecuteOrQueueCommand_Implementation(
+	const TScriptInterface<IPF2CharacterInterface>&        Character,
+	const TScriptInterface<IPF2CharacterCommandInterface>& Command)
 {
-	// By default there is no queue, so we perform the action immediately.
-	Action->PerformAction();
+	EPF2CommandExecuteOrQueueResult Result;
 
-	OutQueueResult = EPF2ActionQueueResult::ExecutedImmediately;
+	// By default there is no queue, so we perform the command immediately.
+	Result = IPF2CharacterCommandInterface::ImmediateResultToExecuteOrQueueResult(Command->AttemptExecuteImmediately());
 
-	return FPF2QueuedActionHandle();
-}
-
-void UPF2ModeOfPlayRuleSetBase::OnCancelQueuedAction_Implementation(
-	const TScriptInterface<IPF2CharacterInterface>&    Character,
-	const TScriptInterface<IPF2QueuedActionInterface>& Action)
-{
-	// By default there is no queue, so we do nothing.
+	return Result;
 }
 
 TScriptInterface<IPF2GameModeInterface> UPF2ModeOfPlayRuleSetBase::GetGameMode() const

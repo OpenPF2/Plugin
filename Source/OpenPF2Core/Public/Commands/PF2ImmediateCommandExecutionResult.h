@@ -7,13 +7,13 @@
 
 #include <UObject/ObjectMacros.h>
 
-#include "PF2CommandExecuteOrBlockResult.generated.h"
+#include "PF2ImmediateCommandExecutionResult.generated.h"
 
 /**
- * An enumeration of the different outcomes from attempting to execute a command or block it (no further action).
+ * An enumeration of the different outcomes from attempting to execute a command immediately.
  */
 UENUM(BlueprintType)
-enum class EPF2CommandExecuteOrBlockResult : uint8
+enum class EPF2ImmediateCommandExecutionResult : uint8
 {
 	/**
 	 * No result yet.

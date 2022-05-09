@@ -5,13 +5,15 @@
 
 #include "Commands/PF2CommandQueueComponent.h"
 
+#include "Commands/PF2CharacterCommandInterface.h"
+
 #include "Utilities/PF2InterfaceUtilities.h"
 
 UPF2CommandQueueComponent::UPF2CommandQueueComponent()
 {
 }
 
-void UPF2CommandQueueComponent::Enqueue(TScriptInterface<IPF2CharacterCommandInterface>& Command)
+void UPF2CommandQueueComponent::Enqueue(const TScriptInterface<IPF2CharacterCommandInterface> Command)
 {
 	IPF2CharacterCommandInterface* CommandIntf = PF2InterfaceUtilities::FromScriptInterface(Command);
 
@@ -33,13 +35,91 @@ void UPF2CommandQueueComponent::PopNext(TScriptInterface<IPF2CharacterCommandInt
 {
 	if (this->Count() != 0)
 	{
-		IPF2CharacterCommandInterface* NextCommandPtr = this->Queue.Pop();
+		IPF2CharacterCommandInterface* NextCommandIntf = this->Queue.Pop();
 
-		NextCommand = PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(NextCommandPtr);
+		UE_LOG(
+			LogPf2Core,
+			VeryVerbose,
+			TEXT("Popping command ('%s') from command queue ('%s')."),
+			*(NextCommandIntf->GetIdForLogs()),
+			*(this->GetIdForLogs())
+		);
+
+		NextCommand = PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(NextCommandIntf);
 	}
 }
 
-bool UPF2CommandQueueComponent::Remove(TScriptInterface<IPF2CharacterCommandInterface>& Command)
+void UPF2CommandQueueComponent::DropNext()
+{
+	if (this->Count() != 0)
+	{
+		const IPF2CharacterCommandInterface* NextCommandIntf = this->Queue.Pop();
+
+		UE_LOG(
+			LogPf2Core,
+			VeryVerbose,
+			TEXT("Removing command ('%s') from command queue ('%s')."),
+			*(NextCommandIntf->GetIdForLogs()),
+			*(this->GetIdForLogs())
+		);
+	}
+}
+
+EPF2ImmediateCommandExecutionResult UPF2CommandQueueComponent::PopAndExecuteNext()
+{
+	EPF2ImmediateCommandExecutionResult             Result;
+	TScriptInterface<IPF2CharacterCommandInterface> NextCommand;
+
+	// We don't pop the command (yet) because it may be blocked and we don't want it to lose its place in the queue if
+	// it is.
+	this->PeekNext(NextCommand);
+
+	if (NextCommand == nullptr)
+	{
+		UE_LOG(
+			LogPf2Core,
+			VeryVerbose,
+			TEXT("No actions are currently queued for command queue ('%s')."),
+			*(this->GetIdForLogs())
+		);
+
+		Result = EPF2ImmediateCommandExecutionResult::None;
+	}
+	else
+	{
+		IPF2CharacterCommandInterface* NextCommandIntf = PF2InterfaceUtilities::FromScriptInterface(NextCommand);
+
+		UE_LOG(
+			LogPf2Core,
+			VeryVerbose,
+			TEXT("Attempt to execute next command ('%s') in command queue ('%s')."),
+			*(NextCommandIntf->GetIdForLogs()),
+			*(this->GetIdForLogs())
+		);
+
+		Result = NextCommandIntf->AttemptExecuteImmediately();
+
+		if (Result == EPF2ImmediateCommandExecutionResult::Blocked)
+		{
+			UE_LOG(
+				LogPf2Core,
+				VeryVerbose,
+				TEXT("Next command ('%s') in command queue ('%s') was blocked and will not be removed from the queue."),
+				*(NextCommandIntf->GetIdForLogs()),
+				*(this->GetIdForLogs())
+			);
+		}
+		else
+		{
+			// Now it's safe to drop the command.
+			this->DropNext();
+		}
+	}
+
+	return Result;
+}
+
+bool UPF2CommandQueueComponent::Remove(const TScriptInterface<IPF2CharacterCommandInterface> Command)
 {
 	IPF2CharacterCommandInterface* CommandIntf    = PF2InterfaceUtilities::FromScriptInterface(Command);
 	const int32                    CountOfRemoved = this->Queue.Remove(CommandIntf);
@@ -57,7 +137,14 @@ void UPF2CommandQueueComponent::Clear()
 	this->Queue.Empty();
 }
 
-void UPF2CommandQueueComponent::BeginPlay()
+FString UPF2CommandQueueComponent::GetIdForLogs() const
 {
-	Super::BeginPlay();
+	// ReSharper disable CppRedundantParentheses
+	return FString::Format(
+		TEXT("{0}.{1}"),
+		{
+			*(this->GetOwner()->GetName()),
+			*(this->GetName())
+		}
+	);
 }

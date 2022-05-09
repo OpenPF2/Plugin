@@ -32,12 +32,12 @@ protected:
 	/**
 	 * The character who would be issued this command.
 	 */
-	IPF2CharacterInterface* CharacterIntf;
+	IPF2CharacterInterface* Character;
 
 	/**
-	 * The specification for the ability that this command will trigger when it is executed.
+	 * The handle of the ability that this command will trigger when it is executed.
 	 */
-	FGameplayAbilitySpec* AbilitySpec;
+	FGameplayAbilitySpecHandle AbilitySpecHandle;
 
 public:
 	// =================================================================================================================
@@ -46,20 +46,21 @@ public:
 	/**
 	 * Creates a new UPF2CharacterCommand for the given character and ability specification.
 	 *
-	 * @param CharacterIntf
+	 * @param Character
 	 *	The character who would be issued the command.
-	 * @param AbilitySpec
-	 *	The specification for the ability that the command will trigger when it is executed.
+	 * @param AbilitySpecHandle
+	 *	The handle of the ability that the command will trigger when it is executed.
 	 *
 	 * @return
 	 *	The new command.
 	 */
-	static UPF2CharacterCommand* Create(IPF2CharacterInterface* CharacterIntf, FGameplayAbilitySpec* AbilitySpec)
+	static UPF2CharacterCommand* Create(IPF2CharacterInterface*          Character,
+	                                    const FGameplayAbilitySpecHandle AbilitySpecHandle)
 	{
 		UPF2CharacterCommand* Command = NewObject<UPF2CharacterCommand>();
 
-		Command->CharacterIntf = CharacterIntf;
-		Command->AbilitySpec   = AbilitySpec;
+		Command->Character         = Character;
+		Command->AbilitySpecHandle = AbilitySpecHandle;
 
 		return Command;
 	};
@@ -68,7 +69,7 @@ protected:
 	// =================================================================================================================
 	// Protected Constructors
 	// =================================================================================================================
-	explicit UPF2CharacterCommand() : CharacterIntf(nullptr), AbilitySpec(nullptr)
+	explicit UPF2CharacterCommand() : Character(nullptr)
 	{
 	}
 
@@ -89,7 +90,13 @@ public:
 	virtual EPF2CommandExecuteOrQueueResult AttemptExecuteOrQueue() override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual EPF2CommandExecuteOrBlockResult AttemptExecuteOrBlock() override;
+	virtual EPF2ImmediateCommandExecutionResult AttemptExecuteImmediately() override;
+
+	// =================================================================================================================
+	// Public Methods - IPF2LogIdentifiableInterface Implementation
+	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual FString GetIdForLogs() const override;
 
 	// =================================================================================================================
 	// Protected Methods
@@ -103,7 +110,19 @@ protected:
 	 */
 	IPF2CharacterInterface* GetCharacter() const
 	{
-		return this->CharacterIntf;
+		check(this->Character);
+		return this->Character;
+	}
+
+	/**
+	 * Gets the handle of the ability that this command will trigger when it is executed.
+	 *
+	 * @return
+	 *	The ability handle.
+	 */
+	FORCEINLINE FGameplayAbilitySpecHandle GetAbilitySpecHandle() const
+	{
+		return this->AbilitySpecHandle;
 	}
 
 	/**
@@ -114,7 +133,17 @@ protected:
 	 */
 	FORCEINLINE FGameplayAbilitySpec* GetAbilitySpec() const
 	{
-		return this->AbilitySpec;
+		return this->GetAbilitySystemComponent()->FindAbilitySpecFromHandle(this->GetAbilitySpecHandle());
+	}
+
+	/**
+	 * Gets the Ability System Component (ASC) of the character for which this command will be executed.
+	 */
+	UAbilitySystemComponent* GetAbilitySystemComponent() const
+	{
+		UAbilitySystemComponent* AbilitySystemComponent = this->GetCharacter()->GetAbilitySystemComponent();
+		check(AbilitySystemComponent);
+		return AbilitySystemComponent;
 	}
 
 	/**
@@ -123,9 +152,22 @@ protected:
 	 * @return
 	 *	The gameplay ability.
 	 */
-	FORCEINLINE IPF2GameplayAbilityInterface* GetAbility() const
+	FORCEINLINE UGameplayAbility* GetAbility() const
 	{
-		IPF2GameplayAbilityInterface* Ability = Cast<IPF2GameplayAbilityInterface>(this->GetAbilitySpec()->Ability);
+		UGameplayAbility* Ability = this->GetAbilitySpec()->Ability;
+		check(Ability);
+		return Ability;
+	}
+
+	/**
+	 * Gets the PF2 interface to the CDO of the ability that this command will trigger when it is executed.
+	 *
+	 * @return
+	 *	The gameplay ability, as a PF2 interface.
+	 */
+	FORCEINLINE IPF2GameplayAbilityInterface* GetAbilityIntf() const
+	{
+		IPF2GameplayAbilityInterface* Ability = Cast<IPF2GameplayAbilityInterface>(this->GetAbility());
 		check(Ability);
 		return Ability;
 	}

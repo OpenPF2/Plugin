@@ -6,7 +6,9 @@
 #pragma once
 
 #include <CoreMinimal.h>
-#include <UObject/Interface.h>
+
+#include "PF2ImmediateCommandExecutionResult.h"
+#include "Utilities/PF2LogIdentifiableInterface.h"
 
 #include "PF2CommandQueueInterface.generated.h"
 
@@ -19,7 +21,7 @@ class IPF2CharacterCommandInterface;
 // Normal Declarations
 // =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
-class UPF2CommandQueueInterface : public UInterface
+class UPF2CommandQueueInterface : public UPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 };
@@ -27,7 +29,7 @@ class UPF2CommandQueueInterface : public UInterface
 /**
  * An interface for objects that maintain queues of commands/actions.
  */
-class OPENPF2CORE_API IPF2CommandQueueInterface
+class OPENPF2CORE_API IPF2CommandQueueInterface : public IPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 
@@ -39,7 +41,7 @@ public:
 	 *	The command to add to the queue.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Command Queues")
-	virtual void Enqueue(TScriptInterface<IPF2CharacterCommandInterface>& Command) = 0;
+	virtual void Enqueue(TScriptInterface<IPF2CharacterCommandInterface> Command) = 0;
 
 	/**
 	 * Returns the next command (if there is one) in the queue.
@@ -64,6 +66,28 @@ public:
 	virtual void PopNext(TScriptInterface<IPF2CharacterCommandInterface>& NextCommand) = 0;
 
 	/**
+	 * Removes the first/oldest command (if there is one) from the queue and drops it.
+	 *
+	 * The command is removed from the queue.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Command Queues")
+	virtual void DropNext() = 0;
+
+	/**
+	 * Removes and executes the first/oldest command (if there is one) from the queue.
+	 *
+	 * The command is removed from the queue.
+	 *
+	* @return
+	 *	- EPF2ImmediateCommandExecutionResult::None if there are no commands to execute.
+	 *	- EPF2ImmediateCommandExecutionResult::Activated if there was a queued command that was executed.
+	 *	- EPF2ImmediateCommandExecutionResult::Blocked if there was a queued command but it could not be executed yet,
+	 *	  typically because it is blocked by another ability that is active on the character.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Command Queues")
+	virtual EPF2ImmediateCommandExecutionResult PopAndExecuteNext() = 0;
+
+	/**
 	 * Removes a command from the queue.
 	 *
 	 * If the command is not in the queue, nothing happens (this method is idempotent).
@@ -76,7 +100,7 @@ public:
 	 *	- false if the command was not in the queue.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Command Queues")
-	virtual bool Remove(TScriptInterface<IPF2CharacterCommandInterface>& Command) = 0;
+	virtual bool Remove(TScriptInterface<IPF2CharacterCommandInterface> Command) = 0;
 
 	/**
 	 * Gets the count of how many commands are in the queue.

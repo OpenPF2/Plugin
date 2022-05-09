@@ -7,15 +7,16 @@
 
 #include <CoreMinimal.h>
 #include <Engine/Texture2D.h>
-#include <UObject/Interface.h>
 
-#include "Commands/PF2CommandExecuteOrBlockResult.h"
+#include "Commands/PF2ImmediateCommandExecutionResult.h"
 #include "Commands/PF2CommandExecuteOrQueueResult.h"
+
+#include "Utilities/PF2LogIdentifiableInterface.h"
 
 #include "PF2CharacterCommandInterface.generated.h"
 
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
-class UPF2CharacterCommandInterface : public UInterface
+class UPF2CharacterCommandInterface : public UPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 };
@@ -23,11 +24,46 @@ class UPF2CharacterCommandInterface : public UInterface
 /**
  * An interface for commands that can either be executed immediately, or defer their execution to a future time.
  */
-class OPENPF2CORE_API IPF2CharacterCommandInterface
+class OPENPF2CORE_API IPF2CharacterCommandInterface : public IPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 
 public:
+	// =================================================================================================================
+	// Public Static Methods
+	// =================================================================================================================
+	/**
+	 * Utility function for converting a EPF2ImmediateCommandExecutionResult into a EPF2CommandExecuteOrQueueResult.
+	 *
+	 * @param ImmediateResult
+	 *	The result to transcribed.
+	 *
+	 * @return
+	 *	The transcribed result.
+	 */
+	static FORCEINLINE EPF2CommandExecuteOrQueueResult ImmediateResultToExecuteOrQueueResult(
+		const EPF2ImmediateCommandExecutionResult ImmediateResult)
+	{
+		switch (ImmediateResult)
+		{
+			default:
+			case EPF2ImmediateCommandExecutionResult::None:
+				return EPF2CommandExecuteOrQueueResult::None;
+
+			case EPF2ImmediateCommandExecutionResult::Activated:
+				return EPF2CommandExecuteOrQueueResult::ExecutedImmediately;
+
+			case EPF2ImmediateCommandExecutionResult::Blocked:
+				return EPF2CommandExecuteOrQueueResult::Refused;
+
+			case EPF2ImmediateCommandExecutionResult::Cancelled:
+				return EPF2CommandExecuteOrQueueResult::Refused;
+		}
+	}
+
+	// =================================================================================================================
+	// Public Instance Methods
+	// =================================================================================================================
 	/**
 	 * Gets an icon to represent this command, for whenever it is displayed to players/users.
 	 *
@@ -74,5 +110,5 @@ public:
 	 *	The outcome of attempting to execute the command.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Commands")
-	virtual EPF2CommandExecuteOrBlockResult AttemptExecuteOrBlock() = 0;
+	virtual EPF2ImmediateCommandExecutionResult AttemptExecuteImmediately() = 0;
 };

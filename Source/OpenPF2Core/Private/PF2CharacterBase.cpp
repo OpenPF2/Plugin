@@ -227,14 +227,16 @@ void APF2CharacterBase::MulticastHandleEncounterTurnEnded_Implementation()
 	this->OnEncounterTurnEnded();
 }
 
-void APF2CharacterBase::MulticastHandleActionQueued_Implementation(const FPF2QueuedActionHandle ActionHandle)
+void APF2CharacterBase::MulticastHandleCommandQueued_Implementation(
+	const TScriptInterface<IPF2CharacterCommandInterface>& Command)
 {
-	this->OnActionQueued(ActionHandle);
+	this->OnCommandQueued(Command);
 }
 
-void APF2CharacterBase::MulticastHandleActionDequeued_Implementation(const FPF2QueuedActionHandle ActionHandle)
+void APF2CharacterBase::MulticastHandleCommandRemoved_Implementation(
+	const TScriptInterface<IPF2CharacterCommandInterface>& Command)
 {
-	this->OnActionDequeued(ActionHandle);
+	this->OnCommandRemoved(Command);
 }
 
 bool APF2CharacterBase::SetCharacterLevel(const int32 NewLevel)

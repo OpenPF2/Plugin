@@ -43,7 +43,7 @@ public:
 	// Public Methods - IPF2CommandQueueInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
-	virtual void Enqueue(TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
+	virtual void Enqueue(TScriptInterface<IPF2CharacterCommandInterface> Command) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void PeekNext(TScriptInterface<IPF2CharacterCommandInterface>& NextCommand) override;
@@ -52,7 +52,13 @@ public:
 	virtual void PopNext(TScriptInterface<IPF2CharacterCommandInterface>& NextCommand) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual bool Remove(TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
+	virtual void DropNext() override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual EPF2ImmediateCommandExecutionResult PopAndExecuteNext() override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual bool Remove(TScriptInterface<IPF2CharacterCommandInterface> Command) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual int Count() override;
@@ -60,9 +66,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void Clear() override;
 
-protected:
 	// =================================================================================================================
-	// Protected Methods - UActorComponent Implementation
+	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
-	virtual void BeginPlay() override;
+	UFUNCTION(BlueprintCallable)
+	virtual FString GetIdForLogs() const override;
 };

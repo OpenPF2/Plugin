@@ -11,7 +11,7 @@
 #include "PF2GameStateInterface.h"
 #include "PF2ModeOfPlayType.h"
 
-#include "Abilities/PF2ActionQueueResult.h"
+#include "Commands/PF2CommandExecuteOrQueueResult.h"
 
 #include "PF2ModeOfPlayRuleSetInterface.generated.h"
 
@@ -99,55 +99,24 @@ public:
 	void OnCharacterRemovedFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character);
 
 	/**
-	 * Callback to notify this rule set that a character wishes to queue-up an action (usually a GA).
+	 * Callback to notify this rule set that a character wishes to perform a command (e.g., use an ability).
 	 *
-	 * This gives the rule set control over when the action should be performed (e.g., to enforce initiative order).
-	 * The action may not get executed if the encounter ends before it has been activated. In such a situation, the
-	 * action will be canceled instead.
+	 * This gives the rule set control over when the command should be performed (e.g., to enforce initiative order).
+	 * The command may not get executed if the encounter ends before it has been activated. In such a situation, the
+	 * command will be canceled instead.
 	 *
 	 * @param Character
-	 *	The character that is queuing the action up.
-	 * @param Action
-	 *	The action that is being queued.
-	 * @param OutQueueResult
-	 *	An optional output parameter to be notified of whether the action was actually queued, executed immediately,
-	 *	or refused.
+	 *	The character that is queuing the command up.
+	 * @param Command
+	 *	The command that is being queued.
 	 *
 	 * @return
-	 *	- If the action was queued: a valid handle to refer to the action on the server in the future.
-	 *	- Otherwise: An invalid, placeholder handle to indicate that the action was not queued.
+	 *	A result that indicates whether the command was queued, executed immediately, or refused.
 	 */
 	UFUNCTION(BlueprintNativeEvent, Category="OpenPF2|Mode of Play Rule Sets")
-	FPF2QueuedActionHandle OnQueueAction(const TScriptInterface<IPF2CharacterInterface>&    Character,
-	                                     const TScriptInterface<IPF2QueuedActionInterface>& Action,
-	                                     EPF2ActionQueueResult&                             OutQueueResult);
-
-	/**
-	 * Callback to notify this rule set that a character wishes to cancel a queued-up an action (usually a GA).
-	 *
-	 * If the specified action is not in the queue for the specified character, no changes are made to the action queue
-	 * and this method simply returns.
-	 *
-	 * @param ActionHandle
-	 *	A reference to the previously-queued action that is being canceled.
-	 */
-	UFUNCTION(BlueprintNativeEvent, Category="OpenPF2|Mode of Play Rule Sets")
-	void OnCancelQueuedActionByHandle(const FPF2QueuedActionHandle ActionHandle);
-
-	/**
-	 * Callback to notify this rule set that a character wishes to cancel a queued-up an action (usually a GA).
-	 *
-	 * If the specified action is not in the queue for the specified character, no changes are made to the action queue
-	 * and this method simply returns.
-	 *
-	 * @param Character
-	 *	The character that queued-up the action.
-	 * @param Action
-	 *	The previously-queued action that is being canceled.
-	 */
-	UFUNCTION(BlueprintNativeEvent, Category="OpenPF2|Mode of Play Rule Sets")
-	void OnCancelQueuedAction(const TScriptInterface<IPF2CharacterInterface>&    Character,
-	                          const TScriptInterface<IPF2QueuedActionInterface>& Action);
+	EPF2CommandExecuteOrQueueResult AttemptExecuteOrQueueCommand(
+		const TScriptInterface<IPF2CharacterInterface>&    Character,
+	    const TScriptInterface<IPF2CharacterCommandInterface>& Command);
 
 	/**
 	 * Determines whether this rule set allows transitioning to the specified mode of play with the given game state.

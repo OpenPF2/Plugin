@@ -15,7 +15,6 @@
 #include <AbilitySystemInterface.h>
 #include <UObject/ScriptInterface.h>
 
-#include "PF2QueuedActionHandle.h"
 #include "Abilities/PF2AbilityBoostBase.h"
 
 #include "PF2CharacterInterface.generated.h"
@@ -23,8 +22,9 @@
 // =====================================================================================================================
 // Forward Declarations (to break recursive dependencies)
 // =====================================================================================================================
-class IPF2PlayerControllerInterface;
+class IPF2CharacterCommandInterface;
 class IPF2CommandQueueInterface;
+class IPF2PlayerControllerInterface;
 
 // =====================================================================================================================
 // Normal Declarations
@@ -275,20 +275,20 @@ public:
 	 *
 	 * (This should normally be invoked only by the MoPRS).
 	 *
-	 * @param ActionHandle
-	 *	A reference to the ability that has been queued up.
+	 * @param Command
+	 *	The command that has been queued up.
 	 */
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleActionQueued(const FPF2QueuedActionHandle ActionHandle) = 0;
+	virtual void MulticastHandleCommandQueued(const TScriptInterface<IPF2CharacterCommandInterface>& Command) = 0;
 
 	/**
 	 * Notifies this character that a previously queued action/ability has been removed from the queue.
 	 *
 	 * (This should normally be invoked only by the MoPRS).
 	 *
-	 * @param ActionHandle
-	 *	A reference to the ability that has been removed.
+	 * @param Command
+	 *	The command that has been removed.
 	 */
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) = 0;
+	virtual void MulticastHandleCommandRemoved(const TScriptInterface<IPF2CharacterCommandInterface>& Command) = 0;
 };

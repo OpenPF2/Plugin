@@ -7,13 +7,18 @@
 
 #include <UObject/Interface.h>
 
-#include "PF2GameStateInterface.h"
-#include "PF2QueuedActionHandle.h"
-
 #include "GameModes/PF2ModeOfPlayType.h"
 
 #include "PF2PlayerControllerInterface.generated.h"
 
+// =====================================================================================================================
+// Forward Declarations (to break recursive dependencies)
+// =====================================================================================================================
+class IPF2CharacterInterface;
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2PlayerControllerInterface : public UInterface
 {
@@ -53,20 +58,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
 	virtual APlayerController* ToPlayerController() = 0;
 
-	/**
-	 * Cancels an action that was previously queued for this character.
-	 *
-	 * @param ActionHandle
-	 *	A reference to the ability that has been queued-up.
-	 */
-	UFUNCTION(
-		BlueprintCallable,
-		Server,
-		Unreliable,
-		DisplayName="Cancel Queued Action",
-		Category="OpenPF2|Player Controllers")
-	virtual void ServerCancelQueuedAction(const FPF2QueuedActionHandle ActionHandle) = 0;
-
 	// =================================================================================================================
 	// Public Event Notifications from the Game State
 	// =================================================================================================================
@@ -103,27 +94,27 @@ public:
 	virtual void MulticastHandleEncounterTurnEnded() = 0;
 
 	/**
-	 * Notifies this player controller that an action/ability for the character being controlled has been queued-up.
+	 * Notifies this player controller that a command for the character being controlled has been queued-up.
 	 *
 	 * This happens if the active Mode of Play Rule Set (MoPRS) is requiring characters to queue up execution of
-	 * abilities until their turn to attack/act.
+	 * commands until their turn to attack/act.
 	 *
-	 * (This should normally be invoked only by the MoPRS).
+	 * (This should normally be invoked only by the Command Queue Component).
 	 *
-	 * @param ActionHandle
-	 *	A reference to the ability that was queued.
+	 * @param Command
+	 *	The command that was queued.
 	 */
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleActionQueued(const FPF2QueuedActionHandle ActionHandle) = 0;
+	virtual void MulticastHandleCommandQueued(const TScriptInterface<IPF2CharacterCommandInterface>& Command) = 0;
 
 	/**
-	 * Notifies this player controller a previously queued action/ability has been removed from the queue.
+	 * Notifies this player controller a previously queued command has been removed from the queue.
 	 *
-	 * (This should normally be invoked only by the MoPRS).
+	 * (This should normally be invoked only by the Command Queue Component).
 	 *
-	 * @param ActionHandle
-	 *	A reference to the ability that has been removed.
+	 * @param Command
+	 *	The command that was removed.
 	 */
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) = 0;
+	virtual void MulticastHandleCommandRemoved(const TScriptInterface<IPF2CharacterCommandInterface>& Command) = 0;
 };

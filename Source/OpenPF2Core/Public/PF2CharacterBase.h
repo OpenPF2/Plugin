@@ -22,7 +22,6 @@
 #include "PF2CharacterConstants.h"
 #include "PF2CharacterInterface.h"
 #include "PF2ClassGameplayEffectBase.h"
-#include "PF2QueuedActionHandle.h"
 
 #include "Abilities/PF2AbilityBoostBase.h"
 #include "Abilities/PF2AbilitySystemComponent.h"
@@ -30,12 +29,15 @@
 #include "Abilities/PF2CharacterAbilityScoreType.h"
 #include "Utilities/PF2GameplayAbilityUtilities.h"
 #include "Utilities/PF2InterfaceUtilities.h"
+#include "Utilities/PF2LogIdentifiableInterface.h"
 
 #include "PF2CharacterBase.generated.h"
 
 // =====================================================================================================================
 // Forward Declarations (to break recursive dependencies)
 // =====================================================================================================================
+class IPF2CharacterCommandInterface;
+
 template<class AscType, class AttributeSetType, class CommandQueueType>
 class TPF2CharacterComponentFactory;
 
@@ -476,10 +478,10 @@ public:
 	virtual void MulticastHandleEncounterTurnEnded() override;
 
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleActionQueued(const FPF2QueuedActionHandle ActionHandle) override;
+	virtual void MulticastHandleCommandQueued(const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) override;
+	virtual void MulticastHandleCommandRemoved(const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
 	// =================================================================================================================
 	// Public Methods - Blueprint Callable
@@ -653,28 +655,32 @@ protected:
 	void OnHitPointsChanged(float Delta, const struct FGameplayTagContainer& EventTags);
 
 	/**
-	 * BP event invoked when an action/ability this character has attempted to execute has been queued-up.
+	 * BP event invoked when a command this character has attempted to execute has been queued-up.
 	 *
 	 * This happens if the active Mode of Play Rule Set (MoPRS) is requiring characters to queue up execution of
 	 * abilities until their turn to attack/act.
 	 *
-	 * @param ActionHandle
-	 *	A reference to the ability that has been queued up.
+	 * @param Command
+	 *	A reference to the command that has been queued up.
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
-	void OnActionQueued(const FPF2QueuedActionHandle ActionHandle);
+	void OnCommandQueued(const TScriptInterface<IPF2CharacterCommandInterface>& Command);
 
 	/**
-	 * BP event invoked when a previously queued action/ability for this character has been removed from the queue.
+	 * BP event invoked when a previously queued command for this character has been removed from the queue.
 	 *
-	 * This happens if an action queued through the active Mode of Play Rule Set (MoPRS) was executed, canceled by the
-	 * player, removed by game rules, or removed/canceled by something in the world.
-	 *
-	 * @param ActionHandle
-	 *	A reference to the ability that has been removed.
+	 * This will happen when the following events happen for a command that was queued through the active Mode of Play
+	 * Rule Set (MoPRS):
+	 *	- It was executed.
+	 *	- It was canceled by the player.
+	 *	- It was removed by game rules.
+	 *	- It was removed/canceled by something in the world.
+	*
+	 * @param Command
+	 *	A reference to the command that has been removed.
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
-	void OnActionDequeued(const FPF2QueuedActionHandle ActionHandle);
+	void OnCommandRemoved(const TScriptInterface<IPF2CharacterCommandInterface>& Command);
 };
 
 /**
