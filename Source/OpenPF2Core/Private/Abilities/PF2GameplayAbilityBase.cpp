@@ -4,7 +4,6 @@
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "Abilities/PF2GameplayAbilityBase.h"
-
 #include "Utilities/PF2LogUtilities.h"
 
 UTexture2D* UPF2GameplayAbilityBase::GetAbilityIcon() const

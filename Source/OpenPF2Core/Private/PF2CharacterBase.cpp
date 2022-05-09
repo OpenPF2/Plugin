@@ -265,7 +265,7 @@ void APF2CharacterBase::RemoveRedundantPendingAbilityBoosts()
 		{
 			TSubclassOf<UPF2AbilityBoostBase> BoostGa   = AbilityBoostSelection.BoostGameplayAbility;
 			UAbilitySystemComponent*          Asc       = this->GetAbilitySystemComponent();
-			FGameplayAbilitySpec*             BoostSpec = Asc->FindAbilitySpecFromClass(BoostGa);
+			const FGameplayAbilitySpec*       BoostSpec = Asc->FindAbilitySpecFromClass(BoostGa);
 
 			if (BoostSpec != nullptr)
 			{
