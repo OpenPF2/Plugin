@@ -4,7 +4,6 @@
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "Commands/PF2CommandQueueComponent.h"
-
 #include "Commands/PF2CharacterCommandInterface.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
@@ -19,6 +18,9 @@ void UPF2CommandQueueComponent::Enqueue(const TScriptInterface<IPF2CharacterComm
 
 	checkf(!this->Queue.Contains(CommandIntf), TEXT("The same command can only exist in the queue once."));
 	this->Queue.Add(CommandIntf);
+
+	this->OnCommandAdded.Broadcast(Command);
+	this->OnCommandsChanged.Broadcast(PF2InterfaceUtilities::ToScriptInterfaces(this->Queue));
 }
 
 void UPF2CommandQueueComponent::PeekNext(TScriptInterface<IPF2CharacterCommandInterface>& NextCommand)
@@ -46,6 +48,9 @@ void UPF2CommandQueueComponent::PopNext(TScriptInterface<IPF2CharacterCommandInt
 		);
 
 		NextCommand = PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(NextCommandIntf);
+
+		this->OnCommandRemoved.Broadcast(NextCommand);
+		this->OnCommandsChanged.Broadcast(PF2InterfaceUtilities::ToScriptInterfaces(this->Queue));
 	}
 }
 
@@ -53,7 +58,7 @@ void UPF2CommandQueueComponent::DropNext()
 {
 	if (this->Count() != 0)
 	{
-		const IPF2CharacterCommandInterface* NextCommandIntf = this->Queue.Pop();
+		IPF2CharacterCommandInterface* NextCommandIntf = this->Queue.Pop();
 
 		UE_LOG(
 			LogPf2Core,
@@ -62,6 +67,12 @@ void UPF2CommandQueueComponent::DropNext()
 			*(NextCommandIntf->GetIdForLogs()),
 			*(this->GetIdForLogs())
 		);
+
+		this->OnCommandRemoved.Broadcast(
+			PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(NextCommandIntf)
+		);
+
+		this->OnCommandsChanged.Broadcast(PF2InterfaceUtilities::ToScriptInterfaces(this->Queue));
 	}
 }
 
@@ -121,10 +132,17 @@ EPF2ImmediateCommandExecutionResult UPF2CommandQueueComponent::PopAndExecuteNext
 
 bool UPF2CommandQueueComponent::Remove(const TScriptInterface<IPF2CharacterCommandInterface> Command)
 {
-	IPF2CharacterCommandInterface* CommandIntf    = PF2InterfaceUtilities::FromScriptInterface(Command);
-	const int32                    CountOfRemoved = this->Queue.Remove(CommandIntf);
+	IPF2CharacterCommandInterface* CommandIntf        = PF2InterfaceUtilities::FromScriptInterface(Command);
+	const int32                    CountOfRemoved     = this->Queue.Remove(CommandIntf);
+	const bool                     bWasCommandRemoved = (CountOfRemoved > 0);
 
-	return (CountOfRemoved > 0);
+	if (bWasCommandRemoved)
+	{
+		this->OnCommandRemoved.Broadcast(Command);
+		this->OnCommandsChanged.Broadcast(PF2InterfaceUtilities::ToScriptInterfaces(this->Queue));
+	}
+
+	return bWasCommandRemoved;
 }
 
 int UPF2CommandQueueComponent::Count()
@@ -135,6 +153,7 @@ int UPF2CommandQueueComponent::Count()
 void UPF2CommandQueueComponent::Clear()
 {
 	this->Queue.Empty();
+	this->OnCommandsChanged.Broadcast(TArray<TScriptInterface<IPF2CharacterCommandInterface>>());
 }
 
 FString UPF2CommandQueueComponent::GetIdForLogs() const

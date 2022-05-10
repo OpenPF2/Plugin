@@ -5,15 +5,39 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include <CoreMinimal.h>
+
 #include "PF2CommandQueueInterface.h"
 
 #include "Components/ActorComponent.h"
-
 #include "Containers/CircularQueue.h"
 
 #include "PF2CommandQueueComponent.generated.h"
 
+// =====================================================================================================================
+// Delegate Types
+// =====================================================================================================================
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
+	FPF2CommandAddedToQueueDelegate,
+	TScriptInterface<IPF2CharacterCommandInterface>,
+	Command
+);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
+	FPF2CommandRemovedFromQueueDelegate,
+	TScriptInterface<IPF2CharacterCommandInterface>,
+	Command
+);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
+	FPF2CommandQueueChangedDelegate,
+	TArray<TScriptInterface<IPF2CharacterCommandInterface>>,
+	Commands
+);
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 /**
  * A component for managing commands/actions that have been queued for a particular character.
  *
@@ -31,6 +55,24 @@ protected:
 	TArray<IPF2CharacterCommandInterface*> Queue;
 
 public:
+	/**
+	 * Event fired when a command has been added to this queue.
+	 */
+	UPROPERTY(BlueprintAssignable)
+	FPF2CommandAddedToQueueDelegate OnCommandAdded;
+
+	/**
+	 * Event fired when a command has been removed from this queue.
+	 */
+	UPROPERTY(BlueprintAssignable)
+	FPF2CommandRemovedFromQueueDelegate OnCommandRemoved;
+
+	/**
+	 * Event fired when the commands in the queue have changed (commands added, commands removed, or queue cleared).
+	 */
+	UPROPERTY(BlueprintAssignable)
+	FPF2CommandQueueChangedDelegate OnCommandsChanged;
+
 	// =================================================================================================================
 	// Public Constructors
 	// =================================================================================================================
