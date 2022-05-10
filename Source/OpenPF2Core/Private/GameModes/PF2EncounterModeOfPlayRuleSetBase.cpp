@@ -170,13 +170,7 @@ TScriptInterface<IPF2CharacterInterface> UPF2EncounterModeOfPlayRuleSetBase::Get
 
 TArray<TScriptInterface<IPF2CharacterInterface>> UPF2EncounterModeOfPlayRuleSetBase::GetCharactersInInitiativeOrder() const
 {
-	return PF2ArrayUtilities::Map<TScriptInterface<IPF2CharacterInterface>>(
-		this->CurrentCharacterSequence,
-		[](IPF2CharacterInterface* Pf2Character)
-		{
-			return PF2InterfaceUtilities::ToScriptInterface(Pf2Character);
-		}
-	);
+	return PF2InterfaceUtilities::ToScriptInterfaces<IPF2CharacterInterface>(this->CurrentCharacterSequence);
 }
 
 void UPF2EncounterModeOfPlayRuleSetBase::QueueCommandForCharacter(
@@ -242,13 +236,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::RebuildCharacterSequence()
 	TArray<IPF2CharacterInterface*> NewCharacterSequence;
 
 	const TArray<IPF2CharacterInterface*> PlayableCharacters =
-		PF2ArrayUtilities::Map<IPF2CharacterInterface*>(
-			this->GetPlayerControlledCharacters(),
-			[](const TScriptInterface<IPF2CharacterInterface> Character)
-			{
-				return PF2InterfaceUtilities::FromScriptInterface(Character);
-			}
-		);
+		PF2InterfaceUtilities::FromScriptInterfaces<IPF2CharacterInterface>(this->GetPlayerControlledCharacters());
 
 	this->CharactersByInitiatives.KeyStableSort(TGreater<int32>());
 
