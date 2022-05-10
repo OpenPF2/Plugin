@@ -477,12 +477,6 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void MulticastHandleEncounterTurnEnded() override;
 
-	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleCommandQueued(const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
-
-	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleCommandRemoved(const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
-
 	// =================================================================================================================
 	// Public Methods - Blueprint Callable
 	// =================================================================================================================
@@ -653,34 +647,6 @@ protected:
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
 	void OnHitPointsChanged(float Delta, const struct FGameplayTagContainer& EventTags);
-
-	/**
-	 * BP event invoked when a command this character has attempted to execute has been queued-up.
-	 *
-	 * This happens if the active Mode of Play Rule Set (MoPRS) is requiring characters to queue up execution of
-	 * abilities until their turn to attack/act.
-	 *
-	 * @param Command
-	 *	A reference to the command that has been queued up.
-	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
-	void OnCommandQueued(const TScriptInterface<IPF2CharacterCommandInterface>& Command);
-
-	/**
-	 * BP event invoked when a previously queued command for this character has been removed from the queue.
-	 *
-	 * This will happen when the following events happen for a command that was queued through the active Mode of Play
-	 * Rule Set (MoPRS):
-	 *	- It was executed.
-	 *	- It was canceled by the player.
-	 *	- It was removed by game rules.
-	 *	- It was removed/canceled by something in the world.
-	*
-	 * @param Command
-	 *	A reference to the command that has been removed.
-	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
-	void OnCommandRemoved(const TScriptInterface<IPF2CharacterCommandInterface>& Command);
 };
 
 /**

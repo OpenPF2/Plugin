@@ -64,12 +64,6 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void MulticastHandleEncounterTurnEnded() override;
 
-	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleCommandQueued(const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
-
-	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleCommandRemoved(const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
-
 protected:
 	// =================================================================================================================
 	// Blueprint Event Callbacks
@@ -100,29 +94,4 @@ protected:
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player Controllers")
 	void OnEncounterTurnEnded();
-
-	/**
-	 * BP event invoked when an action/ability has been queued-up for the controlled character.
-	 *
-	 * This is invoked on both the owning client and server.
-	 *
-	 * @param Command
-	 *	The command that was queued.
-	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player Controllers")
-	void OnCommandQueued(const TScriptInterface<IPF2CharacterCommandInterface>& Command);
-
-	/**
-	 * BP event invoked when a previously queued action/ability for the controlled character has been cancelled.
-	 *
-	 * This is invoked on both the owning client and server.
-	 *
-	 * This happens if an action queued through the active Mode of Play Rule Set (MoPRS) was canceled by the player,
-	 * by game rules, or something in the world.
-	 *
-	 * @param Command
-	 *	The command that was removed.
-	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player Controllers")
-	void OnCommandRemoved(const TScriptInterface<IPF2CharacterCommandInterface>& Command);
 };

@@ -88,15 +88,3 @@ void APF2PlayerControllerBase::MulticastHandleEncounterTurnEnded_Implementation(
 {
 	this->OnEncounterTurnEnded();
 }
-
-void APF2PlayerControllerBase::MulticastHandleCommandQueued_Implementation(
-	const TScriptInterface<IPF2CharacterCommandInterface>& Command)
-{
-	this->OnCommandQueued(Command);
-}
-
-void APF2PlayerControllerBase::MulticastHandleCommandRemoved_Implementation(
-	const TScriptInterface<IPF2CharacterCommandInterface>& Command)
-{
-	this->OnCommandRemoved(Command);
-}
