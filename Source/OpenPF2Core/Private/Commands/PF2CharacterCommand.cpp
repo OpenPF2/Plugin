@@ -53,7 +53,7 @@ EPF2CommandExecuteOrQueueResult UPF2CharacterCommand::AttemptExecuteOrQueue()
 			TScriptInterface<IPF2CharacterCommandInterface> CommandIntf =
 				PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(this);
 
-			Result = PF2GameMode->AttemptExecuteOrQueueCommand(CharacterIntf, CommandIntf);
+			Result = PF2GameMode->AttemptToExecuteOrQueueCommand(CharacterIntf, CommandIntf);
 		}
 	}
 

@@ -65,7 +65,7 @@ public:
 	virtual void RemoveCharacterFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual EPF2CommandExecuteOrQueueResult AttemptExecuteOrQueueCommand(
+	virtual EPF2CommandExecuteOrQueueResult AttemptToExecuteOrQueueCommand(
 		TScriptInterface<IPF2CharacterInterface>&        Character,
 		TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 

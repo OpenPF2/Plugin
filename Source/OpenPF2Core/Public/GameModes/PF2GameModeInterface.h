@@ -113,7 +113,7 @@ public:
 	 *	A result that indicates whether the command was queued, executed immediately, or refused.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Modes")
-	virtual EPF2CommandExecuteOrQueueResult AttemptExecuteOrQueueCommand(
+	virtual EPF2CommandExecuteOrQueueResult AttemptToExecuteOrQueueCommand(
 		TScriptInterface<IPF2CharacterInterface>&        Character,
 		TScriptInterface<IPF2CharacterCommandInterface>& Command) = 0;
 };

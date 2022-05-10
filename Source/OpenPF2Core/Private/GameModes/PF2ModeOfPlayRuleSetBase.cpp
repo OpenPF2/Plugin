@@ -8,7 +8,7 @@
 #include "Utilities/PF2ArrayUtilities.h"
 #include "Utilities/PF2InterfaceUtilities.h"
 
-EPF2CommandExecuteOrQueueResult UPF2ModeOfPlayRuleSetBase::AttemptExecuteOrQueueCommand_Implementation(
+EPF2CommandExecuteOrQueueResult UPF2ModeOfPlayRuleSetBase::AttemptToExecuteOrQueueCommand_Implementation(
 	const TScriptInterface<IPF2CharacterInterface>&        Character,
 	const TScriptInterface<IPF2CharacterCommandInterface>& Command)
 {

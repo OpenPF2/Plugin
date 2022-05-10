@@ -114,7 +114,7 @@ public:
 	 *	A result that indicates whether the command was queued, executed immediately, or refused.
 	 */
 	UFUNCTION(BlueprintNativeEvent, Category="OpenPF2|Mode of Play Rule Sets")
-	EPF2CommandExecuteOrQueueResult AttemptExecuteOrQueueCommand(
+	EPF2CommandExecuteOrQueueResult AttemptToExecuteOrQueueCommand(
 		const TScriptInterface<IPF2CharacterInterface>&    Character,
 	    const TScriptInterface<IPF2CharacterCommandInterface>& Command);
 
