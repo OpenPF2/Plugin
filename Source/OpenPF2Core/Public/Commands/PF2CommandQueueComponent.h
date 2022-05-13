@@ -19,19 +19,19 @@
 // =====================================================================================================================
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 	FPF2CommandAddedToQueueDelegate,
-	TScriptInterface<IPF2CharacterCommandInterface>,
+	const TScriptInterface<IPF2CharacterCommandInterface>&,
 	Command
 );
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 	FPF2CommandRemovedFromQueueDelegate,
-	TScriptInterface<IPF2CharacterCommandInterface>,
+	const TScriptInterface<IPF2CharacterCommandInterface>&,
 	Command
 );
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 	FPF2CommandQueueChangedDelegate,
-	TArray<TScriptInterface<IPF2CharacterCommandInterface>>,
+	const TArray<TScriptInterface<IPF2CharacterCommandInterface>>&,
 	Commands
 );
 
