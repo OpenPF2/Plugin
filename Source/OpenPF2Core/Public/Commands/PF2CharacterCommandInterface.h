@@ -111,4 +111,10 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Commands")
 	virtual EPF2ImmediateCommandExecutionResult AttemptExecuteImmediately() = 0;
+
+	/**
+	 * Cancel this command, removing it from the owning character's queue.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Commands")
+	virtual void Cancel() = 0;
 };

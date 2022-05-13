@@ -7,6 +7,8 @@
 
 #include "Abilities/PF2GameplayAbilityInterface.h"
 
+#include "Commands/PF2CommandQueueInterface.h"
+
 #include "GameModes/PF2GameModeInterface.h"
 
 #include "Utilities/PF2EnumUtilities.h"
@@ -91,6 +93,11 @@ EPF2ImmediateCommandExecutionResult UPF2CharacterCommand::AttemptExecuteImmediat
 	);
 
 	return Result;
+}
+
+void UPF2CharacterCommand::Cancel()
+{
+	this->GetCharacter()->GetCommandQueueComponent()->Remove(this);
 }
 
 FString UPF2CharacterCommand::GetIdForLogs() const

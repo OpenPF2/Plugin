@@ -92,6 +92,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual EPF2ImmediateCommandExecutionResult AttemptExecuteImmediately() override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual void Cancel() override;
+
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
