@@ -24,6 +24,11 @@ OPENPF2CORE_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2CoreAbilities, Log, VeryVerbos
 OPENPF2CORE_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2CoreEncounters, Log, VeryVerbose);
 
 /**
+ * Log category for character-initiative-management logic evaluated by OpenPF2, usually during encounters.
+ */
+OPENPF2CORE_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2CoreInitiative, Log, VeryVerbose);
+
+/**
  * Log category for logging character abilities and stats (very verbose).
  */
 OPENPF2CORE_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2CoreStatsDebug, Log, VeryVerbose);

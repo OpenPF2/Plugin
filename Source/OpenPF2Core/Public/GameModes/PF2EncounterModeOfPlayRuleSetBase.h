@@ -7,11 +7,22 @@
 
 #include <UObject/ScriptInterface.h>
 
-#include "PF2CharacterInterface.h"
 #include "PF2ModeOfPlayRuleSetBase.h"
+
+#include "Commands/PF2ImmediateCommandExecutionResult.h"
 
 #include "PF2EncounterModeOfPlayRuleSetBase.generated.h"
 
+// =====================================================================================================================
+// Forward Declarations (to minimize header dependencies)
+// =====================================================================================================================
+class IPF2CharacterCommandInterface;
+class IPF2CharacterInitiativeQueueInterface;
+class IPF2CharacterInterface;
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 /**
  * Base class for PF2 Mode of Play Rule Sets (MoPRS) that need encounter logic, including initiative and command queues.
  *
@@ -32,39 +43,10 @@ class OPENPF2CORE_API APF2EncounterModeOfPlayRuleSetBase : public APF2ModeOfPlay
 	GENERATED_BODY()
 
 protected:
-	// =================================================================================================================
-	// Protected Fields
-	// =================================================================================================================
 	/**
-	 * A map of initiative to characters.
-	 *
-	 * From the Pathfinder 2E Core Rulebook, page 13, "Initiative":
-	 * "At the start of an encounter, all creatures involved roll for initiative to determine the order in which they
-	 * act. The higher the result of its roll, the earlier a creature gets to act."
-	 *
-	 * From the Pathfinder 2E Core Rulebook, page 468, "Step 1: Roll Initiative":
-	 * "If your result is tied with a foe’s result, the adversary goes first. If your result is tied with another PC’s,
-	 * you can decide between yourselves who goes first when you reach that place in the initiative order. After that,
-	 * your places in the initiative order usually don’t change during the encounter."
+	 * The component of the MoPRS that maintains the list of characters and their initiatives.
 	 */
-	TMultiMap<int, IPF2CharacterInterface*> CharactersByInitiatives;
-
-	/**
-	 * All of the characters in the initiative, ordered from highest to lowest initiative.
-	 *
-	 * This array is rebuilt whenever characters are added or removed from the encounter.
-	 */
-	TArray<IPF2CharacterInterface*> CurrentCharacterSequence;
-
-	/**
-	 * The last character that was returned by GetNextCharacterByInitiative().
-	 */
-	IPF2CharacterInterface* PreviousCharacter;
-
-	/**
-	 * The initiative of the last character that was returned by GetNextCharacterByInitiative().
-	 */
-	int32 PreviousCharacterIndex;
+	IPF2CharacterInitiativeQueueInterface* CharacterInitiativeQueue;
 
 public:
 	// =================================================================================================================
@@ -73,16 +55,24 @@ public:
 	/**
 	 * Default constructor for APF2EncounterModeOfPlayRuleSetBase.
 	 */
-	explicit APF2EncounterModeOfPlayRuleSetBase() :
-		PreviousCharacter(nullptr),
-		PreviousCharacterIndex(-1)
-	{
-	}
+	explicit APF2EncounterModeOfPlayRuleSetBase();
 
-protected:
 	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
+
+protected:
+	/**
+	 * Gets the component of the MoPRS that maintains the list of characters and their initiatives.
+	 *
+	 * @return
+	 *	The character initiative queue.
+	 */
+	FORCEINLINE IPF2CharacterInitiativeQueueInterface* GetCharacterInitiativeQueue() const
+	{
+		return this->CharacterInitiativeQueue;
+	}
+
 	/**
 	 * Signals the start of the specified character's turn.
 	 *
@@ -90,7 +80,7 @@ protected:
 	 *	The character for whom a turn is starting.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Turns")
-	void StartTurnForCharacter(const TScriptInterface<IPF2CharacterInterface> Character);
+	void StartTurnForCharacter(const TScriptInterface<IPF2CharacterInterface> Character) const;
 
 	/**
 	 * Signals the end of the specified character's turn.
@@ -205,7 +195,7 @@ protected:
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Command Queue")
 	void QueueCommandForCharacter(
 		const TScriptInterface<IPF2CharacterInterface>&        Character,
-		const TScriptInterface<IPF2CharacterCommandInterface>& Command);
+		const TScriptInterface<IPF2CharacterCommandInterface>& Command) const;
 
 	/**
 	 * Cancels and clears all commands queued for all characters.
@@ -275,39 +265,4 @@ protected:
 	void PopNextCommandQueuedForCharacter(
 		const TScriptInterface<IPF2CharacterInterface>&  Character,
 		TScriptInterface<IPF2CharacterCommandInterface>& NextCommand);
-
-	/**
-	 * Rebuilds the sequence of characters according to initiative order.
-	 *
-	 * All characters are sorted from highest to lowest initiative order in the rebuilt list. If two characters have the
-	 * same initiative, their order will be adjusted so that one goes before the other. Per PF2 rules (see below),
-	 * Playable Characters (PCs) with the same initiative as Non-Playable Characters (NPCs) are sorted after NPCs so
-	 * that NPCs take turns first. Unlike with standard PF2 rules, though, if multiple characters of the same type --
-	 * either two PCs or two NPCs -- we randomize their order rather than give each character a choice of preferred
-	 * order. This helps to keep combat fluid by avoiding having to prompt players for input at the start of encounters.
-	 *
-	 * From the Pathfinder 2E Core Rulebook, page 13, "Initiative":
-	 * "At the start of an encounter, all creatures involved roll for initiative to determine the order in which they
-	 * act. The higher the result of its roll, the earlier a creature gets to act."
-	 *
-	 * From the Pathfinder 2E Core Rulebook, page 468, "Step 1: Roll Initiative":
-	 * "If your result is tied with a foe’s result, the adversary goes first. If your result is tied with another PC’s,
-	 * you can decide between yourselves who goes first when you reach that place in the initiative order. After that,
-	 * your places in the initiative order usually don’t change during the encounter."
-	 *
-	 * This method performs a lot of sorting and is expensive. It should only be called when the list of characters has
-	 * changed.
-	 */
-	void RebuildCharacterSequence();
-
-	/**
-	 * Attempts to locate the specified character in the initiative map and then remove them.
-	 *
-	 * This method does not rebuild the character sequence. In most cases, you will want to use
-	 * ClearInitiativeForCharacter() instead, as that method calls this method and then rebuilds the character sequence.
-	 *
-	 * @param Character
-	 *	The character being removed from the map.
-	 */
-	void RemoveCharacterFromInitiativeMap(const IPF2CharacterInterface* Character);
 };
