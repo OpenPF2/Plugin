@@ -27,7 +27,7 @@
  */
 UCLASS(Abstract, Blueprintable)
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API UPF2EncounterModeOfPlayRuleSetBase : public UPF2ModeOfPlayRuleSetBase
+class OPENPF2CORE_API APF2EncounterModeOfPlayRuleSetBase : public APF2ModeOfPlayRuleSetBase
 {
 	GENERATED_BODY()
 
@@ -71,9 +71,9 @@ public:
 	// Public Constructors
 	// =================================================================================================================
 	/**
-	 * Default constructor for UPF2EncounterModeOfPlayRuleSetBase.
+	 * Default constructor for APF2EncounterModeOfPlayRuleSetBase.
 	 */
-	explicit UPF2EncounterModeOfPlayRuleSetBase() :
+	explicit APF2EncounterModeOfPlayRuleSetBase() :
 		PreviousCharacter(nullptr),
 		PreviousCharacterIndex(-1)
 	{

@@ -32,17 +32,9 @@ protected:
 	 * Map from Modes of Play to the Rule Set to use for each mode.
 	 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Mode of Play Rules")
-	TMap<EPF2ModeOfPlayType, TSubclassOf<UPF2ModeOfPlayRuleSetBase>> ModeRuleSets;
+	TMap<EPF2ModeOfPlayType, TSubclassOf<APF2ModeOfPlayRuleSetBase>> ModeRuleSets;
 
 public:
-	// =================================================================================================================
-	// Public Constructors
-	// =================================================================================================================
-	/**
-	 * Default constructor for APF2GameModeBase.
-	 */
-	explicit APF2GameModeBase();
-
 	// =================================================================================================================
 	// Public Methods - IPF2GameModeInterface Implementation
 	// =================================================================================================================
@@ -74,7 +66,6 @@ protected:
 	// Protected Methods - AActor Overrides
 	// =================================================================================================================
 	virtual void BeginPlay() override;
-	virtual void Tick(const float DeltaSeconds) override;
 
 	// =================================================================================================================
 	// Protected Methods - AGameModeBase Overrides

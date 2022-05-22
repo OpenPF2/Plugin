@@ -11,11 +11,6 @@
 #include "GameModes/PF2ModeOfPlayRuleSetInterface.h"
 #include "Utilities/PF2EnumUtilities.h"
 
-APF2GameModeBase::APF2GameModeBase()
-{
-	this->PrimaryActorTick.bCanEverTick = true;
-}
-
 TScriptInterface<IPF2ModeOfPlayRuleSetInterface> APF2GameModeBase::CreateModeOfPlayRuleSet(
 	const EPF2ModeOfPlayType ModeOfPlay)
 {
@@ -23,8 +18,20 @@ TScriptInterface<IPF2ModeOfPlayRuleSetInterface> APF2GameModeBase::CreateModeOfP
 
 	if (this->ModeRuleSets.Contains(ModeOfPlay))
 	{
-		const UClass* const RuleSetType = this->ModeRuleSets[ModeOfPlay];
-		UObject*            NewRuleSet  = NewObject<UObject>(this, RuleSetType);
+		UClass* const RuleSetType = this->ModeRuleSets[ModeOfPlay];
+		UObject*      NewRuleSet;
+
+		// Rule sets are usually actors, but the interface doesn't strictly require them to be. We have to instantiate
+		// them appropriately, since actors have to be added to the world (so that actor callbacks like BeginPlay are
+		// invoked), while base UObjects don't.
+		if (RuleSetType->IsChildOf(AActor::StaticClass()))
+		{
+			NewRuleSet = this->GetWorld()->SpawnActor(RuleSetType);
+		}
+		else
+		{
+			NewRuleSet = NewObject<UObject>(this, RuleSetType);
+		}
 
 		RuleSetWrapper = TScriptInterface<IPF2ModeOfPlayRuleSetInterface>(NewRuleSet);
 	}
@@ -123,18 +130,6 @@ void APF2GameModeBase::BeginPlay()
 
 	// Start off in exploration mode.
 	this->AttemptModeOfPlaySwitch(EPF2ModeOfPlayType::Exploration);
-}
-
-void APF2GameModeBase::Tick(const float DeltaSeconds)
-{
-	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
-
-	Super::Tick(DeltaSeconds);
-
-	if (RuleSet != nullptr)
-	{
-		IPF2ModeOfPlayRuleSetInterface::Execute_OnTick(RuleSet.GetObject(), DeltaSeconds);
-	}
 }
 
 void APF2GameModeBase::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
@@ -263,7 +258,16 @@ void APF2GameModeBase::ForceSwitchModeOfPlay(const EPF2ModeOfPlayType NewModeOfP
 
 		if (OldRuleSet != nullptr)
 		{
+			AActor* OldRuleSetActor = Cast<AActor>(OldRuleSet.GetObject());
+
 			IPF2ModeOfPlayRuleSetInterface::Execute_OnModeOfPlayEnd(OldRuleSet.GetObject(), OldModeOfPlay);
+
+			if (OldRuleSetActor != nullptr)
+			{
+				// Rule sets are usually actors, but the interface doesn't strictly require them to be. If the old rule
+				// set was implemented as an actor, then we also need to remove it from the world.
+				OldRuleSetActor->Destroy();
+			}
 		}
 
 		Pf2GameState->SwitchModeOfPlay(NewModeOfPlay, NewRuleSet);

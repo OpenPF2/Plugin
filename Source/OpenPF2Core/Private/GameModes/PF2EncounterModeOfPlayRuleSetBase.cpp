@@ -17,7 +17,7 @@
 #include "Utilities/PF2LogUtilities.h"
 #include "Utilities/PF2MapUtilities.h"
 
-void UPF2EncounterModeOfPlayRuleSetBase::StartTurnForCharacter(const TScriptInterface<IPF2CharacterInterface> Character)
+void APF2EncounterModeOfPlayRuleSetBase::StartTurnForCharacter(const TScriptInterface<IPF2CharacterInterface> Character)
 {
 	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
 
@@ -39,7 +39,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::StartTurnForCharacter(const TScriptInte
 	IPF2CharacterInterface::Execute_MulticastHandleEncounterTurnStarted(Character.GetObject());
 }
 
-void UPF2EncounterModeOfPlayRuleSetBase::EndTurnForCharacter(const TScriptInterface<IPF2CharacterInterface> Character)
+void APF2EncounterModeOfPlayRuleSetBase::EndTurnForCharacter(const TScriptInterface<IPF2CharacterInterface> Character)
 {
 	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
 
@@ -61,7 +61,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::EndTurnForCharacter(const TScriptInterf
 	IPF2CharacterInterface::Execute_MulticastHandleEncounterTurnEnded(Character.GetObject());
 }
 
-void UPF2EncounterModeOfPlayRuleSetBase::SetCharacterInitiative(
+void APF2EncounterModeOfPlayRuleSetBase::SetCharacterInitiative(
 	const TScriptInterface<IPF2CharacterInterface>& Character,
 	const int32                                     Initiative)
 {
@@ -83,7 +83,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::SetCharacterInitiative(
 	this->RebuildCharacterSequence();
 }
 
-bool UPF2EncounterModeOfPlayRuleSetBase::IsInitiativeSetForCharacter(
+bool APF2EncounterModeOfPlayRuleSetBase::IsInitiativeSetForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character) const
 {
 	const IPF2CharacterInterface* Pf2Character = PF2InterfaceUtilities::FromScriptInterface(Character);
@@ -91,7 +91,7 @@ bool UPF2EncounterModeOfPlayRuleSetBase::IsInitiativeSetForCharacter(
 	return this->CurrentCharacterSequence.Contains(Pf2Character);
 }
 
-void UPF2EncounterModeOfPlayRuleSetBase::ClearInitiativeForCharacter(
+void APF2EncounterModeOfPlayRuleSetBase::ClearInitiativeForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character)
 {
 	const IPF2CharacterInterface* Pf2Character = PF2InterfaceUtilities::FromScriptInterface(Character);
@@ -108,7 +108,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::ClearInitiativeForCharacter(
 	this->RebuildCharacterSequence();
 }
 
-void UPF2EncounterModeOfPlayRuleSetBase::ClearInitiativeForAllCharacters()
+void APF2EncounterModeOfPlayRuleSetBase::ClearInitiativeForAllCharacters()
 {
 	UE_LOG(
 		LogPf2CoreEncounters,
@@ -124,7 +124,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::ClearInitiativeForAllCharacters()
 	this->PreviousCharacterIndex = -1;
 }
 
-TScriptInterface<IPF2CharacterInterface> UPF2EncounterModeOfPlayRuleSetBase::GetNextCharacterByInitiative()
+TScriptInterface<IPF2CharacterInterface> APF2EncounterModeOfPlayRuleSetBase::GetNextCharacterByInitiative()
 {
 	TScriptInterface<IPF2CharacterInterface> Result;
 	const int32                              CharacterCount = this->CurrentCharacterSequence.Num();
@@ -168,12 +168,12 @@ TScriptInterface<IPF2CharacterInterface> UPF2EncounterModeOfPlayRuleSetBase::Get
 	return Result;
 }
 
-TArray<TScriptInterface<IPF2CharacterInterface>> UPF2EncounterModeOfPlayRuleSetBase::GetCharactersInInitiativeOrder() const
+TArray<TScriptInterface<IPF2CharacterInterface>> APF2EncounterModeOfPlayRuleSetBase::GetCharactersInInitiativeOrder() const
 {
 	return PF2InterfaceUtilities::ToScriptInterfaces<IPF2CharacterInterface>(this->CurrentCharacterSequence);
 }
 
-void UPF2EncounterModeOfPlayRuleSetBase::QueueCommandForCharacter(
+void APF2EncounterModeOfPlayRuleSetBase::QueueCommandForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>&        Character,
 	const TScriptInterface<IPF2CharacterCommandInterface>& Command)
 {
@@ -193,7 +193,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::QueueCommandForCharacter(
 	CharacterIntf->GetCommandQueueComponent()->Enqueue(Command);
 }
 
-void UPF2EncounterModeOfPlayRuleSetBase::CancelQueuedCommandsForAllCharacters()
+void APF2EncounterModeOfPlayRuleSetBase::CancelQueuedCommandsForAllCharacters()
 {
 	for (const IPF2CharacterInterface* Character : this->CurrentCharacterSequence)
 	{
@@ -201,13 +201,13 @@ void UPF2EncounterModeOfPlayRuleSetBase::CancelQueuedCommandsForAllCharacters()
 	}
 }
 
-EPF2ImmediateCommandExecutionResult UPF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedCommandForCharacter(
+EPF2ImmediateCommandExecutionResult APF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedCommandForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character)
 {
 	return Character->GetCommandQueueComponent()->PopAndExecuteNext();
 }
 
-bool UPF2EncounterModeOfPlayRuleSetBase::DoesCharacterHaveNextCommandQueued(
+bool APF2EncounterModeOfPlayRuleSetBase::DoesCharacterHaveNextCommandQueued(
 	const TScriptInterface<IPF2CharacterInterface>& Character) const
 {
 	TScriptInterface<IPF2CharacterCommandInterface> NextCommand;
@@ -217,21 +217,21 @@ bool UPF2EncounterModeOfPlayRuleSetBase::DoesCharacterHaveNextCommandQueued(
 	return (NextCommand != nullptr);
 }
 
-void UPF2EncounterModeOfPlayRuleSetBase::PeekNextQueuedCommandForCharacter(
+void APF2EncounterModeOfPlayRuleSetBase::PeekNextQueuedCommandForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>&  Character,
 	TScriptInterface<IPF2CharacterCommandInterface>& NextCommand) const
 {
 	Character->GetCommandQueueComponent()->PeekNext(NextCommand);
 }
 
-void UPF2EncounterModeOfPlayRuleSetBase::PopNextCommandQueuedForCharacter(
+void APF2EncounterModeOfPlayRuleSetBase::PopNextCommandQueuedForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character,
 	TScriptInterface<IPF2CharacterCommandInterface>& NextCommand)
 {
 	Character->GetCommandQueueComponent()->PopNext(NextCommand);
 }
 
-void UPF2EncounterModeOfPlayRuleSetBase::RebuildCharacterSequence()
+void APF2EncounterModeOfPlayRuleSetBase::RebuildCharacterSequence()
 {
 	TArray<IPF2CharacterInterface*> NewCharacterSequence;
 
@@ -300,7 +300,7 @@ void UPF2EncounterModeOfPlayRuleSetBase::RebuildCharacterSequence()
 	}
 }
 
-void UPF2EncounterModeOfPlayRuleSetBase::RemoveCharacterFromInitiativeMap(const IPF2CharacterInterface* Character)
+void APF2EncounterModeOfPlayRuleSetBase::RemoveCharacterFromInitiativeMap(const IPF2CharacterInterface* Character)
 {
 	if (this->PreviousCharacter == Character)
 	{

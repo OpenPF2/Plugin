@@ -8,7 +8,7 @@
 #include "Utilities/PF2ArrayUtilities.h"
 #include "Utilities/PF2InterfaceUtilities.h"
 
-EPF2CommandExecuteOrQueueResult UPF2ModeOfPlayRuleSetBase::AttemptToExecuteOrQueueCommand_Implementation(
+EPF2CommandExecuteOrQueueResult APF2ModeOfPlayRuleSetBase::AttemptToExecuteOrQueueCommand_Implementation(
 	const TScriptInterface<IPF2CharacterInterface>&        Character,
 	const TScriptInterface<IPF2CharacterCommandInterface>& Command)
 {
@@ -20,7 +20,7 @@ EPF2CommandExecuteOrQueueResult UPF2ModeOfPlayRuleSetBase::AttemptToExecuteOrQue
 	return Result;
 }
 
-TScriptInterface<IPF2GameModeInterface> UPF2ModeOfPlayRuleSetBase::GetGameMode() const
+TScriptInterface<IPF2GameModeInterface> APF2ModeOfPlayRuleSetBase::GetGameMode() const
 {
 	AGameModeBase* GameMode = this->GetWorld()->GetAuthGameMode();
 
@@ -29,7 +29,7 @@ TScriptInterface<IPF2GameModeInterface> UPF2ModeOfPlayRuleSetBase::GetGameMode()
 	return TScriptInterface<IPF2GameModeInterface>(GameMode);
 }
 
-TArray<TScriptInterface<IPF2PlayerControllerInterface>> UPF2ModeOfPlayRuleSetBase::GetPlayerControllers() const
+TArray<TScriptInterface<IPF2PlayerControllerInterface>> APF2ModeOfPlayRuleSetBase::GetPlayerControllers() const
 {
 	TArray<TScriptInterface<IPF2PlayerControllerInterface>> PlayerControllers;
 	const UWorld* const                                     World = this->GetWorld();
@@ -50,7 +50,7 @@ TArray<TScriptInterface<IPF2PlayerControllerInterface>> UPF2ModeOfPlayRuleSetBas
 	return PlayerControllers;
 }
 
-TArray<TScriptInterface<IPF2CharacterInterface>> UPF2ModeOfPlayRuleSetBase::GetPlayerControlledCharacters() const
+TArray<TScriptInterface<IPF2CharacterInterface>> APF2ModeOfPlayRuleSetBase::GetPlayerControlledCharacters() const
 {
 	return PF2ArrayUtilities::Reduce<TArray<TScriptInterface<IPF2CharacterInterface>>>(
 		this->GetPlayerControllers(),

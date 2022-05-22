@@ -18,13 +18,13 @@
  */
 UCLASS(Abstract, Blueprintable)
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API UPF2ModeOfPlayRuleSetBase : public UObject, public IPF2ModeOfPlayRuleSetInterface
+class OPENPF2CORE_API APF2ModeOfPlayRuleSetBase : public AActor, public IPF2ModeOfPlayRuleSetInterface
 {
 	GENERATED_BODY()
 
 public:
 	// =================================================================================================================
-	// Public Methods - UPF2ModeOfPlayRuleSetBase Implementation
+	// Public Methods - APF2ModeOfPlayRuleSetBase Implementation
 	// =================================================================================================================
 	virtual EPF2CommandExecuteOrQueueResult AttemptToExecuteOrQueueCommand_Implementation(
 		const TScriptInterface<IPF2CharacterInterface>&        Character,

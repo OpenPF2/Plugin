@@ -64,17 +64,6 @@ public:
 	void OnPlayableCharacterStarting(const TScriptInterface<IPF2CharacterInterface>& Character);
 
 	/**
-	 * Callback to notify this rule set of the start of a frame.
-	 *
-	 * The rule set should use this as an opportunity to update time-based state (e.g., expire time-based initiative).
-	 *
-	 * @param DeltaSeconds
-	 *	The amount of time (in seconds) that's elapsed since the last tick event.
-	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Mode of Play Rule Sets")
-	void OnTick(float DeltaSeconds);
-
-	/**
 	 * Callback to notify this rule set that a character should be added to the current encounter.
 	 *
 	 * The rule set can choose to ignore this event if it's not applicable (e.g., this rule set is not for an
