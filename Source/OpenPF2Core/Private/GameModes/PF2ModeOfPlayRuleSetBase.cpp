@@ -5,8 +5,7 @@
 
 #include "GameModes/PF2ModeOfPlayRuleSetBase.h"
 
-#include "Utilities/PF2ArrayUtilities.h"
-#include "Utilities/PF2InterfaceUtilities.h"
+#include "Libraries/PF2CharacterLibrary.h"
 
 EPF2CommandExecuteOrQueueResult APF2ModeOfPlayRuleSetBase::AttemptToExecuteOrQueueCommand_Implementation(
 	const TScriptInterface<IPF2CharacterInterface>&        Character,
@@ -31,36 +30,10 @@ TScriptInterface<IPF2GameModeInterface> APF2ModeOfPlayRuleSetBase::GetGameMode()
 
 TArray<TScriptInterface<IPF2PlayerControllerInterface>> APF2ModeOfPlayRuleSetBase::GetPlayerControllers() const
 {
-	TArray<TScriptInterface<IPF2PlayerControllerInterface>> PlayerControllers;
-	const UWorld* const                                     World = this->GetWorld();
-
-	for (FConstPlayerControllerIterator Iterator = World->GetPlayerControllerIterator(); Iterator; ++Iterator)
-	{
-		APlayerController* PlayerController = Iterator->Get();
-
-		IPF2PlayerControllerInterface* const Pf2PlayerController =
-			Cast<IPF2PlayerControllerInterface>(PlayerController);
-
-		if (Pf2PlayerController != nullptr)
-		{
-			PlayerControllers.Add(PF2InterfaceUtilities::ToScriptInterface(Pf2PlayerController));
-		}
-	}
-
-	return PlayerControllers;
+	return UPF2CharacterLibrary::GetPlayerControllers(this->GetWorld());
 }
 
 TArray<TScriptInterface<IPF2CharacterInterface>> APF2ModeOfPlayRuleSetBase::GetPlayerControlledCharacters() const
 {
-	return PF2ArrayUtilities::Reduce<TArray<TScriptInterface<IPF2CharacterInterface>>>(
-		this->GetPlayerControllers(),
-		TArray<TScriptInterface<IPF2CharacterInterface>>(),
-		[](TArray<TScriptInterface<IPF2CharacterInterface>>      Characters,
-		   const TScriptInterface<IPF2PlayerControllerInterface> PlayerController)
-		{
-			Characters.Append(PlayerController->GetControlledCharacters());
-
-			return Characters;
-		}
-	);
+	return UPF2CharacterLibrary::GetPlayerControlledCharacters(this->GetWorld());
 }
