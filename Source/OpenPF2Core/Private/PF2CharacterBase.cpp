@@ -81,7 +81,7 @@ int32 APF2CharacterBase::GetCharacterLevel() const
 }
 
 FORCEINLINE void APF2CharacterBase::GetCharacterAbilitySystemComponent(
-	TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const
+	TScriptInterface<IPF2CharacterAbilitySystemInterface>& Output) const
 {
 	// BUGBUG: This is weird, but the way that a TScriptInterface object works is it maintains a reference to a UObject
 	// that *implements* an interface along with a pointer to the part of the UObject that provides the interface
@@ -89,12 +89,12 @@ FORCEINLINE void APF2CharacterBase::GetCharacterAbilitySystemComponent(
 	Output = this->AbilitySystemComponent;
 }
 
-FORCEINLINE IPF2CharacterAbilitySystemComponentInterface* APF2CharacterBase::GetCharacterAbilitySystemComponent() const
+FORCEINLINE IPF2CharacterAbilitySystemInterface* APF2CharacterBase::GetCharacterAbilitySystemComponent() const
 {
 	// Too bad that ASCs in UE don't implement an interface; otherwise we could extend it so casts like this aren't
 	// needed.
-	IPF2CharacterAbilitySystemComponentInterface* CharacterAsc =
-		Cast<IPF2CharacterAbilitySystemComponentInterface>(this->AbilitySystemComponent);
+	IPF2CharacterAbilitySystemInterface* CharacterAsc =
+		Cast<IPF2CharacterAbilitySystemInterface>(this->AbilitySystemComponent);
 
 	check(CharacterAsc);
 	return CharacterAsc;
@@ -159,7 +159,7 @@ void APF2CharacterBase::ApplyAbilityBoostSelections()
 
 void APF2CharacterBase::ActivatePassiveGameplayEffects()
 {
-	IPF2CharacterAbilitySystemComponentInterface* CharacterAsc = this->GetCharacterAbilitySystemComponent();
+	IPF2CharacterAbilitySystemInterface* CharacterAsc = this->GetCharacterAbilitySystemComponent();
 
 	if (this->IsAuthorityForEffects() && !CharacterAsc->ArePassiveGameplayEffectsActive())
 	{

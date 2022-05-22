@@ -415,9 +415,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual void GetCharacterAbilitySystemComponent(
-		TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const override;
+		TScriptInterface<IPF2CharacterAbilitySystemInterface>& Output) const override;
 
-	virtual IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent() const override;
+	virtual IPF2CharacterAbilitySystemInterface* GetCharacterAbilitySystemComponent() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2CommandQueueInterface> GetCommandQueueComponent() const override;

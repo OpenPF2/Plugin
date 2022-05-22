@@ -101,7 +101,7 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual void GetCharacterAbilitySystemComponent(
-		TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const = 0;
+		TScriptInterface<IPF2CharacterAbilitySystemInterface>& Output) const = 0;
 
 	/**
 	 * Gets a PF2-specific version of the ASC sub-component of this character.
@@ -109,7 +109,7 @@ public:
 	 * @return
 	 *	The ASC, as an implementation of the interface for character ASCs.
 	 */
-	virtual IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent() const = 0;
+	virtual IPF2CharacterAbilitySystemInterface* GetCharacterAbilitySystemComponent() const = 0;
 
 	/**
 	 * Gets the sub-component of this character that is used to track commands queued during encounters.
