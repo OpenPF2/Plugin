@@ -7,9 +7,12 @@
 
 #include <UObject/ScriptInterface.h>
 
+#include "PF2CharacterInitiativeQueueInterface.h"
 #include "PF2ModeOfPlayRuleSetBase.h"
 
 #include "Commands/PF2ImmediateCommandExecutionResult.h"
+
+#include "Utilities/PF2InterfaceUtilities.h"
 
 #include "PF2EncounterModeOfPlayRuleSetBase.generated.h"
 
@@ -17,7 +20,6 @@
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2CharacterCommandInterface;
-class IPF2CharacterInitiativeQueueInterface;
 class IPF2CharacterInterface;
 
 // =====================================================================================================================
@@ -58,19 +60,20 @@ public:
 	explicit APF2EncounterModeOfPlayRuleSetBase();
 
 	// =================================================================================================================
-	// Protected Methods
+	// Public Methods
 	// =================================================================================================================
-
-protected:
 	/**
 	 * Gets the component of the MoPRS that maintains the list of characters and their initiatives.
 	 *
 	 * @return
 	 *	The character initiative queue.
 	 */
-	FORCEINLINE IPF2CharacterInitiativeQueueInterface* GetCharacterInitiativeQueue() const
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Initiative")
+	FORCEINLINE TScriptInterface<IPF2CharacterInitiativeQueueInterface> GetCharacterInitiativeQueue() const
 	{
-		return this->CharacterInitiativeQueue;
+		return PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterInitiativeQueueInterface>(
+			this->CharacterInitiativeQueue
+		);
 	}
 
 	/**
