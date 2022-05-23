@@ -149,6 +149,12 @@ public:
 	virtual AActor* ToActor() = 0;
 
 	/**
+	 * Determines if this character is living (i.e., has hit points > 0).
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual bool IsAlive() = 0;
+
+	/**
 	 * Applies a single ability boost selection to this character.
 	 *
 	 * The ability score selections must be compatible with the rule options of the Boost GA.

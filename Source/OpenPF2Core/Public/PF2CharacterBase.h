@@ -432,6 +432,9 @@ public:
 	virtual AActor* ToActor() override;
 
 	UFUNCTION(BlueprintCallable)
+	virtual bool IsAlive() override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual void AddAbilityBoostSelection(const TSubclassOf<UPF2AbilityBoostBase>   BoostGameplayAbility,
 	                                      const TSet<EPF2CharacterAbilityScoreType> SelectedAbilities) override;
 

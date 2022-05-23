@@ -120,6 +120,11 @@ AActor* APF2CharacterBase::ToActor()
 	return this;
 }
 
+bool APF2CharacterBase::IsAlive()
+{
+	return (this->AttributeSet->GetHitPoints() > 0);
+}
+
 void APF2CharacterBase::AddAbilityBoostSelection(
 	const TSubclassOf<UPF2AbilityBoostBase>   BoostGameplayAbility,
 	const TSet<EPF2CharacterAbilityScoreType> SelectedAbilities)
