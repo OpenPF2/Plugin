@@ -86,6 +86,9 @@ public:
 	// Public Methods - IPF2CharacterInitiativeQueueInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
+	virtual bool IsEmpty() override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual void SetCharacterInitiative(const TScriptInterface<IPF2CharacterInterface>& Character,
 	                                    const int32                                     Initiative) override;
 

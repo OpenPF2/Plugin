@@ -14,6 +14,12 @@
 #include "Utilities/PF2LogUtilities.h"
 #include "Utilities/PF2MapUtilities.h"
 
+bool UPF2CharacterInitiativeQueueComponent::IsEmpty()
+{
+	// ReSharper disable once CppRedundantParentheses
+	return (this->CurrentCharacterSequence.Num() == 0);
+}
+
 void UPF2CharacterInitiativeQueueComponent::SetCharacterInitiative(
 	const TScriptInterface<IPF2CharacterInterface>& Character,
 	const int32                                     Initiative)

@@ -41,6 +41,16 @@ class OPENPF2CORE_API IPF2CharacterInitiativeQueueInterface : public IPF2LogIden
 
 public:
 	/**
+	 * Determines if there are any characters in this queue.
+	 *
+	 * @return
+	 *	- true if the queue has no characters.
+	 *	- false if the queue has at least one character.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Character Initiative Queues")
+	virtual bool IsEmpty() = 0;
+
+	/**
 	 * Sets the initiative of the specified character.
 	 *
 	 * If the character already has an initiative set, the character's initiative is changed to the specified value.
