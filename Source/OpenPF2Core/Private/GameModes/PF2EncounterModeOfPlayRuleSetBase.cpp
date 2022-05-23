@@ -23,6 +23,25 @@ APF2EncounterModeOfPlayRuleSetBase::APF2EncounterModeOfPlayRuleSetBase()
 		this->CreateDefaultSubobject<UPF2CharacterInitiativeQueueComponent>(TEXT("CharacterInitiativeQueue"));
 }
 
+bool APF2EncounterModeOfPlayRuleSetBase::HavePlayableCharacters() const
+{
+	bool Result = false;
+
+	if (!this->GetCharacterInitiativeQueue()->IsEmpty())
+	{
+		for (const TScriptInterface<IPF2CharacterInterface> Character : this->GetCharactersInInitiativeOrder())
+		{
+			if (Character->IsAlive())
+			{
+				Result = true;
+				break;
+			}
+		}
+	}
+
+	return Result;
+}
+
 void APF2EncounterModeOfPlayRuleSetBase::StartTurnForCharacter(
 	const TScriptInterface<IPF2CharacterInterface> Character) const
 {

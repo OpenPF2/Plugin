@@ -74,6 +74,16 @@ protected:
 	}
 
 	/**
+	 * Gets whether there are payable characters with initiative set in this encounter.
+	 *
+	 * @return
+	 *	- true if there is at least one playable character who is not dead and who has initiative set.
+	 *	- false if there are no playable, living characters with initiative set.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Characters")
+	bool HavePlayableCharacters() const;
+
+	/**
 	 * Signals the start of the specified character's turn.
 	 *
 	 * @param Character
