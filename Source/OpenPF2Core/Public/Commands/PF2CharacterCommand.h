@@ -13,6 +13,8 @@
 #include "PF2CharacterCommandInterface.h"
 #include "PF2CharacterInterface.h"
 
+#include "Utilities/PF2InterfaceUtilities.h"
+
 #include "PF2CharacterCommand.generated.h"
 
 /**
@@ -43,6 +45,24 @@ public:
 	// =================================================================================================================
 	// Public Static Methods
 	// =================================================================================================================
+	/**
+	 * Creates a new UPF2CharacterCommand for the given character and ability specification.
+	 *
+	 * @param Character
+	 *	The character who would be issued the command.
+	 * @param AbilitySpecHandle
+	 *	The handle of the ability that the command will trigger when it is executed.
+	 *
+	 * @return
+	 *	The new command.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Commands")
+	static UPF2CharacterCommand* Create(const TScriptInterface<IPF2CharacterInterface> Character,
+	                                    const FGameplayAbilitySpecHandle               AbilitySpecHandle)
+	{
+		return Create(PF2InterfaceUtilities::FromScriptInterface(Character), AbilitySpecHandle);
+	}
+
 	/**
 	 * Creates a new UPF2CharacterCommand for the given character and ability specification.
 	 *
