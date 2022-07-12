@@ -59,6 +59,15 @@ EPF2CommandExecuteOrQueueResult UPF2CharacterCommand::AttemptExecuteOrQueue()
 		}
 	}
 
+	UE_LOG(
+		LogPf2CoreAbilities,
+		VeryVerbose,
+		TEXT("[%s] AttemptExecuteOrQueue() result for command ('%s'): %s."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(this->GetIdForLogs()),
+		*(PF2EnumUtilities::ToString(Result))
+	);
+
 	return Result;
 }
 
