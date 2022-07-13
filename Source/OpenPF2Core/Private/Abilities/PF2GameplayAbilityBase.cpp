@@ -21,6 +21,11 @@ FText UPF2GameplayAbilityBase::GetAbilityDescription() const
 	return this->Description;
 }
 
+FName UPF2GameplayAbilityBase::GetDefaultInputActionMapping() const
+{
+	return this->DefaultInputActionMapping;
+}
+
 FString UPF2GameplayAbilityBase::GetIdForLogs() const
 {
 	return this->GetName();

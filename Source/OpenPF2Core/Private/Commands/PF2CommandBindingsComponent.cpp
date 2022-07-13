@@ -8,23 +8,15 @@
 #include <AbilitySystemComponent.h>
 #include <Components/InputComponent.h>
 
+#include "Abilities/PF2GameplayAbilityInterface.h"
+
 #include "Commands/PF2CommandInputBinding.h"
+
 #include "Utilities/PF2InterfaceUtilities.h"
 
-void UPF2CommandBindingsComponent::GiveAbilitiesToCharacter(const TScriptInterface<IPF2CharacterInterface> Character)
+void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter(const TScriptInterface<IPF2CharacterInterface> Character)
 {
-	this->GiveAbilitiesToCharacter(PF2InterfaceUtilities::FromScriptInterface(Character));
-}
-
-void UPF2CommandBindingsComponent::GiveAbilitiesToCharacter(IPF2CharacterInterface* Character)
-{
-	for (FPF2CommandInputBinding& Binding : this->Bindings)
-	{
-		if (!Binding.HasBeenGranted())
-		{
-			Binding.GiveAbilityToCharacter(Character);
-		}
-	}
+	this->LoadAbilitiesFromCharacter(PF2InterfaceUtilities::FromScriptInterface(Character));
 }
 
 void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter(IPF2CharacterInterface* Character)
@@ -38,50 +30,48 @@ void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter(IPF2CharacterInter
 
 	for (const FGameplayAbilitySpec& AbilitySpec : AbilitySystemComponent->GetActivatableAbilities())
 	{
-		this->Bindings.Add(FPF2CommandInputBinding(FName(), AbilitySpec, Character));
-	}
-}
+		const UGameplayAbility*             Ability       = AbilitySpec.Ability;
+		const IPF2GameplayAbilityInterface* AbilityIntf   = Cast<IPF2GameplayAbilityInterface>(Ability);
+		FName                               DefaultAction;
 
-void UPF2CommandBindingsComponent::BindToInputComponent(UInputComponent* InputComponent)
-{
-	for (const FPF2CommandInputBinding& Binding : this->Bindings)
-	{
-		// Pressed event
- 		{
-			FInputActionBinding ActionBinding(Binding.ActionName, IE_Pressed);
-
-			ActionBinding.ActionDelegate.GetDelegateForManualSet().BindUObject(
-				this,
-				&UPF2CommandBindingsComponent::LocalInputPressed,
-				Binding
-			);
-
-			InputComponent->AddActionBinding(ActionBinding);
-		}
-
-		// Released event
+		if (AbilityIntf != nullptr)
 		{
-			FInputActionBinding ActionBinding(Binding.ActionName, IE_Released);
-
-			ActionBinding.ActionDelegate.GetDelegateForManualSet().BindUObject(
-				this,
-				&UPF2CommandBindingsComponent::LocalInputReleased,
-				Binding
-			);
-
-			InputComponent->AddActionBinding(ActionBinding);
+			DefaultAction = AbilityIntf->GetDefaultInputActionMapping();
 		}
+		else
+		{
+			// Fallback for interoperability with non-PF2 abilities.
+			DefaultAction = FName();
+		}
+
+		this->Bindings.Add(FPF2CommandInputBinding(DefaultAction, AbilitySpec, Character));
 	}
 }
 
-// ReSharper disable once CppMemberFunctionMayBeStatic
-void UPF2CommandBindingsComponent::LocalInputPressed(FPF2CommandInputBinding Binding)
+void UPF2CommandBindingsComponent::ConnectToInput(UInputComponent* InputComponent)
 {
-	Binding.InvokeAbility();
+	for (FPF2CommandInputBinding& Binding : this->Bindings)
+	{
+		Binding.ConnectToInput(InputComponent);
+	}
 }
 
-// ReSharper disable once CppMemberFunctionMayBeStatic
-void UPF2CommandBindingsComponent::LocalInputReleased(FPF2CommandInputBinding Binding)
+void UPF2CommandBindingsComponent::DisconnectFromInput(UInputComponent* InputComponent)
 {
-	Binding.ReleaseAbility();
+	for (FPF2CommandInputBinding& Binding : this->Bindings)
+	{
+		Binding.DisconnectFromInput(InputComponent);
+	}
+}
+
+FString UPF2CommandBindingsComponent::GetIdForLogs() const
+{
+	// ReSharper disable CppRedundantParentheses
+	return FString::Format(
+		TEXT("{0}.{1}"),
+		{
+			*(this->GetOwner()->GetName()),
+			*(this->GetName())
+		}
+	);
 }

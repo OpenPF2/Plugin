@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <Templates/SubclassOf.h>
+#include <Components/InputComponent.h>
 
 #include "PF2CharacterInterface.h"
 
@@ -15,6 +15,8 @@ class UGameplayAbility;
 
 /**
  * A single binding between an input action and an ability that can be activated.
+ *
+ * The ability must already have been granted to the character.
  */
 USTRUCT(BlueprintType)
 struct FPF2CommandInputBinding
@@ -30,21 +32,20 @@ struct FPF2CommandInputBinding
 	UPROPERTY(EditDefaultsOnly)
 	FName ActionName;
 
-	/**
-	 * The Gameplay Ability to activate when the action/key is triggered.
-	 */
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<UGameplayAbility> Ability;
-
 protected:
 	// =================================================================================================================
 	// Protected Properties - Blueprint Accessible
 	// =================================================================================================================
 	/**
-	 * The handle for the corresponding ability, after it has been granted to a character's ASC.
+	 * The handle for the corresponding ability.
 	 */
 	UPROPERTY()
-	FGameplayAbilitySpecHandle GrantedAbilitySpecHandle;
+	FGameplayAbilitySpecHandle AbilitySpecHandle;
+
+	/**
+	 * The handles for input action bindings, if this binding been connected to input.
+	 */
+	TArray<int32> Handles;
 
 	// =================================================================================================================
 	// Protected Properties
@@ -52,7 +53,7 @@ protected:
 	/**
 	 * The character to which the ability has been granted.
 	 */
-	IPF2CharacterInterface* GrantedCharacter;
+	IPF2CharacterInterface* Character;
 
 public:
 	// =================================================================================================================
@@ -61,27 +62,12 @@ public:
 	/**
 	 * Default constructor (used by Blueprint).
 	 */
-	explicit FPF2CommandInputBinding() : GrantedCharacter(nullptr)
+	explicit FPF2CommandInputBinding() : Character(nullptr)
 	{
 	}
 
 	/**
-	 * Constructor for initializing a FPF2CommandInputBinding from a Gameplay Ability blueprint.
-	 *
-	 * @param ActionName
-	 *	The human-friendly name of the action, as configured in project settings (e.g "Jump").
-	 * @param Ability
-	 *	The Gameplay Ability to activate when the action/key is triggered.
-	 */
-	explicit FPF2CommandInputBinding(const FName& ActionName, const TSubclassOf<UGameplayAbility>& Ability) :
-		ActionName(ActionName),
-		Ability(Ability),
-		GrantedCharacter(nullptr)
-	{
-	}
-
-	/**
-	 * Constructor for initializing a FPF2CommandInputBinding from an ability that has already been granted.
+	 * Constructor for initializing a FPF2CommandInputBinding from a granted ability.
 	 *
 	 * @param ActionName
 	 *	The human-friendly name of the action, as configured in project settings (e.g "Jump").
@@ -94,9 +80,8 @@ public:
 	                                 const FGameplayAbilitySpec AbilitySpec,
 	                                 IPF2CharacterInterface*    Character) :
 		ActionName(ActionName),
-		Ability(AbilitySpec.Ability->GetClass()),
-		GrantedAbilitySpecHandle(AbilitySpec.Handle),
-		GrantedCharacter(Character)
+		AbilitySpecHandle(AbilitySpec.Handle),
+		Character(Character)
 	{
 	}
 
@@ -112,35 +97,68 @@ public:
 	// Public Methods
 	// =================================================================================================================
 	/**
-	 * Determines whether the ability in this binding has been granted to a character.
+	 * Determines whether the ability in this binding has been connected to an input component.
 	 *
 	 * @return
-	 *	- true if this binding corresponds to a granted ability.
-	 *	- false if this binding corresponds to an ability that has not yet been granted.
+	 *	- true if this binding is presently connected to input.
+	 *	- false if this binding is not connected to input at this time.
 	 */
-	FORCEINLINE bool HasBeenGranted() const
+	FORCEINLINE bool IsConnectedToInput() const
 	{
-		return this->GrantedAbilitySpecHandle.IsValid();
+		return this->Handles.Num() != 0;
 	}
 
 	/**
-	 * Gives this ability to the specified PF2 character.
+	 * Wires-up this binding to receive input from the given player input component.
 	 *
-	 * This can only be run on the server. If this ability has already been given to the specified character, it is not
-	 * granted again. The ability must not have already been given to a different character than the specified
-	 * character.
+	 * This only has an effect if this binding has an action assigned and this binding has not yet been wired up;
+	 * otherwise, this call will have no effect.
 	 *
-	 * @param Character
-	 *	The PF2-compatible character to which the ability should be given.
+	 * @param InputComponent
+	 *	The component to which input should be bound.
 	 */
-	void GiveAbilityToCharacter(IPF2CharacterInterface* Character);
+	void ConnectToInput(UInputComponent* InputComponent);
+
+	/**
+	 * Removes this binding from the given player input component.
+	 *
+	 * This must be called before changing the action of any binding.
+	 *
+	 * This only has an effect if this binding has been wired up; otherwise, this call will have no effect.
+	 */
+	void DisconnectFromInput(UInputComponent* InputComponent);
+
+protected:
+	// =================================================================================================================
+	// Protected Static Methods
+	// =================================================================================================================
+	/**
+	 * Notifies the specified binding instance that the input action it corresponds to has been activated.
+	 *
+	 * @param Binding
+	 *	The binding to notify of a button activation.
+	 */
+	static void LocalInputPressed(FPF2CommandInputBinding* Binding);
+
+	/**
+	* Notifies the specified binding instance that the input action it corresponds to has been released.
+	 *
+	 * @param Binding
+	 *	The binding to notify of a button release.
+	 */
+	static void LocalInputReleased(FPF2CommandInputBinding* Binding);
+
+	// =================================================================================================================
+	// Protected Instance Methods
+	// =================================================================================================================
+	int32 AddActionBinding(UInputComponent*  InputComponent,
+	                       const EInputEvent InKeyEvent,
+	                       void              (*Callback)(FPF2CommandInputBinding*));
 
 	/**
 	 * Assembles and executes a command that invokes the ability associated with this binding.
 	 *
-	 * The ability may be queued if the active MoPRS is requiring abilities to be queued (e.g., encounters). The ability
-	 * is only invoked if it has been granted to the character. If the ability has not yet been granted, the attempt to
-	 * execute the ability is ignored and a warning is logged.
+	 * The ability may be queued if the active MoPRS is requiring abilities to be queued (e.g., encounters).
 	 */
 	virtual void InvokeAbility();
 

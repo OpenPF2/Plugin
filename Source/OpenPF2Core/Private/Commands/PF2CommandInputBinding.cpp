@@ -7,41 +7,85 @@
 
 #include "Commands/PF2CharacterCommand.h"
 
-void FPF2CommandInputBinding::GiveAbilityToCharacter(IPF2CharacterInterface* Character)
+void FPF2CommandInputBinding::ConnectToInput(UInputComponent* InputComponent)
 {
-	check(this->Ability != nullptr);
+	if (!this->IsConnectedToInput() && !this->ActionName.IsNone())
+	{
+		TArray<int32> NewHandles;
 
-	checkf(
-		!this->HasBeenGranted() || (this->GrantedCharacter == Character),
-		TEXT("The ability for this binding has already been given to a different character.")
+		// Pressed event
+		NewHandles.Add(
+			this->AddActionBinding(
+				InputComponent,
+				IE_Pressed,
+				&FPF2CommandInputBinding::LocalInputPressed
+			)
+		);
+
+		// Released event
+		NewHandles.Add(
+			this->AddActionBinding(
+				InputComponent,
+				IE_Released,
+				&FPF2CommandInputBinding::LocalInputReleased
+			)
+		);
+
+		this->Handles = NewHandles;
+	}
+}
+
+void FPF2CommandInputBinding::DisconnectFromInput(UInputComponent* InputComponent)
+{
+	if (this->IsConnectedToInput())
+	{
+		for (const auto& Handle : this->Handles)
+		{
+			InputComponent->RemoveActionBindingForHandle(Handle);
+		}
+
+		this->Handles.Empty();
+	}
+}
+
+void FPF2CommandInputBinding::LocalInputPressed(FPF2CommandInputBinding* Binding)
+{
+	if (Binding != nullptr)
+	{
+		Binding->InvokeAbility();
+	}
+}
+
+void FPF2CommandInputBinding::LocalInputReleased(FPF2CommandInputBinding* Binding)
+{
+	if (Binding != nullptr)
+	{
+		Binding->ReleaseAbility();
+	}
+}
+
+int32 FPF2CommandInputBinding::AddActionBinding(UInputComponent*  InputComponent,
+                                                const EInputEvent InKeyEvent,
+                                                void              (*Callback)(FPF2CommandInputBinding*))
+{
+	FInputActionBinding ActionBinding = FInputActionBinding(this->ActionName, InKeyEvent),
+	                    AddResult;
+
+	ActionBinding.ActionDelegate.GetDelegateForManualSet().BindStatic(
+		Callback,
+		this
 	);
 
-	UAbilitySystemComponent* Asc = Character->GetAbilitySystemComponent();
+	AddResult = InputComponent->AddActionBinding(ActionBinding);
 
-	this->GrantedAbilitySpecHandle =
-		Asc->GiveAbility(FGameplayAbilitySpec(this->Ability, Character->GetCharacterLevel()));
-
-	this->GrantedCharacter = Character;
+	return AddResult.GetHandle();
 }
 
 void FPF2CommandInputBinding::InvokeAbility()
 {
-	if (this->HasBeenGranted())
-	{
-		UPF2CharacterCommand* Command =
-			UPF2CharacterCommand::Create(this->GrantedCharacter, this->GrantedAbilitySpecHandle);
+	UPF2CharacterCommand* Command = UPF2CharacterCommand::Create(this->Character, this->AbilitySpecHandle);
 
-		Command->AttemptExecuteOrQueue();
-	}
-	else
-	{
-		UE_LOG(
-			LogPf2CoreAbilities,
-			Warning,
-			TEXT("FPF2CommandInputBinding::InvokeAbility() called on an ability that has not yet been granted ('%s')."),
-			*(this->Ability->GetFullName())
-		);
-	}
+	Command->AttemptExecuteOrQueue();
 }
 
 void FPF2CommandInputBinding::ReleaseAbility()

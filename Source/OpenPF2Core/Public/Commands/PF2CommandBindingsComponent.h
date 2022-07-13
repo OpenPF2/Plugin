@@ -7,6 +7,7 @@
 
 #include <Components/ActorComponent.h>
 
+#include "PF2CommandBindingsInterface.h"
 #include "PF2CommandInputBinding.h"
 
 #include "PF2CommandBindingsComponent.generated.h"
@@ -19,71 +20,33 @@
  * it works automatically with abilities that need to be queued during encounters.
  */
 UCLASS(ClassGroup="OpenPF2", meta=(BlueprintSpawnableComponent))
-class OPENPF2CORE_API UPF2CommandBindingsComponent : public UActorComponent
+class OPENPF2CORE_API UPF2CommandBindingsComponent : public UActorComponent, public IPF2CommandBindingsInterface
 {
 	GENERATED_BODY()
 
 	/**
 	 * The association between inputs and Gameplay Abilities.
 	 */
-	UPROPERTY(EditDefaultsOnly)
 	TArray<FPF2CommandInputBinding> Bindings;
 
 public:
-	/**
-	 * Grants the given character all of the abilities for which there are bindings.
-	 *
-	 * This can only be run on the server. Only abilities that have not yet been granted to any character are granted.
-	 * Abilities already granted (e.g., abilities that were loaded from the character) are skipped.
-	 *
-	 * @param Character
-	 *	The character to whom abilities should be granted.
-	 */
+	// =================================================================================================================
+	// Public Methods - IPF2CommandBindingsInterface Implementation
+	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
-	void GiveAbilitiesToCharacter(TScriptInterface<IPF2CharacterInterface> Character);
+	virtual void LoadAbilitiesFromCharacter(const TScriptInterface<IPF2CharacterInterface> Character) override;
 
-	/**
-	 * Grants the given character all of the abilities for which there are bindings.
-	 *
-	 * This can only be run on the server. Only abilities that have not yet been granted to any character are granted.
-	 * Abilities already granted (e.g., abilities that were loaded from the character) are skipped.
-	 *
-	 * @param Character
-	 *	The character to whom abilities should be granted.
-	 */
-	void GiveAbilitiesToCharacter(IPF2CharacterInterface* Character);
+	virtual void LoadAbilitiesFromCharacter(IPF2CharacterInterface* Character) override;
 
-	/**
-	 * Populates the bindings array from the abilities that have been granted to a character.
-	 *
-	 * @param Character
-	 *	The character from which to load granted abilities.
-	 */
-	void LoadAbilitiesFromCharacter(IPF2CharacterInterface* Character);
-
-	/**
-	 * Wires-up all bindings to receive input from the given player input component.
-	 *
-	 * @param InputComponent
-	 *	The component to which input should be bound.
-	 */
 	UFUNCTION(BlueprintCallable)
-	void BindToInputComponent(UInputComponent* InputComponent);
+	virtual void ConnectToInput(UInputComponent* InputComponent) override;
 
-protected:
-	/**
-	 * Notifies the specified binding that the input action it corresponds to has been activated.
-	 *
-	 * @param Binding
-	 *	The binding to notify of a button activation.
-	 */
-	void LocalInputPressed(FPF2CommandInputBinding Binding);
+	UFUNCTION(BlueprintCallable)
+	virtual void DisconnectFromInput(UInputComponent* InputComponent) override;
 
-	/**
-	* Notifies the specified that the input action it corresponds to has been released.
-	 *
-	 * @param Binding
-	 *	The binding to notify of a button release.
-	 */
-	void LocalInputReleased(FPF2CommandInputBinding Binding);
+	// =================================================================================================================
+	// Public Methods - IPF2LogIdentifiableInterface Implementation
+	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual FString GetIdForLogs() const override;
 };
