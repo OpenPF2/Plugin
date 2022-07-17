@@ -9,6 +9,14 @@
 
 #include "PF2GameplayAbilityInterface.generated.h"
 
+// =====================================================================================================================
+// Forward Declarations (to break recursive dependencies)
+// =====================================================================================================================
+class UTexture2D;
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 UINTERFACE(MinimalAPI, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2GameplayAbilityInterface : public UInterface
 {
