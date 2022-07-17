@@ -14,6 +14,19 @@
 
 #include "Utilities/PF2InterfaceUtilities.h"
 
+void UPF2CommandBindingsComponent::ClearBindings()
+{
+	if (this->IsConnectedToInput())
+	{
+		for (FPF2CommandInputBinding& Binding : this->Bindings)
+		{
+			Binding.DisconnectFromInput(this->GetInputComponent());
+		}
+	}
+
+	this->Bindings.Empty();
+}
+
 void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter(const TScriptInterface<IPF2CharacterInterface> Character)
 {
 	this->LoadAbilitiesFromCharacter(PF2InterfaceUtilities::FromScriptInterface(Character));
@@ -46,21 +59,39 @@ void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter(IPF2CharacterInter
 
 		this->Bindings.Add(FPF2CommandInputBinding(DefaultAction, AbilitySpec, Character));
 	}
-}
 
-void UPF2CommandBindingsComponent::ConnectToInput(UInputComponent* InputComponent)
-{
-	for (FPF2CommandInputBinding& Binding : this->Bindings)
+	if (this->IsConnectedToInput())
 	{
-		Binding.ConnectToInput(InputComponent);
+		// Wire up all the new bindings.
+		this->ConnectToInput(this->GetInputComponent());
 	}
 }
 
-void UPF2CommandBindingsComponent::DisconnectFromInput(UInputComponent* InputComponent)
+void UPF2CommandBindingsComponent::ConnectToInput(UInputComponent* NewInputComponent)
 {
+	checkf(
+		!this->IsConnectedToInput() || (this->InputComponent == NewInputComponent),
+		TEXT("Command bindings cannot be wired-up to two different input components at the same time.")
+	);
+
 	for (FPF2CommandInputBinding& Binding : this->Bindings)
 	{
-		Binding.DisconnectFromInput(InputComponent);
+		Binding.ConnectToInput(NewInputComponent);
+	}
+
+	this->InputComponent = NewInputComponent;
+}
+
+void UPF2CommandBindingsComponent::DisconnectFromInput()
+{
+	if (this->IsConnectedToInput())
+	{
+		for (FPF2CommandInputBinding& Binding : this->Bindings)
+		{
+			Binding.DisconnectFromInput(this->InputComponent);
+		}
+
+		this->InputComponent = nullptr;
 	}
 }
 

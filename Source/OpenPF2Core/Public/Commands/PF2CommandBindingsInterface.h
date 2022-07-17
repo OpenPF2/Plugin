@@ -33,7 +33,20 @@ class OPENPF2CORE_API IPF2CommandBindingsInterface : public IPF2LogIdentifiableI
 
 public:
 	/**
-	 * Populates the bindings array from the abilities that have been granted to a character.
+	 * Clears all bindings.
+	 *
+	 * If input is currently wired up, bindings are removed from input before being cleared.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Command Bindings")
+	virtual void ClearBindings() = 0;
+
+	/**
+	 * Populates the bindings array from the abilities that have been granted to the specified character.
+	 *
+	 * To prevent duplicate bindings, this can only be called when no bindings have yet been defined or all have been
+	 * cleared.
+	 *
+	 * If input is currently wired up, the new bindings are automatically added to input.
 	 *
 	 * @param Character
 	 *	The character from which to load granted abilities.
@@ -42,7 +55,12 @@ public:
 	virtual void LoadAbilitiesFromCharacter(const TScriptInterface<IPF2CharacterInterface> Character) = 0;
 
 	/**
-	 * Populates the bindings array from the abilities that have been granted to a character.
+	 * Populates the bindings array from the abilities that have been granted to the specified character.
+	 *
+	 * To prevent duplicate bindings, this can only be called when no bindings have yet been defined or all have been
+	* cleared.
+	 *
+	 * If input is currently wired up, the new bindings are automatically added to input.
 	 *
 	 * @param Character
 	 *	The character from which to load granted abilities.
@@ -62,12 +80,12 @@ public:
 	virtual void ConnectToInput(UInputComponent* InputComponent) = 0;
 
 	/**
-	 * Removes the association between actions and the given input component, allowing all bindings to be re-assigned.
+	 * Removes the association between actions and the input component, allowing all bindings to be re-assigned.
 	 *
 	 * This must be called before changing the action of any binding.
 	 *
 	 * Only bindings that have been wired up will be affected; any new binding that is not yet wired up will be ignored.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Command Bindings")
-	virtual void DisconnectFromInput(UInputComponent* InputComponent) = 0;
+	virtual void DisconnectFromInput() = 0;
 };

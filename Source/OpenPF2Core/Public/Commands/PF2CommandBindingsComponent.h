@@ -25,28 +25,73 @@ class OPENPF2CORE_API UPF2CommandBindingsComponent : public UActorComponent, pub
 	GENERATED_BODY()
 
 	/**
+	 * The input component to which this component is currently wired.
+	 */
+	UPROPERTY()
+	UInputComponent* InputComponent;
+
+	/**
 	 * The association between inputs and Gameplay Abilities.
 	 */
+	UPROPERTY()
 	TArray<FPF2CommandInputBinding> Bindings;
 
 public:
+	/**
+	 * Default constructor for UPF2CommandBindingsComponent.
+	 */
+	explicit UPF2CommandBindingsComponent() : InputComponent(nullptr)
+	{
+	}
+
 	// =================================================================================================================
 	// Public Methods - IPF2CommandBindingsInterface Implementation
 	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual void ClearBindings() override;
+
 	UFUNCTION(BlueprintCallable)
 	virtual void LoadAbilitiesFromCharacter(const TScriptInterface<IPF2CharacterInterface> Character) override;
 
 	virtual void LoadAbilitiesFromCharacter(IPF2CharacterInterface* Character) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void ConnectToInput(UInputComponent* InputComponent) override;
+	virtual void ConnectToInput(UInputComponent* NewInputComponent) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void DisconnectFromInput(UInputComponent* InputComponent) override;
+	virtual void DisconnectFromInput() override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
+
+protected:
+	// =================================================================================================================
+	// Protected Methods
+	// =================================================================================================================
+	/**
+	 * Gets the input component to which this bindings component is wired up to, if it is wired up.
+	 *
+	 * @return
+	 *	- If this component is currently wired-up to input: the input component to which it is wired up.
+	 *	- If this component is not currently wired-up to input: null.
+	 */
+	FORCEINLINE UInputComponent* GetInputComponent() const
+	{
+		return this->InputComponent;
+	}
+
+	/**
+	 * Gets whether this component is currently wired up to input.
+	 *
+	 * @return
+	 *	- true if this component is currently wired up to input.
+	 *	- false if it is not currently wired up to input.
+	 */
+	FORCEINLINE bool IsConnectedToInput() const
+	{
+		return this->GetInputComponent() != nullptr;
+	}
 };
