@@ -77,7 +77,7 @@ public:
 	static UPF2CharacterCommand* Create(IPF2CharacterInterface*          Character,
 	                                    const FGameplayAbilitySpecHandle AbilitySpecHandle)
 	{
-		UPF2CharacterCommand* Command = NewObject<UPF2CharacterCommand>();
+		UPF2CharacterCommand* Command = NewObject<UPF2CharacterCommand>(Character->ToActor());
 
 		Command->Character         = Character;
 		Command->AbilitySpecHandle = AbilitySpecHandle;
