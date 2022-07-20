@@ -5,6 +5,7 @@
 
 #include "Commands/PF2CommandInputBinding.h"
 
+#include "OpenPF2Core.h"
 #include "Commands/PF2CharacterCommand.h"
 
 void FPF2CommandInputBinding::ConnectToInput(UInputComponent* InputComponent)
@@ -50,16 +51,48 @@ void FPF2CommandInputBinding::DisconnectFromInput(UInputComponent* InputComponen
 
 void FPF2CommandInputBinding::LocalInputPressed(FPF2CommandInputBinding* Binding)
 {
-	if (Binding != nullptr)
+	if (Binding == nullptr)
 	{
+		UE_LOG(
+			LogPf2CoreKeyBindings,
+			VeryVerbose,
+			TEXT("Input PRESSED for a null binding.")
+		);
+	}
+	else
+	{
+		UE_LOG(
+			LogPf2CoreKeyBindings,
+			VeryVerbose,
+			TEXT("Input PRESSED for binding of action '%s' for character '%s'."),
+			*(Binding->ActionName.ToString()),
+			*(Binding->Character->GetIdForLogs())
+		);
+
 		Binding->InvokeAbility();
 	}
 }
 
 void FPF2CommandInputBinding::LocalInputReleased(FPF2CommandInputBinding* Binding)
 {
-	if (Binding != nullptr)
+	if (Binding == nullptr)
 	{
+		UE_LOG(
+			LogPf2CoreKeyBindings,
+			VeryVerbose,
+			TEXT("Input RELEASED for a null binding.")
+		);
+	}
+	else
+	{
+		UE_LOG(
+			LogPf2CoreKeyBindings,
+			VeryVerbose,
+			TEXT("Input RELEASED for binding to action '%s' for character '%s'."),
+			*(Binding->ActionName.ToString()),
+			*(Binding->Character->GetIdForLogs())
+		);
+
 		Binding->ReleaseAbility();
 	}
 }

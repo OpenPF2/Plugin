@@ -13,6 +13,7 @@
 #include "Commands/PF2CommandInputBinding.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
+#include "Utilities/PF2LogUtilities.h"
 
 void UPF2CommandBindingsComponent::ClearBindings()
 {
@@ -34,14 +35,25 @@ void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter(const TScriptInter
 
 void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter(IPF2CharacterInterface* Character)
 {
+	UAbilitySystemComponent*     AbilitySystemComponent = Character->GetAbilitySystemComponent();
+	TArray<FGameplayAbilitySpec> ActivatableAbilities   = AbilitySystemComponent->GetActivatableAbilities();
+	int32                        NumMappedAbilities     = 0;
+
 	checkf(
 		this->Bindings.Num() == 0,
 		TEXT("Abilities must be loaded from a character before custom bindings are added.")
 	);
 
-	UAbilitySystemComponent* AbilitySystemComponent = Character->GetAbilitySystemComponent();
+	UE_LOG(
+		LogPf2CoreKeyBindings,
+		VeryVerbose,
+		TEXT("[%s] Loading %d abilities from Character ('%s')."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		ActivatableAbilities.Num(),
+		*(Character->GetIdForLogs())
+	);
 
-	for (const FGameplayAbilitySpec& AbilitySpec : AbilitySystemComponent->GetActivatableAbilities())
+	for (const FGameplayAbilitySpec& AbilitySpec : ActivatableAbilities)
 	{
 		const UGameplayAbility*             Ability       = AbilitySpec.Ability;
 		const IPF2GameplayAbilityInterface* AbilityIntf   = Cast<IPF2GameplayAbilityInterface>(Ability);
@@ -50,6 +62,7 @@ void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter(IPF2CharacterInter
 		if (AbilityIntf != nullptr)
 		{
 			DefaultAction = AbilityIntf->GetDefaultInputActionMapping();
+			++NumMappedAbilities;
 		}
 		else
 		{
@@ -59,6 +72,15 @@ void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter(IPF2CharacterInter
 
 		this->Bindings.Add(FPF2CommandInputBinding(DefaultAction, AbilitySpec, Character));
 	}
+
+	UE_LOG(
+		LogPf2CoreKeyBindings,
+		VeryVerbose,
+		TEXT("[%s] Loaded %d abilities with default action mappings from Character ('%s')."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		NumMappedAbilities,
+		*(Character->GetIdForLogs())
+	);
 
 	if (this->IsConnectedToInput())
 	{
