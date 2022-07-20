@@ -10,7 +10,7 @@
 #include "PF2CharacterInitiativeQueueInterface.h"
 #include "PF2ModeOfPlayRuleSetBase.h"
 
-#include "Commands/PF2ImmediateCommandExecutionResult.h"
+#include "Commands/PF2CommandExecuteImmediatelyResult.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
 
@@ -235,7 +235,7 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Command Queue")
 	UPARAM(DisplayName = "Activation Result")
-	EPF2ImmediateCommandExecutionResult ExecuteNextQueuedCommandForCharacter(
+	EPF2CommandExecuteImmediatelyResult ExecuteNextQueuedCommandForCharacter(
 		const TScriptInterface<IPF2CharacterInterface>& Character);
 
 	/**

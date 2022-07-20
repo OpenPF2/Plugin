@@ -7,7 +7,7 @@
 
 #include <CoreMinimal.h>
 
-#include "PF2ImmediateCommandExecutionResult.h"
+#include "PF2CommandExecuteImmediatelyResult.h"
 #include "Utilities/PF2LogIdentifiableInterface.h"
 
 #include "PF2CommandQueueInterface.generated.h"
@@ -85,7 +85,7 @@ public:
 	 *	  typically because it is blocked by another ability that is active on the character.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Command Queues")
-	virtual EPF2ImmediateCommandExecutionResult PopAndExecuteNext() = 0;
+	virtual EPF2CommandExecuteImmediatelyResult PopAndExecuteNext() = 0;
 
 	/**
 	 * Removes a command from the queue.

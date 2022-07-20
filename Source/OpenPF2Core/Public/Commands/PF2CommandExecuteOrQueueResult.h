@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include <UObject/ObjectMacros.h>
-
 #include "PF2CommandExecuteOrQueueResult.generated.h"
 
 /**

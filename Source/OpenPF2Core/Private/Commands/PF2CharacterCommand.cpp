@@ -71,9 +71,9 @@ EPF2CommandExecuteOrQueueResult UPF2CharacterCommand::AttemptExecuteOrQueue()
 	return Result;
 }
 
-EPF2ImmediateCommandExecutionResult UPF2CharacterCommand::AttemptExecuteImmediately()
+EPF2CommandExecuteImmediatelyResult UPF2CharacterCommand::AttemptExecuteImmediately()
 {
-	EPF2ImmediateCommandExecutionResult Result;
+	EPF2CommandExecuteImmediatelyResult Result;
 
 	UE_LOG(
 		LogPf2CoreAbilities,
@@ -85,11 +85,11 @@ EPF2ImmediateCommandExecutionResult UPF2CharacterCommand::AttemptExecuteImmediat
 
 	if (this->GetAbilitySystemComponent()->TryActivateAbility(this->GetAbilitySpecHandle()))
 	{
-		Result = EPF2ImmediateCommandExecutionResult::Activated;
+		Result = EPF2CommandExecuteImmediatelyResult::Activated;
 	}
 	else
 	{
-		Result = EPF2ImmediateCommandExecutionResult::Blocked;
+		Result = EPF2CommandExecuteImmediatelyResult::Blocked;
 	}
 
 	UE_LOG(

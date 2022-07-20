@@ -5,15 +5,13 @@
 
 #pragma once
 
-#include <UObject/ObjectMacros.h>
-
-#include "PF2ImmediateCommandExecutionResult.generated.h"
+#include "PF2CommandExecuteImmediatelyResult.generated.h"
 
 /**
  * An enumeration of the different outcomes from attempting to execute a command immediately.
  */
 UENUM(BlueprintType)
-enum class EPF2ImmediateCommandExecutionResult : uint8
+enum class EPF2CommandExecuteImmediatelyResult : uint8
 {
 	/**
 	 * No result yet.

@@ -151,7 +151,7 @@ void APF2EncounterModeOfPlayRuleSetBase::CancelQueuedCommandsForAllCharacters()
 	}
 }
 
-EPF2ImmediateCommandExecutionResult APF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedCommandForCharacter(
+EPF2CommandExecuteImmediatelyResult APF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedCommandForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character)
 {
 	return Character->GetCommandQueueComponent()->PopAndExecuteNext();

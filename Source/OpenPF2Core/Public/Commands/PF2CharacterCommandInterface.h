@@ -8,7 +8,7 @@
 #include <CoreMinimal.h>
 #include <Engine/Texture2D.h>
 
-#include "Commands/PF2ImmediateCommandExecutionResult.h"
+#include "Commands/PF2CommandExecuteImmediatelyResult.h"
 #include "Commands/PF2CommandExecuteOrQueueResult.h"
 
 #include "Utilities/PF2LogIdentifiableInterface.h"
@@ -33,7 +33,7 @@ public:
 	// Public Static Methods
 	// =================================================================================================================
 	/**
-	 * Utility function for converting a EPF2ImmediateCommandExecutionResult into a EPF2CommandExecuteOrQueueResult.
+	 * Utility function for converting a EPF2CommandExecuteImmediatelyResult into a EPF2CommandExecuteOrQueueResult.
 	 *
 	 * @param ImmediateResult
 	 *	The result to transcribed.
@@ -42,21 +42,21 @@ public:
 	 *	The transcribed result.
 	 */
 	static FORCEINLINE EPF2CommandExecuteOrQueueResult ImmediateResultToExecuteOrQueueResult(
-		const EPF2ImmediateCommandExecutionResult ImmediateResult)
+		const EPF2CommandExecuteImmediatelyResult ImmediateResult)
 	{
 		switch (ImmediateResult)
 		{
 			default:
-			case EPF2ImmediateCommandExecutionResult::None:
+			case EPF2CommandExecuteImmediatelyResult::None:
 				return EPF2CommandExecuteOrQueueResult::None;
 
-			case EPF2ImmediateCommandExecutionResult::Activated:
+			case EPF2CommandExecuteImmediatelyResult::Activated:
 				return EPF2CommandExecuteOrQueueResult::ExecutedImmediately;
 
-			case EPF2ImmediateCommandExecutionResult::Blocked:
+			case EPF2CommandExecuteImmediatelyResult::Blocked:
 				return EPF2CommandExecuteOrQueueResult::Refused;
 
-			case EPF2ImmediateCommandExecutionResult::Cancelled:
+			case EPF2CommandExecuteImmediatelyResult::Cancelled:
 				return EPF2CommandExecuteOrQueueResult::Refused;
 		}
 	}
@@ -110,7 +110,7 @@ public:
 	 *	The outcome of attempting to execute the command.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Commands")
-	virtual EPF2ImmediateCommandExecutionResult AttemptExecuteImmediately() = 0;
+	virtual EPF2CommandExecuteImmediatelyResult AttemptExecuteImmediately() = 0;
 
 	/**
 	 * Cancel this command, removing it from the owning character's queue.

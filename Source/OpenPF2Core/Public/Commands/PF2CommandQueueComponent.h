@@ -97,7 +97,7 @@ public:
 	virtual void DropNext() override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual EPF2ImmediateCommandExecutionResult PopAndExecuteNext() override;
+	virtual EPF2CommandExecuteImmediatelyResult PopAndExecuteNext() override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual bool Remove(TScriptInterface<IPF2CharacterCommandInterface> Command) override;

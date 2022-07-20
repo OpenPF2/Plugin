@@ -110,7 +110,7 @@ public:
 	virtual EPF2CommandExecuteOrQueueResult AttemptExecuteOrQueue() override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual EPF2ImmediateCommandExecutionResult AttemptExecuteImmediately() override;
+	virtual EPF2CommandExecuteImmediatelyResult AttemptExecuteImmediately() override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void Cancel() override;

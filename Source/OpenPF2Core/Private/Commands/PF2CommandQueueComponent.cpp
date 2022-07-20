@@ -76,9 +76,9 @@ void UPF2CommandQueueComponent::DropNext()
 	}
 }
 
-EPF2ImmediateCommandExecutionResult UPF2CommandQueueComponent::PopAndExecuteNext()
+EPF2CommandExecuteImmediatelyResult UPF2CommandQueueComponent::PopAndExecuteNext()
 {
-	EPF2ImmediateCommandExecutionResult             Result;
+	EPF2CommandExecuteImmediatelyResult             Result;
 	TScriptInterface<IPF2CharacterCommandInterface> NextCommand;
 
 	// We don't pop the command (yet) because it may be blocked and we don't want it to lose its place in the queue if
@@ -94,7 +94,7 @@ EPF2ImmediateCommandExecutionResult UPF2CommandQueueComponent::PopAndExecuteNext
 			*(this->GetIdForLogs())
 		);
 
-		Result = EPF2ImmediateCommandExecutionResult::None;
+		Result = EPF2CommandExecuteImmediatelyResult::None;
 	}
 	else
 	{
@@ -110,7 +110,7 @@ EPF2ImmediateCommandExecutionResult UPF2CommandQueueComponent::PopAndExecuteNext
 
 		Result = NextCommandIntf->AttemptExecuteImmediately();
 
-		if (Result == EPF2ImmediateCommandExecutionResult::Blocked)
+		if (Result == EPF2CommandExecuteImmediatelyResult::Blocked)
 		{
 			UE_LOG(
 				LogPf2Core,
