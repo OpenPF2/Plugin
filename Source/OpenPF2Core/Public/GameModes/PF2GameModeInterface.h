@@ -23,6 +23,8 @@ class UPF2GameModeInterface : public UInterface
 
 /**
  * An interface for OpenPF2-compatible Player Modes.
+ *
+ * Instances of this interface exist only on the SERVER, as is the case with a game mode in any UE-powered game.
  */
 class OPENPF2CORE_API IPF2GameModeInterface
 {

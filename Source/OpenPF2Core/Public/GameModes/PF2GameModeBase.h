@@ -16,6 +16,8 @@
 /**
  * Default base class for PF2 Game Modes.
  *
+ * A single instance of this class exists only on the SERVER, as is the case with a game mode in any UE-powered game.
+ *
  * @see IPF2GameModeInterface
  */
 UCLASS(Abstract)
