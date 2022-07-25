@@ -41,7 +41,7 @@ public:
 	 * @return
 	 *	The transcribed result.
 	 */
-	static FORCEINLINE EPF2CommandExecuteOrQueueResult ImmediateResultToExecuteOrQueueResult(
+	FORCEINLINE static EPF2CommandExecuteOrQueueResult ImmediateResultToExecuteOrQueueResult(
 		const EPF2CommandExecuteImmediatelyResult ImmediateResult)
 	{
 		switch (ImmediateResult)
