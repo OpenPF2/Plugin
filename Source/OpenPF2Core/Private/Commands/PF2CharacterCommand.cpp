@@ -68,7 +68,7 @@ EPF2CommandExecuteOrQueueResult APF2CharacterCommand::AttemptExecuteOrQueue()
 		LogPf2CoreAbilities,
 		VeryVerbose,
 		TEXT("[%s] AttemptExecuteOrQueue() called on command ('%s')."),
-		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(PF2LogUtilities::GetHostNetId(World)),
 		*(this->GetIdForLogs())
 	);
 
@@ -91,7 +91,7 @@ EPF2CommandExecuteOrQueueResult APF2CharacterCommand::AttemptExecuteOrQueue()
 		LogPf2CoreAbilities,
 		VeryVerbose,
 		TEXT("[%s] AttemptExecuteOrQueue() result for command ('%s'): %s."),
-		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(PF2LogUtilities::GetHostNetId(World)),
 		*(this->GetIdForLogs()),
 		*(PF2EnumUtilities::ToString(Result))
 	);
