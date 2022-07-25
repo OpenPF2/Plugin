@@ -5,6 +5,8 @@
 
 #include "Commands/PF2CharacterCommand.h"
 
+#include <Net/UnrealNetwork.h>
+
 #include "Abilities/PF2GameplayAbilityInterface.h"
 
 #include "Commands/PF2CommandQueueInterface.h"
@@ -15,22 +17,49 @@
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
-UTexture2D* UPF2CharacterCommand::GetCommandIcon() const
+APF2CharacterCommand* APF2CharacterCommand::Create(const TScriptInterface<IPF2CharacterInterface> InCharacter,
+                                                   const FGameplayAbilitySpecHandle               InAbilitySpecHandle)
+{
+	AActor*               CharacterActor = InCharacter->ToActor();
+	UWorld*               World          = CharacterActor->GetWorld();
+	APF2CharacterCommand* Command;
+
+	FActorSpawnParameters SpawnParameters;
+
+	SpawnParameters.Owner = CharacterActor;
+
+	Command = World->SpawnActor<APF2CharacterCommand>(APF2CharacterCommand::StaticClass(), SpawnParameters);
+
+	Command->Character         = InCharacter;
+	Command->AbilitySpecHandle = InAbilitySpecHandle;
+
+	return Command;
+}
+
+void APF2CharacterCommand::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	AActor::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(APF2CharacterCommand, Character);
+	DOREPLIFETIME(APF2CharacterCommand, AbilitySpecHandle);
+}
+
+UTexture2D* APF2CharacterCommand::GetCommandIcon() const
 {
 	return GetAbilityIntf()->GetAbilityIcon();
 }
 
-FText UPF2CharacterCommand::GetCommandLabel() const
+FText APF2CharacterCommand::GetCommandLabel() const
 {
 	return GetAbilityIntf()->GetAbilityLabel();
 }
 
-FText UPF2CharacterCommand::GetCommandDescription() const
+FText APF2CharacterCommand::GetCommandDescription() const
 {
 	return GetAbilityIntf()->GetAbilityDescription();
 }
 
-EPF2CommandExecuteOrQueueResult UPF2CharacterCommand::AttemptExecuteOrQueue()
+EPF2CommandExecuteOrQueueResult APF2CharacterCommand::AttemptExecuteOrQueue()
 {
 	EPF2CommandExecuteOrQueueResult Result = EPF2CommandExecuteOrQueueResult::None;
 	const UWorld* const             World  = this->GetWorld();
@@ -49,8 +78,7 @@ EPF2CommandExecuteOrQueueResult UPF2CharacterCommand::AttemptExecuteOrQueue()
 
 		if (PF2GameMode != nullptr)
 		{
-			TScriptInterface<IPF2CharacterInterface> CharacterIntf =
-				PF2InterfaceUtilities::ToScriptInterface(this->GetCharacter());
+			TScriptInterface<IPF2CharacterInterface> CharacterIntf = this->GetCharacter();
 
 			TScriptInterface<IPF2CharacterCommandInterface> CommandIntf =
 				PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(this);
@@ -71,7 +99,7 @@ EPF2CommandExecuteOrQueueResult UPF2CharacterCommand::AttemptExecuteOrQueue()
 	return Result;
 }
 
-EPF2CommandExecuteImmediatelyResult UPF2CharacterCommand::AttemptExecuteImmediately()
+EPF2CommandExecuteImmediatelyResult APF2CharacterCommand::AttemptExecuteImmediately()
 {
 	EPF2CommandExecuteImmediatelyResult Result;
 
@@ -104,12 +132,12 @@ EPF2CommandExecuteImmediatelyResult UPF2CharacterCommand::AttemptExecuteImmediat
 	return Result;
 }
 
-void UPF2CharacterCommand::Cancel()
+void APF2CharacterCommand::Cancel()
 {
 	this->GetCharacter()->GetCommandQueueComponent()->Remove(this);
 }
 
-FString UPF2CharacterCommand::GetIdForLogs() const
+FString APF2CharacterCommand::GetIdForLogs() const
 {
 	// ReSharper disable CppRedundantParentheses
 	return FString::Format(

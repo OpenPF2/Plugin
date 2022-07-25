@@ -6,6 +6,9 @@
 #pragma once
 
 #include <CoreMinimal.h>
+
+#include <GameFramework/Info.h>
+
 #include <UObject/Object.h>
 
 #include "Abilities/PF2GameplayAbilityInterface.h"
@@ -26,19 +29,24 @@
  */
 UCLASS(BlueprintType)
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API UPF2CharacterCommand : public UObject, public IPF2CharacterCommandInterface
+class OPENPF2CORE_API APF2CharacterCommand : public AInfo, public IPF2CharacterCommandInterface
 {
 	GENERATED_BODY()
 
 protected:
+	// =================================================================================================================
+	// Protected Properties
+	// =================================================================================================================
 	/**
 	 * The character who would be issued this command.
 	 */
-	IPF2CharacterInterface* Character;
+	UPROPERTY(Replicated)
+	TScriptInterface<IPF2CharacterInterface> Character;
 
 	/**
 	 * The handle of the ability that this command will trigger when it is executed.
 	 */
+	UPROPERTY(Replicated)
 	FGameplayAbilitySpecHandle AbilitySpecHandle;
 
 public:
@@ -46,54 +54,48 @@ public:
 	// Public Static Methods
 	// =================================================================================================================
 	/**
-	 * Creates a new UPF2CharacterCommand for the given character and ability specification.
+	 * Creates a new APF2CharacterCommand for the given character and ability specification.
 	 *
 	 * @param Character
 	 *	The character who would be issued the command.
 	 * @param AbilitySpecHandle
+	 *	The handle of the ability that the command will trigger when it is executed.
+	 *
+	 * @return
+	 *	The new command.
+	 */
+	FORCEINLINE static APF2CharacterCommand* Create(IPF2CharacterInterface*          Character,
+	                                                const FGameplayAbilitySpecHandle AbilitySpecHandle)
+	{
+		return Create(PF2InterfaceUtilities::ToScriptInterface(Character), AbilitySpecHandle);
+	}
+
+	/**
+	 * Creates a new APF2CharacterCommand for the given character and ability specification.
+	 *
+	 * @param InCharacter
+	 *	The character who would be issued the command.
+	 * @param InAbilitySpecHandle
 	 *	The handle of the ability that the command will trigger when it is executed.
 	 *
 	 * @return
 	 *	The new command.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Commands")
-	static UPF2CharacterCommand* Create(const TScriptInterface<IPF2CharacterInterface> Character,
-	                                    const FGameplayAbilitySpecHandle               AbilitySpecHandle)
-	{
-		return Create(PF2InterfaceUtilities::FromScriptInterface(Character), AbilitySpecHandle);
-	}
-
-	/**
-	 * Creates a new UPF2CharacterCommand for the given character and ability specification.
-	 *
-	 * @param Character
-	 *	The character who would be issued the command.
-	 * @param AbilitySpecHandle
-	 *	The handle of the ability that the command will trigger when it is executed.
-	 *
-	 * @return
-	 *	The new command.
-	 */
-	static UPF2CharacterCommand* Create(IPF2CharacterInterface*          Character,
-	                                    const FGameplayAbilitySpecHandle AbilitySpecHandle)
-	{
-		UPF2CharacterCommand* Command = NewObject<UPF2CharacterCommand>(Character->ToActor());
-
-		Command->Character         = Character;
-		Command->AbilitySpecHandle = AbilitySpecHandle;
-
-		return Command;
-	};
+	static APF2CharacterCommand* Create(const TScriptInterface<IPF2CharacterInterface> InCharacter,
+	                                    const FGameplayAbilitySpecHandle               InAbilitySpecHandle);
 
 protected:
 	// =================================================================================================================
 	// Protected Constructors
 	// =================================================================================================================
-	explicit UPF2CharacterCommand() : Character(nullptr)
+	explicit APF2CharacterCommand() : Character(nullptr)
 	{
 	}
 
 public:
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	// =================================================================================================================
 	// Public Methods - IPF2CharacterCommandInterface Overrides
 	// =================================================================================================================
@@ -131,7 +133,7 @@ protected:
 	 * @return
 	 *	The character.
 	 */
-	IPF2CharacterInterface* GetCharacter() const
+	TScriptInterface<IPF2CharacterInterface> GetCharacter() const
 	{
 		check(this->Character);
 		return this->Character;

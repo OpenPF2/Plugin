@@ -116,7 +116,7 @@ int32 FPF2CommandInputBinding::AddActionBinding(UInputComponent*  InputComponent
 
 void FPF2CommandInputBinding::InvokeAbility()
 {
-	UPF2CharacterCommand* Command = UPF2CharacterCommand::Create(this->Character, this->AbilitySpecHandle);
+	APF2CharacterCommand* Command = APF2CharacterCommand::Create(this->Character, this->AbilitySpecHandle);
 
 	Command->AttemptExecuteOrQueue();
 }
