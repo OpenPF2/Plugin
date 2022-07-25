@@ -6,11 +6,12 @@
 #pragma once
 
 #include <CoreMinimal.h>
+#include <Components/ActorComponent.h>
+#include <Containers/CircularQueue.h>
 
 #include "PF2CommandQueueInterface.h"
 
-#include "Components/ActorComponent.h"
-#include "Containers/CircularQueue.h"
+#include "Commands/PF2CharacterCommandInterface.h"
 
 #include "PF2CommandQueueComponent.generated.h"
 

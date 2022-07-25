@@ -6,7 +6,9 @@
 #include "Commands/PF2CommandInputBinding.h"
 
 #include "OpenPF2Core.h"
+
 #include "Commands/PF2CharacterCommand.h"
+#include "Commands/PF2CommandBindingsInterface.h"
 
 void FPF2CommandInputBinding::ConnectToInput(UInputComponent* InputComponent)
 {

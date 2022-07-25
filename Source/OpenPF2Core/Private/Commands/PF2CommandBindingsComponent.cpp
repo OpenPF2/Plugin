@@ -10,6 +10,10 @@
 
 #include "Abilities/PF2GameplayAbilityInterface.h"
 
+#include "PF2CharacterInterface.h"
+
+#include "Commands/PF2CharacterCommand.h"
+#include "Commands/PF2CharacterCommandInterface.h"
 #include "Commands/PF2CommandInputBinding.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
