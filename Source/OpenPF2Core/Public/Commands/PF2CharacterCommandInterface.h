@@ -94,8 +94,9 @@ public:
 	/**
 	 * Attempt to execute this command immediately, if possible; queue it for the character, if not possible.
 	 *
-	 * In rare circumstances, it is possible that the command is neither queued nor executed, in which case the result
-	 * will be EPF2CommandExecuteOrQueueResult::Refused.
+	 * This method only has an effect on the server. If it is called on a client, the result will be
+	 * EPF2CommandExecuteOrQueueResult::None. In rare circumstances, it is possible that the command is neither queued
+	 * nor executed, in which case the result will be EPF2CommandExecuteOrQueueResult::Refused.
 	 *
 	 * @return
 	 *	The outcome of attempting to execute the command.
@@ -105,6 +106,9 @@ public:
 
 	/**
 	 * Attempt to execute this command immediately, if possible; do nothing, if not possible.
+	 *
+	 * This method only has an effect on the server. If it is called on a client, the result will be
+	 * EPF2CommandExecuteImmediatelyResult::None.
 	 *
 	 * @return
 	 *	The outcome of attempting to execute the command.
