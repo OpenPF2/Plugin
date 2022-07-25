@@ -70,7 +70,7 @@ void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter(IPF2CharacterInter
 			DefaultAction = FName();
 		}
 
-		this->Bindings.Add(FPF2CommandInputBinding(DefaultAction, AbilitySpec, Character));
+		this->Bindings.Add(FPF2CommandInputBinding(DefaultAction, AbilitySpec, Character, this));
 	}
 
 	UE_LOG(
@@ -115,6 +115,21 @@ void UPF2CommandBindingsComponent::DisconnectFromInput()
 
 		this->InputComponent = nullptr;
 	}
+}
+
+void UPF2CommandBindingsComponent::ExecuteBoundAbility_Implementation(
+	const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	AActor*                          CharacterActor)
+{
+	UE_LOG(
+		LogPf2CoreKeyBindings,
+		VeryVerbose,
+		TEXT("[%s] ExecuteBoundAbility_Implementation() called."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld()))
+	);
+
+	IPF2CharacterCommandInterface* Command = APF2CharacterCommand::Create(CharacterActor, AbilitySpecHandle);
+	Command->AttemptExecuteOrQueue();
 }
 
 FString UPF2CommandBindingsComponent::GetIdForLogs() const

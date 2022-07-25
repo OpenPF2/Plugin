@@ -17,21 +17,21 @@
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
-APF2CharacterCommand* APF2CharacterCommand::Create(const TScriptInterface<IPF2CharacterInterface> InCharacter,
-                                                   const FGameplayAbilitySpecHandle               InAbilitySpecHandle)
+IPF2CharacterCommandInterface* APF2CharacterCommand::Create(AActor*                          CharacterActor,
+                                                            const FGameplayAbilitySpecHandle AbilitySpecHandle)
 {
-	AActor*               CharacterActor = InCharacter->ToActor();
-	UWorld*               World          = CharacterActor->GetWorld();
+	UWorld*               World           = CharacterActor->GetWorld();
+	FActorSpawnParameters SpawnParameters;
 	APF2CharacterCommand* Command;
 
-	FActorSpawnParameters SpawnParameters;
+	check(CharacterActor->Implements<UPF2CharacterInterface>());
 
 	SpawnParameters.Owner = CharacterActor;
 
-	Command = World->SpawnActor<APF2CharacterCommand>(APF2CharacterCommand::StaticClass(), SpawnParameters);
+	Command = World->SpawnActor<APF2CharacterCommand>(StaticClass(), SpawnParameters);
 
-	Command->Character         = InCharacter;
-	Command->AbilitySpecHandle = InAbilitySpecHandle;
+	Command->Character         = CharacterActor;
+	Command->AbilitySpecHandle = AbilitySpecHandle;
 
 	return Command;
 }

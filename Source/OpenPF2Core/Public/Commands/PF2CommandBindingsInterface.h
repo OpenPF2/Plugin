@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <GameplayAbilitySpec.h>
+
 #include "Utilities/PF2LogIdentifiableInterface.h"
 
 #include "PF2CommandBindingsInterface.generated.h"
@@ -58,7 +60,7 @@ public:
 	 * Populates the bindings array from the abilities that have been granted to the specified character.
 	 *
 	 * To prevent duplicate bindings, this can only be called when no bindings have yet been defined or all have been
-	* cleared.
+	 * cleared.
 	 *
 	 * If input is currently wired up, the new bindings are automatically added to input.
 	 *
@@ -88,4 +90,19 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Command Bindings")
 	virtual void DisconnectFromInput() = 0;
+
+	/*
+	 * Executes the specified ability on the specified character.
+	 *
+	 * This is expected to be invoked only by a command binding. This method exists here rather than in the binding
+	 * struct itself because RPCs can only be invoked for replicated components, and the command bindings component is
+	 * replicated but bindings are not (they are lightweight structs).
+	 *
+	 * @param AbilitySpecHandle
+	 *	The handle for the ability to activate.
+	 * @param Character
+	 *	The character upon which the ability should be activated.
+	 */
+	UFUNCTION(Server, Reliable)
+	virtual void ExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle, AActor* Character) = 0;
 };

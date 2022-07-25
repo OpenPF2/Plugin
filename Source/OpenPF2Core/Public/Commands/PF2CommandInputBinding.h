@@ -5,14 +5,22 @@
 
 #pragma once
 
-#include <Components/InputComponent.h>
+#include <GameplayAbilitySpec.h>
 
-#include "PF2CharacterInterface.h"
+#include <Components/InputComponent.h>
 
 #include "PF2CommandInputBinding.generated.h"
 
+// =====================================================================================================================
+// Forward Declarations (to minimize header dependencies)
+// =====================================================================================================================
+class IPF2CharacterInterface;
+class IPF2CommandBindingsInterface;
 class UGameplayAbility;
 
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 /**
  * A single binding between an input action and an ability that can be activated.
  *
@@ -55,6 +63,11 @@ protected:
 	 */
 	IPF2CharacterInterface* Character;
 
+	/**
+	 * The component that is managing this binding.
+	 */
+	IPF2CommandBindingsInterface* BindingsOwner;
+
 public:
 	// =================================================================================================================
 	// Public Constructors
@@ -62,7 +75,7 @@ public:
 	/**
 	 * Default constructor (used by Blueprint).
 	 */
-	explicit FPF2CommandInputBinding() : Character(nullptr)
+	explicit FPF2CommandInputBinding() : Character(nullptr), BindingsOwner(nullptr)
 	{
 	}
 
@@ -76,12 +89,14 @@ public:
 	 * @param Character
 	 *	The character to which the ability has been granted.
 	 */
-	explicit FPF2CommandInputBinding(const FName&               ActionName,
-	                                 const FGameplayAbilitySpec AbilitySpec,
-	                                 IPF2CharacterInterface*    Character) :
+	explicit FPF2CommandInputBinding(const FName&                  ActionName,
+	                                 const FGameplayAbilitySpec    AbilitySpec,
+	                                 IPF2CharacterInterface*       Character,
+	                                 IPF2CommandBindingsInterface* Owner) :
 		ActionName(ActionName),
 		AbilitySpecHandle(AbilitySpec.Handle),
-		Character(Character)
+		Character(Character),
+		BindingsOwner(Owner)
 	{
 	}
 

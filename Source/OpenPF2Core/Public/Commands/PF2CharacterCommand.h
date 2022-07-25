@@ -11,10 +11,14 @@
 
 #include <UObject/Object.h>
 
-#include "Abilities/PF2GameplayAbilityInterface.h"
 #include "GameplayAbilitySpec.h"
 #include "PF2CharacterCommandInterface.h"
 #include "PF2CharacterInterface.h"
+
+#include "Abilities/PF2GameplayAbilityInterface.h"
+
+#include "Commands/PF2CommandExecuteImmediatelyResult.h"
+#include "Commands/PF2CommandExecuteOrQueueResult.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
 
@@ -56,23 +60,6 @@ public:
 	/**
 	 * Creates a new APF2CharacterCommand for the given character and ability specification.
 	 *
-	 * @param Character
-	 *	The character who would be issued the command.
-	 * @param AbilitySpecHandle
-	 *	The handle of the ability that the command will trigger when it is executed.
-	 *
-	 * @return
-	 *	The new command.
-	 */
-	FORCEINLINE static APF2CharacterCommand* Create(IPF2CharacterInterface*          Character,
-	                                                const FGameplayAbilitySpecHandle AbilitySpecHandle)
-	{
-		return Create(PF2InterfaceUtilities::ToScriptInterface(Character), AbilitySpecHandle);
-	}
-
-	/**
-	 * Creates a new APF2CharacterCommand for the given character and ability specification.
-	 *
 	 * @param InCharacter
 	 *	The character who would be issued the command.
 	 * @param InAbilitySpecHandle
@@ -82,8 +69,46 @@ public:
 	 *	The new command.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Commands")
-	static APF2CharacterCommand* Create(const TScriptInterface<IPF2CharacterInterface> InCharacter,
-	                                    const FGameplayAbilitySpecHandle               InAbilitySpecHandle);
+	static TScriptInterface<IPF2CharacterCommandInterface> Create(
+		const TScriptInterface<IPF2CharacterInterface> InCharacter,
+		const FGameplayAbilitySpecHandle               InAbilitySpecHandle)
+	{
+		return PF2InterfaceUtilities::ToScriptInterface(Create(InCharacter->ToActor(), InAbilitySpecHandle));
+	}
+
+	/**
+	 * Creates a new APF2CharacterCommand for the given character and ability specification.
+	 *
+	 * @param Character
+	 *	The character who would be issued the command.
+	 * @param AbilitySpecHandle
+	 *	The handle of the ability that the command will trigger when it is executed.
+	 *
+	 * @return
+	 *	The new command.
+	 */
+	FORCEINLINE static IPF2CharacterCommandInterface* Create(IPF2CharacterInterface*          Character,
+	                                                         const FGameplayAbilitySpecHandle AbilitySpecHandle)
+	{
+		return Create(Character->ToActor(), AbilitySpecHandle);
+	}
+
+	/**
+	 * Creates a new APF2CharacterCommand for the given character actor and ability specification.
+	 *
+	 * The given actor must implement IPF2CharacterInterface.
+	 *
+	 * @param CharacterActor
+	 *	The character (as an actor) who would be issued the command.
+	 * @param AbilitySpecHandle
+	 *	The handle of the ability that the command will trigger when it is executed.
+	 *
+	 * @return
+	 *	The new command.
+	 */
+	static IPF2CharacterCommandInterface* Create(
+		AActor*                          CharacterActor,
+		const FGameplayAbilitySpecHandle AbilitySpecHandle);
 
 protected:
 	// =================================================================================================================
