@@ -39,7 +39,7 @@ public:
 	 *
 	 * If input is currently wired up, bindings are removed from input before being cleared.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Command Bindings")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Command Bindings")
 	virtual void ClearBindings() = 0;
 
 	/**
@@ -53,7 +53,7 @@ public:
 	 * @param Character
 	 *	The character from which to load granted abilities.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Command Bindings")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Command Bindings")
 	virtual void LoadAbilitiesFromCharacter(const TScriptInterface<IPF2CharacterInterface> Character) = 0;
 
 	/**
@@ -78,7 +78,7 @@ public:
 	 * @param InputComponent
 	 *	The component to which input should be bound.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Command Bindings")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Command Bindings")
 	virtual void ConnectToInput(UInputComponent* InputComponent) = 0;
 
 	/**
@@ -88,7 +88,7 @@ public:
 	 *
 	 * Only bindings that have been wired up will be affected; any new binding that is not yet wired up will be ignored.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Command Bindings")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Command Bindings")
 	virtual void DisconnectFromInput() = 0;
 
 	/*
