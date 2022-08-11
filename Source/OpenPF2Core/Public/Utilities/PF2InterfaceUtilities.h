@@ -27,6 +27,8 @@ namespace PF2InterfaceUtilities
 	 * exposed to Blueprint) and parts that use interfaces (because they are not exposed to Blueprint). When possible,
 	 * use TScriptInterface to avoid having to use this method.
 	 *
+	 * @tparam InterfaceType
+	 *	The type of interface (e.g., IMyInterface).
 	 * @param InterfaceObject
 	 *	The interface object to convert to being wrapped in a script interface object. This must be a UObject.
 	 *
@@ -56,6 +58,8 @@ namespace PF2InterfaceUtilities
 	 * exposed to Blueprint) and parts that use interfaces (because they are not exposed to Blueprint). When possible,
 	 * use TScriptInterface to avoid having to use this method.
 	 *
+	 * @tparam InterfaceType
+	 *	The type of interface (e.g., IMyInterface).
 	 * @param InterfaceObjects
 	 *	The interface objects to convert to being wrapped in script interface objects. These must be UObjects.
 	 *
@@ -82,6 +86,8 @@ namespace PF2InterfaceUtilities
 	 * exposed to Blueprint) and parts that use interfaces (because they are not exposed to Blueprint). When possible,
 	 * use TScriptInterface all the way through to avoid having to use this method.
 	 *
+	 * @tparam InterfaceType
+	 *	The type of interface (e.g., IMyInterface).
 	 * @param ScriptInterface
 	 *	The script interface object that wraps the interface object.
 	 *
@@ -101,6 +107,8 @@ namespace PF2InterfaceUtilities
 	 * exposed to Blueprint) and parts that use interfaces (because they are not exposed to Blueprint). When possible,
 	 * use TScriptInterface all the way through to avoid having to use this method.
 	 *
+	 * @tparam InterfaceType
+	 *	The type of interface (e.g., IMyInterface).
 	 * @param ScriptInterfaces
 	 *	The script interface objects that wrap interface objects.
 	 *
