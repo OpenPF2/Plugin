@@ -8,6 +8,7 @@
 #include <Engine/World.h>
 
 #include "PF2PlayerControllerInterface.h"
+#include "PF2PlayerStateInterface.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
 
@@ -42,7 +43,7 @@ TArray<TScriptInterface<IPF2CharacterInterface>> UPF2CharacterLibrary::GetPlayer
 		[](TArray<TScriptInterface<IPF2CharacterInterface>>      Characters,
 		   const TScriptInterface<IPF2PlayerControllerInterface> PlayerController)
 		{
-			Characters.Append(PlayerController->GetControlledCharacters());
+			Characters.Append(PlayerController->GetPlayerState()->GetControllableCharacters());
 
 			return Characters;
 		}

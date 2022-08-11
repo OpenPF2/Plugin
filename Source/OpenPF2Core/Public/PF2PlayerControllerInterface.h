@@ -9,18 +9,21 @@
 
 #include "GameModes/PF2ModeOfPlayType.h"
 
+#include "Utilities/PF2LogIdentifiableInterface.h"
+
 #include "PF2PlayerControllerInterface.generated.h"
 
 // =====================================================================================================================
 // Forward Declarations (to break recursive dependencies)
 // =====================================================================================================================
 class IPF2CharacterInterface;
+class IPF2PlayerStateInterface;
 
 // =====================================================================================================================
 // Normal Declarations
 // =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
-class UPF2PlayerControllerInterface : public UInterface
+class UPF2PlayerControllerInterface : public UPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 };
@@ -28,7 +31,7 @@ class UPF2PlayerControllerInterface : public UInterface
 /**
  * An interface for OpenPF2-compatible Player Controllers.
  */
-class OPENPF2CORE_API IPF2PlayerControllerInterface
+class OPENPF2CORE_API IPF2PlayerControllerInterface : public IPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 
@@ -37,17 +40,10 @@ public:
 	// Public Methods
 	// =================================================================================================================
 	/**
-	 * Gets the character(s) that this player controller has the ability to control or possess.
-	 *
-	 * For a single-player game that supports parties or squads, this may include both the character that the player
-	 * is actively controlling as well as any controllable character in this player's party or squad. Otherwise, this
-	 * will return only a single character per controller.
-	 *
-	 * @return
-	 *	All of the characters that this player controller can control.
+	 * Gets the player state of this player controller.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
-	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetControlledCharacters() = 0;
+	virtual TScriptInterface<IPF2PlayerStateInterface> GetPlayerState() const = 0;
 
 	/**
 	 * Gets the player controller that is implementing this interface.

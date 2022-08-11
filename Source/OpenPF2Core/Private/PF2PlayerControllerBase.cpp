@@ -6,18 +6,16 @@
 #include "PF2PlayerControllerBase.h"
 
 #include "PF2CharacterInterface.h"
+#include "PF2PlayerStateInterface.h"
 
 #include "GameModes/PF2GameModeInterface.h"
 
-#include "Utilities/PF2ArrayUtilities.h"
 #include "Utilities/PF2EnumUtilities.h"
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
 void APF2PlayerControllerBase::SetPawn(APawn* NewPawn)
 {
-	IPF2CharacterInterface* Pf2Pawn = Cast<IPF2CharacterInterface>(NewPawn);
-
 	UE_LOG(
 		LogPf2Core,
 		VeryVerbose,
@@ -28,36 +26,11 @@ void APF2PlayerControllerBase::SetPawn(APawn* NewPawn)
 	);
 
 	Super::SetPawn(NewPawn);
-
-	if (Pf2Pawn != nullptr)
-	{
-		const TWeakInterfacePtr<IPF2CharacterInterface> WeakPf2Pawn =
-			TWeakInterfacePtr<IPF2CharacterInterface>(Pf2Pawn);
-
-		if (!this->ControlledCharacters.Contains(WeakPf2Pawn))
-		{
-			// TODO (#22): Expose an explicit way to manage party members and to switch between which one is being
-			// controlled.
-			this->ControlledCharacters.Add(WeakPf2Pawn);
-		}
-	}
 }
 
-TArray<TScriptInterface<IPF2CharacterInterface>> APF2PlayerControllerBase::GetControlledCharacters()
+TScriptInterface<IPF2PlayerStateInterface> APF2PlayerControllerBase::GetPlayerState() const
 {
-	return PF2ArrayUtilities::Reduce<TArray<TScriptInterface<IPF2CharacterInterface>>>(
-		this->ControlledCharacters,
-		TArray<TScriptInterface<IPF2CharacterInterface>>(),
-		[](TArray<TScriptInterface<IPF2CharacterInterface>> Characters,
-		   const TWeakInterfacePtr<IPF2CharacterInterface>  CurrentCharacter)
-		{
-			if (CurrentCharacter.IsValid())
-			{
-				Characters.Add(PF2InterfaceUtilities::ToScriptInterface(CurrentCharacter.Get()));
-			}
-
-			return Characters;
-		});
+	return PF2InterfaceUtilities::ToScriptInterface(Cast<IPF2PlayerStateInterface>(this->PlayerState));
 }
 
 APlayerController* APF2PlayerControllerBase::ToPlayerController()
@@ -87,4 +60,9 @@ void APF2PlayerControllerBase::MulticastHandleEncounterTurnStarted_Implementatio
 void APF2PlayerControllerBase::MulticastHandleEncounterTurnEnded_Implementation()
 {
 	this->OnEncounterTurnEnded();
+}
+
+FString APF2PlayerControllerBase::GetIdForLogs() const
+{
+	return this->GetName();
 }

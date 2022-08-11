@@ -6,7 +6,6 @@
 #pragma once
 
 #include <GameFramework/PlayerController.h>
-#include <UObject/WeakInterfacePtr.h>
 
 #include "PF2PlayerControllerInterface.h"
 
@@ -32,14 +31,6 @@ class OPENPF2CORE_API APF2PlayerControllerBase : public APlayerController, publi
 {
 	GENERATED_BODY()
 
-protected:
-	/**
-	 * The characters that can be controlled by this player controller.
-	 *
-	 * Depending on the game, this may represent this player's "party" or "squad".
-	 */
-	TArray<TWeakInterfacePtr<IPF2CharacterInterface>> ControlledCharacters;
-
 public:
 	// =================================================================================================================
 	// Public Methods - AController Overrides
@@ -50,7 +41,7 @@ public:
 	// Public Methods - IPF2PlayerControllerInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
-	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetControlledCharacters() override;
+	virtual TScriptInterface<IPF2PlayerStateInterface> GetPlayerState() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual APlayerController* ToPlayerController() override;
@@ -63,6 +54,12 @@ public:
 
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void MulticastHandleEncounterTurnEnded() override;
+
+	// =================================================================================================================
+	// Public Methods - IPF2LogIdentifiableInterface Overrides
+	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual FString GetIdForLogs() const override;
 
 protected:
 	// =================================================================================================================
