@@ -104,5 +104,5 @@ public:
 	 *	The character upon which the ability should be activated.
 	 */
 	UFUNCTION(Server, Reliable)
-	virtual void ExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle, AActor* Character) = 0;
+	virtual void ServerExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle, AActor* Character) = 0;
 };

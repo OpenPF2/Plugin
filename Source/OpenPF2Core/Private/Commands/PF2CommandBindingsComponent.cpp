@@ -121,14 +121,14 @@ void UPF2CommandBindingsComponent::DisconnectFromInput()
 	}
 }
 
-void UPF2CommandBindingsComponent::ExecuteBoundAbility_Implementation(
+void UPF2CommandBindingsComponent::ServerExecuteBoundAbility_Implementation(
 	const FGameplayAbilitySpecHandle AbilitySpecHandle,
 	AActor*                          CharacterActor)
 {
 	UE_LOG(
 		LogPf2CoreKeyBindings,
 		VeryVerbose,
-		TEXT("[%s] ExecuteBoundAbility_Implementation() called."),
+		TEXT("[%s] ServerExecuteBoundAbility_Implementation() called."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld()))
 	);
 
