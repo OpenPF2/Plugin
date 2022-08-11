@@ -127,4 +127,34 @@ namespace PF2InterfaceUtilities
 			}
 		);
 	}
+
+	/*
+	 * Locates the actor component that implements the specified interface.
+	 *
+	 * @tparam InterfaceType
+	 *	The type of interface (e.g., IMyInterface).
+	 * @tparam UObjectType
+	 *	The UObject that corresponds to the interface type (e.g., UMyInterface).
+	 * @param Actor
+	 *	The actor that contains the desired component.
+	 */
+	template <class InterfaceType, class UObjectType>
+	FORCEINLINE OPENPF2CORE_API InterfaceType* FindComponentByInterface(AActor* Actor)
+	{
+		InterfaceType*                  Result     = nullptr;
+		const TArray<UActorComponent *> Components = Actor->GetComponentsByInterface(UObjectType::StaticClass());
+
+		checkf(
+			Components.Num() < 2,
+			TEXT("More than one component implements the same interface: %s"),
+			*(UObjectType::StaticClass()->GetName())
+		);
+
+		for (UActorComponent* Component : Components)
+		{
+			Result = Cast<InterfaceType>(Component);
+		}
+
+		return Result;
+	}
 }
