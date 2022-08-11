@@ -12,7 +12,7 @@
 #include <Camera/CameraComponent.h>
 #include <Components/InputComponent.h>
 
-APF2StrategicCameraPawnBase::APF2StrategicCameraPawnBase() : Super()
+APF2StrategicCameraPawnBase::APF2StrategicCameraPawnBase()
 {
 	this->CameraSpeed         = 1000.0f;
 	this->CameraZoomSpeed     = 4000.0f;
