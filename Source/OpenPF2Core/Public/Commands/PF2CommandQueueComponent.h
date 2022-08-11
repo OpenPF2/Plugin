@@ -20,20 +20,17 @@
 // =====================================================================================================================
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 	FPF2CommandAddedToQueueDelegate,
-	const TScriptInterface<IPF2CharacterCommandInterface>&,
-	Command
+	const TScriptInterface<IPF2CharacterCommandInterface>&, Command
 );
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 	FPF2CommandRemovedFromQueueDelegate,
-	const TScriptInterface<IPF2CharacterCommandInterface>&,
-	Command
+	const TScriptInterface<IPF2CharacterCommandInterface>&, Command
 );
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 	FPF2CommandQueueChangedDelegate,
-	const TArray<TScriptInterface<IPF2CharacterCommandInterface>>&,
-	Commands
+	const TArray<TScriptInterface<IPF2CharacterCommandInterface>>&, Commands
 );
 
 // =====================================================================================================================

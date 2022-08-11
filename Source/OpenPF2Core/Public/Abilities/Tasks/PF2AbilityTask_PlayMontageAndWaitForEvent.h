@@ -18,10 +18,8 @@
  */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
 	FPF2PlayMontageAndWaitForEventDelegate,
-	FGameplayTag,
-	EventTag,
-	FGameplayEventData,
-	EventData
+	FGameplayTag,       EventTag,
+	FGameplayEventData, EventData
 );
 
 /**
