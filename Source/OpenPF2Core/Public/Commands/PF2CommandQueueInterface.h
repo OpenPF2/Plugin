@@ -40,7 +40,7 @@ public:
 	 * @param Command
 	 *	The command to add to the queue.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Command Queues")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Queues")
 	virtual void Enqueue(TScriptInterface<IPF2CharacterCommandInterface> Command) = 0;
 
 	/**
@@ -51,7 +51,7 @@ public:
 	 * @param NextCommand
 	 *	The output: either the next command in the queue; or an invalid reference if there are no commands in the queue.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Command Queues")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Queues")
 	virtual void PeekNext(TScriptInterface<IPF2CharacterCommandInterface>& NextCommand) = 0;
 
 	/**
@@ -62,7 +62,7 @@ public:
 	 * @param NextCommand
 	 *	The output: either the next command in the queue; or an invalid reference if there are no commands in the queue.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Command Queues")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Queues")
 	virtual void PopNext(TScriptInterface<IPF2CharacterCommandInterface>& NextCommand) = 0;
 
 	/**
@@ -70,7 +70,7 @@ public:
 	 *
 	 * The command is removed from the queue.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Command Queues")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Queues")
 	virtual void DropNext() = 0;
 
 	/**
@@ -84,7 +84,7 @@ public:
 	 *	- EPF2ImmediateCommandExecutionResult::Blocked if there was a queued command but it could not be executed yet,
 	 *	  typically because it is blocked by another ability that is active on the character.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Command Queues")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Queues")
 	virtual EPF2CommandExecuteImmediatelyResult PopAndExecuteNext() = 0;
 
 	/**
@@ -99,7 +99,7 @@ public:
 	 *	- true if the command was removed from the queue.
 	 *	- false if the command was not in the queue.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Command Queues")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Queues")
 	virtual bool Remove(TScriptInterface<IPF2CharacterCommandInterface> Command) = 0;
 
 	/**
@@ -108,12 +108,12 @@ public:
 	 * @return
 	 *	How many items are in the queue.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Command Queues")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Queues")
 	virtual int Count() = 0;
 
 	/**
 	 * Removes all commands from the queue.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Command Queues")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Queues")
 	virtual void Clear() = 0;
 };

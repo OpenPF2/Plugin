@@ -19,7 +19,7 @@
  * pawn/character. Instead, it allows input to be routed to whichever character the player is currently controlling, and
  * it works automatically with abilities that need to be queued during encounters.
  */
-UCLASS(ClassGroup="OpenPF2", meta=(BlueprintSpawnableComponent))
+UCLASS(ClassGroup="OpenPF2|Characters", meta=(BlueprintSpawnableComponent))
 class OPENPF2CORE_API UPF2CommandBindingsComponent : public UActorComponent, public IPF2CommandBindingsInterface
 {
 	GENERATED_BODY()
@@ -62,8 +62,8 @@ public:
 	virtual void DisconnectFromInput() override;
 
 	UFUNCTION(Server, Reliable)
-	virtual void ExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-									 AActor* CharacterActor) override;
+	virtual void ServerExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	                                       AActor*                          CharacterActor) override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation

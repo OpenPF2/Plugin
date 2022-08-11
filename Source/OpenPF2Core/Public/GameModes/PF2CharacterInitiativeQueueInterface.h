@@ -47,7 +47,7 @@ public:
 	 *	- true if the queue has no characters.
 	 *	- false if the queue has at least one character.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Character Initiative Queues")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Mode of Play Rule Sets|Character Initiative Queues")
 	virtual bool IsEmpty() = 0;
 
 	/**
@@ -64,7 +64,7 @@ public:
 	 * @param Initiative
 	 *	The initiative value to use for the specified character.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Character Initiative Queues")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Mode of Play Rule Sets|Character Initiative Queues")
 	virtual void SetCharacterInitiative(const TScriptInterface<IPF2CharacterInterface>& Character,
 	                                    const int32                                     Initiative) = 0;
 
@@ -78,7 +78,7 @@ public:
 	 *	- true if the character has an initiative set.
 	 *	- false if the character does not have any initiative set.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Character Initiative Queues")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Mode of Play Rule Sets|Character Initiative Queues")
 	virtual bool IsInitiativeSetForCharacter(const TScriptInterface<IPF2CharacterInterface>& Character) const = 0;
 
 	/**
@@ -89,13 +89,13 @@ public:
 	 * @param Character
 	 *	The character for which initiative is being cleared.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Character Initiative Queues")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Mode of Play Rule Sets|Character Initiative Queues")
 	virtual void ClearInitiativeForCharacter(const TScriptInterface<IPF2CharacterInterface>& Character) = 0;
 
 	/**
 	 * Clears all initiative values set for all characters.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Character Initiative Queues")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Mode of Play Rule Sets|Character Initiative Queues")
 	virtual void ClearInitiativeForAllCharacters() = 0;
 
 	/**
@@ -126,7 +126,7 @@ public:
 	 *	returned; or, if at the end of the list of characters, the character with the highest initiative in the
 	 *	encounter.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Character Initiative Queues")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Mode of Play Rule Sets|Character Initiative Queues")
 	virtual TScriptInterface<IPF2CharacterInterface> GetNextCharacterByInitiative() = 0;
 
 	/**
@@ -141,6 +141,6 @@ public:
 	 * @return
 	 *	The list of characters, sorted in order of highest to lowest initiative.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Character Initiative Queues")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Mode of Play Rule Sets|Character Initiative Queues")
 	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetCharactersInInitiativeOrder() const = 0;
 };

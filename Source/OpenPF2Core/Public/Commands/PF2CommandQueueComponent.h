@@ -46,7 +46,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
  * came from "ue4-orders-abilities" by Daedalic Entertainment,
  * https://github.com/DaedalicEntertainment/ue4-orders-abilities).
  */
-UCLASS(ClassGroup="OpenPF2", meta=(BlueprintSpawnableComponent))
+UCLASS(ClassGroup="OpenPF2|Characters", meta=(BlueprintSpawnableComponent))
 // ReSharper disable once CppClassCanBeFinal
 class OPENPF2CORE_API UPF2CommandQueueComponent : public UActorComponent, public IPF2CommandQueueInterface
 {

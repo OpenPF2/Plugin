@@ -47,7 +47,7 @@ public:
 	 * @return
 	 *	The level of the owning character actor.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Character Ability System")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Character Ability System")
 	virtual int32 GetCharacterLevel() const = 0;
 
 	/**
@@ -56,7 +56,7 @@ public:
 	 * @return
 	 *	A map from character ability scores to a snapshot of their values and modifiers.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Character Ability System")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Character Ability System")
 	virtual TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> GetAbilityScoreValues() const = 0;
 
 	/**
@@ -65,7 +65,7 @@ public:
 	 * @return
 	 *	The ability boost GAs that are still pending for this character.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Character Ability System")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Character Ability System")
 	virtual TArray<UPF2AbilityBoostBase *> GetPendingAbilityBoosts() const = 0;
 
 	/**
@@ -77,7 +77,7 @@ public:
 	 * @return
 	 *	The blueprint to apply as a passive GE to boost that ability.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Character Ability System")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Character Ability System")
 	virtual TSubclassOf<UGameplayEffect> GetBoostEffectForAbility(const EPF2CharacterAbilityScoreType AbilityScore) = 0;
 
 	/**
@@ -94,6 +94,6 @@ public:
 	 * @param TargetAbilityScore
 	 *	The ability score that will be boosted.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Character Ability System")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Character Ability System")
     virtual void ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore) = 0;
 };
