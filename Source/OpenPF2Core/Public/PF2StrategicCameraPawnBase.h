@@ -189,7 +189,7 @@ protected:
 	float GetCameraDistance() const;
 
 	// =================================================================================================================
-	// Blueprint Event Callbacks
+	// Blueprint Implementable Events
 	// =================================================================================================================
 	/**
 	 * BP event invoked to apply a camera tilt-zoom input to the strategic camera.

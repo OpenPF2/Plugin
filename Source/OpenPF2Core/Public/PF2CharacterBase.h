@@ -592,7 +592,7 @@ protected:
 	virtual void HandleCharacterLevelChanged(float OldLevel, float NewLevel);
 
 	// =================================================================================================================
-	// Blueprint Event Callbacks
+	// Blueprint Implementable Events
 	// =================================================================================================================
 	/**
 	 * BP event invoked when a character's level has changed, to allow logic that depends on levels to be refreshed.
