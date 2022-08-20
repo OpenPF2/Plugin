@@ -43,7 +43,12 @@ TArray<TScriptInterface<IPF2CharacterInterface>> UPF2CharacterLibrary::GetPlayer
 		[](TArray<TScriptInterface<IPF2CharacterInterface>>      Characters,
 		   const TScriptInterface<IPF2PlayerControllerInterface> PlayerController)
 		{
-			Characters.Append(PlayerController->GetPlayerState()->GetControllableCharacters());
+			const TScriptInterface<IPF2PlayerStateInterface> PlayerState = PlayerController->GetPlayerState();
+
+			if (PlayerState != nullptr)
+			{
+				Characters.Append(PlayerState->GetControllableCharacters());
+			}
 
 			return Characters;
 		}

@@ -43,6 +43,8 @@ public:
 	/**
 	 * Gets all of the player-controlled PF2 characters in the world.
 	 *
+	 * If called on the client and the player state has not yet been replicated, this will return an empty array.
+	 *
 	 * @param World
 	 *	A reference to the loaded, running world that contains the characters.
 	 *

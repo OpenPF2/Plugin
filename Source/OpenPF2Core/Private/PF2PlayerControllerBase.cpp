@@ -30,7 +30,18 @@ void APF2PlayerControllerBase::SetPawn(APawn* NewPawn)
 
 TScriptInterface<IPF2PlayerStateInterface> APF2PlayerControllerBase::GetPlayerState() const
 {
-	return PF2InterfaceUtilities::ToScriptInterface(Cast<IPF2PlayerStateInterface>(this->PlayerState));
+	TScriptInterface<IPF2PlayerStateInterface> Result;
+
+	if (this->PlayerState == nullptr)
+	{
+		Result = TScriptInterface<IPF2PlayerStateInterface>();
+	}
+	else
+	{
+		Result = PF2InterfaceUtilities::ToScriptInterface(Cast<IPF2PlayerStateInterface>(this->PlayerState));
+	}
+
+	return Result;
 }
 
 APlayerController* APF2PlayerControllerBase::ToPlayerController()

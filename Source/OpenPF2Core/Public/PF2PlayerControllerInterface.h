@@ -41,6 +41,12 @@ public:
 	// =================================================================================================================
 	/**
 	 * Gets the player state of this player controller.
+	 *
+	 * If called on the client and the player state has not yet been replicated, this will return a null script
+	 * interface.
+	 *
+	 * @return
+	 *	The PF2-specific player state.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
 	virtual TScriptInterface<IPF2PlayerStateInterface> GetPlayerState() const = 0;
