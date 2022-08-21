@@ -18,16 +18,25 @@
 // =====================================================================================================================
 // Delegate Types
 // =====================================================================================================================
+/**
+ * Delegate for Blueprints to react to commands being added to the queue.
+ */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 	FPF2CommandAddedToQueueDelegate,
 	const TScriptInterface<IPF2CharacterCommandInterface>&, Command
 );
 
+/**
+ * Delegate for Blueprints to react to commands being removed from the queue.
+ */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 	FPF2CommandRemovedFromQueueDelegate,
 	const TScriptInterface<IPF2CharacterCommandInterface>&, Command
 );
 
+/**
+ * Delegate for Blueprints to react to the queue changing in any way (commands added or removed, or queue cleared).
+ */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 	FPF2CommandQueueChangedDelegate,
 	const TArray<TScriptInterface<IPF2CharacterCommandInterface>>&, Commands
@@ -53,6 +62,9 @@ protected:
 	TArray<IPF2CharacterCommandInterface*> Queue;
 
 public:
+	// =================================================================================================================
+	// Public Properties - Multicast Delegates
+	// =================================================================================================================
 	/**
 	 * Event fired when a command has been added to this queue.
 	 */
