@@ -36,6 +36,7 @@
 // =====================================================================================================================
 // Forward Declarations (to break recursive dependencies)
 // =====================================================================================================================
+class IPF2CharacterInterface;
 class IPF2CharacterCommandInterface;
 
 template<class AscType, class AttributeSetType, class CommandQueueType>
@@ -90,6 +91,14 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostSelection
 	UPROPERTY(EditAnywhere)
 	TSet<EPF2CharacterAbilityScoreType> SelectedAbilities;
 };
+
+/**
+ * Delegate for Blueprints to react to when a character's turn has started or ended.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
+	FPF2CharacterTurnDelegate,
+	TScriptInterface<IPF2CharacterInterface>, Character
+);
 
 /**
  * Base class for both playable and non-playable characters in OpenPF2.
@@ -341,6 +350,21 @@ protected:
 	TMap<TSubclassOf<UGameplayAbility>, FGameplayAbilitySpecHandle> GrantedAdditionalAbilities;
 
 public:
+	// =================================================================================================================
+	// Public Properties - Multicast Delegates
+	// =================================================================================================================
+	/**
+	 * Event fired when character's encounter turn has started.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Characters")
+	FPF2CharacterTurnDelegate OnEncounterTurnStarted;
+
+	/**
+	 * Event fired when character's encounter turn has ended.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Characters")
+	FPF2CharacterTurnDelegate OnEncounterTurnEnded;
+
 	// =================================================================================================================
 	// Public Constructors
 	// =================================================================================================================
@@ -636,18 +660,6 @@ protected:
 	                      AActor*                                         DamageSource,
 	                      const FGameplayTagContainer&                    EventTags,
 	                      const FHitResult                                HitInfo);
-
-	/**
-	 * BP event invoked when this character's turn during an encounter has started.
-	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
-	void OnEncounterTurnStarted();
-
-	/**
-	 * BP event invoked when this character's turn during an encounter has ended.
-	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
-	void OnEncounterTurnEnded();
 
 	/**
 	 * BP event invoked when this character's hit points (i.e., health) have changed.

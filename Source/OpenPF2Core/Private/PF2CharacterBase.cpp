@@ -229,12 +229,12 @@ void APF2CharacterBase::HandleHitPointsChanged(const float Delta, const FGamepla
 
 void APF2CharacterBase::MulticastHandleEncounterTurnStarted_Implementation()
 {
-	this->OnEncounterTurnStarted();
+	this->OnEncounterTurnStarted.Broadcast(this);
 }
 
 void APF2CharacterBase::MulticastHandleEncounterTurnEnded_Implementation()
 {
-	this->OnEncounterTurnEnded();
+	this->OnEncounterTurnEnded.Broadcast(this);
 }
 
 bool APF2CharacterBase::SetCharacterLevel(const int32 NewLevel)
