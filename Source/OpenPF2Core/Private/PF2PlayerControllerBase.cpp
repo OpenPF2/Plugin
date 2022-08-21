@@ -2,6 +2,9 @@
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// Portions of this code were adapted from or inspired by the "Real-Time Strategy Plugin for Unreal Engine 4" by Nick
+// Pruehs, provided under the MIT License. Copyright (c) 2017 Nick Pruehs.
 
 #include "PF2PlayerControllerBase.h"
 
@@ -13,6 +16,22 @@
 #include "Utilities/PF2EnumUtilities.h"
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
+
+#include <GameFramework/PlayerState.h>
+
+void APF2PlayerControllerBase::InitPlayerState()
+{
+	Super::InitPlayerState();
+
+	this->Native_OnPlayerStateAvailable(this->GetPlayerState());
+}
+
+void APF2PlayerControllerBase::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	this->Native_OnPlayerStateAvailable(this->GetPlayerState());
+}
 
 void APF2PlayerControllerBase::SetPawn(APawn* NewPawn)
 {
@@ -76,4 +95,25 @@ void APF2PlayerControllerBase::MulticastHandleEncounterTurnEnded_Implementation(
 FString APF2PlayerControllerBase::GetIdForLogs() const
 {
 	return this->GetName();
+}
+
+void APF2PlayerControllerBase::Native_OnPlayerStateAvailable(
+	const TScriptInterface<IPF2PlayerStateInterface> NewPlayerState)
+{
+	if (NewPlayerState == nullptr)
+	{
+		return;
+	}
+
+	UE_LOG(
+		LogPf2Core,
+		Verbose,
+		TEXT("[%s] Player controller ('%s') has made player state ('%s') available for character ('%s')."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(this->GetIdForLogs()),
+		*(NewPlayerState->GetIdForLogs()),
+		*(NewPlayerState->ToPlayerState()->GetPlayerName())
+	);
+
+	this->BP_OnPlayerStateAvailable(NewPlayerState);
 }

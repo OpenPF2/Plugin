@@ -2,6 +2,9 @@
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// Portions of this code were adapted from or inspired by the "Real-Time Strategy Plugin for Unreal Engine 4" by Nick
+// Pruehs, provided under the MIT License. Copyright (c) 2017 Nick Pruehs.
 
 #pragma once
 
@@ -35,6 +38,10 @@ public:
 	// =================================================================================================================
 	// Public Methods - AController Overrides
 	// =================================================================================================================
+	virtual void InitPlayerState() override;
+
+	virtual void OnRep_PlayerState() override;
+
 	virtual void SetPawn(APawn* NewPawn) override;
 
 	// =================================================================================================================
@@ -63,8 +70,34 @@ public:
 
 protected:
 	// =================================================================================================================
+	// Native Callbacks
+	// =================================================================================================================
+	/*
+	 * Callback invoked in C++ code when the player state is available for use.
+	 *
+	 * - On the server: This happens just after the player state has been initialized.
+	 * - On clients: This happens just after the player state has been replicated.
+	 *
+	 * @param NewPlayerState
+	 *	The player state that was just made available.
+	 */
+	virtual void Native_OnPlayerStateAvailable(TScriptInterface<IPF2PlayerStateInterface> NewPlayerState);
+
+	// =================================================================================================================
 	// Blueprint Implementable Events
 	// =================================================================================================================
+	/**
+	 * Callback invoked in Blueprint when the player state is available for use.
+	 *
+	 * - On the server: This happens just after the player state has been initialized.
+	 * - On clients: This happens just after the player state has been replicated.
+	 *
+	 * @param NewPlayerState
+	 *	The player state that was just made available.
+	 */
+	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player Controllers", meta=(DisplayName="OnPlayerStateAvailable"))
+	void BP_OnPlayerStateAvailable(const TScriptInterface<IPF2PlayerStateInterface>& NewPlayerState);
+
 	/**
 	 * BP event invoked when the mode of play has changed.
 	 *
