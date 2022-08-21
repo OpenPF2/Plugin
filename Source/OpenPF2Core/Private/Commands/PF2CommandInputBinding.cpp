@@ -66,7 +66,7 @@ void FPF2CommandInputBinding::LocalInputPressed(FPF2CommandInputBinding* Binding
 		UE_LOG(
 			LogPf2CoreKeyBindings,
 			VeryVerbose,
-			TEXT("Input PRESSED for binding of action '%s' for character '%s'."),
+			TEXT("Input PRESSED for binding of action ('%s') for character ('%s')."),
 			*(Binding->ActionName.ToString()),
 			*(Binding->Character->GetIdForLogs())
 		);
@@ -90,7 +90,7 @@ void FPF2CommandInputBinding::LocalInputReleased(FPF2CommandInputBinding* Bindin
 		UE_LOG(
 			LogPf2CoreKeyBindings,
 			VeryVerbose,
-			TEXT("Input RELEASED for binding to action '%s' for character '%s'."),
+			TEXT("Input RELEASED for binding to action ('%s') for character ('%s')."),
 			*(Binding->ActionName.ToString()),
 			*(Binding->Character->GetIdForLogs())
 		);
