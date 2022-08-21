@@ -174,6 +174,12 @@ protected:
 	FText CharacterName;
 
 	/**
+	 * The visual portrait of this character, to represent them in the UI to players/users.
+	 */
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Character")
+	UTexture2D* CharacterPortrait;
+
+	/**
 	 * The current level of this character.
 	 */
 	UPROPERTY(EditAnywhere, Replicated, meta=(ClampMin=1), Category="Character")
@@ -409,6 +415,9 @@ public:
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
 	virtual FText GetCharacterName() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual UTexture2D* GetCharacterPortrait() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual int32 GetCharacterLevel() const override;

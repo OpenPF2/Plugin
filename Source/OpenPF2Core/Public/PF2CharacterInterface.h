@@ -82,6 +82,15 @@ public:
 	virtual FText GetCharacterName() const = 0;
 
 	/**
+	 * Gets a visual portrait of this character, to represent them in the UI to players/users.
+	 *
+	 * @return
+	 *	A graphical representation of this character.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual UTexture2D* GetCharacterPortrait() const = 0;
+
+	/**
 	 * Gets the current level of this character.
 	 *
 	 * The character level impacts the character's stats and how many boosts and feats the character can have.

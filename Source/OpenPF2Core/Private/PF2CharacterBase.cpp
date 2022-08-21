@@ -75,6 +75,11 @@ FText APF2CharacterBase::GetCharacterName() const
 	return Name;
 }
 
+UTexture2D* APF2CharacterBase::GetCharacterPortrait() const
+{
+	return this->CharacterPortrait;
+}
+
 int32 APF2CharacterBase::GetCharacterLevel() const
 {
 	return this->CharacterLevel;
