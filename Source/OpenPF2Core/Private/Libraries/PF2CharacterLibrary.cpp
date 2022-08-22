@@ -21,12 +21,12 @@ TArray<TScriptInterface<IPF2PlayerControllerInterface>> UPF2CharacterLibrary::Ge
 	{
 		APlayerController* PlayerController = Iterator->Get();
 
-		IPF2PlayerControllerInterface* const Pf2PlayerController =
+		IPF2PlayerControllerInterface* const PlayerControllerIntf =
 			Cast<IPF2PlayerControllerInterface>(PlayerController);
 
-		if (Pf2PlayerController != nullptr)
+		if (PlayerControllerIntf != nullptr)
 		{
-			PlayerControllers.Add(PF2InterfaceUtilities::ToScriptInterface(Pf2PlayerController));
+			PlayerControllers.Add(PF2InterfaceUtilities::ToScriptInterface(PlayerControllerIntf));
 		}
 	}
 
@@ -43,11 +43,11 @@ TArray<TScriptInterface<IPF2CharacterInterface>> UPF2CharacterLibrary::GetPlayer
 		[](TArray<TScriptInterface<IPF2CharacterInterface>>      Characters,
 		   const TScriptInterface<IPF2PlayerControllerInterface> PlayerController)
 		{
-			const TScriptInterface<IPF2PlayerStateInterface> PlayerState = PlayerController->GetPlayerState();
+			const TScriptInterface<IPF2PlayerStateInterface> Pf2PlayerState = PlayerController->GetPlayerState();
 
-			if (PlayerState != nullptr)
+			if (Pf2PlayerState != nullptr)
 			{
-				Characters.Append(PlayerState->GetControllableCharacters());
+				Characters.Append(Pf2PlayerState->GetControllableCharacters());
 			}
 
 			return Characters;
