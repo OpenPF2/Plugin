@@ -51,7 +51,7 @@ void UPF2OwnerComponent::SetOwningPlayerByState(TScriptInterface<IPF2PlayerState
 
 	if (PlayerState != PreviousOwningPlayerState)
 	{
-		this->NotifyOnOwningPlayerStateChanged(PreviousOwningPlayerState, PlayerState);
+		this->Native_OnOwningPlayerStateChanged(PreviousOwningPlayerState, PlayerState);
 	}
 }
 
@@ -115,12 +115,12 @@ void UPF2OwnerComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 }
 
 // ReSharper disable once CppMemberFunctionMayBeConst
-void UPF2OwnerComponent::ReceivedOwningPlayerState(const TScriptInterface<IPF2PlayerStateInterface> Owner)
+void UPF2OwnerComponent::OnRep_OwningPlayerState(const TScriptInterface<IPF2PlayerStateInterface> Owner)
 {
-    this->NotifyOnOwningPlayerStateChanged(Owner, this->OwningPlayerState);
+    this->Native_OnOwningPlayerStateChanged(Owner, this->OwningPlayerState);
 }
 
-void UPF2OwnerComponent::NotifyOnOwningPlayerStateChanged(
+void UPF2OwnerComponent::Native_OnOwningPlayerStateChanged(
 	const TScriptInterface<IPF2PlayerStateInterface> PreviousOwner,
 	const TScriptInterface<IPF2PlayerStateInterface> NewOwner) const
 {
@@ -142,7 +142,7 @@ void UPF2OwnerComponent::NotifyOnOwningPlayerStateChanged(
 				((PlayerState == PreviousOwnerIntf) || (PlayerState == NewOwnerIntf)))
 			{
 				// Notify player controllers that have lost or gained ownership of an actor.
-				PlayerState->NotifyOnActorOwnershipChanged(this->GetOwner(), PreviousOwner, NewOwner);
+				PlayerState->Native_OnActorOwnershipChanged(this->GetOwner(), PreviousOwner, NewOwner);
 			}
 		}
 	}

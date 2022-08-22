@@ -56,7 +56,7 @@ void APF2StrategicCameraPawnBase::Tick(const float DeltaSeconds)
 	// Apply tilt-zoom input.
 	if (TiltZoomValue != 0.0f)
 	{
-		this->OnApplyTiltZoom(TiltZoomValue);
+		this->BP_OnApplyTiltZoom(TiltZoomValue);
 	}
 
 }

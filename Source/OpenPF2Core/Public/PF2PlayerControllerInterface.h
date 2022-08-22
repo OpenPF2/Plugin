@@ -74,7 +74,7 @@ public:
 	 *	The new mode of play.
 	 */
 	UFUNCTION()
-	virtual void HandleModeOfPlayChanged(EPF2ModeOfPlayType NewMode) = 0;
+	virtual void Native_OnModeOfPlayChanged(EPF2ModeOfPlayType NewMode) = 0;
 
 	// =================================================================================================================
 	// Public Event Notifications from Mode of Play Rule Sets (MoPRS)
@@ -85,7 +85,7 @@ public:
 	 * (This should normally be invoked only by the MoPRS).
 	 */
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleEncounterTurnStarted() = 0;
+	virtual void Multicast_OnEncounterTurnStarted() = 0;
 
 	/**
 	 *  Notifies this player controller that the pawn's turn during an encounter has ended.
@@ -93,5 +93,5 @@ public:
 	 * (This should normally be invoked only by the MoPRS).
 	 */
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleEncounterTurnEnded() = 0;
+	virtual void Multicast_OnEncounterTurnEnded() = 0;
 };

@@ -522,18 +522,18 @@ void UPF2AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 
 	if (Data.EvaluatedData.Attribute == this->GetTmpDamageIncomingAttribute())
 	{
-		this->HandleDamageIncomingChanged(TargetCharacter, Context, ValueDelta, EventTags);
+		this->Native_OnDamageIncomingChanged(TargetCharacter, Context, ValueDelta, EventTags);
 	}
 	else if (Data.EvaluatedData.Attribute == this->GetHitPointsAttribute())
 	{
-		this->HandleHitPointsChanged(TargetCharacter, Context, ValueDelta, EventTags);
+		this->Native_OnHitPointsChanged(TargetCharacter, Context, ValueDelta, EventTags);
 	}
 }
 
-void UPF2AttributeSet::HandleDamageIncomingChanged(IPF2CharacterInterface*            TargetCharacter,
-                                                   const FGameplayEffectContextHandle Context,
-                                                   const float                        ValueDelta,
-                                                   const FGameplayTagContainer*       EventTags)
+void UPF2AttributeSet::Native_OnDamageIncomingChanged(IPF2CharacterInterface*            TargetCharacter,
+                                                      const FGameplayEffectContextHandle Context,
+                                                      const float                        ValueDelta,
+                                                      const FGameplayTagContainer*       EventTags)
 {
 	const float LocalDamage = this->GetTmpDamageIncoming();
 
@@ -584,16 +584,16 @@ void UPF2AttributeSet::HandleDamageIncomingChanged(IPF2CharacterInterface*      
 				DamageSource = Context.GetEffectCauser();
 			}
 
-			TargetCharacter->HandleDamageReceived(LocalDamage, Instigator, DamageSource, EventTags, HitResult);
-			TargetCharacter->HandleHitPointsChanged(-LocalDamage, EventTags);
+			TargetCharacter->Native_OnDamageReceived(LocalDamage, Instigator, DamageSource, EventTags, HitResult);
+			TargetCharacter->Native_OnHitPointsChanged(-LocalDamage, EventTags);
 		}
 	}
 }
 
-void UPF2AttributeSet::HandleHitPointsChanged(IPF2CharacterInterface*            TargetCharacter,
-                                              const FGameplayEffectContextHandle Context,
-                                              const float                        ValueDelta,
-                                              const FGameplayTagContainer*       EventTags)
+void UPF2AttributeSet::Native_OnHitPointsChanged(IPF2CharacterInterface*            TargetCharacter,
+                                                 const FGameplayEffectContextHandle Context,
+                                                 const float                        ValueDelta,
+                                                 const FGameplayTagContainer*       EventTags)
 {
 	const float ClampedHitPoints = FMath::Clamp(this->GetHitPoints(), 0.0f, this->GetMaxHitPoints());
 
@@ -601,6 +601,6 @@ void UPF2AttributeSet::HandleHitPointsChanged(IPF2CharacterInterface*           
 
 	if (TargetCharacter != nullptr)
 	{
-		TargetCharacter->HandleHitPointsChanged(ValueDelta, EventTags);
+		TargetCharacter->Native_OnHitPointsChanged(ValueDelta, EventTags);
 	}
 }

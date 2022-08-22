@@ -200,6 +200,9 @@ protected:
 	 *   The amount of tilt zoom to apply, as a float from -1.0 to 1.0. This amount has already been scaled by the tilt
 	 *   zoom camera speed and should be added to the current tilt zoom amount.
 	 */
-	UFUNCTION(BlueprintImplementableEvent)
-	void OnApplyTiltZoom(const float TiltAmount);
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		meta=(DisplayName="On Apply Tilt Zoom")
+	)
+	void BP_OnApplyTiltZoom(const float TiltAmount);
 };

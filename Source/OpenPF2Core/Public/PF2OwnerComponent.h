@@ -79,7 +79,7 @@ public:
 	virtual FString GetIdForLogs() const override;
 
 	// =================================================================================================================
-	// Public Methods
+	// Public Properties - Multicast Delegates
 	// =================================================================================================================
 	/**
 	 * Event when the actor is owned by a different player.
@@ -100,7 +100,7 @@ private:
 	/**
 	 * Gets the state of the player who owns the containing actor.
 	 */
-	UPROPERTY(ReplicatedUsing=ReceivedOwningPlayerState)
+	UPROPERTY(ReplicatedUsing=OnRep_OwningPlayerState)
 	TScriptInterface<IPF2PlayerStateInterface> OwningPlayerState;
 
 	// =================================================================================================================
@@ -113,7 +113,7 @@ private:
 	 *	The new owner of the containing actor.
 	 */
 	UFUNCTION()
-    void ReceivedOwningPlayerState(const TScriptInterface<IPF2PlayerStateInterface> Owner);
+    void OnRep_OwningPlayerState(const TScriptInterface<IPF2PlayerStateInterface> Owner);
 
 	// =================================================================================================================
 	// Private Event Notifications
@@ -126,7 +126,7 @@ private:
 	 * @param NewOwner
 	 *	The player state corresponding to the player who is now the owner of this actor. Can be null.
 	 */
-	void NotifyOnOwningPlayerStateChanged(
+	void Native_OnOwningPlayerStateChanged(
 		const TScriptInterface<IPF2PlayerStateInterface> PreviousOwner,
 		const TScriptInterface<IPF2PlayerStateInterface> NewOwner
 	) const;

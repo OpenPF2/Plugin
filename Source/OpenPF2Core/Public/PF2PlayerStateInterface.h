@@ -131,7 +131,7 @@ public:
 	 * @param NewParty
 	 *	The new party to which the player is affiliated.
 	 */
-	virtual void NotifyOnPartyChanged(TScriptInterface<IPF2Party> NewParty) = 0;
+	virtual void Native_OnPartyChanged(TScriptInterface<IPF2Party> NewParty) = 0;
 
 	/**
 	 * Notifies this player state that it is now the owner of an actor or that it no longer owns an actor.
@@ -143,7 +143,7 @@ public:
 	 * @param NewOwner
 	 *	The player state corresponding to the player who is now the owner of this actor. Can be null.
 	 */
-	virtual void NotifyOnActorOwnershipChanged(
+	virtual void Native_OnActorOwnershipChanged(
 		AActor*                                           Actor,
 		const TScriptInterface<IPF2PlayerStateInterface>& PreviousOwner,
 		const TScriptInterface<IPF2PlayerStateInterface>& NewOwner

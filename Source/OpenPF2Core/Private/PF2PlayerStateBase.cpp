@@ -74,7 +74,7 @@ APlayerState* APF2PlayerStateBase::ToPlayerState()
 	return this;
 }
 
-void APF2PlayerStateBase::NotifyOnPartyChanged(TScriptInterface<IPF2Party> NewParty)
+void APF2PlayerStateBase::Native_OnPartyChanged(TScriptInterface<IPF2Party> NewParty)
 {
 	UE_LOG(
 		LogPf2Core,
@@ -85,12 +85,13 @@ void APF2PlayerStateBase::NotifyOnPartyChanged(TScriptInterface<IPF2Party> NewPa
 	);
 
 	// Notify listeners.
-	this->OnPartyChanged(NewParty);
+	this->BP_OnPartyChanged(NewParty);
 }
 
-void APF2PlayerStateBase::NotifyOnActorOwnershipChanged(AActor* Actor,
-                                                        const TScriptInterface<IPF2PlayerStateInterface>& PreviousOwner,
-                                                        const TScriptInterface<IPF2PlayerStateInterface>& NewOwner)
+void APF2PlayerStateBase::Native_OnActorOwnershipChanged(
+	AActor*                                           Actor,
+	const TScriptInterface<IPF2PlayerStateInterface>& PreviousOwner,
+	const TScriptInterface<IPF2PlayerStateInterface>& NewOwner)
 {
 	IPF2CharacterInterface* CharacterActor = Cast<IPF2CharacterInterface>(Actor);
 
@@ -116,5 +117,5 @@ FString APF2PlayerStateBase::GetIdForLogs() const
 
 void APF2PlayerStateBase::ReceivedParty(TScriptInterface<IPF2Party> NewParty)
 {
-	this->NotifyOnPartyChanged(NewParty);
+	this->Native_OnPartyChanged(NewParty);
 }

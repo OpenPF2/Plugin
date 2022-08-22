@@ -68,7 +68,7 @@ APlayerController* APF2PlayerControllerBase::ToPlayerController()
 	return this;
 }
 
-void APF2PlayerControllerBase::HandleModeOfPlayChanged(const EPF2ModeOfPlayType NewMode)
+void APF2PlayerControllerBase::Native_OnModeOfPlayChanged(const EPF2ModeOfPlayType NewMode)
 {
 	UE_LOG(
 		LogPf2Core,
@@ -79,17 +79,17 @@ void APF2PlayerControllerBase::HandleModeOfPlayChanged(const EPF2ModeOfPlayType 
 		*(PF2EnumUtilities::ToString(NewMode))
 	);
 
-	this->OnModeOfPlayChanged(NewMode);
+	this->BP_OnModeOfPlayChanged(NewMode);
 }
 
-void APF2PlayerControllerBase::MulticastHandleEncounterTurnStarted_Implementation()
+void APF2PlayerControllerBase::Multicast_OnEncounterTurnStarted_Implementation()
 {
-	this->OnEncounterTurnStarted();
+	this->BP_OnEncounterTurnStarted();
 }
 
-void APF2PlayerControllerBase::MulticastHandleEncounterTurnEnded_Implementation()
+void APF2PlayerControllerBase::Multicast_OnEncounterTurnEnded_Implementation()
 {
-	this->OnEncounterTurnEnded();
+	this->BP_OnEncounterTurnEnded();
 }
 
 FString APF2PlayerControllerBase::GetIdForLogs() const

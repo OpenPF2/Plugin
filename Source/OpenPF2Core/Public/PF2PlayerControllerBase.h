@@ -54,13 +54,13 @@ public:
 	virtual APlayerController* ToPlayerController() override;
 
 	UFUNCTION()
-	virtual void HandleModeOfPlayChanged(EPF2ModeOfPlayType NewMode) override;
+	virtual void Native_OnModeOfPlayChanged(EPF2ModeOfPlayType NewMode) override;
 
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleEncounterTurnStarted() override;
+	virtual void Multicast_OnEncounterTurnStarted() override;
 
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleEncounterTurnEnded() override;
+	virtual void Multicast_OnEncounterTurnEnded() override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Overrides
@@ -95,7 +95,11 @@ protected:
 	 * @param NewPlayerState
 	 *	The player state that was just made available.
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player Controllers", meta=(DisplayName="OnPlayerStateAvailable"))
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Player Controllers",
+		meta=(DisplayName="On Player State Available")
+	)
 	void BP_OnPlayerStateAvailable(const TScriptInterface<IPF2PlayerStateInterface>& NewPlayerState);
 
 	/**
@@ -106,22 +110,34 @@ protected:
 	 * @param NewMode
 	 *	The new mode of play.
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player Controllers")
-	void OnModeOfPlayChanged(EPF2ModeOfPlayType NewMode);
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Player Controllers",
+		meta=(DisplayName="On Mode of Play Changed")
+	)
+	void BP_OnModeOfPlayChanged(EPF2ModeOfPlayType NewMode);
 
 	/**
 	 * BP event invoked when the pawn's turn during an encounter has started.
 	 *
 	 * This is invoked on both the owning client and server.
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player Controllers")
-	void OnEncounterTurnStarted();
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Player Controllers",
+		meta=(DisplayName="On Encounter Turn Started")
+	)
+	void BP_OnEncounterTurnStarted();
 
 	/**
 	 * BP event invoked when the pawn's turn during an encounter has ended.
 	 *
 	 * This is invoked on both the owning client and server.
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player Controllers")
-	void OnEncounterTurnEnded();
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Player Controllers",
+		meta=(DisplayName="On Encounter Turn Ended")
+	)
+	void BP_OnEncounterTurnEnded();
 };

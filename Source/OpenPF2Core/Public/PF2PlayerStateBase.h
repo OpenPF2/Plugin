@@ -68,9 +68,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual APlayerState* ToPlayerState() override;
 
-	virtual void NotifyOnPartyChanged(TScriptInterface<IPF2Party> NewParty) override;
+	virtual void Native_OnPartyChanged(TScriptInterface<IPF2Party> NewParty) override;
 
-	virtual void NotifyOnActorOwnershipChanged(
+	virtual void Native_OnActorOwnershipChanged(
 		AActor*                                           Actor,
 		const TScriptInterface<IPF2PlayerStateInterface>& PreviousOwner,
 		const TScriptInterface<IPF2PlayerStateInterface>& NewOwner
@@ -92,8 +92,14 @@ protected:
 	 * @param NewParty
 	 *	The new party to which the player is affiliated.
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Player States")
-	void OnPartyChanged(const TScriptInterface<IPF2Party>& NewParty);
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Player States",
+		meta=(
+			DisplayName="On Party Changed"
+		)
+	)
+	void BP_OnPartyChanged(const TScriptInterface<IPF2Party>& NewParty);
 
 private:
 	// =================================================================================================================

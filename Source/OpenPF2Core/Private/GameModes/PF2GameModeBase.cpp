@@ -69,7 +69,7 @@ void APF2GameModeBase::AddCharacterToEncounter(const TScriptInterface<IPF2Charac
 	}
 	else
 	{
-		IPF2ModeOfPlayRuleSetInterface::Execute_OnCharacterAddedToEncounter(RuleSet.GetObject(), Character);
+		IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnCharacterAddedToEncounter(RuleSet.GetObject(), Character);
 	}
 }
 
@@ -88,7 +88,7 @@ void APF2GameModeBase::RemoveCharacterFromEncounter(const TScriptInterface<IPF2C
 	}
 	else
 	{
-		IPF2ModeOfPlayRuleSetInterface::Execute_OnCharacterRemovedFromEncounter(RuleSet.GetObject(), Character);
+		IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnCharacterRemovedFromEncounter(RuleSet.GetObject(), Character);
 	}
 }
 
@@ -142,7 +142,7 @@ void APF2GameModeBase::HandleStartingNewPlayer_Implementation(APlayerController*
 
 	if (RuleSet != nullptr)
 	{
-		IPF2ModeOfPlayRuleSetInterface::Execute_OnPlayableCharacterStarting(
+		IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnPlayableCharacterStarting(
 			RuleSet.GetObject(),
 			NewPlayer->GetCharacter()
 		);
@@ -260,7 +260,7 @@ void APF2GameModeBase::ForceSwitchModeOfPlay(const EPF2ModeOfPlayType NewModeOfP
 		{
 			AActor* OldRuleSetActor = Cast<AActor>(OldRuleSet.GetObject());
 
-			IPF2ModeOfPlayRuleSetInterface::Execute_OnModeOfPlayEnd(OldRuleSet.GetObject(), OldModeOfPlay);
+			IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnModeOfPlayEnd(OldRuleSet.GetObject(), OldModeOfPlay);
 
 			if (OldRuleSetActor != nullptr)
 			{
@@ -274,7 +274,7 @@ void APF2GameModeBase::ForceSwitchModeOfPlay(const EPF2ModeOfPlayType NewModeOfP
 
 		if (NewRuleSet != nullptr)
 		{
-			IPF2ModeOfPlayRuleSetInterface::Execute_OnModeOfPlayStart(NewRuleSet.GetObject(), NewModeOfPlay);
+			IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnModeOfPlayStart(NewRuleSet.GetObject(), NewModeOfPlay);
 		}
 	}
 }

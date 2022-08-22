@@ -247,11 +247,11 @@ public:
 	 * @param HitInfo
 	 *	Hit result information, including who was hit and where the damage was inflicted.
 	 */
-    virtual void HandleDamageReceived(const float                  Damage,
-                                      IPF2CharacterInterface*      InstigatorCharacter,
-                                      AActor*                      DamageSource,
-                                      const FGameplayTagContainer* EventTags,
-                                      const FHitResult             HitInfo) = 0;
+    virtual void Native_OnDamageReceived(const float                  Damage,
+                                         IPF2CharacterInterface*      InstigatorCharacter,
+                                         AActor*                      DamageSource,
+                                         const FGameplayTagContainer* EventTags,
+                                         const FHitResult             HitInfo) = 0;
 
 	/**
 	 * Notifies this character that its hit points (i.e., health) have changed.
@@ -264,7 +264,7 @@ public:
 	 * @param EventTags
 	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to hit points.
 	 */
-	virtual void HandleHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags) = 0;
+	virtual void Native_OnHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags) = 0;
 
 	// =================================================================================================================
 	// Public Event Notifications from Mode of Play Rule Sets (MoPRS)
@@ -275,7 +275,7 @@ public:
 	 * (This should normally be invoked only by the MoPRS).
 	 */
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleEncounterTurnStarted() = 0;
+	virtual void Multicast_OnEncounterTurnStarted() = 0;
 
 	/**
 	 * Notifies this character that their turn during an encounter has ended.
@@ -283,5 +283,5 @@ public:
 	 * (This should normally be invoked only by the MoPRS).
 	 */
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleEncounterTurnEnded() = 0;
+	virtual void Multicast_OnEncounterTurnEnded() = 0;
 };

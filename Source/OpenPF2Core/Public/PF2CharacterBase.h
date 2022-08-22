@@ -499,19 +499,19 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void AddAndActivateGameplayAbility(const TSubclassOf<UGameplayAbility> Ability) override;
 
-	virtual void HandleDamageReceived(const float                         Damage,
-	                                  IPF2CharacterInterface*             InstigatorCharacter,
-	                                  AActor*                             DamageSource,
-	                                  const struct FGameplayTagContainer* EventTags,
-	                                  const FHitResult                    HitInfo) override;
+	virtual void Native_OnDamageReceived(const float                         Damage,
+	                                     IPF2CharacterInterface*             InstigatorCharacter,
+	                                     AActor*                             DamageSource,
+	                                     const struct FGameplayTagContainer* EventTags,
+	                                     const FHitResult                    HitInfo) override;
 
-	virtual void HandleHitPointsChanged(const float Delta, const struct FGameplayTagContainer* EventTags) override;
-
-	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleEncounterTurnStarted() override;
+	virtual void Native_OnHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags) override;
 
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleEncounterTurnEnded() override;
+	virtual void Multicast_OnEncounterTurnStarted() override;
+
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void Multicast_OnEncounterTurnEnded() override;
 
 	// =================================================================================================================
 	// Public Methods - Blueprint Callable
@@ -622,7 +622,7 @@ protected:
 	 * @param NewLevel
 	 *	The new level for this character.
 	 */
-	virtual void HandleCharacterLevelChanged(float OldLevel, float NewLevel);
+	virtual void Native_OnCharacterLevelChanged(float OldLevel, float NewLevel);
 
 	// =================================================================================================================
 	// Blueprint Implementable Events
@@ -635,8 +635,12 @@ protected:
 	 * @param NewLevel
 	 *	The new level for this character.
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
-	void OnCharacterLevelChanged(float OldLevel, float NewLevel);
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Characters",
+		meta=(DisplayName="On Character Level Changed")
+	)
+	void BP_OnCharacterLevelChanged(float OldLevel, float NewLevel);
 
 	/**
 	 * BP event invoked when this character receives damage.
@@ -654,12 +658,16 @@ protected:
 	 * @param HitInfo
 	 *	Hit result information, including who was hit and where the damage was inflicted.
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
-	void OnDamageReceived(const float                                     Damage,
-	                      const TScriptInterface<IPF2CharacterInterface>& InstigatorCharacter,
-	                      AActor*                                         DamageSource,
-	                      const FGameplayTagContainer&                    EventTags,
-	                      const FHitResult                                HitInfo);
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Characters",
+		meta=(DisplayName="On Damage Received")
+	)
+	void BP_OnDamageReceived(const float                                     Damage,
+	                         const TScriptInterface<IPF2CharacterInterface>& InstigatorCharacter,
+	                         AActor*                                         DamageSource,
+	                         const FGameplayTagContainer&                    EventTags,
+	                         const FHitResult                                HitInfo);
 
 	/**
 	 * BP event invoked when this character's hit points (i.e., health) have changed.
@@ -669,8 +677,12 @@ protected:
 	 * @param EventTags
 	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to hit points.
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
-	void OnHitPointsChanged(float Delta, const struct FGameplayTagContainer& EventTags);
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Characters",
+		meta=(DisplayName="On Hit Points Changed")
+	)
+	void BP_OnHitPointsChanged(float Delta, const struct FGameplayTagContainer& EventTags);
 };
 
 /**

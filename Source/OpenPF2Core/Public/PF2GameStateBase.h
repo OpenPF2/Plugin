@@ -97,5 +97,5 @@ protected:
 	 *
 	 * It has no effect on dedicated servers.
 	 */
-	virtual void OnReceivedModeOfPlay();
+	virtual void Native_OnModeOfPlayAvailable();
 };

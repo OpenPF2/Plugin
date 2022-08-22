@@ -235,7 +235,7 @@ private:
 	 * @param Payload
 	 *	Information about the ability activation.
 	 */
-	void OnGameplayEvent(FGameplayTag EventTag, const FGameplayEventData* Payload) const;
+	void Native_OnGameplayEvent(FGameplayTag EventTag, const FGameplayEventData* Payload) const;
 
 	/**
 	 * Callback fired when a montage has ended (either normally or because it was interrupted).
@@ -245,7 +245,7 @@ private:
 	 * @param bInterrupted
 	 *	true if the montage was canceled/interrupted/ended abruptly; false if the montage played to completion.
 	 */
-	void OnMontageEnded(UAnimMontage* Montage, const bool bInterrupted);
+	void Native_OnMontageEnded(UAnimMontage* Montage, const bool bInterrupted);
 
 	/**
 	 * Callback fired when a montage is starting to blend out.
@@ -256,10 +256,10 @@ private:
 	 *	true if -- prior to blending out -- the montage was canceled/interrupted/ended abruptly; false if the montage
 	 *	played to completion.
 	 */
-	void OnMontageBlendingOut(UAnimMontage* Montage, const bool bInterrupted) const;
+	void Native_OnMontageBlendingOut(UAnimMontage* Montage, const bool bInterrupted) const;
 
 	/**
 	 * Callback fired if the GA running this task has been canceled.
 	 */
-	void OnAbilityCancelled() const;
+	void Native_OnAbilityCancelled() const;
 };

@@ -59,10 +59,10 @@ void APF2EncounterModeOfPlayRuleSetBase::StartTurnForCharacter(
 
 	if (PlayerController != nullptr)
 	{
-		IPF2PlayerControllerInterface::Execute_MulticastHandleEncounterTurnStarted(PlayerController.GetObject());
+		IPF2PlayerControllerInterface::Execute_Multicast_OnEncounterTurnStarted(PlayerController.GetObject());
 	}
 
-	IPF2CharacterInterface::Execute_MulticastHandleEncounterTurnStarted(Character.GetObject());
+	IPF2CharacterInterface::Execute_Multicast_OnEncounterTurnStarted(Character.GetObject());
 }
 
 void APF2EncounterModeOfPlayRuleSetBase::EndTurnForCharacter(const TScriptInterface<IPF2CharacterInterface> Character)
@@ -81,10 +81,10 @@ void APF2EncounterModeOfPlayRuleSetBase::EndTurnForCharacter(const TScriptInterf
 
 	if (PlayerController != nullptr)
 	{
-		IPF2PlayerControllerInterface::Execute_MulticastHandleEncounterTurnEnded(PlayerController.GetObject());
+		IPF2PlayerControllerInterface::Execute_Multicast_OnEncounterTurnEnded(PlayerController.GetObject());
 	}
 
-	IPF2CharacterInterface::Execute_MulticastHandleEncounterTurnEnded(Character.GetObject());
+	IPF2CharacterInterface::Execute_Multicast_OnEncounterTurnEnded(Character.GetObject());
 }
 
 void APF2EncounterModeOfPlayRuleSetBase::SetCharacterInitiative(

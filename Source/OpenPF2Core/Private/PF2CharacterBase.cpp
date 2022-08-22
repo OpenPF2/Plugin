@@ -200,13 +200,13 @@ void APF2CharacterBase::AddAndActivateGameplayAbility(const TSubclassOf<UGamepla
 	Asc->GiveAbilityAndActivateOnce(Spec);
 }
 
-void APF2CharacterBase::HandleDamageReceived(const float                  Damage,
-                                             IPF2CharacterInterface*      InstigatorCharacter,
-                                             AActor*                      DamageSource,
-                                             const FGameplayTagContainer* EventTags,
-                                             const FHitResult             HitInfo)
+void APF2CharacterBase::Native_OnDamageReceived(const float                  Damage,
+                                                IPF2CharacterInterface*      InstigatorCharacter,
+                                                AActor*                      DamageSource,
+                                                const FGameplayTagContainer* EventTags,
+                                                const FHitResult             HitInfo)
 {
-	this->OnDamageReceived(
+	this->BP_OnDamageReceived(
 		Damage,
 		PF2InterfaceUtilities::ToScriptInterface(InstigatorCharacter),
 		DamageSource,
@@ -215,7 +215,7 @@ void APF2CharacterBase::HandleDamageReceived(const float                  Damage
 	);
 }
 
-void APF2CharacterBase::HandleHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags)
+void APF2CharacterBase::Native_OnHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags)
 {
 	if ((this->AbilitySystemComponent == nullptr) ||
 		!this->GetCharacterAbilitySystemComponent()->ArePassiveGameplayEffectsActive())
@@ -224,15 +224,15 @@ void APF2CharacterBase::HandleHitPointsChanged(const float Delta, const FGamepla
 		return;
 	}
 
-	this->OnHitPointsChanged(Delta, *EventTags);
+	this->BP_OnHitPointsChanged(Delta, *EventTags);
 }
 
-void APF2CharacterBase::MulticastHandleEncounterTurnStarted_Implementation()
+void APF2CharacterBase::Multicast_OnEncounterTurnStarted_Implementation()
 {
 	this->OnEncounterTurnStarted.Broadcast(this);
 }
 
-void APF2CharacterBase::MulticastHandleEncounterTurnEnded_Implementation()
+void APF2CharacterBase::Multicast_OnEncounterTurnEnded_Implementation()
 {
 	this->OnEncounterTurnEnded.Broadcast(this);
 }
@@ -243,7 +243,7 @@ bool APF2CharacterBase::SetCharacterLevel(const int32 NewLevel)
 
 	if ((OldLevel != NewLevel) && (NewLevel > 0))
 	{
-		this->HandleCharacterLevelChanged(OldLevel, NewLevel);
+		this->Native_OnCharacterLevelChanged(OldLevel, NewLevel);
 		return true;
 	}
 	else
@@ -395,12 +395,12 @@ void APF2CharacterBase::GrantAdditionalAbilities()
 	}
 }
 
-void APF2CharacterBase::HandleCharacterLevelChanged(const float OldLevel, const float NewLevel)
+void APF2CharacterBase::Native_OnCharacterLevelChanged(const float OldLevel, const float NewLevel)
 {
 	this->DeactivatePassiveGameplayEffects();
 
 	this->CharacterLevel = NewLevel;
-	this->OnCharacterLevelChanged(OldLevel, NewLevel);
+	this->BP_OnCharacterLevelChanged(OldLevel, NewLevel);
 
 	this->ActivatePassiveGameplayEffects();
 }

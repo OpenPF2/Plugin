@@ -43,7 +43,7 @@ void APF2GameStateBase::SwitchModeOfPlay(const EPF2ModeOfPlayType               
 		this->ModeOfPlayRuleSet = NewRuleSet;
 
 		// We're running on the server; notify server copies of the game state that we have received a mode of play.
-		this->OnReceivedModeOfPlay();
+		this->Native_OnModeOfPlayAvailable();
 	}
 }
 
@@ -57,10 +57,10 @@ void APF2GameStateBase::OnRep_ModeOfPlay()
 	);
 
 	// We're running on the client; notify the client that we have received a mode of play.
-	this->OnReceivedModeOfPlay();
+	this->Native_OnModeOfPlayAvailable();
 }
 
-void APF2GameStateBase::OnReceivedModeOfPlay()
+void APF2GameStateBase::Native_OnModeOfPlayAvailable()
 {
 	const UWorld* const World = this->GetWorld();
 
@@ -73,7 +73,7 @@ void APF2GameStateBase::OnReceivedModeOfPlay()
 
 		if (PF2PlayerController != nullptr)
 		{
-			PF2PlayerController->HandleModeOfPlayChanged(this->ModeOfPlay);
+			PF2PlayerController->Native_OnModeOfPlayChanged(this->ModeOfPlay);
 		}
 	}
 }
