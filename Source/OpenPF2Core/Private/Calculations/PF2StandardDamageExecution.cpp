@@ -19,8 +19,13 @@ UPF2StandardDamageExecution::UPF2StandardDamageExecution() :
 	DamageParameterTag(FGameplayTag::RequestGameplayTag(this->DamageParameterTagName)),
 	ResistanceParameterTag(FGameplayTag::RequestGameplayTag(this->ResistanceParameterTagName))
 {
+#if WITH_EDITORONLY_DATA
+	// Expose the damage parameter tag and resistance parameter tag for use in calculations in the editor.
+	// The ValidTransientAggregatorIdentifiers property only exists for use in the editor. It does NOT exist at run-time
+	// nor in Shipping builds.
 	this->ValidTransientAggregatorIdentifiers.AddTag(this->DamageParameterTag);
 	this->ValidTransientAggregatorIdentifiers.AddTag(this->ResistanceParameterTag);
+#endif
 }
 
 void UPF2StandardDamageExecution::Execute_Implementation(

@@ -40,7 +40,7 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2GameModeInterface Implementation
 	// =================================================================================================================
-	virtual FORCEINLINE TScriptInterface<IPF2ModeOfPlayRuleSetInterface> CreateModeOfPlayRuleSet(
+	virtual TScriptInterface<IPF2ModeOfPlayRuleSetInterface> CreateModeOfPlayRuleSet(
 		const EPF2ModeOfPlayType ModeOfPlay) override;
 
 	UFUNCTION(BlueprintCallable)
