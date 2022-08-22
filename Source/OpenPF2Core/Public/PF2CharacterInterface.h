@@ -146,7 +146,7 @@ public:
 	 *	The ability boost GAs that are still pending for this character.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
-	virtual TArray<UPF2AbilityBoostBase*> GetPendingAbilityBoosts() const = 0;
+	virtual TArray<TScriptInterface<IPF2AbilityBoostInterface>> GetPendingAbilityBoosts() const = 0;
 
 	/**
 	 * Gets the actor that is implementing this interface.

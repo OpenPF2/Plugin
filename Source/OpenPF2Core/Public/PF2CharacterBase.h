@@ -459,7 +459,7 @@ public:
 	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerController() const override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual TArray<UPF2AbilityBoostBase*> GetPendingAbilityBoosts() const override;
+	virtual TArray<TScriptInterface<IPF2AbilityBoostInterface>> GetPendingAbilityBoosts() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual AActor* ToActor() override;

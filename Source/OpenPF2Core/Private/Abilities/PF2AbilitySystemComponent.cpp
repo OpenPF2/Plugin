@@ -12,6 +12,7 @@
 
 #include "Utilities/PF2ArrayUtilities.h"
 #include "Utilities/PF2EnumUtilities.h"
+#include "Utilities/PF2InterfaceUtilities.h"
 
 UPF2AbilitySystemComponent::UPF2AbilitySystemComponent()
 {
@@ -384,10 +385,10 @@ TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> UPF2AbilitySy
 	return Values;
 }
 
-TArray<UPF2AbilityBoostBase*> UPF2AbilitySystemComponent::GetPendingAbilityBoosts() const
+TArray<TScriptInterface<IPF2AbilityBoostInterface>> UPF2AbilitySystemComponent::GetPendingAbilityBoosts() const
 {
-	TArray<UPF2AbilityBoostBase*> MatchingGameplayAbilities;
-	TArray<FGameplayAbilitySpec*> MatchingGameplayAbilitySpecs;
+	TArray<TScriptInterface<IPF2AbilityBoostInterface>> MatchingGameplayAbilities;
+	TArray<FGameplayAbilitySpec*>                       MatchingGameplayAbilitySpecs;
 
 	this->GetActivatableGameplayAbilitySpecsByAllMatchingTags(
 		FGameplayTagContainer(PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.Type.AbilityBoost"))),
@@ -396,11 +397,19 @@ TArray<UPF2AbilityBoostBase*> UPF2AbilitySystemComponent::GetPendingAbilityBoost
 	);
 
 	MatchingGameplayAbilities =
-		PF2ArrayUtilities::Map<UPF2AbilityBoostBase*>(
+		PF2ArrayUtilities::Map<TScriptInterface<IPF2AbilityBoostInterface>>(
 			MatchingGameplayAbilitySpecs,
 			[](const FGameplayAbilitySpec* AbilitySpec)
 			{
-				return Cast<UPF2AbilityBoostBase>(AbilitySpec->Ability);
+				IPF2AbilityBoostInterface* AbilityBoostIntf =
+					Cast<IPF2AbilityBoostInterface>(AbilitySpec->Ability);
+
+				checkf(
+					AbilityBoostIntf != nullptr,
+					TEXT("All ability boosts must implement IPF2AbilityBoostInterface.")
+				);
+
+				return PF2InterfaceUtilities::ToScriptInterface(AbilityBoostIntf);
 			}
 		);
 

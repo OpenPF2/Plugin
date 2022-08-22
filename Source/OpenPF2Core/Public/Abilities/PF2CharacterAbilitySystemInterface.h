@@ -66,7 +66,7 @@ public:
 	 *	The ability boost GAs that are still pending for this character.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Character Ability System")
-	virtual TArray<UPF2AbilityBoostBase *> GetPendingAbilityBoosts() const = 0;
+	virtual TArray<TScriptInterface<IPF2AbilityBoostInterface>> GetPendingAbilityBoosts() const = 0;
 
 	/**
 	 * Gets the Gameplay Effect to use as a passive GE when boosting the specified character ability score.

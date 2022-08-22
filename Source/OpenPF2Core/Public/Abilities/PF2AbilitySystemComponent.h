@@ -10,6 +10,14 @@
 
 #include "PF2AbilitySystemComponent.generated.h"
 
+// =====================================================================================================================
+// Forward Declarations (to break recursive dependencies)
+// =====================================================================================================================
+class IPF2AbilityBoostInterface;
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 UCLASS()
 class OPENPF2CORE_API UPF2AbilitySystemComponent :
 	public UAbilitySystemComponent, public IPF2CharacterAbilitySystemInterface
@@ -147,7 +155,7 @@ public:
 	virtual TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> GetAbilityScoreValues() const override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual TArray<UPF2AbilityBoostBase *> GetPendingAbilityBoosts() const override;
+	virtual TArray<TScriptInterface<IPF2AbilityBoostInterface>> GetPendingAbilityBoosts() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual FORCEINLINE TSubclassOf<UGameplayEffect> GetBoostEffectForAbility(

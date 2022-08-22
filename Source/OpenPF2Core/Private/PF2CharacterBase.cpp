@@ -115,7 +115,7 @@ TScriptInterface<IPF2PlayerControllerInterface> APF2CharacterBase::GetPlayerCont
 	return this->GetController();
 }
 
-TArray<UPF2AbilityBoostBase *> APF2CharacterBase::GetPendingAbilityBoosts() const
+TArray<TScriptInterface<IPF2AbilityBoostInterface>> APF2CharacterBase::GetPendingAbilityBoosts() const
 {
 	return this->GetCharacterAbilitySystemComponent()->GetPendingAbilityBoosts();
 }
