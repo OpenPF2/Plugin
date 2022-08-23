@@ -27,7 +27,7 @@ class IPF2PlayerControllerInterface;
 // =====================================================================================================================
 // Normal Declarations
 // =====================================================================================================================
-UCLASS(ClassGroup="OpenPF2|Mode of Play Rule Sets", meta=(BlueprintSpawnableComponent))
+UCLASS(ClassGroup="OpenPF2-ModeOfPlayRuleSets", meta=(BlueprintSpawnableComponent))
 class OPENPF2CORE_API UPF2CharacterInitiativeQueueComponent final :
 	public UActorComponent,
 	public IPF2CharacterInitiativeQueueInterface

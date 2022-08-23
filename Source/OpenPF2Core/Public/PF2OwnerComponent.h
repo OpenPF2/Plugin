@@ -34,7 +34,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
 // =====================================================================================================================
 // Normal Declarations
 // =====================================================================================================================
-UCLASS(ClassGroup="OpenPF2|Characters", meta=(BlueprintSpawnableComponent))
+UCLASS(ClassGroup="OpenPF2-Characters", meta=(BlueprintSpawnableComponent))
 // ReSharper disable once CppClassCanBeFinal
 class OPENPF2CORE_API UPF2OwnerComponent : public UActorComponent, public IPF2OwnerInterface
 {
