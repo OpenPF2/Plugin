@@ -9,14 +9,17 @@
 #include <Net/UnrealNetwork.h>
 #include <UObject/ConstructorHelpers.h>
 
+#include "PF2OwnerTrackingComponent.h"
+
 #include "Abilities/PF2GameplayAbilityTargetData_BoostAbility.h"
 #include "Commands/PF2CommandQueueComponent.h"
 #include "Utilities/PF2InterfaceUtilities.h"
 
 APF2CharacterBase::APF2CharacterBase() :
 	APF2CharacterBase(TPF2CharacterComponentFactory<UPF2AbilitySystemComponent,
-	                                                UPF2AttributeSet,
-	                                                UPF2CommandQueueComponent>())
+	                                                UPF2CommandQueueComponent,
+	                                                UPF2OwnerTrackingComponent,
+	                                                UPF2AttributeSet>())
 {
 }
 
@@ -108,6 +111,11 @@ FORCEINLINE IPF2CharacterAbilitySystemInterface* APF2CharacterBase::GetCharacter
 TScriptInterface<IPF2CommandQueueInterface> APF2CharacterBase::GetCommandQueueComponent() const
 {
 	return this->CommandQueue;
+}
+
+TScriptInterface<IPF2OwnerTrackingInterface> APF2CharacterBase::GetOwnerTrackingComponent() const
+{
+	return this->OwnerTracker;
 }
 
 TScriptInterface<IPF2PlayerControllerInterface> APF2CharacterBase::GetPlayerController() const

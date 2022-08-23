@@ -39,7 +39,7 @@
 class IPF2CharacterInterface;
 class IPF2CharacterCommandInterface;
 
-template<class AscType, class AttributeSetType, class CommandQueueType>
+template<class AscType, class CommandQueueType, class OwnerTrackerType, class AttributeSetType>
 class TPF2CharacterComponentFactory;
 
 // =====================================================================================================================
@@ -129,6 +129,12 @@ protected:
 	 */
 	UPROPERTY()
 	TScriptInterface<IPF2CommandQueueInterface> CommandQueue;
+
+	/**
+	 * The sub-component that tracks which player owns/controls this character.
+	 */
+	UPROPERTY()
+	TScriptInterface<IPF2OwnerTrackingInterface> OwnerTracker;
 
 	/**
 	 * The attributes of this character.
@@ -382,22 +388,37 @@ protected:
 	 *
 	 * @param ComponentFactory
 	 *   The factory component to use for generating the ASC and Attribute Set.
+	 *
+	 * @tparam AscType
+	 *	The class type to use for the Ability System Component (ASC).
+	 * @tparam CommandQueueType
+	 *	The class type to use for the command queue component (for encounters).
+	 * @tparam OwnerTrackerType
+	 *	The class type to use for the owner tracking component.
+	 * @tparam AttributeSetType
+	 *	The class type to use for the character attribute set.
 	 */
-	template<class AscType, class AttributeSetType, class CommandQueueType>
+	template<class AscType, class CommandQueueType, class OwnerTrackerType, class AttributeSetType>
 	explicit APF2CharacterBase(TPF2CharacterComponentFactory<AscType,
-	                                                         AttributeSetType,
-	                                                         CommandQueueType> ComponentFactory) :
+	                                                         CommandQueueType,
+	                                                         OwnerTrackerType,
+	                                                         AttributeSetType> ComponentFactory) :
 		bManagedPassiveEffectsGenerated(false),
 		CharacterName(FText::FromString(TEXT("Character"))),
 		CharacterLevel(1)
 	{
 		this->AbilitySystemComponent = ComponentFactory.CreateAbilitySystemComponent(this);
-		this->AttributeSet           = ComponentFactory.CreateAttributeSet(this);
 
 		this->CommandQueue =
 			PF2InterfaceUtilities::ToScriptInterface<IPF2CommandQueueInterface>(
 				ComponentFactory.CreateCommandQueue(this)
 			);
+
+		this->OwnerTracker = PF2InterfaceUtilities::ToScriptInterface<IPF2OwnerTrackingInterface>(
+				ComponentFactory.CreateOwnerTracker(this)
+			);
+
+		this->AttributeSet = ComponentFactory.CreateAttributeSet(this);
 
 		for (const TTuple<FString, FName>& EffectInfo : PF2CharacterConstants::GeCoreCharacterBlueprintPaths)
 		{
@@ -454,6 +475,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2CommandQueueInterface> GetCommandQueueComponent() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual TScriptInterface<IPF2OwnerTrackingInterface> GetOwnerTrackingComponent() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerController() const override;
@@ -699,8 +723,17 @@ protected:
  *
  * Discussion here:
  * https://stackoverflow.com/questions/69351471/how-can-i-create-a-ue4-uclass-base-class-that-uses-createdefaultsubobject-but
+ *
+ * @tparam AscType
+ *	The class type to use for the Ability System Component (ASC).
+ * @tparam CommandQueueType
+ *	The class type to use for the command queue component (for encounters).
+ * @tparam OwnerTrackerType
+ *	The class type to use for the owner tracking component.
+ * @tparam AttributeSetType
+ *	The class type to use for the character attribute set.
  */
-template<class AscType, class AttributeSetType, class CommandQueueType>
+template<class AscType, class CommandQueueType, class OwnerTrackerType, class AttributeSetType>
 class TPF2CharacterComponentFactory
 {
 public:
@@ -726,23 +759,6 @@ public:
 	}
 
 	/**
-	 * Creates an Attribute Set for a character.
-	 *
-	 * The attribute set is automatically created as a default sub-object of the character, with the name
-	 * "AttributeSet".
-	 *
-	 * @param Character
-	 *	The character for which the attribute set will be created.
-	 *
-	 * @return
-	 *	The new attribute set.
-	 */
-	static AttributeSetType* CreateAttributeSet(APF2CharacterBase* Character)
-	{
-		return Character->CreateDefaultSubobject<AttributeSetType>(TEXT("AttributeSet"));
-	}
-
-	/**
 	 * Creates a Command Queue Component for a character.
 	 *
 	 * The component is automatically created as a default sub-object of the character, with the name
@@ -757,5 +773,39 @@ public:
 	static CommandQueueType* CreateCommandQueue(APF2CharacterBase* Character)
 	{
 		return Character->CreateDefaultSubobject<CommandQueueType>(TEXT("CommandQueue"));
+	}
+
+	/**
+	 * Creates an Owner Tracking Component for a character.
+	 *
+	 * The component is automatically created as a default sub-object of the character, with the name
+	 * "OwnerTracker".
+	 *
+	 * @param Character
+	 *	The character for which the owner tracker will be created.
+	 *
+	 * @return
+	 *	The new owner tracker.
+	 */
+	static OwnerTrackerType* CreateOwnerTracker(APF2CharacterBase* Character)
+	{
+		return Character->CreateDefaultSubobject<OwnerTrackerType>(TEXT("OwnerTracker"));
+	}
+
+	/**
+	 * Creates an Attribute Set for a character.
+	 *
+	 * The attribute set is automatically created as a default sub-object of the character, with the name
+	 * "AttributeSet".
+	 *
+	 * @param Character
+	 *	The character for which the attribute set will be created.
+	 *
+	 * @return
+	 *	The new attribute set.
+	 */
+	static AttributeSetType* CreateAttributeSet(APF2CharacterBase* Character)
+	{
+		return Character->CreateDefaultSubobject<AttributeSetType>(TEXT("AttributeSet"));
 	}
 };

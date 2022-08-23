@@ -24,6 +24,7 @@
 // =====================================================================================================================
 class IPF2CharacterCommandInterface;
 class IPF2CommandQueueInterface;
+class IPF2OwnerTrackingInterface;
 class IPF2PlayerControllerInterface;
 
 // =====================================================================================================================
@@ -124,10 +125,19 @@ public:
 	 * Gets the sub-component of this character that is used to track commands queued during encounters.
 	 *
 	 * @return
-	 *	The command queue component.
+	 *	The command queue component, if one is available. Otherwise, a script interface that wraps a null pointer.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual TScriptInterface<IPF2CommandQueueInterface> GetCommandQueueComponent() const = 0;
+
+	/**
+	 * Gets the sub-component of this character that is used to track which player owns this character.
+	 *
+	 * @return
+	 *	The owner tracking component, if one is available. Otherwise, a script interface that wraps a null pointer.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual TScriptInterface<IPF2OwnerTrackingInterface> GetOwnerTrackingComponent() const = 0;
 
 	/**
 	 * Gets the player controller for this character, if this character is being controlled by a player.
