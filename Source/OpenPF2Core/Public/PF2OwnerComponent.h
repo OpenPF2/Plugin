@@ -84,7 +84,7 @@ public:
 	/**
 	 * Event when the actor is owned by a different player.
 	 */
-	UPROPERTY(BlueprintAssignable, Category = "OpenPF2|Components|Characters|Owner")
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Owner")
 	FPF2OwnerComponentOwnerChangedDelegate OnOwnerChanged;
 
 private:
@@ -94,7 +94,7 @@ private:
 	/**
      * The index of the player that should initially own the containing actor.
      */
-    UPROPERTY(EditInstanceOnly, Category = "OpenPF2|Components|Characters|Owner")
+    UPROPERTY(EditAnywhere, Category="OpenPF2 Owner Component")
     uint8 IndexOfInitialOwningPlayer;
 
 	/**
