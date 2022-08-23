@@ -7,7 +7,7 @@
 // License. Copyright (c) 2017 Nick Pruehs.
 //
 
-#include "PF2OwnerComponent.h"
+#include "PF2OwnerTrackingComponent.h"
 
 #include <Engine/World.h>
 
@@ -21,29 +21,29 @@
 
 #include "Utilities/PF2InterfaceUtilities.h"
 
-UPF2OwnerComponent::UPF2OwnerComponent()
+UPF2OwnerTrackingComponent::UPF2OwnerTrackingComponent()
 {
 	this->SetIsReplicatedByDefault(true);
 
 	this->IndexOfInitialOwningPlayer = IPF2PlayerStateInterface::PlayerIndexNone;
 }
 
-uint8 UPF2OwnerComponent::GetIndexOfInitialOwningPlayer() const
+uint8 UPF2OwnerTrackingComponent::GetIndexOfInitialOwningPlayer() const
 {
 	return this->IndexOfInitialOwningPlayer;
 }
 
-TScriptInterface<IPF2PlayerStateInterface> UPF2OwnerComponent::GetStateOfOwningPlayer() const
+TScriptInterface<IPF2PlayerStateInterface> UPF2OwnerTrackingComponent::GetStateOfOwningPlayer() const
 {
 	return this->OwningPlayerState;
 }
 
-void UPF2OwnerComponent::SetOwningPlayerByController(TScriptInterface<IPF2PlayerControllerInterface> Controller)
+void UPF2OwnerTrackingComponent::SetOwningPlayerByController(TScriptInterface<IPF2PlayerControllerInterface> Controller)
 {
 	this->SetOwningPlayerByState(Controller->GetPlayerState());
 }
 
-void UPF2OwnerComponent::SetOwningPlayerByState(TScriptInterface<IPF2PlayerStateInterface> PlayerState)
+void UPF2OwnerTrackingComponent::SetOwningPlayerByState(TScriptInterface<IPF2PlayerStateInterface> PlayerState)
 {
 	const TScriptInterface<IPF2PlayerStateInterface> PreviousOwningPlayerState = this->OwningPlayerState;
 
@@ -55,15 +55,15 @@ void UPF2OwnerComponent::SetOwningPlayerByState(TScriptInterface<IPF2PlayerState
 	}
 }
 
-bool UPF2OwnerComponent::IsSamePartyAsActor(AActor* OtherActor) const
+bool UPF2OwnerTrackingComponent::IsSamePartyAsActor(AActor* OtherActor) const
 {
 	bool Result = false;
 
 	if (OtherActor != nullptr)
 	{
 		const TScriptInterface<IPF2PlayerStateInterface> MyOwner = this->GetStateOfOwningPlayer();
-		const IPF2OwnerInterface* OtherComponent =
-			PF2InterfaceUtilities::FindComponentByInterface<IPF2OwnerInterface, UPF2OwnerInterface>(OtherActor);
+		const IPF2OwnerTrackingInterface* OtherComponent =
+			PF2InterfaceUtilities::FindComponentByInterface<IPF2OwnerTrackingInterface, UPF2OwnerTrackingInterface>(OtherActor);
 
 		if (OtherComponent != nullptr)
 		{
@@ -76,7 +76,7 @@ bool UPF2OwnerComponent::IsSamePartyAsActor(AActor* OtherActor) const
 	return Result;
 }
 
-bool UPF2OwnerComponent::IsSamePartyAsPlayerWithController(AController* OtherController) const
+bool UPF2OwnerTrackingComponent::IsSamePartyAsPlayerWithController(AController* OtherController) const
 {
 	bool Result = false;
 
@@ -95,7 +95,7 @@ bool UPF2OwnerComponent::IsSamePartyAsPlayerWithController(AController* OtherCon
 	return Result;
 }
 
-FString UPF2OwnerComponent::GetIdForLogs() const
+FString UPF2OwnerTrackingComponent::GetIdForLogs() const
 {
 	// ReSharper disable CppRedundantParentheses
 	return FString::Format(
@@ -107,20 +107,20 @@ FString UPF2OwnerComponent::GetIdForLogs() const
 	);
 }
 
-void UPF2OwnerComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+void UPF2OwnerTrackingComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(UPF2OwnerComponent, OwningPlayerState);
+	DOREPLIFETIME(UPF2OwnerTrackingComponent, OwningPlayerState);
 }
 
 // ReSharper disable once CppMemberFunctionMayBeConst
-void UPF2OwnerComponent::OnRep_OwningPlayerState(const TScriptInterface<IPF2PlayerStateInterface> Owner)
+void UPF2OwnerTrackingComponent::OnRep_OwningPlayerState(const TScriptInterface<IPF2PlayerStateInterface> Owner)
 {
     this->Native_OnOwningPlayerStateChanged(Owner, this->OwningPlayerState);
 }
 
-void UPF2OwnerComponent::Native_OnOwningPlayerStateChanged(
+void UPF2OwnerTrackingComponent::Native_OnOwningPlayerStateChanged(
 	const TScriptInterface<IPF2PlayerStateInterface> PreviousOwner,
 	const TScriptInterface<IPF2PlayerStateInterface> NewOwner) const
 {

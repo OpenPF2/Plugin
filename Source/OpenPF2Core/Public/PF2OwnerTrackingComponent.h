@@ -12,9 +12,9 @@
 
 #include <GameFramework/Controller.h>
 
-#include "PF2OwnerInterface.h"
+#include "PF2OwnerTrackingInterface.h"
 
-#include "PF2OwnerComponent.generated.h"
+#include "PF2OwnerTrackingComponent.generated.h"
 
 // =====================================================================================================================
 // Forward Declarations (to break recursive dependencies)
@@ -36,7 +36,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
 // =====================================================================================================================
 UCLASS(ClassGroup="OpenPF2-Characters", meta=(BlueprintSpawnableComponent))
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API UPF2OwnerComponent : public UActorComponent, public IPF2OwnerInterface
+class OPENPF2CORE_API UPF2OwnerTrackingComponent : public UActorComponent, public IPF2OwnerTrackingInterface
 {
 	GENERATED_BODY()
 
@@ -44,7 +44,7 @@ public:
 	// =================================================================================================================
 	// Constructors
 	// =================================================================================================================
-	UPF2OwnerComponent();
+	UPF2OwnerTrackingComponent();
 
 	// =================================================================================================================
 	// Public Methods - UActorComponent Overrides
@@ -52,7 +52,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	// =================================================================================================================
-	// Public Methods - IPF2OwnerInterface Implementation
+	// Public Methods - IPF2OwnerTrackingInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintPure)
 	virtual uint8 GetIndexOfInitialOwningPlayer() const override;

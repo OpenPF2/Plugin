@@ -12,7 +12,7 @@
 
 #include "Utilities/PF2LogIdentifiableInterface.h"
 
-#include "PF2OwnerInterface.generated.h"
+#include "PF2OwnerTrackingInterface.generated.h"
 
 // =====================================================================================================================
 // Forward Declarations (to break recursive dependencies)
@@ -24,7 +24,7 @@ class IPF2PlayerStateInterface;
 // Normal Declarations
 // =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
-class UPF2OwnerInterface : public UPF2LogIdentifiableInterface
+class UPF2OwnerTrackingInterface : public UPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 };
@@ -32,7 +32,7 @@ class UPF2OwnerInterface : public UPF2LogIdentifiableInterface
 /**
  * An interface for components that track which player "owns" or controls a character.
  */
-class OPENPF2CORE_API IPF2OwnerInterface : public IPF2LogIdentifiableInterface
+class OPENPF2CORE_API IPF2OwnerTrackingInterface : public IPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 
