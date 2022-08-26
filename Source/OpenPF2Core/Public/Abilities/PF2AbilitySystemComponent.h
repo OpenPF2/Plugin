@@ -43,13 +43,13 @@ protected:
 	 * These are used to apply replicated tags that are specific to a particular character instance, such as age, size,
 	 * skill proficiency, etc.
 	 */
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly)
 	FGameplayTagContainer DynamicTags;
 
 	/**
 	 * The weight groups of Gameplay Effects that have been activated on this ASC.
 	 */
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly)
 	TSet<FName> ActivatedWeightGroups;
 
 	/**

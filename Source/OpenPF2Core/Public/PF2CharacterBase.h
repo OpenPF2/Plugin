@@ -121,25 +121,25 @@ protected:
 	/**
 	 * The Ability System Component (ASC) used for interfacing this character with the Gameplay Abilities System (GAS).
 	 */
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UAbilitySystemComponent* AbilitySystemComponent;
 
 	/**
 	 * The sub-component that tracks commands for this character queued during encounters.
 	 */
-	UPROPERTY()
-	TScriptInterface<IPF2CommandQueueInterface> CommandQueue;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UActorComponent* CommandQueue;
 
 	/**
 	 * The sub-component that tracks which player owns/controls this character.
 	 */
-	UPROPERTY()
-	TScriptInterface<IPF2OwnerTrackingInterface> OwnerTracker;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UActorComponent* OwnerTracker;
 
 	/**
 	 * The attributes of this character.
 	 */
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UPF2AttributeSet* AttributeSet;
 
 	/**
@@ -408,18 +408,9 @@ protected:
 		CharacterLevel(1)
 	{
 		this->AbilitySystemComponent = ComponentFactory.CreateAbilitySystemComponent(this);
-
-		this->CommandQueue =
-			PF2InterfaceUtilities::ToScriptInterface<IPF2CommandQueueInterface>(
-				ComponentFactory.CreateCommandQueue(this)
-			);
-
-		this->OwnerTracker =
-			PF2InterfaceUtilities::ToScriptInterface<IPF2OwnerTrackingInterface>(
-				ComponentFactory.CreateOwnerTracker(this)
-			);
-
-		this->AttributeSet = ComponentFactory.CreateAttributeSet(this);
+		this->CommandQueue           = ComponentFactory.CreateCommandQueue(this);
+		this->OwnerTracker           = ComponentFactory.CreateOwnerTracker(this);
+		this->AttributeSet           = ComponentFactory.CreateAttributeSet(this);
 
 		for (const TTuple<FString, FName>& EffectInfo : PF2CharacterConstants::GeCoreCharacterBlueprintPaths)
 		{
