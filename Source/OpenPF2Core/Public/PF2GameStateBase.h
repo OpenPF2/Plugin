@@ -2,6 +2,9 @@
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// Portions of this code were adapted from or inspired by the "Real-Time Strategy Plugin for Unreal Engine 4" by Nick
+// Pruehs, provided under the MIT License. Copyright (c) 2017 Nick Pruehs.
 
 #pragma once
 
@@ -25,6 +28,14 @@ class OPENPF2CORE_API APF2GameStateBase : public AGameStateBase, public IPF2Game
 	GENERATED_BODY()
 
 protected:
+	// =================================================================================================================
+	// Protected Properties
+	// =================================================================================================================
+	/**
+	 * The next player index to assign to a player who joins the game.
+	 */
+	uint16 NextPlayerIndex;
+
 	// =================================================================================================================
 	// Protected Properties - Blueprint Accessible
 	// =================================================================================================================
@@ -61,6 +72,11 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2GameStateInterface Implementation
 	// =================================================================================================================
+	virtual FORCEINLINE uint16 GetNextAvailablePlayerIndex() override
+	{
+		return this->NextPlayerIndex++;
+	}
+
 	UFUNCTION(BlueprintCallable)
 	virtual FORCEINLINE EPF2ModeOfPlayType GetModeOfPlay() override
 	{

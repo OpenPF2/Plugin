@@ -14,7 +14,7 @@
 #include "Utilities/PF2EnumUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
-APF2GameStateBase::APF2GameStateBase()
+APF2GameStateBase::APF2GameStateBase() : NextPlayerIndex(0)
 {
 }
 

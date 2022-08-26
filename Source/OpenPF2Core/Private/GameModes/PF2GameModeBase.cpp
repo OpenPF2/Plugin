@@ -2,14 +2,25 @@
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// Portions of this code were adapted from or inspired by the "Real-Time Strategy Plugin for Unreal Engine 4" by Nick
+// Pruehs, provided under the MIT License. Copyright (c) 2017 Nick Pruehs.
 
 #include "GameModes/PF2GameModeBase.h"
 
+#include <EngineUtils.h>
+
+#include <GameFramework/PlayerState.h>
+
 #include "PF2CharacterInterface.h"
 #include "PF2GameStateInterface.h"
+#include "PF2OwnerTrackingInterface.h"
+#include "PF2PlayerStateInterface.h"
 
 #include "GameModes/PF2ModeOfPlayRuleSetInterface.h"
+
 #include "Utilities/PF2EnumUtilities.h"
+#include "Utilities/PF2InterfaceUtilities.h"
 
 TScriptInterface<IPF2ModeOfPlayRuleSetInterface> APF2GameModeBase::CreateModeOfPlayRuleSet(
 	const EPF2ModeOfPlayType ModeOfPlay)
@@ -136,6 +147,7 @@ void APF2GameModeBase::HandleStartingNewPlayer_Implementation(APlayerController*
 {
 	TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet;
 
+	this->AssignPlayerIndexAndClaimCharacters(NewPlayer);
 	Super::HandleStartingNewPlayer_Implementation(NewPlayer);
 
 	RuleSet = this->GetModeOfPlayRuleSet();
@@ -172,6 +184,90 @@ TScriptInterface<IPF2ModeOfPlayRuleSetInterface> APF2GameModeBase::GetModeOfPlay
 	return RuleSet;
 }
 
+void APF2GameModeBase::AssignPlayerIndexAndClaimCharacters(APlayerController* PlayerController)
+{
+	IPF2PlayerControllerInterface* PlayerControllerIntf = Cast<IPF2PlayerControllerInterface>(PlayerController);
+	IPF2PlayerStateInterface*      PlayerStateIntf      = PlayerController->GetPlayerState<IPF2PlayerStateInterface>();
+
+	if (PlayerStateIntf != nullptr)
+	{
+		const uint8 NextPlayerIndex = this->GetNextAvailablePlayerIndex();
+
+		PlayerStateIntf->SetPlayerIndex(NextPlayerIndex);
+		this->ClaimOwnershipOfCharacters(PlayerControllerIntf, PlayerStateIntf);
+	}
+}
+
+void APF2GameModeBase::ClaimOwnershipOfCharacters(
+	IPF2PlayerControllerInterface*  PlayerControllerIntf,
+	const IPF2PlayerStateInterface* PlayerStateIntf)
+{
+	const uint8 PlayerIndex = PlayerStateIntf->GetPlayerIndex();
+	UWorld*     World       = this->GetWorld();
+
+	if (!IsValid(World))
+	{
+		return;
+	}
+
+	for (TActorIterator<AActor> ActorItr(World); ActorItr; ++ActorItr)
+	{
+		AActor*                 Actor              = *ActorItr;
+		IPF2CharacterInterface* ActorCharacterIntf = Cast<IPF2CharacterInterface>(Actor);
+
+		if (ActorCharacterIntf != nullptr)
+		{
+			TScriptInterface<IPF2OwnerTrackingInterface> OwnerTracker =
+				ActorCharacterIntf->GetOwnerTrackingComponent();
+
+			if ((OwnerTracker != nullptr) && (OwnerTracker->GetIndexOfInitialOwningPlayer() == PlayerIndex))
+			{
+				this->TransferOwnership(ActorCharacterIntf, PlayerControllerIntf);
+			}
+		}
+	}
+}
+
+// ReSharper disable once CppMemberFunctionMayBeStatic
+void APF2GameModeBase::TransferOwnership(
+	IPF2CharacterInterface*        Character,
+	IPF2PlayerControllerInterface* PlayerControllerIntf)
+{
+	TScriptInterface<IPF2OwnerTrackingInterface> OwnerTracker;
+
+	if ((Character == nullptr) || (PlayerControllerIntf == nullptr))
+    {
+        return;
+    }
+
+    // Set player controller as networking authority for the character.
+    Character->ToActor()->SetOwner(PlayerControllerIntf->ToPlayerController());
+
+	OwnerTracker = Character->GetOwnerTrackingComponent();
+
+	if (OwnerTracker != nullptr)
+	{
+		OwnerTracker->SetOwningPlayerByController(PF2InterfaceUtilities::ToScriptInterface(PlayerControllerIntf));
+
+		UE_LOG(
+			LogPf2Core,
+			VeryVerbose,
+			TEXT("Player controller ('%s') now owns character ('%s')."),
+			*(PlayerControllerIntf->GetIdForLogs()),
+			*(Character->GetIdForLogs())
+		);
+	}
+	else
+	{
+		UE_LOG(
+			LogPf2Core,
+			Error,
+			TEXT("Player controller ('%s') cannot be made an owner of character ('%s') because the character lacks an owner tracking component."),
+			*(PlayerControllerIntf->GetIdForLogs()),
+			*(Character->GetIdForLogs())
+		);
+	}
+}
 
 void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeOfPlay)
 {

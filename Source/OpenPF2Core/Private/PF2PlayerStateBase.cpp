@@ -5,9 +5,10 @@
 //
 // Portions of this code were adapted from or inspired by the "Real-Time Strategy Plugin for Unreal Engine 4" by Nick
 // Pruehs, provided under the MIT License. Copyright (c) 2017 Nick Pruehs.
-//
 
 #include "PF2PlayerStateBase.h"
+
+#include <Net/UnrealNetwork.h>
 
 #include "PF2CharacterInterface.h"
 #include "PF2Party.h"
@@ -18,11 +19,18 @@
 void APF2PlayerStateBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(APF2PlayerStateBase, PlayerIndex);
 }
 
 uint8 APF2PlayerStateBase::GetPlayerIndex() const
 {
 	return this->PlayerIndex;
+}
+
+void APF2PlayerStateBase::SetPlayerIndex(uint8 NewPlayerIndex)
+{
+	this->PlayerIndex = PlayerIndex;
 }
 
 TScriptInterface<IPF2Party> APF2PlayerStateBase::GetParty() const

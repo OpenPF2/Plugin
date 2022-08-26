@@ -2,14 +2,18 @@
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// Portions of this code were adapted from or inspired by the "Real-Time Strategy Plugin for Unreal Engine 4" by Nick
+// Pruehs, provided under the MIT License. Copyright (c) 2017 Nick Pruehs.
 
 #pragma once
 
 #include <GameFramework/GameModeBase.h>
+#include <GameFramework/GameStateBase.h>
 #include <UObject/ScriptInterface.h>
 
-#include "GameModes/PF2ModeOfPlayRuleSetBase.h"
 #include "GameModes/PF2GameModeInterface.h"
+#include "GameModes/PF2ModeOfPlayRuleSetBase.h"
 
 #include "PF2GameModeBase.generated.h"
 
@@ -93,6 +97,17 @@ protected:
 	}
 
 	/**
+     * Gets the first player index that hasn't yet been assigned to any other player.
+     *
+     * @return
+     *	The next available player index.
+     */
+    FORCEINLINE uint16 GetNextAvailablePlayerIndex() const
+	{
+		return this->GetGameStateIntf()->GetNextAvailablePlayerIndex();
+	}
+
+	/**
 	 * Gets the active Mode of Play Rule Set (MoPRS) from the game state.
 	 *
 	 * @return
@@ -100,6 +115,36 @@ protected:
 	 *	or there is no active MoPRS, the script interface wraps nullptr.
 	 */
 	virtual TScriptInterface<IPF2ModeOfPlayRuleSetInterface> GetModeOfPlayRuleSet();
+
+	/**
+	 * Assigns the specified player controller a new, unused player index.
+	 *
+	 * @param PlayerController
+	 *	The player controller that will be assigned a distinct player index.
+	 */
+	void AssignPlayerIndexAndClaimCharacters(APlayerController* PlayerController);
+
+	/**
+	 * Locates and claims all characters that should belong to the given player based on their owner tracking component.
+	 *
+	 * @param PlayerControllerIntf
+	 *	The player controller of the player claiming ownership of characters.
+	 * @param PlayerStateIntf
+	 *	The player state of the player for which characters are being claimed.
+	 */
+	void ClaimOwnershipOfCharacters(
+		IPF2PlayerControllerInterface*  PlayerControllerIntf,
+		const IPF2PlayerStateInterface* PlayerStateIntf);
+
+	/**
+	 * Transfers ownership of the specified character to the specified player controller.
+	 *
+	 * @param Character
+	 *	The character that is being transferred.
+	 * @param PlayerControllerIntf
+	 *	The player controller that is being made the new owner of the character.
+	 */
+	void TransferOwnership(IPF2CharacterInterface* Character, IPF2PlayerControllerInterface* PlayerControllerIntf);
 
 	/**
 	 * Attempts to change the current play mode for all characters in the loaded level.

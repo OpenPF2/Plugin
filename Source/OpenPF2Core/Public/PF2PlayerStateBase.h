@@ -5,7 +5,7 @@
 //
 // Portions of this code were adapted from or inspired by the "Real-Time Strategy Plugin for Unreal Engine 4" by Nick
 // Pruehs, provided under the MIT License. Copyright (c) 2017 Nick Pruehs.
-//
+
 #pragma once
 
 #include <UObject/WeakInterfacePtr.h>
@@ -35,6 +35,13 @@ class OPENPF2CORE_API APF2PlayerStateBase : public APlayerState, public IPF2Play
 	GENERATED_BODY()
 
 public:
+	/**
+	 * Default constructor for APF2PlayerStateBase.
+	 */
+	APF2PlayerStateBase(): PlayerIndex(0)
+	{
+	}
+
 	// =================================================================================================================
 	// Public Methods - APlayerState Overrides
 	// =================================================================================================================
@@ -45,6 +52,8 @@ public:
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
 	virtual uint8 GetPlayerIndex() const override;
+
+	virtual void SetPlayerIndex(uint8 NewPlayerIndex) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2Party> GetParty() const override;

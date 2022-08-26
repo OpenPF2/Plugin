@@ -51,6 +51,14 @@ class OPENPF2CORE_API IPF2GameStateInterface
 
 public:
 	/**
+	 * Gets the first player index that hasn't yet been assigned to any player.
+	 *
+	 * @return
+	 *	The next available player index.
+	 */
+	virtual uint16 GetNextAvailablePlayerIndex() = 0;
+
+	/**
 	 * Gets the current play mode for all characters in the loaded level.
 	 *
 	 * From the Pathfinder 2E Core Rulebook, page 493, "Running Modes of Play":

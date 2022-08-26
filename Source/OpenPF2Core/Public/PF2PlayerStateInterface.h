@@ -60,6 +60,13 @@ public:
 	virtual uint8 GetPlayerIndex() const = 0;
 
 	/**
+	 * Sets the index of the player to which this player state corresponds.
+	 *
+	 * (This should be assigned only by the game mode.)
+	 */
+	virtual void SetPlayerIndex(uint8 NewPlayerIndex) = 0;
+
+	/**
 	 * Gets the party this player belongs to.
 	 *
 	 * @return
