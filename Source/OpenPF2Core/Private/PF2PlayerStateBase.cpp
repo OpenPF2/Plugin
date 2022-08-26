@@ -74,7 +74,7 @@ APlayerState* APF2PlayerStateBase::ToPlayerState()
 	return this;
 }
 
-void APF2PlayerStateBase::Native_OnPartyChanged(TScriptInterface<IPF2Party> NewParty)
+void APF2PlayerStateBase::Native_OnPartyChanged(const TScriptInterface<IPF2Party> NewParty)
 {
 	UE_LOG(
 		LogPf2Core,
