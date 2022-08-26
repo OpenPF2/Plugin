@@ -78,6 +78,21 @@ protected:
 	// Protected Methods
 	// =================================================================================================================
 	/**
+	 * Gets the game state as a PF2-compatible game state interface.
+	 *
+	 * @return
+	 *	The game state.
+	 */
+	FORCEINLINE IPF2GameStateInterface* GetGameStateIntf() const
+	{
+		IPF2GameStateInterface* GameStateIntf = this->GetGameState<IPF2GameStateInterface>();
+
+		check(GameStateIntf != nullptr);
+
+		return GameStateIntf;
+	}
+
+	/**
 	 * Gets the active Mode of Play Rule Set (MoPRS) from the game state.
 	 *
 	 * @return

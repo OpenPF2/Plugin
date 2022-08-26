@@ -175,8 +175,8 @@ TScriptInterface<IPF2ModeOfPlayRuleSetInterface> APF2GameModeBase::GetModeOfPlay
 
 void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeOfPlay)
 {
-	IPF2GameStateInterface*                        Pf2GameStateInterface = this->GetGameState<IPF2GameStateInterface>();
-	const TScriptInterface<IPF2GameStateInterface> Pf2GameState          = Cast<UObject>(Pf2GameStateInterface);
+	const TScriptInterface<IPF2GameStateInterface> Pf2GameState =
+		PF2InterfaceUtilities::ToScriptInterface(this->GetGameStateIntf());
 
 	if (Pf2GameState == nullptr)
 	{
@@ -238,8 +238,8 @@ void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeO
 
 void APF2GameModeBase::ForceSwitchModeOfPlay(const EPF2ModeOfPlayType NewModeOfPlay)
 {
-	IPF2GameStateInterface*                        Pf2GameStateInterface = this->GetGameState<IPF2GameStateInterface>();
-	const TScriptInterface<IPF2GameStateInterface> Pf2GameState          = Cast<UObject>(Pf2GameStateInterface);
+	const TScriptInterface<IPF2GameStateInterface> Pf2GameState =
+		PF2InterfaceUtilities::ToScriptInterface(this->GetGameStateIntf());
 
 	if (Pf2GameState == nullptr)
 	{
