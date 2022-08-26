@@ -29,7 +29,7 @@ void UPF2CommandQueueComponent::PeekNext(TScriptInterface<IPF2CharacterCommandIn
 	{
 		IPF2CharacterCommandInterface* NextCommandPtr = this->Queue[0];
 
-		NextCommand = PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(NextCommandPtr);
+		NextCommand = PF2InterfaceUtilities::ToScriptInterface(NextCommandPtr);
 	}
 }
 
@@ -47,7 +47,7 @@ void UPF2CommandQueueComponent::PopNext(TScriptInterface<IPF2CharacterCommandInt
 			*(this->GetIdForLogs())
 		);
 
-		NextCommand = PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(NextCommandIntf);
+		NextCommand = PF2InterfaceUtilities::ToScriptInterface(NextCommandIntf);
 
 		this->OnCommandRemoved.Broadcast(NextCommand);
 		this->OnCommandsChanged.Broadcast(PF2InterfaceUtilities::ToScriptInterfaces(this->Queue));
@@ -68,10 +68,7 @@ void UPF2CommandQueueComponent::DropNext()
 			*(this->GetIdForLogs())
 		);
 
-		this->OnCommandRemoved.Broadcast(
-			PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(NextCommandIntf)
-		);
-
+		this->OnCommandRemoved.Broadcast(PF2InterfaceUtilities::ToScriptInterface(NextCommandIntf));
 		this->OnCommandsChanged.Broadcast(PF2InterfaceUtilities::ToScriptInterfaces(this->Queue));
 	}
 }

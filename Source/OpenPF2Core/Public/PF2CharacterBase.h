@@ -414,7 +414,8 @@ protected:
 				ComponentFactory.CreateCommandQueue(this)
 			);
 
-		this->OwnerTracker = PF2InterfaceUtilities::ToScriptInterface<IPF2OwnerTrackingInterface>(
+		this->OwnerTracker =
+			PF2InterfaceUtilities::ToScriptInterface<IPF2OwnerTrackingInterface>(
 				ComponentFactory.CreateOwnerTracker(this)
 			);
 

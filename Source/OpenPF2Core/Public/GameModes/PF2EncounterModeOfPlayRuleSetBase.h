@@ -71,9 +71,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Initiative")
 	FORCEINLINE TScriptInterface<IPF2CharacterInitiativeQueueInterface> GetCharacterInitiativeQueue() const
 	{
-		return PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterInitiativeQueueInterface>(
-			this->CharacterInitiativeQueue
-		);
+		return PF2InterfaceUtilities::ToScriptInterface(this->CharacterInitiativeQueue);
 	}
 
 	/**
