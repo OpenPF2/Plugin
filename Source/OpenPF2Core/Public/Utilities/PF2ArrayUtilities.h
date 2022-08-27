@@ -11,6 +11,32 @@
 namespace PF2ArrayUtilities
 {
 	/**
+	 * Add each unique element from one array to the end of the other.
+	 *
+	 * Elements that already exist in the target array are skipped.
+	 *
+	 * @param NewElements
+	 *	The array of elements to add to the target.
+	 * @param Target
+	 *	The array to which elements will be added.
+	 */
+	template <typename In>
+	void AddAllUnique(TArray<In> NewElements, TArray<In>& Target)
+	{
+		TSet<In> TargetIndex = TSet<In>(Target);
+
+		for (const auto& NewElement : NewElements)
+		{
+			// We could use Target.AddUnique() but for larger sets it's O(N^2) whereas building a set from the target
+			// and then using the set as an index of what's in the array should cost only O(2N).
+			if (!TargetIndex.Contains(NewElement))
+			{
+				Target.Add(Target);
+			}
+		}
+	}
+
+	/**
 	 * Applies a transformation function to the values in an array, then returns the result of the transformation.
 	 *
 	 * The original array is not modified.
