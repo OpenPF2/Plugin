@@ -19,11 +19,14 @@ namespace PF2ArrayUtilities
 	 *	The array of elements to add to the target.
 	 * @param Target
 	 *	The array to which elements will be added.
+	 *
+	 * @tparam T
+	 *	The type of elements in the array.
 	 */
-	template <typename In>
-	void AddAllUnique(TArray<In> NewElements, TArray<In>& Target)
+	template <typename T>
+	void AddAllUnique(TArray<T> NewElements, TArray<T>& Target)
 	{
-		TSet<In> TargetIndex = TSet<In>(Target);
+		TSet<T> TargetIndex = TSet<T>(Target);
 
 		for (const auto& NewElement : NewElements)
 		{
@@ -48,6 +51,14 @@ namespace PF2ArrayUtilities
 	 *
 	 * @return
 	 *	An array of the values that resulted from applying the transformation to every value of the source array.
+	 *
+	 * @tparam In
+	 *	The type of elements in the input array.
+	 * @tparam Out
+	 *	The type of elements in the output array. (The type into which input elements will be transformed).
+	 * @tparam Func
+	 *	The type of the lambda function to invoke on each element of the input array to return a new element to add to
+	 *	the output array.
 	 */
 	template <typename Out, typename In, typename Func>
 	TArray<Out> Map(const TArray<In> Elements, const Func Callable)
@@ -89,6 +100,14 @@ namespace PF2ArrayUtilities
 	 *
 	 * @return
 	 *	The result of reducing the values of the array.
+	 *
+	 * @tparam In
+	 *	The type of elements in the input array.
+	 * @tparam Out
+	 *	The type of result to return. (The type into which all input elements will be consolidated).
+	 * @tparam Func
+	 *	The type of the lambda function to invoke on each element of the input array, applying a transformation on the
+	 *	element and the accumulated result to return a new output value.
 	 */
 	template <typename Out, typename In, typename Func>
 	Out Reduce(const TArray<In> Elements, const Out StartingValue, const Func Callable)
@@ -113,13 +132,16 @@ namespace PF2ArrayUtilities
 	 *
 	 * @return
 	 *	A new array containing all the values of the original array that were not null.
-	*/
-	template <typename In>
-	TArray<In> Filter(const TArray<In> Elements)
+	 *
+	 * @tparam T
+	 *	The type of elements in the array.
+	 */
+	template <typename T>
+	TArray<T> Filter(const TArray<T> Elements)
 	{
-		return Filter<In>(
+		return Filter<T>(
 			Elements,
-			[](const In Element)
+			[](const T Element)
 			{
 				return Element != nullptr;
 			}
@@ -142,9 +164,12 @@ namespace PF2ArrayUtilities
 	 *
 	 * @return
 	 *	A new array containing all the values of the original array for which the callable returned "true".
+	 *
+	 * @tparam T
+	 *	The type of elements in the array.
 	 */
-	template <typename In, typename Func>
-	TArray<In> Filter(const TArray<In> Elements, const Func Callable)
+	template <typename T, typename Func>
+	TArray<T> Filter(const TArray<T> Elements, const Func Callable)
 	{
 		return Elements.FilterByPredicate(Callable);
 	}
