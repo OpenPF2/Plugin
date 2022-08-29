@@ -209,7 +209,7 @@ void APF2GameModeBase::AddCharacterToEncounter(const TScriptInterface<IPF2Charac
 		UE_LOG(
 			LogPf2CoreEncounters,
 			Error,
-			TEXT("No MoPRS is set. Ignoring request to add character (%s) to encounter."),
+			TEXT("No MoPRS is set. Ignoring request to add character ('%s') to encounter."),
 			*(Character->GetCharacterName().ToString())
 		);
 	}
@@ -228,7 +228,7 @@ void APF2GameModeBase::RemoveCharacterFromEncounter(const TScriptInterface<IPF2C
 		UE_LOG(
 			LogPf2CoreEncounters,
 			Error,
-			TEXT("No MoPRS is set. Ignoring request to remove character (%s) from encounter."),
+			TEXT("No MoPRS is set. Ignoring request to remove character ('%s') from encounter."),
 			*(Character->GetCharacterName().ToString())
 		);
 	}
@@ -250,7 +250,7 @@ EPF2CommandExecuteOrQueueResult APF2GameModeBase::AttemptToExecuteOrQueueCommand
 		UE_LOG(
 			LogPf2CoreEncounters,
 			Error,
-			TEXT("No MoPRS is set. Performing command (%s) without queuing."),
+			TEXT("No MoPRS is set. Performing command ('%s') without queuing."),
 			*(Command->GetCommandLabel().ToString())
 		);
 
