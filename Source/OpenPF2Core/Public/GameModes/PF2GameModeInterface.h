@@ -8,13 +8,22 @@
 #include <UObject/Interface.h>
 #include <UObject/ScriptInterface.h>
 
-#include "PF2ModeOfPlayRuleSetInterface.h"
+#include "PF2ModeOfPlayType.h"
 
-#include "Commands/PF2CharacterCommandInterface.h"
 #include "Commands/PF2CommandExecuteOrQueueResult.h"
 
 #include "PF2GameModeInterface.generated.h"
 
+// =====================================================================================================================
+// Forward Declarations (to break recursive dependencies)
+// =====================================================================================================================
+class IPF2CharacterCommandInterface;
+class IPF2CharacterInterface;
+class IPF2ModeOfPlayRuleSetInterface;
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2GameModeInterface : public UInterface
 {
@@ -47,7 +56,7 @@ public:
 	 *
 	 * @see EPF2ModeOfPlay
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Modes")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Mode")
 	virtual void RequestEncounterMode() = 0;
 
 	/**
@@ -58,7 +67,7 @@ public:
 	 *
 	 * @see EPF2ModeOfPlay
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Modes")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Mode")
 	virtual void RequestExplorationMode() = 0;
 
 	/**
@@ -69,7 +78,7 @@ public:
 	 *
 	 * @see EPF2ModeOfPlay
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Modes")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Mode")
 	virtual void RequestDowntimeMode() = 0;
 
 	/**
@@ -82,7 +91,7 @@ public:
 	 * @param Character
 	 *	The character being added to the encounter.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Modes")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Mode")
 	virtual void AddCharacterToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) = 0;
 
 	/**
@@ -95,7 +104,7 @@ public:
 	 * @param Character
 	 *	The character being added to the encounter.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Modes")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Mode")
 	virtual void RemoveCharacterFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) = 0;
 
 	/**
@@ -114,7 +123,7 @@ public:
 	 * @return
 	 *	A result that indicates whether the command was queued, executed immediately, or refused.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Modes")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Mode")
 	virtual EPF2CommandExecuteOrQueueResult AttemptToExecuteOrQueueCommand(
 		TScriptInterface<IPF2CharacterInterface>&        Character,
 		TScriptInterface<IPF2CharacterCommandInterface>& Command) = 0;

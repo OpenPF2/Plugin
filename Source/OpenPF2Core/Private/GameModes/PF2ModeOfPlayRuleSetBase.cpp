@@ -4,7 +4,7 @@
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "GameModes/PF2ModeOfPlayRuleSetBase.h"
-
+#include "Commands/PF2CharacterCommandInterface.h"
 #include "Libraries/PF2CharacterLibrary.h"
 
 EPF2CommandExecuteOrQueueResult APF2ModeOfPlayRuleSetBase::AttemptToExecuteOrQueueCommand_Implementation(

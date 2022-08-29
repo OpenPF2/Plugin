@@ -17,6 +17,8 @@
 #include "PF2OwnerTrackingInterface.h"
 #include "PF2PlayerStateInterface.h"
 
+#include "Commands/PF2CharacterCommandInterface.h"
+
 #include "GameModes/PF2ModeOfPlayRuleSetInterface.h"
 
 #include "Utilities/PF2EnumUtilities.h"
