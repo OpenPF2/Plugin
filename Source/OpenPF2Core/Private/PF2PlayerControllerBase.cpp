@@ -107,7 +107,7 @@ void APF2PlayerControllerBase::Native_OnPlayerStateAvailable(
 
 	UE_LOG(
 		LogPf2Core,
-		Verbose,
+		VeryVerbose,
 		TEXT("[%s] Player controller ('%s') has made player state ('%s') available for character ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		*(this->GetIdForLogs()),
