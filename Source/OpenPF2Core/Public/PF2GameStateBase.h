@@ -34,7 +34,7 @@ protected:
 	/**
 	 * The next player index to assign to a player who joins the game.
 	 */
-	uint16 NextPlayerIndex;
+	int32 NextPlayerIndex;
 
 	// =================================================================================================================
 	// Protected Properties - Blueprint Accessible
@@ -72,7 +72,7 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2GameStateInterface Implementation
 	// =================================================================================================================
-	virtual FORCEINLINE uint16 GetNextAvailablePlayerIndex() override
+	virtual FORCEINLINE int32 GetNextAvailablePlayerIndex() override
 	{
 		return this->NextPlayerIndex++;
 	}

@@ -120,8 +120,8 @@ public:
 	 */
 	UFUNCTION(BlueprintNativeEvent, Category="OpenPF2|Mode of Play Rule Sets")
 	EPF2CommandExecuteOrQueueResult AttemptToExecuteOrQueueCommand(
-		const TScriptInterface<IPF2CharacterInterface>&    Character,
-	    const TScriptInterface<IPF2CharacterCommandInterface>& Command);
+		const TScriptInterface<IPF2CharacterInterface>&        Character,
+		const TScriptInterface<IPF2CharacterCommandInterface>& Command);
 
 	/**
 	 * Determines whether this rule set allows transitioning to the specified mode of play with the given game state.

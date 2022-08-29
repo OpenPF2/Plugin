@@ -19,7 +19,7 @@
 // =====================================================================================================================
 class APlayerState;
 class IPF2CharacterInterface;
-class IPF2Party;
+class IPF2PartyInterface;
 
 // =====================================================================================================================
 // Normal Declarations
@@ -44,12 +44,11 @@ public:
 	/**
 	 * Special constant value that signifies that a character does not belong to any player.
 	 */
-	static const uint8 PlayerIndexNone;
+	static const int32 PlayerIndexNone;
 
 	// =================================================================================================================
 	// Public Methods
 	// =================================================================================================================
-
 	/**
 	 * Gets the index of the player to which this player state corresponds.
 	 *
@@ -57,23 +56,32 @@ public:
 	 *	The zero-based index in the server's list of players that corresponds to this player state.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player State")
-	virtual uint8 GetPlayerIndex() const = 0;
+	virtual int32 GetPlayerIndex() const = 0;
 
 	/**
 	 * Sets the index of the player to which this player state corresponds.
 	 *
 	 * (This should be assigned only by the game mode.)
 	 */
-	virtual void SetPlayerIndex(uint8 NewPlayerIndex) = 0;
+	virtual void SetPlayerIndex(int32 NewPlayerIndex) = 0;
 
 	/**
-	 * Gets the party this player belongs to.
+	 * Gets the party of the player to which this player state corresponds.
 	 *
 	 * @return
-	 *	Information about the party that this player belongs to.
+	 *	Information about the party that the player who owns this player state belongs to.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player State")
-	virtual TScriptInterface<IPF2Party> GetParty() const = 0;
+	virtual TScriptInterface<IPF2PartyInterface> GetParty() const = 0;
+
+	/**
+	 * Sets the party of the player to which this player state corresponds.
+	 *
+	 * @param NewParty
+	 *	The new party that this player should belong to.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player State")
+	virtual void SetParty(const TScriptInterface<IPF2PartyInterface> NewParty) = 0;
 
 	/**
 	 * Gets the player controller that owns this player state.
@@ -85,29 +93,7 @@ public:
 	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerController() const = 0;
 
 	/**
-	 * Gets whether the player belongs to the same party as the player having the given player controller.
-	 *
-	 * @return
-	 *	TRUE if both player controllers are for players in the same party; or FALSE if they are from different parties.
-	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player State")
-	virtual bool IsSamePartyAsPlayerWithController(
-		const TScriptInterface<IPF2PlayerControllerInterface>& OtherPlayerController
-	) const = 0;
-
-	/**
-	 * Gets whether the player belongs to the same party as the player having the given player state.
-	 *
-	 * @return
-	 *	TRUE if both player states are for players in the same party; or FALSE if they are from different parties.
-	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player State")
-	virtual bool IsSamePartyAsPlayerWithState(
-		const TScriptInterface<IPF2PlayerStateInterface>& OtherPlayerState
-	) const = 0;
-
-	/**
-	 * Gets the character(s) that this player has the ability to control or possess.
+	 * Gets the character(s) that the player owning this player state has the ability to control or possess.
 	 *
 	 * For a single-player game that supports parties or squads, this may include both the character that the player
 	 * is actively controlling as well as any controllable character in this player's party or squad. Otherwise, this
@@ -124,6 +110,49 @@ public:
 	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetControllableCharacters() const = 0;
 
 	/**
+	 * Determines whether the player owning this player state belongs to the same party as another player.
+	 *
+	 * The other player is identified by their player controller.
+	 *
+	 * @return
+	 *	TRUE if both player controllers are for players in the same party; or FALSE if they are from different parties.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player State")
+	virtual bool IsSamePartyAsPlayerWithController(
+		const TScriptInterface<IPF2PlayerControllerInterface>& OtherController
+	) const = 0;
+
+	/**
+	 * Determines whether the player owning this player state belongs to the same party as another player.
+	 *
+	 * The other player is identified by their player state.
+	 *
+	 * @return
+	 *	TRUE if both player states are for players in the same party; or FALSE if they are from different parties.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player State")
+	virtual bool IsSamePartyAsPlayerWithState(
+		const TScriptInterface<IPF2PlayerStateInterface>& OtherPlayerState
+	) const = 0;
+
+	/**
+	 * Adds the specified character to the list of characters that this player can control.
+	 *
+	 * The character must be affiliated with the same party as the player to which this player state corresponds.
+	 *
+	 * @param Character
+	 *	The character to give to this player.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player State")
+	virtual void GiveCharacter(const TScriptInterface<IPF2CharacterInterface> Character) = 0;
+
+	/**
+	 * Removes the specified character from the list of characters that this player can control.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player State")
+	virtual void ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface> Character) = 0;
+
+	/**
 	 * Gets the player state that is implementing this interface.
 	 *
 	 * @return
@@ -131,28 +160,4 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player State")
 	virtual APlayerState* ToPlayerState() = 0;
-
-	/**
-	 * Notifies this player state that the player who owns it is now a member of a different party.
-	 *
-	 * @param NewParty
-	 *	The new party to which the player is affiliated.
-	 */
-	virtual void Native_OnPartyChanged(TScriptInterface<IPF2Party> NewParty) = 0;
-
-	/**
-	 * Notifies this player state that it is now the owner of an actor or that it no longer owns an actor.
-	 *
-	 * @param Actor
-	 *	The actor that changed owners.
-	 * @param PreviousOwner
-	 *	The player state corresponding to the player who was the previous owner of this actor. Can be null.
-	 * @param NewOwner
-	 *	The player state corresponding to the player who is now the owner of this actor. Can be null.
-	 */
-	virtual void Native_OnActorOwnershipChanged(
-		AActor*                                           Actor,
-		const TScriptInterface<IPF2PlayerStateInterface>& PreviousOwner,
-		const TScriptInterface<IPF2PlayerStateInterface>& NewOwner
-	) = 0;
 };

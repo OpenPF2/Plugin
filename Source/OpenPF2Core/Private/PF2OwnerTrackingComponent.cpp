@@ -16,6 +16,8 @@
 
 #include <Net/UnrealNetwork.h>
 
+#include "PF2CharacterInterface.h"
+#include "PF2PartyInterface.h"
 #include "PF2PlayerControllerInterface.h"
 #include "PF2PlayerStateInterface.h"
 
@@ -24,13 +26,65 @@
 UPF2OwnerTrackingComponent::UPF2OwnerTrackingComponent()
 {
 	this->SetIsReplicatedByDefault(true);
-
-	this->IndexOfInitialOwningPlayer = IPF2PlayerStateInterface::PlayerIndexNone;
 }
 
-uint8 UPF2OwnerTrackingComponent::GetIndexOfInitialOwningPlayer() const
+void UPF2OwnerTrackingComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	return this->IndexOfInitialOwningPlayer;
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UPF2OwnerTrackingComponent, OwningPlayerState);
+	DOREPLIFETIME(UPF2OwnerTrackingComponent, Party);
+}
+
+TScriptInterface<IPF2PartyInterface> UPF2OwnerTrackingComponent::GetParty() const
+{
+	return this->Party;
+}
+
+void UPF2OwnerTrackingComponent::SetParty(const TScriptInterface<IPF2PartyInterface> NewParty)
+{
+	const TScriptInterface<IPF2PartyInterface> OldParty = this->Party;
+
+	if (NewParty != OldParty)
+	{
+		const TScriptInterface<IPF2PlayerStateInterface> PlayerState      = this->GetStateOfOwningPlayer();
+		int32                                            OwningPartyIndex = IPF2PartyInterface::PartyIndexNone,
+		                                                 NewPartyIndex    = IPF2PartyInterface::PartyIndexNone;
+
+		if (PlayerState != nullptr)
+		{
+			const TScriptInterface<IPF2PartyInterface> OwningPlayerParty = PlayerState->GetParty();
+
+			if (OwningPlayerParty != nullptr)
+			{
+				OwningPartyIndex = OwningPlayerParty->GetPartyIndex();
+			}
+		}
+
+		if (NewParty != nullptr)
+		{
+			NewPartyIndex = NewParty->GetPartyIndex();
+		}
+
+		if ((PlayerState == nullptr) || (OwningPartyIndex == NewPartyIndex))
+		{
+			this->Party = Cast<AInfo>(NewParty.GetObject());
+
+			this->Native_OnPartyChanged(OldParty, NewParty);
+		}
+		else
+		{
+			UE_LOG(
+				LogPf2Core,
+				Error,
+				TEXT("Owner tracker ('%s') cannot be affiliated with a party ('%i') that differs from that of the party ('%i') of its owning player ('%s')."),
+				*(this->GetIdForLogs()),
+				NewPartyIndex,
+				OwningPartyIndex,
+				*(PlayerState->GetIdForLogs())
+			);
+		}
+	}
 }
 
 TScriptInterface<IPF2PlayerStateInterface> UPF2OwnerTrackingComponent::GetStateOfOwningPlayer() const
@@ -38,20 +92,21 @@ TScriptInterface<IPF2PlayerStateInterface> UPF2OwnerTrackingComponent::GetStateO
 	return this->OwningPlayerState;
 }
 
-void UPF2OwnerTrackingComponent::SetOwningPlayerByController(TScriptInterface<IPF2PlayerControllerInterface> Controller)
+void UPF2OwnerTrackingComponent::SetOwningPlayerByController(
+	const TScriptInterface<IPF2PlayerControllerInterface> NewController)
 {
-	this->SetOwningPlayerByState(Controller->GetPlayerState());
+	this->SetOwningPlayerByState(NewController->GetPlayerState());
 }
 
-void UPF2OwnerTrackingComponent::SetOwningPlayerByState(TScriptInterface<IPF2PlayerStateInterface> PlayerState)
+void UPF2OwnerTrackingComponent::SetOwningPlayerByState(const TScriptInterface<IPF2PlayerStateInterface> NewPlayerState)
 {
-	const TScriptInterface<IPF2PlayerStateInterface> PreviousOwningPlayerState = this->OwningPlayerState;
+	const TScriptInterface<IPF2PlayerStateInterface> OldOwningPlayerState = this->OwningPlayerState;
 
-	this->OwningPlayerState = PlayerState;
-
-	if (PlayerState != PreviousOwningPlayerState)
+	if (NewPlayerState != OldOwningPlayerState)
 	{
-		this->Native_OnOwningPlayerStateChanged(PreviousOwningPlayerState, PlayerState);
+		this->OwningPlayerState = Cast<APlayerState>(NewPlayerState.GetObject());
+
+		this->Native_OnOwningPlayerStateChanged(OldOwningPlayerState, NewPlayerState);
 	}
 }
 
@@ -76,74 +131,71 @@ bool UPF2OwnerTrackingComponent::IsSamePartyAsActor(AActor* OtherActor) const
 	return Result;
 }
 
-bool UPF2OwnerTrackingComponent::IsSamePartyAsPlayerWithController(AController* OtherController) const
+bool UPF2OwnerTrackingComponent::IsSamePartyAsPlayerWithController(
+	const TScriptInterface<IPF2PlayerControllerInterface> OtherController) const
 {
-	bool Result = false;
+	const TScriptInterface<IPF2PlayerStateInterface> PlayerState          = this->GetStateOfOwningPlayer();
+	TScriptInterface<IPF2PlayerStateInterface>       OtherPlayerState;
 
-	if (IsValid(OtherController))
-	{
-		const IPF2PlayerControllerInterface* OtherControllerIntf = Cast<IPF2PlayerControllerInterface>(OtherController);
+	check(OtherController != nullptr);
 
-		if (OtherControllerIntf != nullptr)
-		{
-			const TScriptInterface<IPF2PlayerStateInterface> MyOwner          = this->GetStateOfOwningPlayer();
-			const TScriptInterface<IPF2PlayerStateInterface> OtherPlayerState = OtherControllerIntf->GetPlayerState();
+	OtherPlayerState = OtherController->GetPlayerState();
 
-			Result = MyOwner->IsSamePartyAsPlayerWithState(OtherPlayerState);
-		}
-	}
-	return Result;
+	return PlayerState->IsSamePartyAsPlayerWithState(OtherPlayerState);
 }
 
 FString UPF2OwnerTrackingComponent::GetIdForLogs() const
 {
+	FString                             OwnerName;
+	AActor*                             OwningActor = this->GetOwner();
+	const IPF2LogIdentifiableInterface* OwnerLogId  = Cast<IPF2LogIdentifiableInterface>(OwningActor);
+
+	if (OwnerLogId == nullptr)
+	{
+		// Fallback to vanilla UE if we're not in something that implements IPF2LogIdentifiableInterface
+		OwnerName = OwningActor->GetName();
+	}
+	else
+	{
+		// Use the preferred log ID of the containing actor.
+		OwnerName = OwnerLogId->GetIdForLogs();
+	}
+
 	// ReSharper disable CppRedundantParentheses
 	return FString::Format(
 		TEXT("{0}.{1}"),
 		{
-			*(this->GetOwner()->GetName()),
+			*(OwnerName),
 			*(this->GetName())
 		}
 	);
 }
 
-void UPF2OwnerTrackingComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+void UPF2OwnerTrackingComponent::OnRep_OwningPlayerState(APlayerState* OldOwner) const
 {
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	const TScriptInterface<IPF2PlayerStateInterface> OldPf2Owner = OldOwner;
+	const TScriptInterface<IPF2PlayerStateInterface> NewPf2Owner = this->OwningPlayerState;
 
-	DOREPLIFETIME(UPF2OwnerTrackingComponent, OwningPlayerState);
+    this->Native_OnOwningPlayerStateChanged(OldPf2Owner, NewPf2Owner);
 }
 
-// ReSharper disable once CppMemberFunctionMayBeConst
-void UPF2OwnerTrackingComponent::OnRep_OwningPlayerState(const TScriptInterface<IPF2PlayerStateInterface> Owner)
+void UPF2OwnerTrackingComponent::OnRep_Party(AInfo* OldParty) const
 {
-    this->Native_OnOwningPlayerStateChanged(Owner, this->OwningPlayerState);
+	const TScriptInterface<IPF2PartyInterface> OldPf2Party = OldParty;
+	const TScriptInterface<IPF2PartyInterface> NewPf2Party = this->Party;
+
+	this->Native_OnPartyChanged(OldPf2Party, NewPf2Party);
 }
 
 void UPF2OwnerTrackingComponent::Native_OnOwningPlayerStateChanged(
-	const TScriptInterface<IPF2PlayerStateInterface> PreviousOwner,
+	const TScriptInterface<IPF2PlayerStateInterface> OldOwner,
 	const TScriptInterface<IPF2PlayerStateInterface> NewOwner) const
 {
-	const UWorld* World = GetWorld();
+	this->OnOwnerChanged.Broadcast(this->GetOwner(), OldOwner, NewOwner);
+}
 
-	OnOwnerChanged.Broadcast(this->GetOwner(), Cast<AController>(NewOwner->ToPlayerState()->GetOwner()));
-
-	if (IsValid(World))
-	{
-		const IPF2PlayerStateInterface* PreviousOwnerIntf = PF2InterfaceUtilities::FromScriptInterface(PreviousOwner);
-		const IPF2PlayerStateInterface* NewOwnerIntf      = PF2InterfaceUtilities::FromScriptInterface(NewOwner);
-
-		for (FConstPlayerControllerIterator Iterator = World->GetPlayerControllerIterator(); Iterator; ++Iterator)
-		{
-			const TWeakObjectPtr<APlayerController> Controller  = *Iterator;
-			IPF2PlayerStateInterface*               PlayerState = Controller->GetPlayerState<IPF2PlayerStateInterface>();
-
-			if ((PlayerState != nullptr) &&
-				((PlayerState == PreviousOwnerIntf) || (PlayerState == NewOwnerIntf)))
-			{
-				// Notify player controllers that have lost or gained ownership of an actor.
-				PlayerState->Native_OnActorOwnershipChanged(this->GetOwner(), PreviousOwner, NewOwner);
-			}
-		}
-	}
+void UPF2OwnerTrackingComponent::Native_OnPartyChanged(const TScriptInterface<IPF2PartyInterface> OldParty,
+                                                       const TScriptInterface<IPF2PartyInterface> NewParty) const
+{
+	this->OnPartyChanged.Broadcast(this->GetOwner(), OldParty, NewParty);
 }

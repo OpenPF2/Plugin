@@ -11,7 +11,8 @@
 #include <Net/UnrealNetwork.h>
 
 #include "PF2CharacterInterface.h"
-#include "PF2Party.h"
+#include "PF2OwnerTrackingInterface.h"
+#include "PF2PartyInterface.h"
 
 #include "Utilities/PF2ArrayUtilities.h"
 #include "Utilities/PF2InterfaceUtilities.h"
@@ -23,19 +24,31 @@ void APF2PlayerStateBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 	DOREPLIFETIME(APF2PlayerStateBase, PlayerIndex);
 }
 
-uint8 APF2PlayerStateBase::GetPlayerIndex() const
+int32 APF2PlayerStateBase::GetPlayerIndex() const
 {
 	return this->PlayerIndex;
 }
 
-void APF2PlayerStateBase::SetPlayerIndex(uint8 NewPlayerIndex)
+void APF2PlayerStateBase::SetPlayerIndex(int32 NewPlayerIndex)
 {
 	this->PlayerIndex = PlayerIndex;
 }
 
-TScriptInterface<IPF2Party> APF2PlayerStateBase::GetParty() const
+TScriptInterface<IPF2PartyInterface> APF2PlayerStateBase::GetParty() const
 {
 	return this->Party;
+}
+
+void APF2PlayerStateBase::SetParty(const TScriptInterface<IPF2PartyInterface> NewParty)
+{
+	const TScriptInterface<IPF2PartyInterface> OldParty = this->GetParty();
+
+	this->Party = NewParty;
+
+	if (this->GetParty() != NewParty)
+	{
+		this->Native_OnPartyChanged(OldParty, NewParty);
+	}
 }
 
 TScriptInterface<IPF2PlayerControllerInterface> APF2PlayerStateBase::GetPlayerController() const
@@ -43,21 +56,6 @@ TScriptInterface<IPF2PlayerControllerInterface> APF2PlayerStateBase::GetPlayerCo
 	IPF2PlayerControllerInterface* PlayerControllerIntf = Cast<IPF2PlayerControllerInterface>(this->GetOwner());
 
 	return PF2InterfaceUtilities::ToScriptInterface(PlayerControllerIntf);
-}
-
-bool APF2PlayerStateBase::IsSamePartyAsPlayerWithController(
-	const TScriptInterface<IPF2PlayerControllerInterface>& OtherPlayerController) const
-{
-	return this->IsSamePartyAsPlayerWithState(OtherPlayerController->GetPlayerState());
-}
-
-bool APF2PlayerStateBase::IsSamePartyAsPlayerWithState(
-	const TScriptInterface<IPF2PlayerStateInterface>& OtherPlayerState) const
-{
-	const TScriptInterface<IPF2Party> ThisParty  = this->GetParty(),
-	                                  OtherParty = OtherPlayerState->GetParty();
-
-	return ThisParty->GetPartyIndex() == OtherParty->GetPartyIndex();
 }
 
 TArray<TScriptInterface<IPF2CharacterInterface>> APF2PlayerStateBase::GetControllableCharacters() const
@@ -77,45 +75,97 @@ TArray<TScriptInterface<IPF2CharacterInterface>> APF2PlayerStateBase::GetControl
 		});
 }
 
-APlayerState* APF2PlayerStateBase::ToPlayerState()
+bool APF2PlayerStateBase::IsSamePartyAsPlayerWithController(
+	const TScriptInterface<IPF2PlayerControllerInterface>& OtherPlayerController) const
 {
-	return this;
+	check(OtherPlayerController != nullptr);
+
+	return this->IsSamePartyAsPlayerWithState(OtherPlayerController->GetPlayerState());
 }
 
-void APF2PlayerStateBase::Native_OnPartyChanged(const TScriptInterface<IPF2Party> NewParty)
+bool APF2PlayerStateBase::IsSamePartyAsPlayerWithState(
+	const TScriptInterface<IPF2PlayerStateInterface>& OtherPlayerState) const
+{
+	const TScriptInterface<IPF2PartyInterface> ThisParty  = this->GetParty();
+	TScriptInterface<IPF2PartyInterface>       OtherParty;
+
+	check(OtherPlayerState != nullptr);
+	check(ThisParty != nullptr);
+
+	OtherParty = OtherPlayerState->GetParty();
+
+	return (ThisParty->GetPartyIndex() == OtherParty->GetPartyIndex());
+}
+
+void APF2PlayerStateBase::GiveCharacter(const TScriptInterface<IPF2CharacterInterface> Character)
+{
+	const TScriptInterface<IPF2PartyInterface>   ThisParty = this->GetParty();
+	TScriptInterface<IPF2OwnerTrackingInterface> OwnerTracker;
+	int32                                        ThisPartyIndex  = IPF2PartyInterface::PartyIndexNone,
+	                                             OtherPartyIndex = IPF2PartyInterface::PartyIndexNone;
+
+	check(Character != nullptr);
+
+	if (ThisParty != nullptr)
+	{
+		ThisPartyIndex = ThisParty->GetPartyIndex();
+	}
+
+	OwnerTracker = Character->GetOwnerTrackingComponent();
+
+	if (OwnerTracker != nullptr)
+	{
+		const TScriptInterface<IPF2PartyInterface> OtherParty = OwnerTracker->GetParty();
+
+		if (OtherParty != nullptr)
+		{
+			OtherPartyIndex = OtherParty->GetPartyIndex();
+		}
+	}
+
+	if (ThisPartyIndex == OtherPartyIndex)
+	{
+		UE_LOG(
+			LogPf2Core,
+			Verbose,
+			TEXT("The player ('%s') has been granted the ability to control a character ('%s')."),
+			*(this->GetIdForLogs()),
+			*(Character->GetIdForLogs())
+		);
+
+		this->ControllableCharacters.AddUnique(Character->ToActor());
+		this->BP_OnCharacterGiven(Character);
+	}
+	else
+	{
+		UE_LOG(
+			LogPf2Core,
+			Error,
+			TEXT("The given character ('%s') is affiliated with a different party ('%i') than the player ('%i')."),
+			*(Character->GetIdForLogs()),
+			ThisPartyIndex,
+			OtherPartyIndex
+		);
+	}
+}
+
+void APF2PlayerStateBase::ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface> Character)
 {
 	UE_LOG(
 		LogPf2Core,
-		Log,
-		TEXT("Player %s added to party %d."),
-		*this->GetIdForLogs(),
-		NewParty->GetPartyIndex()
+		Verbose,
+		TEXT("The player ('%s') can no longer control a character ('%s')."),
+		*(this->GetIdForLogs()),
+		*(Character->GetIdForLogs())
 	);
 
-	// Notify listeners.
-	this->BP_OnPartyChanged(NewParty);
+	this->ControllableCharacters.Remove(Character->ToActor());
+	this->BP_OnCharacterReleased(Character);
 }
 
-void APF2PlayerStateBase::Native_OnActorOwnershipChanged(
-	AActor*                                           Actor,
-	const TScriptInterface<IPF2PlayerStateInterface>& PreviousOwner,
-	const TScriptInterface<IPF2PlayerStateInterface>& NewOwner)
+APlayerState* APF2PlayerStateBase::ToPlayerState()
 {
-	IPF2CharacterInterface* CharacterActor = Cast<IPF2CharacterInterface>(Actor);
-
-	if (CharacterActor != nullptr)
-	{
-		const TWeakInterfacePtr<IPF2CharacterInterface> WeakCharacterActor(CharacterActor);
-
-		if (NewOwner == this)
-		{
-			this->ControllableCharacters.AddUnique(WeakCharacterActor);
-		}
-		else
-		{
-			this->ControllableCharacters.Remove(WeakCharacterActor);
-		}
-	}
+	return this;
 }
 
 FString APF2PlayerStateBase::GetIdForLogs() const
@@ -123,7 +173,37 @@ FString APF2PlayerStateBase::GetIdForLogs() const
 	return this->GetName();
 }
 
-void APF2PlayerStateBase::ReceivedParty(TScriptInterface<IPF2Party> NewParty)
+void APF2PlayerStateBase::OnRep_Party(const TScriptInterface<IPF2PartyInterface> OldParty)
 {
-	this->Native_OnPartyChanged(NewParty);
+	this->Native_OnPartyChanged(OldParty, this->Party);
+}
+
+void APF2PlayerStateBase::Native_OnPartyChanged(
+	const TScriptInterface<IPF2PartyInterface> OldParty,
+	const TScriptInterface<IPF2PartyInterface> NewParty)
+{
+	if ((OldParty != nullptr) && (NewParty == nullptr))
+	{
+		UE_LOG(
+			LogPf2Core,
+			Verbose,
+			TEXT("Player ('%s') removed from party ('%s')."),
+			*(this->GetIdForLogs()),
+			*(OldParty->GetIdForLogs())
+		);
+	}
+
+	if (NewParty != nullptr)
+	{
+		UE_LOG(
+			LogPf2Core,
+			Verbose,
+			TEXT("Player ('%s') added to party ('%d')."),
+			*(this->GetIdForLogs()),
+			*(NewParty->GetIdForLogs())
+		);
+	}
+
+	// Notify listeners.
+	this->BP_OnPartyChanged(OldParty, NewParty);
 }

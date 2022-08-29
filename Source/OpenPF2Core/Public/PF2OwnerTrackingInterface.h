@@ -8,8 +8,6 @@
 //
 #pragma once
 
-#include <GameFramework/Controller.h>
-
 #include "Utilities/PF2LogIdentifiableInterface.h"
 
 #include "PF2OwnerTrackingInterface.generated.h"
@@ -17,6 +15,7 @@
 // =====================================================================================================================
 // Forward Declarations (to break recursive dependencies)
 // =====================================================================================================================
+class IPF2PartyInterface;
 class IPF2PlayerControllerInterface;
 class IPF2PlayerStateInterface;
 
@@ -30,7 +29,7 @@ class UPF2OwnerTrackingInterface : public UPF2LogIdentifiableInterface
 };
 
 /**
- * An interface for components that track which player "owns" or controls a character.
+ * An interface for components that track which player "owns" or controls an actor (usually, a character).
  */
 class OPENPF2CORE_API IPF2OwnerTrackingInterface : public IPF2LogIdentifiableInterface
 {
@@ -41,17 +40,27 @@ public:
 	// Public Methods
 	// =================================================================================================================
 	/**
-	 * Gets the index of the player that should initially own the actor.
+	 * Gets the party with which the containing actor is affiliated.
 	 *
 	 * @return
-	 *	The zero-based index in the server's list of players that corresponds to the player that owns this character.
-	 *	Can be -1 for characters owned by the server or story.
+	 *   The party to which this character corresponds.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Owner")
-	virtual uint8 GetIndexOfInitialOwningPlayer() const = 0;
+	virtual TScriptInterface<IPF2PartyInterface> GetParty() const = 0;
 
 	/**
-	 * Gets the state of the player who owns this actor.
+	 * Sets the party with which the containing actor is affiliated.
+	 *
+	 * If a player owns the containing actor, the player must be affiliated with the same party as the new party.
+	 *
+	 * @param NewParty
+	 *   The new party to which this character will belong.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Owner")
+	virtual void SetParty(const TScriptInterface<IPF2PartyInterface> NewParty) = 0;
+
+	/**
+	 * Gets the state of the player who owns the containing actor.
 	 *
 	 * @return
 	 *	The interface to the player state of the player who owns this actor.
@@ -60,25 +69,25 @@ public:
 	virtual TScriptInterface<IPF2PlayerStateInterface> GetStateOfOwningPlayer() const = 0;
 
 	/**
-	 * Sets the player who own this actor by the controller of the player.
+	 * Sets the player who own this actor, identified by the controller of the player.
 	 *
-	 * @param Controller
+	 * @param NewController
 	 *	The player controller for player that now owns this actor.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Owner")
-	virtual void SetOwningPlayerByController(TScriptInterface<IPF2PlayerControllerInterface> Controller) = 0;
+	virtual void SetOwningPlayerByController(const TScriptInterface<IPF2PlayerControllerInterface> NewController) = 0;
 
 	/**
-	 * Sets the player who owns this actor by the state of the player
+	 * Sets the player who owns this actor, identified by the state of the player
 	 *
-	 * @param PlayerState
+	 * @param NewPlayerState
 	 *	The state for player that now owns this actor.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Owner")
-    virtual void SetOwningPlayerByState(TScriptInterface<IPF2PlayerStateInterface> PlayerState) = 0;
+    virtual void SetOwningPlayerByState(const TScriptInterface<IPF2PlayerStateInterface> NewPlayerState) = 0;
 
 	/**
-	 * Checks whether this actor belongs to the same party as the specified one.
+	 * Checks whether this actor is affiliated with the same party as another actor.
 	 *
 	 * @param OtherActor
 	 *	The other actor against which this actor will be checked.
@@ -90,11 +99,13 @@ public:
 	virtual bool IsSamePartyAsActor(AActor* OtherActor) const = 0;
 
 	/**
-	 * Checks whether the player owning this actor belongs to the same party as the character with the given controller.
+	 * Checks whether this actor is affiliated with the same party as another player, identified by their controller.
 	 *
 	 * @return
 	 *	TRUE if this actor belongs to the same party as the player the given controller controls.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Owner")
-	virtual bool IsSamePartyAsPlayerWithController(AController* OtherController) const = 0;
+	virtual bool IsSamePartyAsPlayerWithController(
+		const TScriptInterface<IPF2PlayerControllerInterface> OtherController
+	) const = 0;
 };

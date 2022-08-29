@@ -51,15 +51,21 @@ public:
 	// Public Methods - IPF2PlayerStateInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
-	virtual uint8 GetPlayerIndex() const override;
+	virtual int32 GetPlayerIndex() const override;
 
-	virtual void SetPlayerIndex(uint8 NewPlayerIndex) override;
+	virtual void SetPlayerIndex(int32 NewPlayerIndex) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual TScriptInterface<IPF2Party> GetParty() const override;
+	virtual TScriptInterface<IPF2PartyInterface> GetParty() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void SetParty(const TScriptInterface<IPF2PartyInterface> NewParty) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerController() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetControllableCharacters() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual bool IsSamePartyAsPlayerWithController(
@@ -72,18 +78,13 @@ public:
 	) const override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetControllableCharacters() const override;
+	virtual void GiveCharacter(const TScriptInterface<IPF2CharacterInterface> Character) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface> Character) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual APlayerState* ToPlayerState() override;
-
-	virtual void Native_OnPartyChanged(TScriptInterface<IPF2Party> NewParty) override;
-
-	virtual void Native_OnActorOwnershipChanged(
-		AActor*                                           Actor,
-		const TScriptInterface<IPF2PlayerStateInterface>& PreviousOwner,
-		const TScriptInterface<IPF2PlayerStateInterface>& NewOwner
-	) override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Overrides
@@ -93,22 +94,81 @@ public:
 
 protected:
 	// =================================================================================================================
+	// Protected Replication Callbacks
+	// =================================================================================================================
+	/**
+	 * Notifies this component that party information has been replicated.
+	 *
+	 * @param OldParty
+	 *	The previous party to which the player was affiliated.
+	 */
+	UFUNCTION()
+	void OnRep_Party(const TScriptInterface<IPF2PartyInterface> OldParty);
+
+	// =================================================================================================================
+	// Protected Native Event Callbacks
+	// =================================================================================================================
+	/**
+	 * Notifies this player state that the player who owns it is now a member of a different party.
+	 *
+	 * This is invoked after the party of the player has been updated.
+	 *
+	 * @param OldParty
+	 *	The previous party to which the player was affiliated.
+	 * @param NewParty
+	 *	The new party to which the player is affiliated.
+	 */
+	void Native_OnPartyChanged(
+		const TScriptInterface<IPF2PartyInterface> OldParty,
+		const TScriptInterface<IPF2PartyInterface> NewParty
+	);
+
+	// =================================================================================================================
 	// Blueprint Implementable Events
 	// =================================================================================================================
 	/**
 	 * BP event invoked when this player has changed party affiliation.
 	 *
+	 * @param OldParty
+	 *	The old party to which the player was affiliated.
 	 * @param NewParty
-	 *	The new party to which the player is affiliated.
+	 *	The party to which the player is now affiliated.
 	 */
 	UFUNCTION(
 		BlueprintImplementableEvent,
 		Category="OpenPF2|Player States",
-		meta=(
-			DisplayName="On Party Changed"
-		)
+		meta=(DisplayName="On Party Changed")
 	)
-	void BP_OnPartyChanged(const TScriptInterface<IPF2Party>& NewParty);
+	void BP_OnPartyChanged(
+		const TScriptInterface<IPF2PartyInterface>& OldParty,
+		const TScriptInterface<IPF2PartyInterface>& NewParty
+	);
+
+	/**
+	 * BP event invoked when this player has taken ownership of a character.
+	 *
+	 * @param Character
+	 *	The character that is now controllable by this player.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Player States",
+		meta=(DisplayName="On Character Given")
+	)
+	void BP_OnCharacterGiven(const TScriptInterface<IPF2CharacterInterface>& Character);
+
+	/**
+	 * BP event invoked when this player has been released of ownership of a character.
+	 *
+	 * @param Character
+	 *	The character that is no longer controllable by this player.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Player States",
+		meta=(DisplayName="On Character Released")
+	)
+	void BP_OnCharacterReleased(const TScriptInterface<IPF2CharacterInterface>& Character);
 
 private:
 	// =================================================================================================================
@@ -125,25 +185,17 @@ private:
 	/**
 	 * The party to which this player is affiliated.
 	 */
-	UPROPERTY(ReplicatedUsing=ReceivedParty)
-	TScriptInterface<IPF2Party> Party;
+	UPROPERTY(ReplicatedUsing=OnRep_Party)
+	TScriptInterface<IPF2PartyInterface> Party;
 
 	/**
-	 * The characters that can be controlled by this player.
+	 * The character(s) that can be controlled by this player.
 	 *
-	 * Depending on the game, this may represent some or all of the characters in this player's party.
-	 */
-	TArray<TWeakInterfacePtr<IPF2CharacterInterface>> ControllableCharacters;
-
-	// =================================================================================================================
-	// Private Replication Callbacks
-	// =================================================================================================================
-	/**
-	 * Notifies this component that party information has been replicated.
+	 * The characters in this list must be affiliated with the same party as this player.
 	 *
-	 * @param NewParty
-	 *	The new party to which the player is affiliated.
+	 * This is an array of actors (instead of interfaces) for replication. UE will not replicate actors if they are
+	 * declared/referenced through an interface property.
 	 */
-	UFUNCTION()
-	void ReceivedParty(TScriptInterface<IPF2Party> NewParty);
+	UPROPERTY(Replicated)
+	TArray<AActor*> ControllableCharacters;
 };

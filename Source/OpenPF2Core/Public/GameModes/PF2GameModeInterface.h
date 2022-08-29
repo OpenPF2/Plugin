@@ -20,6 +20,8 @@
 class IPF2CharacterCommandInterface;
 class IPF2CharacterInterface;
 class IPF2ModeOfPlayRuleSetInterface;
+class IPF2PartyInterface;
+class IPF2PlayerControllerInterface;
 
 // =====================================================================================================================
 // Normal Declarations
@@ -47,6 +49,68 @@ public:
 	 *	The rule set for the current mode of play.
 	 */
 	virtual TScriptInterface<IPF2ModeOfPlayRuleSetInterface> CreateModeOfPlayRuleSet(const EPF2ModeOfPlayType ModeOfPlay) = 0;
+
+	/**
+	 * Transfers ownership of the specified character from one player to another, as identified by player controller.
+	 *
+	 * @param Character
+	 *	The character that is being transferred.
+	 * @param ControllerOfNewOwner
+	 *	The player controller that is being made the new owner of the character.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Mode")
+	virtual void TransferCharacterOwnership(
+		const TScriptInterface<IPF2CharacterInterface>        Character,
+		const TScriptInterface<IPF2PlayerControllerInterface> ControllerOfNewOwner
+	) = 0;
+
+	/**
+	 * Changes the party affiliation of a player.
+	 *
+	 * This will automatically notify the affected parties of the change. Thus, if the player already belongs to a
+	 * party, that party is notified to remove the player. If the new party is not null, it is notified to add the
+	 * player.
+	 *
+	 * If the player has controllable characters, all of them will be released during this transition. If this behavior
+	 * is undesirable, use SwitchPartyOfPlayerAndOwnedCharacters() instead.
+	 *
+	 * @param PlayerController
+	 *	The player controller that corresponds to the player who is switching parties.
+	 * @param NewParty
+	 *	The new party affiliation for the player. Can be null to indicate that the player should not belong to any
+	 *	party.
+	 *
+	 * @see SwitchPartyOfPlayerAndOwnedCharacters
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Mode")
+	virtual void SwitchPartyOfPlayer(
+		const TScriptInterface<IPF2PlayerControllerInterface> PlayerController,
+		const TScriptInterface<IPF2PartyInterface>            NewParty
+	) = 0;
+
+	/**
+	 * Changes the party affiliation of a player and each of its controllable characters.
+	 *
+	 * This will automatically notify the affected parties of the change. Thus, if the player already belongs to a
+	 * party, that party is notified to remove the player. If the new party is not null, it is notified to add the
+	 * player.
+	 *
+	 * If the player has controllable characters, each of them will be switched to be affiliated with the new party
+	 * during this transition. If this behavior is undesirable, use SwitchPartyOfPlayer() instead.
+	 *
+	 * @param PlayerController
+	 *	The player controller that corresponds to the player who is switching parties.
+	 * @param NewParty
+	 *	The new party affiliation for the player and its characters. Can be null to indicate that the player should not
+	 *	belong to any party.
+	 *
+	 * @see SwitchPartyOfPlayer
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Mode")
+	virtual void SwitchPartyOfPlayerAndOwnedCharacters(
+		const TScriptInterface<IPF2PlayerControllerInterface> PlayerController,
+		const TScriptInterface<IPF2PartyInterface>            NewParty
+	) = 0;
 
 	/**
 	 * Requests a switch of the play mode to encounter mode.

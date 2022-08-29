@@ -48,6 +48,24 @@ public:
 		const EPF2ModeOfPlayType ModeOfPlay) override;
 
 	UFUNCTION(BlueprintCallable)
+	virtual void TransferCharacterOwnership(
+		const TScriptInterface<IPF2CharacterInterface>        Character,
+		const TScriptInterface<IPF2PlayerControllerInterface> ControllerOfNewOwner
+	) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void SwitchPartyOfPlayer(
+		const TScriptInterface<IPF2PlayerControllerInterface> PlayerController,
+		const TScriptInterface<IPF2PartyInterface>            NewParty
+	) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void SwitchPartyOfPlayerAndOwnedCharacters(
+		const TScriptInterface<IPF2PlayerControllerInterface> PlayerController,
+		const TScriptInterface<IPF2PartyInterface>            NewParty
+	) override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual void RequestEncounterMode() override;
 
 	UFUNCTION(BlueprintCallable)
@@ -102,7 +120,7 @@ protected:
      * @return
      *	The next available player index.
      */
-    FORCEINLINE uint16 GetNextAvailablePlayerIndex() const
+    FORCEINLINE int32 GetNextAvailablePlayerIndex() const
 	{
 		return this->GetGameStateIntf()->GetNextAvailablePlayerIndex();
 	}
@@ -122,29 +140,7 @@ protected:
 	 * @param PlayerController
 	 *	The player controller that will be assigned a distinct player index.
 	 */
-	void AssignPlayerIndexAndClaimCharacters(APlayerController* PlayerController);
-
-	/**
-	 * Locates and claims all characters that should belong to the given player based on their owner tracking component.
-	 *
-	 * @param PlayerControllerIntf
-	 *	The player controller of the player claiming ownership of characters.
-	 * @param PlayerStateIntf
-	 *	The player state of the player for which characters are being claimed.
-	 */
-	void ClaimOwnershipOfCharacters(
-		IPF2PlayerControllerInterface*  PlayerControllerIntf,
-		const IPF2PlayerStateInterface* PlayerStateIntf);
-
-	/**
-	 * Transfers ownership of the specified character to the specified player controller.
-	 *
-	 * @param Character
-	 *	The character that is being transferred.
-	 * @param PlayerControllerIntf
-	 *	The player controller that is being made the new owner of the character.
-	 */
-	void TransferOwnership(IPF2CharacterInterface* Character, IPF2PlayerControllerInterface* PlayerControllerIntf);
+	void AssignPlayerIndex(const APlayerController* PlayerController) const;
 
 	/**
 	 * Attempts to change the current play mode for all characters in the loaded level.

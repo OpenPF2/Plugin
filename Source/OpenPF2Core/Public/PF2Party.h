@@ -8,91 +8,178 @@
 //
 #pragma once
 
-#include <GameFramework/PlayerController.h>
-#include <UObject/Interface.h>
+#include <GameFramework/Info.h>
 
-#include "PF2PlayerControllerInterface.h"
-#include "PF2PlayerStateInterface.h"
+#include "PF2PartyInterface.h"
+
 #include "PF2Party.generated.h"
+
+// =====================================================================================================================
+// Forward Declarations (to break recursive dependencies)
+// =====================================================================================================================
+class IPF2CharacterInterface;
+class IPF2PlayerStateInterface;
+
+// =====================================================================================================================
+// Delegate Types
+// =====================================================================================================================
+/**
+ * Delegate for Blueprints to react to a change in player membership.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
+	FPF2PartyMemberChangedDelegate,
+	TScriptInterface<IPF2PartyInterface>,       Party,
+	TScriptInterface<IPF2PlayerStateInterface>, PlayerState
+);
 
 // =====================================================================================================================
 // Normal Declarations
 // =====================================================================================================================
-UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
-class UPF2Party : public UInterface
-{
-	GENERATED_BODY()
-};
-
 /**
- * An interface for groups or "parties" that one or more players and characters can belong to in OpenPF2.
- *
- * Each player of the game is affiliated with a single party. All of the characters that the player can control are
- * affiliated with the same party, but not all of the *characters* affiliated with a party are necessarily controllable
- * by all *players* in the same party. For example, in a multiplayer RPG, two players may be in the same party but only
- * have the ability to control their own characters within the party (e.g., a party of 4 in which each player can only
- * control 2 characters each).
+ * Default implementation of a PF2-compatible party.
  */
-class OPENPF2CORE_API IPF2Party
+UCLASS(BlueprintType, Blueprintable)
+// ReSharper disable once CppClassCanBeFinal
+class OPENPF2CORE_API APF2Party : public AInfo, public IPF2PartyInterface
 {
 	GENERATED_BODY()
+
+protected:
+	/**
+	 * The player-readable name of this party.
+	 */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Replicated, Category="OpenPF2 Party")
+	FText PartyName;
+
+	/**
+	 * The index of this party.
+	 */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Replicated, Category="OpenPF2 Party")
+	int32 PartyIndex;
+
+	/**
+	 * Player state for all players belonging to this party.
+	 *
+	 * This is an array of player state actors (instead of interfaces) for replication. UE will not replicate actors if
+	 * they are declared/referenced through an interface property.
+	 */
+	UPROPERTY(Replicated)
+	TArray<APlayerState*> MemberStates;
+
+	/**
+	 * The characters belonging to this party.
+	 *
+	 * This is an array of character actors (instead of interfaces) for replication. UE will not replicate actors if
+	 * they are declared/referenced through an interface property.
+	 */
+	UPROPERTY(Replicated)
+	TArray<AActor*> MemberCharacters;
 
 public:
-	/** Gets the index of this team. */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Parties")
-	virtual uint8 GetPartyIndex() const = 0;
+	APF2Party();
 
+	// =================================================================================================================
+	// Public Methods - AActor Overrides
+	// =================================================================================================================
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	// =================================================================================================================
+	// Public Methods - IPF2PartyInterface Overrides
+	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual FText GetPartyName() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual int32 GetPartyIndex() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<TScriptInterface<IPF2PlayerControllerInterface>> GetMemberControllers() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<TScriptInterface<IPF2PlayerStateInterface>> GetMemberStates() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetMemberCharacters() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void AddPlayerToPartyByController(const TScriptInterface<IPF2PlayerControllerInterface>& Controller) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void AddPlayerToPartyByState(const TScriptInterface<IPF2PlayerStateInterface>& PlayerState) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void RemovePlayerFromPartyByController(const TScriptInterface<IPF2PlayerControllerInterface>& Controller) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void RemovePlayerFromPartyByState(const TScriptInterface<IPF2PlayerStateInterface>& PlayerState) override;
+
+	// =================================================================================================================
+	// Public Methods - IPF2LogIdentifiableInterface Overrides
+	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual FString GetIdForLogs() const override;
+
+	// =================================================================================================================
+	// Public Properties - Multicast Delegates
+	// =================================================================================================================
 	/**
-	 * Gets player controllers for all players belonging to this party.
+	 * Event fired when a player is added to this party.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Parties")
-	virtual TArray<TScriptInterface<IPF2PlayerControllerInterface>> GetMemberControllers() const = 0;
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Parties")
+	FPF2PartyMemberChangedDelegate OnPlayerAdded;
 
 	/**
-	 * Gets player state for all players belonging to this party.
+	 * Event fired when a player is removed from this party.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Parties")
-	virtual TArray<TScriptInterface<IPF2PlayerStateInterface>> GetMemberStates() const = 0;
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Parties")
+	FPF2PartyMemberChangedDelegate OnPlayerRemoved;
 
+protected:
+	// =================================================================================================================
+	// Protected Native Event Callbacks
+	// =================================================================================================================
 	/**
-	 * Gets the characters belonging to this party.
-	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Parties")
-	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetMemberCharacters() const = 0;
-
-	/**
-	 * Adds the player having the specified player controller to this party.
-	 *
-	 * @param PlayerController
-	 *	The controller for the player to add to the party.
-	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Parties")
-	virtual void AddPlayerToPartyByController(TScriptInterface<IPF2PlayerStateInterface> PlayerController) = 0;
-
-	/**
-	 * Adds the player having the specified player state to this party.
+	 * Notifies this party that a player has been added to this party.
 	 *
 	 * @param PlayerState
-	 *	The state for the player to add to the party.
+	 *	The state of the player that corresponds to the player that was added to the party.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Parties")
-	virtual void AddPlayerToPartyByState(TScriptInterface<IPF2PlayerStateInterface> PlayerState) = 0;
+	void Native_OnPlayerAdded(const TScriptInterface<IPF2PlayerStateInterface>& PlayerState);
 
 	/**
-	 * Removes the player having the specified player controller from this party.
-	 *
-	 * @param Controller
-	 *	The controller for the player to remove from the party.
-	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Parties")
-	virtual void RemovePlayerFromPartyByController(TScriptInterface<IPF2PlayerStateInterface> Controller) = 0;
-
-	/**
-	 * Removes the player having the specified player state from this party.
+	 * Notifies this party that a player has been removed from this party.
 	 *
 	 * @param PlayerState
-	 *	The state for the player to remove from the party.
+	 *	The state of the player that corresponds to the player that was removed from this party.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Parties")
-	virtual void RemovePlayerFromPartyByState(TScriptInterface<IPF2PlayerStateInterface> PlayerState) = 0;
+	void Native_OnPlayerRemoved(const TScriptInterface<IPF2PlayerStateInterface>& PlayerState);
+
+	// =================================================================================================================
+	// Blueprint Implementable Events
+	// =================================================================================================================
+	/**
+	 * BP event invoked when a player has been added to this party.
+	 *
+	 * @param PlayerState
+	 *	The state of the player that corresponds to the player that was added to this party.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Parties",
+		meta=(DisplayName="On Player Added")
+	)
+	void BP_OnPlayerAdded(const TScriptInterface<IPF2PlayerStateInterface>& PlayerState);
+
+	/**
+	 * BP event invoked when a player has been removed from this party.
+	 *
+	 * @param PlayerState
+	 *	The state of the player that corresponds to the player that was removed from this party.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Parties",
+		meta=(DisplayName="On Player Removed")
+	)
+	void BP_OnPlayerRemoved(const TScriptInterface<IPF2PlayerStateInterface>& PlayerState);
 };

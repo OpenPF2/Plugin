@@ -56,7 +56,7 @@ public:
 	 * @return
 	 *	The next available player index.
 	 */
-	virtual uint16 GetNextAvailablePlayerIndex() = 0;
+	virtual int32 GetNextAvailablePlayerIndex() = 0;
 
 	/**
 	 * Gets the current play mode for all characters in the loaded level.

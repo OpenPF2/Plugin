@@ -11,9 +11,9 @@
 #include <Components/ActorComponent.h>
 
 #include <GameFramework/Controller.h>
+#include <GameFramework/Info.h>
 
 #include "PF2OwnerTrackingInterface.h"
-
 #include "PF2OwnerTrackingComponent.generated.h"
 
 // =====================================================================================================================
@@ -25,10 +25,24 @@ class IPF2PlayerStateInterface;
 // =====================================================================================================================
 // Delegate Types
 // =====================================================================================================================
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
-	FPF2OwnerComponentOwnerChangedDelegate,
-	AActor*,      Actor,
-	AController*, NewOwner
+/**
+ * Delegate for Blueprints to react to a change in owning player state.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(
+	FPF2OwnerComponentOwningPlayerStateChangedDelegate,
+	AActor*,                                    Actor,
+	TScriptInterface<IPF2PlayerStateInterface>, OldOwner,
+	TScriptInterface<IPF2PlayerStateInterface>, NewOwner
+);
+
+/**
+ * Delegate for Blueprints to react to a change in party affiliation.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(
+	FPF2OwnerComponentPartyChangedDelegate,
+	AActor*,                              Actor,
+	TScriptInterface<IPF2PartyInterface>, OldParty,
+	TScriptInterface<IPF2PartyInterface>, NewParty
 );
 
 // =====================================================================================================================
@@ -54,23 +68,28 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2OwnerTrackingInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintPure)
-	virtual uint8 GetIndexOfInitialOwningPlayer() const override;
+	UFUNCTION(BlueprintCallable)
+	virtual TScriptInterface<IPF2PartyInterface> GetParty() const override;
 
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintCallable)
+	virtual void SetParty(const TScriptInterface<IPF2PartyInterface> NewParty) override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2PlayerStateInterface> GetStateOfOwningPlayer() const override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void SetOwningPlayerByController(TScriptInterface<IPF2PlayerControllerInterface> Controller) override;
+	virtual void SetOwningPlayerByController(const TScriptInterface<IPF2PlayerControllerInterface> NewController) override;
 
 	UFUNCTION(BlueprintCallable)
-    virtual void SetOwningPlayerByState(TScriptInterface<IPF2PlayerStateInterface> PlayerState) override;
+    virtual void SetOwningPlayerByState(const TScriptInterface<IPF2PlayerStateInterface> NewPlayerState) override;
 
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintCallable)
 	virtual bool IsSamePartyAsActor(AActor* OtherActor) const override;
 
-	UFUNCTION(BlueprintPure)
-	virtual bool IsSamePartyAsPlayerWithController(AController* OtherController) const override;
+	UFUNCTION(BlueprintCallable)
+	virtual bool IsSamePartyAsPlayerWithController(
+		const TScriptInterface<IPF2PlayerControllerInterface> OtherController
+	) const override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Overrides
@@ -82,52 +101,91 @@ public:
 	// Public Properties - Multicast Delegates
 	// =================================================================================================================
 	/**
-	 * Event when the actor is owned by a different player.
+	 * Event fired when the containing actor is owned by a different player.
 	 */
 	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Owner")
-	FPF2OwnerComponentOwnerChangedDelegate OnOwnerChanged;
+	FPF2OwnerComponentOwningPlayerStateChangedDelegate OnOwnerChanged;
+
+	/**
+	 * Event fired when the containing actor changes party affiliations.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Owner")
+	FPF2OwnerComponentPartyChangedDelegate OnPartyChanged;
+
+protected:
+	// =================================================================================================================
+	// Protected Replication Callbacks
+	// =================================================================================================================
+	/**
+	 * Notifies this component that the player state for the player who owns the containing actor has been replicated.
+	 *
+	 * @param OldOwner
+	 *	The previous owner of the containing actor.
+	 */
+	UFUNCTION()
+    void OnRep_OwningPlayerState(APlayerState* OldOwner) const;
+
+	/**
+	 * Notifies this component that the party to which the containing actor is affiliated has been replicated.
+	 *
+	 * @param OldParty
+	 *	The previous party affiliation of the containing actor.
+	 */
+	UFUNCTION()
+	void OnRep_Party(AInfo* OldParty) const;
+
+	// =================================================================================================================
+	// Protected Native Event Notifications
+	// =================================================================================================================
+	/**
+	 * Notifies all event listeners that the player state that own the containing actor has changed.
+	 *
+	 * @param OldOwner
+	 *	The player state corresponding to the player who was the previous owner of this actor. Can be null if there was
+	 *	no prior owner.
+	 * @param NewOwner
+	 *	The player state corresponding to the player who is now the owner of this actor. Can be null if there is no
+	 *	new owner (containing actor does not belong to anyone/is an orphan).
+	 */
+	void Native_OnOwningPlayerStateChanged(
+		const TScriptInterface<IPF2PlayerStateInterface> OldOwner,
+		const TScriptInterface<IPF2PlayerStateInterface> NewOwner
+	) const;
+
+	/**
+	 * Notifies all event listeners that the party to which the containing actor is affiliated has changed.
+	 *
+	 * @param OldParty
+	 *	The previous party affiliation, if any. Can be null if there was no prior party affiliation.
+	 * @param NewParty
+	 *	The new party affiliation, if any. Can be null if the containing actor should no longer be affiliated with a
+	 *	party.
+	 */
+	void Native_OnPartyChanged(
+		const TScriptInterface<IPF2PartyInterface> OldParty,
+		const TScriptInterface<IPF2PartyInterface> NewParty
+	) const;
 
 private:
 	// =================================================================================================================
 	// Private Properties
 	// =================================================================================================================
 	/**
-     * The index of the player that should initially own the containing actor.
-     */
-    UPROPERTY(EditAnywhere, Category="OpenPF2 Owner Component")
-    uint8 IndexOfInitialOwningPlayer;
-
-	/**
-	 * Gets the state of the player who owns the containing actor.
+	 * The state of the player who owns the containing actor.
+	 *
+	 * This is a standard player state (instead of an interface) for replication. UE will not replicate actors if they
+	 * are declared/referenced through an interface property. The value of this property MUST implement
+	 * IPF2PlayerStateInterface.
 	 */
 	UPROPERTY(ReplicatedUsing=OnRep_OwningPlayerState)
-	TScriptInterface<IPF2PlayerStateInterface> OwningPlayerState;
+	APlayerState* OwningPlayerState;
 
-	// =================================================================================================================
-	// Private Replication Callbacks
-	// =================================================================================================================
 	/**
-	 * Notifies this component that the player state for the player who owns the containing actor has been replicated.
+	 * The party to which the containing actor is affiliated, if any.
 	 *
-	 * @param Owner
-	 *	The new owner of the containing actor.
+	 * This is an info actor (instead of an interface) for replication. UE will not replicate actors if they are
+	 * declared/referenced through an interface property. The value of this property MUST implement IPF2PartyInterface.
 	 */
-	UFUNCTION()
-    void OnRep_OwningPlayerState(const TScriptInterface<IPF2PlayerStateInterface> Owner);
-
-	// =================================================================================================================
-	// Private Event Notifications
-	// =================================================================================================================
-	/**
-	 * Notifies all event listeners that the player state that own the containing actor has changed.
-	 *
-	 * @param PreviousOwner
-	 *	The player state corresponding to the player who was the previous owner of this actor. Can be null.
-	 * @param NewOwner
-	 *	The player state corresponding to the player who is now the owner of this actor. Can be null.
-	 */
-	void Native_OnOwningPlayerStateChanged(
-		const TScriptInterface<IPF2PlayerStateInterface> PreviousOwner,
-		const TScriptInterface<IPF2PlayerStateInterface> NewOwner
-	) const;
+	UPROPERTY(ReplicatedUsing=OnRep_Party)
+	AInfo* Party;
 };
