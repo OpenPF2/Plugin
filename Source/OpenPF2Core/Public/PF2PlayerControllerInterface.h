@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include <UObject/Interface.h>
-
 #include "GameModes/PF2ModeOfPlayType.h"
 
 #include "Utilities/PF2LogIdentifiableInterface.h"
@@ -110,7 +108,6 @@ public:
 	 * @param NewMode
 	 *	The new mode of play.
 	 */
-	UFUNCTION()
 	virtual void Native_OnModeOfPlayChanged(EPF2ModeOfPlayType NewMode) = 0;
 
 	// =================================================================================================================
