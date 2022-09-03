@@ -12,8 +12,10 @@
 
 #pragma once
 
-#include <GameFramework/Character.h>
 #include <AbilitySystemInterface.h>
+
+#include <GameFramework/Character.h>
+
 #include <UObject/ConstructorHelpers.h>
 #include <UObject/ScriptInterface.h>
 
@@ -27,8 +29,8 @@
 #include "Abilities/PF2AbilitySystemComponent.h"
 #include "Abilities/PF2AttributeSet.h"
 #include "Abilities/PF2CharacterAbilityScoreType.h"
+
 #include "Utilities/PF2GameplayAbilityUtilities.h"
-#include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogIdentifiableInterface.h"
 
 #include "PF2CharacterBase.generated.h"

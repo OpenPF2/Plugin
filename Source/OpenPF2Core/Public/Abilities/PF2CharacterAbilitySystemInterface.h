@@ -5,9 +5,10 @@
 
 #pragma once
 
-#include "Abilities/PF2CharacterAbilityScoreType.h"
 #include "PF2AbilitySystemInterface.h"
 #include "PF2AttributeModifierSnapshot.h"
+
+#include "Abilities/PF2CharacterAbilityScoreType.h"
 
 #include "PF2CharacterAbilitySystemInterface.generated.h"
 

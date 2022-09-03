@@ -5,10 +5,11 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "GameplayCueInterface.h"
-#include "GameFramework/DefaultPawn.h"
-#include "AbilitySystemInterface.h"
+#include <AbilitySystemInterface.h>
+#include <GameplayCueInterface.h>
+
+#include <GameFramework/DefaultPawn.h>
+
 #include "PF2TestPawn.generated.h"
 
 class UAbilitySystemComponent;

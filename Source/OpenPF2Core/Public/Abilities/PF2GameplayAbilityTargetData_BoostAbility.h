@@ -5,7 +5,8 @@
 
 #pragma once
 
-#include "Abilities/GameplayAbilityTargetTypes.h"
+#include <Abilities/GameplayAbilityTargetTypes.h>
+
 #include "PF2CharacterAbilityScoreType.h"
 
 #include "PF2GameplayAbilityTargetData_BoostAbility.generated.h"

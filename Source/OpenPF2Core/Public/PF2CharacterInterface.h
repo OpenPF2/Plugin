@@ -13,6 +13,7 @@
 #pragma once
 
 #include <AbilitySystemInterface.h>
+
 #include <UObject/ScriptInterface.h>
 
 #include "Abilities/PF2AbilityBoostBase.h"

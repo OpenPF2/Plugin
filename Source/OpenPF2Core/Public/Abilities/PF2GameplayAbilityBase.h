@@ -8,6 +8,7 @@
 #include <Abilities/GameplayAbility.h>
 
 #include "Abilities/PF2GameplayAbilityInterface.h"
+
 #include "Utilities/PF2LogIdentifiableInterface.h"
 
 #include "PF2GameplayAbilityBase.generated.h"

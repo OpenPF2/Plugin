@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include <CoreMinimal.h>
-
 #include "PF2AbilityCalculationBase.h"
 #include "PF2AbilityBoostCalculationBase.generated.h"
 

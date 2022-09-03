@@ -5,12 +5,13 @@
 //
 // Portions of this code were adapted from or inspired by the "Real-Time Strategy Plugin for Unreal Engine 4" by Nick
 // Pruehs, provided under the MIT License. Copyright (c) 2017 Nick Pruehs.
-//
+
 #pragma once
 
 #include <GameFramework/PlayerController.h>
 
 #include "Utilities/PF2LogIdentifiableInterface.h"
+
 #include "PF2PartyInterface.generated.h"
 
 // =====================================================================================================================

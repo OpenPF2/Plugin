@@ -12,7 +12,6 @@
 
 #pragma once
 
-#include <CoreMinimal.h>
 #include <GameplayModMagnitudeCalculation.h>
 
 #include "PF2KeyAbilityTemlCalculationBase.generated.h"

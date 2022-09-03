@@ -12,8 +12,6 @@
 
 #include "Calculations/PF2TemlCalculation.h"
 
-#include <CoreMinimal.h>
-
 #include "Utilities/PF2GameplayAbilityUtilities.h"
 
 FPF2TemlCalculation::FPF2TemlCalculation(const FString TagPrefix, const FGameplayEffectSpec& Spec) :

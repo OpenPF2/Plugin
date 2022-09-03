@@ -12,8 +12,6 @@
 
 #pragma once
 
-#include <CoreMinimal.h>
-
 #include "Utilities/PF2LogIdentifiableInterface.h"
 
 #include "PF2CharacterInitiativeQueueInterface.generated.h"

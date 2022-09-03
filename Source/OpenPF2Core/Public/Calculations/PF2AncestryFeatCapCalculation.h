@@ -6,7 +6,7 @@
 #pragma once
 
 #include <GameplayModMagnitudeCalculation.h>
-#include <CoreMinimal.h>
+
 #include "PF2AncestryFeatCapCalculation.generated.h"
 
 /**

@@ -9,9 +9,12 @@
 #pragma once
 
 #include <GameFramework/GameStateBase.h>
+
 #include <UObject/ScriptInterface.h>
 
 #include "PF2GameStateInterface.h"
+
+#include "GameModes/PF2ModeOfPlayRuleSetInterface.h"
 #include "GameModes/PF2ModeOfPlayType.h"
 
 #include "PF2GameStateBase.generated.h"

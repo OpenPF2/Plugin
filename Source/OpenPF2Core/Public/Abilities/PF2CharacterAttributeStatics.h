@@ -6,6 +6,7 @@
 #pragma once
 
 #include "GameplayEffectExecutionCalculation.h"
+
 #include "Abilities/PF2AttributeSet.h"
 
 #define DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(S, P, T, B) \

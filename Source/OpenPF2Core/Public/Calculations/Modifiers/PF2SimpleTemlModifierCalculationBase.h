@@ -8,6 +8,7 @@
 #include <GameplayModMagnitudeCalculation.h>
 
 #include "Calculations/PF2AbilityCalculationBase.h"
+
 #include "PF2SimpleTemlModifierCalculationBase.generated.h"
 
 /**

@@ -4,7 +4,9 @@
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #pragma once
+
 #include "Calculations/Modifiers/PF2SimpleTemlModifierCalculationBase.h"
+
 #include "PF2PerceptionModifierCalculationBase.generated.h"
 
 /**

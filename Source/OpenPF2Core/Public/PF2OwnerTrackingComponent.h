@@ -5,7 +5,7 @@
 //
 // Portions of this code were adapted from or inspired by the "Real-Time Strategy Plugin for Unreal Engine 4" by Nick
 // Pruehs, provided under the MIT License. Copyright (c) 2017 Nick Pruehs.
-//
+
 #pragma once
 
 #include <Components/ActorComponent.h>
@@ -14,6 +14,7 @@
 #include <GameFramework/Info.h>
 
 #include "PF2OwnerTrackingInterface.h"
+
 #include "PF2OwnerTrackingComponent.generated.h"
 
 // =====================================================================================================================

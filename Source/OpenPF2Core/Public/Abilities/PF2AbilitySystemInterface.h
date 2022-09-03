@@ -7,6 +7,7 @@
 
 #include <GameplayEffect.h>
 #include <GameplayTagContainer.h>
+
 #include <UObject/Interface.h>
 
 #include "PF2AbilitySystemInterface.generated.h"

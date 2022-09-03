@@ -6,6 +6,7 @@
 #pragma once
 
 #include "GameplayTagContainer.h"
+
 #include "Utilities/PF2GameplayAbilityUtilities.h"
 
 #include "PF2MonetaryValue.generated.h"

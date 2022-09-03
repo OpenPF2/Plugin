@@ -10,6 +10,7 @@
 #include "PF2PlayerControllerBase.h"
 #include "PF2PlayerControllerInterface.h"
 
+#include "Commands/PF2CharacterCommandInterface.h"
 #include "Commands/PF2CommandQueueInterface.h"
 
 #include "GameModes/PF2CharacterInitiativeQueueComponent.h"

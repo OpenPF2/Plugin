@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include <CoreMinimal.h>
 #include <GameplayEffect.h>
 #include <GameplayEffectTypes.h>
 #include <GameplayTagContainer.h>

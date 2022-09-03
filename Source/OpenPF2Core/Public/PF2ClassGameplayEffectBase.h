@@ -6,6 +6,7 @@
 #pragma once
 
 #include "GameplayEffect.h"
+
 #include "PF2ClassGameplayEffectBase.generated.h"
 
 /**

@@ -15,7 +15,9 @@
 #include "PF2AbilityBoostInterface.h"
 #include "PF2AbilityBoostRuleOption.h"
 #include "PF2AttributeSet.h"
+
 #include "Abilities/GameplayAbility.h"
+
 #include "Utilities/PF2GameplayAbilityUtilities.h"
 
 #include "PF2AbilityBoostBase.generated.h"

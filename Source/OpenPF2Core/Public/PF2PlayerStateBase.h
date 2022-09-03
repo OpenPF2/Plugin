@@ -8,8 +8,9 @@
 
 #pragma once
 
-#include <UObject/WeakInterfacePtr.h>
 #include <GameFramework/PlayerState.h>
+
+#include <UObject/WeakInterfacePtr.h>
 
 #include "PF2PlayerStateInterface.h"
 

@@ -10,6 +10,7 @@
 
 #include <GameFramework/GameModeBase.h>
 #include <GameFramework/GameStateBase.h>
+
 #include <UObject/ScriptInterface.h>
 
 #include "GameModes/PF2GameModeInterface.h"

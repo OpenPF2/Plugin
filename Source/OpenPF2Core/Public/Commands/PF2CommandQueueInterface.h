@@ -5,9 +5,8 @@
 
 #pragma once
 
-#include <CoreMinimal.h>
-
 #include "PF2CommandExecuteImmediatelyResult.h"
+
 #include "Utilities/PF2LogIdentifiableInterface.h"
 
 #include "PF2CommandQueueInterface.generated.h"

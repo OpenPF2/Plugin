@@ -6,6 +6,7 @@
 #pragma once
 
 #include <AbilitySystemComponent.h>
+
 #include "PF2CharacterAbilitySystemInterface.h"
 
 #include "PF2AbilitySystemComponent.generated.h"

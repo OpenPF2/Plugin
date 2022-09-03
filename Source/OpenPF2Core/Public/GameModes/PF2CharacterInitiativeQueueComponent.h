@@ -12,10 +12,10 @@
 
 #pragma once
 
-#include <CoreMinimal.h>
 #include <Components/ActorComponent.h>
 
 #include "PF2CharacterInitiativeQueueInterface.h"
+
 #include "PF2CharacterInitiativeQueueComponent.generated.h"
 
 // =====================================================================================================================

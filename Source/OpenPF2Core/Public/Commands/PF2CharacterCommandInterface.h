@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <CoreMinimal.h>
+// ReSharper disable once CppUnusedIncludeDirective
 #include <Engine/Texture2D.h>
 
 #include "Commands/PF2CommandExecuteImmediatelyResult.h"

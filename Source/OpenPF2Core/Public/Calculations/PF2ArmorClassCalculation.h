@@ -12,9 +12,8 @@
 
 #pragma once
 
-#include <CoreMinimal.h>
-
 #include "GameplayModMagnitudeCalculation.h"
+
 #include "PF2ArmorClassCalculation.generated.h"
 
 /**

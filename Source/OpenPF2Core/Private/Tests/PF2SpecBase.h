@@ -5,7 +5,9 @@
 #pragma once
 
 #include <Misc/AutomationTest.h>
+
 #include "Abilities/PF2AttributeSet.h"
+
 #include "Tests/PF2TestPawn.h"
 
 #define DEFINE_PF_SPEC_PRIVATE(TClass, PrettyName, TFlags, FileName, LineNumber) \

@@ -12,9 +12,8 @@
 
 #pragma once
 
-#include <CoreMinimal.h>
-
 #include "Calculations/PF2KeyAbilityTemlCalculationBase.h"
+
 #include "PF2SpellAttackRollCalculation.generated.h"
 
 /**

@@ -12,11 +12,12 @@
 
 #pragma once
 
-#include "Abilities/GameplayAbility.h"
-#include "Abilities/PF2CharacterAttributeStatics.h"
-#include "Abilities/PF2CharacterAbilityScoreType.h"
-#include "Abilities/Weapons/PF2WeaponInterface.h"
 #include "PF2MonetaryValue.h"
+
+#include "Abilities/GameplayAbility.h"
+#include "Abilities/PF2CharacterAbilityScoreType.h"
+#include "Abilities/PF2CharacterAttributeStatics.h"
+#include "Abilities/Weapons/PF2WeaponInterface.h"
 
 #include "PF2WeaponBase.generated.h"
 

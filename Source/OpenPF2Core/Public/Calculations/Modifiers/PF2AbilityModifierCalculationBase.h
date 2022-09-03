@@ -6,7 +6,6 @@
 #pragma once
 
 #include <GameplayModMagnitudeCalculation.h>
-#include <CoreMinimal.h>
 
 #include "Calculations/PF2AbilityCalculationBase.h"
 
