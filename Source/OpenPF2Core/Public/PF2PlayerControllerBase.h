@@ -189,9 +189,9 @@ protected:
 	void BP_OnCharacterReleased(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter);
 
 	/**
-	 * BP event invoked when the mode of play has changed.
+	 * Blueprint event callback invoked when the mode of play has changed.
 	 *
-	 * This is invoked on both the owning client and server.
+	 * This is invoked on both the owning client and the server.
 	 *
 	 * @param NewMode
 	 *	The new mode of play.
@@ -206,7 +206,7 @@ protected:
 	/**
 	 * BP event invoked when the pawn's turn during an encounter has started.
 	 *
-	 * This is invoked on both the owning client and server.
+	 * This is invoked on both the owning client and the server.
 	 */
 	UFUNCTION(
 		BlueprintImplementableEvent,
@@ -218,7 +218,7 @@ protected:
 	/**
 	 * BP event invoked when the pawn's turn during an encounter has ended.
 	 *
-	 * This is invoked on both the owning client and server.
+	 * This is invoked on both the owning client and the server.
 	 */
 	UFUNCTION(
 		BlueprintImplementableEvent,
