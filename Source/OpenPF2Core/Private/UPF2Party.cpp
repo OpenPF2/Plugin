@@ -91,15 +91,21 @@ void APF2Party::AddPlayerToPartyByController(const TScriptInterface<IPF2PlayerCo
 
 void APF2Party::AddPlayerToPartyByState(const TScriptInterface<IPF2PlayerStateInterface>& PlayerState)
 {
+	APlayerState* PlayerStateActor;
+
 	check(PlayerState != nullptr);
 
-	APlayerState* PlayerStateActor = PlayerState->ToPlayerState();
+	PlayerStateActor = PlayerState->ToPlayerState();
 
 	if (!this->MemberStates.Contains(PlayerStateActor))
 	{
+		const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = PlayerState->GetPlayerController();
+
 		this->MemberStates.AddUnique(PlayerStateActor);
 
-		for (const auto& Character : PlayerState->GetControllableCharacters())
+		check(PlayerController != nullptr);
+
+		for (const auto& Character : PlayerController->GetControllableCharacters())
 		{
 			this->MemberCharacters.AddUnique(Character->ToActor());
 		}
@@ -116,15 +122,17 @@ void APF2Party::RemovePlayerFromPartyByController(const TScriptInterface<IPF2Pla
 
 void APF2Party::RemovePlayerFromPartyByState(const TScriptInterface<IPF2PlayerStateInterface>& PlayerState)
 {
+	APlayerState* PlayerStateActor;
+
 	check(PlayerState != nullptr);
 
-	APlayerState* PlayerStateActor = PlayerState->ToPlayerState();
+	PlayerStateActor = PlayerState->ToPlayerState();
 
 	if (this->MemberStates.Contains(PlayerStateActor))
 	{
 		this->MemberStates.Remove(PlayerStateActor);
 
-		for (const auto& Character : PlayerState->GetControllableCharacters())
+		for (const auto& Character : PlayerState->GetPlayerController()->GetControllableCharacters())
 		{
 			this->MemberCharacters.Remove(Character->ToActor());
 		}

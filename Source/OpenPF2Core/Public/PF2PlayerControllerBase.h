@@ -34,6 +34,20 @@ class OPENPF2CORE_API APF2PlayerControllerBase : public APlayerController, publi
 {
 	GENERATED_BODY()
 
+	// =================================================================================================================
+	// Private Properties
+	// =================================================================================================================
+	/**
+	 * The character(s) that can be controlled by this player.
+	 *
+	 * The characters in this list must be affiliated with the same party as this player.
+	 *
+	 * This is an array of actors (instead of interfaces) for replication. UE will not replicate actors if they are
+	 * declared/referenced through an interface property.
+	 */
+	UPROPERTY(ReplicatedUsing=OnRep_ControllableCharacters)
+	TArray<AActor*> ControllableCharacters;
+
 public:
 	// =================================================================================================================
 	// Public Methods - AController Overrides
@@ -41,6 +55,11 @@ public:
 	virtual void InitPlayerState() override;
 
 	virtual void OnRep_PlayerState() override;
+
+	// =================================================================================================================
+	// Public Methods - APlayerController Overrides
+	// =================================================================================================================
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	virtual void SetPawn(APawn* NewPawn) override;
 
@@ -53,8 +72,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual APlayerController* ToPlayerController() override;
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetControllableCharacters() const override;
+
 	virtual void Native_OnModeOfPlayChanged(EPF2ModeOfPlayType NewMode) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void GiveCharacter(const TScriptInterface<IPF2CharacterInterface>& GivenCharacter) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter) override;
 
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void Multicast_OnEncounterTurnStarted() override;
@@ -70,7 +97,19 @@ public:
 
 protected:
 	// =================================================================================================================
-	// Native Callbacks
+	// Protected Replication Callbacks
+	// =================================================================================================================
+	/**
+	 * Notifies this component that the list of character(s) that can be controlled by the player has been replicated.
+	 *
+	 * @param OldCharacters
+	 *	The previous array of characters that the player could control.
+	 */
+	UFUNCTION()
+	void OnRep_ControllableCharacters(const TArray<AActor*> OldCharacters);
+
+	// =================================================================================================================
+	// Protected Native Event Callbacks
 	// =================================================================================================================
 	/*
 	 * Callback invoked in C++ code when the player state is available for use.
@@ -83,12 +122,29 @@ protected:
 	 */
 	virtual void Native_OnPlayerStateAvailable(TScriptInterface<IPF2PlayerStateInterface> NewPlayerState);
 
+	/**
+	 * Callback invoked in C++ code when the player has taken ownership of a character.
+	 *
+	 * @param GivenCharacter
+	 *	The character that is now controllable by the player.
+	 */
+	virtual void Native_OnCharacterGiven(const TScriptInterface<IPF2CharacterInterface>& GivenCharacter);
+
+	/**
+	 * Callback invoked in C++ code when the player has been released of ownership of a character.
+	 *
+	 * @param ReleasedCharacter
+	 *	The character that is no longer controllable by the player.
+	 */
+	virtual void Native_OnCharacterReleased(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter);
+
 	// =================================================================================================================
 	// Blueprint Implementable Events
 	// =================================================================================================================
 	/**
-	 * Callback invoked in Blueprint when the player state is available for use.
+	 * Blueprint event callback invoked in Blueprint when the player state is available for use.
 	 *
+	 * This is invoked on both the owning client and the server:
 	 * - On the server: This happens just after the player state has been initialized.
 	 * - On clients: This happens just after the player state has been replicated.
 	 *
@@ -101,6 +157,36 @@ protected:
 		meta=(DisplayName="On Player State Available")
 	)
 	void BP_OnPlayerStateAvailable(const TScriptInterface<IPF2PlayerStateInterface>& NewPlayerState);
+
+	/**
+	 * Blueprint event callback invoked when the player has taken ownership of a character.
+	 *
+	 * This is invoked on both the owning client and the server.
+	 *
+	 * @param GivenCharacter
+	 *	The character that is now controllable by the player.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Player Controllers",
+		meta=(DisplayName="On Character Given")
+	)
+	void BP_OnCharacterGiven(const TScriptInterface<IPF2CharacterInterface>& GivenCharacter);
+
+	/**
+	 * Blueprint event invoke callback when the player has been released from ownership of a character.
+	 *
+	 * This is invoked on both the owning client and the server.
+	 *
+	 * @param ReleasedCharacter
+	 *	The character that is no longer controllable by the player.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Player Controllers",
+		meta=(DisplayName="On Character Released")
+	)
+	void BP_OnCharacterReleased(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter);
 
 	/**
 	 * BP event invoked when the mode of play has changed.

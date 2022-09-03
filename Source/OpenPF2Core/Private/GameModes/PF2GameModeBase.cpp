@@ -53,22 +53,11 @@ TScriptInterface<IPF2ModeOfPlayRuleSetInterface> APF2GameModeBase::CreateModeOfP
 
 void APF2GameModeBase::TransferCharacterOwnership(
 	const TScriptInterface<IPF2CharacterInterface>        Character,
-	const TScriptInterface<IPF2PlayerControllerInterface> ControllerOfNewOwner)
+	const TScriptInterface<IPF2PlayerControllerInterface> NewController)
 {
-	TScriptInterface<IPF2PlayerStateInterface>   PlayerStateOfNewOwner;
 	TScriptInterface<IPF2OwnerTrackingInterface> OwnerTracker;
 
 	check(Character != nullptr);
-
-	if (ControllerOfNewOwner == nullptr)
-	{
-		PlayerStateOfNewOwner = TScriptInterface<IPF2PlayerStateInterface>(nullptr);
-	}
-	else
-	{
-		PlayerStateOfNewOwner = ControllerOfNewOwner->GetPlayerState();
-		check(PlayerStateOfNewOwner != nullptr);
-	}
 
 	OwnerTracker = Character->GetOwnerTrackingComponent();
 
@@ -78,26 +67,26 @@ void APF2GameModeBase::TransferCharacterOwnership(
 			LogPf2Core,
 			Warning,
 			TEXT("Character ('%s') lacks an owner tracking component, so it will not be able to respond properly to ownership changes."),
-			*(ControllerOfNewOwner->GetIdForLogs()),
+			*(NewController->GetIdForLogs()),
 			*(Character->GetIdForLogs())
 		);
 	}
 	else
 	{
-		const TScriptInterface<IPF2PlayerStateInterface> PlayerStateOfOldOwner = OwnerTracker->GetStateOfOwningPlayer();
+		const TScriptInterface<IPF2PlayerStateInterface> OldOwnerPlayerState = OwnerTracker->GetStateOfOwningPlayer();
 
-		if (PlayerStateOfOldOwner != PlayerStateOfNewOwner)
+		if (OldOwnerPlayerState != nullptr)
 		{
-			if (PlayerStateOfOldOwner != nullptr)
-			{
-				PlayerStateOfOldOwner->ReleaseCharacter(Character);
-			}
+			const TScriptInterface<IPF2PlayerControllerInterface> OldController =
+				OldOwnerPlayerState->GetPlayerController();
 
-			OwnerTracker->SetOwningPlayerByState(PlayerStateOfNewOwner);
+			OldController->ReleaseCharacter(Character);
 		}
+
+		OwnerTracker->SetOwningPlayerByController(NewController);
 	}
 
-	if (PlayerStateOfNewOwner == nullptr)
+	if (NewController == nullptr)
 	{
 		UE_LOG(
 			LogPf2Core,
@@ -112,15 +101,15 @@ void APF2GameModeBase::TransferCharacterOwnership(
 			LogPf2Core,
 			Verbose,
 			TEXT("Player controller ('%s') now owns character ('%s')."),
-			*(ControllerOfNewOwner->GetIdForLogs()),
+			*(NewController->GetIdForLogs()),
 			*(Character->GetIdForLogs())
 		);
 
-		PlayerStateOfNewOwner->GiveCharacter(Character);
+		NewController->GiveCharacter(Character);
 	}
 
 	// Set player controller as networking authority for the character.
-	Character->ToActor()->SetOwner(ControllerOfNewOwner->ToPlayerController());
+	Character->ToActor()->SetOwner(NewController->ToPlayerController());
 }
 
 void APF2GameModeBase::SwitchPartyOfPlayer(const TScriptInterface<IPF2PlayerControllerInterface> PlayerController,
@@ -135,9 +124,9 @@ void APF2GameModeBase::SwitchPartyOfPlayer(const TScriptInterface<IPF2PlayerCont
 
 	if (OldParty != NewParty)
 	{
-		for (const auto& Character : PlayerState->GetControllableCharacters())
+		for (const auto& Character : PlayerController->GetControllableCharacters())
 		{
-			PlayerState->ReleaseCharacter(Character);
+			PlayerController->ReleaseCharacter(Character);
 		}
 
 		// We already released all the characters, so this allows us to reuse the logic without duplicating it here.
@@ -170,7 +159,7 @@ void APF2GameModeBase::SwitchPartyOfPlayerAndOwnedCharacters(
 		PlayerState->SetParty(NewParty);
 
 		// Associate all controllable characters with the new party.
-		for (const auto& Character : PlayerState->GetControllableCharacters())
+		for (const auto& Character : PlayerController->GetControllableCharacters())
 		{
 			const TScriptInterface<IPF2OwnerTrackingInterface> OwnerTracker = Character->GetOwnerTrackingComponent();
 

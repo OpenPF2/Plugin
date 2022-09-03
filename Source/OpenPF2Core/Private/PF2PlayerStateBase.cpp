@@ -11,10 +11,8 @@
 #include <Net/UnrealNetwork.h>
 
 #include "PF2CharacterInterface.h"
-#include "PF2OwnerTrackingInterface.h"
 #include "PF2PartyInterface.h"
 
-#include "Utilities/PF2ArrayUtilities.h"
 #include "Utilities/PF2InterfaceUtilities.h"
 
 void APF2PlayerStateBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -58,23 +56,6 @@ TScriptInterface<IPF2PlayerControllerInterface> APF2PlayerStateBase::GetPlayerCo
 	return PF2InterfaceUtilities::ToScriptInterface(PlayerControllerIntf);
 }
 
-TArray<TScriptInterface<IPF2CharacterInterface>> APF2PlayerStateBase::GetControllableCharacters() const
-{
-	return PF2ArrayUtilities::Reduce<TArray<TScriptInterface<IPF2CharacterInterface>>>(
-		this->ControllableCharacters,
-		TArray<TScriptInterface<IPF2CharacterInterface>>(),
-		[](TArray<TScriptInterface<IPF2CharacterInterface>> Characters,
-		   const TWeakInterfacePtr<IPF2CharacterInterface>  CurrentCharacter)
-		{
-			if (CurrentCharacter.IsValid())
-			{
-				Characters.Add(PF2InterfaceUtilities::ToScriptInterface(CurrentCharacter.Get()));
-			}
-
-			return Characters;
-		});
-}
-
 bool APF2PlayerStateBase::IsSamePartyAsPlayerWithController(
 	const TScriptInterface<IPF2PlayerControllerInterface>& OtherPlayerController) const
 {
@@ -95,72 +76,6 @@ bool APF2PlayerStateBase::IsSamePartyAsPlayerWithState(
 	OtherParty = OtherPlayerState->GetParty();
 
 	return (ThisParty->GetPartyIndex() == OtherParty->GetPartyIndex());
-}
-
-void APF2PlayerStateBase::GiveCharacter(const TScriptInterface<IPF2CharacterInterface> Character)
-{
-	const TScriptInterface<IPF2PartyInterface>   ThisParty = this->GetParty();
-	TScriptInterface<IPF2OwnerTrackingInterface> OwnerTracker;
-	int32                                        ThisPartyIndex  = IPF2PartyInterface::PartyIndexNone,
-	                                             OtherPartyIndex = IPF2PartyInterface::PartyIndexNone;
-
-	check(Character != nullptr);
-
-	if (ThisParty != nullptr)
-	{
-		ThisPartyIndex = ThisParty->GetPartyIndex();
-	}
-
-	OwnerTracker = Character->GetOwnerTrackingComponent();
-
-	if (OwnerTracker != nullptr)
-	{
-		const TScriptInterface<IPF2PartyInterface> OtherParty = OwnerTracker->GetParty();
-
-		if (OtherParty != nullptr)
-		{
-			OtherPartyIndex = OtherParty->GetPartyIndex();
-		}
-	}
-
-	if (ThisPartyIndex == OtherPartyIndex)
-	{
-		UE_LOG(
-			LogPf2Core,
-			Verbose,
-			TEXT("The player ('%s') has been granted the ability to control a character ('%s')."),
-			*(this->GetIdForLogs()),
-			*(Character->GetIdForLogs())
-		);
-
-		this->ControllableCharacters.AddUnique(Character->ToActor());
-		this->BP_OnCharacterGiven(Character);
-	}
-	else
-	{
-		UE_LOG(
-			LogPf2Core,
-			Error,
-			TEXT("The given character ('%s') is affiliated with a different party ('%i') than the player ('%i')."),
-			*(Character->GetIdForLogs()),
-			ThisPartyIndex,
-			OtherPartyIndex
-		);
-	}
-}
-
-void APF2PlayerStateBase::ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface> Character)
-{
-	UE_LOG(
-		LogPf2Core,
-		Verbose,
-		TEXT("The player ('%s') can no longer control a character ('%s')."),
-		*(this->GetIdForLogs()),
-		*(Character->GetIdForLogs())
-	);
-
-	this->ControllableCharacters.Remove(Character->ToActor());
-	this->BP_OnCharacterReleased(Character);
 }
 
 APlayerState* APF2PlayerStateBase::ToPlayerState()

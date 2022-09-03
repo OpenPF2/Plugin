@@ -50,7 +50,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void TransferCharacterOwnership(
 		const TScriptInterface<IPF2CharacterInterface>        Character,
-		const TScriptInterface<IPF2PlayerControllerInterface> ControllerOfNewOwner
+		const TScriptInterface<IPF2PlayerControllerInterface> NewController
 	) override;
 
 	UFUNCTION(BlueprintCallable)

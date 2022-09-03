@@ -93,23 +93,6 @@ public:
 	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerController() const = 0;
 
 	/**
-	 * Gets the character(s) that the player owning this player state has the ability to control or possess.
-	 *
-	 * For a single-player game that supports parties or squads, this may include both the character that the player
-	 * is actively controlling as well as any controllable character in this player's party or squad. Otherwise, this
-	 * will return only a single character per controller.
-	 *
-	 * All the characters returned will each be in the same party as the player, but not all characters in the party are
-	 * necessarily controllable by the current player (e.g., in a multiplayer RPG, two players may be in the same party
-	 * but may be restricted from being able to control each other's characters).
-	 *
-	 * @return
-	 *	All of the characters that this player controller can control.
-	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player State")
-	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetControllableCharacters() const = 0;
-
-	/**
 	 * Determines whether the player owning this player state belongs to the same party as another player.
 	 *
 	 * The other player is identified by their player controller.
@@ -134,23 +117,6 @@ public:
 	virtual bool IsSamePartyAsPlayerWithState(
 		const TScriptInterface<IPF2PlayerStateInterface>& OtherPlayerState
 	) const = 0;
-
-	/**
-	 * Adds the specified character to the list of characters that this player can control.
-	 *
-	 * The character must be affiliated with the same party as the player to which this player state corresponds.
-	 *
-	 * @param Character
-	 *	The character to give to this player.
-	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player State")
-	virtual void GiveCharacter(const TScriptInterface<IPF2CharacterInterface> Character) = 0;
-
-	/**
-	 * Removes the specified character from the list of characters that this player can control.
-	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player State")
-	virtual void ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface> Character) = 0;
 
 	/**
 	 * Gets the player state that is implementing this interface.

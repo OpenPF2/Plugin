@@ -65,9 +65,6 @@ public:
 	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerController() const override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetControllableCharacters() const override;
-
-	UFUNCTION(BlueprintCallable)
 	virtual bool IsSamePartyAsPlayerWithController(
 		const TScriptInterface<IPF2PlayerControllerInterface>& OtherPlayerController
 	) const override;
@@ -76,12 +73,6 @@ public:
 	virtual bool IsSamePartyAsPlayerWithState(
 		const TScriptInterface<IPF2PlayerStateInterface>& OtherPlayerState
 	) const override;
-
-	UFUNCTION(BlueprintCallable)
-	virtual void GiveCharacter(const TScriptInterface<IPF2CharacterInterface> Character) override;
-
-	UFUNCTION(BlueprintCallable)
-	virtual void ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface> Character) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual APlayerState* ToPlayerState() override;
@@ -144,32 +135,6 @@ protected:
 		const TScriptInterface<IPF2PartyInterface>& NewParty
 	);
 
-	/**
-	 * BP event invoked when this player has taken ownership of a character.
-	 *
-	 * @param Character
-	 *	The character that is now controllable by this player.
-	 */
-	UFUNCTION(
-		BlueprintImplementableEvent,
-		Category="OpenPF2|Player States",
-		meta=(DisplayName="On Character Given")
-	)
-	void BP_OnCharacterGiven(const TScriptInterface<IPF2CharacterInterface>& Character);
-
-	/**
-	 * BP event invoked when this player has been released of ownership of a character.
-	 *
-	 * @param Character
-	 *	The character that is no longer controllable by this player.
-	 */
-	UFUNCTION(
-		BlueprintImplementableEvent,
-		Category="OpenPF2|Player States",
-		meta=(DisplayName="On Character Released")
-	)
-	void BP_OnCharacterReleased(const TScriptInterface<IPF2CharacterInterface>& Character);
-
 private:
 	// =================================================================================================================
 	// Private Properties
@@ -187,15 +152,4 @@ private:
 	 */
 	UPROPERTY(ReplicatedUsing=OnRep_Party)
 	TScriptInterface<IPF2PartyInterface> Party;
-
-	/**
-	 * The character(s) that can be controlled by this player.
-	 *
-	 * The characters in this list must be affiliated with the same party as this player.
-	 *
-	 * This is an array of actors (instead of interfaces) for replication. UE will not replicate actors if they are
-	 * declared/referenced through an interface property.
-	 */
-	UPROPERTY(Replicated)
-	TArray<AActor*> ControllableCharacters;
 };

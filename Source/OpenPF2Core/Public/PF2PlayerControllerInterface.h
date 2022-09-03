@@ -52,6 +52,23 @@ public:
 	virtual TScriptInterface<IPF2PlayerStateInterface> GetPlayerState() const = 0;
 
 	/**
+	 * Gets the character(s) that the player has the ability to control or possess.
+	 *
+	 * For a single-player game that supports parties or squads, this may include both the character that the player
+	 * is actively controlling as well as any controllable character in this player's party or squad. Otherwise, this
+	 * will return only a single character per controller.
+	 *
+	 * All the characters returned will each be in the same party as the player, but not all characters in the party are
+	 * necessarily controllable by the current player (e.g., in a multiplayer RPG, two players may be in the same party
+	 * but may be restricted from being able to control each other's characters).
+	 *
+	 * @return
+	 *	All of the characters that this player controller can control.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
+	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetControllableCharacters() const = 0;
+
+	/**
 	 * Gets the player controller that is implementing this interface.
 	 *
 	 * @return
@@ -59,6 +76,26 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
 	virtual APlayerController* ToPlayerController() = 0;
+
+	/**
+	 * Adds the specified character to the list of characters that the player can control.
+	 *
+	 * The character must be affiliated with the same party as the player to which this player state corresponds.
+	 *
+	 * @param GivenCharacter
+	 *	The character to give to this player.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
+	virtual void GiveCharacter(const TScriptInterface<IPF2CharacterInterface>& GivenCharacter) = 0;
+
+	/**
+	 * Removes the specified character from the list of characters that the player can control.
+	 *
+	 * @param ReleasedCharacter
+	 *   The character to release from the player's controller.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
+	virtual void ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter) = 0;
 
 	// =================================================================================================================
 	// Public Event Notifications from the Game State
