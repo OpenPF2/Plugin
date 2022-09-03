@@ -34,6 +34,23 @@ class OPENPF2CORE_API APF2PlayerStateBase : public APlayerState, public IPF2Play
 {
 	GENERATED_BODY()
 
+	// =================================================================================================================
+	// Private Properties
+	// =================================================================================================================
+	/**
+	 * The zero-based index of this player.
+	 *
+	 * This is assigned by the server upon the player joining the game.
+	 */
+	UPROPERTY(Replicated)
+	uint8 PlayerIndex;
+
+	/**
+	 * The party to which this player is affiliated.
+	 */
+	UPROPERTY(ReplicatedUsing=OnRep_Party)
+	TScriptInterface<IPF2PartyInterface> Party;
+
 public:
 	/**
 	 * Default constructor for APF2PlayerStateBase.
@@ -134,22 +151,4 @@ protected:
 		const TScriptInterface<IPF2PartyInterface>& OldParty,
 		const TScriptInterface<IPF2PartyInterface>& NewParty
 	);
-
-private:
-	// =================================================================================================================
-	// Private Properties
-	// =================================================================================================================
-	/**
-	 * The zero-based index of this player.
-	 *
-	 * This is assigned by the server upon the player joining the game.
-	 */
-	UPROPERTY(Replicated)
-	uint8 PlayerIndex;
-
-	/**
-	 * The party to which this player is affiliated.
-	 */
-	UPROPERTY(ReplicatedUsing=OnRep_Party)
-	TScriptInterface<IPF2PartyInterface> Party;
 };
