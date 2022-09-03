@@ -20,6 +20,7 @@ void APF2PlayerStateBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(APF2PlayerStateBase, PlayerIndex);
+	DOREPLIFETIME(APF2PlayerStateBase, Party);
 }
 
 int32 APF2PlayerStateBase::GetPlayerIndex() const
