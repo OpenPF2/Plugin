@@ -86,7 +86,7 @@ public:
 	/**
 	 * Sets the current play mode for all characters in the loaded level.
 	 *
-	 * This should only get called by the game mode (on the server).
+	 * (This should only get called by the game mode (on the server).)
 	 *
 	 * @see EPF2ModeOfPlay
 	 *
@@ -95,6 +95,6 @@ public:
 	 * @param NewRuleSet
 	 *	The rules that govern how the game will behave while in the new play mode.
 	 */
-	virtual void SwitchModeOfPlay(const EPF2ModeOfPlayType                         NewMode,
-	                              TScriptInterface<IPF2ModeOfPlayRuleSetInterface> NewRuleSet) = 0;
+	virtual void SetModeOfPlay(const EPF2ModeOfPlayType                         NewMode,
+	                           TScriptInterface<IPF2ModeOfPlayRuleSetInterface> NewRuleSet) = 0;
 };

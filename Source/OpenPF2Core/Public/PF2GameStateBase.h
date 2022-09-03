@@ -89,8 +89,8 @@ public:
 		return this->ModeOfPlayRuleSet;
 	}
 
-	virtual void SwitchModeOfPlay(const EPF2ModeOfPlayType                         NewMode,
-	                              TScriptInterface<IPF2ModeOfPlayRuleSetInterface> NewRuleSet) override;
+	virtual void SetModeOfPlay(const EPF2ModeOfPlayType                         NewMode,
+	                           TScriptInterface<IPF2ModeOfPlayRuleSetInterface> NewRuleSet) override;
 
 protected:
 	// =================================================================================================================

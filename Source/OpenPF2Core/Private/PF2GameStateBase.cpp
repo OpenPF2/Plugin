@@ -26,8 +26,8 @@ void APF2GameStateBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME(APF2GameStateBase, ModeOfPlayRuleSet);
 }
 
-void APF2GameStateBase::SwitchModeOfPlay(const EPF2ModeOfPlayType                               NewMode,
-                                         const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> NewRuleSet)
+void APF2GameStateBase::SetModeOfPlay(const EPF2ModeOfPlayType                               NewMode,
+                                      const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> NewRuleSet)
 {
 	if (this->HasAuthority())
 	{

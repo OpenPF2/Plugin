@@ -428,7 +428,7 @@ void APF2GameModeBase::ForceSwitchModeOfPlay(const EPF2ModeOfPlayType NewModeOfP
 			}
 		}
 
-		Pf2GameState->SwitchModeOfPlay(NewModeOfPlay, NewRuleSet);
+		Pf2GameState->SetModeOfPlay(NewModeOfPlay, NewRuleSet);
 
 		if (NewRuleSet != nullptr)
 		{
