@@ -71,7 +71,7 @@ void FPF2CommandInputBinding::LocalInputPressed(FPF2CommandInputBinding* Binding
 			*(Binding->Character->GetIdForLogs())
 		);
 
-		Binding->InvokeAbility();
+		Binding->ActivateAbility();
 	}
 }
 
@@ -95,7 +95,7 @@ void FPF2CommandInputBinding::LocalInputReleased(FPF2CommandInputBinding* Bindin
 			*(Binding->Character->GetIdForLogs())
 		);
 
-		Binding->ReleaseAbility();
+		Binding->DeactivateAbility();
 	}
 }
 
@@ -116,12 +116,12 @@ int32 FPF2CommandInputBinding::AddActionBinding(UInputComponent*  InputComponent
 	return AddResult.GetHandle();
 }
 
-void FPF2CommandInputBinding::InvokeAbility()
+void FPF2CommandInputBinding::ActivateAbility()
 {
 	this->BindingsOwner->ExecuteBoundAbility(this->AbilitySpecHandle, this->Character);
 }
 
-void FPF2CommandInputBinding::ReleaseAbility()
+void FPF2CommandInputBinding::DeactivateAbility()
 {
 	// Default implementation -- Do nothing.
 }

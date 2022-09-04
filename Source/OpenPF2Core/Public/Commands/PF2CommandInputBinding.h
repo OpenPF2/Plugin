@@ -177,12 +177,12 @@ protected:
 	 *
 	 * The ability may be queued if the active MoPRS is requiring abilities to be queued (e.g., encounters).
 	 */
-	virtual void InvokeAbility();
+	virtual void ActivateAbility();
 
 	/**
-	 * Notifies the ability that the player is no longer pressing the keys for this binding.
+	 * Notifies the ability that the player is no longer invoking the ability associated with this binding.
 	 *
-	 * (The default implementation does nothing, so this call has no effect).
+	 * The default implementation does nothing.
 	 */
-	virtual void ReleaseAbility();
+	virtual void DeactivateAbility();
 };
