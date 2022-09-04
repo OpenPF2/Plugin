@@ -88,6 +88,8 @@ public:
 	 *	The specification for the ability.
 	 * @param Character
 	 *	The character to which the ability has been granted.
+	 * @param Owner
+	 *	The component that is managing this binding.
 	 */
 	explicit FPF2CommandInputBinding(const FName&                  ActionName,
 	                                 const FGameplayAbilitySpec    AbilitySpec,
