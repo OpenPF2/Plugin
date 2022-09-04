@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <GameplayAbilitySpec.h>
+
 #include "GameModes/PF2ModeOfPlayType.h"
 
 #include "Utilities/PF2LogIdentifiableInterface.h"
@@ -94,6 +96,24 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
 	virtual void ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter) = 0;
+
+	/**
+	 * Performs an ability on one of the characters that this player controller is able to control.
+	 *
+	 * The given character must be controllable by this player controller.
+	 *
+	 * This is an RPC so the character is passed as an actor instead of as an interface reference. UE will not
+	 * replicate actors if they are declared/referenced through an interface property. The given actor must implement
+	 * the IPF2CharacterInterface interface.
+	 *
+	 * @param AbilitySpecHandle
+	 *	The handle for the ability to activate.
+	 * @param CharacterActor
+	 *	The character upon which the ability should be activated.
+	 */
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
+	virtual void Server_PerformAbilityOnControllableCharacter(const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	                                                          AActor*                          CharacterActor) = 0;
 
 	// =================================================================================================================
 	// Public Event Notifications from the Game State

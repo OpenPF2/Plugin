@@ -17,6 +17,8 @@
 #include "PF2PartyInterface.h"
 #include "PF2PlayerStateInterface.h"
 
+#include "Commands/PF2CharacterCommand.h"
+
 #include "GameModes/PF2GameModeInterface.h"
 
 #include "Utilities/PF2ArrayUtilities.h"
@@ -179,6 +181,23 @@ void APF2PlayerControllerBase::ReleaseCharacter(const TScriptInterface<IPF2Chara
 
 	this->ControllableCharacters.Remove(ReleasedCharacter->ToActor());
 	this->Native_OnCharacterReleased(ReleasedCharacter);
+}
+
+void APF2PlayerControllerBase::Server_PerformAbilityOnControllableCharacter_Implementation(
+	const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	AActor* CharacterActor)
+{
+	IPF2CharacterCommandInterface* Command;
+
+	UE_LOG(
+		LogPf2CoreKeyBindings,
+		VeryVerbose,
+		TEXT("[%s] Server_PerformAbilityOnControllableCharacter() called."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld()))
+	);
+
+	Command = APF2CharacterCommand::Create(CharacterActor, AbilitySpecHandle);
+	Command->AttemptExecuteOrQueue();
 }
 
 void APF2PlayerControllerBase::Multicast_OnEncounterTurnStarted_Implementation()

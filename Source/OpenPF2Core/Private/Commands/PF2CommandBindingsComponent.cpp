@@ -6,14 +6,15 @@
 #include "Commands/PF2CommandBindingsComponent.h"
 
 #include <AbilitySystemComponent.h>
+
 #include <Components/InputComponent.h>
+
+#include "PF2CharacterInterface.h"
+#include "PF2PlayerControllerInterface.h"
 
 #include "Abilities/PF2GameplayAbilityInterface.h"
 
-#include "PF2CharacterInterface.h"
-
 #include "Commands/PF2CharacterCommand.h"
-#include "Commands/PF2CharacterCommandInterface.h"
 #include "Commands/PF2CommandInputBinding.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
@@ -121,19 +122,14 @@ void UPF2CommandBindingsComponent::DisconnectFromInput()
 	}
 }
 
-void UPF2CommandBindingsComponent::ServerExecuteBoundAbility_Implementation(
+void UPF2CommandBindingsComponent::ExecuteBoundAbility(
 	const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	AActor*                          CharacterActor)
+	IPF2CharacterInterface* Character)
 {
-	UE_LOG(
-		LogPf2CoreKeyBindings,
-		VeryVerbose,
-		TEXT("[%s] ServerExecuteBoundAbility_Implementation() called."),
-		*(PF2LogUtilities::GetHostNetId(this->GetWorld()))
-	);
+	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
+	check(PlayerController != nullptr);
 
-	IPF2CharacterCommandInterface* Command = APF2CharacterCommand::Create(CharacterActor, AbilitySpecHandle);
-	Command->AttemptExecuteOrQueue();
+	PlayerController->Server_PerformAbilityOnControllableCharacter(AbilitySpecHandle, Character->ToActor());
 }
 
 FString UPF2CommandBindingsComponent::GetIdForLogs() const

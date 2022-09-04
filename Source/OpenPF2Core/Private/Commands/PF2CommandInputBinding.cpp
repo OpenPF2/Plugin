@@ -118,11 +118,7 @@ int32 FPF2CommandInputBinding::AddActionBinding(UInputComponent*  InputComponent
 
 void FPF2CommandInputBinding::InvokeAbility()
 {
-	// We have to convert the character to an actor for replication to work properly through the RPC.
-	this->BindingsOwner->ServerExecuteBoundAbility(
-		this->AbilitySpecHandle,
-		this->Character->ToActor()
-	);
+	this->BindingsOwner->ExecuteBoundAbility(this->AbilitySpecHandle, this->Character);
 }
 
 void FPF2CommandInputBinding::ReleaseAbility()
