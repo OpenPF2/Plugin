@@ -141,11 +141,20 @@ public:
 	virtual TScriptInterface<IPF2OwnerTrackingInterface> GetOwnerTrackingComponent() const = 0;
 
 	/**
-	 * Gets the player controller for this character, if this character is being controlled by a player.
+	 * Gets the player controller for this character, if this character is controllable by a player.
+	 *
+	 * This method behaves differently depending upon if it is being invoked on a client or on the server:
+	 * - On clients: For characters controllable by the local player, this will return the local player controller.
+	 *   Otherwise, this will return null.
+	 * - On the server:
+	 *     - For a character that is possessed by a player controller, this will return the player controller that is
+	 *       possessing the character.
+	 *     - Otherwise, if the character has an owner tracking component, this will return the player controller that
+	 *       "owns" the character.
 	 *
 	 * @return
-	 *	Either the player controller for this character, or a null player controller reference if this is not a playable
-	 *	character.
+	 *	Either the player controller for this character, or a null player controller reference if this character is not
+	 *	currently in the list of controllable characters for any player that is locally accessible.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerController() const = 0;

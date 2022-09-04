@@ -10,10 +10,12 @@
 #include <UObject/ConstructorHelpers.h>
 
 #include "PF2OwnerTrackingComponent.h"
+#include "PF2PlayerStateInterface.h"
 
 #include "Abilities/PF2GameplayAbilityTargetData_BoostAbility.h"
 #include "Commands/PF2CommandQueueComponent.h"
 #include "Utilities/PF2InterfaceUtilities.h"
+#include "Utilities/PF2LogUtilities.h"
 
 APF2CharacterBase::APF2CharacterBase() :
 	APF2CharacterBase(TPF2CharacterComponentFactory<UPF2AbilitySystemComponent,
@@ -120,7 +122,48 @@ TScriptInterface<IPF2OwnerTrackingInterface> APF2CharacterBase::GetOwnerTracking
 
 TScriptInterface<IPF2PlayerControllerInterface> APF2CharacterBase::GetPlayerController() const
 {
-	return this->GetController();
+	TScriptInterface<IPF2PlayerControllerInterface> PlayerController = this->GetController();
+
+	// Using the PC is usually the fastest/easiest option, but only works if the character is possessed, as is the case
+	// for a party character in exploration mode. For any other situation, we have to use the owner tracking component
+	// (if there is one) to identify the PC for this character. If this doesn't work, then this character isn't
+	// controllable by any PCs right now but might be controllable by AI (e.g. by the story or campaign).
+	if (PlayerController == nullptr)
+	{
+		const TScriptInterface<IPF2OwnerTrackingInterface> OwnerTrackingComponent = this->GetOwnerTrackingComponent();
+
+		UE_LOG(
+			LogPf2Core,
+			VeryVerbose,
+			TEXT("[%s] Attempting to identify owner of character ('%s') using owner tracking component."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(this->GetIdForLogs())
+		);
+
+		if (OwnerTrackingComponent != nullptr)
+		{
+			const TScriptInterface<IPF2PlayerStateInterface> OwnerPlayerState =
+				OwnerTrackingComponent->GetStateOfOwningPlayer();
+
+			if (OwnerPlayerState != nullptr)
+			{
+				PlayerController = OwnerPlayerState->GetPlayerController();
+			}
+		}
+	}
+
+	if (PlayerController == nullptr)
+	{
+		UE_LOG(
+			LogPf2Core,
+			Warning,
+			TEXT("[%s] Either this character ('%s') is only controllable by a remote client, or the character does not have a PF2-compatible player controller."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(this->GetIdForLogs())
+		);
+	}
+
+	return PlayerController;
 }
 
 TArray<TScriptInterface<IPF2AbilityBoostInterface>> APF2CharacterBase::GetPendingAbilityBoosts() const
