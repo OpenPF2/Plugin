@@ -7,8 +7,6 @@
 
 #include <GameFramework/Info.h>
 
-#include <UObject/Object.h>
-
 #include "GameplayAbilitySpec.h"
 #include "PF2CharacterCommandInterface.h"
 #include "PF2CharacterInterface.h"
