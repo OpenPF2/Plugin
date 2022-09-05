@@ -64,7 +64,7 @@ public:
 	 * @return
 	 *	The new command.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Commands")
+	UFUNCTION(BlueprintPure, Category="OpenPF2|Character Commands", meta=(DisplayName="Create Character Command"))
 	static TScriptInterface<IPF2CharacterCommandInterface> Create(
 		const TScriptInterface<IPF2CharacterInterface> InCharacter,
 		const FGameplayAbilitySpecHandle               InAbilitySpecHandle)
