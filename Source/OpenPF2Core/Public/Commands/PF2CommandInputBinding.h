@@ -51,7 +51,7 @@ protected:
 	FGameplayAbilitySpecHandle AbilitySpecHandle;
 
 	/**
-	 * The handles for input action bindings, if this binding been connected to input.
+	 * The handles for input action bindings, if this binding has been connected to input.
 	 */
 	TArray<int32> Handles;
 

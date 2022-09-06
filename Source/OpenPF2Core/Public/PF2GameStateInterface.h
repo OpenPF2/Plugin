@@ -86,7 +86,7 @@ public:
 	/**
 	 * Sets the current play mode for all characters in the loaded level.
 	 *
-	 * (This should only get called by the game mode (on the server).)
+	 * This should only get called by the game mode (on the server).
 	 *
 	 * @see EPF2ModeOfPlay
 	 *
