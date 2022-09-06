@@ -71,7 +71,7 @@ public:
 	 * meadow but then encounter an assailant, resulting in the play mode changing to encounter mode until either the
 	 * assailant or the party have been killed or have fled.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game States")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game State")
 	virtual EPF2ModeOfPlayType GetModeOfPlay() = 0;
 
 	/**
@@ -80,7 +80,7 @@ public:
 	 * @return
 	 *	The current rule set for the current mode of play.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game States")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game State")
 	virtual TScriptInterface<IPF2ModeOfPlayRuleSetInterface> GetModeOfPlayRuleSet() = 0;
 
 	/**
