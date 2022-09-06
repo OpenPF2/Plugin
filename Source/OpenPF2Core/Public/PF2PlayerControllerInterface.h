@@ -5,11 +5,9 @@
 
 #pragma once
 
-#include <GameplayAbilitySpec.h>
+#include "PF2CharacterControllerInterface.h"
 
 #include "GameModes/PF2ModeOfPlayType.h"
-
-#include "Utilities/PF2LogIdentifiableInterface.h"
 
 #include "PF2PlayerControllerInterface.generated.h"
 
@@ -23,7 +21,7 @@ class IPF2PlayerStateInterface;
 // Normal Declarations
 // =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
-class UPF2PlayerControllerInterface : public UPF2LogIdentifiableInterface
+class UPF2PlayerControllerInterface : public UPF2CharacterControllerInterface
 {
 	GENERATED_BODY()
 };
@@ -31,7 +29,7 @@ class UPF2PlayerControllerInterface : public UPF2LogIdentifiableInterface
 /**
  * An interface for OpenPF2-compatible Player Controllers.
  */
-class OPENPF2CORE_API IPF2PlayerControllerInterface : public IPF2LogIdentifiableInterface
+class OPENPF2CORE_API IPF2PlayerControllerInterface : public IPF2CharacterControllerInterface
 {
 	GENERATED_BODY()
 
@@ -96,24 +94,6 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
 	virtual void ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter) = 0;
-
-	/**
-	 * Performs an ability on one of the characters that this player controller is able to control.
-	 *
-	 * The given character must be controllable by this player controller.
-	 *
-	 * This is an RPC so the character is passed as an actor instead of as an interface reference. UE will not
-	 * replicate actors if they are declared/referenced through an interface property. The given actor must implement
-	 * the IPF2CharacterInterface interface.
-	 *
-	 * @param AbilitySpecHandle
-	 *	The handle for the ability to activate.
-	 * @param CharacterActor
-	 *	The character upon which the ability should be activated.
-	 */
-	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
-	virtual void Server_PerformAbilityOnControllableCharacter(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	                                                          AActor*                          CharacterActor) = 0;
 
 	// =================================================================================================================
 	// Public Event Notifications from the Game State

@@ -122,14 +122,89 @@ void UPF2CommandBindingsComponent::DisconnectFromInput()
 	}
 }
 
-void UPF2CommandBindingsComponent::ExecuteBoundAbility(
+bool UPF2CommandBindingsComponent::Server_ExecuteBoundAbility_Validate(
 	const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	IPF2CharacterInterface* Character)
+	AActor*                          CharacterActor)
 {
-	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
-	check(PlayerController != nullptr);
+	TScriptInterface<IPF2CharacterInterface> Character;
+	APawn*                                   CharacterPawn;
 
-	PlayerController->Server_PerformAbilityOnControllableCharacter(AbilitySpecHandle, Character->ToActor());
+	if (!CharacterActor->Implements<UPF2CharacterInterface>())
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("Server_ExecuteBoundAbility(%s,%s): Character must implement PF2CharacterInterface."),
+			*(AbilitySpecHandle.ToString()),
+			*(CharacterActor->GetName())
+		);
+
+		return false;
+	}
+
+	Character = TScriptInterface<IPF2CharacterInterface>(CharacterActor);
+
+	if (Character == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("Character is null, so ability ('%s') cannot be executed."),
+			*(AbilitySpecHandle.ToString())
+		);
+
+		return false;
+	}
+
+	CharacterPawn = Character->ToPawn();
+
+	if (CharacterPawn == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("Character ('%s') is not a pawn, so ability ('%s') cannot be executed."),
+			*(Character->GetIdForLogs()),
+			*(AbilitySpecHandle.ToString())
+		);
+
+		return false;
+	}
+
+	if (Cast<IPF2CharacterControllerInterface>(CharacterPawn->GetController()) == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("Character ('%s') is not currently possessed by an OpenPF2-compatible controller, so ability ('%s') cannot be executed."),
+			*(Character->GetIdForLogs()),
+			*(AbilitySpecHandle.ToString())
+		);
+
+		return false;
+	}
+
+	return true;
+}
+
+void UPF2CommandBindingsComponent::Server_ExecuteBoundAbility_Implementation(
+	const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	AActor*                          CharacterActor)
+{
+	const TScriptInterface<IPF2CharacterInterface> Character = TScriptInterface<IPF2CharacterInterface>(CharacterActor);
+	APawn*                                         CharacterPawn;
+	IPF2CharacterControllerInterface*              CharacterController;
+
+	check(Character != nullptr);
+
+	CharacterPawn = Character->ToPawn();
+	check(CharacterPawn != nullptr);
+
+	CharacterController = Cast<IPF2CharacterControllerInterface>(CharacterPawn->GetController());
+	check(CharacterController != nullptr)
+
+	// Delegate to whichever player controller or AI controller is controlling this character.
+	CharacterController->PerformAbilityOnControllableCharacter(AbilitySpecHandle, Character->ToActor());
 }
 
 FString UPF2CommandBindingsComponent::GetIdForLogs() const

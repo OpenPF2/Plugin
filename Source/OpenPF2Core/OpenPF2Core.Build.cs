@@ -16,6 +16,7 @@ public class OpenPF2Core: ModuleRules
 			new string[]
 			{
 				"Core",
+				"AIModule",
 				"GameplayAbilities",
 				"GameplayTags",
 				"GameplayTasks",

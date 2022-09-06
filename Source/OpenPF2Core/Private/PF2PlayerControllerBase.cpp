@@ -8,6 +8,10 @@
 
 #include "PF2PlayerControllerBase.h"
 
+#include <AIController.h>
+
+#include <BehaviorTree/BlackboardComponent.h>
+
 #include <GameFramework/PlayerState.h>
 
 #include <Net/UnrealNetwork.h>
@@ -183,23 +187,6 @@ void APF2PlayerControllerBase::ReleaseCharacter(const TScriptInterface<IPF2Chara
 	this->Native_OnCharacterReleased(ReleasedCharacter);
 }
 
-void APF2PlayerControllerBase::Server_PerformAbilityOnControllableCharacter_Implementation(
-	const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	AActor* CharacterActor)
-{
-	IPF2CharacterCommandInterface* Command;
-
-	UE_LOG(
-		LogPf2CoreKeyBindings,
-		VeryVerbose,
-		TEXT("[%s] Server_PerformAbilityOnControllableCharacter() called."),
-		*(PF2LogUtilities::GetHostNetId(this->GetWorld()))
-	);
-
-	Command = APF2CharacterCommand::Create(CharacterActor, AbilitySpecHandle);
-	Command->AttemptExecuteOrQueue();
-}
-
 void APF2PlayerControllerBase::Multicast_OnEncounterTurnStarted_Implementation()
 {
 	this->BP_OnEncounterTurnStarted();
@@ -208,6 +195,43 @@ void APF2PlayerControllerBase::Multicast_OnEncounterTurnStarted_Implementation()
 void APF2PlayerControllerBase::Multicast_OnEncounterTurnEnded_Implementation()
 {
 	this->BP_OnEncounterTurnEnded();
+}
+
+void APF2PlayerControllerBase::PerformAbilityOnControllableCharacter(
+	const FGameplayAbilitySpecHandle                AbilitySpecHandle,
+	const TScriptInterface<IPF2CharacterInterface>& TargetCharacter)
+{
+	IPF2CharacterCommandInterface* Command;
+
+	UE_LOG(
+		LogPf2CoreAbilities,
+		VeryVerbose,
+		TEXT("[%s] PerformAbilityOnControllableCharacter() called on player controller ('%s')."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(this->GetIdForLogs())
+	);
+
+	if ((TargetCharacter->ToPawn()->GetController() != this) &&
+		!this->GetControllableCharacters().Contains(TargetCharacter->ToActor()))
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("[%s] %s::PerformAbilityOnControllableCharacter(%s,%s): TargetCharacter must be controllable by this player controller."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(this->GetIdForLogs()),
+			*(AbilitySpecHandle.ToString()),
+			*(TargetCharacter->GetIdForLogs())
+		);
+
+		return;
+	}
+
+	// TODO: Pass the command through the RPC rather than building it in each controller. It's already an actor.
+	Command =
+		APF2CharacterCommand::Create(PF2InterfaceUtilities::FromScriptInterface(TargetCharacter), AbilitySpecHandle);
+
+	Command->AttemptExecuteOrQueue();
 }
 
 FString APF2PlayerControllerBase::GetIdForLogs() const
