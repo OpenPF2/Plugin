@@ -104,13 +104,13 @@ public:
 	/**
 	 * Event fired when the containing actor is owned by a different player.
 	 */
-	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Owner")
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Owner Tracking")
 	FPF2OwnerComponentOwningPlayerStateChangedDelegate OnOwnerChanged;
 
 	/**
 	 * Event fired when the containing actor changes party affiliations.
 	 */
-	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Owner")
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Owner Tracking")
 	FPF2OwnerComponentPartyChangedDelegate OnPartyChanged;
 
 protected:
