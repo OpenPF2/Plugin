@@ -95,6 +95,9 @@ public:
 	virtual void SetModeOfPlay(const EPF2ModeOfPlayType                         NewMode,
 	                           TScriptInterface<IPF2ModeOfPlayRuleSetInterface> NewRuleSet) override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual void RefreshAbilityActorInfoForAllCharacters() override;
+
 protected:
 	// =================================================================================================================
 	// Protected Methods
@@ -117,4 +120,12 @@ protected:
 	 * It has no effect on dedicated servers.
 	 */
 	virtual void Native_OnModeOfPlayAvailable();
+
+	/**
+	 * Callback invoked on all clients to refresh ability actor info for all characters.
+	 *
+	 * This is invoked by RefreshAbilityActorInfoForAllCharacters().
+	 */
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_RefreshAbilityActorInfoForAllCharacters();
 };

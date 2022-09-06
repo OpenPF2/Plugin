@@ -47,6 +47,18 @@ void APF2GameStateBase::SetModeOfPlay(const EPF2ModeOfPlayType                  
 	}
 }
 
+void APF2GameStateBase::RefreshAbilityActorInfoForAllCharacters()
+{
+	UE_LOG(
+		LogPf2Core,
+		VeryVerbose,
+		TEXT("[%s] Triggering refresh of ability actor information for all characters."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld()))
+	);
+
+	this->Multicast_RefreshAbilityActorInfoForAllCharacters();
+}
+
 void APF2GameStateBase::OnRep_ModeOfPlay()
 {
 	UE_LOG(
@@ -74,6 +86,41 @@ void APF2GameStateBase::Native_OnModeOfPlayAvailable()
 		if (PF2PlayerController != nullptr)
 		{
 			PF2PlayerController->Native_OnModeOfPlayChanged(this->ModeOfPlay);
+		}
+	}
+}
+
+void APF2GameStateBase::Multicast_RefreshAbilityActorInfoForAllCharacters_Implementation()
+{
+	const UWorld* World = this->GetWorld();
+
+	for (FConstPlayerControllerIterator Iterator = World->GetPlayerControllerIterator(); Iterator; ++Iterator)
+	{
+		const IPF2PlayerControllerInterface* PlayerControllerIntf =
+			Cast<IPF2PlayerControllerInterface>(Iterator->Get());
+
+		if (PlayerControllerIntf != nullptr)
+		{
+			TArray<TScriptInterface<IPF2CharacterInterface>> Characters =
+				PlayerControllerIntf->GetControllableCharacters();
+
+			for (const TScriptInterface<IPF2CharacterInterface> Character : Characters)
+			{
+				UAbilitySystemComponent* AbilitySystemComponent = Character->GetAbilitySystemComponent();
+
+				if (AbilitySystemComponent != nullptr)
+				{
+					UE_LOG(
+						LogPf2Core,
+						VeryVerbose,
+						TEXT("[%s] Refreshing ability actor information for character ('%s')."),
+						*(PF2LogUtilities::GetHostNetId(World)),
+						*(Character->GetIdForLogs())
+					);
+
+					AbilitySystemComponent->RefreshAbilityActorInfo();
+				}
+			}
 		}
 	}
 }
