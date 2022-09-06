@@ -176,6 +176,11 @@ AActor* APF2CharacterBase::ToActor()
 	return this;
 }
 
+APawn* APF2CharacterBase::ToPawn()
+{
+	return this;
+}
+
 bool APF2CharacterBase::IsAlive()
 {
 	return (this->AttributeSet->GetHitPoints() > 0);

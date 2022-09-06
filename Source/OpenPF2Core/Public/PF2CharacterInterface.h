@@ -178,6 +178,15 @@ public:
 	virtual AActor* ToActor() = 0;
 
 	/**
+	 * Gets the pawn that is implementing this interface.
+	 *
+	 * @return
+	 *	This character, as a pawn.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual APawn* ToPawn() = 0;
+
+	/**
 	 * Determines if this character is living (i.e., has hit points > 0).
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")

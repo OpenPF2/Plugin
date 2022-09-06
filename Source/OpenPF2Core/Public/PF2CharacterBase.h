@@ -483,6 +483,9 @@ public:
 	virtual AActor* ToActor() override;
 
 	UFUNCTION(BlueprintCallable)
+	virtual APawn* ToPawn() override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual bool IsAlive() override;
 
 	UFUNCTION(BlueprintCallable)
