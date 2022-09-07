@@ -30,7 +30,7 @@ IPF2CharacterCommandInterface* APF2CharacterCommand::Create(AActor*             
 
 	Command = World->SpawnActor<APF2CharacterCommand>(StaticClass(), SpawnParameters);
 
-	Command->Character         = CharacterActor;
+	Command->TargetCharacter   = CharacterActor;
 	Command->AbilitySpecHandle = AbilitySpecHandle;
 
 	return Command;
@@ -40,8 +40,16 @@ void APF2CharacterCommand::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 {
 	AActor::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(APF2CharacterCommand, Character);
+	DOREPLIFETIME(APF2CharacterCommand, TargetCharacter);
 	DOREPLIFETIME(APF2CharacterCommand, AbilitySpecHandle);
+}
+
+TScriptInterface<IPF2CharacterInterface> APF2CharacterCommand::GetTargetCharacter() const
+{
+	check(this->TargetCharacter);
+	check(this->TargetCharacter->Implements<UPF2CharacterInterface>());
+
+	return TScriptInterface<IPF2CharacterInterface>(this->TargetCharacter);
 }
 
 UTexture2D* APF2CharacterCommand::GetCommandIcon() const
@@ -78,12 +86,12 @@ EPF2CommandExecuteOrQueueResult APF2CharacterCommand::AttemptExecuteOrQueue()
 
 		if (PF2GameMode != nullptr)
 		{
-			TScriptInterface<IPF2CharacterInterface> CharacterIntf = this->GetCharacter();
+			TScriptInterface<IPF2CharacterInterface> Pf2Character = this->GetTargetCharacter();
 
 			TScriptInterface<IPF2CharacterCommandInterface> CommandIntf =
 				PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(this);
 
-			Result = PF2GameMode->AttemptToExecuteOrQueueCommand(CharacterIntf, CommandIntf);
+			Result = PF2GameMode->AttemptToExecuteOrQueueCommand(Pf2Character, CommandIntf);
 		}
 	}
 
@@ -134,7 +142,12 @@ EPF2CommandExecuteImmediatelyResult APF2CharacterCommand::AttemptExecuteImmediat
 
 void APF2CharacterCommand::Cancel()
 {
-	this->GetCharacter()->GetCommandQueueComponent()->Remove(this);
+	this->GetTargetCharacter()->GetCommandQueueComponent()->Remove(this);
+}
+
+AInfo* APF2CharacterCommand::ToActor()
+{
+	return this;
 }
 
 FString APF2CharacterCommand::GetIdForLogs() const

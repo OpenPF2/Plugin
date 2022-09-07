@@ -52,7 +52,7 @@ void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter(IPF2CharacterInter
 	UE_LOG(
 		LogPf2CoreKeyBindings,
 		VeryVerbose,
-		TEXT("[%s] Loading %d abilities from Character ('%s')."),
+		TEXT("[%s] Loading %d abilities from TargetCharacter ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		ActivatableAbilities.Num(),
 		*(Character->GetIdForLogs())
@@ -81,7 +81,7 @@ void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter(IPF2CharacterInter
 	UE_LOG(
 		LogPf2CoreKeyBindings,
 		VeryVerbose,
-		TEXT("[%s] Loaded %d abilities with default action mappings from Character ('%s')."),
+		TEXT("[%s] Loaded %d abilities with default action mappings from TargetCharacter ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		NumMappedAbilities,
 		*(Character->GetIdForLogs())
@@ -122,89 +122,18 @@ void UPF2CommandBindingsComponent::DisconnectFromInput()
 	}
 }
 
-bool UPF2CommandBindingsComponent::Server_ExecuteBoundAbility_Validate(
+void UPF2CommandBindingsComponent::ExecuteBoundAbility(
 	const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	AActor*                          CharacterActor)
+	IPF2CharacterInterface* Character)
 {
-	TScriptInterface<IPF2CharacterInterface> Character;
-	APawn*                                   CharacterPawn;
+	IPF2CharacterCommandInterface*                        CommandIntf;
+	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
 
-	if (!CharacterActor->Implements<UPF2CharacterInterface>())
-	{
-		UE_LOG(
-			LogPf2CoreAbilities,
-			Error,
-			TEXT("Server_ExecuteBoundAbility(%s,%s): Character must implement PF2CharacterInterface."),
-			*(AbilitySpecHandle.ToString()),
-			*(CharacterActor->GetName())
-		);
+	check(PlayerController != nullptr);
 
-		return false;
-	}
+	CommandIntf = APF2CharacterCommand::Create(Character, AbilitySpecHandle);
 
-	Character = TScriptInterface<IPF2CharacterInterface>(CharacterActor);
-
-	if (Character == nullptr)
-	{
-		UE_LOG(
-			LogPf2CoreAbilities,
-			Error,
-			TEXT("Character is null, so ability ('%s') cannot be executed."),
-			*(AbilitySpecHandle.ToString())
-		);
-
-		return false;
-	}
-
-	CharacterPawn = Character->ToPawn();
-
-	if (CharacterPawn == nullptr)
-	{
-		UE_LOG(
-			LogPf2CoreAbilities,
-			Error,
-			TEXT("Character ('%s') is not a pawn, so ability ('%s') cannot be executed."),
-			*(Character->GetIdForLogs()),
-			*(AbilitySpecHandle.ToString())
-		);
-
-		return false;
-	}
-
-	if (Cast<IPF2CharacterControllerInterface>(CharacterPawn->GetController()) == nullptr)
-	{
-		UE_LOG(
-			LogPf2CoreAbilities,
-			Error,
-			TEXT("Character ('%s') is not currently possessed by an OpenPF2-compatible controller, so ability ('%s') cannot be executed."),
-			*(Character->GetIdForLogs()),
-			*(AbilitySpecHandle.ToString())
-		);
-
-		return false;
-	}
-
-	return true;
-}
-
-void UPF2CommandBindingsComponent::Server_ExecuteBoundAbility_Implementation(
-	const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	AActor*                          CharacterActor)
-{
-	const TScriptInterface<IPF2CharacterInterface> Character = TScriptInterface<IPF2CharacterInterface>(CharacterActor);
-	APawn*                                         CharacterPawn;
-	IPF2CharacterControllerInterface*              CharacterController;
-
-	check(Character != nullptr);
-
-	CharacterPawn = Character->ToPawn();
-	check(CharacterPawn != nullptr);
-
-	CharacterController = Cast<IPF2CharacterControllerInterface>(CharacterPawn->GetController());
-	check(CharacterController != nullptr)
-
-	// Delegate to whichever player controller or AI controller is controlling this character.
-	CharacterController->PerformAbilityOnControllableCharacter(AbilitySpecHandle, Character->ToActor());
+	PlayerController->Server_ExecuteCharacterCommand(CommandIntf->ToActor());
 }
 
 FString UPF2CommandBindingsComponent::GetIdForLogs() const

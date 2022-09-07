@@ -61,9 +61,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void DisconnectFromInput() override;
 
-	UFUNCTION(Server, Reliable, WithValidation)
-	virtual void Server_ExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-											AActor*                          CharacterActor) override;
+	virtual void ExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	                                 IPF2CharacterInterface* Character) override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation

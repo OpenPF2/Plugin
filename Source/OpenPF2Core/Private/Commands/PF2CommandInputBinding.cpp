@@ -118,7 +118,7 @@ int32 FPF2CommandInputBinding::AddActionBinding(UInputComponent*  InputComponent
 
 void FPF2CommandInputBinding::ActivateAbility()
 {
-	this->BindingsOwner->Server_ExecuteBoundAbility(this->AbilitySpecHandle, this->Character->ToActor());
+	this->BindingsOwner->ExecuteBoundAbility(this->AbilitySpecHandle, this->Character);
 }
 
 void FPF2CommandInputBinding::DeactivateAbility()

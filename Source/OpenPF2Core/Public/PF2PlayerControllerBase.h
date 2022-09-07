@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include <GameFramework/Info.h>
 #include <GameFramework/PlayerController.h>
 
 #include "PF2PlayerControllerInterface.h"
@@ -83,6 +84,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter) override;
 
+	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
+	virtual void Server_ExecuteCharacterCommand(AInfo* CharacterCommand) override;
+
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void Multicast_OnEncounterTurnStarted() override;
 
@@ -93,9 +97,8 @@ public:
 	// Public Methods - IPF2CharacterControllerInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
-	virtual void PerformAbilityOnControllableCharacter(
-			const FGameplayAbilitySpecHandle AbilitySpecHandle,
-			const TScriptInterface<IPF2CharacterInterface>& TargetCharacter) override;
+	virtual void PerformCommandOnPossessedCharacter(
+		const TScriptInterface<IPF2CharacterCommandInterface>& CharacterCommand) override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Overrides

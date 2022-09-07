@@ -41,7 +41,7 @@ protected:
 	 * The character who would be issued this command.
 	 */
 	UPROPERTY(Replicated)
-	TScriptInterface<IPF2CharacterInterface> Character;
+	AActor* TargetCharacter;
 
 	/**
 	 * The handle of the ability that this command will trigger when it is executed.
@@ -110,7 +110,7 @@ protected:
 	// =================================================================================================================
 	// Protected Constructors
 	// =================================================================================================================
-	explicit APF2CharacterCommand() : Character(nullptr)
+	explicit APF2CharacterCommand() : TargetCharacter(nullptr)
 	{
 	}
 
@@ -120,6 +120,9 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2CharacterCommandInterface Overrides
 	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual TScriptInterface<IPF2CharacterInterface> GetTargetCharacter() const override;
+
 	UFUNCTION(BlueprintCallable)
 	virtual UTexture2D* GetCommandIcon() const override;
 
@@ -138,6 +141,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void Cancel() override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual AInfo* ToActor() override;
+
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
@@ -148,18 +154,6 @@ public:
 	// Protected Methods
 	// =================================================================================================================
 protected:
-	/**
-	 * Gets the character who would be issued this command.
-	 *
-	 * @return
-	 *	The character.
-	 */
-	TScriptInterface<IPF2CharacterInterface> GetCharacter() const
-	{
-		check(this->Character);
-		return this->Character;
-	}
-
 	/**
 	 * Gets the handle of the ability that this command will trigger when it is executed.
 	 *
@@ -185,10 +179,11 @@ protected:
 	/**
 	 * Gets the Ability System Component (ASC) of the character for which this command will be executed.
 	 */
-	UAbilitySystemComponent* GetAbilitySystemComponent() const
+	FORCEINLINE UAbilitySystemComponent* GetAbilitySystemComponent() const
 	{
-		UAbilitySystemComponent* AbilitySystemComponent = this->GetCharacter()->GetAbilitySystemComponent();
+		UAbilitySystemComponent* AbilitySystemComponent = this->GetTargetCharacter()->GetAbilitySystemComponent();
 		check(AbilitySystemComponent);
+
 		return AbilitySystemComponent;
 	}
 
@@ -202,6 +197,7 @@ protected:
 	{
 		UGameplayAbility* Ability = this->GetAbilitySpec()->Ability;
 		check(Ability);
+
 		return Ability;
 	}
 
@@ -215,6 +211,7 @@ protected:
 	{
 		IPF2GameplayAbilityInterface* Ability = Cast<IPF2GameplayAbilityInterface>(this->GetAbility());
 		check(Ability);
+
 		return Ability;
 	}
 };

@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include <GameplayAbilitySpec.h>
-
 #include "Utilities/PF2LogIdentifiableInterface.h"
 
 #include "PF2CharacterControllerInterface.generated.h"
@@ -14,6 +12,7 @@
 // =====================================================================================================================
 // Forward Declarations (to break recursive dependencies)
 // =====================================================================================================================
+class IPF2CharacterCommandInterface;
 class IPF2CharacterInterface;
 
 // =====================================================================================================================
@@ -37,17 +36,14 @@ public:
 	// Public Methods
 	// =================================================================================================================
 	/**
-	 * Performs an ability on one of the characters that this controller is able to control.
+	 * Performs a command on one of the characters that this controller is able to control.
 	 *
-	 * The given character must be controllable by this controller.
+	 * The given character must currently be possessed by this controller.
 	 *
-	 * @param AbilitySpecHandle
-	 *	The handle for the ability to activate.
-	 * @param TargetCharacter
-	 *	The character upon which the ability should be activated.
+	 * @param CharacterCommand
+	 *	The command to execute.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|TargetCharacter Controllers")
-	virtual void PerformAbilityOnControllableCharacter(
-		const FGameplayAbilitySpecHandle                AbilitySpecHandle,
-		const TScriptInterface<IPF2CharacterInterface>& TargetCharacter) = 0;
+	virtual void PerformCommandOnPossessedCharacter(
+		const TScriptInterface<IPF2CharacterCommandInterface>& CharacterCommand) = 0;
 };

@@ -65,6 +65,15 @@ public:
 	// Public Instance Methods
 	// =================================================================================================================
 	/**
+	 * Gets the character on which this command would be executed.
+	 *
+	 * @return
+	 *	The character that is the target of this command.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Commands")
+	virtual TScriptInterface<IPF2CharacterInterface> GetTargetCharacter() const = 0;
+
+	/**
 	 * Gets an icon to represent this command, for whenever it is displayed to players/users.
 	 *
 	 * @return
@@ -121,4 +130,13 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Commands")
 	virtual void Cancel() = 0;
+
+	/**
+	 * Gets the actor that is implementing this interface.
+	 *
+	 * @return
+	 *	This character, as an actor.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Commands")
+	virtual AInfo* ToActor() = 0;
 };

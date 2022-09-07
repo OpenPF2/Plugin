@@ -10,8 +10,6 @@
 
 #include <AIController.h>
 
-#include <BehaviorTree/BlackboardComponent.h>
-
 #include <GameFramework/PlayerState.h>
 
 #include <Net/UnrealNetwork.h>
@@ -187,6 +185,70 @@ void APF2PlayerControllerBase::ReleaseCharacter(const TScriptInterface<IPF2Chara
 	this->Native_OnCharacterReleased(ReleasedCharacter);
 }
 
+bool APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Validate(AInfo* CharacterCommand)
+{
+	IPF2CharacterCommandInterface*           CharacterCommandIntf;
+	TScriptInterface<IPF2CharacterInterface> TargetCharacter;
+
+	CharacterCommandIntf = Cast<IPF2CharacterCommandInterface>(CharacterCommand);
+
+	if (CharacterCommandIntf == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("Server_ExecuteCharacterCommand(%s): Command must implement IPF2CharacterCommandInterface."),
+			*((CharacterCommand != nullptr) ? CharacterCommand->GetName() : "null")
+		);
+
+		return false;
+	}
+
+	TargetCharacter = CharacterCommandIntf->GetTargetCharacter();
+
+	if ((TargetCharacter->ToPawn()->GetController() != this) &&
+		!this->GetControllableCharacters().Contains(TargetCharacter->ToActor()))
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("Server_ExecuteCharacterCommand(%s): Target character ('%s') must be controllable by this player controller ('%s')."),
+			*(CharacterCommandIntf->GetIdForLogs()),
+			*(TargetCharacter->GetIdForLogs()),
+			*(this->GetIdForLogs())
+		);
+
+		return false;
+	}
+
+	return true;
+}
+
+void APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Implementation(AInfo* CharacterCommand)
+{
+	IPF2CharacterCommandInterface*           CharacterCommandIntf;
+	TScriptInterface<IPF2CharacterInterface> TargetCharacter;
+	APawn*                                   CharacterPawn;
+	IPF2CharacterControllerInterface*        CharacterController;
+
+	CharacterCommandIntf = Cast<IPF2CharacterCommandInterface>(CharacterCommand);
+	check(CharacterCommandIntf != nullptr);
+
+	TargetCharacter = CharacterCommandIntf->GetTargetCharacter();
+	check(TargetCharacter != nullptr);
+
+	CharacterPawn = TargetCharacter->ToPawn();
+	check(CharacterPawn != nullptr);
+
+	CharacterController = Cast<IPF2CharacterControllerInterface>(CharacterPawn->GetController());
+	check(CharacterController != nullptr)
+
+	// Delegate to whichever player controller or AI controller is controlling this character.
+	CharacterController->PerformCommandOnPossessedCharacter(
+		PF2InterfaceUtilities::ToScriptInterface(CharacterCommandIntf)
+	);
+}
+
 void APF2PlayerControllerBase::Multicast_OnEncounterTurnStarted_Implementation()
 {
 	this->BP_OnEncounterTurnStarted();
@@ -197,41 +259,45 @@ void APF2PlayerControllerBase::Multicast_OnEncounterTurnEnded_Implementation()
 	this->BP_OnEncounterTurnEnded();
 }
 
-void APF2PlayerControllerBase::PerformAbilityOnControllableCharacter(
-	const FGameplayAbilitySpecHandle                AbilitySpecHandle,
-	const TScriptInterface<IPF2CharacterInterface>& TargetCharacter)
+void APF2PlayerControllerBase::PerformCommandOnPossessedCharacter(
+	const TScriptInterface<IPF2CharacterCommandInterface>& CharacterCommand)
 {
-	IPF2CharacterCommandInterface* Command;
+	const TScriptInterface<IPF2CharacterInterface> TargetCharacter = CharacterCommand->GetTargetCharacter();
 
 	UE_LOG(
 		LogPf2CoreAbilities,
 		VeryVerbose,
-		TEXT("[%s] PerformAbilityOnControllableCharacter() called on player controller ('%s')."),
+		TEXT("[%s] PerformCommandOnPossessedCharacter() called on player controller ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		*(this->GetIdForLogs())
 	);
 
-	if ((TargetCharacter->ToPawn()->GetController() != this) &&
-		!this->GetControllableCharacters().Contains(TargetCharacter->ToActor()))
+	if (TargetCharacter == nullptr)
 	{
 		UE_LOG(
 			LogPf2CoreAbilities,
 			Error,
-			TEXT("[%s] %s::PerformAbilityOnControllableCharacter(%s,%s): TargetCharacter must be controllable by this player controller."),
+			TEXT("[%s] PerformCommandOnPossessedCharacter(): Null command passed to player controller ('%s')."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-			*(this->GetIdForLogs()),
-			*(AbilitySpecHandle.ToString()),
-			*(TargetCharacter->GetIdForLogs())
+			*(this->GetIdForLogs())
 		);
-
 		return;
 	}
 
-	// TODO: Pass the command through the RPC rather than building it in each controller. It's already an actor.
-	Command =
-		APF2CharacterCommand::Create(PF2InterfaceUtilities::FromScriptInterface(TargetCharacter), AbilitySpecHandle);
+	if (TargetCharacter->ToPawn()->GetController() != this)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("[%s] PerformCommandOnPossessedCharacter(%s): Target character must be possessed by this player controller."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(CharacterCommand->GetIdForLogs()),
+			*(this->GetIdForLogs())
+		);
+		return;
+	}
 
-	Command->AttemptExecuteOrQueue();
+	CharacterCommand->AttemptExecuteOrQueue();
 }
 
 FString APF2PlayerControllerBase::GetIdForLogs() const

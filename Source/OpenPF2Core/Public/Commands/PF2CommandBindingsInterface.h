@@ -96,16 +96,11 @@ public:
 	 *
 	 * This is expected to be invoked only by a command binding.
 	 *
-	 * Since this is an RPC, the character is passed as an actor instead of as an interface reference because UE will
-	 * not replicate actors if they are declared/referenced through an interface property.
-	 *
 	 * @param AbilitySpecHandle
 	 *	The handle for the ability to activate.
-	 * @param ActorCharacter
-	 *	The character upon which the ability should be activated. This actor must implement the IPF2CharacterInterface
-	 *	interface.
+	 * @param Character
+	 *	The character upon which the ability should be activated.
 	 */
-	UFUNCTION(Server, Reliable)
-	virtual void Server_ExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	                                        AActor*                          ActorCharacter) = 0;
+	virtual void ExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	                                 IPF2CharacterInterface*          Character) = 0;
 };

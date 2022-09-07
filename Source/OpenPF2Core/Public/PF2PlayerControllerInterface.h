@@ -95,6 +95,21 @@ public:
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
 	virtual void ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter) = 0;
 
+	/**
+	 * Executes the given command on the server on one of the characters this player controller is able to control.
+	 *
+	 * The character in the given command must be controllable by this player controller, but can be possessed by either
+	 * this player controller or an AI controller.
+	 *
+	 * Since this is an RPC, the command is passed as an actor instead of as an interface reference because UE will
+	 * not replicate actors if they are declared/referenced through an interface property.
+	 *
+	 * @param CharacterCommand
+	 *	The command to execute, as an info actor. This actor must implement the IPF2CharacterCommandInterface interface.
+	 */
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
+	virtual void Server_ExecuteCharacterCommand(AInfo* CharacterCommand) = 0;
+
 	// =================================================================================================================
 	// Public Event Notifications from the Game State
 	// =================================================================================================================

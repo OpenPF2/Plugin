@@ -50,9 +50,8 @@ public:
 	// Public Methods - IPF2CharacterControllerInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
-	virtual void PerformAbilityOnControllableCharacter(
-		const FGameplayAbilitySpecHandle                AbilitySpecHandle,
-		const TScriptInterface<IPF2CharacterInterface>& TargetCharacter) override;
+	virtual void PerformCommandOnPossessedCharacter(
+		const TScriptInterface<IPF2CharacterCommandInterface>& CharacterCommand) override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Overrides

@@ -16,40 +16,46 @@
 
 #include "Utilities/PF2LogUtilities.h"
 
-void APF2AIControllerBase::PerformAbilityOnControllableCharacter(
-	const FGameplayAbilitySpecHandle                AbilitySpecHandle,
-	const TScriptInterface<IPF2CharacterInterface>& TargetCharacter)
+void APF2AIControllerBase::PerformCommandOnPossessedCharacter(
+	const TScriptInterface<IPF2CharacterCommandInterface>& CharacterCommand)
 {
-	IPF2CharacterCommandInterface* Command;
+	const TScriptInterface<IPF2CharacterInterface> TargetCharacter = CharacterCommand->GetTargetCharacter();
 
 	UE_LOG(
 		LogPf2CoreAbilities,
 		VeryVerbose,
-		TEXT("[%s] PerformAbilityOnControllableCharacter() called on AI controller ('%s')."),
+		TEXT("[%s] PerformCommandOnPossessedCharacter() called on AI controller ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		*(this->GetIdForLogs())
 	);
+
+	if (TargetCharacter == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("[%s] PerformCommandOnPossessedCharacter(): Null command passed to AI controller ('%s')."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(this->GetIdForLogs())
+		);
+		return;
+	}
 
 	if (TargetCharacter->ToPawn()->GetController() != this)
 	{
 		UE_LOG(
 			LogPf2CoreAbilities,
 			Error,
-			TEXT("[%s] %s::PerformAbilityOnControllableCharacter(%s,%s): TargetCharacter must be controllable by this AI controller."),
+			TEXT("[%s] PerformCommandOnPossessedCharacter(%s): Target character must be possessed by this AI controller ('%s')."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-			*(this->GetIdForLogs()),
-			*(AbilitySpecHandle.ToString()),
-			*(TargetCharacter->GetIdForLogs())
+			*(CharacterCommand->GetIdForLogs()),
+			*(this->GetIdForLogs())
 		);
 		return;
 	}
 
-	// TODO: Pass the command through the RPC rather than building it in each controller. It's already an actor.
-	Command =
-		APF2CharacterCommand::Create(PF2InterfaceUtilities::FromScriptInterface(TargetCharacter), AbilitySpecHandle);
-
 	// FIXME: What if multiple commands come in in quick succession? This is only a short-term fix.
-	this->GetBlackboardComponent()->SetValueAsObject(this->GetBlackboardNextCommandKey(), Cast<UObject>(Command));
+	this->GetBlackboardComponent()->SetValueAsObject(this->GetBlackboardNextCommandKey(), CharacterCommand.GetObject());
 }
 
 FString APF2AIControllerBase::GetIdForLogs() const
