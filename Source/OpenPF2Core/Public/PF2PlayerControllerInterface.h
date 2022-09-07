@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <GameplayAbilitySpec.h>
+
 #include "PF2CharacterControllerInterface.h"
 
 #include "GameModes/PF2ModeOfPlayType.h"
@@ -96,19 +98,23 @@ public:
 	virtual void ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter) = 0;
 
 	/**
-	 * Executes the given command on the server on one of the characters this player controller is able to control.
+	 * Builds and executes a command on the server for one of the characters this player controller can control.
 	 *
-	 * The character in the given command must be controllable by this player controller, but can be possessed by either
-	 * this player controller or an AI controller.
+	 * The given character must be controllable by this player controller, but may be possessed by either this player
+	 * controller or an AI controller.
 	 *
-	 * Since this is an RPC, the command is passed as an actor instead of as an interface reference because UE will
+	 * Since this is an RPC, the character is passed as an actor instead of as an interface reference because UE will
 	 * not replicate actors if they are declared/referenced through an interface property.
 	 *
-	 * @param CharacterCommand
-	 *	The command to execute, as an info actor. This actor must implement the IPF2CharacterCommandInterface interface.
+	 * @param AbilitySpecHandle
+	 *	The handle for the ability to activate.
+	 * @param CharacterActor
+	 *	The character upon which the ability should be activated. The given actor must implement the
+	 *	IPF2CharacterInterface interface.
 	 */
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
-	virtual void Server_ExecuteCharacterCommand(AInfo* CharacterCommand) = 0;
+	virtual void Server_ExecuteCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	                                            AActor*          CharacterActor) = 0;
 
 	// =================================================================================================================
 	// Public Event Notifications from the Game State

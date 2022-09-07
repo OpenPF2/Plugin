@@ -126,14 +126,10 @@ void UPF2CommandBindingsComponent::ExecuteBoundAbility(
 	const FGameplayAbilitySpecHandle AbilitySpecHandle,
 	IPF2CharacterInterface* Character)
 {
-	IPF2CharacterCommandInterface*                        CommandIntf;
 	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
-
 	check(PlayerController != nullptr);
 
-	CommandIntf = APF2CharacterCommand::Create(Character, AbilitySpecHandle);
-
-	PlayerController->Server_ExecuteCharacterCommand(CommandIntf->ToActor());
+	PlayerController->Server_ExecuteCharacterCommand(AbilitySpecHandle, Character->ToActor());
 }
 
 FString UPF2CommandBindingsComponent::GetIdForLogs() const

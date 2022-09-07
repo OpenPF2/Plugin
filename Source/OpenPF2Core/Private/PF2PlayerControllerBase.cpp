@@ -185,26 +185,23 @@ void APF2PlayerControllerBase::ReleaseCharacter(const TScriptInterface<IPF2Chara
 	this->Native_OnCharacterReleased(ReleasedCharacter);
 }
 
-bool APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Validate(AInfo* CharacterCommand)
+bool APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Validate(
+	const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	AActor* CharacterActor)
 {
-	IPF2CharacterCommandInterface*           CharacterCommandIntf;
-	TScriptInterface<IPF2CharacterInterface> TargetCharacter;
+	IPF2CharacterInterface* TargetCharacter = Cast<IPF2CharacterInterface>(CharacterActor);
 
-	CharacterCommandIntf = Cast<IPF2CharacterCommandInterface>(CharacterCommand);
-
-	if (CharacterCommandIntf == nullptr)
+	if (TargetCharacter == nullptr)
 	{
 		UE_LOG(
 			LogPf2CoreAbilities,
 			Error,
-			TEXT("Server_ExecuteCharacterCommand(%s): Command must implement IPF2CharacterCommandInterface."),
-			*((CharacterCommand != nullptr) ? CharacterCommand->GetName() : "null")
+			TEXT("Server_ExecuteCharacterCommand(%s): Character must implement IPF2CharacterInterface."),
+			*((CharacterActor != nullptr) ? CharacterActor->GetName() : "null")
 		);
 
 		return false;
 	}
-
-	TargetCharacter = CharacterCommandIntf->GetTargetCharacter();
 
 	if ((TargetCharacter->ToPawn()->GetController() != this) &&
 		!this->GetControllableCharacters().Contains(TargetCharacter->ToActor()))
@@ -212,8 +209,7 @@ bool APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Validate(AInfo* Ch
 		UE_LOG(
 			LogPf2CoreAbilities,
 			Error,
-			TEXT("Server_ExecuteCharacterCommand(%s): Target character ('%s') must be controllable by this player controller ('%s')."),
-			*(CharacterCommandIntf->GetIdForLogs()),
+			TEXT("Server_ExecuteCharacterCommand(%s): Target character must be controllable by this player controller ('%s')."),
 			*(TargetCharacter->GetIdForLogs()),
 			*(this->GetIdForLogs())
 		);
@@ -224,24 +220,22 @@ bool APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Validate(AInfo* Ch
 	return true;
 }
 
-void APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Implementation(AInfo* CharacterCommand)
+void APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Implementation(
+	const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	AActor* CharacterActor)
 {
-	IPF2CharacterCommandInterface*           CharacterCommandIntf;
-	TScriptInterface<IPF2CharacterInterface> TargetCharacter;
-	APawn*                                   CharacterPawn;
-	IPF2CharacterControllerInterface*        CharacterController;
-
-	CharacterCommandIntf = Cast<IPF2CharacterCommandInterface>(CharacterCommand);
-	check(CharacterCommandIntf != nullptr);
-
-	TargetCharacter = CharacterCommandIntf->GetTargetCharacter();
-	check(TargetCharacter != nullptr);
+	IPF2CharacterInterface*           TargetCharacter      = Cast<IPF2CharacterInterface>(CharacterActor);
+	IPF2CharacterCommandInterface*    CharacterCommandIntf;
+	APawn*                            CharacterPawn;
+	IPF2CharacterControllerInterface* CharacterController;
 
 	CharacterPawn = TargetCharacter->ToPawn();
 	check(CharacterPawn != nullptr);
 
 	CharacterController = Cast<IPF2CharacterControllerInterface>(CharacterPawn->GetController());
 	check(CharacterController != nullptr)
+
+	CharacterCommandIntf = APF2CharacterCommand::Create(TargetCharacter, AbilitySpecHandle);
 
 	// Delegate to whichever player controller or AI controller is controlling this character.
 	CharacterController->PerformCommandOnPossessedCharacter(

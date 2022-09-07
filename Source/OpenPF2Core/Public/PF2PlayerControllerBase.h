@@ -85,7 +85,8 @@ public:
 	virtual void ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter) override;
 
 	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
-	virtual void Server_ExecuteCharacterCommand(AInfo* CharacterCommand) override;
+	virtual void Server_ExecuteCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	                                            AActor*                          CharacterActor) override;
 
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void Multicast_OnEncounterTurnStarted() override;
