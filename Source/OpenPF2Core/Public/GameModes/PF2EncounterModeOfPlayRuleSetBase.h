@@ -50,6 +50,13 @@ protected:
 	 */
 	IPF2CharacterInitiativeQueueInterface* CharacterInitiativeQueue;
 
+	/**
+	 * The character whose turn it is in the encounter.
+	 *
+	 * Can be null if in between turns or no character has started a turn.
+	 */
+	TScriptInterface<IPF2CharacterInterface> ActiveCharacter;
+
 public:
 	// =================================================================================================================
 	// Public Constructors
@@ -91,7 +98,7 @@ public:
 	 *	The character for whom a turn is starting.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Turns")
-	void StartTurnForCharacter(const TScriptInterface<IPF2CharacterInterface> Character) const;
+	void StartTurnForCharacter(const TScriptInterface<IPF2CharacterInterface> Character);
 
 	/**
 	 * Signals the end of the specified character's turn.
@@ -206,7 +213,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Command Queue")
 	void QueueCommandForCharacter(
 		const TScriptInterface<IPF2CharacterInterface>&        Character,
-		const TScriptInterface<IPF2CharacterCommandInterface>& Command) const;
+		const TScriptInterface<IPF2CharacterCommandInterface>& Command);
 
 	/**
 	 * Cancels and clears all commands queued for all characters.
@@ -276,4 +283,27 @@ public:
 	void PopNextCommandQueuedForCharacter(
 		const TScriptInterface<IPF2CharacterInterface>&  Character,
 		TScriptInterface<IPF2CharacterCommandInterface>& NextCommand);
+
+protected:
+	// =================================================================================================================
+	// Protected Methods
+	// =================================================================================================================
+	/**
+	 * Gets the character whose turn it is.
+	 *
+	 * @return
+	 *	The active character. Can be null if in between turns or no character has started a turn in the current
+	 *	encounter.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Turns")
+	TScriptInterface<IPF2CharacterInterface> GetActiveCharacter() const;
+
+	/**
+	 * Sets the character whose turn it is.
+	 *
+	 * @param NewActiveCharacter
+	 *	The character to make the active character.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Turns")
+	void SetActiveCharacter(const TScriptInterface<IPF2CharacterInterface>& NewActiveCharacter);
 };

@@ -44,7 +44,7 @@ bool APF2EncounterModeOfPlayRuleSetBase::HavePlayableCharacters() const
 }
 
 void APF2EncounterModeOfPlayRuleSetBase::StartTurnForCharacter(
-	const TScriptInterface<IPF2CharacterInterface> Character) const
+	const TScriptInterface<IPF2CharacterInterface> Character)
 {
 	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
 
@@ -57,6 +57,8 @@ void APF2EncounterModeOfPlayRuleSetBase::StartTurnForCharacter(
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		*(Character->GetIdForLogs())
 	);
+
+	this->SetActiveCharacter(Character);
 
 	if (PlayerController != nullptr)
 	{
@@ -80,6 +82,8 @@ void APF2EncounterModeOfPlayRuleSetBase::EndTurnForCharacter(const TScriptInterf
 		*(Character->GetIdForLogs())
 	);
 
+	this->SetActiveCharacter(TScriptInterface<IPF2CharacterInterface>(nullptr));
+
 	if (PlayerController != nullptr)
 	{
 		IPF2PlayerControllerInterface::Execute_Multicast_OnEncounterTurnEnded(PlayerController.GetObject());
@@ -92,6 +96,7 @@ void APF2EncounterModeOfPlayRuleSetBase::SetCharacterInitiative(
 	const TScriptInterface<IPF2CharacterInterface>& Character,
 	const int32                                     Initiative)
 {
+	this->GetCharacterInitiativeQueue()->SetCharacterInitiative(Character, Initiative);
 }
 
 bool APF2EncounterModeOfPlayRuleSetBase::IsInitiativeSetForCharacter(
@@ -124,9 +129,10 @@ TArray<TScriptInterface<IPF2CharacterInterface>> APF2EncounterModeOfPlayRuleSetB
 	return this->GetCharacterInitiativeQueue()->GetCharactersInInitiativeOrder();
 }
 
+// ReSharper disable once CppUE4BlueprintCallableFunctionMayBeConst
 void APF2EncounterModeOfPlayRuleSetBase::QueueCommandForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>&        Character,
-	const TScriptInterface<IPF2CharacterCommandInterface>& Command) const
+	const TScriptInterface<IPF2CharacterCommandInterface>& Command)
 {
 	const IPF2CharacterInterface* CharacterIntf = PF2InterfaceUtilities::FromScriptInterface(Character);
 
@@ -180,4 +186,15 @@ void APF2EncounterModeOfPlayRuleSetBase::PopNextCommandQueuedForCharacter(
 	TScriptInterface<IPF2CharacterCommandInterface>& NextCommand)
 {
 	Character->GetCommandQueueComponent()->PopNext(NextCommand);
+}
+
+TScriptInterface<IPF2CharacterInterface> APF2EncounterModeOfPlayRuleSetBase::GetActiveCharacter() const
+{
+	return this->ActiveCharacter;
+}
+
+void APF2EncounterModeOfPlayRuleSetBase::SetActiveCharacter(
+	const TScriptInterface<IPF2CharacterInterface>& NewActiveCharacter)
+{
+	this->ActiveCharacter = NewActiveCharacter;
 }
