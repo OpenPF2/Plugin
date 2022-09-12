@@ -8,7 +8,6 @@
 
 #pragma once
 
-#include <GameFramework/Info.h>
 #include <GameFramework/PlayerController.h>
 
 #include "PF2PlayerControllerInterface.h"
@@ -93,13 +92,6 @@ public:
 
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void Multicast_OnEncounterTurnEnded() override;
-
-	// =================================================================================================================
-	// Public Methods - IPF2CharacterControllerInterface Implementation
-	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
-	virtual void PerformCommandOnPossessedCharacter(
-		const TScriptInterface<IPF2CharacterCommandInterface>& CharacterCommand) override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Overrides

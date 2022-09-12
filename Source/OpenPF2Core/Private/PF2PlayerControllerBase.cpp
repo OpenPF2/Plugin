@@ -224,23 +224,61 @@ void APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Implementation(
 	const FGameplayAbilitySpecHandle AbilitySpecHandle,
 	AActor* CharacterActor)
 {
-	IPF2CharacterInterface*           TargetCharacter      = Cast<IPF2CharacterInterface>(CharacterActor);
-	IPF2CharacterCommandInterface*    CharacterCommandIntf;
-	APawn*                            CharacterPawn;
-	IPF2CharacterControllerInterface* CharacterController;
+	IPF2CharacterInterface*        TargetCharacter = Cast<IPF2CharacterInterface>(CharacterActor);
+	IPF2CharacterCommandInterface* CharacterCommandIntf;
+	APawn*                         CharacterPawn;
+
+	UE_LOG(
+		LogPf2CoreAbilities,
+		VeryVerbose,
+		TEXT("[%s] Server_ExecuteCharacterCommand() called on player controller ('%s')."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(this->GetIdForLogs())
+	);
+
+	if (TargetCharacter == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("[%s] Server_ExecuteCharacterCommand(): Non-PF2 character passed to player controller ('%s')."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(this->GetIdForLogs())
+		);
+		return;
+	}
 
 	CharacterPawn = TargetCharacter->ToPawn();
-	check(CharacterPawn != nullptr);
 
-	CharacterController = Cast<IPF2CharacterControllerInterface>(CharacterPawn->GetController());
-	check(CharacterController != nullptr)
+	if (CharacterPawn == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("[%s] Server_ExecuteCharacterCommand(%s): Non-pawn character passed to player controller ('%s')."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(TargetCharacter->GetIdForLogs()),
+			*(this->GetIdForLogs())
+		);
+		return;
+	}
+
+	if ((CharacterPawn->GetController() != this) && !this->GetControllableCharacters().Contains(CharacterPawn))
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("[%s] Server_ExecuteCharacterCommand(%s): Target character must be controllable by this player controller ('%s')."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(TargetCharacter->GetIdForLogs()),
+			*(this->GetIdForLogs())
+		);
+		return;
+	}
 
 	CharacterCommandIntf = APF2CharacterCommand::Create(TargetCharacter, AbilitySpecHandle);
 
-	// Delegate to whichever player controller or AI controller is controlling this character.
-	CharacterController->PerformCommandOnPossessedCharacter(
-		PF2InterfaceUtilities::ToScriptInterface(CharacterCommandIntf)
-	);
+	CharacterCommandIntf->AttemptExecuteOrQueue();
 }
 
 void APF2PlayerControllerBase::Multicast_OnEncounterTurnStarted_Implementation()
@@ -251,47 +289,6 @@ void APF2PlayerControllerBase::Multicast_OnEncounterTurnStarted_Implementation()
 void APF2PlayerControllerBase::Multicast_OnEncounterTurnEnded_Implementation()
 {
 	this->BP_OnEncounterTurnEnded();
-}
-
-void APF2PlayerControllerBase::PerformCommandOnPossessedCharacter(
-	const TScriptInterface<IPF2CharacterCommandInterface>& CharacterCommand)
-{
-	const TScriptInterface<IPF2CharacterInterface> TargetCharacter = CharacterCommand->GetTargetCharacter();
-
-	UE_LOG(
-		LogPf2CoreAbilities,
-		VeryVerbose,
-		TEXT("[%s] PerformCommandOnPossessedCharacter() called on player controller ('%s')."),
-		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(this->GetIdForLogs())
-	);
-
-	if (TargetCharacter == nullptr)
-	{
-		UE_LOG(
-			LogPf2CoreAbilities,
-			Error,
-			TEXT("[%s] PerformCommandOnPossessedCharacter(): Null command passed to player controller ('%s')."),
-			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-			*(this->GetIdForLogs())
-		);
-		return;
-	}
-
-	if (TargetCharacter->ToPawn()->GetController() != this)
-	{
-		UE_LOG(
-			LogPf2CoreAbilities,
-			Error,
-			TEXT("[%s] PerformCommandOnPossessedCharacter(%s): Target character must be possessed by this player controller."),
-			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-			*(CharacterCommand->GetIdForLogs()),
-			*(this->GetIdForLogs())
-		);
-		return;
-	}
-
-	CharacterCommand->AttemptExecuteOrQueue();
 }
 
 FString APF2PlayerControllerBase::GetIdForLogs() const

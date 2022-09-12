@@ -28,50 +28,10 @@ class OPENPF2CORE_API APF2AIControllerBase : public AAIController, public IPF2AI
 {
 	GENERATED_BODY()
 
-protected:
-	// FIXME: What if multiple commands come in in quick succession? This is only a short-term fix.
-	/**
-	 * The key in the blackboard of the behavior tree of this controller that contains the next command to execute.
-	 *
-	 * The behavior tree is expected to consume the command and clear the value of this key promptly.
-	 */
-	UPROPERTY(EditDefaultsOnly, Category="Blackboard")
-	FName NextCommandKey;
-
 public:
-	// =================================================================================================================
-	// Public Constructors
-	// =================================================================================================================
-	APF2AIControllerBase() : NextCommandKey("NextCommand")
-	{
-	}
-
-	// =================================================================================================================
-	// Public Methods - IPF2CharacterControllerInterface Implementation
-	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
-	virtual void PerformCommandOnPossessedCharacter(
-		const TScriptInterface<IPF2CharacterCommandInterface>& CharacterCommand) override;
-
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Overrides
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
-
-protected:
-	// =================================================================================================================
-	// Protected Methods
-	// =================================================================================================================
-	// FIXME: What if multiple commands come in in quick succession? This is only a short-term fix.
-	/**
-	 * Gets the name of the blackboard key containing the next command to execute.
-	 *
-	 * @return
-	 *	The name of the blackboard key for the next command.
-	 */
-	FORCEINLINE FName GetBlackboardNextCommandKey() const
-	{
-		return this->NextCommandKey;
-	}
 };

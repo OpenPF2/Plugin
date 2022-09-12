@@ -5,9 +5,7 @@
 
 #pragma once
 
-#include <GameplayAbilitySpec.h>
-
-#include "PF2CharacterControllerInterface.h"
+#include "Utilities/PF2LogIdentifiableInterface.h"
 
 #include "PF2AIControllerInterface.generated.h"
 
@@ -15,7 +13,7 @@
 // Normal Declarations
 // =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
-class UPF2AIControllerInterface : public UPF2CharacterControllerInterface
+class UPF2AIControllerInterface : public UPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 };
@@ -23,7 +21,7 @@ class UPF2AIControllerInterface : public UPF2CharacterControllerInterface
 /**
  * An interface for OpenPF2-compatible AI controllers.
  */
-class OPENPF2CORE_API IPF2AIControllerInterface : public IPF2CharacterControllerInterface
+class OPENPF2CORE_API IPF2AIControllerInterface : public IPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 };

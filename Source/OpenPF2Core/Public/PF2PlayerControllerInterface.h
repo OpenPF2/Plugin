@@ -7,9 +7,8 @@
 
 #include <GameplayAbilitySpec.h>
 
-#include "PF2CharacterControllerInterface.h"
-
 #include "GameModes/PF2ModeOfPlayType.h"
+#include "Utilities/PF2LogIdentifiableInterface.h"
 
 #include "PF2PlayerControllerInterface.generated.h"
 
@@ -23,7 +22,7 @@ class IPF2PlayerStateInterface;
 // Normal Declarations
 // =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
-class UPF2PlayerControllerInterface : public UPF2CharacterControllerInterface
+class UPF2PlayerControllerInterface : public UPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 };
@@ -31,7 +30,7 @@ class UPF2PlayerControllerInterface : public UPF2CharacterControllerInterface
 /**
  * An interface for OpenPF2-compatible Player Controllers.
  */
-class OPENPF2CORE_API IPF2PlayerControllerInterface : public IPF2CharacterControllerInterface
+class OPENPF2CORE_API IPF2PlayerControllerInterface : public IPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 
