@@ -20,6 +20,8 @@
 
 #include "GameModes/PF2ModeOfPlayRuleSetInterface.h"
 
+#include "Libraries/PF2CharacterCommandLibrary.h"
+
 #include "Utilities/PF2EnumUtilities.h"
 #include "Utilities/PF2InterfaceUtilities.h"
 
@@ -244,7 +246,7 @@ EPF2CommandExecuteOrQueueResult APF2GameModeBase::AttemptToExecuteOrQueueCommand
 		);
 
 		Result =
-			IPF2CharacterCommandInterface::ImmediateResultToExecuteOrQueueResult(Command->AttemptExecuteImmediately());
+			UPF2CharacterCommandLibrary::ImmediateResultToExecuteOrQueueResult(Command->AttemptExecuteImmediately());
 	}
 	else
 	{

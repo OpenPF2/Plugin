@@ -5,6 +5,8 @@
 
 #include "GameModes/PF2ModeOfPlayRuleSetBase.h"
 #include "Commands/PF2CharacterCommandInterface.h"
+
+#include "Libraries/PF2CharacterCommandLibrary.h"
 #include "Libraries/PF2CharacterLibrary.h"
 
 EPF2CommandExecuteOrQueueResult APF2ModeOfPlayRuleSetBase::AttemptToExecuteOrQueueCommand_Implementation(
@@ -14,7 +16,7 @@ EPF2CommandExecuteOrQueueResult APF2ModeOfPlayRuleSetBase::AttemptToExecuteOrQue
 	EPF2CommandExecuteOrQueueResult Result;
 
 	// By default there is no queue, so we perform the command immediately.
-	Result = IPF2CharacterCommandInterface::ImmediateResultToExecuteOrQueueResult(Command->AttemptExecuteImmediately());
+	Result = UPF2CharacterCommandLibrary::ImmediateResultToExecuteOrQueueResult(Command->AttemptExecuteImmediately());
 
 	return Result;
 }

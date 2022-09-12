@@ -30,38 +30,6 @@ class OPENPF2CORE_API IPF2CharacterCommandInterface : public IPF2LogIdentifiable
 
 public:
 	// =================================================================================================================
-	// Public Static Methods
-	// =================================================================================================================
-	/**
-	 * Utility function for converting a EPF2CommandExecuteImmediatelyResult into a EPF2CommandExecuteOrQueueResult.
-	 *
-	 * @param ImmediateResult
-	 *	The result to transcribed.
-	 *
-	 * @return
-	 *	The transcribed result.
-	 */
-	FORCEINLINE static EPF2CommandExecuteOrQueueResult ImmediateResultToExecuteOrQueueResult(
-		const EPF2CommandExecuteImmediatelyResult ImmediateResult)
-	{
-		switch (ImmediateResult)
-		{
-			default:
-			case EPF2CommandExecuteImmediatelyResult::None:
-				return EPF2CommandExecuteOrQueueResult::None;
-
-			case EPF2CommandExecuteImmediatelyResult::Activated:
-				return EPF2CommandExecuteOrQueueResult::ExecutedImmediately;
-
-			case EPF2CommandExecuteImmediatelyResult::Blocked:
-				return EPF2CommandExecuteOrQueueResult::Refused;
-
-			case EPF2CommandExecuteImmediatelyResult::Cancelled:
-				return EPF2CommandExecuteOrQueueResult::Refused;
-		}
-	}
-
-	// =================================================================================================================
 	// Public Instance Methods
 	// =================================================================================================================
 	/**
