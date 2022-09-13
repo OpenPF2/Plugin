@@ -16,7 +16,6 @@
 #include "GameModes/PF2CharacterInitiativeQueueComponent.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
-#include "Utilities/PF2LogUtilities.h"
 
 APF2EncounterModeOfPlayRuleSetBase::APF2EncounterModeOfPlayRuleSetBase()
 {
@@ -53,8 +52,7 @@ void APF2EncounterModeOfPlayRuleSetBase::StartTurnForCharacter(
 	UE_LOG(
 		LogPf2CoreEncounters,
 		Verbose,
-		TEXT("[%s] Starting turn for character ('%s')."),
-		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		TEXT("Starting turn for character ('%s')."),
 		*(Character->GetIdForLogs())
 	);
 
@@ -77,8 +75,7 @@ void APF2EncounterModeOfPlayRuleSetBase::EndTurnForCharacter(const TScriptInterf
 	UE_LOG(
 		LogPf2CoreEncounters,
 		Verbose,
-		TEXT("[%s] Ending turn for character ('%s')."),
-		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		TEXT("Ending turn for character ('%s')."),
 		*(Character->GetIdForLogs())
 	);
 
@@ -134,58 +131,159 @@ void APF2EncounterModeOfPlayRuleSetBase::QueueCommandForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>&        Character,
 	const TScriptInterface<IPF2CharacterCommandInterface>& Command)
 {
-	const IPF2CharacterInterface* CharacterIntf = PF2InterfaceUtilities::FromScriptInterface(Character);
+	const TScriptInterface<IPF2CommandQueueInterface> CommandQueue = Character->GetCommandQueueComponent();
 
-	check(CharacterIntf != nullptr);
+	if (CommandQueue == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreEncounters,
+			Error,
+			TEXT("Character ('%s') lacks a command queue component; unable to queue command ('%s')."),
+			*(Character->GetIdForLogs()),
+			*(Command->GetIdForLogs())
+		);
+	}
+	else
+	{
+		UE_LOG(
+			LogPf2CoreEncounters,
+			VeryVerbose,
+			TEXT("Queuing command ('%s') for character ('%s')."),
+			*(Command->GetIdForLogs()),
+			*(Character->GetIdForLogs())
+		);
 
-	UE_LOG(
-		LogPf2CoreEncounters,
-		VeryVerbose,
-		TEXT("[%s] Queuing command ('%s') for character ('%s')."),
-		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(Command->GetIdForLogs()),
-		*(Character->GetIdForLogs())
-	);
-
-	CharacterIntf->GetCommandQueueComponent()->Enqueue(Command);
+		CommandQueue->Enqueue(Command);
+	}
 }
 
+// ReSharper disable once CppUE4BlueprintCallableFunctionMayBeConst
 void APF2EncounterModeOfPlayRuleSetBase::CancelQueuedCommandsForAllCharacters()
 {
 	for (const TScriptInterface<IPF2CharacterInterface> Character : this->GetCharactersInInitiativeOrder())
 	{
-		Character->GetCommandQueueComponent()->Clear();
+		const TScriptInterface<IPF2CommandQueueInterface> CommandQueue = Character->GetCommandQueueComponent();
+
+		if (CommandQueue == nullptr)
+		{
+			UE_LOG(
+				LogPf2CoreEncounters,
+				Warning,
+				TEXT("Character ('%s') lacks a command queue component; no commands to clear."),
+				*(Character->GetIdForLogs())
+			);
+		}
+		else
+		{
+			CommandQueue->Clear();
+		}
 	}
 }
 
+// ReSharper disable once CppUE4BlueprintCallableFunctionMayBeConst
 EPF2CommandExecuteImmediatelyResult APF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedCommandForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character)
 {
-	return Character->GetCommandQueueComponent()->PopAndExecuteNext();
+	EPF2CommandExecuteImmediatelyResult               Result;
+	const TScriptInterface<IPF2CommandQueueInterface> CommandQueue = Character->GetCommandQueueComponent();
+
+	if (CommandQueue == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreEncounters,
+			Warning,
+			TEXT("Character ('%s') lacks a command queue component; unable to execute any commands."),
+			*(Character->GetIdForLogs())
+		);
+
+		Result = EPF2CommandExecuteImmediatelyResult::None;
+	}
+	else
+	{
+		Result = CommandQueue->PopAndExecuteNext();
+	}
+
+	return Result;
 }
 
+// ReSharper disable once CppUE4BlueprintCallableFunctionMayBeStatic
 bool APF2EncounterModeOfPlayRuleSetBase::DoesCharacterHaveNextCommandQueued(
 	const TScriptInterface<IPF2CharacterInterface>& Character) const
 {
-	TScriptInterface<IPF2CharacterCommandInterface> NextCommand;
+	bool                                              Result;
+	const TScriptInterface<IPF2CommandQueueInterface> CommandQueue = Character->GetCommandQueueComponent();
 
-	Character->GetCommandQueueComponent()->PeekNext(NextCommand);
+	if (CommandQueue == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreEncounters,
+			Warning,
+			TEXT("Character ('%s') lacks a command queue component; it is not possible to queue commands."),
+			*(Character->GetIdForLogs())
+		);
 
-	return (NextCommand != nullptr);
+		Result = false;
+	}
+	else
+	{
+		TScriptInterface<IPF2CharacterCommandInterface> NextCommand;
+
+		CommandQueue->PeekNext(NextCommand);
+
+		Result = (NextCommand != nullptr);
+	}
+
+	return Result;
 }
 
+// ReSharper disable once CppUE4BlueprintCallableFunctionMayBeStatic
+// ReSharper disable once CppUE4BlueprintCallableFunctionMayBeConst
 void APF2EncounterModeOfPlayRuleSetBase::PeekNextQueuedCommandForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>&  Character,
 	TScriptInterface<IPF2CharacterCommandInterface>& NextCommand) const
 {
-	Character->GetCommandQueueComponent()->PeekNext(NextCommand);
+	const TScriptInterface<IPF2CommandQueueInterface> CommandQueue = Character->GetCommandQueueComponent();
+
+	if (CommandQueue == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreEncounters,
+			Warning,
+			TEXT("Character ('%s') lacks a command queue component; it is not possible to queue commands."),
+			*(Character->GetIdForLogs())
+		);
+
+		NextCommand = TScriptInterface<IPF2CharacterCommandInterface>(nullptr);
+	}
+	else
+	{
+		CommandQueue->PeekNext(NextCommand);
+	}
 }
 
+// ReSharper disable once CppUE4BlueprintCallableFunctionMayBeStatic
+// ReSharper disable once CppUE4BlueprintCallableFunctionMayBeConst
 void APF2EncounterModeOfPlayRuleSetBase::PopNextCommandQueuedForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character,
 	TScriptInterface<IPF2CharacterCommandInterface>& NextCommand)
 {
-	Character->GetCommandQueueComponent()->PopNext(NextCommand);
+	const TScriptInterface<IPF2CommandQueueInterface> CommandQueue = Character->GetCommandQueueComponent();
+
+	if (CommandQueue == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreEncounters,
+			Warning,
+			TEXT("Character ('%s') lacks a command queue component; it is not possible to queue commands."),
+			*(Character->GetIdForLogs())
+		);
+
+		NextCommand = TScriptInterface<IPF2CharacterCommandInterface>(nullptr);
+	}
+	else
+	{
+		CommandQueue->PopNext(NextCommand);
+	}
 }
 
 TScriptInterface<IPF2CharacterInterface> APF2EncounterModeOfPlayRuleSetBase::GetActiveCharacter() const

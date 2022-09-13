@@ -142,7 +142,32 @@ EPF2CommandExecuteImmediatelyResult APF2CharacterCommand::AttemptExecuteImmediat
 
 void APF2CharacterCommand::Cancel()
 {
-	this->GetTargetCharacter()->GetCommandQueueComponent()->Remove(this);
+	const TScriptInterface<IPF2CharacterInterface>    Character    = this->GetTargetCharacter();
+	const TScriptInterface<IPF2CommandQueueInterface> CommandQueue = Character->GetCommandQueueComponent();
+
+	if (CommandQueue == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("[%s] Character ('%s') lacks a command queue component; unable to cancel command ('%s')."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(Character->GetIdForLogs()),
+			*(this->GetIdForLogs())
+		);
+	}
+	else
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Verbose,
+			TEXT("[%s] Command ('%s') cancelled."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(this->GetIdForLogs())
+		);
+
+		CommandQueue->Remove(this);
+	}
 }
 
 AInfo* APF2CharacterCommand::ToActor()
