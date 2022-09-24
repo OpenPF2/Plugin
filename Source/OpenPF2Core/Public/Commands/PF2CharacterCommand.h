@@ -112,6 +112,9 @@ protected:
 	// =================================================================================================================
 	explicit APF2CharacterCommand() : TargetCharacter(nullptr)
 	{
+		// Replicate to all players to en
+		this->bReplicates     = true;
+		this->bAlwaysRelevant = true;
 	}
 
 public:

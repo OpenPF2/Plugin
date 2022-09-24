@@ -9,6 +9,8 @@
 
 #include <Containers/CircularQueue.h>
 
+#include <GameFramework/Info.h>
+
 #include "PF2CommandQueueInterface.h"
 
 #include "Commands/PF2CharacterCommandInterface.h"
@@ -59,12 +61,25 @@ class OPENPF2CORE_API UPF2CommandQueueComponent : public UActorComponent, public
 	GENERATED_BODY()
 
 protected:
-	TArray<IPF2CharacterCommandInterface*> Queue;
+	/**
+	 * The queue of commands for the owning character.
+
+	 * This is an array of actors (instead of interfaces) for replication. UE will not replicate actors if they are
+	 * declared/referenced through an interface property.
+	 */
+	UPROPERTY(ReplicatedUsing=OnRep_Queue)
+	TArray<AInfo*> Queue;
 
 public:
 	// =================================================================================================================
 	// Public Properties - Multicast Delegates
 	// =================================================================================================================
+	/**
+	 * Event fired when the commands in the queue have changed (commands added, commands removed, or queue cleared).
+	 */
+	UPROPERTY(BlueprintAssignable)
+	FPF2CommandQueueChangedDelegate OnCommandsChanged;
+
 	/**
 	 * Event fired when a command has been added to this queue.
 	 */
@@ -77,12 +92,6 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FPF2CommandRemovedFromQueueDelegate OnCommandRemoved;
 
-	/**
-	 * Event fired when the commands in the queue have changed (commands added, commands removed, or queue cleared).
-	 */
-	UPROPERTY(BlueprintAssignable)
-	FPF2CommandQueueChangedDelegate OnCommandsChanged;
-
 	// =================================================================================================================
 	// Public Constructors
 	// =================================================================================================================
@@ -90,6 +99,11 @@ public:
 	 * Default constructor for UPF2CommandQueueComponent.
 	 */
 	UPF2CommandQueueComponent();
+
+	// =================================================================================================================
+	// Public Methods - AActorComponent Overrides
+	// =================================================================================================================
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2CommandQueueInterface Implementation
@@ -123,4 +137,41 @@ public:
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
+
+protected:
+	// =================================================================================================================
+	// Protected Replication Callbacks
+	// =================================================================================================================
+	/**
+	 * Replication callback for the "Queue" property.
+	 *
+	 * This notifies all event listeners that the contents of the queue has changed, as well as separately notifying
+	 * listeners about each command that was added or removed.
+	 */
+	UFUNCTION()
+	virtual void OnRep_Queue(const TArray<AInfo*>& OldQueue);
+
+	// =================================================================================================================
+	// Protected Event Notifications
+	// =================================================================================================================
+	/**
+	 * Callback invoked when commands in this queue have changed (commands added, commands removed, or queue cleared).
+	 */
+	void Native_OnCommandsChanged() const;
+
+	/**
+	 * Callback invoked when a command has been added to this queue.
+	 *
+	 * @param CommandAdded
+	 *	The command that was added.
+	 */
+	void Native_OnCommandAdded(const TScriptInterface<IPF2CharacterCommandInterface>& CommandAdded) const;
+
+	/**
+	 * Callback invoked when a command has been removed from this queue.
+	 *
+	 * @param CommandRemoved
+	 *	The command that was removed.
+	 */
+	void Native_OnCommandRemoved(const TScriptInterface<IPF2CharacterCommandInterface>& CommandRemoved) const;
 };
