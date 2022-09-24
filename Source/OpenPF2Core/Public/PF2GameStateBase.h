@@ -100,7 +100,7 @@ public:
 
 protected:
 	// =================================================================================================================
-	// Protected Methods
+	// Protected Replication Callbacks
 	// =================================================================================================================
 	/**
 	 * Replication callback for the "Mode of Play" property.
@@ -111,6 +111,9 @@ protected:
 	UFUNCTION()
 	virtual void OnRep_ModeOfPlay();
 
+	// =================================================================================================================
+	// Protected Native Event Callbacks
+	// =================================================================================================================
 	/**
 	 * Notifies this copy of the game state that the mode of play has been updated by the server.
 	 *
@@ -121,6 +124,9 @@ protected:
 	 */
 	virtual void Native_OnModeOfPlayAvailable();
 
+	// =================================================================================================================
+	// Protected Event Notifications
+	// =================================================================================================================
 	/**
 	 * Callback invoked on all clients to refresh ability actor info for all characters.
 	 *
