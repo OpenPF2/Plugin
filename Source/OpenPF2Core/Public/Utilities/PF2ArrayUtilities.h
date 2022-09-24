@@ -173,4 +173,38 @@ namespace PF2ArrayUtilities
 	{
 		return Elements.FilterByPredicate(Callable);
 	}
+
+	/**
+	 * Typecast one array to an array of another type.
+	 *
+	 * This should only be used in cases when the types are compatible. For example, to downcast a generic type like
+	 * TArray<Actor*> to TArray<IPF2CharacterInterface*> when it is know that an array of actors must all implement a
+	 * particular interface.
+	 *
+	 * In development builds, the sizes of the types are checked for compatibility with assertions.
+	 *
+	 * Credit for this approach:
+	 * https://forums.unrealengine.com/t/how-to-cast-tarray-to-another-type/293689/13
+	 *
+	 * @param InArray
+	 *	The array to typecast.
+	 *
+	 * @return
+	 *	The typecast array.
+	 */
+	template <typename In, typename Out>
+	TArray<Out> Cast(TArray<In> InArray)
+	{
+		TArray<Out> Result;
+
+		// Confirm compatible data types.
+		check(sizeof(In) == sizeof(Out));
+
+		Result = MoveTemp(*reinterpret_cast<TArray<Out>*>(&InArray));
+
+		// Confirm all elements were moved.
+		check(InArray.Num() == 0);
+
+		return Result;
+	}
 }
