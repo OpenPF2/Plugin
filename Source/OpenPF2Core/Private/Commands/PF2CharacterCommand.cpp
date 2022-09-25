@@ -40,7 +40,7 @@ IPF2CharacterCommandInterface* APF2CharacterCommand::Create(AActor*             
 
 void APF2CharacterCommand::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	AActor::GetLifetimeReplicatedProps(OutLifetimeProps);
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(APF2CharacterCommand, TargetCharacter);
 	DOREPLIFETIME(APF2CharacterCommand, AbilitySpecHandle);
