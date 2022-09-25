@@ -35,9 +35,10 @@ TScriptInterface<IPF2ModeOfPlayRuleSetInterface> APF2GameModeBase::CreateModeOfP
 		UClass* const RuleSetType = this->ModeRuleSets[ModeOfPlay];
 		UObject*      NewRuleSet;
 
-		// Rule sets are usually actors, but the interface doesn't strictly require them to be. We have to instantiate
-		// them appropriately, since actors have to be added to the world (so that actor callbacks like BeginPlay are
-		// invoked), while base UObjects don't.
+		// Rule sets are usually actors so that they can be composed of actor components, but the interface doesn't
+		// strictly require them to be actors. Therefore, we have to instantiate a rule set appropriately for its type,
+		// since actors have to be added to the world (so that actor callbacks like BeginPlay are invoked), while base
+		// UObjects can't be.
 		if (RuleSetType->IsChildOf(AActor::StaticClass()))
 		{
 			NewRuleSet = this->GetWorld()->SpawnActor(RuleSetType);
