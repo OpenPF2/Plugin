@@ -7,7 +7,10 @@
 
 #include <GameplayAbilitySpec.h>
 
+#include <GameFramework/Info.h>
+
 #include "GameModes/PF2ModeOfPlayType.h"
+
 #include "Utilities/PF2LogIdentifiableInterface.h"
 
 #include "PF2PlayerControllerInterface.generated.h"
@@ -114,6 +117,22 @@ public:
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
 	virtual void Server_ExecuteCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
 	                                            AActor*          CharacterActor) = 0;
+
+	/**
+	 * Requests to cancel a command on the server for one of the characters this player controller can control.
+	 *
+	 * The character that the command targets must be controllable by this player controller, but may be possessed by
+	 * either this player controller or an AI controller.
+	 *
+	 * Since this is an RPC, the command is passed as an actor instead of as an interface reference because UE will
+	 * not replicate actors if they are declared/referenced through an interface property.
+	 *
+	 * @param Command
+	 *	The command that should be canceled. The given actor must implement the
+	 *	IPF2CharacterCommandInterface interface.
+	 */
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
+	virtual void Server_CancelCharacterCommand(AInfo* Command) = 0;
 
 	// =================================================================================================================
 	// Public Event Notifications from the Game State

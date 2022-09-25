@@ -5,11 +5,13 @@
 
 #include "Commands/PF2CharacterCommand.h"
 
+#include <GameFramework/GameModeBase.h>
+
 #include <Net/UnrealNetwork.h>
 
-#include "Abilities/PF2GameplayAbilityInterface.h"
+#include "PF2PlayerControllerInterface.h"
 
-#include "Commands/PF2CommandQueueInterface.h"
+#include "Abilities/PF2GameplayAbilityInterface.h"
 
 #include "GameModes/PF2GameModeInterface.h"
 
@@ -170,33 +172,66 @@ EPF2CommandExecuteImmediatelyResult APF2CharacterCommand::AttemptExecuteImmediat
 	return Result;
 }
 
-void APF2CharacterCommand::Cancel()
+void APF2CharacterCommand::Cancel_WithRemoteServer()
 {
-	const TScriptInterface<IPF2CharacterInterface>    Character    = this->GetTargetCharacter();
-	const TScriptInterface<IPF2CommandQueueInterface> CommandQueue = Character->GetCommandQueueComponent();
+	const TScriptInterface<IPF2CharacterInterface>        Character        = this->GetTargetCharacter();
+	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
 
-	if (CommandQueue == nullptr)
+	if (PlayerController == nullptr)
 	{
 		UE_LOG(
 			LogPf2CoreAbilities,
 			Error,
-			TEXT("[%s] Character ('%s') lacks a command queue component; unable to cancel command ('%s')."),
-			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			TEXT("Character ('%s') is not controllable by the local client and/or does not belong to a PF2-compatible player controller; unable to cancel command ('%s')."),
 			*(Character->GetIdForLogs()),
 			*(this->GetIdForLogs())
 		);
 	}
 	else
 	{
+		PlayerController->Server_CancelCharacterCommand(this);
+	}
+}
+
+void APF2CharacterCommand::Cancel_WithLocalServer()
+{
+	const TScriptInterface<IPF2CharacterInterface> Character    = this->GetTargetCharacter();
+	AGameModeBase*                                 GameMode     = this->GetWorld()->GetAuthGameMode();
+	IPF2GameModeInterface*                         GameModeIntf = Cast<IPF2GameModeInterface>(GameMode);
+
+	if (GameModeIntf == nullptr)
+	{
 		UE_LOG(
 			LogPf2CoreAbilities,
-			Verbose,
-			TEXT("[%s] Command ('%s') cancelled."),
-			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-			*(this->GetIdForLogs())
+			Error,
+			TEXT("Game Mode ('%s') is not PF2-compatible; unable to cancel command ('%s') for character ('%s')."),
+			*(GetNameSafe(GameMode)),
+			*(this->GetIdForLogs()),
+			*(Character->GetIdForLogs())
 		);
+	}
+	else
+	{
+		TScriptInterface<IPF2CharacterCommandInterface> CommandIntf =
+			PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(this);
 
-		CommandQueue->Remove(this);
+		GameModeIntf->AttemptToCancelCommand(CommandIntf);
+	}
+}
+
+void APF2CharacterCommand::AttemptCancel()
+{
+	if (this->GetWorld()->GetAuthGameMode() == nullptr)
+	{
+		// The game mode only exists on servers; if it does not exist, we must be running on a client.
+		// Route the request through the local player controller so we can trigger this on the server.
+		this->Cancel_WithRemoteServer();
+	}
+	else
+	{
+		// The game mode only exists on servers; if it exists, we must be running on the server.
+		// We can notify the game mode directly.
+		this->Cancel_WithLocalServer();
 	}
 }
 

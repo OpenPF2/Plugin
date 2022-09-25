@@ -87,6 +87,9 @@ public:
 	virtual void Server_ExecuteCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
 	                                            AActor*                          CharacterActor) override;
 
+	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
+	virtual void Server_CancelCharacterCommand(AInfo* Command) override;
+
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void Multicast_OnEncounterTurnStarted() override;
 

@@ -190,26 +190,44 @@ bool APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Validate(
 	AActor* CharacterActor)
 {
 	IPF2CharacterInterface* TargetCharacter = Cast<IPF2CharacterInterface>(CharacterActor);
+	APawn*                  CharacterPawn;
 
 	if (TargetCharacter == nullptr)
 	{
 		UE_LOG(
 			LogPf2CoreAbilities,
 			Error,
-			TEXT("Server_ExecuteCharacterCommand(%s): Character must implement IPF2CharacterInterface."),
-			*((CharacterActor != nullptr) ? CharacterActor->GetName() : "null")
+			TEXT("Server_ExecuteCharacterCommand(%s,%s): Character must implement IPF2CharacterInterface."),
+			*(AbilitySpecHandle.ToString()),
+			*(GetNameSafe(CharacterActor))
 		);
 
 		return false;
 	}
 
-	if ((TargetCharacter->ToPawn()->GetController() != this) &&
-		!this->GetControllableCharacters().Contains(TargetCharacter->ToActor()))
+	CharacterPawn = TargetCharacter->ToPawn();
+
+	if (CharacterPawn == nullptr)
 	{
 		UE_LOG(
 			LogPf2CoreAbilities,
 			Error,
-			TEXT("Server_ExecuteCharacterCommand(%s): Target character must be controllable by this player controller ('%s')."),
+			TEXT("Server_ExecuteCharacterCommand(%s,%s): Non-pawn character passed to player controller ('%s')."),
+			*(AbilitySpecHandle.ToString()),
+			*(TargetCharacter->GetIdForLogs()),
+			*(this->GetIdForLogs())
+		);
+
+		return false;
+	}
+
+	if ((CharacterPawn->GetController() != this) && !this->GetControllableCharacters().Contains(CharacterPawn))
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("Server_ExecuteCharacterCommand(%s,%s): Target character must be controllable by this player controller ('%s')."),
+			*(AbilitySpecHandle.ToString()),
 			*(TargetCharacter->GetIdForLogs()),
 			*(this->GetIdForLogs())
 		);
@@ -231,54 +249,92 @@ void APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Implementation(
 	UE_LOG(
 		LogPf2CoreAbilities,
 		VeryVerbose,
-		TEXT("[%s] Server_ExecuteCharacterCommand() called on player controller ('%s')."),
-		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		TEXT("Server_ExecuteCharacterCommand(%s,%s) called on player controller ('%s')."),
+		*(AbilitySpecHandle.ToString()),
+		*(GetNameSafe(CharacterActor)),
 		*(this->GetIdForLogs())
 	);
 
-	if (TargetCharacter == nullptr)
-	{
-		UE_LOG(
-			LogPf2CoreAbilities,
-			Error,
-			TEXT("[%s] Server_ExecuteCharacterCommand(): Non-PF2 character passed to player controller ('%s')."),
-			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-			*(this->GetIdForLogs())
-		);
-		return;
-	}
+	// Already checked by Validate() callback.
+	check(TargetCharacter != nullptr);
 
+	// Already checked by Validate() callback.
 	CharacterPawn = TargetCharacter->ToPawn();
-
-	if (CharacterPawn == nullptr)
-	{
-		UE_LOG(
-			LogPf2CoreAbilities,
-			Error,
-			TEXT("[%s] Server_ExecuteCharacterCommand(%s): Non-pawn character passed to player controller ('%s')."),
-			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-			*(TargetCharacter->GetIdForLogs()),
-			*(this->GetIdForLogs())
-		);
-		return;
-	}
-
-	if ((CharacterPawn->GetController() != this) && !this->GetControllableCharacters().Contains(CharacterPawn))
-	{
-		UE_LOG(
-			LogPf2CoreAbilities,
-			Error,
-			TEXT("[%s] Server_ExecuteCharacterCommand(%s): Target character must be controllable by this player controller ('%s')."),
-			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-			*(TargetCharacter->GetIdForLogs()),
-			*(this->GetIdForLogs())
-		);
-		return;
-	}
+	check(CharacterPawn != nullptr);
 
 	CharacterCommandIntf = APF2CharacterCommand::Create(TargetCharacter, AbilitySpecHandle);
 
 	CharacterCommandIntf->AttemptExecuteOrQueue();
+}
+
+bool APF2PlayerControllerBase::Server_CancelCharacterCommand_Validate(AInfo* Command)
+{
+	const IPF2CharacterCommandInterface* CommandIntf = Cast<IPF2CharacterCommandInterface>(Command);
+
+	if (CommandIntf == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("Server_CancelCharacterCommand(%s): Command must implement IPF2CharacterCommandInterface."),
+			*(GetNameSafe(Command))
+		);
+
+		return false;
+	}
+	else
+	{
+		const TScriptInterface<IPF2CharacterInterface> TargetCharacter = CommandIntf->GetTargetCharacter();
+
+		if (TargetCharacter == nullptr)
+		{
+			UE_LOG(
+				LogPf2CoreAbilities,
+				Error,
+				TEXT("Server_CancelCharacterCommand(%s): Target character cannot be null."),
+				*(GetNameSafe(Command))
+			);
+
+			return false;
+		}
+
+		if ((TargetCharacter->ToPawn()->GetController() != this) &&
+			!this->GetControllableCharacters().Contains(TargetCharacter->ToActor()))
+		{
+			UE_LOG(
+				LogPf2CoreAbilities,
+				Error,
+				TEXT("Server_CancelCharacterCommand(%s): Target character ('%s') must be controllable by this player controller ('%s')."),
+				*(GetNameSafe(Command)),
+				*(TargetCharacter->GetIdForLogs()),
+				*(this->GetIdForLogs())
+			);
+
+			return false;
+		}
+	}
+
+	return true;
+}
+
+void APF2PlayerControllerBase::Server_CancelCharacterCommand_Implementation(AInfo* Command)
+{
+	IPF2CharacterCommandInterface* CommandIntf = Cast<IPF2CharacterCommandInterface>(Command);
+
+	UE_LOG(
+		LogPf2CoreAbilities,
+		VeryVerbose,
+		TEXT("Server_CancelCharacterCommand(%s) called on player controller ('%s')."),
+		*(GetNameSafe(Command)),
+		*(this->GetIdForLogs())
+	);
+
+	// Already checked by Validate() callback.
+	check(CommandIntf != nullptr);
+
+	// Just defer back to the command. Since we're on the server side, this should not result in infinite recursion
+	// because the server implementation is for the command to call into the game mode.
+	CommandIntf->AttemptCancel();
 }
 
 void APF2PlayerControllerBase::Multicast_OnEncounterTurnStarted_Implementation()

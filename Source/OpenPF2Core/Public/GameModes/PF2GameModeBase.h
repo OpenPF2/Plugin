@@ -85,6 +85,9 @@ public:
 	virtual EPF2CommandExecuteOrQueueResult AttemptToExecuteOrQueueCommand(
 		TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual void AttemptToCancelCommand(TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
+
 protected:
 	// =================================================================================================================
 	// Protected Methods - AActor Overrides

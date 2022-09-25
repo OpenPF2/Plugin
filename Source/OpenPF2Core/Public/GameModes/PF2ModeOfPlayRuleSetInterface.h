@@ -121,6 +121,18 @@ public:
 		const TScriptInterface<IPF2CharacterCommandInterface>& Command);
 
 	/**
+	 * Notifies this rule set that a character wishes to cancel a command.
+	 *
+	 * This gives the rule set control over if/when a command should be canceled. The command may not get cancelled if
+	 * it is already being executed or has finished being executed. In such a situation, the command will still proceed.
+	 *
+	 * @param Command
+	 *	The command that is being cancelled.
+	 */
+	UFUNCTION(BlueprintNativeEvent, Category="OpenPF2|Mode of Play Rule Sets")
+	void AttemptToCancelCommand(const TScriptInterface<IPF2CharacterCommandInterface>& Command);
+
+	/**
 	 * Determines whether this rule set allows transitioning to the specified mode of play with the given game state.
 	 *
 	 * Some modes freely allow transitions to other game modes, while others place restrictions on transitions so that

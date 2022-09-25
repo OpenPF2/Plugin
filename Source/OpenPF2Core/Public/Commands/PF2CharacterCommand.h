@@ -143,7 +143,7 @@ public:
 	virtual EPF2CommandExecuteImmediatelyResult AttemptExecuteImmediately() override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void Cancel() override;
+	virtual void AttemptCancel() override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual AInfo* ToActor() override;
@@ -208,4 +208,14 @@ protected:
 
 		return Ability;
 	}
+
+	/**
+	 * Attempts to cancel this command on the remote server by routing the request through the local player controller.
+	 */
+	void Cancel_WithRemoteServer();
+
+	/**
+	 * Attempts to cancel this command on the local server by notifying the game mode, which typically notifies a MoPRS.
+	 */
+	void Cancel_WithLocalServer();
 };

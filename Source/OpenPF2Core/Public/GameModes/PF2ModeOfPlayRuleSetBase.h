@@ -29,6 +29,9 @@ public:
 	virtual EPF2CommandExecuteOrQueueResult AttemptToExecuteOrQueueCommand_Implementation(
 		const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
+	virtual void AttemptToCancelCommand_Implementation(
+		const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
+
 protected:
 	// =================================================================================================================
 	// Protected Methods

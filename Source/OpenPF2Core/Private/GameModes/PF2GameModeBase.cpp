@@ -255,6 +255,25 @@ EPF2CommandExecuteOrQueueResult APF2GameModeBase::AttemptToExecuteOrQueueCommand
 	return Result;
 }
 
+void APF2GameModeBase::AttemptToCancelCommand(TScriptInterface<IPF2CharacterCommandInterface>& Command)
+{
+	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
+
+	if (RuleSet == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreEncounters,
+			Error,
+			TEXT("No MoPRS is set. Cannot cancel command ('%s')."),
+			*(Command->GetCommandLabel().ToString())
+		);
+	}
+	else
+	{
+		IPF2ModeOfPlayRuleSetInterface::Execute_AttemptToCancelCommand(RuleSet.GetObject(), Command);
+	}
+}
+
 void APF2GameModeBase::BeginPlay()
 {
 	Super::BeginPlay();

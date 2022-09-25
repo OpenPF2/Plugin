@@ -4,7 +4,9 @@
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "GameModes/PF2ModeOfPlayRuleSetBase.h"
+
 #include "Commands/PF2CharacterCommandInterface.h"
+#include "Commands/PF2CommandQueueInterface.h"
 
 #include "Libraries/PF2CharacterCommandLibrary.h"
 #include "Libraries/PF2CharacterLibrary.h"
@@ -18,6 +20,56 @@ EPF2CommandExecuteOrQueueResult APF2ModeOfPlayRuleSetBase::AttemptToExecuteOrQue
 	Result = UPF2CharacterCommandLibrary::ImmediateResultToExecuteOrQueueResult(Command->AttemptExecuteImmediately());
 
 	return Result;
+}
+
+void APF2ModeOfPlayRuleSetBase::AttemptToCancelCommand_Implementation(
+	const TScriptInterface<IPF2CharacterCommandInterface>& Command)
+{
+	TScriptInterface<IPF2CharacterInterface>    Character;
+	TScriptInterface<IPF2CommandQueueInterface> CommandQueue;
+
+	if (Command == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("AttemptToCancelCommand(): Command cannot be null."),
+		);
+
+		return;
+	}
+
+	Character = Command->GetTargetCharacter();
+
+	if (Character == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("AttemptToCancelCommand(%s): Command has null target character."),
+			*(Command->GetIdForLogs())
+		);
+
+		return;
+	}
+
+	CommandQueue = Character->GetCommandQueueComponent();
+
+	if (Character == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Verbose,
+			TEXT("AttemptToCancelCommand(%s): Character ('%s') has no command queue component -- nothing to cancel."),
+			*(Command->GetIdForLogs()),
+			*(Character->GetIdForLogs())
+		);
+
+		return;
+	}
+
+	// Default implementation -- remove the command from the character's command queue, if one exists.
+	CommandQueue->Remove(Command);
 }
 
 TScriptInterface<IPF2GameModeInterface> APF2ModeOfPlayRuleSetBase::GetGameMode() const

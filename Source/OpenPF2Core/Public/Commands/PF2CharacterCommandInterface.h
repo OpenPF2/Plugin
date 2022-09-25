@@ -94,10 +94,13 @@ public:
 	virtual EPF2CommandExecuteImmediatelyResult AttemptExecuteImmediately() = 0;
 
 	/**
-	 * Cancel this command, removing it from the owning character's queue.
+	 * Request to cancel this command.
+	 *
+	 * The actual choice of whether the command is canceled is deferred to the game mode and active Mode of Play Rule
+	 * Set. This can be invoked on either the client or server and in either case, it will be executed on the server.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Commands")
-	virtual void Cancel() = 0;
+	virtual void AttemptCancel() = 0;
 
 	/**
 	 * Gets the actor that is implementing this interface.

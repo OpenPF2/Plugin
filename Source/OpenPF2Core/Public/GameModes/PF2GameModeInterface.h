@@ -189,4 +189,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Mode")
 	virtual EPF2CommandExecuteOrQueueResult AttemptToExecuteOrQueueCommand(
 		TScriptInterface<IPF2CharacterCommandInterface>& Command) = 0;
+
+	/**
+	 * Notifies game rules and/or the Mode of Play Rule Set (MoPRS) that a character wishes to cancel a command.
+	 *
+	 * If the current mode is structured (e.g., Encounter mode), then the command will be removed from the queue of
+	 * commands for the character. On the other hand, if the current Mode of Play allows characters to perform commands
+	 * immediately, canceling the command will have no effect because it is likely already being executed or has
+	 * finished executing.
+	 *
+	 * @param Command
+	 *	The command to cancel.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Mode")
+	virtual void AttemptToCancelCommand(TScriptInterface<IPF2CharacterCommandInterface>& Command) = 0;
 };
