@@ -38,6 +38,9 @@ class OPENPF2CORE_API IPF2ModeOfPlayRuleSetInterface
 	GENERATED_BODY()
 
 public:
+	// =================================================================================================================
+	// Blueprint Implementable Events
+	// =================================================================================================================
 	/**
 	 * Callback to notify this rule set that the mode of play that invoked it is now active.
 	 *
@@ -104,7 +107,26 @@ public:
 	void BP_OnCharacterRemovedFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character);
 
 	/**
-	 * Callback to notify this rule set that a character wishes to perform a command (e.g., use an ability).
+	 * Callback to notify this rule set to wrap-up prior to a change in mode of play.
+	 *
+	 * The rule set should use this as an opportunity to apply any long-lasting effects of the mode (e.g., calculate
+	 * experience and hero points, end encounter-only gameplay effects or abilities, etc.).
+	 *
+	 * @param ModeOfPlay
+	 *	The mode of play that is ending.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Mode of Play Rule Sets",
+		meta=(DisplayName="On Mode of Play End")
+	)
+	void BP_OnModeOfPlayEnd(EPF2ModeOfPlayType ModeOfPlay);
+
+	// =================================================================================================================
+	// Blueprint Functions
+	// =================================================================================================================
+	/**
+	 * Notifies this rule set that a character wishes to perform a command (e.g., use an ability).
 	 *
 	 * This gives the rule set control over when the command should be performed (e.g., to enforce initiative order).
 	 * The command may not get executed if the encounter ends before it has been activated. In such a situation, the
@@ -149,20 +171,4 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Mode of Play Rule Sets")
 	bool CanTransitionTo(const TScriptInterface<IPF2GameStateInterface>& GameState,
 	                     const EPF2ModeOfPlayType                        TargetMode) const;
-
-	/**
-	 * Callback to notify this rule set to wrap-up prior to a change in mode of play.
-	 *
-	 * The rule set should use this as an opportunity to apply any long-lasting effects of the mode (e.g., calculate
-	 * experience and hero points, end encounter-only gameplay effects or abilities, etc.).
-	 *
-	 * @param ModeOfPlay
-	 *	The mode of play that is ending.
-	 */
-	UFUNCTION(
-		BlueprintImplementableEvent,
-		Category="OpenPF2|Mode of Play Rule Sets",
-		meta=(DisplayName="On Mode of Play End")
-	)
-	void BP_OnModeOfPlayEnd(EPF2ModeOfPlayType ModeOfPlay);
 };

@@ -24,7 +24,7 @@ class OPENPF2CORE_API APF2ModeOfPlayRuleSetBase : public AActor, public IPF2Mode
 
 public:
 	// =================================================================================================================
-	// Public Methods - APF2ModeOfPlayRuleSetBase Implementation
+	// Public Methods - IPF2ModeOfPlayRuleSetInterface Implementation
 	// =================================================================================================================
 	virtual EPF2CommandExecuteOrQueueResult AttemptToExecuteOrQueueCommand_Implementation(
 		const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;

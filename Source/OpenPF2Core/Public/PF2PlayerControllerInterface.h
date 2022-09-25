@@ -111,8 +111,7 @@ public:
 	 * @param AbilitySpecHandle
 	 *	The handle for the ability to activate.
 	 * @param CharacterActor
-	 *	The character upon which the ability should be activated. The given actor must implement the
-	 *	IPF2CharacterInterface interface.
+	 *	The character upon which the ability should be activated. The given actor must implement IPF2CharacterInterface.
 	 */
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
 	virtual void Server_ExecuteCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,

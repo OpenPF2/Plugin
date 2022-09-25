@@ -154,10 +154,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
 
+protected:
 	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
-protected:
 	/**
 	 * Gets the handle of the ability that this command will trigger when it is executed.
 	 *

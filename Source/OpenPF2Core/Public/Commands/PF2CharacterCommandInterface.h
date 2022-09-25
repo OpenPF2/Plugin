@@ -5,7 +5,6 @@
 
 #pragma once
 
-// ReSharper disable once CppUnusedIncludeDirective
 #include <Engine/Texture2D.h>
 
 #include "Commands/PF2CommandExecuteImmediatelyResult.h"
@@ -15,6 +14,14 @@
 
 #include "PF2CharacterCommandInterface.generated.h"
 
+// =====================================================================================================================
+// Forward Declarations (to break recursive dependencies)
+// =====================================================================================================================
+class IPF2CharacterInterface;
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2CharacterCommandInterface : public UPF2LogIdentifiableInterface
 {
