@@ -57,7 +57,7 @@ void APF2PlayerControllerBase::SetPawn(APawn* NewPawn)
 		TEXT("[%s] Player controller ('%s') has taken possession of pawn ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		*(this->GetName()),
-		(NewPawn == nullptr) ? TEXT("null") : *(NewPawn->GetFullName())
+		*(GetFullNameSafe(NewPawn))
 	);
 
 	Super::SetPawn(NewPawn);

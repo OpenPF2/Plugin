@@ -137,8 +137,8 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::Activate()
 		ABILITY_LOG(
 			Warning,
 			TEXT("UPF2AbilityTask_PlayMontageAndWaitForEvent called in Ability %s failed to play montage %s; Task Instance Name %s."),
-			*this->Ability->GetName(),
-			*GetNameSafe(this->MontageToPlay),
+			*(GetNameSafe(this->Ability)),
+			*(GetNameSafe(this->MontageToPlay)),
 			*this->InstanceName.ToString()
 		);
 

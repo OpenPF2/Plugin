@@ -138,7 +138,7 @@ FString UPF2CommandBindingsComponent::GetIdForLogs() const
 	return FString::Format(
 		TEXT("{0}.{1}"),
 		{
-			*(this->GetOwner()->GetName()),
+			*(GetNameSafe(this->GetOwner())),
 			*(this->GetName())
 		}
 	);

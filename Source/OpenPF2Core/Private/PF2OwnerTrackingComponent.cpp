@@ -153,7 +153,7 @@ FString UPF2OwnerTrackingComponent::GetIdForLogs() const
 	if (OwnerLogId == nullptr)
 	{
 		// Fallback to vanilla UE if we're not in something that implements IPF2LogIdentifiableInterface
-		OwnerName = OwningActor->GetName();
+		OwnerName = GetNameSafe(OwningActor);
 	}
 	else
 	{

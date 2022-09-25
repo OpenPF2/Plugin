@@ -262,7 +262,7 @@ FString APF2CharacterCommand::GetIdForLogs() const
 		TEXT("{0}[{1}.{2}]"),
 		{
 			*(this->GetCommandLabel().ToString()),
-			(WrappedAbility == nullptr) ? TEXT("null") : *(WrappedAbility->GetName()),
+			*(GetNameSafe(WrappedAbility)),
 			*(this->GetName())
 		}
 	);
@@ -277,7 +277,7 @@ FGameplayAbilitySpec* APF2CharacterCommand::GetAbilitySpec() const
 	{
 		const FGameplayAbilitySpecHandle TargetHandle = this->GetAbilitySpecHandle();
 		const FString                    HostNetId    = PF2LogUtilities::GetHostNetId(this->GetWorld()),
-		                                 AscId        = GetNameSafe(Asc),
+		                                 AscId        = GetFullNameSafe(Asc),
 		                                 HandleId     = TargetHandle.ToString();
 
 		AbilitySpec = Asc->FindAbilitySpecFromHandle(TargetHandle);
