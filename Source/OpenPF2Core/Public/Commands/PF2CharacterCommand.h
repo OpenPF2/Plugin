@@ -17,6 +17,7 @@
 #include "Commands/PF2CommandExecuteOrQueueResult.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
+#include "Utilities/PF2LogUtilities.h"
 
 #include "PF2CharacterCommand.generated.h"
 
@@ -172,48 +173,38 @@ protected:
 	 * Gets the specification for the ability that this command will trigger when it is executed.
 	 *
 	 * @return
-	 *	The ability specification.
+	 *	The ability specification; or nullptr if either the character lacks an ASC (unlikely) or the character no longer
+	 *	has an ability that matches this command (more likely).
 	 */
-	FORCEINLINE FGameplayAbilitySpec* GetAbilitySpec() const
-	{
-		return this->GetAbilitySystemComponent()->FindAbilitySpecFromHandle(this->GetAbilitySpecHandle());
-	}
+	FGameplayAbilitySpec* GetAbilitySpec() const;
 
 	/**
 	 * Gets the Ability System Component (ASC) of the character for which this command will be executed.
+	 *
+	 * @return
+	 *	The ASC of the target character; or NULL if the character is somehow missing an Ability System Component.
 	 */
-	FORCEINLINE UAbilitySystemComponent* GetAbilitySystemComponent() const
-	{
-		UAbilitySystemComponent* AbilitySystemComponent = this->GetTargetCharacter()->GetAbilitySystemComponent();
-		check(AbilitySystemComponent);
-
-		return AbilitySystemComponent;
-	}
+	UAbilitySystemComponent* GetAbilitySystemComponent() const;
 
 	/**
 	 * Gets the CDO for the ability that this command will trigger when it is executed.
 	 *
 	 * @return
-	 *	The gameplay ability.
+	 *	The gameplay ability; or nullptr if the character no longer has an ability that corresponds to the specification
+	 *	of this command.
 	 */
-	FORCEINLINE UGameplayAbility* GetAbility() const
-	{
-		UGameplayAbility* Ability = this->GetAbilitySpec()->Ability;
-		check(Ability);
-
-		return Ability;
-	}
+	FORCEINLINE UGameplayAbility* GetAbility() const;
 
 	/**
 	 * Gets the PF2 interface to the CDO of the ability that this command will trigger when it is executed.
 	 *
 	 * @return
-	 *	The gameplay ability, as a PF2 interface.
+	 *	The gameplay ability, as a PF2 interface; or nullptr if the character no longer has an ability that corresponds
+	 *	to the specification of this command.
 	 */
 	FORCEINLINE IPF2GameplayAbilityInterface* GetAbilityIntf() const
 	{
 		IPF2GameplayAbilityInterface* Ability = Cast<IPF2GameplayAbilityInterface>(this->GetAbility());
-		check(Ability);
 
 		return Ability;
 	}

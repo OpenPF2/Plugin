@@ -54,17 +54,49 @@ TScriptInterface<IPF2CharacterInterface> APF2CharacterCommand::GetTargetCharacte
 
 UTexture2D* APF2CharacterCommand::GetCommandIcon() const
 {
-	return GetAbilityIntf()->GetAbilityIcon();
+	UTexture2D*                         CommandIcon = nullptr;
+	const IPF2GameplayAbilityInterface* AbilityIntf = this->GetAbilityIntf();
+
+	if (AbilityIntf != nullptr)
+	{
+		CommandIcon = AbilityIntf->GetAbilityIcon();
+	}
+
+	return CommandIcon;
 }
 
 FText APF2CharacterCommand::GetCommandLabel() const
 {
-	return GetAbilityIntf()->GetAbilityLabel();
+	FText                               CommandLabel;
+	const IPF2GameplayAbilityInterface* AbilityIntf  = this->GetAbilityIntf();
+
+	if (AbilityIntf == nullptr)
+	{
+		CommandLabel = FText();
+	}
+	else
+	{
+		CommandLabel = AbilityIntf->GetAbilityLabel();
+	}
+
+	return CommandLabel;
 }
 
 FText APF2CharacterCommand::GetCommandDescription() const
 {
-	return GetAbilityIntf()->GetAbilityDescription();
+	FText                               CommandDescription;
+	const IPF2GameplayAbilityInterface* AbilityIntf        = this->GetAbilityIntf();
+
+	if (AbilityIntf == nullptr)
+	{
+		CommandDescription = FText();
+	}
+	else
+	{
+		CommandDescription = AbilityIntf->GetAbilityDescription();
+	}
+
+	return CommandDescription;
 }
 
 EPF2CommandExecuteOrQueueResult APF2CharacterCommand::AttemptExecuteOrQueue()
@@ -177,13 +209,95 @@ AInfo* APF2CharacterCommand::ToActor()
 
 FString APF2CharacterCommand::GetIdForLogs() const
 {
+	const UGameplayAbility* WrappedAbility = this->GetAbility();
+
 	// ReSharper disable CppRedundantParentheses
 	return FString::Format(
 		TEXT("{0}[{1}.{2}]"),
 		{
 			*(this->GetCommandLabel().ToString()),
-			*(this->GetAbility()->GetName()),
+			(WrappedAbility == nullptr) ? TEXT("null") : *(WrappedAbility->GetName()),
 			*(this->GetName())
 		}
 	);
+}
+
+FGameplayAbilitySpec* APF2CharacterCommand::GetAbilitySpec() const
+{
+	FGameplayAbilitySpec*    AbilitySpec = nullptr;
+	UAbilitySystemComponent* Asc         = this->GetAbilitySystemComponent();
+
+	if (Asc != nullptr)
+	{
+		const FGameplayAbilitySpecHandle TargetHandle = this->GetAbilitySpecHandle();
+		const FString                    HostNetId    = PF2LogUtilities::GetHostNetId(this->GetWorld()),
+		                                 AscId        = GetNameSafe(Asc),
+		                                 HandleId     = TargetHandle.ToString();
+
+		AbilitySpec = Asc->FindAbilitySpecFromHandle(TargetHandle);
+
+		if (AbilitySpec == nullptr)
+		{
+			// FIXME: This warning gets emitted every time a command gets replicated to clients other than the client
+			// who can control the character to which the command belongs. Ideally, there should be some way to make
+			// commands only replicate from the server to the client that can control the character, but
+			// bOnlyRelevantToOwner doesn't work here (yet?) because the "owner" of an AI-possessed character belong to
+			// a player is not "owned" (in the net authority sense) by the controller for that player.
+			UE_LOG(
+				LogPf2CoreAbilities,
+				Warning,
+				TEXT("[%s] ASC ('%s') has no Gameplay Ability that matches handle ('%s')."),
+				*HostNetId,
+				*AscId,
+				*HandleId
+			);
+		}
+		else
+		{
+			UE_LOG(
+				LogPf2CoreAbilities,
+				VeryVerbose,
+				TEXT("[%s] Found a Gameplay Ability ('%s') in the ASC ('%s') that matches the given handle ('%s')."),
+				*HostNetId,
+				*(AbilitySpec->GetDebugString()),
+				*AscId,
+				*HandleId
+			);
+		}
+	}
+
+	return AbilitySpec;
+}
+
+UAbilitySystemComponent* APF2CharacterCommand::GetAbilitySystemComponent() const
+{
+	const TScriptInterface<IPF2CharacterInterface> CharacterIntf = this->GetTargetCharacter();
+	UAbilitySystemComponent*                       Asc           = CharacterIntf->GetAbilitySystemComponent();
+
+	if (Asc == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Warning,
+			TEXT("[%s] Character ('%s') has no Ability System Component (ASC)."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(CharacterIntf->GetIdForLogs())
+		);
+	}
+
+	return Asc;
+}
+
+UGameplayAbility* APF2CharacterCommand::GetAbility() const
+{
+	const FGameplayAbilitySpec* AbilitySpec = this->GetAbilitySpec();
+	UGameplayAbility*           Ability     = nullptr;
+
+	if (AbilitySpec != nullptr)
+	{
+		Ability = AbilitySpec->Ability;
+		check(Ability != nullptr);
+	}
+
+	return Ability;
 }
