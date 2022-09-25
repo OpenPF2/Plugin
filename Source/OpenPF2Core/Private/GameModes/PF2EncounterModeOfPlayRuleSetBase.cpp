@@ -15,8 +15,6 @@
 
 #include "GameModes/PF2CharacterInitiativeQueueComponent.h"
 
-#include "Utilities/PF2InterfaceUtilities.h"
-
 APF2EncounterModeOfPlayRuleSetBase::APF2EncounterModeOfPlayRuleSetBase()
 {
 	this->CharacterInitiativeQueue =
@@ -29,7 +27,7 @@ bool APF2EncounterModeOfPlayRuleSetBase::HavePlayableCharacters() const
 
 	if (!this->GetCharacterInitiativeQueue()->IsEmpty())
 	{
-		for (const TScriptInterface<IPF2CharacterInterface> Character : this->GetCharactersInInitiativeOrder())
+		for (const TScriptInterface<IPF2CharacterInterface> Character : this->GetAllCharactersInInitiativeOrder())
 		{
 			if (Character->IsAlive())
 			{
@@ -40,6 +38,45 @@ bool APF2EncounterModeOfPlayRuleSetBase::HavePlayableCharacters() const
 	}
 
 	return Result;
+}
+
+void APF2EncounterModeOfPlayRuleSetBase::SetCharacterInitiative(
+	const TScriptInterface<IPF2CharacterInterface>& Character,
+	const int32                                     Initiative)
+{
+	this->GetCharacterInitiativeQueue()->SetCharacterInitiative(Character, Initiative);
+}
+
+bool APF2EncounterModeOfPlayRuleSetBase::IsInitiativeSetForCharacter(
+	const TScriptInterface<IPF2CharacterInterface>& Character) const
+{
+	return this->GetCharacterInitiativeQueue()->IsInitiativeSetForCharacter(Character);
+}
+
+void APF2EncounterModeOfPlayRuleSetBase::ClearInitiativeForCharacter(
+	const TScriptInterface<IPF2CharacterInterface>& Character)
+{
+	this->GetCharacterInitiativeQueue()->ClearInitiativeForCharacter(Character);
+}
+
+void APF2EncounterModeOfPlayRuleSetBase::ClearInitiativeForAllCharacters()
+{
+	this->GetCharacterInitiativeQueue()->ClearInitiativeForAllCharacters();
+}
+
+TScriptInterface<IPF2CharacterInterface> APF2EncounterModeOfPlayRuleSetBase::GetNextCharacterByInitiative()
+{
+	return this->GetCharacterInitiativeQueue()->GetNextCharacterByInitiative();
+}
+
+TArray<TScriptInterface<IPF2CharacterInterface>> APF2EncounterModeOfPlayRuleSetBase::GetAllCharactersInInitiativeOrder() const
+{
+	return this->GetCharacterInitiativeQueue()->GetCharactersInInitiativeOrder();
+}
+
+TScriptInterface<IPF2CharacterInterface> APF2EncounterModeOfPlayRuleSetBase::GetActiveCharacter() const
+{
+	return this->ActiveCharacter;
 }
 
 void APF2EncounterModeOfPlayRuleSetBase::StartTurnForCharacter(
@@ -89,44 +126,35 @@ void APF2EncounterModeOfPlayRuleSetBase::EndTurnForCharacter(const TScriptInterf
 	IPF2CharacterInterface::Execute_Multicast_OnEncounterTurnEnded(Character.GetObject());
 }
 
-void APF2EncounterModeOfPlayRuleSetBase::SetCharacterInitiative(
-	const TScriptInterface<IPF2CharacterInterface>& Character,
-	const int32                                     Initiative)
-{
-	this->GetCharacterInitiativeQueue()->SetCharacterInitiative(Character, Initiative);
-}
-
-bool APF2EncounterModeOfPlayRuleSetBase::IsInitiativeSetForCharacter(
+bool APF2EncounterModeOfPlayRuleSetBase::DoesCharacterHaveNextCommandQueued(
 	const TScriptInterface<IPF2CharacterInterface>& Character) const
 {
-	return this->GetCharacterInitiativeQueue()->IsInitiativeSetForCharacter(Character);
+	bool                                              Result;
+	const TScriptInterface<IPF2CommandQueueInterface> CommandQueue = Character->GetCommandQueueComponent();
+
+	if (CommandQueue == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreEncounters,
+			Warning,
+			TEXT("Character ('%s') lacks a command queue component; it is not possible to queue commands."),
+			*(Character->GetIdForLogs())
+		);
+
+		Result = false;
+	}
+	else
+	{
+		TScriptInterface<IPF2CharacterCommandInterface> NextCommand;
+
+		CommandQueue->PeekNext(NextCommand);
+
+		Result = (NextCommand != nullptr);
+	}
+
+	return Result;
 }
 
-// ReSharper disable once CppUE4BlueprintCallableFunctionMayBeConst
-void APF2EncounterModeOfPlayRuleSetBase::ClearInitiativeForCharacter(
-	const TScriptInterface<IPF2CharacterInterface>& Character)
-{
-	this->GetCharacterInitiativeQueue()->ClearInitiativeForCharacter(Character);
-}
-
-// ReSharper disable once CppUE4BlueprintCallableFunctionMayBeConst
-void APF2EncounterModeOfPlayRuleSetBase::ClearInitiativeForAllCharacters()
-{
-	this->GetCharacterInitiativeQueue()->ClearInitiativeForAllCharacters();
-}
-
-// ReSharper disable once CppUE4BlueprintCallableFunctionMayBeConst
-TScriptInterface<IPF2CharacterInterface> APF2EncounterModeOfPlayRuleSetBase::GetNextCharacterByInitiative()
-{
-	return this->GetCharacterInitiativeQueue()->GetNextCharacterByInitiative();
-}
-
-TArray<TScriptInterface<IPF2CharacterInterface>> APF2EncounterModeOfPlayRuleSetBase::GetCharactersInInitiativeOrder() const
-{
-	return this->GetCharacterInitiativeQueue()->GetCharactersInInitiativeOrder();
-}
-
-// ReSharper disable once CppUE4BlueprintCallableFunctionMayBeConst
 void APF2EncounterModeOfPlayRuleSetBase::QueueCommandForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>&        Character,
 	const TScriptInterface<IPF2CharacterCommandInterface>& Command)
@@ -157,10 +185,9 @@ void APF2EncounterModeOfPlayRuleSetBase::QueueCommandForCharacter(
 	}
 }
 
-// ReSharper disable once CppUE4BlueprintCallableFunctionMayBeConst
 void APF2EncounterModeOfPlayRuleSetBase::CancelQueuedCommandsForAllCharacters()
 {
-	for (const TScriptInterface<IPF2CharacterInterface> Character : this->GetCharactersInInitiativeOrder())
+	for (const TScriptInterface<IPF2CharacterInterface> Character : this->GetAllCharactersInInitiativeOrder())
 	{
 		const TScriptInterface<IPF2CommandQueueInterface> CommandQueue = Character->GetCommandQueueComponent();
 
@@ -180,7 +207,6 @@ void APF2EncounterModeOfPlayRuleSetBase::CancelQueuedCommandsForAllCharacters()
 	}
 }
 
-// ReSharper disable once CppUE4BlueprintCallableFunctionMayBeConst
 EPF2CommandExecuteImmediatelyResult APF2EncounterModeOfPlayRuleSetBase::ExecuteNextQueuedCommandForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character)
 {
@@ -206,38 +232,6 @@ EPF2CommandExecuteImmediatelyResult APF2EncounterModeOfPlayRuleSetBase::ExecuteN
 	return Result;
 }
 
-// ReSharper disable once CppUE4BlueprintCallableFunctionMayBeStatic
-bool APF2EncounterModeOfPlayRuleSetBase::DoesCharacterHaveNextCommandQueued(
-	const TScriptInterface<IPF2CharacterInterface>& Character) const
-{
-	bool                                              Result;
-	const TScriptInterface<IPF2CommandQueueInterface> CommandQueue = Character->GetCommandQueueComponent();
-
-	if (CommandQueue == nullptr)
-	{
-		UE_LOG(
-			LogPf2CoreEncounters,
-			Warning,
-			TEXT("Character ('%s') lacks a command queue component; it is not possible to queue commands."),
-			*(Character->GetIdForLogs())
-		);
-
-		Result = false;
-	}
-	else
-	{
-		TScriptInterface<IPF2CharacterCommandInterface> NextCommand;
-
-		CommandQueue->PeekNext(NextCommand);
-
-		Result = (NextCommand != nullptr);
-	}
-
-	return Result;
-}
-
-// ReSharper disable once CppUE4BlueprintCallableFunctionMayBeStatic
-// ReSharper disable once CppUE4BlueprintCallableFunctionMayBeConst
 void APF2EncounterModeOfPlayRuleSetBase::PeekNextQueuedCommandForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>&  Character,
 	TScriptInterface<IPF2CharacterCommandInterface>& NextCommand) const
@@ -261,8 +255,6 @@ void APF2EncounterModeOfPlayRuleSetBase::PeekNextQueuedCommandForCharacter(
 	}
 }
 
-// ReSharper disable once CppUE4BlueprintCallableFunctionMayBeStatic
-// ReSharper disable once CppUE4BlueprintCallableFunctionMayBeConst
 void APF2EncounterModeOfPlayRuleSetBase::PopNextCommandQueuedForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character,
 	TScriptInterface<IPF2CharacterCommandInterface>& NextCommand)
@@ -284,11 +276,6 @@ void APF2EncounterModeOfPlayRuleSetBase::PopNextCommandQueuedForCharacter(
 	{
 		CommandQueue->PopNext(NextCommand);
 	}
-}
-
-TScriptInterface<IPF2CharacterInterface> APF2EncounterModeOfPlayRuleSetBase::GetActiveCharacter() const
-{
-	return this->ActiveCharacter;
 }
 
 void APF2EncounterModeOfPlayRuleSetBase::SetActiveCharacter(
