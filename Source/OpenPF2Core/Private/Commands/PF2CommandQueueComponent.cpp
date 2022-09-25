@@ -10,6 +10,7 @@
 #include "Commands/PF2CharacterCommandInterface.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
+#include "Utilities/PF2LogUtilities.h"
 
 UPF2CommandQueueComponent::UPF2CommandQueueComponent()
 {
@@ -238,17 +239,44 @@ void UPF2CommandQueueComponent::Native_OnCommandsChanged() const
 		}
 	}
 
+	UE_LOG(
+		LogPf2CoreAbilities,
+		VeryVerbose,
+		TEXT("[%s] Command queue changed ('%s') - %d elements."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(this->GetIdForLogs()),
+		NewCommands.Num()
+	);
+
 	this->OnCommandsChanged.Broadcast(NewCommands);
 }
 
 void UPF2CommandQueueComponent::Native_OnCommandAdded(
 	const TScriptInterface<IPF2CharacterCommandInterface>& CommandAdded) const
 {
+	UE_LOG(
+		LogPf2CoreAbilities,
+		VeryVerbose,
+		TEXT("[%s] Command ('%s') added to queue ('%s')."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(CommandAdded->GetIdForLogs()),
+		*(this->GetIdForLogs())
+	);
+
 	this->OnCommandAdded.Broadcast(CommandAdded);
 }
 
 void UPF2CommandQueueComponent::Native_OnCommandRemoved(
 	const TScriptInterface<IPF2CharacterCommandInterface>& CommandRemoved) const
 {
+	UE_LOG(
+		LogPf2CoreAbilities,
+		VeryVerbose,
+		TEXT("[%s] Command ('%s') removed from queue ('%s')."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(CommandRemoved->GetIdForLogs()),
+		*(this->GetIdForLogs())
+	);
+
 	this->OnCommandRemoved.Broadcast(CommandRemoved);
 }
