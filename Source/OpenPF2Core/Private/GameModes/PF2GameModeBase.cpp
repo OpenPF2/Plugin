@@ -230,7 +230,6 @@ void APF2GameModeBase::RemoveCharacterFromEncounter(const TScriptInterface<IPF2C
 }
 
 EPF2CommandExecuteOrQueueResult APF2GameModeBase::AttemptToExecuteOrQueueCommand(
-		TScriptInterface<IPF2CharacterInterface>&        Character,
 		TScriptInterface<IPF2CharacterCommandInterface>& Command)
 {
 	EPF2CommandExecuteOrQueueResult                        Result;
@@ -250,12 +249,7 @@ EPF2CommandExecuteOrQueueResult APF2GameModeBase::AttemptToExecuteOrQueueCommand
 	}
 	else
 	{
-		Result =
-			IPF2ModeOfPlayRuleSetInterface::Execute_AttemptToExecuteOrQueueCommand(
-				RuleSet.GetObject(),
-				Character,
-				Command
-			);
+		Result = IPF2ModeOfPlayRuleSetInterface::Execute_AttemptToExecuteOrQueueCommand(RuleSet.GetObject(), Command);
 	}
 
 	return Result;

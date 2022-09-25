@@ -118,12 +118,10 @@ EPF2CommandExecuteOrQueueResult APF2CharacterCommand::AttemptExecuteOrQueue()
 
 		if (PF2GameMode != nullptr)
 		{
-			TScriptInterface<IPF2CharacterInterface> Pf2Character = this->GetTargetCharacter();
-
 			TScriptInterface<IPF2CharacterCommandInterface> CommandIntf =
 				PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(this);
 
-			Result = PF2GameMode->AttemptToExecuteOrQueueCommand(Pf2Character, CommandIntf);
+			Result = PF2GameMode->AttemptToExecuteOrQueueCommand(CommandIntf);
 		}
 	}
 

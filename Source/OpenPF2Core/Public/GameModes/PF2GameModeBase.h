@@ -83,7 +83,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual EPF2CommandExecuteOrQueueResult AttemptToExecuteOrQueueCommand(
-		TScriptInterface<IPF2CharacterInterface>&        Character,
 		TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
 protected:

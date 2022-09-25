@@ -10,7 +10,6 @@
 #include "Libraries/PF2CharacterLibrary.h"
 
 EPF2CommandExecuteOrQueueResult APF2ModeOfPlayRuleSetBase::AttemptToExecuteOrQueueCommand_Implementation(
-	const TScriptInterface<IPF2CharacterInterface>&        Character,
 	const TScriptInterface<IPF2CharacterCommandInterface>& Command)
 {
 	EPF2CommandExecuteOrQueueResult Result;

@@ -180,15 +180,13 @@ public:
 	 * Mode of Play allows characters to perform commands immediately, the command will not be queued and will instead
 	 * be given the opportunity to run before this call returns.
 	 *
-	 * @param Character
-	 *	The character for which the command is being queued.
 	 * @param Command
 	 *	The command being queued.
+	 *
 	 * @return
 	 *	A result that indicates whether the command was queued, executed immediately, or refused.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Mode")
 	virtual EPF2CommandExecuteOrQueueResult AttemptToExecuteOrQueueCommand(
-		TScriptInterface<IPF2CharacterInterface>&        Character,
 		TScriptInterface<IPF2CharacterCommandInterface>& Command) = 0;
 };

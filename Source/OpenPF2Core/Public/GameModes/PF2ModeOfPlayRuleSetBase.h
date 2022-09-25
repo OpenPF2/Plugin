@@ -27,7 +27,6 @@ public:
 	// Public Methods - APF2ModeOfPlayRuleSetBase Implementation
 	// =================================================================================================================
 	virtual EPF2CommandExecuteOrQueueResult AttemptToExecuteOrQueueCommand_Implementation(
-		const TScriptInterface<IPF2CharacterInterface>&        Character,
 		const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
 protected:
