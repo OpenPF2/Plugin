@@ -103,8 +103,9 @@ FText APF2CharacterCommand::GetCommandDescription() const
 
 EPF2CommandExecuteOrQueueResult APF2CharacterCommand::AttemptExecuteOrQueue()
 {
-	EPF2CommandExecuteOrQueueResult Result = EPF2CommandExecuteOrQueueResult::None;
-	const UWorld* const             World  = this->GetWorld();
+	EPF2CommandExecuteOrQueueResult Result      = EPF2CommandExecuteOrQueueResult::None;
+	const UWorld* const             World       = this->GetWorld();
+	IPF2GameModeInterface*          PF2GameMode;
 
 	UE_LOG(
 		LogPf2CoreAbilities,
@@ -114,17 +115,29 @@ EPF2CommandExecuteOrQueueResult APF2CharacterCommand::AttemptExecuteOrQueue()
 		*(this->GetIdForLogs())
 	);
 
-	if (World != nullptr)
+	check(World);
+
+	PF2GameMode = Cast<IPF2GameModeInterface>(World->GetAuthGameMode());
+
+	if (PF2GameMode == nullptr)
 	{
-		IPF2GameModeInterface* PF2GameMode = Cast<IPF2GameModeInterface>(World->GetAuthGameMode());
+		// TODO: If we have an actual need for this use case, we could probably support it by routing the invocation
+		// through the local player controller. The reason this isn't supported at the moment is because character
+		// commands have to be spawned on the server to have any effect, so we create them and invoke them there, and
+		// therefore don't (yet) have a need to invoke them locally.
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("[%s] AttemptExecuteOrQueue() can only be called on the server."),
+			*(PF2LogUtilities::GetHostNetId(World))
+		);
+	}
+	else
+	{
+		TScriptInterface<IPF2CharacterCommandInterface> CommandIntf =
+			PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(this);
 
-		if (PF2GameMode != nullptr)
-		{
-			TScriptInterface<IPF2CharacterCommandInterface> CommandIntf =
-				PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(this);
-
-			Result = PF2GameMode->AttemptToExecuteOrQueueCommand(CommandIntf);
-		}
+		Result = PF2GameMode->AttemptToExecuteOrQueueCommand(CommandIntf);
 	}
 
 	UE_LOG(
