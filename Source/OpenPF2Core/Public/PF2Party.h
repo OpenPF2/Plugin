@@ -84,7 +84,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	// =================================================================================================================
-	// Public Methods - IPF2PartyInterface Overrides
+	// Public Methods - IPF2PartyInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
 	virtual FText GetPartyName() const override;
@@ -114,7 +114,7 @@ public:
 	virtual void RemovePlayerFromPartyByState(const TScriptInterface<IPF2PlayerStateInterface>& PlayerState) override;
 
 	// =================================================================================================================
-	// Public Methods - IPF2LogIdentifiableInterface Overrides
+	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;

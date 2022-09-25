@@ -70,7 +70,7 @@ protected:
 
 public:
 	// =================================================================================================================
-	// Public Methods - IPF2GameplayAbilityInterface Overrides
+	// Public Methods - IPF2GameplayAbilityInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
 	virtual UTexture2D* GetAbilityIcon() const override;
@@ -85,7 +85,7 @@ public:
 	virtual FName GetDefaultInputActionMapping() const override;
 
 	// =================================================================================================================
-	// Public Methods - IPF2LogIdentifiableInterface Overrides
+	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;

@@ -30,7 +30,7 @@ class OPENPF2CORE_API APF2AIControllerBase : public AAIController, public IPF2AI
 
 public:
 	// =================================================================================================================
-	// Public Methods - IPF2LogIdentifiableInterface Overrides
+	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;

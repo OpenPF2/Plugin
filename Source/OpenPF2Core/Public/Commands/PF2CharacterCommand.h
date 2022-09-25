@@ -122,7 +122,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	// =================================================================================================================
-	// Public Methods - IPF2CharacterCommandInterface Overrides
+	// Public Methods - IPF2CharacterCommandInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2CharacterInterface> GetTargetCharacter() const override;
