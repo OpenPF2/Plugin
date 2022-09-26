@@ -118,12 +118,12 @@ protected:
 	}
 
 	/**
-     * Gets the first player index that hasn't yet been assigned to any other player.
-     *
-     * @return
-     *	The next available player index.
-     */
-    FORCEINLINE int32 GetNextAvailablePlayerIndex() const
+	 * Gets the first player index that hasn't yet been assigned to any other player.
+	 *
+	 * @return
+	 *	The next available player index.
+	 */
+	FORCEINLINE int32 GetNextAvailablePlayerIndex() const
 	{
 		return this->GetGameStateIntf()->GetNextAvailablePlayerIndex();
 	}

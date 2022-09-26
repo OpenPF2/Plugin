@@ -50,7 +50,7 @@ namespace PF2ArrayUtilities
 	 *	The transformation function/lambda invoked on each element in order to get the mapped value.
 	 *
 	 * @return
-	 *	An array of the values that resulted from applying the transformation to every value of the source array.
+	 *	The array of values that resulted from applying the transformation to every value of the source array.
 	 *
 	 * @tparam In
 	 *	The type of elements in the input array.

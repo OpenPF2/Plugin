@@ -77,10 +77,10 @@ public:
 	 *
 	 * The command is removed from the queue.
 	 *
-	* @return
-	 *	- EPF2ImmediateCommandExecutionResult::None if there are no commands to execute.
-	 *	- EPF2ImmediateCommandExecutionResult::Activated if there was a queued command that was executed.
-	 *	- EPF2ImmediateCommandExecutionResult::Blocked if there was a queued command but it could not be executed yet,
+	 * @return
+	 *	- EPF2CommandExecuteImmediatelyResult::None if there are no commands to execute.
+	 *	- EPF2CommandExecuteImmediatelyResult::Activated if there was a queued command that was executed.
+	 *	- EPF2CommandExecuteImmediatelyResult::Blocked if there was a queued command but it could not be executed yet,
 	 *	  typically because it is blocked by another ability that is active on the character.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Queues")

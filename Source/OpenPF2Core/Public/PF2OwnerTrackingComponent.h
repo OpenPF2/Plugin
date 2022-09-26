@@ -82,7 +82,7 @@ public:
 	virtual void SetOwningPlayerByController(const TScriptInterface<IPF2PlayerControllerInterface> NewController) override;
 
 	UFUNCTION(BlueprintCallable)
-    virtual void SetOwningPlayerByState(const TScriptInterface<IPF2PlayerStateInterface> NewPlayerState) override;
+	virtual void SetOwningPlayerByState(const TScriptInterface<IPF2PlayerStateInterface> NewPlayerState) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual bool IsSamePartyAsActor(AActor* OtherActor) const override;
@@ -124,7 +124,7 @@ protected:
 	 *	The previous owner of the containing actor.
 	 */
 	UFUNCTION()
-    void OnRep_OwningPlayerState(APlayerState* OldOwner) const;
+	void OnRep_OwningPlayerState(APlayerState* OldOwner) const;
 
 	/**
 	 * Notifies this component that the party to which the containing actor is affiliated has been replicated.

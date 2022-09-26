@@ -63,7 +63,7 @@ class OPENPF2CORE_API UPF2CommandQueueComponent : public UActorComponent, public
 protected:
 	/**
 	 * The queue of commands for the owning character.
-
+	 *
 	 * This is an array of actors (instead of interfaces) for replication. UE will not replicate actors if they are
 	 * declared/referenced through an interface property.
 	 */

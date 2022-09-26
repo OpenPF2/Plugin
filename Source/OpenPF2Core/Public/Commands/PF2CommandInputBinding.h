@@ -158,7 +158,7 @@ protected:
 	static void LocalInputPressed(FPF2CommandInputBinding* Binding);
 
 	/**
-	* Notifies the specified binding instance that the input action it corresponds to has been released.
+	 * Notifies the specified binding instance that the input action it corresponds to has been released.
 	 *
 	 * @param Binding
 	 *	The binding to notify of a button release.

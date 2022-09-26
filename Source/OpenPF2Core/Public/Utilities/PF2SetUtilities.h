@@ -21,7 +21,7 @@ namespace PF2SetUtilities
 	 *	The transformation function/lambda invoked on each element in order to get the mapped value.
 	 *
 	 * @return
-	 *	An set of the values that resulted from applying the transformation to every value of the source set.
+	 *	The set of values that resulted from applying the transformation to every value of the source set.
 	 *
 	 * @tparam In
 	 *	The type of elements in the input set.

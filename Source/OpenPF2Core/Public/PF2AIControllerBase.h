@@ -12,7 +12,7 @@
 
 #include "PF2AIControllerInterface.h"
 
-#include "PF2AiControllerBase.generated.h"
+#include "PF2AIControllerBase.generated.h"
 
 // =====================================================================================================================
 // Normal Declarations

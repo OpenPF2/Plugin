@@ -54,7 +54,7 @@ public:
 	// Public Methods
 	// =================================================================================================================
 	/**
-	 * Gets whether there are payable characters with initiative set in this encounter.
+	 * Gets whether there are playable characters with initiative set in this encounter.
 	 *
 	 * @return
 	 *	- true if there is at least one playable character who is not dead and who has initiative set.
@@ -225,11 +225,11 @@ public:
 	 *	The character whose turn it is to act.
 	 *
 	 * @return
-	 *	- EPF2ImmediateCommandExecutionResult::None if the character is out of commands to execute.
-	 *	- EPF2ImmediateCommandExecutionResult::Activated if the character had an command queued up that was executed.
-	 *	- EPF2ImmediateCommandExecutionResult::Blocked if the character has an command to execute but it cannot be
+	 *	- EPF2CommandExecuteImmediatelyResult::None if the character is out of commands to execute.
+	 *	- EPF2CommandExecuteImmediatelyResult::Activated if the character had an command queued up that was executed.
+	 *	- EPF2CommandExecuteImmediatelyResult::Blocked if the character has an command to execute but it cannot be
 	 *	  executed yet, typically because it is blocked by another ability that is active on the character.
-	 *	- EPF2ImmediateCommandExecutionResult::Cancelled if the rule set has opted to cancel the command.
+	 *	- EPF2CommandExecuteImmediatelyResult::Cancelled if the rule set has opted to cancel the command.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Encounter Mode of Play Rule Sets|Command Queue")
 	virtual UPARAM(DisplayName = "Activation Result") EPF2CommandExecuteImmediatelyResult

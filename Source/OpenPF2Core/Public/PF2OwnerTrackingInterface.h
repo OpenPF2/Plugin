@@ -84,7 +84,7 @@ public:
 	 *	The state for player that now owns this actor.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Owner Tracking")
-    virtual void SetOwningPlayerByState(const TScriptInterface<IPF2PlayerStateInterface> NewPlayerState) = 0;
+	virtual void SetOwningPlayerByState(const TScriptInterface<IPF2PlayerStateInterface> NewPlayerState) = 0;
 
 	/**
 	 * Checks whether this actor is affiliated with the same party as another actor.

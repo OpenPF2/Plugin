@@ -128,7 +128,7 @@ namespace PF2InterfaceUtilities
 		);
 	}
 
-	/*
+	/**
 	 * Locates the actor component that implements the specified interface.
 	 *
 	 * @tparam InterfaceType
