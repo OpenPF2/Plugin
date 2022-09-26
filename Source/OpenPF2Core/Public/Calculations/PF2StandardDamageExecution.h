@@ -1,17 +1,16 @@
-// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "GameplayEffectExecutionCalculation.h"
+#include <GameplayEffectExecutionCalculation.h>
 
 #include "PF2StandardDamageExecution.generated.h"
 
 /**
- * Damage execution calculation for applying damage and resistance logic according to standard PF2 rules.
+ * Damage execution calculation for applying damage and resistance logic according to standard OpenPF2 rules.
  */
 UCLASS()
 // ReSharper disable once CppClassCanBeFinal

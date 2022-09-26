@@ -9,33 +9,28 @@
 #include "PF2ModeOfPlayRuleSetInterface.h"
 #include "PF2PlayerControllerInterface.h"
 
-#include "Abilities/PF2ActionQueueResult.h"
-
 #include "PF2ModeOfPlayRuleSetBase.generated.h"
 
 /**
- * Default base class for PF2 Mode of Play Rule Sets (MoPRS).
+ * Default base class for OpenPF2 Mode of Play Rule Sets (MoPRS).
  *
  * @see IPF2GameModeInterface
  */
 UCLASS(Abstract, Blueprintable)
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API UPF2ModeOfPlayRuleSetBase : public UObject, public IPF2ModeOfPlayRuleSetInterface
+class OPENPF2CORE_API APF2ModeOfPlayRuleSetBase : public AActor, public IPF2ModeOfPlayRuleSetInterface
 {
 	GENERATED_BODY()
 
 public:
 	// =================================================================================================================
-	// Public Methods - UPF2ModeOfPlayRuleSetBase Implementation
+	// Public Methods - IPF2ModeOfPlayRuleSetInterface Implementation
 	// =================================================================================================================
-	virtual FPF2QueuedActionHandle OnQueueAction_Implementation(
-		const TScriptInterface<IPF2CharacterInterface>&    Character,
-		const TScriptInterface<IPF2QueuedActionInterface>& Action,
-		OUT EPF2ActionQueueResult&                         OutQueueResult) override;
+	virtual EPF2CommandExecuteOrQueueResult AttemptToExecuteOrQueueCommand_Implementation(
+		const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
-	virtual void OnCancelQueuedAction_Implementation(
-		const TScriptInterface<IPF2CharacterInterface>&    Character,
-		const TScriptInterface<IPF2QueuedActionInterface>& Action) override;
+	virtual void AttemptToCancelCommand_Implementation(
+		const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
 protected:
 	// =================================================================================================================
@@ -45,7 +40,7 @@ protected:
 	 * Gets the game mode.
 	 *
 	 * @return
-	 *	PF2-specific game mode.
+	 *	OpenPF2-specific game mode.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets")
 	TScriptInterface<IPF2GameModeInterface> GetGameMode() const;
@@ -54,16 +49,16 @@ protected:
 	 * Gets controllers for all the characters in the world.
 	 *
 	 * @return
-	 *	PF2-specific controllers for all players in the world.
+	 *	OpenPF2-specific controllers for all players in the world.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Characters")
 	TArray<TScriptInterface<IPF2PlayerControllerInterface>> GetPlayerControllers() const;
 
 	/**
-	 * Gets all of the player-controlled PF2 characters in the world.
+	 * Gets all of the player-controlled OpenPF2 characters in the world.
 	 *
 	 * @return
-	 *	PF2-specific controllers for all players in the world.
+	 *	OpenPF2-specific controllers for all players in the world.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Characters")
 	TArray<TScriptInterface<IPF2CharacterInterface>> GetPlayerControlledCharacters() const;

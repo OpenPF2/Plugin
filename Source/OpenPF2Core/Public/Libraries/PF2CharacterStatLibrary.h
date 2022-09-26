@@ -17,7 +17,7 @@
 #include "PF2CharacterStatLibrary.generated.h"
 
 /**
- * Function library for standard PF2 character statistic calculations.
+ * Function library for standard OpenPF2 character statistic calculations.
  */
 UCLASS()
 class UPF2CharacterStatLibrary final : public UBlueprintFunctionLibrary

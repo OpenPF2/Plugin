@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include <CoreMinimal.h>
 #include <GameplayEffect.h>
 #include <GameplayEffectTypes.h>
 #include <GameplayTagContainer.h>
@@ -16,7 +15,7 @@
 // Forward Declarations (to break recursive dependencies)
 // =====================================================================================================================
 class IPF2CharacterInterface;
-class IPF2CharacterAbilitySystemComponentInterface;
+class IPF2CharacterAbilitySystemInterface;
 class UPF2AttributeSet;
 
 // =====================================================================================================================
@@ -126,7 +125,7 @@ namespace PF2GameplayAbilityUtilities
 	);
 
 	/**
-	 * Gets the ASC of the given actor, as an implementation of IPF2CharacterAbilitySystemComponentInterface.
+	 * Gets the ASC of the given actor, as an implementation of IPF2CharacterAbilitySystemInterface.
 	 *
 	 * In development builds, the ASC is checked to ensure that it is non-null and implements the interface.
 	 *
@@ -137,7 +136,7 @@ namespace PF2GameplayAbilityUtilities
 	 *	A pointer to the IPF2CharacterAbilitySystemComponentInterface interface of the Ability System Component for the
 	 *	actor described by the given info.
 	 */
-	OPENPF2CORE_API FORCEINLINE IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent(
+	OPENPF2CORE_API FORCEINLINE IPF2CharacterAbilitySystemInterface* GetCharacterAbilitySystemComponent(
 		const FGameplayAbilityActorInfo* ActorInfo);
 
 	/**
@@ -155,7 +154,7 @@ namespace PF2GameplayAbilityUtilities
 		const FGameplayAbilityActorInfo* ActorInfo);
 
 	/**
-	 * Gets the PF2 attribute set of the given actor.
+	 * Gets the OpenPF2 attribute set of the given actor.
 	 *
 	 * In development builds, the attribute set is checked to ensure that it is non-null.
 	 *
@@ -163,12 +162,12 @@ namespace PF2GameplayAbilityUtilities
 	 *	Information on the actor holding the ASC.
 	 *
 	 * @return
-	 *	A pointer to the PF2 attribute set.
+	 *	A pointer to the OpenPF2 attribute set.
 	 */
 	OPENPF2CORE_API FORCEINLINE const UPF2AttributeSet* GetAttributeSet(const FGameplayAbilityActorInfo* ActorInfo);
 
 	/**
-	 * Determines which PF2 character an activated GE has targeted.
+	 * Determines which OpenPF2 character an activated GE has targeted.
 	 *
 	 * @param Data
 	 *	Information about the GE activation, including the GE spec, attribute modifications, and target spec.
@@ -176,7 +175,7 @@ namespace PF2GameplayAbilityUtilities
 	OPENPF2CORE_API IPF2CharacterInterface* GetEffectTarget(const FGameplayEffectModCallbackData* Data);
 
 	/**
-	 * Determines which PF2 character (if any) was ultimately the source of a GE activation.
+	 * Determines which OpenPF2 character (if any) was ultimately the source of a GE activation.
 	 *
 	 * For example, if a target character is injured by an axe, the instigator of the damage GE for the axe is the
 	 * player character who is brandishing the axe. Similarly, if damage was caused by a rocket-propelled grenade (RPG),

@@ -2,19 +2,25 @@
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// Portions of this code were adapted from or inspired by the "Real-Time Strategy Plugin for Unreal Engine 4" by Nick
+// Pruehs, provided under the MIT License. Copyright (c) 2017 Nick Pruehs.
 
 #pragma once
 
 #include <GameFramework/GameStateBase.h>
+
 #include <UObject/ScriptInterface.h>
 
 #include "PF2GameStateInterface.h"
+
+#include "GameModes/PF2ModeOfPlayRuleSetInterface.h"
 #include "GameModes/PF2ModeOfPlayType.h"
 
 #include "PF2GameStateBase.generated.h"
 
 /**
- * Default base class for PF2 Game States.
+ * Default base class for OpenPF2 Game States.
  *
  * @see IPF2GameStateInterface
  */
@@ -25,6 +31,14 @@ class OPENPF2CORE_API APF2GameStateBase : public AGameStateBase, public IPF2Game
 	GENERATED_BODY()
 
 protected:
+	// =================================================================================================================
+	// Protected Properties
+	// =================================================================================================================
+	/**
+	 * The next player index to assign to a player who joins the game.
+	 */
+	int32 NextPlayerIndex;
+
 	// =================================================================================================================
 	// Protected Properties - Blueprint Accessible
 	// =================================================================================================================
@@ -61,6 +75,11 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2GameStateInterface Implementation
 	// =================================================================================================================
+	virtual FORCEINLINE int32 GetNextAvailablePlayerIndex() override
+	{
+		return this->NextPlayerIndex++;
+	}
+
 	UFUNCTION(BlueprintCallable)
 	virtual FORCEINLINE EPF2ModeOfPlayType GetModeOfPlay() override
 	{
@@ -73,12 +92,15 @@ public:
 		return this->ModeOfPlayRuleSet;
 	}
 
-	virtual void SwitchModeOfPlay(const EPF2ModeOfPlayType                         NewMode,
-	                              TScriptInterface<IPF2ModeOfPlayRuleSetInterface> NewRuleSet) override;
+	virtual void SetModeOfPlay(const EPF2ModeOfPlayType                         NewMode,
+	                           TScriptInterface<IPF2ModeOfPlayRuleSetInterface> NewRuleSet) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void RefreshAbilityActorInfoForAllCharacters() override;
 
 protected:
 	// =================================================================================================================
-	// Protected Methods
+	// Protected Replication Callbacks
 	// =================================================================================================================
 	/**
 	 * Replication callback for the "Mode of Play" property.
@@ -89,6 +111,9 @@ protected:
 	UFUNCTION()
 	virtual void OnRep_ModeOfPlay();
 
+	// =================================================================================================================
+	// Protected Native Event Callbacks
+	// =================================================================================================================
 	/**
 	 * Notifies this copy of the game state that the mode of play has been updated by the server.
 	 *
@@ -97,5 +122,16 @@ protected:
 	 *
 	 * It has no effect on dedicated servers.
 	 */
-	virtual void OnReceivedModeOfPlay();
+	virtual void Native_OnModeOfPlayAvailable();
+
+	// =================================================================================================================
+	// Protected Event Notifications
+	// =================================================================================================================
+	/**
+	 * Callback invoked on all clients to refresh ability actor info for all characters.
+	 *
+	 * This is invoked by RefreshAbilityActorInfoForAllCharacters().
+	 */
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_RefreshAbilityActorInfoForAllCharacters();
 };

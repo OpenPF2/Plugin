@@ -12,11 +12,12 @@
 
 #pragma once
 
-#include "Abilities/GameplayAbility.h"
-#include "Abilities/PF2CharacterAttributeStatics.h"
-#include "Abilities/PF2CharacterAbilityScoreType.h"
-#include "Abilities/Weapons/PF2WeaponInterface.h"
 #include "PF2MonetaryValue.h"
+
+#include "Abilities/GameplayAbility.h"
+#include "Abilities/PF2CharacterAbilityScoreType.h"
+#include "Abilities/PF2CharacterAttributeStatics.h"
+#include "Abilities/Weapons/PF2WeaponInterface.h"
 
 #include "PF2WeaponBase.generated.h"
 
@@ -195,7 +196,7 @@ protected:
 	 *
 	 * Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Attack Rolls".
 	 */
-	virtual float CalculateAttackRoll(const IPF2CharacterAbilitySystemComponentInterface* CharacterAsc);
+	virtual float CalculateAttackRoll(const IPF2CharacterAbilitySystemInterface* CharacterAsc);
 
 	/**
 	 * Calculates the damage roll, which determines how much of an effect an attack has on the target.
@@ -210,13 +211,13 @@ protected:
 	 *
 	 * Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Damage Rolls".
 	 */
-	virtual float CalculateDamageRoll(const IPF2CharacterAbilitySystemComponentInterface* CharacterAsc);
+	virtual float CalculateDamageRoll(const IPF2CharacterAbilitySystemInterface* CharacterAsc);
 
 	/**
 	 * Gets the value of the specified ability.
 	 *
 	 * TODO: Re-work this to be a GE so we don't have to worry about snapshot timing and other GEs.
 	 */
-	static float GetAbilityModifierValue(const IPF2CharacterAbilitySystemComponentInterface* CharacterAsc,
-	                                     const EPF2CharacterAbilityScoreType                 AbilityScoreType);
+	static float GetAbilityModifierValue(const IPF2CharacterAbilitySystemInterface* CharacterAsc,
+	                                     const EPF2CharacterAbilityScoreType        AbilityScoreType);
 };

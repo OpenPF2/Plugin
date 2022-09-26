@@ -18,10 +18,8 @@
  */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
 	FPF2PlayMontageAndWaitForEventDelegate,
-	FGameplayTag,
-	EventTag,
-	FGameplayEventData,
-	EventData
+	FGameplayTag,       EventTag,
+	FGameplayEventData, EventData
 );
 
 /**
@@ -203,7 +201,7 @@ private:
 	FPF2PlayMontageAndWaitForEventDelegate OnInterrupted;
 
 	/**
-	 * Execution pin fired if the ability task has been canceled by another ability.
+	 * Execution pin fired if the ability task has been cancelled by another ability.
 	 */
 	UPROPERTY(BlueprintAssignable)
 	FPF2PlayMontageAndWaitForEventDelegate OnCancelled;
@@ -237,7 +235,7 @@ private:
 	 * @param Payload
 	 *	Information about the ability activation.
 	 */
-	void OnGameplayEvent(FGameplayTag EventTag, const FGameplayEventData* Payload) const;
+	void Native_OnGameplayEvent(FGameplayTag EventTag, const FGameplayEventData* Payload) const;
 
 	/**
 	 * Callback fired when a montage has ended (either normally or because it was interrupted).
@@ -245,9 +243,9 @@ private:
 	 * @param Montage
 	 *	The montage that has ended.
 	 * @param bInterrupted
-	 *	true if the montage was canceled/interrupted/ended abruptly; false if the montage played to completion.
+	 *	true if the montage was cancelled/interrupted/ended abruptly; false if the montage played to completion.
 	 */
-	void OnMontageEnded(UAnimMontage* Montage, const bool bInterrupted);
+	void Native_OnMontageEnded(UAnimMontage* Montage, const bool bInterrupted);
 
 	/**
 	 * Callback fired when a montage is starting to blend out.
@@ -255,13 +253,13 @@ private:
 	 * @param Montage
 	 *	The montage that is blending out.
 	 * @param bInterrupted
-	 *	true if -- prior to blending out -- the montage was canceled/interrupted/ended abruptly; false if the montage
+	 *	true if -- prior to blending out -- the montage was cancelled/interrupted/ended abruptly; false if the montage
 	 *	played to completion.
 	 */
-	void OnMontageBlendingOut(UAnimMontage* Montage, const bool bInterrupted) const;
+	void Native_OnMontageBlendingOut(UAnimMontage* Montage, const bool bInterrupted) const;
 
 	/**
-	 * Callback fired if the GA running this task has been canceled.
+	 * Callback fired if the GA running this task has been cancelled.
 	 */
-	void OnAbilityCancelled() const;
+	void Native_OnAbilityCancelled() const;
 };

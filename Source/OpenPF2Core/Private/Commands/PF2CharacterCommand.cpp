@@ -1,0 +1,349 @@
+﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
+// distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+#include "Commands/PF2CharacterCommand.h"
+
+#include <GameFramework/GameModeBase.h>
+
+#include <Net/UnrealNetwork.h>
+
+#include "PF2PlayerControllerInterface.h"
+
+#include "Abilities/PF2GameplayAbilityInterface.h"
+
+#include "GameModes/PF2GameModeInterface.h"
+
+#include "Utilities/PF2EnumUtilities.h"
+#include "Utilities/PF2InterfaceUtilities.h"
+#include "Utilities/PF2LogUtilities.h"
+
+IPF2CharacterCommandInterface* APF2CharacterCommand::Create(AActor*                          CharacterActor,
+                                                            const FGameplayAbilitySpecHandle AbilitySpecHandle)
+{
+	UWorld*               World           = CharacterActor->GetWorld();
+	FActorSpawnParameters SpawnParameters;
+	APF2CharacterCommand* Command;
+
+	check(CharacterActor->Implements<UPF2CharacterInterface>());
+
+	SpawnParameters.Owner = CharacterActor;
+
+	Command = World->SpawnActor<APF2CharacterCommand>(StaticClass(), SpawnParameters);
+
+	Command->TargetCharacter   = CharacterActor;
+	Command->AbilitySpecHandle = AbilitySpecHandle;
+
+	return Command;
+}
+
+void APF2CharacterCommand::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(APF2CharacterCommand, TargetCharacter);
+	DOREPLIFETIME(APF2CharacterCommand, AbilitySpecHandle);
+}
+
+TScriptInterface<IPF2CharacterInterface> APF2CharacterCommand::GetTargetCharacter() const
+{
+	check(this->TargetCharacter);
+	check(this->TargetCharacter->Implements<UPF2CharacterInterface>());
+
+	return TScriptInterface<IPF2CharacterInterface>(this->TargetCharacter);
+}
+
+UTexture2D* APF2CharacterCommand::GetCommandIcon() const
+{
+	UTexture2D*                         CommandIcon = nullptr;
+	const IPF2GameplayAbilityInterface* AbilityIntf = this->GetAbilityIntf();
+
+	if (AbilityIntf != nullptr)
+	{
+		CommandIcon = AbilityIntf->GetAbilityIcon();
+	}
+
+	return CommandIcon;
+}
+
+FText APF2CharacterCommand::GetCommandLabel() const
+{
+	FText                               CommandLabel;
+	const IPF2GameplayAbilityInterface* AbilityIntf  = this->GetAbilityIntf();
+
+	if (AbilityIntf == nullptr)
+	{
+		CommandLabel = FText();
+	}
+	else
+	{
+		CommandLabel = AbilityIntf->GetAbilityLabel();
+	}
+
+	return CommandLabel;
+}
+
+FText APF2CharacterCommand::GetCommandDescription() const
+{
+	FText                               CommandDescription;
+	const IPF2GameplayAbilityInterface* AbilityIntf        = this->GetAbilityIntf();
+
+	if (AbilityIntf == nullptr)
+	{
+		CommandDescription = FText();
+	}
+	else
+	{
+		CommandDescription = AbilityIntf->GetAbilityDescription();
+	}
+
+	return CommandDescription;
+}
+
+EPF2CommandExecuteOrQueueResult APF2CharacterCommand::AttemptExecuteOrQueue()
+{
+	EPF2CommandExecuteOrQueueResult Result      = EPF2CommandExecuteOrQueueResult::None;
+	const UWorld* const             World       = this->GetWorld();
+	IPF2GameModeInterface*          PF2GameMode;
+
+	UE_LOG(
+		LogPf2CoreAbilities,
+		VeryVerbose,
+		TEXT("[%s] AttemptExecuteOrQueue() called on command ('%s')."),
+		*(PF2LogUtilities::GetHostNetId(World)),
+		*(this->GetIdForLogs())
+	);
+
+	check(World);
+
+	PF2GameMode = Cast<IPF2GameModeInterface>(World->GetAuthGameMode());
+
+	if (PF2GameMode == nullptr)
+	{
+		// TODO: If we have an actual need for this use case, we could probably support it by routing the invocation
+		// through the local player controller. The reason this isn't supported at the moment is because character
+		// commands have to be spawned on the server to have any effect, so we create them and invoke them there, and
+		// therefore don't (yet) have a need to invoke them locally.
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("[%s] AttemptExecuteOrQueue() can only be called on the server."),
+			*(PF2LogUtilities::GetHostNetId(World))
+		);
+	}
+	else
+	{
+		TScriptInterface<IPF2CharacterCommandInterface> CommandIntf =
+			PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(this);
+
+		Result = PF2GameMode->AttemptToExecuteOrQueueCommand(CommandIntf);
+	}
+
+	UE_LOG(
+		LogPf2CoreAbilities,
+		VeryVerbose,
+		TEXT("[%s] AttemptExecuteOrQueue() result for command ('%s'): %s."),
+		*(PF2LogUtilities::GetHostNetId(World)),
+		*(this->GetIdForLogs()),
+		*(PF2EnumUtilities::ToString(Result))
+	);
+
+	return Result;
+}
+
+EPF2CommandExecuteImmediatelyResult APF2CharacterCommand::AttemptExecuteImmediately()
+{
+	EPF2CommandExecuteImmediatelyResult Result;
+
+	UE_LOG(
+		LogPf2CoreAbilities,
+		VeryVerbose,
+		TEXT("[%s] AttemptExecuteImmediately() called on command ('%s')."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(this->GetIdForLogs())
+	);
+
+	if (this->GetAbilitySystemComponent()->TryActivateAbility(this->GetAbilitySpecHandle()))
+	{
+		Result = EPF2CommandExecuteImmediatelyResult::Activated;
+	}
+	else
+	{
+		Result = EPF2CommandExecuteImmediatelyResult::Blocked;
+	}
+
+	UE_LOG(
+		LogPf2CoreAbilities,
+		VeryVerbose,
+		TEXT("[%s] AttemptExecuteImmediately() result for command ('%s'): %s."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(this->GetIdForLogs()),
+		*(PF2EnumUtilities::ToString(Result))
+	);
+
+	return Result;
+}
+
+void APF2CharacterCommand::Cancel_WithRemoteServer()
+{
+	const TScriptInterface<IPF2CharacterInterface>        Character        = this->GetTargetCharacter();
+	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
+
+	if (PlayerController == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("Character ('%s') is not controllable by the local client and/or does not belong to an OpenPF2-compatible player controller; unable to cancel command ('%s')."),
+			*(Character->GetIdForLogs()),
+			*(this->GetIdForLogs())
+		);
+	}
+	else
+	{
+		PlayerController->Server_CancelCharacterCommand(this);
+	}
+}
+
+void APF2CharacterCommand::Cancel_WithLocalServer()
+{
+	const TScriptInterface<IPF2CharacterInterface> Character    = this->GetTargetCharacter();
+	AGameModeBase*                                 GameMode     = this->GetWorld()->GetAuthGameMode();
+	IPF2GameModeInterface*                         GameModeIntf = Cast<IPF2GameModeInterface>(GameMode);
+
+	if (GameModeIntf == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("Game Mode ('%s') is not OpenPF2-compatible; unable to cancel command ('%s') for character ('%s')."),
+			*(GetNameSafe(GameMode)),
+			*(this->GetIdForLogs()),
+			*(Character->GetIdForLogs())
+		);
+	}
+	else
+	{
+		TScriptInterface<IPF2CharacterCommandInterface> CommandIntf =
+			PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(this);
+
+		GameModeIntf->AttemptToCancelCommand(CommandIntf);
+	}
+}
+
+void APF2CharacterCommand::AttemptCancel()
+{
+	if (this->GetWorld()->GetAuthGameMode() == nullptr)
+	{
+		// The game mode only exists on servers; if it does not exist, we must be running on a client.
+		// Route the request through the local player controller so we can trigger this on the server.
+		this->Cancel_WithRemoteServer();
+	}
+	else
+	{
+		// The game mode only exists on servers; if it exists, we must be running on the server.
+		// We can notify the game mode directly.
+		this->Cancel_WithLocalServer();
+	}
+}
+
+AInfo* APF2CharacterCommand::ToActor()
+{
+	return this;
+}
+
+FString APF2CharacterCommand::GetIdForLogs() const
+{
+	const UGameplayAbility* WrappedAbility = this->GetAbility();
+
+	// ReSharper disable CppRedundantParentheses
+	return FString::Format(
+		TEXT("{0}[{1}.{2}]"),
+		{
+			*(this->GetCommandLabel().ToString()),
+			*(GetNameSafe(WrappedAbility)),
+			*(this->GetName())
+		}
+	);
+}
+
+FGameplayAbilitySpec* APF2CharacterCommand::GetAbilitySpec() const
+{
+	FGameplayAbilitySpec*    AbilitySpec = nullptr;
+	UAbilitySystemComponent* Asc         = this->GetAbilitySystemComponent();
+
+	if (Asc != nullptr)
+	{
+		const FGameplayAbilitySpecHandle TargetHandle = this->GetAbilitySpecHandle();
+		const FString                    HostNetId    = PF2LogUtilities::GetHostNetId(this->GetWorld()),
+		                                 AscId        = GetFullNameSafe(Asc),
+		                                 HandleId     = TargetHandle.ToString();
+
+		AbilitySpec = Asc->FindAbilitySpecFromHandle(TargetHandle);
+
+		if (AbilitySpec == nullptr)
+		{
+			// FIXME: This warning gets emitted every time a command gets replicated to clients other than the client
+			// who can control the character to which the command belongs. Ideally, there should be some way to make
+			// commands only replicate from the server to the client that can control the character, but
+			// bOnlyRelevantToOwner doesn't work here (yet?) because the "owner" of an AI-possessed character belong to
+			// a player is not "owned" (in the net authority sense) by the controller for that player.
+			UE_LOG(
+				LogPf2CoreAbilities,
+				Warning,
+				TEXT("[%s] ASC ('%s') has no Gameplay Ability that matches handle ('%s')."),
+				*HostNetId,
+				*AscId,
+				*HandleId
+			);
+		}
+		else
+		{
+			UE_LOG(
+				LogPf2CoreAbilities,
+				VeryVerbose,
+				TEXT("[%s] Found a Gameplay Ability ('%s') in the ASC ('%s') that matches the given handle ('%s')."),
+				*HostNetId,
+				*(AbilitySpec->GetDebugString()),
+				*AscId,
+				*HandleId
+			);
+		}
+	}
+
+	return AbilitySpec;
+}
+
+UAbilitySystemComponent* APF2CharacterCommand::GetAbilitySystemComponent() const
+{
+	const TScriptInterface<IPF2CharacterInterface> CharacterIntf = this->GetTargetCharacter();
+	UAbilitySystemComponent*                       Asc           = CharacterIntf->GetAbilitySystemComponent();
+
+	if (Asc == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Warning,
+			TEXT("[%s] Character ('%s') has no Ability System Component (ASC)."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(CharacterIntf->GetIdForLogs())
+		);
+	}
+
+	return Asc;
+}
+
+UGameplayAbility* APF2CharacterCommand::GetAbility() const
+{
+	const FGameplayAbilitySpec* AbilitySpec = this->GetAbilitySpec();
+	UGameplayAbility*           Ability     = nullptr;
+
+	if (AbilitySpec != nullptr)
+	{
+		Ability = AbilitySpec->Ability;
+		check(Ability != nullptr);
+	}
+
+	return Ability;
+}

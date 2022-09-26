@@ -12,8 +12,10 @@
 
 #pragma once
 
-#include <GameFramework/Character.h>
 #include <AbilitySystemInterface.h>
+
+#include <GameFramework/Character.h>
+
 #include <UObject/ConstructorHelpers.h>
 #include <UObject/ScriptInterface.h>
 
@@ -22,20 +24,29 @@
 #include "PF2CharacterConstants.h"
 #include "PF2CharacterInterface.h"
 #include "PF2ClassGameplayEffectBase.h"
-#include "PF2QueuedActionHandle.h"
 
 #include "Abilities/PF2AbilityBoostBase.h"
 #include "Abilities/PF2AbilitySystemComponent.h"
 #include "Abilities/PF2AttributeSet.h"
 #include "Abilities/PF2CharacterAbilityScoreType.h"
+
 #include "Utilities/PF2GameplayAbilityUtilities.h"
+#include "Utilities/PF2LogIdentifiableInterface.h"
 
 #include "PF2CharacterBase.generated.h"
 
-// Forward declaration; this is defined at the end of the file.
-template<class AscType, class AttributeSetType>
+// =====================================================================================================================
+// Forward Declarations (to break recursive dependencies)
+// =====================================================================================================================
+class IPF2CharacterInterface;
+class IPF2CharacterCommandInterface;
+
+template<class AscType, class CommandQueueType, class OwnerTrackerType, class AttributeSetType>
 class TPF2CharacterComponentFactory;
 
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 /**
  * Struct for representing the selection of what ability/abilities to boost when activating a specific boost GA.
  */
@@ -63,8 +74,8 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostSelection
 	 *	The ability scores that the player selected, out of the options offered by the Boost GA.
 	 */
 	explicit FPF2CharacterAbilityBoostSelection(
-		TSubclassOf<UPF2AbilityBoostBase> BoostGameplayAbility,
-		TSet<EPF2CharacterAbilityScoreType>                     SelectedAbilities) :
+		const TSubclassOf<UPF2AbilityBoostBase>   BoostGameplayAbility,
+		const TSet<EPF2CharacterAbilityScoreType> SelectedAbilities) :
 			BoostGameplayAbility(BoostGameplayAbility),
 			SelectedAbilities(SelectedAbilities)
 	{
@@ -84,9 +95,17 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostSelection
 };
 
 /**
+ * Delegate for Blueprints to react to when a character's turn has started or ended.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
+	FPF2CharacterTurnDelegate,
+	TScriptInterface<IPF2CharacterInterface>, Character
+);
+
+/**
  * Base class for both playable and non-playable characters in OpenPF2.
  *
- * PF2-based games must extend this class if they have custom character attributes or abilities.
+ * OpenPF2-based games must extend this class if they have custom character attributes or abilities.
  */
 UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal
@@ -104,13 +123,25 @@ protected:
 	/**
 	 * The Ability System Component (ASC) used for interfacing this character with the Gameplay Abilities System (GAS).
 	 */
-	UPROPERTY()
-	UPF2AbilitySystemComponent* AbilitySystemComponent;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UAbilitySystemComponent* AbilitySystemComponent;
+
+	/**
+	 * The sub-component that tracks commands for this character queued during encounters.
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UActorComponent* CommandQueue;
+
+	/**
+	 * The sub-component that tracks which player owns/controls this character.
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UActorComponent* OwnerTracker;
 
 	/**
 	 * The attributes of this character.
 	 */
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UPF2AttributeSet* AttributeSet;
 
 	/**
@@ -158,6 +189,12 @@ protected:
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Character")
 	FText CharacterName;
+
+	/**
+	 * The visual portrait of this character, to represent them in the UI to players/users.
+	 */
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Character")
+	UTexture2D* CharacterPortrait;
 
 	/**
 	 * The current level of this character.
@@ -322,6 +359,21 @@ protected:
 
 public:
 	// =================================================================================================================
+	// Public Properties - Multicast Delegates
+	// =================================================================================================================
+	/**
+	 * Event fired when character's encounter turn has started.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Characters")
+	FPF2CharacterTurnDelegate OnEncounterTurnStarted;
+
+	/**
+	 * Event fired when character's encounter turn has ended.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Characters")
+	FPF2CharacterTurnDelegate OnEncounterTurnEnded;
+
+	// =================================================================================================================
 	// Public Constructors
 	// =================================================================================================================
 	/**
@@ -338,14 +390,28 @@ protected:
 	 *
 	 * @param ComponentFactory
 	 *   The factory component to use for generating the ASC and Attribute Set.
+	 *
+	 * @tparam AscType
+	 *	The class type to use for the Ability System Component (ASC).
+	 * @tparam CommandQueueType
+	 *	The class type to use for the command queue component (for encounters).
+	 * @tparam OwnerTrackerType
+	 *	The class type to use for the owner tracking component.
+	 * @tparam AttributeSetType
+	 *	The class type to use for the character attribute set.
 	 */
-	template<class AscType, class AttributeSetType>
-	explicit APF2CharacterBase(TPF2CharacterComponentFactory<AscType, AttributeSetType> ComponentFactory) :
+	template<class AscType, class CommandQueueType, class OwnerTrackerType, class AttributeSetType>
+	explicit APF2CharacterBase(TPF2CharacterComponentFactory<AscType,
+	                                                         CommandQueueType,
+	                                                         OwnerTrackerType,
+	                                                         AttributeSetType> ComponentFactory) :
 		bManagedPassiveEffectsGenerated(false),
 		CharacterName(FText::FromString(TEXT("Character"))),
 		CharacterLevel(1)
 	{
 		this->AbilitySystemComponent = ComponentFactory.CreateAbilitySystemComponent(this);
+		this->CommandQueue           = ComponentFactory.CreateCommandQueue(this);
+		this->OwnerTracker           = ComponentFactory.CreateOwnerTracker(this);
 		this->AttributeSet           = ComponentFactory.CreateAttributeSet(this);
 
 		for (const TTuple<FString, FName>& EffectInfo : PF2CharacterConstants::GeCoreCharacterBlueprintPaths)
@@ -390,22 +456,37 @@ public:
 	virtual FText GetCharacterName() const override;
 
 	UFUNCTION(BlueprintCallable)
+	virtual UTexture2D* GetCharacterPortrait() const override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual int32 GetCharacterLevel() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void GetCharacterAbilitySystemComponent(
-		TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const override;
+		TScriptInterface<IPF2CharacterAbilitySystemInterface>& Output) const override;
 
-	virtual IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent() const override;
+	virtual IPF2CharacterAbilitySystemInterface* GetCharacterAbilitySystemComponent() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual TScriptInterface<IPF2CommandQueueInterface> GetCommandQueueComponent() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual TScriptInterface<IPF2OwnerTrackingInterface> GetOwnerTrackingComponent() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerController() const override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual TArray<UPF2AbilityBoostBase*> GetPendingAbilityBoosts() const override;
+	virtual TArray<TScriptInterface<IPF2AbilityBoostInterface>> GetPendingAbilityBoosts() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual AActor* ToActor() override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual APawn* ToPawn() override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual bool IsAlive() override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void AddAbilityBoostSelection(const TSubclassOf<UPF2AbilityBoostBase>   BoostGameplayAbility,
@@ -439,25 +520,19 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void AddAndActivateGameplayAbility(const TSubclassOf<UGameplayAbility> Ability) override;
 
-	virtual void HandleDamageReceived(const float                         Damage,
-	                                  IPF2CharacterInterface*             InstigatorCharacter,
-	                                  AActor*                             DamageSource,
-	                                  const struct FGameplayTagContainer* EventTags,
-	                                  const FHitResult                    HitInfo) override;
+	virtual void Native_OnDamageReceived(const float                         Damage,
+	                                     IPF2CharacterInterface*             InstigatorCharacter,
+	                                     AActor*                             DamageSource,
+	                                     const struct FGameplayTagContainer* EventTags,
+	                                     const FHitResult                    HitInfo) override;
 
-	virtual void HandleHitPointsChanged(const float Delta, const struct FGameplayTagContainer* EventTags) override;
-
-	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleEncounterTurnStarted() override;
+	virtual void Native_OnHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags) override;
 
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleEncounterTurnEnded() override;
+	virtual void Multicast_OnEncounterTurnStarted() override;
 
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleActionQueued(const FPF2QueuedActionHandle ActionHandle) override;
-
-	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) override;
+	virtual void Multicast_OnEncounterTurnEnded() override;
 
 	// =================================================================================================================
 	// Public Methods - Blueprint Callable
@@ -568,10 +643,10 @@ protected:
 	 * @param NewLevel
 	 *	The new level for this character.
 	 */
-	virtual void HandleCharacterLevelChanged(float OldLevel, float NewLevel);
+	virtual void Native_OnCharacterLevelChanged(float OldLevel, float NewLevel);
 
 	// =================================================================================================================
-	// Blueprint Event Callbacks
+	// Blueprint Implementable Events
 	// =================================================================================================================
 	/**
 	 * BP event invoked when a character's level has changed, to allow logic that depends on levels to be refreshed.
@@ -581,8 +656,12 @@ protected:
 	 * @param NewLevel
 	 *	The new level for this character.
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
-	void OnCharacterLevelChanged(float OldLevel, float NewLevel);
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Characters",
+		meta=(DisplayName="On Character Level Changed")
+	)
+	void BP_OnCharacterLevelChanged(float OldLevel, float NewLevel);
 
 	/**
 	 * BP event invoked when this character receives damage.
@@ -600,24 +679,16 @@ protected:
 	 * @param HitInfo
 	 *	Hit result information, including who was hit and where the damage was inflicted.
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
-	void OnDamageReceived(const float                                     Damage,
-	                      const TScriptInterface<IPF2CharacterInterface>& InstigatorCharacter,
-	                      AActor*                                         DamageSource,
-	                      const FGameplayTagContainer&                    EventTags,
-	                      const FHitResult                                HitInfo);
-
-	/**
-	 * BP event invoked when this character's turn during an encounter has started.
-	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
-	void OnEncounterTurnStarted();
-
-	/**
-	 * BP event invoked when this character's turn during an encounter has ended.
-	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
-	void OnEncounterTurnEnded();
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Characters",
+		meta=(DisplayName="On Damage Received")
+	)
+	void BP_OnDamageReceived(const float                                     Damage,
+	                         const TScriptInterface<IPF2CharacterInterface>& InstigatorCharacter,
+	                         AActor*                                         DamageSource,
+	                         const FGameplayTagContainer&                    EventTags,
+	                         const FHitResult                                HitInfo);
 
 	/**
 	 * BP event invoked when this character's hit points (i.e., health) have changed.
@@ -627,46 +698,44 @@ protected:
 	 * @param EventTags
 	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to hit points.
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
-	void OnHitPointsChanged(float Delta, const struct FGameplayTagContainer& EventTags);
-
-	/**
-	 * BP event invoked when an action/ability this character has attempted to execute has been queued-up.
-	 *
-	 * This happens if the active Mode of Play Rule Set (MoPRS) is requiring characters to queue up execution of
-	 * abilities until their turn to attack/act.
-	 *
-	 * @param ActionHandle
-	 *	A reference to the ability that has been queued up.
-	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
-	void OnActionQueued(const FPF2QueuedActionHandle ActionHandle);
-
-	/**
-	 * BP event invoked when a previously queued action/ability for this character has been removed from the queue.
-	 *
-	 * This happens if an action queued through the active Mode of Play Rule Set (MoPRS) was executed, canceled by the
-	 * player, removed by game rules, or removed/canceled by something in the world.
-	 *
-	 * @param ActionHandle
-	 *	A reference to the ability that has been removed.
-	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Characters")
-	void OnActionDequeued(const FPF2QueuedActionHandle ActionHandle);
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Characters",
+		meta=(DisplayName="On Hit Points Changed")
+	)
+	void BP_OnHitPointsChanged(float Delta, const struct FGameplayTagContainer& EventTags);
 };
 
 /**
- * Type of object for instantiating the ASC and attribute set for this type of character.
+ * Type of object for instantiating sub-components for a character.
  *
  * This is in a separate object to allow these types to be parameterized/templated so sub-classes can swap out the type
- * of ASC and attribute set just by supplying different types in their constructors.
+ * of each sub-component in their constructors. UE4 does not allow a sub-class to create a default sub-component having
+ * the same name as one that was defined in the parent class.
+ *
+ * This approach is used as a workaround for a gap in UE4 constructor behavior. Prior to UE 4.23, it appears that the
+ * standard pattern would have been to use ObjectInitializer.SetDefaultSubobjectClass() from within
+ * UObject(const FObjectInitializer& ObjectInitializer), but that constructor was deprecated in 4.23. In UE5 it looks
+ * like there is now a "Change Subobject Class" method through the "Subobject Data Subsystem".
+ *
+ * Discussion here:
+ * https://stackoverflow.com/questions/69351471/how-can-i-create-a-ue4-uclass-base-class-that-uses-createdefaultsubobject-but
+ *
+ * @tparam AscType
+ *	The class type to use for the Ability System Component (ASC).
+ * @tparam CommandQueueType
+ *	The class type to use for the command queue component (for encounters).
+ * @tparam OwnerTrackerType
+ *	The class type to use for the owner tracking component.
+ * @tparam AttributeSetType
+ *	The class type to use for the character attribute set.
  */
-template<class AscType, class AttributeSetType>
+template<class AscType, class CommandQueueType, class OwnerTrackerType, class AttributeSetType>
 class TPF2CharacterComponentFactory
 {
 public:
 	/**
-	 * Creates an Ability System Component (ASC) for this character.
+	 * Creates an Ability System Component (ASC) for a character.
 	 *
 	 * The ASC is automatically created as a default sub-object of the character, with the name
 	 * "AbilitySystemComponent".
@@ -687,7 +756,41 @@ public:
 	}
 
 	/**
-	 * Creates an Attribute Set for this character.
+	 * Creates a Command Queue Component for a character.
+	 *
+	 * The component is automatically created as a default sub-object of the character, with the name
+	 * "CommandQueue".
+	 *
+	 * @param Character
+	 *	The character for which the command queue will be created.
+	 *
+	 * @return
+	 *	The new command queue.
+	 */
+	static CommandQueueType* CreateCommandQueue(APF2CharacterBase* Character)
+	{
+		return Character->CreateDefaultSubobject<CommandQueueType>(TEXT("CommandQueue"));
+	}
+
+	/**
+	 * Creates an Owner Tracking Component for a character.
+	 *
+	 * The component is automatically created as a default sub-object of the character, with the name
+	 * "OwnerTracker".
+	 *
+	 * @param Character
+	 *	The character for which the owner tracker will be created.
+	 *
+	 * @return
+	 *	The new owner tracker.
+	 */
+	static OwnerTrackerType* CreateOwnerTracker(APF2CharacterBase* Character)
+	{
+		return Character->CreateDefaultSubobject<OwnerTrackerType>(TEXT("OwnerTracker"));
+	}
+
+	/**
+	 * Creates an Attribute Set for a character.
 	 *
 	 * The attribute set is automatically created as a default sub-object of the character, with the name
 	 * "AttributeSet".

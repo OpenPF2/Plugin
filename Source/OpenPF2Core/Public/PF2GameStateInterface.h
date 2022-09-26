@@ -24,7 +24,6 @@
 // =====================================================================================================================
 class IPF2CharacterInterface;
 class IPF2ModeOfPlayRuleSetInterface;
-class IPF2QueuedActionInterface;
 
 // =====================================================================================================================
 // Normal Declarations
@@ -52,6 +51,14 @@ class OPENPF2CORE_API IPF2GameStateInterface
 
 public:
 	/**
+	 * Gets the first player index that hasn't yet been assigned to any player.
+	 *
+	 * @return
+	 *	The next available player index.
+	 */
+	virtual int32 GetNextAvailablePlayerIndex() = 0;
+
+	/**
 	 * Gets the current play mode for all characters in the loaded level.
 	 *
 	 * From the Pathfinder 2E Core Rulebook, page 493, "Running Modes of Play":
@@ -64,7 +71,7 @@ public:
 	 * meadow but then encounter an assailant, resulting in the play mode changing to encounter mode until either the
 	 * assailant or the party have been killed or have fled.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game States")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game State")
 	virtual EPF2ModeOfPlayType GetModeOfPlay() = 0;
 
 	/**
@@ -73,7 +80,7 @@ public:
 	 * @return
 	 *	The current rule set for the current mode of play.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game States")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game State")
 	virtual TScriptInterface<IPF2ModeOfPlayRuleSetInterface> GetModeOfPlayRuleSet() = 0;
 
 	/**
@@ -88,6 +95,15 @@ public:
 	 * @param NewRuleSet
 	 *	The rules that govern how the game will behave while in the new play mode.
 	 */
-	virtual void SwitchModeOfPlay(const EPF2ModeOfPlayType                         NewMode,
-	                              TScriptInterface<IPF2ModeOfPlayRuleSetInterface> NewRuleSet) = 0;
+	virtual void SetModeOfPlay(const EPF2ModeOfPlayType                         NewMode,
+	                           TScriptInterface<IPF2ModeOfPlayRuleSetInterface> NewRuleSet) = 0;
+
+	/**
+	 * Notifies all clients to refresh ability actor info for all of their characters.
+	 *
+	 * This should only be called on the server. It should be triggered whenever the controller/owner of any character
+	 * changes, as a workaround for UE-78453.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game State")
+	virtual void RefreshAbilityActorInfoForAllCharacters() = 0;
 };

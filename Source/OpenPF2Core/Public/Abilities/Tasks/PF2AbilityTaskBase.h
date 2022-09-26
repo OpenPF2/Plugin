@@ -10,7 +10,7 @@
 #include "PF2AbilityTaskBase.generated.h"
 
 /**
- * Common base class for PF2 Ability Tasks.
+ * Common base class for OpenPF2 Ability Tasks.
  */
 UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal

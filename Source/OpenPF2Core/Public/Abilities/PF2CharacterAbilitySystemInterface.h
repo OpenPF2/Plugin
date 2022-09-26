@@ -5,18 +5,25 @@
 
 #pragma once
 
-#include "Abilities/PF2CharacterAbilityScoreType.h"
-#include "PF2AbilitySystemComponentInterface.h"
+#include "PF2AbilitySystemInterface.h"
 #include "PF2AttributeModifierSnapshot.h"
 
-#include "PF2CharacterAbilitySystemComponentInterface.generated.h"
+#include "Abilities/PF2CharacterAbilityScoreType.h"
 
-// Forward declaration; this is defined in "Abilities/PF2GameplayAbility_BoostAbilityBase.h", but that file depends on
-// this header file, so we have to break the recursive dependency.
+#include "PF2CharacterAbilitySystemInterface.generated.h"
+
+// =====================================================================================================================
+// Forward Declarations (to break recursive dependencies)
+// =====================================================================================================================
+// This is defined in "Abilities/PF2GameplayAbility_BoostAbilityBase.h", but that file depends on this header file, so
+// we have to break the recursive dependency.
 class UPF2AbilityBoostBase;
 
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
-class UPF2CharacterAbilitySystemComponentInterface : public UPF2AbilitySystemComponentInterface
+class UPF2CharacterAbilitySystemInterface : public UPF2AbilitySystemInterface
 {
     GENERATED_BODY()
 };
@@ -27,7 +34,7 @@ class UPF2CharacterAbilitySystemComponentInterface : public UPF2AbilitySystemCom
  * This interface provides some additional convenience/utility functionality that allows direct manipulation of the
  * ability scores of a character by means of activating passive GEs on the ASC.
  */
-class OPENPF2CORE_API IPF2CharacterAbilitySystemComponentInterface : public IPF2AbilitySystemComponentInterface
+class OPENPF2CORE_API IPF2CharacterAbilitySystemInterface : public IPF2AbilitySystemInterface
 {
     GENERATED_BODY()
 
@@ -41,7 +48,7 @@ public:
 	 * @return
 	 *	The level of the owning character actor.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Ability System Components")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Character Ability System")
 	virtual int32 GetCharacterLevel() const = 0;
 
 	/**
@@ -50,7 +57,7 @@ public:
 	 * @return
 	 *	A map from character ability scores to a snapshot of their values and modifiers.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Ability System Components")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Character Ability System")
 	virtual TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> GetAbilityScoreValues() const = 0;
 
 	/**
@@ -59,8 +66,8 @@ public:
 	 * @return
 	 *	The ability boost GAs that are still pending for this character.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Ability System Components")
-	virtual TArray<UPF2AbilityBoostBase *> GetPendingAbilityBoosts() const = 0;
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Character Ability System")
+	virtual TArray<TScriptInterface<IPF2AbilityBoostInterface>> GetPendingAbilityBoosts() const = 0;
 
 	/**
 	 * Gets the Gameplay Effect to use as a passive GE when boosting the specified character ability score.
@@ -71,7 +78,7 @@ public:
 	 * @return
 	 *	The blueprint to apply as a passive GE to boost that ability.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Ability System Components")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Character Ability System")
 	virtual TSubclassOf<UGameplayEffect> GetBoostEffectForAbility(const EPF2CharacterAbilityScoreType AbilityScore) = 0;
 
 	/**
@@ -88,6 +95,6 @@ public:
 	 * @param TargetAbilityScore
 	 *	The ability score that will be boosted.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Ability System Components")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Character Ability System")
     virtual void ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore) = 0;
 };

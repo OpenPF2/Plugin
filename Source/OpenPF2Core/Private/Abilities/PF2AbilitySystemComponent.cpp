@@ -9,8 +9,10 @@
 
 #include "PF2CharacterConstants.h"
 #include "PF2CharacterInterface.h"
+
 #include "Utilities/PF2ArrayUtilities.h"
 #include "Utilities/PF2EnumUtilities.h"
+#include "Utilities/PF2InterfaceUtilities.h"
 
 UPF2AbilitySystemComponent::UPF2AbilitySystemComponent()
 {
@@ -218,7 +220,7 @@ void UPF2AbilitySystemComponent::AddDynamicTag(const FGameplayTag Tag)
 			VeryVerbose,
 			TEXT("Adding a dynamic tag ('%s') to ASC on character ('%s')."),
 			*(Tag.ToString()),
-			*(this->GetOwnerActor()->GetName())
+			*(GetNameSafe(this->GetOwnerActor()))
 		);
 
 		this->DynamicTags.AddTag(Tag);
@@ -234,7 +236,7 @@ void UPF2AbilitySystemComponent::AppendDynamicTags(const FGameplayTagContainer T
 			VeryVerbose,
 			TEXT("Adding dynamic tags ('%s') to ASC on character ('%s')."),
 			*(Tags.ToString()),
-			*(this->GetOwnerActor()->GetName())
+			*(GetNameSafe(this->GetOwnerActor()))
 		);
 
 		this->DynamicTags.AppendTags(Tags);
@@ -250,7 +252,7 @@ void UPF2AbilitySystemComponent::SetDynamicTags(const FGameplayTagContainer Tags
 			VeryVerbose,
 			TEXT("Setting all dynamic tags ('%s') in ASC on character ('%s')."),
 			*(Tags.ToString()),
-			*(this->GetOwnerActor()->GetName())
+			*(GetNameSafe(this->GetOwnerActor()))
 		);
 
 		this->DynamicTags = Tags;
@@ -266,7 +268,7 @@ void UPF2AbilitySystemComponent::RemoveDynamicTag(const FGameplayTag Tag)
 			VeryVerbose,
 			TEXT("Removing a dynamic tag ('%s') from ASC on character ('%s')."),
 			*(Tag.ToString()),
-			*(this->GetOwnerActor()->GetName())
+			*(GetNameSafe(this->GetOwnerActor()))
 		);
 
 		this->DynamicTags.RemoveTag(Tag);
@@ -282,7 +284,7 @@ void UPF2AbilitySystemComponent::RemoveDynamicTags(const FGameplayTagContainer T
 			VeryVerbose,
 			TEXT("Removing dynamic tags ('%s') from ASC on character ('%s')."),
 			*(Tags.ToString()),
-			*(this->GetOwnerActor()->GetName())
+			*(GetNameSafe(this->GetOwnerActor()))
 		);
 
 		this->DynamicTags.RemoveTags(Tags);
@@ -297,7 +299,7 @@ void UPF2AbilitySystemComponent::RemoveAllDynamicTags()
 			LogPf2Core,
 			VeryVerbose,
 			TEXT("Removing all dynamic tags from ASC on character ('%s')."),
-			*(this->GetOwnerActor()->GetName())
+			*(GetNameSafe(this->GetOwnerActor()))
 		);
 
 		this->DynamicTags.Reset();
@@ -317,7 +319,7 @@ FGameplayTagContainer UPF2AbilitySystemComponent::GetActiveGameplayTags() const
 
 FORCEINLINE int32 UPF2AbilitySystemComponent::GetCharacterLevel() const
 {
-	IPF2CharacterInterface* OwningCharacter = Cast<IPF2CharacterInterface>(this->GetOwnerActor());
+	const IPF2CharacterInterface* OwningCharacter = Cast<IPF2CharacterInterface>(this->GetOwnerActor());
 
 	if (OwningCharacter == nullptr)
 	{
@@ -383,10 +385,10 @@ TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> UPF2AbilitySy
 	return Values;
 }
 
-TArray<UPF2AbilityBoostBase*> UPF2AbilitySystemComponent::GetPendingAbilityBoosts() const
+TArray<TScriptInterface<IPF2AbilityBoostInterface>> UPF2AbilitySystemComponent::GetPendingAbilityBoosts() const
 {
-	TArray<UPF2AbilityBoostBase*> MatchingGameplayAbilities;
-	TArray<FGameplayAbilitySpec*> MatchingGameplayAbilitySpecs;
+	TArray<TScriptInterface<IPF2AbilityBoostInterface>> MatchingGameplayAbilities;
+	TArray<FGameplayAbilitySpec*>                       MatchingGameplayAbilitySpecs;
 
 	this->GetActivatableGameplayAbilitySpecsByAllMatchingTags(
 		FGameplayTagContainer(PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.Type.AbilityBoost"))),
@@ -395,11 +397,19 @@ TArray<UPF2AbilityBoostBase*> UPF2AbilitySystemComponent::GetPendingAbilityBoost
 	);
 
 	MatchingGameplayAbilities =
-		PF2ArrayUtilities::Map<UPF2AbilityBoostBase*>(
+		PF2ArrayUtilities::Map<TScriptInterface<IPF2AbilityBoostInterface>>(
 			MatchingGameplayAbilitySpecs,
 			[](const FGameplayAbilitySpec* AbilitySpec)
 			{
-				return Cast<UPF2AbilityBoostBase>(AbilitySpec->Ability);
+				IPF2AbilityBoostInterface* AbilityBoostIntf =
+					Cast<IPF2AbilityBoostInterface>(AbilitySpec->Ability);
+
+				checkf(
+					AbilityBoostIntf != nullptr,
+					TEXT("All ability boosts must implement IPF2AbilityBoostInterface.")
+				);
+
+				return PF2InterfaceUtilities::ToScriptInterface(AbilityBoostIntf);
 			}
 		);
 
@@ -422,8 +432,8 @@ void UPF2AbilitySystemComponent::ApplyAbilityBoost(const EPF2CharacterAbilitySco
 		VeryVerbose,
 		TEXT("Applying a boost to ability ('%s') through ASC for character ('%s') via GE ('%s')."),
 		*(PF2EnumUtilities::ToString(TargetAbilityScore)),
-		*(this->GetOwnerActor()->GetName()),
-		*(BoostEffect->GetName())
+		*(GetNameSafe(this->GetOwnerActor())),
+		*(GetNameSafe(BoostEffect))
 	);
 
 	this->AddPassiveGameplayEffectWithWeight(WeightGroup, BoostEffect);

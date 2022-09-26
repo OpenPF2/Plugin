@@ -6,13 +6,22 @@
 #pragma once
 
 #include <AbilitySystemComponent.h>
-#include "PF2CharacterAbilitySystemComponentInterface.h"
+
+#include "PF2CharacterAbilitySystemInterface.h"
 
 #include "PF2AbilitySystemComponent.generated.h"
 
+// =====================================================================================================================
+// Forward Declarations (to break recursive dependencies)
+// =====================================================================================================================
+class IPF2AbilityBoostInterface;
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 UCLASS()
 class OPENPF2CORE_API UPF2AbilitySystemComponent :
-	public UAbilitySystemComponent, public IPF2CharacterAbilitySystemComponentInterface
+	public UAbilitySystemComponent, public IPF2CharacterAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -35,13 +44,13 @@ protected:
 	 * These are used to apply replicated tags that are specific to a particular character instance, such as age, size,
 	 * skill proficiency, etc.
 	 */
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly)
 	FGameplayTagContainer DynamicTags;
 
 	/**
 	 * The weight groups of Gameplay Effects that have been activated on this ASC.
 	 */
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly)
 	TSet<FName> ActivatedWeightGroups;
 
 	/**
@@ -74,7 +83,7 @@ public:
 	UPF2AbilitySystemComponent();
 
 	// =================================================================================================================
-	// Public Methods - IPF2AbilitySystemComponentInterface Implementation
+	// Public Methods - IPF2AbilitySystemInterface Implementation
 	// =================================================================================================================
 	virtual bool ArePassiveGameplayEffectsActive() override
 	{
@@ -138,7 +147,7 @@ public:
 	virtual FGameplayTagContainer GetActiveGameplayTags() const override;
 
 	// =================================================================================================================
-	// Public Methods - IPF2CharacterAbilitySystemComponentInterface Implementation
+	// Public Methods - IPF2CharacterAbilitySystemInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
 	virtual int32 GetCharacterLevel() const override;
@@ -147,7 +156,7 @@ public:
 	virtual TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> GetAbilityScoreValues() const override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual TArray<UPF2AbilityBoostBase *> GetPendingAbilityBoosts() const override;
+	virtual TArray<TScriptInterface<IPF2AbilityBoostInterface>> GetPendingAbilityBoosts() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual FORCEINLINE TSubclassOf<UGameplayEffect> GetBoostEffectForAbility(

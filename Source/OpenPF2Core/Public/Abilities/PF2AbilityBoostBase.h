@@ -12,9 +12,12 @@
 
 #pragma once
 
+#include "PF2AbilityBoostInterface.h"
 #include "PF2AbilityBoostRuleOption.h"
 #include "PF2AttributeSet.h"
+
 #include "Abilities/GameplayAbility.h"
+
 #include "Utilities/PF2GameplayAbilityUtilities.h"
 
 #include "PF2AbilityBoostBase.generated.h"
@@ -34,7 +37,7 @@
  */
 UCLASS(Abstract, HideCategories=("Triggers"))
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API UPF2AbilityBoostBase : public UGameplayAbility
+class OPENPF2CORE_API UPF2AbilityBoostBase : public UGameplayAbility, public IPF2AbilityBoostInterface
 {
 	GENERATED_BODY()
 
@@ -57,11 +60,14 @@ protected:
 public:
 	UPF2AbilityBoostBase();
 
-	static FORCEINLINE FGameplayTag GetTriggerTag()
+	FORCEINLINE static FGameplayTag GetTriggerTag()
 	{
 		return PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.Type.AbilityBoost"));
 	};
 
+	// =================================================================================================================
+	// Public Methods - UGameplayAbility Implementation
+	// =================================================================================================================
 	virtual bool CheckCost(
 		const FGameplayAbilitySpecHandle Handle,
 		const FGameplayAbilityActorInfo* ActorInfo,
@@ -72,6 +78,18 @@ public:
 		const FGameplayAbilityActorInfo*     ActorInfo,
 		const FGameplayAbilityActivationInfo ActivationInfo,
 		const FGameplayEventData*            TriggerEventData) override;
+
+	// =================================================================================================================
+	// Public Methods - IPF2AbilityBoostInterface Implementation
+	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual FText GetDescription() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<FPF2AbilityBoostRuleOption> GetBoostRuleOptions() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual UGameplayAbility* ToGameplayAbility() override;
 
 protected:
 	/**

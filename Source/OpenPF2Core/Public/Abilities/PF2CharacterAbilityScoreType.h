@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -10,7 +10,7 @@
 #include "PF2CharacterAbilityScoreType.generated.h"
 
 /**
- * Enumerated type for the abilities that PF2 characters possess (aka "boostable" abilities).
+ * Enumerated type for the abilities that OpenPF2 characters possess (aka "boostable" abilities).
  *
  * The name of each enum value exactly matches the name of the corresponding character attribute in the GAS attribute
  * set for the character.

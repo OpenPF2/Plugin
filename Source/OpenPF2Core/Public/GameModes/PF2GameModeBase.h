@@ -2,21 +2,26 @@
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// Portions of this code were adapted from or inspired by the "Real-Time Strategy Plugin for Unreal Engine 4" by Nick
+// Pruehs, provided under the MIT License. Copyright (c) 2017 Nick Pruehs.
 
 #pragma once
 
 #include <GameFramework/GameModeBase.h>
+#include <GameFramework/GameStateBase.h>
+
 #include <UObject/ScriptInterface.h>
 
-#include "Abilities/PF2ActionQueueResult.h"
-
-#include "GameModes/PF2ModeOfPlayRuleSetBase.h"
 #include "GameModes/PF2GameModeInterface.h"
+#include "GameModes/PF2ModeOfPlayRuleSetBase.h"
 
 #include "PF2GameModeBase.generated.h"
 
 /**
- * Default base class for PF2 Game Modes.
+ * Default base class for OpenPF2 Game Modes.
+ *
+ * A single instance of this class exists only on the SERVER, as is the case with a game mode in any UE-powered game.
  *
  * @see IPF2GameModeInterface
  */
@@ -33,23 +38,33 @@ protected:
 	/**
 	 * Map from Modes of Play to the Rule Set to use for each mode.
 	 */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Mode of Play Rules")
-	TMap<EPF2ModeOfPlayType, TSubclassOf<UPF2ModeOfPlayRuleSetBase>> ModeRuleSets;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="OpenPF2 Game Modes")
+	TMap<EPF2ModeOfPlayType, TSubclassOf<APF2ModeOfPlayRuleSetBase>> ModeRuleSets;
 
 public:
 	// =================================================================================================================
-	// Public Constructors
-	// =================================================================================================================
-	/**
-	 * Default constructor for APF2GameModeBase.
-	 */
-	explicit APF2GameModeBase();
-
-	// =================================================================================================================
 	// Public Methods - IPF2GameModeInterface Implementation
 	// =================================================================================================================
-	virtual FORCEINLINE TScriptInterface<IPF2ModeOfPlayRuleSetInterface> CreateModeOfPlayRuleSet(
+	virtual TScriptInterface<IPF2ModeOfPlayRuleSetInterface> CreateModeOfPlayRuleSet(
 		const EPF2ModeOfPlayType ModeOfPlay) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void TransferCharacterOwnership(
+		const TScriptInterface<IPF2CharacterInterface>        Character,
+		const TScriptInterface<IPF2PlayerControllerInterface> NewController
+	) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void SwitchPartyOfPlayer(
+		const TScriptInterface<IPF2PlayerControllerInterface> PlayerController,
+		const TScriptInterface<IPF2PartyInterface>            NewParty
+	) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void SwitchPartyOfPlayerAndOwnedCharacters(
+		const TScriptInterface<IPF2PlayerControllerInterface> PlayerController,
+		const TScriptInterface<IPF2PartyInterface>            NewParty
+	) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void RequestEncounterMode() override;
@@ -67,25 +82,17 @@ public:
 	virtual void RemoveCharacterFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual FPF2QueuedActionHandle QueueActionForInitiativeTurn(
-		TScriptInterface<IPF2CharacterInterface>&    Character,
-		TScriptInterface<IPF2QueuedActionInterface>& Action,
-		EPF2ActionQueueResult&                       OutQueueResult) override;
+	virtual EPF2CommandExecuteOrQueueResult AttemptToExecuteOrQueueCommand(
+		TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void CancelActionQueuedForInitiativeTurnByHandle(const FPF2QueuedActionHandle ActionHandle) override;
-
-	UFUNCTION(BlueprintCallable)
-	virtual void CancelActionQueuedForInitiativeTurn(
-		const TScriptInterface<IPF2CharacterInterface>&    Character,
-		const TScriptInterface<IPF2QueuedActionInterface>& Action) override;
+	virtual void AttemptToCancelCommand(TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
 protected:
 	// =================================================================================================================
 	// Protected Methods - AActor Overrides
 	// =================================================================================================================
 	virtual void BeginPlay() override;
-	virtual void Tick(const float DeltaSeconds) override;
 
 	// =================================================================================================================
 	// Protected Methods - AGameModeBase Overrides
@@ -96,6 +103,32 @@ protected:
 	// Protected Methods
 	// =================================================================================================================
 	/**
+	 * Gets the game state as an OpenPF2-compatible game state interface.
+	 *
+	 * @return
+	 *	The game state.
+	 */
+	FORCEINLINE IPF2GameStateInterface* GetGameStateIntf() const
+	{
+		IPF2GameStateInterface* GameStateIntf = this->GetGameState<IPF2GameStateInterface>();
+
+		check(GameStateIntf != nullptr);
+
+		return GameStateIntf;
+	}
+
+	/**
+	 * Gets the first player index that hasn't yet been assigned to any other player.
+	 *
+	 * @return
+	 *	The next available player index.
+	 */
+	FORCEINLINE int32 GetNextAvailablePlayerIndex() const
+	{
+		return this->GetGameStateIntf()->GetNextAvailablePlayerIndex();
+	}
+
+	/**
 	 * Gets the active Mode of Play Rule Set (MoPRS) from the game state.
 	 *
 	 * @return
@@ -103,6 +136,14 @@ protected:
 	 *	or there is no active MoPRS, the script interface wraps nullptr.
 	 */
 	virtual TScriptInterface<IPF2ModeOfPlayRuleSetInterface> GetModeOfPlayRuleSet();
+
+	/**
+	 * Assigns the specified player controller a new, unused player index.
+	 *
+	 * @param PlayerController
+	 *	The player controller that will be assigned a distinct player index.
+	 */
+	void AssignPlayerIndex(const APlayerController* PlayerController) const;
 
 	/**
 	 * Attempts to change the current play mode for all characters in the loaded level.

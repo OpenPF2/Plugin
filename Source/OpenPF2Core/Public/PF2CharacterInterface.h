@@ -13,15 +13,24 @@
 #pragma once
 
 #include <AbilitySystemInterface.h>
-#include <UObject/ScriptInterface.h>
 
-#include "PF2PlayerControllerInterface.h"
-#include "PF2QueuedActionHandle.h"
+#include <UObject/ScriptInterface.h>
 
 #include "Abilities/PF2AbilityBoostBase.h"
 
 #include "PF2CharacterInterface.generated.h"
 
+// =====================================================================================================================
+// Forward Declarations (to break recursive dependencies)
+// =====================================================================================================================
+class IPF2CharacterCommandInterface;
+class IPF2CommandQueueInterface;
+class IPF2OwnerTrackingInterface;
+class IPF2PlayerControllerInterface;
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2CharacterInterface : public UAbilitySystemInterface
 {
@@ -75,6 +84,15 @@ public:
 	virtual FText GetCharacterName() const = 0;
 
 	/**
+	 * Gets a visual portrait of this character, to represent them in the UI to players/users.
+	 *
+	 * @return
+	 *	A graphical representation of this character.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual UTexture2D* GetCharacterPortrait() const = 0;
+
+	/**
 	 * Gets the current level of this character.
 	 *
 	 * The character level impacts the character's stats and how many boosts and feats the character can have.
@@ -87,29 +105,56 @@ public:
 	virtual int32 GetCharacterLevel() const = 0;
 
 	/**
-	 * Gets a PF2-specific version of the Ability System Component (ASC) for this character.
+	 * Gets an OpenPF2-specific version of the Ability System Component (ASC) for this character.
 	 *
 	 * @param Output
 	 *	The ASC, as an implementation of the interface for character ASCs.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual void GetCharacterAbilitySystemComponent(
-		TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const = 0;
+		TScriptInterface<IPF2CharacterAbilitySystemInterface>& Output) const = 0;
 
 	/**
-	 * Gets a PF2-specific version of the ASC sub-component of this character.
+	 * Gets an OpenPF2-specific version of the ASC sub-component of this character.
 	 *
 	 * @return
 	 *	The ASC, as an implementation of the interface for character ASCs.
 	 */
-	virtual IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent() const = 0;
+	virtual IPF2CharacterAbilitySystemInterface* GetCharacterAbilitySystemComponent() const = 0;
 
 	/**
-	 * Gets the player controller for this character, if this character is being controlled by a player.
+	 * Gets the sub-component of this character that is used to track commands queued during encounters.
 	 *
 	 * @return
-	 *	Either the player controller for this character, or a null player controller reference if this is not a playable
-	 *	character.
+	 *	The command queue component, if one is available. Otherwise, a script interface that wraps a null pointer.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual TScriptInterface<IPF2CommandQueueInterface> GetCommandQueueComponent() const = 0;
+
+	/**
+	 * Gets the sub-component of this character that is used to track which player owns this character.
+	 *
+	 * @return
+	 *	The owner tracking component, if one is available. Otherwise, a script interface that wraps a null pointer.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual TScriptInterface<IPF2OwnerTrackingInterface> GetOwnerTrackingComponent() const = 0;
+
+	/**
+	 * Gets the player controller for this character, if this character is controllable by a player.
+	 *
+	 * This method behaves differently depending upon if it is being invoked on a client or on the server:
+	 * - On clients: For characters controllable by the local player, this will return the local player controller.
+	 *   Otherwise, this will return null.
+	 * - On the server:
+	 *     - For a character that is possessed by a player controller, this will return the player controller that is
+	 *       possessing the character.
+	 *     - Otherwise, if the character has an owner tracking component, this will return the player controller that
+	 *       "owns" the character.
+	 *
+	 * @return
+	 *	Either the player controller for this character, or a null player controller reference if this character is not
+	 *	currently in the list of controllable characters for any player that is locally accessible.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerController() const = 0;
@@ -121,7 +166,7 @@ public:
 	 *	The ability boost GAs that are still pending for this character.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
-	virtual TArray<UPF2AbilityBoostBase*> GetPendingAbilityBoosts() const = 0;
+	virtual TArray<TScriptInterface<IPF2AbilityBoostInterface>> GetPendingAbilityBoosts() const = 0;
 
 	/**
 	 * Gets the actor that is implementing this interface.
@@ -131,6 +176,21 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual AActor* ToActor() = 0;
+
+	/**
+	 * Gets the pawn that is implementing this interface.
+	 *
+	 * @return
+	 *	This character, as a pawn.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual APawn* ToPawn() = 0;
+
+	/**
+	 * Determines if this character is living (i.e., has hit points > 0).
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual bool IsAlive() = 0;
 
 	/**
 	 * Applies a single ability boost selection to this character.
@@ -216,11 +276,11 @@ public:
 	 * @param HitInfo
 	 *	Hit result information, including who was hit and where the damage was inflicted.
 	 */
-    virtual void HandleDamageReceived(const float                  Damage,
-                                      IPF2CharacterInterface*      InstigatorCharacter,
-                                      AActor*                      DamageSource,
-                                      const FGameplayTagContainer* EventTags,
-                                      const FHitResult             HitInfo) = 0;
+    virtual void Native_OnDamageReceived(const float                  Damage,
+                                         IPF2CharacterInterface*      InstigatorCharacter,
+                                         AActor*                      DamageSource,
+                                         const FGameplayTagContainer* EventTags,
+                                         const FHitResult             HitInfo) = 0;
 
 	/**
 	 * Notifies this character that its hit points (i.e., health) have changed.
@@ -233,7 +293,7 @@ public:
 	 * @param EventTags
 	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to hit points.
 	 */
-	virtual void HandleHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags) = 0;
+	virtual void Native_OnHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags) = 0;
 
 	// =================================================================================================================
 	// Public Event Notifications from Mode of Play Rule Sets (MoPRS)
@@ -244,7 +304,7 @@ public:
 	 * (This should normally be invoked only by the MoPRS).
 	 */
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleEncounterTurnStarted() = 0;
+	virtual void Multicast_OnEncounterTurnStarted() = 0;
 
 	/**
 	 * Notifies this character that their turn during an encounter has ended.
@@ -252,27 +312,5 @@ public:
 	 * (This should normally be invoked only by the MoPRS).
 	 */
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleEncounterTurnEnded() = 0;
-
-	/**
-	 * Notifies this character that an action/ability they have attempted to execute has been queued-up.
-	 *
-	 * (This should normally be invoked only by the MoPRS).
-	 *
-	 * @param ActionHandle
-	 *	A reference to the ability that has been queued up.
-	 */
-	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleActionQueued(const FPF2QueuedActionHandle ActionHandle) = 0;
-
-	/**
-	 * Notifies this character that a previously queued action/ability has been removed from the queue.
-	 *
-	 * (This should normally be invoked only by the MoPRS).
-	 *
-	 * @param ActionHandle
-	 *	A reference to the ability that has been removed.
-	 */
-	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) = 0;
+	virtual void Multicast_OnEncounterTurnEnded() = 0;
 };

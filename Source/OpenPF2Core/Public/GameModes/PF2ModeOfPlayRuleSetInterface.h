@@ -11,7 +11,7 @@
 #include "PF2GameStateInterface.h"
 #include "PF2ModeOfPlayType.h"
 
-#include "Abilities/PF2ActionQueueResult.h"
+#include "Commands/PF2CommandExecuteOrQueueResult.h"
 
 #include "PF2ModeOfPlayRuleSetInterface.generated.h"
 
@@ -22,8 +22,8 @@ class OPENPF2CORE_API UPF2ModeOfPlayRuleSetInterface : public UInterface
 };
 
 /**
- * An interface for OpenPF2-compatible Mode of Play Rule Sets (MoPRS), which provide strategies for the game should
- * behave while in a particular mode of PF2 play.
+ * An interface for OpenPF2-compatible Mode of Play Rule Sets (MoPRS), which provide strategies for how the game should
+ * behave while in a particular mode of OpenPF2 play.
  *
  * MoPRS not only provide logic that control how different gameplay events are handled, but also can act as an extension
  * to game state by storing and maintaining variables that are relevant for the current mode of play. For example,
@@ -33,11 +33,14 @@ class OPENPF2CORE_API UPF2ModeOfPlayRuleSetInterface : public UInterface
  *
  * @see EPF2ModeOfPlayType
  */
-class OPENPF2CORE_API IPF2ModeOfPlayRuleSetInterface
+class OPENPF2CORE_API IPF2ModeOfPlayRuleSetInterface : public IInterface
 {
 	GENERATED_BODY()
 
 public:
+	// =================================================================================================================
+	// Blueprint Implementable Events
+	// =================================================================================================================
 	/**
 	 * Callback to notify this rule set that the mode of play that invoked it is now active.
 	 *
@@ -47,8 +50,12 @@ public:
 	 * @param ModeOfPlay
 	 *	The mode of play that is just starting.
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Mode of Play Rule Sets")
-	void OnModeOfPlayStart(EPF2ModeOfPlayType ModeOfPlay);
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Mode of Play Rule Sets",
+		meta=(DisplayName="On Mode of Play Start")
+	)
+	void BP_OnModeOfPlayStart(EPF2ModeOfPlayType ModeOfPlay);
 
 	/**
 	 * Callback to notify this rule set that a playable character has just joined the game.
@@ -60,19 +67,12 @@ public:
 	 * @param Character
 	 *	The character of the player who just connected.
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Mode of Play Rule Sets")
-	void OnPlayableCharacterStarting(const TScriptInterface<IPF2CharacterInterface>& Character);
-
-	/**
-	 * Callback to notify this rule set of the start of a frame.
-	 *
-	 * The rule set should use this as an opportunity to update time-based state (e.g., expire time-based initiative).
-	 *
-	 * @param DeltaSeconds
-	 *	The amount of time (in seconds) that's elapsed since the last tick event.
-	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Mode of Play Rule Sets")
-	void OnTick(float DeltaSeconds);
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Mode of Play Rule Sets",
+		meta=(DisplayName="On Playable Character Starting")
+	)
+	void BP_OnPlayableCharacterStarting(const TScriptInterface<IPF2CharacterInterface>& Character);
 
 	/**
 	 * Callback to notify this rule set that a character should be added to the current encounter.
@@ -83,8 +83,12 @@ public:
 	 * @param Character
 	 *	The character being added to the encounter.
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Mode of Play Rule Sets")
-	void OnCharacterAddedToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character);
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Mode of Play Rule Sets",
+		meta=(DisplayName="On Character Added to Encounter")
+	)
+	void BP_OnCharacterAddedToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character);
 
 	/**
 	 * Callback to notify this rule set that a character should be removed from the current encounter.
@@ -95,59 +99,60 @@ public:
 	 * @param Character
 	 *	The character being removed from the encounter.
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Mode of Play Rule Sets")
-	void OnCharacterRemovedFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character);
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Mode of Play Rule Sets",
+		meta=(DisplayName="On Character Removed from Encounter")
+	)
+	void BP_OnCharacterRemovedFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character);
 
 	/**
-	 * Callback to notify this rule set that a character wishes to queue-up an action (usually a GA).
+	 * Callback to notify this rule set to wrap-up prior to a change in mode of play.
 	 *
-	 * This gives the rule set control over when the action should be performed (e.g., to enforce initiative order).
-	 * The action may not get executed if the encounter ends before it has been activated. In such a situation, the
-	 * action will be canceled instead.
+	 * The rule set should use this as an opportunity to apply any long-lasting effects of the mode (e.g., calculate
+	 * experience and hero points, end encounter-only gameplay effects or abilities, etc.).
 	 *
-	 * @param Character
-	 *	The character that is queuing the action up.
-	 * @param Action
-	 *	The action that is being queued.
-	 * @param OutQueueResult
-	 *	An optional output parameter to be notified of whether the action was actually queued, executed immediately,
-	 *	or refused.
+	 * @param ModeOfPlay
+	 *	The mode of play that is ending.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Mode of Play Rule Sets",
+		meta=(DisplayName="On Mode of Play End")
+	)
+	void BP_OnModeOfPlayEnd(EPF2ModeOfPlayType ModeOfPlay);
+
+	// =================================================================================================================
+	// Blueprint Functions
+	// =================================================================================================================
+	/**
+	 * Notifies this rule set that a character wishes to perform a command (e.g., use an ability).
+	 *
+	 * This gives the rule set control over when the command should be performed (e.g., to enforce initiative order).
+	 * The command may not get executed if the encounter ends before it has been activated. In such a situation, the
+	 * command will be cancelled instead.
+	 *
+	 * @param Command
+	 *	The command that is being queued.
 	 *
 	 * @return
-	 *	- If the action was queued: a valid handle to refer to the action on the server in the future.
-	 *	- Otherwise: An invalid, placeholder handle to indicate that the action was not queued.
+	 *	A result that indicates whether the command was queued, executed immediately, or refused.
 	 */
 	UFUNCTION(BlueprintNativeEvent, Category="OpenPF2|Mode of Play Rule Sets")
-	FPF2QueuedActionHandle OnQueueAction(const TScriptInterface<IPF2CharacterInterface>&    Character,
-	                                     const TScriptInterface<IPF2QueuedActionInterface>& Action,
-	                                     EPF2ActionQueueResult&                             OutQueueResult);
+	EPF2CommandExecuteOrQueueResult AttemptToExecuteOrQueueCommand(
+		const TScriptInterface<IPF2CharacterCommandInterface>& Command);
 
 	/**
-	 * Callback to notify this rule set that a character wishes to cancel a queued-up an action (usually a GA).
+	 * Notifies this rule set that a character wishes to cancel a command.
 	 *
-	 * If the specified action is not in the queue for the specified character, no changes are made to the action queue
-	 * and this method simply returns.
+	 * This gives the rule set control over if/when a command should be cancelled. The command may not get cancelled if
+	 * it is already being executed or has finished being executed. In such a situation, the command will still proceed.
 	 *
-	 * @param ActionHandle
-	 *	A reference to the previously-queued action that is being canceled.
+	 * @param Command
+	 *	The command that is being cancelled.
 	 */
 	UFUNCTION(BlueprintNativeEvent, Category="OpenPF2|Mode of Play Rule Sets")
-	void OnCancelQueuedActionByHandle(const FPF2QueuedActionHandle ActionHandle);
-
-	/**
-	 * Callback to notify this rule set that a character wishes to cancel a queued-up an action (usually a GA).
-	 *
-	 * If the specified action is not in the queue for the specified character, no changes are made to the action queue
-	 * and this method simply returns.
-	 *
-	 * @param Character
-	 *	The character that queued-up the action.
-	 * @param Action
-	 *	The previously-queued action that is being canceled.
-	 */
-	UFUNCTION(BlueprintNativeEvent, Category="OpenPF2|Mode of Play Rule Sets")
-	void OnCancelQueuedAction(const TScriptInterface<IPF2CharacterInterface>&    Character,
-	                          const TScriptInterface<IPF2QueuedActionInterface>& Action);
+	void AttemptToCancelCommand(const TScriptInterface<IPF2CharacterCommandInterface>& Command);
 
 	/**
 	 * Determines whether this rule set allows transitioning to the specified mode of play with the given game state.
@@ -166,16 +171,4 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Mode of Play Rule Sets")
 	bool CanTransitionTo(const TScriptInterface<IPF2GameStateInterface>& GameState,
 	                     const EPF2ModeOfPlayType                        TargetMode) const;
-
-	/**
-	 * Callback to notify this rule set to wrap-up prior to a change in mode of play.
-	 *
-	 * The rule set should use this as an opportunity to apply any long-lasting effects of the mode (e.g., calculate
-	 * experience and hero points, end encounter-only gameplay effects or abilities, etc.).
-	 *
-	 * @param ModeOfPlay
-	 *	The mode of play that is ending.
-	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Mode of Play Rule Sets")
-	void OnModeOfPlayEnd(EPF2ModeOfPlayType ModeOfPlay);
 };

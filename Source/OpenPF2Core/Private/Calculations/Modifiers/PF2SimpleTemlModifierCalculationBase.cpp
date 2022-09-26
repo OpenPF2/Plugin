@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -42,7 +42,7 @@ float UPF2SimpleTemlModifierCalculationBase::DoCalculation(
 	const float Modifier = AbilityScore + TemlProficiencyBonus;
 
 	UE_LOG(
-		LogPf2Core,
+		LogPf2CoreStats,
 		VeryVerbose,
 		TEXT("Calculated modifier ('%s'): %f + %f = %f"),
 		*(this->ProficiencyRootTag.ToString()),

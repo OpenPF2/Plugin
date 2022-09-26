@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -136,7 +136,7 @@ protected:
 	 * To improve performance, the result is cached per instance.
 	 *
 	 * Normally, it would be computationally and memory intensive to maintain all possible permutations for how rule
-	 * options could be evaluated. However, in PF2, most game rules have a maximum of 3 rule options (2 is much more
+	 * options could be evaluated. However, in OpenPF2, most game rules have a maximum of 3 rule options (2 is much more
 	 * common), the largest this array will tend to be is 6 elements. If we find that this becomes a problem, we could
 	 * switch to a more efficient algorithm (e.g. perhaps we could define a "natural ordering" for both the ability
 	 * score types AND rule options that allows us to re-sort boost choices from the player so they are always applied

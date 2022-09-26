@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -13,7 +13,7 @@
 #pragma once
 
 /**
- * An enumeration of the different play modes in PF2.
+ * An enumeration of the different play modes in OpenPF2.
  *
  * From the Pathfinder 2E Core Rulebook, page 493, "Running Modes of Play":
  * "Pathfinder sessions are divided into three different modes of play: encounters, exploration, and downtime. Each mode

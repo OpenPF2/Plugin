@@ -4,6 +4,7 @@
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #pragma once
+
 #include "PF2CharacterAbilityScoreType.h"
 
 #include "PF2AbilityBoostRuleOption.generated.h"

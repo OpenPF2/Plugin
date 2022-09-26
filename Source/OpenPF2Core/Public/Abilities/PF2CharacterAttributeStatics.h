@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -6,6 +6,7 @@
 #pragma once
 
 #include "GameplayEffectExecutionCalculation.h"
+
 #include "Abilities/PF2AttributeSet.h"
 
 #define DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(S, P, T, B) \
@@ -27,10 +28,10 @@
 }
 
 /**
- * Singleton container for PF2 character attribute capture definitions.
+ * Singleton container for OpenPF2 character attribute capture definitions.
  *
- * This centralizes all static capture definitions for PF2 attributes instead of there being multiple, smaller "Statics"
- * definitions like those preferred by Epic's sample projects.
+ * This centralizes all static capture definitions for OpenPF2 attributes instead of there being multiple, smaller
+ * "Statics" definitions like those preferred by Epic's sample projects.
  */
 class OPENPF2CORE_API FPF2CharacterAttributeStatics final
 {

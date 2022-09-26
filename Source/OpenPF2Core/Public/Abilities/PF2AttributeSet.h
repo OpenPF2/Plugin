@@ -959,10 +959,10 @@ protected:
 	 * @param EventTags
 	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to damage.
 	 */
-	void HandleDamageIncomingChanged(IPF2CharacterInterface*            TargetCharacter,
-	                                 const FGameplayEffectContextHandle Context,
-	                                 const float                        ValueDelta,
-	                                 const FGameplayTagContainer*       EventTags);
+	void Native_OnDamageIncomingChanged(IPF2CharacterInterface*            TargetCharacter,
+	                                    const FGameplayEffectContextHandle Context,
+	                                    const float                        ValueDelta,
+	                                    const FGameplayTagContainer*       EventTags);
 
 	/**
 	 * Notifies this ASC that the hit points attribute has changed.
@@ -976,8 +976,8 @@ protected:
 	 * @param EventTags
 	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to hit points.
 	 */
-	void HandleHitPointsChanged(IPF2CharacterInterface*            TargetCharacter,
-	                            const FGameplayEffectContextHandle Context,
-	                            const float                        ValueDelta,
-	                            const FGameplayTagContainer*       EventTags);
+	void Native_OnHitPointsChanged(IPF2CharacterInterface*            TargetCharacter,
+	                               const FGameplayEffectContextHandle Context,
+	                               const float                        ValueDelta,
+	                               const FGameplayTagContainer*       EventTags);
 };

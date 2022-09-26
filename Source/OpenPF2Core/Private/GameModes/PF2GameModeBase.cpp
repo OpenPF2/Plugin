@@ -2,20 +2,28 @@
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// Portions of this code were adapted from or inspired by the "Real-Time Strategy Plugin for Unreal Engine 4" by Nick
+// Pruehs, provided under the MIT License. Copyright (c) 2017 Nick Pruehs.
 
 #include "GameModes/PF2GameModeBase.h"
 
+#include <EngineUtils.h>
+
 #include "PF2CharacterInterface.h"
 #include "PF2GameStateInterface.h"
-#include "PF2QueuedActionInterface.h"
+#include "PF2OwnerTrackingInterface.h"
+#include "PF2PartyInterface.h"
+#include "PF2PlayerStateInterface.h"
+
+#include "Commands/PF2CharacterCommandInterface.h"
 
 #include "GameModes/PF2ModeOfPlayRuleSetInterface.h"
-#include "Utilities/PF2EnumUtilities.h"
 
-APF2GameModeBase::APF2GameModeBase()
-{
-	this->PrimaryActorTick.bCanEverTick = true;
-}
+#include "Libraries/PF2CharacterCommandLibrary.h"
+
+#include "Utilities/PF2EnumUtilities.h"
+#include "Utilities/PF2InterfaceUtilities.h"
 
 TScriptInterface<IPF2ModeOfPlayRuleSetInterface> APF2GameModeBase::CreateModeOfPlayRuleSet(
 	const EPF2ModeOfPlayType ModeOfPlay)
@@ -24,13 +32,149 @@ TScriptInterface<IPF2ModeOfPlayRuleSetInterface> APF2GameModeBase::CreateModeOfP
 
 	if (this->ModeRuleSets.Contains(ModeOfPlay))
 	{
-		const UClass* const RuleSetType = this->ModeRuleSets[ModeOfPlay];
-		UObject*            NewRuleSet  = NewObject<UObject>(this, RuleSetType);
+		UClass* const RuleSetType = this->ModeRuleSets[ModeOfPlay];
+		UObject*      NewRuleSet;
+
+		// Rule sets are usually actors so that they can be composed of actor components, but the interface doesn't
+		// strictly require them to be actors. Therefore, we have to instantiate a rule set appropriately for its type,
+		// since actors have to be added to the world (so that actor callbacks like BeginPlay are invoked), while base
+		// UObjects can't be.
+		if (RuleSetType->IsChildOf(AActor::StaticClass()))
+		{
+			NewRuleSet = this->GetWorld()->SpawnActor(RuleSetType);
+		}
+		else
+		{
+			NewRuleSet = NewObject<UObject>(this, RuleSetType);
+		}
 
 		RuleSetWrapper = TScriptInterface<IPF2ModeOfPlayRuleSetInterface>(NewRuleSet);
 	}
 
 	return RuleSetWrapper;
+}
+
+void APF2GameModeBase::TransferCharacterOwnership(
+	const TScriptInterface<IPF2CharacterInterface>        Character,
+	const TScriptInterface<IPF2PlayerControllerInterface> NewController)
+{
+	TScriptInterface<IPF2OwnerTrackingInterface> OwnerTracker;
+
+	check(Character != nullptr);
+
+	OwnerTracker = Character->GetOwnerTrackingComponent();
+
+	if (OwnerTracker == nullptr)
+	{
+		UE_LOG(
+			LogPf2Core,
+			Warning,
+			TEXT("Character ('%s') lacks an owner tracking component, so it will not be able to respond properly to ownership changes."),
+			*(NewController->GetIdForLogs()),
+			*(Character->GetIdForLogs())
+		);
+	}
+	else
+	{
+		const TScriptInterface<IPF2PlayerStateInterface> OldOwnerPlayerState = OwnerTracker->GetStateOfOwningPlayer();
+
+		if (OldOwnerPlayerState != nullptr)
+		{
+			const TScriptInterface<IPF2PlayerControllerInterface> OldController =
+				OldOwnerPlayerState->GetPlayerController();
+
+			OldController->ReleaseCharacter(Character);
+		}
+
+		OwnerTracker->SetOwningPlayerByController(NewController);
+	}
+
+	if (NewController == nullptr)
+	{
+		UE_LOG(
+			LogPf2Core,
+			Verbose,
+			TEXT("Character ('%s') is now no longer owned by any character."),
+			*(Character->GetIdForLogs())
+		);
+	}
+	else
+	{
+		UE_LOG(
+			LogPf2Core,
+			Verbose,
+			TEXT("Player controller ('%s') now owns character ('%s')."),
+			*(NewController->GetIdForLogs()),
+			*(Character->GetIdForLogs())
+		);
+
+		NewController->GiveCharacter(Character);
+	}
+
+	// Set player controller as networking authority for the character.
+	Character->ToActor()->SetOwner(NewController->ToPlayerController());
+}
+
+void APF2GameModeBase::SwitchPartyOfPlayer(const TScriptInterface<IPF2PlayerControllerInterface> PlayerController,
+                                           const TScriptInterface<IPF2PartyInterface>            NewParty)
+{
+	const TScriptInterface<IPF2PlayerStateInterface> PlayerState = PlayerController->GetPlayerState();
+	TScriptInterface<IPF2PartyInterface>             OldParty;
+
+	check(PlayerState != nullptr);
+
+	OldParty = PlayerState->GetParty();
+
+	if (OldParty != NewParty)
+	{
+		for (const auto& Character : PlayerController->GetControllableCharacters())
+		{
+			PlayerController->ReleaseCharacter(Character);
+		}
+
+		// We already released all the characters, so this allows us to reuse the logic without duplicating it here.
+		this->SwitchPartyOfPlayerAndOwnedCharacters(PlayerController, NewParty);
+	}
+}
+
+void APF2GameModeBase::SwitchPartyOfPlayerAndOwnedCharacters(
+	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController,
+	const TScriptInterface<IPF2PartyInterface>            NewParty)
+{
+	TScriptInterface<IPF2PlayerStateInterface> PlayerState;
+	TScriptInterface<IPF2PartyInterface>       OldParty;
+
+	check(PlayerController != nullptr);
+
+	PlayerState = PlayerController->GetPlayerState();
+	check(PlayerState != nullptr);
+
+	OldParty = PlayerState->GetParty();
+
+	if (OldParty != NewParty)
+	{
+		// Remove from old party, if there is one.
+		if (OldParty != nullptr)
+		{
+			OldParty->RemovePlayerFromPartyByState(PlayerState);
+		}
+
+		PlayerState->SetParty(NewParty);
+
+		// Associate all controllable characters with the new party.
+		for (const auto& Character : PlayerController->GetControllableCharacters())
+		{
+			const TScriptInterface<IPF2OwnerTrackingInterface> OwnerTracker = Character->GetOwnerTrackingComponent();
+
+			OwnerTracker->SetParty(NewParty);
+		}
+
+		// Notify the new party, if there is one.
+		if (NewParty != nullptr)
+		{
+			NewParty->AddPlayerToPartyByState(PlayerState);
+		}
+	}
 }
 
 void APF2GameModeBase::RequestEncounterMode()
@@ -57,13 +201,13 @@ void APF2GameModeBase::AddCharacterToEncounter(const TScriptInterface<IPF2Charac
 		UE_LOG(
 			LogPf2CoreEncounters,
 			Error,
-			TEXT("No MoPRS is set. Ignoring request to add character (%s) to encounter."),
+			TEXT("No MoPRS is set. Ignoring request to add character ('%s') to encounter."),
 			*(Character->GetCharacterName().ToString())
 		);
 	}
 	else
 	{
-		IPF2ModeOfPlayRuleSetInterface::Execute_OnCharacterAddedToEncounter(RuleSet.GetObject(), Character);
+		IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnCharacterAddedToEncounter(RuleSet.GetObject(), Character);
 	}
 }
 
@@ -76,22 +220,20 @@ void APF2GameModeBase::RemoveCharacterFromEncounter(const TScriptInterface<IPF2C
 		UE_LOG(
 			LogPf2CoreEncounters,
 			Error,
-			TEXT("No MoPRS is set. Ignoring request to remove character (%s) from encounter."),
+			TEXT("No MoPRS is set. Ignoring request to remove character ('%s') from encounter."),
 			*(Character->GetCharacterName().ToString())
 		);
 	}
 	else
 	{
-		IPF2ModeOfPlayRuleSetInterface::Execute_OnCharacterRemovedFromEncounter(RuleSet.GetObject(), Character);
+		IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnCharacterRemovedFromEncounter(RuleSet.GetObject(), Character);
 	}
 }
 
-FPF2QueuedActionHandle APF2GameModeBase::QueueActionForInitiativeTurn(
-	TScriptInterface<IPF2CharacterInterface>&    Character,
-	TScriptInterface<IPF2QueuedActionInterface>& Action,
-	OUT EPF2ActionQueueResult&                   OutQueueResult)
+EPF2CommandExecuteOrQueueResult APF2GameModeBase::AttemptToExecuteOrQueueCommand(
+		TScriptInterface<IPF2CharacterCommandInterface>& Command)
 {
-	FPF2QueuedActionHandle                                 Result;
+	EPF2CommandExecuteOrQueueResult                        Result;
 	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
 
 	if (RuleSet == nullptr)
@@ -99,28 +241,22 @@ FPF2QueuedActionHandle APF2GameModeBase::QueueActionForInitiativeTurn(
 		UE_LOG(
 			LogPf2CoreEncounters,
 			Error,
-			TEXT("No MoPRS is set. Performing action (%s) without queuing."),
-			*(Action->GetActionName().ToString())
+			TEXT("No MoPRS is set. Performing command ('%s') without queuing."),
+			*(Command->GetCommandLabel().ToString())
 		);
 
-		Action->PerformAction();
-		OutQueueResult = EPF2ActionQueueResult::ExecutedImmediately;
+		Result =
+			UPF2CharacterCommandLibrary::ImmediateResultToExecuteOrQueueResult(Command->AttemptExecuteImmediately());
 	}
 	else
 	{
-		Result =
-			IPF2ModeOfPlayRuleSetInterface::Execute_OnQueueAction(
-				RuleSet.GetObject(),
-				Character,
-				Action,
-				OutQueueResult
-			);
+		Result = IPF2ModeOfPlayRuleSetInterface::Execute_AttemptToExecuteOrQueueCommand(RuleSet.GetObject(), Command);
 	}
 
 	return Result;
 }
 
-void APF2GameModeBase::CancelActionQueuedForInitiativeTurnByHandle(const FPF2QueuedActionHandle ActionHandle)
+void APF2GameModeBase::AttemptToCancelCommand(TScriptInterface<IPF2CharacterCommandInterface>& Command)
 {
 	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
 
@@ -129,34 +265,13 @@ void APF2GameModeBase::CancelActionQueuedForInitiativeTurnByHandle(const FPF2Que
 		UE_LOG(
 			LogPf2CoreEncounters,
 			Error,
-			TEXT("No MoPRS is set. Ignoring request to remove action (%s, handle: %d) from queue."),
-			*(ActionHandle.ActionName.ToString()),
-			ActionHandle.HandleId
+			TEXT("No MoPRS is set. Cannot cancel command ('%s')."),
+			*(Command->GetCommandLabel().ToString())
 		);
 	}
 	else
 	{
-		IPF2ModeOfPlayRuleSetInterface::Execute_OnCancelQueuedActionByHandle(RuleSet.GetObject(), ActionHandle);
-	}
-}
-
-void APF2GameModeBase::CancelActionQueuedForInitiativeTurn(const TScriptInterface<IPF2CharacterInterface>&    Character,
-                                                           const TScriptInterface<IPF2QueuedActionInterface>& Action)
-{
-	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
-
-	if (RuleSet == nullptr)
-	{
-		UE_LOG(
-			LogPf2CoreEncounters,
-			Error,
-			TEXT("No MoPRS is set. Ignoring request to remove action (%s) from queue."),
-			*(Action->GetActionName().ToString())
-		);
-	}
-	else
-	{
-		IPF2ModeOfPlayRuleSetInterface::Execute_OnCancelQueuedAction(RuleSet.GetObject(), Character, Action);
+		IPF2ModeOfPlayRuleSetInterface::Execute_AttemptToCancelCommand(RuleSet.GetObject(), Command);
 	}
 }
 
@@ -168,29 +283,18 @@ void APF2GameModeBase::BeginPlay()
 	this->AttemptModeOfPlaySwitch(EPF2ModeOfPlayType::Exploration);
 }
 
-void APF2GameModeBase::Tick(const float DeltaSeconds)
-{
-	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
-
-	Super::Tick(DeltaSeconds);
-
-	if (RuleSet != nullptr)
-	{
-		IPF2ModeOfPlayRuleSetInterface::Execute_OnTick(RuleSet.GetObject(), DeltaSeconds);
-	}
-}
-
 void APF2GameModeBase::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
 {
 	TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet;
 
+	this->AssignPlayerIndex(NewPlayer);
 	Super::HandleStartingNewPlayer_Implementation(NewPlayer);
 
 	RuleSet = this->GetModeOfPlayRuleSet();
 
 	if (RuleSet != nullptr)
 	{
-		IPF2ModeOfPlayRuleSetInterface::Execute_OnPlayableCharacterStarting(
+		IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnPlayableCharacterStarting(
 			RuleSet.GetObject(),
 			NewPlayer->GetCharacter()
 		);
@@ -207,7 +311,7 @@ TScriptInterface<IPF2ModeOfPlayRuleSetInterface> APF2GameModeBase::GetModeOfPlay
 		UE_LOG(
 			LogPf2Core,
 			Error,
-			TEXT("Mode of Play Rule Set (MoPRS) support is not enabled because the current game state is not compatible with PF2.")
+			TEXT("Mode of Play Rule Set (MoPRS) support is not enabled because the current game state is not compatible with OpenPF2.")
 		);
 
 		RuleSet = TScriptInterface<IPF2ModeOfPlayRuleSetInterface>();
@@ -220,18 +324,29 @@ TScriptInterface<IPF2ModeOfPlayRuleSetInterface> APF2GameModeBase::GetModeOfPlay
 	return RuleSet;
 }
 
+void APF2GameModeBase::AssignPlayerIndex(const APlayerController* PlayerController) const
+{
+	IPF2PlayerStateInterface* PlayerStateIntf = PlayerController->GetPlayerState<IPF2PlayerStateInterface>();
+
+	if (PlayerStateIntf != nullptr)
+	{
+		const uint8 NextPlayerIndex = this->GetNextAvailablePlayerIndex();
+
+		PlayerStateIntf->SetPlayerIndex(NextPlayerIndex);
+	}
+}
 
 void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeOfPlay)
 {
-	IPF2GameStateInterface*                        Pf2GameStateInterface = this->GetGameState<IPF2GameStateInterface>();
-	const TScriptInterface<IPF2GameStateInterface> Pf2GameState          = Cast<UObject>(Pf2GameStateInterface);
+	const TScriptInterface<IPF2GameStateInterface> Pf2GameState =
+		PF2InterfaceUtilities::ToScriptInterface(this->GetGameStateIntf());
 
 	if (Pf2GameState == nullptr)
 	{
 		UE_LOG(
 			LogPf2Core,
 			Error,
-			TEXT("Cannot transition to new mode of play (%s) because current game state is not compatible with PF2."),
+			TEXT("Cannot transition to new mode of play (%s) because current game state is not compatible with OpenPF2."),
 			*PF2EnumUtilities::ToString(NewModeOfPlay)
 		);
 	}
@@ -286,15 +401,15 @@ void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeO
 
 void APF2GameModeBase::ForceSwitchModeOfPlay(const EPF2ModeOfPlayType NewModeOfPlay)
 {
-	IPF2GameStateInterface*                        Pf2GameStateInterface = this->GetGameState<IPF2GameStateInterface>();
-	const TScriptInterface<IPF2GameStateInterface> Pf2GameState          = Cast<UObject>(Pf2GameStateInterface);
+	const TScriptInterface<IPF2GameStateInterface> Pf2GameState =
+		PF2InterfaceUtilities::ToScriptInterface(this->GetGameStateIntf());
 
 	if (Pf2GameState == nullptr)
 	{
 		UE_LOG(
 			LogPf2Core,
 			Error,
-			TEXT("Cannot transition to new mode of play (%s) because current game state is not compatible with PF2."),
+			TEXT("Cannot transition to new mode of play (%s) because current game state is not compatible with OpenPF2."),
 			*PF2EnumUtilities::ToString(NewModeOfPlay)
 		);
 	}
@@ -306,14 +421,23 @@ void APF2GameModeBase::ForceSwitchModeOfPlay(const EPF2ModeOfPlayType NewModeOfP
 
 		if (OldRuleSet != nullptr)
 		{
-			IPF2ModeOfPlayRuleSetInterface::Execute_OnModeOfPlayEnd(OldRuleSet.GetObject(), OldModeOfPlay);
+			AActor* OldRuleSetActor = Cast<AActor>(OldRuleSet.GetObject());
+
+			IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnModeOfPlayEnd(OldRuleSet.GetObject(), OldModeOfPlay);
+
+			if (OldRuleSetActor != nullptr)
+			{
+				// Rule sets are usually actors, but the interface doesn't strictly require them to be. If the old rule
+				// set was implemented as an actor, then we also need to remove it from the world.
+				OldRuleSetActor->Destroy();
+			}
 		}
 
-		Pf2GameState->SwitchModeOfPlay(NewModeOfPlay, NewRuleSet);
+		Pf2GameState->SetModeOfPlay(NewModeOfPlay, NewRuleSet);
 
 		if (NewRuleSet != nullptr)
 		{
-			IPF2ModeOfPlayRuleSetInterface::Execute_OnModeOfPlayStart(NewRuleSet.GetObject(), NewModeOfPlay);
+			IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnModeOfPlayStart(NewRuleSet.GetObject(), NewModeOfPlay);
 		}
 	}
 }

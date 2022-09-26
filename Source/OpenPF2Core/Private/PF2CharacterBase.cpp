@@ -9,11 +9,19 @@
 #include <Net/UnrealNetwork.h>
 #include <UObject/ConstructorHelpers.h>
 
+#include "PF2OwnerTrackingComponent.h"
+#include "PF2PlayerStateInterface.h"
+
 #include "Abilities/PF2GameplayAbilityTargetData_BoostAbility.h"
+#include "Commands/PF2CommandQueueComponent.h"
 #include "Utilities/PF2InterfaceUtilities.h"
+#include "Utilities/PF2LogUtilities.h"
 
 APF2CharacterBase::APF2CharacterBase() :
-	APF2CharacterBase(TPF2CharacterComponentFactory<UPF2AbilitySystemComponent, UPF2AttributeSet>())
+	APF2CharacterBase(TPF2CharacterComponentFactory<UPF2AbilitySystemComponent,
+	                                                UPF2CommandQueueComponent,
+	                                                UPF2OwnerTrackingComponent,
+	                                                UPF2AttributeSet>())
 {
 }
 
@@ -72,13 +80,18 @@ FText APF2CharacterBase::GetCharacterName() const
 	return Name;
 }
 
+UTexture2D* APF2CharacterBase::GetCharacterPortrait() const
+{
+	return this->CharacterPortrait;
+}
+
 int32 APF2CharacterBase::GetCharacterLevel() const
 {
 	return this->CharacterLevel;
 }
 
 FORCEINLINE void APF2CharacterBase::GetCharacterAbilitySystemComponent(
-	TScriptInterface<IPF2CharacterAbilitySystemComponentInterface>& Output) const
+	TScriptInterface<IPF2CharacterAbilitySystemInterface>& Output) const
 {
 	// BUGBUG: This is weird, but the way that a TScriptInterface object works is it maintains a reference to a UObject
 	// that *implements* an interface along with a pointer to the part of the UObject that provides the interface
@@ -86,23 +99,74 @@ FORCEINLINE void APF2CharacterBase::GetCharacterAbilitySystemComponent(
 	Output = this->AbilitySystemComponent;
 }
 
-FORCEINLINE IPF2CharacterAbilitySystemComponentInterface* APF2CharacterBase::GetCharacterAbilitySystemComponent() const
+FORCEINLINE IPF2CharacterAbilitySystemInterface* APF2CharacterBase::GetCharacterAbilitySystemComponent() const
 {
 	// Too bad that ASCs in UE don't implement an interface; otherwise we could extend it so casts like this aren't
 	// needed.
-	IPF2CharacterAbilitySystemComponentInterface* CharacterAsc =
-		Cast<IPF2CharacterAbilitySystemComponentInterface>(this->AbilitySystemComponent);
+	IPF2CharacterAbilitySystemInterface* CharacterAsc =
+		Cast<IPF2CharacterAbilitySystemInterface>(this->AbilitySystemComponent);
 
 	check(CharacterAsc);
 	return CharacterAsc;
 }
 
-TScriptInterface<IPF2PlayerControllerInterface> APF2CharacterBase::GetPlayerController() const
+TScriptInterface<IPF2CommandQueueInterface> APF2CharacterBase::GetCommandQueueComponent() const
 {
-	return this->GetController();
+	return this->CommandQueue;
 }
 
-TArray<UPF2AbilityBoostBase *> APF2CharacterBase::GetPendingAbilityBoosts() const
+TScriptInterface<IPF2OwnerTrackingInterface> APF2CharacterBase::GetOwnerTrackingComponent() const
+{
+	return this->OwnerTracker;
+}
+
+TScriptInterface<IPF2PlayerControllerInterface> APF2CharacterBase::GetPlayerController() const
+{
+	TScriptInterface<IPF2PlayerControllerInterface> PlayerController = this->GetController();
+
+	// Using the PC is usually the fastest/easiest option, but only works if the character is possessed, as is the case
+	// for a party character in exploration mode. For any other situation, we have to use the owner tracking component
+	// (if there is one) to identify the PC for this character. If this doesn't work, then this character isn't
+	// controllable by any PCs right now but might be controllable by AI (e.g. by the story or campaign).
+	if (PlayerController == nullptr)
+	{
+		const TScriptInterface<IPF2OwnerTrackingInterface> OwnerTrackingComponent = this->GetOwnerTrackingComponent();
+
+		UE_LOG(
+			LogPf2Core,
+			VeryVerbose,
+			TEXT("[%s] Attempting to identify owner of character ('%s') using owner tracking component."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(this->GetIdForLogs())
+		);
+
+		if (OwnerTrackingComponent != nullptr)
+		{
+			const TScriptInterface<IPF2PlayerStateInterface> OwnerPlayerState =
+				OwnerTrackingComponent->GetStateOfOwningPlayer();
+
+			if (OwnerPlayerState != nullptr)
+			{
+				PlayerController = OwnerPlayerState->GetPlayerController();
+			}
+		}
+	}
+
+	if (PlayerController == nullptr)
+	{
+		UE_LOG(
+			LogPf2Core,
+			Warning,
+			TEXT("[%s] Either this character ('%s') is only controllable by a remote client, or the character does not have an OpenPF2-compatible player controller."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(this->GetIdForLogs())
+		);
+	}
+
+	return PlayerController;
+}
+
+TArray<TScriptInterface<IPF2AbilityBoostInterface>> APF2CharacterBase::GetPendingAbilityBoosts() const
 {
 	return this->GetCharacterAbilitySystemComponent()->GetPendingAbilityBoosts();
 }
@@ -110,6 +174,16 @@ TArray<UPF2AbilityBoostBase *> APF2CharacterBase::GetPendingAbilityBoosts() cons
 AActor* APF2CharacterBase::ToActor()
 {
 	return this;
+}
+
+APawn* APF2CharacterBase::ToPawn()
+{
+	return this;
+}
+
+bool APF2CharacterBase::IsAlive()
+{
+	return (this->AttributeSet->GetHitPoints() > 0);
 }
 
 void APF2CharacterBase::AddAbilityBoostSelection(
@@ -151,7 +225,7 @@ void APF2CharacterBase::ApplyAbilityBoostSelections()
 
 void APF2CharacterBase::ActivatePassiveGameplayEffects()
 {
-	IPF2CharacterAbilitySystemComponentInterface* CharacterAsc = this->GetCharacterAbilitySystemComponent();
+	IPF2CharacterAbilitySystemInterface* CharacterAsc = this->GetCharacterAbilitySystemComponent();
 
 	if (this->IsAuthorityForEffects() && !CharacterAsc->ArePassiveGameplayEffectsActive())
 	{
@@ -182,13 +256,13 @@ void APF2CharacterBase::AddAndActivateGameplayAbility(const TSubclassOf<UGamepla
 	Asc->GiveAbilityAndActivateOnce(Spec);
 }
 
-void APF2CharacterBase::HandleDamageReceived(const float                  Damage,
-                                             IPF2CharacterInterface*      InstigatorCharacter,
-                                             AActor*                      DamageSource,
-                                             const FGameplayTagContainer* EventTags,
-                                             const FHitResult             HitInfo)
+void APF2CharacterBase::Native_OnDamageReceived(const float                  Damage,
+                                                IPF2CharacterInterface*      InstigatorCharacter,
+                                                AActor*                      DamageSource,
+                                                const FGameplayTagContainer* EventTags,
+                                                const FHitResult             HitInfo)
 {
-	this->OnDamageReceived(
+	this->BP_OnDamageReceived(
 		Damage,
 		PF2InterfaceUtilities::ToScriptInterface(InstigatorCharacter),
 		DamageSource,
@@ -197,36 +271,26 @@ void APF2CharacterBase::HandleDamageReceived(const float                  Damage
 	);
 }
 
-void APF2CharacterBase::HandleHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags)
+void APF2CharacterBase::Native_OnHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags)
 {
 	if ((this->AbilitySystemComponent == nullptr) ||
-		!this->AbilitySystemComponent->ArePassiveGameplayEffectsActive())
+		!this->GetCharacterAbilitySystemComponent()->ArePassiveGameplayEffectsActive())
 	{
 		// Stats are not presently initialized, so bail out to avoid firing off during initialization.
 		return;
 	}
 
-	this->OnHitPointsChanged(Delta, *EventTags);
+	this->BP_OnHitPointsChanged(Delta, *EventTags);
 }
 
-void APF2CharacterBase::MulticastHandleEncounterTurnStarted_Implementation()
+void APF2CharacterBase::Multicast_OnEncounterTurnStarted_Implementation()
 {
-	this->OnEncounterTurnStarted();
+	this->OnEncounterTurnStarted.Broadcast(this);
 }
 
-void APF2CharacterBase::MulticastHandleEncounterTurnEnded_Implementation()
+void APF2CharacterBase::Multicast_OnEncounterTurnEnded_Implementation()
 {
-	this->OnEncounterTurnEnded();
-}
-
-void APF2CharacterBase::MulticastHandleActionQueued_Implementation(const FPF2QueuedActionHandle ActionHandle)
-{
-	this->OnActionQueued(ActionHandle);
-}
-
-void APF2CharacterBase::MulticastHandleActionDequeued_Implementation(const FPF2QueuedActionHandle ActionHandle)
-{
-	this->OnActionDequeued(ActionHandle);
+	this->OnEncounterTurnEnded.Broadcast(this);
 }
 
 bool APF2CharacterBase::SetCharacterLevel(const int32 NewLevel)
@@ -235,7 +299,7 @@ bool APF2CharacterBase::SetCharacterLevel(const int32 NewLevel)
 
 	if ((OldLevel != NewLevel) && (NewLevel > 0))
 	{
-		this->HandleCharacterLevelChanged(OldLevel, NewLevel);
+		this->Native_OnCharacterLevelChanged(OldLevel, NewLevel);
 		return true;
 	}
 	else
@@ -257,7 +321,7 @@ void APF2CharacterBase::RemoveRedundantPendingAbilityBoosts()
 		{
 			TSubclassOf<UPF2AbilityBoostBase> BoostGa   = AbilityBoostSelection.BoostGameplayAbility;
 			UAbilitySystemComponent*          Asc       = this->GetAbilitySystemComponent();
-			FGameplayAbilitySpec*             BoostSpec = Asc->FindAbilitySpecFromClass(BoostGa);
+			const FGameplayAbilitySpec*       BoostSpec = Asc->FindAbilitySpecFromClass(BoostGa);
 
 			if (BoostSpec != nullptr)
 			{
@@ -387,12 +451,12 @@ void APF2CharacterBase::GrantAdditionalAbilities()
 	}
 }
 
-void APF2CharacterBase::HandleCharacterLevelChanged(const float OldLevel, const float NewLevel)
+void APF2CharacterBase::Native_OnCharacterLevelChanged(const float OldLevel, const float NewLevel)
 {
 	this->DeactivatePassiveGameplayEffects();
 
 	this->CharacterLevel = NewLevel;
-	this->OnCharacterLevelChanged(OldLevel, NewLevel);
+	this->BP_OnCharacterLevelChanged(OldLevel, NewLevel);
 
 	this->ActivatePassiveGameplayEffects();
 }

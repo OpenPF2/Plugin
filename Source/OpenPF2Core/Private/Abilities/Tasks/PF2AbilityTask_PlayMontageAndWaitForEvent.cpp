@@ -63,7 +63,7 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::Activate()
 				this->EventTags,
 				FGameplayEventTagMulticastDelegate::FDelegate::CreateUObject(
 					this,
-					&UPF2AbilityTask_PlayMontageAndWaitForEvent::OnGameplayEvent
+					&UPF2AbilityTask_PlayMontageAndWaitForEvent::Native_OnGameplayEvent
 				)
 			);
 
@@ -88,19 +88,19 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::Activate()
 				this->CancelledHandle =
 					this->Ability->OnGameplayAbilityCancelled.AddUObject(
 						this,
-						&UPF2AbilityTask_PlayMontageAndWaitForEvent::OnAbilityCancelled
+						&UPF2AbilityTask_PlayMontageAndWaitForEvent::Native_OnAbilityCancelled
 					);
 
 				this->BlendingOutDelegate.BindUObject(
 					this,
-					&UPF2AbilityTask_PlayMontageAndWaitForEvent::OnMontageBlendingOut
+					&UPF2AbilityTask_PlayMontageAndWaitForEvent::Native_OnMontageBlendingOut
 				);
 
 				AnimInstance->Montage_SetBlendingOutDelegate(this->BlendingOutDelegate, this->MontageToPlay);
 
 				this->MontageEndedDelegate.BindUObject(
 					this,
-					&UPF2AbilityTask_PlayMontageAndWaitForEvent::OnMontageEnded
+					&UPF2AbilityTask_PlayMontageAndWaitForEvent::Native_OnMontageEnded
 				);
 
 				AnimInstance->Montage_SetEndDelegate(this->MontageEndedDelegate, this->MontageToPlay);
@@ -137,8 +137,8 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::Activate()
 		ABILITY_LOG(
 			Warning,
 			TEXT("UPF2AbilityTask_PlayMontageAndWaitForEvent called in Ability %s failed to play montage %s; Task Instance Name %s."),
-			*this->Ability->GetName(),
-			*GetNameSafe(this->MontageToPlay),
+			*(GetNameSafe(this->Ability)),
+			*(GetNameSafe(this->MontageToPlay)),
 			*this->InstanceName.ToString()
 		);
 
@@ -155,7 +155,7 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::ExternalCancel()
 {
 	check(this->AbilitySystemComponent);
 
-	this->OnAbilityCancelled();
+	this->Native_OnAbilityCancelled();
 
 	Super::ExternalCancel();
 }
@@ -269,8 +269,8 @@ bool UPF2AbilityTask_PlayMontageAndWaitForEvent::StopPlayingMontage() const
 	return false;
 }
 
-void UPF2AbilityTask_PlayMontageAndWaitForEvent::OnGameplayEvent(const FGameplayTag        EventTag,
-                                                                 const FGameplayEventData* Payload) const
+void UPF2AbilityTask_PlayMontageAndWaitForEvent::Native_OnGameplayEvent(const FGameplayTag        EventTag,
+                                                                        const FGameplayEventData* Payload) const
 {
 	if (this->ShouldBroadcastAbilityTaskDelegates())
 	{
@@ -282,7 +282,7 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::OnGameplayEvent(const FGameplay
 	}
 }
 
-void UPF2AbilityTask_PlayMontageAndWaitForEvent::OnMontageEnded(UAnimMontage* Montage, const bool bInterrupted)
+void UPF2AbilityTask_PlayMontageAndWaitForEvent::Native_OnMontageEnded(UAnimMontage* Montage, const bool bInterrupted)
 {
 	if (!bInterrupted && (Montage == this->MontageToPlay))
 	{
@@ -295,8 +295,8 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::OnMontageEnded(UAnimMontage* Mo
 	this->EndTask();
 }
 
-void UPF2AbilityTask_PlayMontageAndWaitForEvent::OnMontageBlendingOut(UAnimMontage* Montage,
-                                                                      const bool    bInterrupted) const
+void UPF2AbilityTask_PlayMontageAndWaitForEvent::Native_OnMontageBlendingOut(UAnimMontage* Montage,
+                                                                             const bool    bInterrupted) const
 {
 	if (this->HasAbility() &&
 		(this->Ability->GetCurrentMontage() == this->MontageToPlay) &&
@@ -338,7 +338,7 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::OnMontageBlendingOut(UAnimMonta
 	}
 }
 
-void UPF2AbilityTask_PlayMontageAndWaitForEvent::OnAbilityCancelled() const
+void UPF2AbilityTask_PlayMontageAndWaitForEvent::Native_OnAbilityCancelled() const
 {
 	if (this->StopPlayingMontage())
 	{

@@ -1,11 +1,13 @@
-﻿// Copyright 2021 Guy Elsmore-Paddock. All Rights Reserved.
+﻿// Copyright 2021-2022 Guy Elsmore-Paddock. All Rights Reserved.
 // Adapted from content that is Copyright Epic Games, Inc. (Action RPG Sample).
 // Licensed only for use with Unreal Engine.
 
 #pragma once
 
 #include <Misc/AutomationTest.h>
+
 #include "Abilities/PF2AttributeSet.h"
+
 #include "Tests/PF2TestPawn.h"
 
 #define DEFINE_PF_SPEC_PRIVATE(TClass, PrettyName, TFlags, FileName, LineNumber) \

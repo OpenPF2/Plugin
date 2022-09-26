@@ -14,7 +14,7 @@
 #include "Utilities/PF2EnumUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
-APF2GameStateBase::APF2GameStateBase()
+APF2GameStateBase::APF2GameStateBase() : NextPlayerIndex(0)
 {
 }
 
@@ -26,8 +26,8 @@ void APF2GameStateBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME(APF2GameStateBase, ModeOfPlayRuleSet);
 }
 
-void APF2GameStateBase::SwitchModeOfPlay(const EPF2ModeOfPlayType                               NewMode,
-                                         const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> NewRuleSet)
+void APF2GameStateBase::SetModeOfPlay(const EPF2ModeOfPlayType                               NewMode,
+                                      const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> NewRuleSet)
 {
 	if (this->HasAuthority())
 	{
@@ -43,8 +43,20 @@ void APF2GameStateBase::SwitchModeOfPlay(const EPF2ModeOfPlayType               
 		this->ModeOfPlayRuleSet = NewRuleSet;
 
 		// We're running on the server; notify server copies of the game state that we have received a mode of play.
-		this->OnReceivedModeOfPlay();
+		this->Native_OnModeOfPlayAvailable();
 	}
+}
+
+void APF2GameStateBase::RefreshAbilityActorInfoForAllCharacters()
+{
+	UE_LOG(
+		LogPf2Core,
+		VeryVerbose,
+		TEXT("[%s] Triggering refresh of ability actor information for all characters."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld()))
+	);
+
+	this->Multicast_RefreshAbilityActorInfoForAllCharacters();
 }
 
 void APF2GameStateBase::OnRep_ModeOfPlay()
@@ -57,10 +69,10 @@ void APF2GameStateBase::OnRep_ModeOfPlay()
 	);
 
 	// We're running on the client; notify the client that we have received a mode of play.
-	this->OnReceivedModeOfPlay();
+	this->Native_OnModeOfPlayAvailable();
 }
 
-void APF2GameStateBase::OnReceivedModeOfPlay()
+void APF2GameStateBase::Native_OnModeOfPlayAvailable()
 {
 	const UWorld* const World = this->GetWorld();
 
@@ -73,16 +85,42 @@ void APF2GameStateBase::OnReceivedModeOfPlay()
 
 		if (PF2PlayerController != nullptr)
 		{
-			UE_LOG(
-				LogPf2Core,
-				VeryVerbose,
-				TEXT("[%s] Notifying player controller ('%s') that mode of play has changed to '%s'."),
-				*(PF2LogUtilities::GetHostNetId(World)),
-				*(PlayerController->GetName()),
-				*(PF2EnumUtilities::ToString(this->ModeOfPlay))
-			);
+			PF2PlayerController->Native_OnModeOfPlayChanged(this->ModeOfPlay);
+		}
+	}
+}
 
-			PF2PlayerController->HandleModeOfPlayChanged(this->ModeOfPlay);
+void APF2GameStateBase::Multicast_RefreshAbilityActorInfoForAllCharacters_Implementation()
+{
+	const UWorld* World = this->GetWorld();
+
+	for (FConstPlayerControllerIterator Iterator = World->GetPlayerControllerIterator(); Iterator; ++Iterator)
+	{
+		const IPF2PlayerControllerInterface* PlayerControllerIntf =
+			Cast<IPF2PlayerControllerInterface>(Iterator->Get());
+
+		if (PlayerControllerIntf != nullptr)
+		{
+			TArray<TScriptInterface<IPF2CharacterInterface>> Characters =
+				PlayerControllerIntf->GetControllableCharacters();
+
+			for (const TScriptInterface<IPF2CharacterInterface> Character : Characters)
+			{
+				UAbilitySystemComponent* AbilitySystemComponent = Character->GetAbilitySystemComponent();
+
+				if (AbilitySystemComponent != nullptr)
+				{
+					UE_LOG(
+						LogPf2Core,
+						VeryVerbose,
+						TEXT("[%s] Refreshing ability actor information for character ('%s')."),
+						*(PF2LogUtilities::GetHostNetId(World)),
+						*(Character->GetIdForLogs())
+					);
+
+					AbilitySystemComponent->RefreshAbilityActorInfo();
+				}
+			}
 		}
 	}
 }

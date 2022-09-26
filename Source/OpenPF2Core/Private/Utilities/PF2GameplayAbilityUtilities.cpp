@@ -3,16 +3,16 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-#pragma once
-
 #include "Utilities/PF2GameplayAbilityUtilities.h"
 
 #include <GameplayEffectExtension.h>
+
 #include <GameFramework/Pawn.h>
 #include <GameFramework/PlayerController.h>
 
 #include "PF2CharacterInterface.h"
-#include "Abilities/PF2CharacterAbilitySystemComponentInterface.h"
+
+#include "Abilities/PF2CharacterAbilitySystemInterface.h"
 
 /**
  * Utility logic for working with Gameplay Abilities.
@@ -65,13 +65,13 @@ namespace PF2GameplayAbilityUtilities
 		return WeightGroup;
 	}
 
-	FORCEINLINE IPF2CharacterAbilitySystemComponentInterface* GetCharacterAbilitySystemComponent(
+	FORCEINLINE IPF2CharacterAbilitySystemInterface* GetCharacterAbilitySystemComponent(
 		const FGameplayAbilityActorInfo* ActorInfo)
 	{
-		IPF2CharacterAbilitySystemComponentInterface* CharacterAsc;
-		UAbilitySystemComponent*                      AbilitySystemComponent = GetAbilitySystemComponent(ActorInfo);
+		IPF2CharacterAbilitySystemInterface* CharacterAsc;
+		UAbilitySystemComponent*             AbilitySystemComponent = GetAbilitySystemComponent(ActorInfo);
 
-		CharacterAsc = Cast<IPF2CharacterAbilitySystemComponentInterface>(AbilitySystemComponent);
+		CharacterAsc = Cast<IPF2CharacterAbilitySystemInterface>(AbilitySystemComponent);
 		check(CharacterAsc != nullptr);
 
 		return CharacterAsc;

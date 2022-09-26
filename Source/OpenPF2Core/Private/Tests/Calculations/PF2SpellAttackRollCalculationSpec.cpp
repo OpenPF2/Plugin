@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -24,9 +24,9 @@ BEGIN_DEFINE_PF_SPEC(FPF2SpellAttackRollCalculationsSpec,
 	};
 
 	// The classes in the core rulebook don't have any spellcasting abilities other than Wisdom and Charisma, but
-	// there's no reason to limit game makers to just those options. Plus, add-on material for PF2 could always invent a
-	// new class that uses something like Intelligence for a character that does complex spellcasting or Dexterity for a
-	// character who performs physically-dexterous spells.
+	// there's no reason to limit game makers to just those options. Plus, add-on material for OpenPF2 could always
+	// invent a new class that uses something like Intelligence for a character that does complex spellcasting or
+	// Dexterity for a character who performs physically-dexterous spells.
 	const TMap<FString, FString> AllAbilityModifierAttributes = {
 		{"Charisma",     "AbCharismaModifier"     },
 		{"Constitution", "AbConstitutionModifier" },

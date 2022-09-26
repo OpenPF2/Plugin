@@ -5,17 +5,27 @@
 
 #pragma once
 
-#include <UObject/Interface.h>
+#include <GameplayAbilitySpec.h>
 
-#include "PF2GameStateInterface.h"
-#include "PF2QueuedActionHandle.h"
+#include <GameFramework/Info.h>
 
 #include "GameModes/PF2ModeOfPlayType.h"
 
+#include "Utilities/PF2LogIdentifiableInterface.h"
+
 #include "PF2PlayerControllerInterface.generated.h"
 
+// =====================================================================================================================
+// Forward Declarations (to break recursive dependencies)
+// =====================================================================================================================
+class IPF2CharacterInterface;
+class IPF2PlayerStateInterface;
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
-class UPF2PlayerControllerInterface : public UInterface
+class UPF2PlayerControllerInterface : public UPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 };
@@ -23,7 +33,7 @@ class UPF2PlayerControllerInterface : public UInterface
 /**
  * An interface for OpenPF2-compatible Player Controllers.
  */
-class OPENPF2CORE_API IPF2PlayerControllerInterface
+class OPENPF2CORE_API IPF2PlayerControllerInterface : public IPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 
@@ -32,14 +42,33 @@ public:
 	// Public Methods
 	// =================================================================================================================
 	/**
-	 * Gets the character that this player controller is controlling.
+	 * Gets the player state of this player controller.
+	 *
+	 * If called on the client and the player state has not yet been replicated, this will return a null script
+	 * interface.
 	 *
 	 * @return
-	 *	Either the controller character (if this controller is controlling a PF2 character), or a null character
-	 *	reference.
+	 *	The OpenPF2-specific player state.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
-	virtual TScriptInterface<IPF2CharacterInterface> GetControlledCharacter() = 0;
+	virtual TScriptInterface<IPF2PlayerStateInterface> GetPlayerState() const = 0;
+
+	/**
+	 * Gets the character(s) that the player has the ability to control or possess.
+	 *
+	 * For a single-player game that supports parties or squads, this may include both the character that the player
+	 * is actively controlling as well as any controllable character in this player's party or squad. Otherwise, this
+	 * will return only a single character per controller.
+	 *
+	 * All the characters returned will each be in the same party as the player, but not all characters in the party are
+	 * necessarily controllable by the current player (e.g., in a multiplayer RPG, two players may be in the same party
+	 * but may be restricted from being able to control each other's characters).
+	 *
+	 * @return
+	 *	All of the characters that this player controller can control.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
+	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetControllableCharacters() const = 0;
 
 	/**
 	 * Gets the player controller that is implementing this interface.
@@ -51,18 +80,58 @@ public:
 	virtual APlayerController* ToPlayerController() = 0;
 
 	/**
-	 * Cancels an action that was previously queued for this character.
+	 * Adds the specified character to the list of characters that the player can control.
 	 *
-	 * @param ActionHandle
-	 *	A reference to the ability that has been queued-up.
+	 * The character must be affiliated with the same party as the player to which this player state corresponds.
+	 *
+	 * @param GivenCharacter
+	 *	The character to give to this player.
 	 */
-	UFUNCTION(
-		BlueprintCallable,
-		Server,
-		Unreliable,
-		DisplayName="Cancel Queued Action",
-		Category="OpenPF2|Player Controllers")
-	virtual void ServerCancelQueuedAction(const FPF2QueuedActionHandle ActionHandle) = 0;
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
+	virtual void GiveCharacter(const TScriptInterface<IPF2CharacterInterface>& GivenCharacter) = 0;
+
+	/**
+	 * Removes the specified character from the list of characters that the player can control.
+	 *
+	 * @param ReleasedCharacter
+	 *   The character to release from the player's controller.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
+	virtual void ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter) = 0;
+
+	/**
+	 * Builds and executes a command on the server for one of the characters this player controller can control.
+	 *
+	 * The given character must be controllable by this player controller, but may be possessed by either this player
+	 * controller or an AI controller.
+	 *
+	 * Since this is an RPC, the character is passed as an actor instead of as an interface reference because UE will
+	 * not replicate actors if they are declared/referenced through an interface property.
+	 *
+	 * @param AbilitySpecHandle
+	 *	The handle for the ability to activate.
+	 * @param CharacterActor
+	 *	The character upon which the ability should be activated. The given actor must implement IPF2CharacterInterface.
+	 */
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
+	virtual void Server_ExecuteCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	                                            AActor*          CharacterActor) = 0;
+
+	/**
+	 * Requests to cancel a command on the server for one of the characters this player controller can control.
+	 *
+	 * The character that the command targets must be controllable by this player controller, but may be possessed by
+	 * either this player controller or an AI controller.
+	 *
+	 * Since this is an RPC, the command is passed as an actor instead of as an interface reference because UE will
+	 * not replicate actors if they are declared/referenced through an interface property.
+	 *
+	 * @param Command
+	 *	The command that should be cancelled. The given actor must implement the
+	 *	IPF2CharacterCommandInterface interface.
+	 */
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
+	virtual void Server_CancelCharacterCommand(AInfo* Command) = 0;
 
 	// =================================================================================================================
 	// Public Event Notifications from the Game State
@@ -77,8 +146,7 @@ public:
 	 * @param NewMode
 	 *	The new mode of play.
 	 */
-	UFUNCTION()
-	virtual void HandleModeOfPlayChanged(EPF2ModeOfPlayType NewMode) = 0;
+	virtual void Native_OnModeOfPlayChanged(EPF2ModeOfPlayType NewMode) = 0;
 
 	// =================================================================================================================
 	// Public Event Notifications from Mode of Play Rule Sets (MoPRS)
@@ -89,7 +157,7 @@ public:
 	 * (This should normally be invoked only by the MoPRS).
 	 */
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleEncounterTurnStarted() = 0;
+	virtual void Multicast_OnEncounterTurnStarted() = 0;
 
 	/**
 	 *  Notifies this player controller that the pawn's turn during an encounter has ended.
@@ -97,30 +165,5 @@ public:
 	 * (This should normally be invoked only by the MoPRS).
 	 */
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleEncounterTurnEnded() = 0;
-
-	/**
-	 * Notifies this player controller that an action/ability for the character being controlled has been queued-up.
-	 *
-	 * This happens if the active Mode of Play Rule Set (MoPRS) is requiring characters to queue up execution of
-	 * abilities until their turn to attack/act.
-	 *
-	 * (This should normally be invoked only by the MoPRS).
-	 *
-	 * @param ActionHandle
-	 *	A reference to the ability that was queued.
-	 */
-	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleActionQueued(const FPF2QueuedActionHandle ActionHandle) = 0;
-
-	/**
-	 * Notifies this player controller a previously queued action/ability has been removed from the queue.
-	 *
-	 * (This should normally be invoked only by the MoPRS).
-	 *
-	 * @param ActionHandle
-	 *	A reference to the ability that has been removed.
-	 */
-	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleActionDequeued(const FPF2QueuedActionHandle ActionHandle) = 0;
+	virtual void Multicast_OnEncounterTurnEnded() = 0;
 };

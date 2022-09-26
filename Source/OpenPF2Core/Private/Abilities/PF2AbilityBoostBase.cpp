@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -7,7 +7,7 @@
 
 #include "Abilities/PF2AbilityBoostRuleOptionValidator.h"
 #include "Abilities/PF2AttributeSet.h"
-#include "Abilities/PF2CharacterAbilitySystemComponentInterface.h"
+#include "Abilities/PF2CharacterAbilitySystemInterface.h"
 #include "Abilities/PF2GameplayAbilityTargetData_BoostAbility.h"
 
 UPF2AbilityBoostBase::UPF2AbilityBoostBase()
@@ -57,7 +57,7 @@ void UPF2AbilityBoostBase::ActivateAbility(
 	{
 		const TSet<EPF2CharacterAbilityScoreType> BoostSelections = this->GetBoostSelections(TriggerEventData);
 
-		IPF2CharacterAbilitySystemComponentInterface* CharacterAsc =
+		IPF2CharacterAbilitySystemInterface* CharacterAsc =
 			PF2GameplayAbilityUtilities::GetCharacterAbilitySystemComponent(ActorInfo);
 
 		UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
@@ -81,6 +81,21 @@ void UPF2AbilityBoostBase::ActivateAbility(
 
 		EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
 	}
+}
+
+FText UPF2AbilityBoostBase::GetDescription() const
+{
+	return this->Description;
+}
+
+TArray<FPF2AbilityBoostRuleOption> UPF2AbilityBoostBase::GetBoostRuleOptions() const
+{
+	return this->BoostRuleOptions;
+}
+
+UGameplayAbility* UPF2AbilityBoostBase::ToGameplayAbility()
+{
+	return this;
 }
 
 TSet<EPF2CharacterAbilityScoreType> UPF2AbilityBoostBase::GetBoostSelections(
