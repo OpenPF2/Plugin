@@ -20,7 +20,7 @@ class UWorld;
 // Normal Declarations
 // =====================================================================================================================
 /**
- * Function library for standard PF2 characters.
+ * Function library for interacting with OpenPF2 characters and character controllers.
  */
 UCLASS()
 class UPF2CharacterLibrary final : public UBlueprintFunctionLibrary
