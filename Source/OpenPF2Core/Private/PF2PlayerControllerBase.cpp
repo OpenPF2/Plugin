@@ -362,8 +362,8 @@ void APF2PlayerControllerBase::OnRep_ControllableCharacters(const TArray<AActor*
 	{
 		IPF2CharacterInterface* CharacterIntf = Cast<IPF2CharacterInterface>(OldCharacter);
 
-		// BUGBUG: By the time we're here, this should definitely be a PF2 character, but UE will sometimes replicate
-		// entries in this->ControllableCharacters as NULL.
+		// BUGBUG: By the time we're here, this should definitely be an OpenPF2 character, but UE will sometimes
+		// replicate entries in this->ControllableCharacters as NULL.
 		if ((CharacterIntf != nullptr) && !this->ControllableCharacters.Contains(OldCharacter))
 		{
 			RemovedCharacters.Add(CharacterIntf);
@@ -375,8 +375,8 @@ void APF2PlayerControllerBase::OnRep_ControllableCharacters(const TArray<AActor*
 	{
 		IPF2CharacterInterface* CharacterIntf = Cast<IPF2CharacterInterface>(NewCharacter);
 
-		// BUGBUG: By the time we're here, this should definitely be a PF2 character, but UE will sometimes replicate
-		// entries in this->ControllableCharacters as NULL.
+		// BUGBUG: By the time we're here, this should definitely be an OpenPF2 character, but UE will sometimes
+		// replicate entries in this->ControllableCharacters as NULL.
 		if ((CharacterIntf != nullptr) && !OldCharacters.Contains(NewCharacter))
 		{
 			AddedCharacters.Add(CharacterIntf);

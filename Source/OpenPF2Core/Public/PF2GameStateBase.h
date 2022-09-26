@@ -20,7 +20,7 @@
 #include "PF2GameStateBase.generated.h"
 
 /**
- * Default base class for PF2 Game States.
+ * Default base class for OpenPF2 Game States.
  *
  * @see IPF2GameStateInterface
  */

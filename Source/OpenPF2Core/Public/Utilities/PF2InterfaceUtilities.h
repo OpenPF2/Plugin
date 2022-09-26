@@ -23,7 +23,7 @@ namespace PF2InterfaceUtilities
 	 * The provided object MUST be a UObject or the conversion will fail. This is because Blueprint can only interact
 	 * with UObjects so TScriptInterface has to wrap a UObject.
 	 *
-	 * This can be used to reduce impedance between parts of the PF2 API that use TScriptInterface (because they're
+	 * This can be used to reduce impedance between parts of the OpenPF2 API that use TScriptInterface (because they're
 	 * exposed to Blueprint) and parts that use interfaces (because they are not exposed to Blueprint). When possible,
 	 * use TScriptInterface to avoid having to use this method.
 	 *
@@ -55,7 +55,7 @@ namespace PF2InterfaceUtilities
 	 * The provided objects MUST be UObjects or the conversion will fail. This is because Blueprint can only interact
 	 * with UObjects so each TScriptInterface has to wrap a UObject.
 	 *
-	 * This can be used to reduce impedance between parts of the PF2 API that use TScriptInterface (because they're
+	 * This can be used to reduce impedance between parts of the OpenPF2 API that use TScriptInterface (because they're
 	 * exposed to Blueprint) and parts that use interfaces (because they are not exposed to Blueprint). When possible,
 	 * use TScriptInterface to avoid having to use this method.
 	 *
@@ -84,7 +84,7 @@ namespace PF2InterfaceUtilities
 	/**
 	 * Unwraps the interface object inside a TScriptInterface object into the appropriate "raw" interface type.
 	 *
-	 * This can be used to reduce impedance between parts of the PF2 API that use TScriptInterface (because they're
+	 * This can be used to reduce impedance between parts of the OpenPF2 API that use TScriptInterface (because they're
 	 * exposed to Blueprint) and parts that use interfaces (because they are not exposed to Blueprint). When possible,
 	 * use TScriptInterface all the way through to avoid having to use this method.
 	 *
@@ -106,7 +106,7 @@ namespace PF2InterfaceUtilities
 	/**
 	 * Unwraps the interface objects inside TScriptInterface objects into an array of "raw" interface types.
 	 *
-	 * This can be used to reduce impedance between parts of the PF2 API that use TScriptInterface (because they're
+	 * This can be used to reduce impedance between parts of the OpenPF2 API that use TScriptInterface (because they're
 	 * exposed to Blueprint) and parts that use interfaces (because they are not exposed to Blueprint). When possible,
 	 * use TScriptInterface all the way through to avoid having to use this method.
 	 *

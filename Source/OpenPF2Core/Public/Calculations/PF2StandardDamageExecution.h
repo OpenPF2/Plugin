@@ -10,7 +10,7 @@
 #include "PF2StandardDamageExecution.generated.h"
 
 /**
- * Damage execution calculation for applying damage and resistance logic according to standard PF2 rules.
+ * Damage execution calculation for applying damage and resistance logic according to standard OpenPF2 rules.
  */
 UCLASS()
 // ReSharper disable once CppClassCanBeFinal

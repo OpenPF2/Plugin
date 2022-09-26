@@ -105,7 +105,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 /**
  * Base class for both playable and non-playable characters in OpenPF2.
  *
- * PF2-based games must extend this class if they have custom character attributes or abilities.
+ * OpenPF2-based games must extend this class if they have custom character attributes or abilities.
  */
 UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal

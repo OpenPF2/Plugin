@@ -196,11 +196,11 @@ protected:
 	FORCEINLINE UGameplayAbility* GetAbility() const;
 
 	/**
-	 * Gets the PF2 interface to the CDO of the ability that this command will trigger when it is executed.
+	 * Gets the OpenPF2 interface to the CDO of the ability that this command will trigger when it is executed.
 	 *
 	 * @return
-	 *	The gameplay ability, as a PF2 interface; or nullptr if the character no longer has an ability that corresponds
-	 *	to the specification of this command.
+	 *	The gameplay ability, as an OpenPF2 interface; or nullptr if the character no longer has an ability that
+	 *	corresponds to the specification of this command.
 	 */
 	FORCEINLINE IPF2GameplayAbilityInterface* GetAbilityIntf() const
 	{

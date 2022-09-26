@@ -27,7 +27,7 @@ class IPF2CharacterInterface;
 // Normal Declarations
 // =====================================================================================================================
 /**
- * Default base class for PF2 Mode of Play Rule Sets (MoPRS) that need encounter logic.
+ * Default base class for OpenPF2 Mode of Play Rule Sets (MoPRS) that need encounter logic.
  *
  * Encounters often involve each character "rolling" for their initiative order, and then performing attacks in order
  * from highest to lowest initiative score. Encounters also usually involve characters needing to "queue-up"
@@ -40,7 +40,7 @@ class IPF2CharacterInterface;
  * class and implement the IPF2EncounterModeOfPlayRuleSetInterface interface in your own C++ base class and compose
  * functionality however you like. For example, in your game, you might want characters to act one-by-one; or, you may
  * prefer to cycle through characters at a rapid clip to keep combat flowing despite the turn-based nature of standard
- * PF2 rules.
+ * OpenPF2 rules.
  *
  * @see IPF2EncounterModeOfPlayRuleSetInterface
  */

@@ -154,7 +154,7 @@ namespace PF2GameplayAbilityUtilities
 		const FGameplayAbilityActorInfo* ActorInfo);
 
 	/**
-	 * Gets the PF2 attribute set of the given actor.
+	 * Gets the OpenPF2 attribute set of the given actor.
 	 *
 	 * In development builds, the attribute set is checked to ensure that it is non-null.
 	 *
@@ -162,12 +162,12 @@ namespace PF2GameplayAbilityUtilities
 	 *	Information on the actor holding the ASC.
 	 *
 	 * @return
-	 *	A pointer to the PF2 attribute set.
+	 *	A pointer to the OpenPF2 attribute set.
 	 */
 	OPENPF2CORE_API FORCEINLINE const UPF2AttributeSet* GetAttributeSet(const FGameplayAbilityActorInfo* ActorInfo);
 
 	/**
-	 * Determines which PF2 character an activated GE has targeted.
+	 * Determines which OpenPF2 character an activated GE has targeted.
 	 *
 	 * @param Data
 	 *	Information about the GE activation, including the GE spec, attribute modifications, and target spec.
@@ -175,7 +175,7 @@ namespace PF2GameplayAbilityUtilities
 	OPENPF2CORE_API IPF2CharacterInterface* GetEffectTarget(const FGameplayEffectModCallbackData* Data);
 
 	/**
-	 * Determines which PF2 character (if any) was ultimately the source of a GE activation.
+	 * Determines which OpenPF2 character (if any) was ultimately the source of a GE activation.
 	 *
 	 * For example, if a target character is injured by an axe, the instigator of the damage GE for the axe is the
 	 * player character who is brandishing the axe. Similarly, if damage was caused by a rocket-propelled grenade (RPG),

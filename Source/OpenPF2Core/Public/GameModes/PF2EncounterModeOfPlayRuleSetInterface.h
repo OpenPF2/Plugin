@@ -40,7 +40,7 @@ class UPF2EncounterModeOfPlayRuleSetInterface : public UInterface
  *
  * Encounters tend to maintain initiative order, keep track of the number of enemies left standing, and have to keep
  * track of which character is taking a turn. These aspects are not relevant to other game modes like exploration mode
- * and downtime mode, so they are not part of the standard MoPRS interface for PF2.
+ * and downtime mode, so they are not part of the standard MoPRS interface for OpenPF2.
  *
  * This interface does not extend the IPF2ModeOfPlayRuleSetInterface because the UE type system does not allow
  * interfaces to contain both BlueprintImplementableEvents and BlueprintCallable functions.
@@ -196,7 +196,7 @@ public:
 		const TScriptInterface<IPF2CharacterInterface>& Character) const = 0;
 
 	/**
-	 * Adds the specified command to the queue of commands being maintained for the specified PF2 character.
+	 * Adds the specified command to the queue of commands being maintained for the specified OpenPF2 character.
 	 *
 	 * @param Character
 	 *	The character that is queuing the command up.

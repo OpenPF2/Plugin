@@ -35,13 +35,13 @@ public:
 	 *	A reference to the loaded, running world that contains the characters.
 	 *
 	 * @return
-	 *	An array of all PF2-specific controllers for all players in the world.
+	 *	An array of all OpenPF2-specific controllers for all players in the world.
 	 */
 	UFUNCTION(BlueprintPure, Category="OpenPF2|Characters")
 	static TArray<TScriptInterface<IPF2PlayerControllerInterface>> GetPlayerControllers(const UWorld* const World);
 
 	/**
-	 * Gets all of the player-controlled PF2 characters in the world.
+	 * Gets all of the player-controlled OpenPF2 characters in the world.
 	 *
 	 * If called on the client and the player state has not yet been replicated, this will return an empty array.
 	 *

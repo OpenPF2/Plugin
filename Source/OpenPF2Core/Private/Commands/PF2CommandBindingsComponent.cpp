@@ -71,7 +71,7 @@ void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter(IPF2CharacterInter
 		}
 		else
 		{
-			// Fallback for interoperability with non-PF2 abilities.
+			// Fallback for interoperability with non-OpenPF2 abilities.
 			DefaultAction = FName();
 		}
 

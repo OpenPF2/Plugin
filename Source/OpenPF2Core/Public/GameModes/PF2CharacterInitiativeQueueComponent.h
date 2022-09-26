@@ -121,16 +121,16 @@ protected:
 	 * Gets controllers for all the characters in the world.
 	 *
 	 * @return
-	 *	PF2-specific controllers for all players in the world.
+	 *	OpenPF2-specific controllers for all players in the world.
 	 */
 	UFUNCTION(BlueprintCallable)
 	TArray<TScriptInterface<IPF2PlayerControllerInterface>> GetPlayerControllers() const;
 
 	/**
-	 * Gets all of the player-controlled PF2 characters in the world.
+	 * Gets all of the player-controlled OpenPF2 characters in the world.
 	 *
 	 * @return
-	 *	PF2-specific controllers for all players in the world.
+	 *	OpenPF2-specific controllers for all players in the world.
 	 */
 	UFUNCTION(BlueprintCallable)
 	TArray<TScriptInterface<IPF2CharacterInterface>> GetPlayerControlledCharacters() const;
@@ -139,11 +139,12 @@ protected:
 	 * Rebuilds the sequence of characters according to initiative order.
 	 *
 	 * All characters are sorted from highest to lowest initiative order in the rebuilt list. If two characters have the
-	 * same initiative, their order will be adjusted so that one goes before the other. Per PF2 rules (see below),
+	 * same initiative, their order will be adjusted so that one goes before the other. Per OpenPF2 rules (see below),
 	 * Playable Characters (PCs) with the same initiative as Non-Playable Characters (NPCs) are sorted after NPCs so
-	 * that NPCs take turns first. Unlike with standard PF2 rules, though, if multiple characters of the same type --
-	 * either two PCs or two NPCs -- we randomize their order rather than give each character a choice of preferred
-	 * order. This helps to keep combat fluid by avoiding having to prompt players for input at the start of encounters.
+	 * that NPCs take turns first. Unlike with standard OpenPF2 rules, though, if multiple characters of the same
+	 * type -- either two PCs or two NPCs -- we randomize their order rather than give each character a choice of
+	 * preferred order. This helps to keep combat fluid by avoiding having to prompt players for input at the start of
+	 * encounters.
 	 *
 	 * From the Pathfinder 2E Core Rulebook, page 13, "Initiative":
 	 * "At the start of an encounter, all creatures involved roll for initiative to determine the order in which they

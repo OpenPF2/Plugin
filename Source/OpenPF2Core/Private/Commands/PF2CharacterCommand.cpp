@@ -195,7 +195,7 @@ void APF2CharacterCommand::Cancel_WithRemoteServer()
 		UE_LOG(
 			LogPf2CoreAbilities,
 			Error,
-			TEXT("Character ('%s') is not controllable by the local client and/or does not belong to a PF2-compatible player controller; unable to cancel command ('%s')."),
+			TEXT("Character ('%s') is not controllable by the local client and/or does not belong to an OpenPF2-compatible player controller; unable to cancel command ('%s')."),
 			*(Character->GetIdForLogs()),
 			*(this->GetIdForLogs())
 		);
@@ -217,7 +217,7 @@ void APF2CharacterCommand::Cancel_WithLocalServer()
 		UE_LOG(
 			LogPf2CoreAbilities,
 			Error,
-			TEXT("Game Mode ('%s') is not PF2-compatible; unable to cancel command ('%s') for character ('%s')."),
+			TEXT("Game Mode ('%s') is not OpenPF2-compatible; unable to cancel command ('%s') for character ('%s')."),
 			*(GetNameSafe(GameMode)),
 			*(this->GetIdForLogs()),
 			*(Character->GetIdForLogs())

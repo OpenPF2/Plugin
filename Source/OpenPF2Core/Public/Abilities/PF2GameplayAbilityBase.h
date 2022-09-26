@@ -14,7 +14,7 @@
 #include "PF2GameplayAbilityBase.generated.h"
 
 /**
- * Abstract base class for PF2-enabled gameplay abilities.
+ * Abstract base class for OpenPF2-enabled gameplay abilities.
  *
  * GAs that extend from this base class automatically get ability queuing and de-queuing interactions for free.
  * If a GA supports waiting for initiative (i.e., action queueing while in an encounter), then this ability must be

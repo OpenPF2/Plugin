@@ -36,7 +36,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
 // Normal Declarations
 // =====================================================================================================================
 /**
- * Default implementation of a PF2-compatible party.
+ * Default implementation of an OpenPF2-compatible party.
  */
 UCLASS(BlueprintType, Blueprintable)
 // ReSharper disable once CppClassCanBeFinal

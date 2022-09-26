@@ -48,7 +48,7 @@ public:
 	 * interface.
 	 *
 	 * @return
-	 *	The PF2-specific player state.
+	 *	The OpenPF2-specific player state.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
 	virtual TScriptInterface<IPF2PlayerStateInterface> GetPlayerState() const = 0;

@@ -12,7 +12,7 @@
 #include "PF2ModeOfPlayRuleSetBase.generated.h"
 
 /**
- * Default base class for PF2 Mode of Play Rule Sets (MoPRS).
+ * Default base class for OpenPF2 Mode of Play Rule Sets (MoPRS).
  *
  * @see IPF2GameModeInterface
  */
@@ -40,7 +40,7 @@ protected:
 	 * Gets the game mode.
 	 *
 	 * @return
-	 *	PF2-specific game mode.
+	 *	OpenPF2-specific game mode.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets")
 	TScriptInterface<IPF2GameModeInterface> GetGameMode() const;
@@ -49,16 +49,16 @@ protected:
 	 * Gets controllers for all the characters in the world.
 	 *
 	 * @return
-	 *	PF2-specific controllers for all players in the world.
+	 *	OpenPF2-specific controllers for all players in the world.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Characters")
 	TArray<TScriptInterface<IPF2PlayerControllerInterface>> GetPlayerControllers() const;
 
 	/**
-	 * Gets all of the player-controlled PF2 characters in the world.
+	 * Gets all of the player-controlled OpenPF2 characters in the world.
 	 *
 	 * @return
-	 *	PF2-specific controllers for all players in the world.
+	 *	OpenPF2-specific controllers for all players in the world.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Characters")
 	TArray<TScriptInterface<IPF2CharacterInterface>> GetPlayerControlledCharacters() const;

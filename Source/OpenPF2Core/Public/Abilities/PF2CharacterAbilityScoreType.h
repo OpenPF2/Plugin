@@ -10,7 +10,7 @@
 #include "PF2CharacterAbilityScoreType.generated.h"
 
 /**
- * Enumerated type for the abilities that PF2 characters possess (aka "boostable" abilities).
+ * Enumerated type for the abilities that OpenPF2 characters possess (aka "boostable" abilities).
  *
  * The name of each enum value exactly matches the name of the corresponding character attribute in the GAS attribute
  * set for the character.

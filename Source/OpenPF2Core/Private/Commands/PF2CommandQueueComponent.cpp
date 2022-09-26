@@ -187,7 +187,7 @@ void UPF2CommandQueueComponent::OnRep_Queue(const TArray<AInfo*>& OldQueue)
 	{
 		IPF2CharacterCommandInterface* CommandIntf = Cast<IPF2CharacterCommandInterface>(Command);
 
-		// BUGBUG: By the time we're here, this should definitely be a PF2 command, but UE will sometimes replicate
+		// BUGBUG: By the time we're here, this should definitely be an OpenPF2 command, but UE will sometimes replicate
 		// entries in this->Queue as NULL.
 		if ((CommandIntf != nullptr) && !this->Queue.Contains(Command))
 		{
@@ -200,7 +200,7 @@ void UPF2CommandQueueComponent::OnRep_Queue(const TArray<AInfo*>& OldQueue)
 	{
 		IPF2CharacterCommandInterface* CommandIntf = Cast<IPF2CharacterCommandInterface>(Command);
 
-		// BUGBUG: By the time we're here, this should definitely be a PF2 command, but UE will sometimes replicate
+		// BUGBUG: By the time we're here, this should definitely be an OpenPF2 command, but UE will sometimes replicate
 		// entries in this->Queue as NULL.
 		if ((CommandIntf != nullptr) && !OldQueue.Contains(Command))
 		{
@@ -227,7 +227,7 @@ void UPF2CommandQueueComponent::Native_OnCommandsChanged() const
 
 	for (AInfo* NewCommand : this->Queue)
 	{
-		// BUGBUG: By the time we're here, this should definitely be a PF2 command, but UE will sometimes replicate
+		// BUGBUG: By the time we're here, this should definitely be an OpenPF2 command, but UE will sometimes replicate
 		// entries in this->Queue as NULL.
 		if (NewCommand != nullptr)
 		{

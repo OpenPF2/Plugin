@@ -157,7 +157,7 @@ TScriptInterface<IPF2PlayerControllerInterface> APF2CharacterBase::GetPlayerCont
 		UE_LOG(
 			LogPf2Core,
 			Warning,
-			TEXT("[%s] Either this character ('%s') is only controllable by a remote client, or the character does not have a PF2-compatible player controller."),
+			TEXT("[%s] Either this character ('%s') is only controllable by a remote client, or the character does not have an OpenPF2-compatible player controller."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 			*(this->GetIdForLogs())
 		);

@@ -23,7 +23,7 @@ class OPENPF2CORE_API UPF2ModeOfPlayRuleSetInterface : public UInterface
 
 /**
  * An interface for OpenPF2-compatible Mode of Play Rule Sets (MoPRS), which provide strategies for how the game should
- * behave while in a particular mode of PF2 play.
+ * behave while in a particular mode of OpenPF2 play.
  *
  * MoPRS not only provide logic that control how different gameplay events are handled, but also can act as an extension
  * to game state by storing and maintaining variables that are relevant for the current mode of play. For example,

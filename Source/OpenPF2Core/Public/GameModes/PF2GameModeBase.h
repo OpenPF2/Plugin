@@ -19,7 +19,7 @@
 #include "PF2GameModeBase.generated.h"
 
 /**
- * Default base class for PF2 Game Modes.
+ * Default base class for OpenPF2 Game Modes.
  *
  * A single instance of this class exists only on the SERVER, as is the case with a game mode in any UE-powered game.
  *
@@ -103,7 +103,7 @@ protected:
 	// Protected Methods
 	// =================================================================================================================
 	/**
-	 * Gets the game state as a PF2-compatible game state interface.
+	 * Gets the game state as an OpenPF2-compatible game state interface.
 	 *
 	 * @return
 	 *	The game state.

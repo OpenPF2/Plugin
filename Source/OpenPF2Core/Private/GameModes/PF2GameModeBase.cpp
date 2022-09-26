@@ -311,7 +311,7 @@ TScriptInterface<IPF2ModeOfPlayRuleSetInterface> APF2GameModeBase::GetModeOfPlay
 		UE_LOG(
 			LogPf2Core,
 			Error,
-			TEXT("Mode of Play Rule Set (MoPRS) support is not enabled because the current game state is not compatible with PF2.")
+			TEXT("Mode of Play Rule Set (MoPRS) support is not enabled because the current game state is not compatible with OpenPF2.")
 		);
 
 		RuleSet = TScriptInterface<IPF2ModeOfPlayRuleSetInterface>();
@@ -346,7 +346,7 @@ void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeO
 		UE_LOG(
 			LogPf2Core,
 			Error,
-			TEXT("Cannot transition to new mode of play (%s) because current game state is not compatible with PF2."),
+			TEXT("Cannot transition to new mode of play (%s) because current game state is not compatible with OpenPF2."),
 			*PF2EnumUtilities::ToString(NewModeOfPlay)
 		);
 	}
@@ -409,7 +409,7 @@ void APF2GameModeBase::ForceSwitchModeOfPlay(const EPF2ModeOfPlayType NewModeOfP
 		UE_LOG(
 			LogPf2Core,
 			Error,
-			TEXT("Cannot transition to new mode of play (%s) because current game state is not compatible with PF2."),
+			TEXT("Cannot transition to new mode of play (%s) because current game state is not compatible with OpenPF2."),
 			*PF2EnumUtilities::ToString(NewModeOfPlay)
 		);
 	}

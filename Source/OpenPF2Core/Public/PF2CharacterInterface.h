@@ -105,7 +105,7 @@ public:
 	virtual int32 GetCharacterLevel() const = 0;
 
 	/**
-	 * Gets a PF2-specific version of the Ability System Component (ASC) for this character.
+	 * Gets an OpenPF2-specific version of the Ability System Component (ASC) for this character.
 	 *
 	 * @param Output
 	 *	The ASC, as an implementation of the interface for character ASCs.
@@ -115,7 +115,7 @@ public:
 		TScriptInterface<IPF2CharacterAbilitySystemInterface>& Output) const = 0;
 
 	/**
-	 * Gets a PF2-specific version of the ASC sub-component of this character.
+	 * Gets an OpenPF2-specific version of the ASC sub-component of this character.
 	 *
 	 * @return
 	 *	The ASC, as an implementation of the interface for character ASCs.

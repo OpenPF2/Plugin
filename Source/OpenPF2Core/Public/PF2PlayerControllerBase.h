@@ -24,7 +24,7 @@ class IPF2CharacterCommandInterface;
 // Normal Declarations
 // =====================================================================================================================
 /**
- * Default base class for PF2 Player Controllers.
+ * Default base class for OpenPF2 Player Controllers.
  *
  * @see IPF2PlayerControllerInterface
  */

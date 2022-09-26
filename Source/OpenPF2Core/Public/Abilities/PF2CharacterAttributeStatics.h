@@ -28,10 +28,10 @@
 }
 
 /**
- * Singleton container for PF2 character attribute capture definitions.
+ * Singleton container for OpenPF2 character attribute capture definitions.
  *
- * This centralizes all static capture definitions for PF2 attributes instead of there being multiple, smaller "Statics"
- * definitions like those preferred by Epic's sample projects.
+ * This centralizes all static capture definitions for OpenPF2 attributes instead of there being multiple, smaller
+ * "Statics" definitions like those preferred by Epic's sample projects.
  */
 class OPENPF2CORE_API FPF2CharacterAttributeStatics final
 {

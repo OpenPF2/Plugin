@@ -6,7 +6,7 @@
 #pragma once
 
 /**
- * Constants related to PF2 character logic.
+ * Constants related to OpenPF2 character logic.
  */
 namespace PF2CharacterConstants
 {
@@ -14,7 +14,7 @@ namespace PF2CharacterConstants
 	 * The name of each weight "group" for passive GEs on a character.
 	 *
 	 * Weight groups are evaluated in the order that their names are sorted. Placing different GEs in different groups
-	 * allows game designers to control the order that GEs are applied to a PF2 character.
+	 * allows game designers to control the order that GEs are applied to an OpenPF2 character.
 	 *
 	 * For consistency, each name in this list must exactly match a tag in the "GameplayEffect.WeightGroup" group. This
 	 * ensures that game designers have the same options for placing a GE in a weight group as exists in backend code.

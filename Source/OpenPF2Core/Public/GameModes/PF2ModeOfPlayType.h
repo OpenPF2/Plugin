@@ -13,7 +13,7 @@
 #pragma once
 
 /**
- * An enumeration of the different play modes in PF2.
+ * An enumeration of the different play modes in OpenPF2.
  *
  * From the Pathfinder 2E Core Rulebook, page 493, "Running Modes of Play":
  * "Pathfinder sessions are divided into three different modes of play: encounters, exploration, and downtime. Each mode
