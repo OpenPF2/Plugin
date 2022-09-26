@@ -130,7 +130,7 @@ public:
 	 *
 	 * This gives the rule set control over when the command should be performed (e.g., to enforce initiative order).
 	 * The command may not get executed if the encounter ends before it has been activated. In such a situation, the
-	 * command will be canceled instead.
+	 * command will be cancelled instead.
 	 *
 	 * @param Command
 	 *	The command that is being queued.
@@ -145,7 +145,7 @@ public:
 	/**
 	 * Notifies this rule set that a character wishes to cancel a command.
 	 *
-	 * This gives the rule set control over if/when a command should be canceled. The command may not get cancelled if
+	 * This gives the rule set control over if/when a command should be cancelled. The command may not get cancelled if
 	 * it is already being executed or has finished being executed. In such a situation, the command will still proceed.
 	 *
 	 * @param Command

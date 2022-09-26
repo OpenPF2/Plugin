@@ -127,7 +127,7 @@ public:
 	 * not replicate actors if they are declared/referenced through an interface property.
 	 *
 	 * @param Command
-	 *	The command that should be canceled. The given actor must implement the
+	 *	The command that should be cancelled. The given actor must implement the
 	 *	IPF2CharacterCommandInterface interface.
 	 */
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")

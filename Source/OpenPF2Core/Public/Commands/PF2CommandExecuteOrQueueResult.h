@@ -29,7 +29,7 @@ enum class EPF2CommandExecuteOrQueueResult : uint8
 	Queued,
 
 	/**
-	 * The command was neither queued nor executed and should be removed from any queues and canceled/ended.
+	 * The command was neither queued nor executed and should be removed from any queues and cancelled/ended.
 	 */
 	Refused,
 };

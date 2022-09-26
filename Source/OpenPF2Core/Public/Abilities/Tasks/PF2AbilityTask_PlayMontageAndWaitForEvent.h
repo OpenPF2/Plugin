@@ -201,7 +201,7 @@ private:
 	FPF2PlayMontageAndWaitForEventDelegate OnInterrupted;
 
 	/**
-	 * Execution pin fired if the ability task has been canceled by another ability.
+	 * Execution pin fired if the ability task has been cancelled by another ability.
 	 */
 	UPROPERTY(BlueprintAssignable)
 	FPF2PlayMontageAndWaitForEventDelegate OnCancelled;
@@ -243,7 +243,7 @@ private:
 	 * @param Montage
 	 *	The montage that has ended.
 	 * @param bInterrupted
-	 *	true if the montage was canceled/interrupted/ended abruptly; false if the montage played to completion.
+	 *	true if the montage was cancelled/interrupted/ended abruptly; false if the montage played to completion.
 	 */
 	void Native_OnMontageEnded(UAnimMontage* Montage, const bool bInterrupted);
 
@@ -253,13 +253,13 @@ private:
 	 * @param Montage
 	 *	The montage that is blending out.
 	 * @param bInterrupted
-	 *	true if -- prior to blending out -- the montage was canceled/interrupted/ended abruptly; false if the montage
+	 *	true if -- prior to blending out -- the montage was cancelled/interrupted/ended abruptly; false if the montage
 	 *	played to completion.
 	 */
 	void Native_OnMontageBlendingOut(UAnimMontage* Montage, const bool bInterrupted) const;
 
 	/**
-	 * Callback fired if the GA running this task has been canceled.
+	 * Callback fired if the GA running this task has been cancelled.
 	 */
 	void Native_OnAbilityCancelled() const;
 };

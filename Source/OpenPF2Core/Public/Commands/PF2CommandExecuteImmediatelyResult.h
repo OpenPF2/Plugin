@@ -33,7 +33,7 @@ enum class EPF2CommandExecuteImmediatelyResult : uint8
 	Blocked,
 
 	/**
-	 * The command was not performed because it was canceled externally.
+	 * The command was not performed because it was cancelled externally.
 	 */
 	Cancelled,
 };
