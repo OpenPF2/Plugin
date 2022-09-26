@@ -15,14 +15,6 @@ namespace PF2SetUtilities
 	 *
 	 * The original set is not modified.
 	 *
-	 * @param Elements
-	 *	The set of values to map.
-	 * @param Callable
-	 *	The transformation function/lambda invoked on each element in order to get the mapped value.
-	 *
-	 * @return
-	 *	The set of values that resulted from applying the transformation to every value of the source set.
-	 *
 	 * @tparam In
 	 *	The type of elements in the input set.
 	 * @tparam Out
@@ -30,6 +22,14 @@ namespace PF2SetUtilities
 	 * @tparam Func
 	 *	The type of the lambda function to invoke on each element of the input set to return a new element to add to
 	 *	the output set.
+	 *
+	 * @param Elements
+	 *	The set of values to map.
+	 * @param Callable
+	 *	The transformation function/lambda invoked on each element in order to get the mapped value.
+	 *
+	 * @return
+	 *	The set of values that resulted from applying the transformation to every value of the source set.
 	 */
 	template <typename Out, typename In, typename Func>
 	TSet<Out> Map(const TSet<In> Elements, const Func Callable)
@@ -57,6 +57,14 @@ namespace PF2SetUtilities
 	 *
 	 * The original set is not modified.
 	 *
+	 * @tparam In
+	 *	The type of elements in the input set.
+	 * @tparam Out
+	 *	The type of result to return. (The type into which all input elements will be consolidated).
+	 * @tparam Func
+	 *	The type of the lambda function to invoke on each element of the input set, applying a transformation on the
+	 *	element and the accumulated result to return a new output value.
+	 *
 	 * @param Elements
 	 *	The set of values to reduce.
 	 * @param StartingValue
@@ -71,14 +79,6 @@ namespace PF2SetUtilities
 	 *
 	 * @return
 	 *	The result of reducing the values of the set.
-	 *
-	 * @tparam In
-	 *	The type of elements in the input set.
-	 * @tparam Out
-	 *	The type of result to return. (The type into which all input elements will be consolidated).
-	 * @tparam Func
-	 *	The type of the lambda function to invoke on each element of the input set, applying a transformation on the
-	 *	element and the accumulated result to return a new output value.
 	 */
 	template <typename Out, typename In, typename Func>
 	Out Reduce(const TSet<In> Elements, const Out StartingValue, const Func Callable)
@@ -98,14 +98,14 @@ namespace PF2SetUtilities
 	 *
 	 * The original set is not modified.
 	 *
+	 * @tparam T
+	 *	The type of elements in the set.
+	 *
 	 * @param Elements
 	 *	The set of values to filter.
 	 *
 	 * @return
 	 *	A new set containing all the values of the original set that were not null.
-	 *
-	 * @tparam T
-	 *	The type of elements in the set.
 	 */
 	template <typename T>
 	TSet<T> Filter(const TSet<T> Elements)
@@ -127,6 +127,9 @@ namespace PF2SetUtilities
 	 *
 	 * The original set is not modified.
 	 *
+	 * @tparam T
+	 *	The type of elements in the set.
+	 *
 	 * @param Elements
 	 *	The set of values to filter.
 	 * @param Callable
@@ -135,9 +138,6 @@ namespace PF2SetUtilities
 	 *
 	 * @return
 	 *	A new set containing all the values of the original set for which the callable returned "true".
-	 *
-	 * @tparam T
-	 *	The type of elements in the set.
 	 */
 	template <typename T, typename Func>
 	TSet<T> Filter(const TSet<T> Elements, const Func Callable)
