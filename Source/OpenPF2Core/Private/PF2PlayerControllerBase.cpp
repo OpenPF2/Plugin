@@ -162,7 +162,6 @@ void APF2PlayerControllerBase::GiveCharacter(const TScriptInterface<IPF2Characte
 			LogPf2Core,
 			Error,
 			TEXT("The given character ('%s') is affiliated with a different party ('%i') than the player ('%i')."),
-			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 			*(GivenCharacter->GetIdForLogs()),
 			ThisPartyIndex,
 			OtherPartyIndex
