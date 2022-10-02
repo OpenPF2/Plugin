@@ -14,28 +14,73 @@
 
 AActor* UPF2ConversionsLibrary::Conv_CharacterToActor(const TScriptInterface<IPF2CharacterInterface>& Character)
 {
-	return Character->ToActor();
+	if (Character == nullptr)
+	{
+		// This is neither an assertion error nor a logged error because Blueprints might use this conversion before a
+		// call to "Is valid?" or something that can accept a nullptr.
+		return nullptr;
+	}
+	else
+	{
+		return Character->ToActor();
+	}
 }
 
 APawn* UPF2ConversionsLibrary::Conv_CharacterToPawn(const TScriptInterface<IPF2CharacterInterface>& Character)
 {
-	return Character->ToPawn();
+	if (Character == nullptr)
+	{
+		// This is neither an assertion error nor a logged error because Blueprints might use this conversion before a
+		// call to "Is valid?" or something that can accept a nullptr.
+		return nullptr;
+	}
+	else
+	{
+		return Character->ToPawn();
+	}
 }
 
 AController* UPF2ConversionsLibrary::Conv_InterfaceToController(
 	const TScriptInterface<IPF2PlayerControllerInterface>& PlayerController)
 {
-	return PlayerController->ToPlayerController();
+	if (PlayerController == nullptr)
+	{
+		// This is neither an assertion error nor a logged error because Blueprints might use this conversion before a
+		// call to "Is valid?" or something that can accept a nullptr.
+		return nullptr;
+	}
+	else
+	{
+		return PlayerController->ToPlayerController();
+	}
 }
 
 APlayerController* UPF2ConversionsLibrary::Conv_InterfaceToPlayerController(
 	const TScriptInterface<IPF2PlayerControllerInterface>& PlayerController)
 {
-	return PlayerController->ToPlayerController();
+	if (PlayerController == nullptr)
+	{
+		// This is neither an assertion error nor a logged error because Blueprints might use this conversion before a
+		// call to "Is valid?" or something that can accept a nullptr.
+		return nullptr;
+	}
+	else
+	{
+		return PlayerController->ToPlayerController();
+	}
 }
 
 APlayerState* UPF2ConversionsLibrary::Conv_InterfaceToPlayerState(
 	const TScriptInterface<IPF2PlayerStateInterface>& PlayerState)
 {
-	return PlayerState->ToPlayerState();
+	if (PlayerState == nullptr)
+	{
+		// This is neither an assertion error nor a logged error because Blueprints might use this conversion before a
+		// call to "Is valid?" or something that can accept a nullptr.
+		return nullptr;
+	}
+	else
+	{
+		return PlayerState->ToPlayerState();
+	}
 }
