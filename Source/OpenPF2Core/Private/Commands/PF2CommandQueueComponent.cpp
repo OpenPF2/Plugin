@@ -198,31 +198,9 @@ void UPF2CommandQueueComponent::OnRep_Queue(const TArray<AInfo*>& OldQueue)
 	TArray<IPF2CharacterCommandInterface*> RemovedCommands,
 	                                       AddedCommands;
 
-	// Identify which commands were removed.
-	for (AInfo* const Command : OldQueue)
-	{
-		IPF2CharacterCommandInterface* CommandIntf = Cast<IPF2CharacterCommandInterface>(Command);
-
-		// BUGBUG: By the time we're here, this should definitely be an OpenPF2 command, but UE will sometimes replicate
-		// entries in this->Queue as NULL.
-		if ((CommandIntf != nullptr) && !this->Queue.Contains(Command))
-		{
-			RemovedCommands.Add(CommandIntf);
-		}
-	}
-
-	// Identify which commands were added.
-	for (AInfo* const Command : this->Queue)
-	{
-		IPF2CharacterCommandInterface* CommandIntf = Cast<IPF2CharacterCommandInterface>(Command);
-
-		// BUGBUG: By the time we're here, this should definitely be an OpenPF2 command, but UE will sometimes replicate
-		// entries in this->Queue as NULL.
-		if ((CommandIntf != nullptr) && !OldQueue.Contains(Command))
-		{
-			AddedCommands.Add(CommandIntf);
-		}
-	}
+	// BUGBUG: By the time we're here, this should definitely be an OpenPF2 command, but UE will sometimes replicate
+	// entries in this->Queue as NULL.
+	PF2ArrayUtilities::CaptureDeltasWithCast(OldQueue, this->Queue, RemovedCommands, AddedCommands);
 
 	for (IPF2CharacterCommandInterface* const& RemovedCommand : RemovedCommands)
 	{

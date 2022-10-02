@@ -207,4 +207,95 @@ namespace PF2ArrayUtilities
 
 		return Result;
 	}
+
+	/**
+	 * Identify what elements have been added or removed between two copies of an array.
+	 *
+	 * @tparam T
+	 *	The type of elements in the arrays. Should be a pointer type (e.g., AActor*).
+	 *
+	 * @param OldArray
+	 *	The old copy of the array.
+	 * @param NewArray
+	 *	The new copy of the array.
+	 * @param OutRemovedElements
+	 *	The array to which elements that were present in OldArray but are no longer present in NewArray will be added.
+	 * @param OutAddedElements
+	 *	The array to which elements that were not present in OldArray but are now present in NewArray will be added.
+	 */
+	template <typename T>
+	void CaptureDeltas(const TArray<T> OldArray,
+	                   const TArray<T> NewArray,
+	                   TArray<T>&      OutRemovedElements,
+	                   TArray<T>&      OutAddedElements)
+	{
+		// Identify which elements were removed.
+		for (T const Element : OldArray)
+		{
+			if ((Element != nullptr) && !NewArray.Contains(Element))
+			{
+				OutRemovedElements.Add(Element);
+			}
+		}
+
+		// Identify which elements were added.
+		for (T const Element : NewArray)
+		{
+			if ((Element != nullptr) && !OldArray.Contains(Element))
+			{
+				OutAddedElements.Add(Element);
+			}
+		}
+	}
+
+	/**
+	 * Identify what elements have been added or removed between two copies of an array, casting results in the process.
+	 *
+	 * Elements will be typecast from SrcT to ResultT. Only elements for which the typecast is successful will be added
+	 * to OutRemovedElements and OutAddedElements; all other elements will be disregarded.
+	 *
+	 * @tparam SrcT
+	 *	The type of elements in the old and new array, without the pointer specifier (this code needs the raw type, so
+	 *	it already assumes the arrays use pointers).
+	 * @tparam ResultT
+	 *	The type of elements in the removed and added arrays, without the pointer specifier (this code needs the raw
+	 *	type, so it already assumes the arrays use pointers).
+	 *
+	 * @param OldArray
+	 *	The old copy of the array.
+	 * @param NewArray
+	 *	The new copy of the array.
+	 * @param OutRemovedElements
+	 *	The array to which elements that were present in OldArray but are no longer present in NewArray will be added.
+	 * @param OutAddedElements
+	 *	The array to which elements that were not present in OldArray but are now present in NewArray will be added.
+	 */
+	template <typename SrcT, typename ResultT>
+	void CaptureDeltasWithCast(const TArray<SrcT*> OldArray,
+	                           const TArray<SrcT*> NewArray,
+	                           TArray<ResultT*>&   OutRemovedElements,
+	                           TArray<ResultT*>&   OutAddedElements)
+	{
+		// Identify which elements were removed.
+		for (SrcT* const Element : OldArray)
+		{
+			ResultT* CastElement = Cast<ResultT>(Element);
+
+			if ((CastElement != nullptr) && !NewArray.Contains(Element))
+			{
+				OutRemovedElements.Add(CastElement);
+			}
+		}
+
+		// Identify which elements were added.
+		for (SrcT* const Element : NewArray)
+		{
+			ResultT* CastElement = Cast<ResultT>(Element);
+
+			if ((CastElement != nullptr) && !OldArray.Contains(Element))
+			{
+				OutAddedElements.Add(CastElement);
+			}
+		}
+	}
 }
