@@ -12,6 +12,14 @@
 
 #include "PF2CommandBindingsComponent.generated.h"
 
+// =====================================================================================================================
+// Delegate Types
+// =====================================================================================================================
+/**
+ * Delegate for Blueprints to react to a command queue getting wired up to input or disconnected from input.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPF2CommandQueueInputConnectionChangedDelegate);
+
 /**
  * A component for characters that need to support binding execution of Gameplay Abilities to input actions.
  *
@@ -37,6 +45,9 @@ class OPENPF2CORE_API UPF2CommandBindingsComponent : public UActorComponent, pub
 	TArray<FPF2CommandInputBinding> Bindings;
 
 public:
+	// =================================================================================================================
+	// Public Constructor
+	// =================================================================================================================
 	/**
 	 * Default constructor for UPF2CommandBindingsComponent.
 	 */
@@ -70,6 +81,25 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
 
+	// =================================================================================================================
+	// Public Properties - Multicast Delegates
+	// =================================================================================================================
+	/**
+	 * Event fired when local input is connected to this component.
+	 *
+	 * This event is only fired on clients.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Command Bindings")
+	FPF2CommandQueueInputConnectionChangedDelegate OnInputConnected;
+
+	/**
+	 * Event fired when local input is disconnected from this component.
+	 *
+	 * This event is only fired on clients.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Command Bindings")
+	FPF2CommandQueueInputConnectionChangedDelegate OnInputDisconnected;
+
 protected:
 	// =================================================================================================================
 	// Protected Methods
@@ -97,4 +127,21 @@ protected:
 	{
 		return this->GetInputComponent() != nullptr;
 	}
+
+	// =================================================================================================================
+	// Protected Native Event Callbacks
+	// =================================================================================================================
+	/**
+	 * Callback invoked in C++ code when input has been connected to this component.
+	 *
+	 * This notifies all event listeners that input has been connected.
+	 */
+	virtual void Native_OnInputConnected();
+
+	/*
+	 * Callback invoked in C++ code when input has been disconnected from this component.
+	 *
+	 * This notifies all event listeners that input has been disconnected.
+	 */
+	virtual void Native_OnInputDisconnected();
 };

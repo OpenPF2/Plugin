@@ -107,6 +107,8 @@ void UPF2CommandBindingsComponent::ConnectToInput(UInputComponent* NewInputCompo
 	}
 
 	this->InputComponent = NewInputComponent;
+
+	this->Native_OnInputConnected();
 }
 
 void UPF2CommandBindingsComponent::DisconnectFromInput()
@@ -120,6 +122,8 @@ void UPF2CommandBindingsComponent::DisconnectFromInput()
 
 		this->InputComponent = nullptr;
 	}
+
+	this->Native_OnInputDisconnected();
 }
 
 void UPF2CommandBindingsComponent::ExecuteBoundAbility(
@@ -142,4 +146,14 @@ FString UPF2CommandBindingsComponent::GetIdForLogs() const
 			*(this->GetName())
 		}
 	);
+}
+
+void UPF2CommandBindingsComponent::Native_OnInputConnected()
+{
+	this->OnInputConnected.Broadcast();
+}
+
+void UPF2CommandBindingsComponent::Native_OnInputDisconnected()
+{
+	this->OnInputDisconnected.Broadcast();
 }
