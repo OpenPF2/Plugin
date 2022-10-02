@@ -32,7 +32,7 @@ struct FPF2CommandInputBinding
 	GENERATED_BODY()
 
 	// =================================================================================================================
-	// Public Properties - Blueprint Accessible
+	// Public Fields - Blueprint Accessible
 	// =================================================================================================================
 	/**
 	 * The human-friendly name of the action, as configured in project input settings (e.g "Jump", "Fire", etc.).
@@ -42,7 +42,7 @@ struct FPF2CommandInputBinding
 
 protected:
 	// =================================================================================================================
-	// Protected Properties - Blueprint Accessible
+	// Protected Fields - Blueprint Accessible
 	// =================================================================================================================
 	/**
 	 * The handle for the corresponding ability.
@@ -56,7 +56,7 @@ protected:
 	TArray<int32> Handles;
 
 	// =================================================================================================================
-	// Protected Properties
+	// Protected Fields
 	// =================================================================================================================
 	/**
 	 * The character to which the ability has been granted.

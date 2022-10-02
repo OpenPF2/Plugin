@@ -120,7 +120,7 @@ public:
 	virtual FString GetIdForLogs() const override;
 
 	// =================================================================================================================
-	// Public Properties - Multicast Delegates
+	// Public Fields - Multicast Delegates
 	// =================================================================================================================
 	/**
 	 * Event fired when a player is added to this party.

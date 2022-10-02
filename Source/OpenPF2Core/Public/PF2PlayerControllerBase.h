@@ -35,7 +35,7 @@ class OPENPF2CORE_API APF2PlayerControllerBase : public APlayerController, publi
 	GENERATED_BODY()
 
 	// =================================================================================================================
-	// Private Properties
+	// Private Fields
 	// =================================================================================================================
 	/**
 	 * The character(s) that can be controlled by this player.

@@ -359,7 +359,7 @@ protected:
 
 public:
 	// =================================================================================================================
-	// Public Properties - Multicast Delegates
+	// Public Fields - Multicast Delegates
 	// =================================================================================================================
 	/**
 	 * Event fired when character's encounter turn has started.

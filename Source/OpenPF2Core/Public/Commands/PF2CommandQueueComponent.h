@@ -90,7 +90,7 @@ protected:
 
 public:
 	// =================================================================================================================
-	// Public Properties - Multicast Delegates
+	// Public Fields - Multicast Delegates
 	// =================================================================================================================
 	/**
 	 * Event fired when the commands in the queue have changed (commands added, commands removed, or queue cleared).

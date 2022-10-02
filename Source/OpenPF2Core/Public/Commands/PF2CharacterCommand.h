@@ -36,7 +36,7 @@ class OPENPF2CORE_API APF2CharacterCommand : public AInfo, public IPF2CharacterC
 
 protected:
 	// =================================================================================================================
-	// Protected Properties
+	// Protected Fields
 	// =================================================================================================================
 	/**
 	 * The character who would be issued this command.

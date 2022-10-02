@@ -99,7 +99,7 @@ public:
 	virtual FString GetIdForLogs() const override;
 
 	// =================================================================================================================
-	// Public Properties - Multicast Delegates
+	// Public Fields - Multicast Delegates
 	// =================================================================================================================
 	/**
 	 * Event fired when the containing actor is owned by a different player.
@@ -169,7 +169,7 @@ protected:
 
 private:
 	// =================================================================================================================
-	// Private Properties
+	// Private Fields
 	// =================================================================================================================
 	/**
 	 * The state of the player who owns the containing actor.

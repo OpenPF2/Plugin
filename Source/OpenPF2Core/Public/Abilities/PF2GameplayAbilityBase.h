@@ -35,7 +35,7 @@ class UPF2GameplayAbilityBase :
 
 protected:
 	// =================================================================================================================
-	// Protected Properties
+	// Protected Fields
 	// =================================================================================================================
 	/**
 	 * The icon to represent this ability, for whenever it is displayed to players/users.
