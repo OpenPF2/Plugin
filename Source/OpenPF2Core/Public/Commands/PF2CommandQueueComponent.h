@@ -60,6 +60,15 @@ class OPENPF2CORE_API UPF2CommandQueueComponent : public UActorComponent, public
 {
 	GENERATED_BODY()
 
+public:
+	// =================================================================================================================
+	// Public Constants
+	// =================================================================================================================
+	/**
+	 * Special constant value that signifies that there is no limit to the number of commands that can be enqueued.
+	 */
+	static const uint8 CommandLimitNone;
+
 protected:
 	/**
 	 * The queue of commands for the owning character.
@@ -69,6 +78,15 @@ protected:
 	 */
 	UPROPERTY(ReplicatedUsing=OnRep_Queue)
 	TArray<AInfo*> Queue;
+
+	/**
+	 * The maximum number of commands that can be in the queue at one time.
+	 *
+	 * Once the queue reaches this size, no additional commands will be accepted until at least one command already in
+	 * the queue has been executed or removed.
+	 */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	uint8 SizeLimit;
 
 public:
 	// =================================================================================================================

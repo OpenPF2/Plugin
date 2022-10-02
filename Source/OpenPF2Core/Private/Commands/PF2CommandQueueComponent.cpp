@@ -12,7 +12,9 @@
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
-UPF2CommandQueueComponent::UPF2CommandQueueComponent()
+const uint8 UPF2CommandQueueComponent::CommandLimitNone = 0;
+
+UPF2CommandQueueComponent::UPF2CommandQueueComponent(): SizeLimit(CommandLimitNone)
 {
 	this->SetIsReplicatedByDefault(true);
 }
@@ -28,11 +30,25 @@ void UPF2CommandQueueComponent::Enqueue(const TScriptInterface<IPF2CharacterComm
 {
 	AInfo* CommandActor = Command->ToActor();
 
-	checkf(!this->Queue.Contains(CommandActor), TEXT("The same command can only exist in the queue once."));
-	this->Queue.Add(CommandActor);
+	if ((this->SizeLimit != CommandLimitNone) && (this->Queue.Num() == this->SizeLimit))
+	{
+		UE_LOG(
+			LogPf2Core,
+			Verbose,
+			TEXT("Command queue ('%s') is already at maximum capacity ('%d'), so command ('%s') will not be enqueued."),
+			*(this->GetIdForLogs()),
+			this->SizeLimit,
+			*(Command->GetIdForLogs())
+		);
+	}
+	else
+	{
+		checkf(!this->Queue.Contains(CommandActor), TEXT("The same command can only exist in the queue once."));
+		this->Queue.Add(CommandActor);
 
-	this->Native_OnCommandAdded(Command);
-	this->Native_OnCommandsChanged();
+		this->Native_OnCommandAdded(Command);
+		this->Native_OnCommandsChanged();
+	}
 }
 
 void UPF2CommandQueueComponent::PeekNext(TScriptInterface<IPF2CharacterCommandInterface>& NextCommand)
