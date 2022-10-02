@@ -118,7 +118,7 @@ protected:
 	// =================================================================================================================
 	// Protected Native Event Callbacks
 	// =================================================================================================================
-	/*
+	/**
 	 * Callback invoked in C++ code when the player state is available for use.
 	 *
 	 * - On the server: This happens just after the player state has been initialized.
