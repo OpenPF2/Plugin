@@ -168,6 +168,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore) override;
 
+	// =================================================================================================================
+	// Public Methods - IPF2ActorComponentInterface Implementation
+	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual UActorComponent* ToActorComponent() override;
+
+	// =================================================================================================================
+	// Public Methods - IPF2LogIdentifiableInterface Implementation
+	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual FString GetIdForLogs() const override;
+
 protected:
 	// =================================================================================================================
 	// Protected Methods

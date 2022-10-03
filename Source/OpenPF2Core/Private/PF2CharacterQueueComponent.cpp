@@ -181,9 +181,21 @@ TArray<TScriptInterface<IPF2CharacterInterface>> UPF2CharacterQueueComponent::To
 		});
 }
 
+UActorComponent* UPF2CharacterQueueComponent::ToActorComponent()
+{
+	return this;
+}
+
 FString UPF2CharacterQueueComponent::GetIdForLogs() const
 {
-	return this->GetName();
+	// ReSharper disable CppRedundantParentheses
+	return FString::Format(
+		TEXT("{0}.{1}"),
+		{
+			*(GetNameSafe(this->GetOwner())),
+			*(this->GetName())
+		}
+	);
 }
 
 void UPF2CharacterQueueComponent::SetActiveCharacterIndex(const uint8 NewActiveCharacterIndex)

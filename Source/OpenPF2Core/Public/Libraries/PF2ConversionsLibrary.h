@@ -14,6 +14,7 @@
 // =====================================================================================================================
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
+class IPF2ActorComponentInterface;
 class IPF2CharacterInterface;
 class IPF2PlayerControllerInterface;
 class IPF2PlayerStateInterface;
@@ -114,5 +115,23 @@ public:
 	)
 	static APlayerState* Conv_PlayerStateIntfToPlayerState(
 		const TScriptInterface<IPF2PlayerStateInterface>& PlayerState
+	);
+
+	/**
+	 * Converts an actor component interface to a standard actor component.
+	 *
+	 * @param ActorComponent
+	 *	The actor component interface instance to convert.
+	 *
+	 * @return
+	 *	The resulting actor component.
+	 */
+	UFUNCTION(
+		BlueprintPure,
+		meta=(DisplayName = "To Actor Component", CompactNodeTitle = "->", BlueprintAutocast),
+		Category="OpenPF2|Conversions"
+	)
+	static UActorComponent* Conv_ActorComponentIntfToActorComponent(
+		const TScriptInterface<IPF2ActorComponentInterface>& ActorComponent
 	);
 };

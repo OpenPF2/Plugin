@@ -9,6 +9,7 @@
 
 #include <GameFramework/PlayerController.h>
 
+#include "PF2ActorComponentInterface.h"
 #include "PF2CharacterInterface.h"
 #include "PF2PlayerStateInterface.h"
 
@@ -82,5 +83,20 @@ APlayerState* UPF2ConversionsLibrary::Conv_PlayerStateIntfToPlayerState(
 	else
 	{
 		return PlayerState->ToPlayerState();
+	}
+}
+
+UActorComponent* UPF2ConversionsLibrary::Conv_ActorComponentIntfToActorComponent(
+	const TScriptInterface<IPF2ActorComponentInterface>& ActorComponent)
+{
+	if (ActorComponent == nullptr)
+	{
+		// This is neither an assertion error nor a logged error because Blueprints might use this conversion before a
+		// call to "Is valid?" or something that can accept a nullptr.
+		return nullptr;
+	}
+	else
+	{
+		return ActorComponent->ToActorComponent();
 	}
 }

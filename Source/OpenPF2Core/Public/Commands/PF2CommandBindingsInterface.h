@@ -7,7 +7,7 @@
 
 #include <GameplayAbilitySpec.h>
 
-#include "Utilities/PF2LogIdentifiableInterface.h"
+#include "PF2ActorComponentInterface.h"
 
 #include "PF2CommandBindingsInterface.generated.h"
 
@@ -21,7 +21,7 @@ class IPF2CharacterInterface;
 // Normal Declarations
 // =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
-class UPF2CommandBindingsInterface : public UPF2LogIdentifiableInterface
+class UPF2CommandBindingsInterface : public UPF2ActorComponentInterface
 {
 	GENERATED_BODY()
 };
@@ -29,7 +29,7 @@ class UPF2CommandBindingsInterface : public UPF2LogIdentifiableInterface
 /**
  * An interface for components that maintain Gameplay Ability input action bindings for characters.
  */
-class OPENPF2CORE_API IPF2CommandBindingsInterface : public IPF2LogIdentifiableInterface
+class OPENPF2CORE_API IPF2CommandBindingsInterface : public IPF2ActorComponentInterface
 {
 	GENERATED_BODY()
 

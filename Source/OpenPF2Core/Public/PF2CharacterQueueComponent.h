@@ -157,6 +157,12 @@ public:
 	virtual TArray<TScriptInterface<IPF2CharacterInterface>> ToArray() const override;
 
 	// =================================================================================================================
+	// Public Methods - IPF2ActorComponentInterface Implementation
+	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual UActorComponent* ToActorComponent() override;
+
+	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)

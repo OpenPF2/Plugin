@@ -181,6 +181,11 @@ void UPF2CommandQueueComponent::Clear()
 	this->Native_OnCommandsChanged();
 }
 
+UActorComponent* UPF2CommandQueueComponent::ToActorComponent()
+{
+	return this;
+}
+
 FString UPF2CommandQueueComponent::GetIdForLogs() const
 {
 	// ReSharper disable CppRedundantParentheses

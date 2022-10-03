@@ -151,6 +151,11 @@ bool UPF2OwnerTrackingComponent::IsSamePartyAsPlayerWithController(
 	return Result;
 }
 
+UActorComponent* UPF2OwnerTrackingComponent::ToActorComponent()
+{
+	return this;
+}
+
 FString UPF2OwnerTrackingComponent::GetIdForLogs() const
 {
 	FString                             OwnerName;

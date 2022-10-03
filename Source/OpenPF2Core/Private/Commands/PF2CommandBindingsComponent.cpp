@@ -136,6 +136,11 @@ void UPF2CommandBindingsComponent::ExecuteBoundAbility(
 	PlayerController->Server_ExecuteCharacterCommand(AbilitySpecHandle, Character->ToActor());
 }
 
+UActorComponent* UPF2CommandBindingsComponent::ToActorComponent()
+{
+	return this;
+}
+
 FString UPF2CommandBindingsComponent::GetIdForLogs() const
 {
 	// ReSharper disable CppRedundantParentheses

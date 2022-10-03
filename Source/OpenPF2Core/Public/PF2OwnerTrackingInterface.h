@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "Utilities/PF2LogIdentifiableInterface.h"
+#include "PF2ActorComponentInterface.h"
 
 #include "PF2OwnerTrackingInterface.generated.h"
 
@@ -23,7 +23,7 @@ class IPF2PlayerStateInterface;
 // Normal Declarations
 // =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
-class UPF2OwnerTrackingInterface : public UPF2LogIdentifiableInterface
+class UPF2OwnerTrackingInterface : public UPF2ActorComponentInterface
 {
 	GENERATED_BODY()
 };
@@ -31,7 +31,7 @@ class UPF2OwnerTrackingInterface : public UPF2LogIdentifiableInterface
 /**
  * An interface for components that track which player "owns" or controls an actor (usually, a character).
  */
-class OPENPF2CORE_API IPF2OwnerTrackingInterface : public IPF2LogIdentifiableInterface
+class OPENPF2CORE_API IPF2OwnerTrackingInterface : public IPF2ActorComponentInterface
 {
 	GENERATED_BODY()
 

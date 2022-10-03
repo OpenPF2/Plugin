@@ -439,6 +439,16 @@ void UPF2AbilitySystemComponent::ApplyAbilityBoost(const EPF2CharacterAbilitySco
 	this->AddPassiveGameplayEffectWithWeight(WeightGroup, BoostEffect);
 }
 
+UActorComponent* UPF2AbilitySystemComponent::ToActorComponent()
+{
+	return this;
+}
+
+FString UPF2AbilitySystemComponent::GetIdForLogs() const
+{
+	return this->GetName();
+}
+
 TMultiMap<FName, TSubclassOf<UGameplayEffect>> UPF2AbilitySystemComponent::GetPassiveGameplayEffectsToApply()
 {
 	if (this->CachedPassiveGameplayEffectsToApply.Num() == 0)
