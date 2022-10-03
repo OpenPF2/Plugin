@@ -236,6 +236,11 @@ void UPF2CharacterQueueComponent::OnRep_CharacterQueue(const TArray<AActor*> Old
 	{
 		this->Native_OnCharacterAdded(PF2InterfaceUtilities::ToScriptInterface(AddedCharacter));
 	}
+
+	if ((RemovedCharacters.Num() != 0) || (AddedCharacters.Num() != 0))
+	{
+		this->Native_OnCharactersChanged();
+	}
 }
 
 void UPF2CharacterQueueComponent::OnRep_ActiveCharacterIndex()
