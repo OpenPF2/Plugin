@@ -28,6 +28,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPF2CommandQueueInputConnectionChangedDelegat
  * it works automatically with abilities that need to be queued during encounters.
  */
 UCLASS(ClassGroup="OpenPF2-Characters", meta=(BlueprintSpawnableComponent))
+// ReSharper disable once CppClassCanBeFinal
 class OPENPF2CORE_API UPF2CommandBindingsComponent : public UActorComponent, public IPF2CommandBindingsInterface
 {
 	GENERATED_BODY()
@@ -82,7 +83,7 @@ public:
 	virtual FString GetIdForLogs() const override;
 
 	// =================================================================================================================
-	// Public Fields - Multicast Delegates
+	// Public Properties - Multicast Delegates
 	// =================================================================================================================
 	/**
 	 * Event fired when local input is connected to this component.
