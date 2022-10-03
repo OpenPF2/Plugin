@@ -34,7 +34,7 @@ public:
 	 * Converts a character to an actor.
 	 *
 	 * @param Character
-	 *	The character to convert.
+	 *	The character interface instance to convert.
 	 *
 	 * @return
 	 *	The resulting actor.
@@ -44,13 +44,13 @@ public:
 		meta=(DisplayName = "To Actor", CompactNodeTitle = "->", BlueprintAutocast),
 		Category="OpenPF2|Conversions"
 	)
-	static AActor* Conv_CharacterToActor(const TScriptInterface<IPF2CharacterInterface>& Character);
+	static AActor* Conv_CharacterIntfToActor(const TScriptInterface<IPF2CharacterInterface>& Character);
 
 	/**
 	 * Converts a character to a pawn.
 	 *
 	 * @param Character
-	 *	The character to convert.
+	 *	The character interface instance to convert.
 	 *
 	 * @return
 	 *	The resulting pawn.
@@ -60,13 +60,13 @@ public:
 		meta=(DisplayName = "To Pawn", CompactNodeTitle = "->", BlueprintAutocast),
 		Category="OpenPF2|Conversions"
 	)
-	static APawn* Conv_CharacterToPawn(const TScriptInterface<IPF2CharacterInterface>& Character);
+	static APawn* Conv_CharacterIntfToPawn(const TScriptInterface<IPF2CharacterInterface>& Character);
 
 	/**
 	 * Converts a player controller interface to a standard controller actor.
 	 *
 	 * @param PlayerController
-	 *	The player controller to convert.
+	 *	The player controller interface instance to convert.
 	 *
 	 * @return
 	 *	The resulting controller.
@@ -76,7 +76,7 @@ public:
 		meta=(DisplayName = "To Controller", CompactNodeTitle = "->", BlueprintAutocast),
 		Category="OpenPF2|Conversions"
 	)
-	static AController* Conv_InterfaceToController(
+	static AController* Conv_PlayerControllerIntfToController(
 		const TScriptInterface<IPF2PlayerControllerInterface>& PlayerController
 	);
 
@@ -84,7 +84,7 @@ public:
 	 * Converts a player controller interface to a standard player controller actor.
 	 *
 	 * @param PlayerController
-	 *	The player controller to convert.
+	 *	The player controller interface instance to convert.
 	 *
 	 * @return
 	 *	The resulting player controller.
@@ -94,7 +94,7 @@ public:
 		meta=(DisplayName = "To Player Controller", CompactNodeTitle = "->", BlueprintAutocast),
 		Category="OpenPF2|Conversions"
 	)
-	static APlayerController* Conv_InterfaceToPlayerController(
+	static APlayerController* Conv_PlayerControllerIntfToPlayerController(
 		const TScriptInterface<IPF2PlayerControllerInterface>& PlayerController
 	);
 
@@ -102,7 +102,7 @@ public:
 	 * Converts a player state interface to a standard player state actor.
 	 *
 	 * @param PlayerState
-	 *	The player state to convert.
+	 *	The player state interface instance to convert.
 	 *
 	 * @return
 	 *	The resulting player state.
@@ -112,7 +112,7 @@ public:
 		meta=(DisplayName = "To Player State", CompactNodeTitle = "->", BlueprintAutocast),
 		Category="OpenPF2|Conversions"
 	)
-	static APlayerState* Conv_InterfaceToPlayerState(
+	static APlayerState* Conv_PlayerStateIntfToPlayerState(
 		const TScriptInterface<IPF2PlayerStateInterface>& PlayerState
 	);
 };

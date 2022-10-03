@@ -12,7 +12,7 @@
 #include "PF2CharacterInterface.h"
 #include "PF2PlayerStateInterface.h"
 
-AActor* UPF2ConversionsLibrary::Conv_CharacterToActor(const TScriptInterface<IPF2CharacterInterface>& Character)
+AActor* UPF2ConversionsLibrary::Conv_CharacterIntfToActor(const TScriptInterface<IPF2CharacterInterface>& Character)
 {
 	if (Character == nullptr)
 	{
@@ -26,7 +26,7 @@ AActor* UPF2ConversionsLibrary::Conv_CharacterToActor(const TScriptInterface<IPF
 	}
 }
 
-APawn* UPF2ConversionsLibrary::Conv_CharacterToPawn(const TScriptInterface<IPF2CharacterInterface>& Character)
+APawn* UPF2ConversionsLibrary::Conv_CharacterIntfToPawn(const TScriptInterface<IPF2CharacterInterface>& Character)
 {
 	if (Character == nullptr)
 	{
@@ -40,7 +40,7 @@ APawn* UPF2ConversionsLibrary::Conv_CharacterToPawn(const TScriptInterface<IPF2C
 	}
 }
 
-AController* UPF2ConversionsLibrary::Conv_InterfaceToController(
+AController* UPF2ConversionsLibrary::Conv_PlayerControllerIntfToController(
 	const TScriptInterface<IPF2PlayerControllerInterface>& PlayerController)
 {
 	if (PlayerController == nullptr)
@@ -55,7 +55,7 @@ AController* UPF2ConversionsLibrary::Conv_InterfaceToController(
 	}
 }
 
-APlayerController* UPF2ConversionsLibrary::Conv_InterfaceToPlayerController(
+APlayerController* UPF2ConversionsLibrary::Conv_PlayerControllerIntfToPlayerController(
 	const TScriptInterface<IPF2PlayerControllerInterface>& PlayerController)
 {
 	if (PlayerController == nullptr)
@@ -70,7 +70,7 @@ APlayerController* UPF2ConversionsLibrary::Conv_InterfaceToPlayerController(
 	}
 }
 
-APlayerState* UPF2ConversionsLibrary::Conv_InterfaceToPlayerState(
+APlayerState* UPF2ConversionsLibrary::Conv_PlayerStateIntfToPlayerState(
 	const TScriptInterface<IPF2PlayerStateInterface>& PlayerState)
 {
 	if (PlayerState == nullptr)
