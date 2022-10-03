@@ -94,24 +94,32 @@ public:
 	// =================================================================================================================
 	/**
 	 * Event fired when the characters in the queue have changed (characters added, commands removed, or queue cleared).
+	 *
+	 * If replication is enabled for this component, this is invoked on both the owning client and the server.
 	 */
 	UPROPERTY(BlueprintAssignable)
 	FPF2CharacterQueueChangedDelegate OnCharactersChanged;
 
 	/**
 	 * Event fired when a character is added to the queue.
+	 *
+	 * If replication is enabled for this component, this is invoked on both the owning client and the server.
 	 */
 	UPROPERTY(BlueprintAssignable)
 	FPF2CharacterAddedOrRemovedDelegate OnCharacterAdded;
 
 	/**
 	 * Event fired when a character is removed from the queue.
+	 *
+	 * If replication is enabled for this component, this is invoked on both the owning client and the server.
 	 */
 	UPROPERTY(BlueprintAssignable)
 	FPF2CharacterAddedOrRemovedDelegate OnCharacterRemoved;
 
 	/**
 	 * Event fired when a change in active character occurs.
+	 *
+	 * If replication is enabled for this component, this is invoked on both the owning client and the server.
 	 */
 	UPROPERTY(BlueprintAssignable)
 	FPF2ActiveCharacterChangedDelegate OnActiveCharacterChanged;
@@ -219,11 +227,15 @@ protected:
 	// =================================================================================================================
 	/**
 	 * Callback invoked when characters in this queue have changed (characters added or removed, or queue cleared).
+	 *
+	 * If replication is enabled for this component, this is invoked on both the owning client and the server.
 	 */
 	void Native_OnCharactersChanged();
 
 	/**
 	 * Callback invoked when a character has been added to the queue.
+	 *
+	 * If replication is enabled for this component, this is invoked on both the owning client and the server.
 	 *
 	 * @param AddedCharacter
 	 *	The character that is now in the queue.
@@ -232,6 +244,8 @@ protected:
 
 	/**
 	 * Callback invoked when a character has been removed from the queue.
+	 *
+	 * If replication is enabled for this component, this is invoked on both the owning client and the server.
 	 *
 	 * @param RemovedCharacter
 	 *	The character that is no longer in the queue.
@@ -243,6 +257,8 @@ protected:
 
 	/**
 	 * Callback invoked when there is a change to which character in the queue is active.
+	 *
+	 * If replication is enabled for this component, this is invoked on both the owning client and the server.
 	 *
 	 * @param NewCharacter
 	 *	The character that is now active in the queue.
