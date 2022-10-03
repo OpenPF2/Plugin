@@ -223,6 +223,8 @@ void UPF2CharacterQueueComponent::OnRep_CharacterQueue(const TArray<AActor*> Old
 	// entries in this->ControllableCharacters as NULL.
 	PF2ArrayUtilities::CaptureDeltasWithCast(OldCharacters, this->Queue, RemovedCharacters, AddedCharacters);
 
+	// We execute this logic even if we have no registered listeners because we still need to do internal bookkeeping
+	// when the queue changes.
 	for (IPF2CharacterInterface* const& RemovedCharacter : RemovedCharacters)
 	{
 		const int32 RemovedIndex = OldCharacters.Find(RemovedCharacter->ToActor());
@@ -250,40 +252,45 @@ void UPF2CharacterQueueComponent::OnRep_ActiveCharacterIndex()
 
 void UPF2CharacterQueueComponent::Native_OnCharactersChanged()
 {
-	TArray<TScriptInterface<IPF2CharacterInterface>> NewCharacters;
-
-	UE_LOG(
-		LogPf2Core,
-		Verbose,
-		TEXT("[%s] Characters in queue ('%s') have changed."),
-		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(this->GetIdForLogs())
-	);
-
-	for (AActor* Character : this->Queue)
+	if (this->OnCharactersChanged.IsBound())
 	{
-		// BUGBUG: By the time we're here, this should definitely be an OpenPF2 character, but UE will sometimes
-		// replicate entries in this->Queue as NULL.
-		if (Character != nullptr)
+		TArray<TScriptInterface<IPF2CharacterInterface>> NewCharacters;
+
+		for (AActor* Character : this->Queue)
 		{
-			NewCharacters.Add(
-				PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterInterface>(
-					Cast<IPF2CharacterInterface>(Character)
-				)
-			);
+			// BUGBUG: By the time we're here, this should definitely be an OpenPF2 character, but UE will sometimes
+			// replicate entries in this->Queue as NULL.
+			if (Character != nullptr)
+			{
+				NewCharacters.Add(
+					PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterInterface>(
+						Cast<IPF2CharacterInterface>(Character)
+					)
+				);
+			}
 		}
+
+		UE_LOG(
+			LogPf2CoreAbilities,
+			VeryVerbose,
+			TEXT("[%s] Character queue changed ('%s') - %d elements."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(this->GetIdForLogs()),
+			NewCharacters.Num()
+		);
+
+		this->OnCharactersChanged.Broadcast(NewCharacters);
 	}
-
-	UE_LOG(
-		LogPf2CoreAbilities,
-		VeryVerbose,
-		TEXT("[%s] Character queue changed ('%s') - %d elements."),
-		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(this->GetIdForLogs()),
-		NewCharacters.Num()
-	);
-
-	this->OnCharactersChanged.Broadcast(NewCharacters);
+	else
+	{
+		UE_LOG(
+			LogPf2Core,
+			Verbose,
+			TEXT("[%s] Character queue changed ('%s')."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(this->GetIdForLogs())
+		);
+	}
 }
 
 // ReSharper disable once CppMemberFunctionMayBeConst

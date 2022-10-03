@@ -200,21 +200,26 @@ FString UPF2CommandQueueComponent::GetIdForLogs() const
 
 void UPF2CommandQueueComponent::OnRep_Queue(const TArray<AInfo*>& OldQueue)
 {
-	TArray<IPF2CharacterCommandInterface*> RemovedCommands,
-	                                       AddedCommands;
-
-	// BUGBUG: By the time we're here, this should definitely be an OpenPF2 command, but UE will sometimes replicate
-	// entries in this->Queue as NULL.
-	PF2ArrayUtilities::CaptureDeltasWithCast(OldQueue, this->Queue, RemovedCommands, AddedCommands);
-
-	for (IPF2CharacterCommandInterface* const& RemovedCommand : RemovedCommands)
+	// Skip unnecessary overhead if we have no listeners. This is only safe because our Native_ callbacks don't do
+	// anything other than notify listeners.
+	if (this->OnCommandAdded.IsBound() || this->OnCommandRemoved.IsBound())
 	{
-		this->Native_OnCommandRemoved(PF2InterfaceUtilities::ToScriptInterface(RemovedCommand));
-	}
+		TArray<IPF2CharacterCommandInterface*> RemovedCommands,
+											   AddedCommands;
 
-	for (IPF2CharacterCommandInterface* const& AddedCommand : AddedCommands)
-	{
-		this->Native_OnCommandAdded(PF2InterfaceUtilities::ToScriptInterface(AddedCommand));
+		// BUGBUG: By the time we're here, this should definitely be an OpenPF2 command, but UE will sometimes replicate
+		// entries in this->Queue as NULL.
+		PF2ArrayUtilities::CaptureDeltasWithCast(OldQueue, this->Queue, RemovedCommands, AddedCommands);
+
+		for (IPF2CharacterCommandInterface* const& RemovedCommand : RemovedCommands)
+		{
+			this->Native_OnCommandRemoved(PF2InterfaceUtilities::ToScriptInterface(RemovedCommand));
+		}
+
+		for (IPF2CharacterCommandInterface* const& AddedCommand : AddedCommands)
+		{
+			this->Native_OnCommandAdded(PF2InterfaceUtilities::ToScriptInterface(AddedCommand));
+		}
 	}
 
 	this->Native_OnCommandsChanged();
@@ -222,32 +227,46 @@ void UPF2CommandQueueComponent::OnRep_Queue(const TArray<AInfo*>& OldQueue)
 
 void UPF2CommandQueueComponent::Native_OnCommandsChanged() const
 {
-	TArray<TScriptInterface<IPF2CharacterCommandInterface>> NewCommands;
-
-	for (AInfo* NewCommand : this->Queue)
+	// Skip unnecessary overhead if we have no listeners.
+	if (this->OnCommandsChanged.IsBound())
 	{
-		// BUGBUG: By the time we're here, this should definitely be an OpenPF2 command, but UE will sometimes replicate
-		// entries in this->Queue as NULL.
-		if (NewCommand != nullptr)
+		TArray<TScriptInterface<IPF2CharacterCommandInterface>> NewCommands;
+
+		for (AInfo* NewCommand : this->Queue)
 		{
-			NewCommands.Add(
-				PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(
-					Cast<IPF2CharacterCommandInterface>(NewCommand)
-				)
-			);
+			// BUGBUG: By the time we're here, this should definitely be an OpenPF2 command, but UE will sometimes
+			// replicate entries in this->Queue as NULL.
+			if (NewCommand != nullptr)
+			{
+				NewCommands.Add(
+					PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(
+						Cast<IPF2CharacterCommandInterface>(NewCommand)
+					)
+				);
+			}
 		}
+
+		UE_LOG(
+			LogPf2CoreAbilities,
+			VeryVerbose,
+			TEXT("[%s] Command queue changed ('%s') - %d elements."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(this->GetIdForLogs()),
+			NewCommands.Num()
+		);
+
+		this->OnCommandsChanged.Broadcast(NewCommands);
 	}
-
-	UE_LOG(
-		LogPf2CoreAbilities,
-		VeryVerbose,
-		TEXT("[%s] Command queue changed ('%s') - %d elements."),
-		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(this->GetIdForLogs()),
-		NewCommands.Num()
-	);
-
-	this->OnCommandsChanged.Broadcast(NewCommands);
+	else
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			VeryVerbose,
+			TEXT("[%s] Command queue changed ('%s')."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(this->GetIdForLogs())
+		);
+	}
 }
 
 void UPF2CommandQueueComponent::Native_OnCommandAdded(
