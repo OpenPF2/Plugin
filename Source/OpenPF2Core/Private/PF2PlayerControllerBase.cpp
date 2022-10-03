@@ -12,9 +12,8 @@
 
 #include <GameFramework/PlayerState.h>
 
-#include <Net/UnrealNetwork.h>
-
 #include "PF2CharacterInterface.h"
+#include "PF2CharacterQueueComponent.h"
 #include "PF2OwnerTrackingInterface.h"
 #include "PF2PartyInterface.h"
 #include "PF2PlayerStateInterface.h"
@@ -23,10 +22,27 @@
 
 #include "GameModes/PF2GameModeInterface.h"
 
-#include "Utilities/PF2ArrayUtilities.h"
 #include "Utilities/PF2EnumUtilities.h"
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
+
+APF2PlayerControllerBase::APF2PlayerControllerBase()
+{
+	UPF2CharacterQueueComponent* CharacterQueue =
+		this->CreateDefaultSubobject<UPF2CharacterQueueComponent>(TEXT("ControllableCharacters"));
+
+	CharacterQueue->OnCharacterAdded.AddDynamic(
+		this,
+		&APF2PlayerControllerBase::Native_OnCharacterGiven
+	);
+
+	CharacterQueue->OnCharacterRemoved.AddDynamic(
+		this,
+		&APF2PlayerControllerBase::Native_OnCharacterReleased
+	);
+
+	this->ControllableCharacterQueue = CharacterQueue;
+}
 
 void APF2PlayerControllerBase::InitPlayerState()
 {
@@ -40,13 +56,6 @@ void APF2PlayerControllerBase::OnRep_PlayerState()
 	Super::OnRep_PlayerState();
 
 	this->Native_OnPlayerStateAvailable(this->GetPlayerState());
-}
-
-void APF2PlayerControllerBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(APF2PlayerControllerBase, ControllableCharacters);
 }
 
 void APF2PlayerControllerBase::SetPawn(APawn* NewPawn)
@@ -82,19 +91,7 @@ TScriptInterface<IPF2PlayerStateInterface> APF2PlayerControllerBase::GetPlayerSt
 
 TArray<TScriptInterface<IPF2CharacterInterface>> APF2PlayerControllerBase::GetControllableCharacters() const
 {
-	return PF2ArrayUtilities::Reduce<TArray<TScriptInterface<IPF2CharacterInterface>>>(
-		this->ControllableCharacters,
-		TArray<TScriptInterface<IPF2CharacterInterface>>(),
-		[](TArray<TScriptInterface<IPF2CharacterInterface>> Characters,
-		   const TWeakInterfacePtr<IPF2CharacterInterface>  CurrentCharacter)
-		{
-			if (CurrentCharacter.IsValid())
-			{
-				Characters.Add(PF2InterfaceUtilities::ToScriptInterface(CurrentCharacter.Get()));
-			}
-
-			return Characters;
-		});
+	return this->GetCharacterQueue()->ToArray();
 }
 
 APlayerController* APF2PlayerControllerBase::ToPlayerController()
@@ -153,8 +150,7 @@ void APF2PlayerControllerBase::GiveCharacter(const TScriptInterface<IPF2Characte
 			*(GivenCharacter->GetIdForLogs())
 		);
 
-		this->ControllableCharacters.AddUnique(GivenCharacter->ToActor());
-		this->Native_OnCharacterGiven(GivenCharacter);
+		this->GetCharacterQueue()->Add(GivenCharacter);
 	}
 	else
 	{
@@ -180,8 +176,7 @@ void APF2PlayerControllerBase::ReleaseCharacter(const TScriptInterface<IPF2Chara
 		*(ReleasedCharacter->GetIdForLogs())
 	);
 
-	this->ControllableCharacters.Remove(ReleasedCharacter->ToActor());
-	this->Native_OnCharacterReleased(ReleasedCharacter);
+	this->GetCharacterQueue()->Remove(ReleasedCharacter);
 }
 
 bool APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Validate(
@@ -351,29 +346,14 @@ FString APF2PlayerControllerBase::GetIdForLogs() const
 	return this->GetName();
 }
 
-void APF2PlayerControllerBase::OnRep_ControllableCharacters(const TArray<AActor*> OldCharacters)
+TScriptInterface<IPF2CharacterQueueInterface> APF2PlayerControllerBase::GetCharacterQueue() const
 {
-	TArray<IPF2CharacterInterface*> RemovedCharacters,
-	                                AddedCharacters;
+	return this->ControllableCharacterQueue;
+}
 
-	// BUGBUG: By the time we're here, this should definitely be an OpenPF2 character, but UE will sometimes replicate
-	// entries in this->ControllableCharacters as NULL.
-	PF2ArrayUtilities::CaptureDeltasWithCast(
-		OldCharacters,
-		this->ControllableCharacters,
-		RemovedCharacters,
-		AddedCharacters
-	);
-
-	for (IPF2CharacterInterface* const& RemovedCharacter : RemovedCharacters)
-	{
-		this->Native_OnCharacterReleased(PF2InterfaceUtilities::ToScriptInterface(RemovedCharacter));
-	}
-
-	for (IPF2CharacterInterface* const& AddedCharacter : AddedCharacters)
-	{
-		this->Native_OnCharacterGiven(PF2InterfaceUtilities::ToScriptInterface(AddedCharacter));
-	}
+TScriptInterface<IPF2CharacterInterface> APF2PlayerControllerBase::GetActiveCharacter() const
+{
+	return this->GetCharacterQueue()->GetActiveCharacter();
 }
 
 void APF2PlayerControllerBase::Native_OnPlayerStateAvailable(

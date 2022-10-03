@@ -17,8 +17,9 @@
 // =====================================================================================================================
 // Forward Declarations (to break recursive dependencies)
 // =====================================================================================================================
-class IPF2CharacterInterface;
 class IPF2CharacterCommandInterface;
+class IPF2CharacterInterface;
+class IPF2CharacterQueueInterface;
 
 // =====================================================================================================================
 // Normal Declarations
@@ -34,21 +35,28 @@ class OPENPF2CORE_API APF2PlayerControllerBase : public APlayerController, publi
 {
 	GENERATED_BODY()
 
+protected:
 	// =================================================================================================================
-	// Private Fields
+	// Protected Fields
 	// =================================================================================================================
 	/**
-	 * The character(s) that can be controlled by this player.
+	 * The sub-component that tracks which characters are controllable by this player.
 	 *
-	 * The characters in this list must be affiliated with the same party as this player.
+	 * The characters in this queue must be affiliated with the same party as this player.
 	 *
-	 * This is an array of actors (instead of interfaces) for replication. UE will not replicate actors if they are
-	 * declared/referenced through an interface property.
+	 * This is declared as an actor component instead of an interface so that UE interacts with it properly for
+	 * replication and in the editor. UE will not do this if this component were declared/referenced through an
+	 * interface field.
 	 */
-	UPROPERTY(ReplicatedUsing=OnRep_ControllableCharacters)
-	TArray<AActor*> ControllableCharacters;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UActorComponent* ControllableCharacterQueue;
 
 public:
+	// =================================================================================================================
+	// Public Constructors
+	// =================================================================================================================
+	APF2PlayerControllerBase();
+
 	// =================================================================================================================
 	// Public Methods - AController Overrides
 	// =================================================================================================================
@@ -59,8 +67,6 @@ public:
 	// =================================================================================================================
 	// Public Methods - APlayerController Overrides
 	// =================================================================================================================
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
 	virtual void SetPawn(APawn* NewPawn) override;
 
 	// =================================================================================================================
@@ -104,16 +110,28 @@ public:
 
 protected:
 	// =================================================================================================================
-	// Protected Replication Callbacks
+	// Protected Methods
 	// =================================================================================================================
 	/**
-	 * Notifies this component that the list of character(s) that can be controlled by the player has been replicated.
+	 * Gets the sub-component that keeps track of which character(s) this player can control and in what order.
 	 *
-	 * @param OldCharacters
-	 *	The previous array of characters that the player could control.
+	 * @return
+	 *	The character queue sub-component.
 	 */
-	UFUNCTION()
-	void OnRep_ControllableCharacters(const TArray<AActor*> OldCharacters);
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
+	TScriptInterface<IPF2CharacterQueueInterface> GetCharacterQueue() const;
+
+	/**
+	 * Gets the character that this player is actively controlling.
+	 *
+	 * This can return nullptr if this player has no characters to control.
+	 *
+	 * @return
+	 *	- If there are no characters to control: A script interface wrapping a nullptr.
+	 *	- If there are characters to control: The active character.
+	 */
+	UFUNCTION(BlueprintPure, Category="OpenPF2|Player Controllers")
+	TScriptInterface<IPF2CharacterInterface> GetActiveCharacter() const;
 
 	// =================================================================================================================
 	// Protected Native Event Callbacks
@@ -127,6 +145,7 @@ protected:
 	 * @param NewPlayerState
 	 *	The player state that was just made available.
 	 */
+	UFUNCTION()
 	virtual void Native_OnPlayerStateAvailable(TScriptInterface<IPF2PlayerStateInterface> NewPlayerState);
 
 	/**
@@ -135,6 +154,7 @@ protected:
 	 * @param GivenCharacter
 	 *	The character that is now controllable by the player.
 	 */
+	UFUNCTION()
 	virtual void Native_OnCharacterGiven(const TScriptInterface<IPF2CharacterInterface>& GivenCharacter);
 
 	/**
@@ -143,6 +163,7 @@ protected:
 	 * @param ReleasedCharacter
 	 *	The character that is no longer controllable by the player.
 	 */
+	UFUNCTION()
 	virtual void Native_OnCharacterReleased(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter);
 
 	// =================================================================================================================
