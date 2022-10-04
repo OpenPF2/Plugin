@@ -114,4 +114,15 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Queues")
 	virtual void Clear() = 0;
+
+	/**
+	 * Converts the contents of this queue into an array of commands.
+	 *
+	 * Changes to the resulting array have no effect on the contents of this queue.
+	 *
+	 * @return
+	 *	The array of commands contained in this queue, in the order they appear in the queue.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Queues")
+	virtual TArray<TScriptInterface<IPF2CharacterCommandInterface>> ToArray() const = 0;
 };

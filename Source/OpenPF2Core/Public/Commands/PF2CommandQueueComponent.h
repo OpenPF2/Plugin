@@ -150,6 +150,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void Clear() override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<TScriptInterface<IPF2CharacterCommandInterface>> ToArray() const override;
+
 	// =================================================================================================================
 	// Public Methods - IPF2ActorComponentInterface Implementation
 	// =================================================================================================================

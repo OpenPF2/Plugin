@@ -7,6 +7,8 @@
 
 #include <Net/UnrealNetwork.h>
 
+#include <UObject/WeakInterfacePtr.h>
+
 #include "Commands/PF2CharacterCommandInterface.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
@@ -179,6 +181,23 @@ void UPF2CommandQueueComponent::Clear()
 {
 	this->Queue.Empty();
 	this->Native_OnCommandsChanged();
+}
+
+TArray<TScriptInterface<IPF2CharacterCommandInterface>> UPF2CommandQueueComponent::ToArray() const
+{
+	return PF2ArrayUtilities::Reduce<TArray<TScriptInterface<IPF2CharacterCommandInterface>>>(
+		this->Queue,
+		TArray<TScriptInterface<IPF2CharacterCommandInterface>>(),
+		[](TArray<TScriptInterface<IPF2CharacterCommandInterface>> Commands,
+		   const TWeakInterfacePtr<IPF2CharacterCommandInterface>  CurrentCommand)
+		{
+			if (CurrentCommand.IsValid())
+			{
+				Commands.Add(PF2InterfaceUtilities::ToScriptInterface(CurrentCommand.Get()));
+			}
+
+			return Commands;
+		});
 }
 
 UActorComponent* UPF2CommandQueueComponent::ToActorComponent()
