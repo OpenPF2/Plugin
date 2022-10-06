@@ -50,7 +50,7 @@ void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter(IPF2CharacterInter
 	);
 
 	UE_LOG(
-		LogPf2CoreKeyBindings,
+		LogPf2CoreInput,
 		VeryVerbose,
 		TEXT("[%s] Loading %d abilities from TargetCharacter ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
@@ -79,7 +79,7 @@ void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter(IPF2CharacterInter
 	}
 
 	UE_LOG(
-		LogPf2CoreKeyBindings,
+		LogPf2CoreInput,
 		VeryVerbose,
 		TEXT("[%s] Loaded %d abilities with default action mappings from TargetCharacter ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),

@@ -56,7 +56,7 @@ void FPF2CommandInputBinding::LocalInputPressed(FPF2CommandInputBinding* Binding
 	if (Binding == nullptr)
 	{
 		UE_LOG(
-			LogPf2CoreKeyBindings,
+			LogPf2CoreInput,
 			VeryVerbose,
 			TEXT("Input PRESSED for a null binding.")
 		);
@@ -64,7 +64,7 @@ void FPF2CommandInputBinding::LocalInputPressed(FPF2CommandInputBinding* Binding
 	else
 	{
 		UE_LOG(
-			LogPf2CoreKeyBindings,
+			LogPf2CoreInput,
 			VeryVerbose,
 			TEXT("Input PRESSED for binding of action ('%s') for character ('%s')."),
 			*(Binding->ActionName.ToString()),
@@ -80,7 +80,7 @@ void FPF2CommandInputBinding::LocalInputReleased(FPF2CommandInputBinding* Bindin
 	if (Binding == nullptr)
 	{
 		UE_LOG(
-			LogPf2CoreKeyBindings,
+			LogPf2CoreInput,
 			VeryVerbose,
 			TEXT("Input RELEASED for a null binding.")
 		);
@@ -88,7 +88,7 @@ void FPF2CommandInputBinding::LocalInputReleased(FPF2CommandInputBinding* Bindin
 	else
 	{
 		UE_LOG(
-			LogPf2CoreKeyBindings,
+			LogPf2CoreInput,
 			VeryVerbose,
 			TEXT("Input RELEASED for binding to action ('%s') for character ('%s')."),
 			*(Binding->ActionName.ToString()),
