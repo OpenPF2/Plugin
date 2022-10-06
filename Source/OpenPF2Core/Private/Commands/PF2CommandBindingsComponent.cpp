@@ -155,10 +155,26 @@ FString UPF2CommandBindingsComponent::GetIdForLogs() const
 
 void UPF2CommandBindingsComponent::Native_OnInputConnected()
 {
+	UE_LOG(
+		LogPf2CoreInput,
+		Verbose,
+		TEXT("[%s] Command bindings component ('%s') connected to input."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(this->GetIdForLogs())
+	);
+
 	this->OnInputConnected.Broadcast();
 }
 
 void UPF2CommandBindingsComponent::Native_OnInputDisconnected()
 {
+	UE_LOG(
+		LogPf2CoreInput,
+		Verbose,
+		TEXT("[%s] Command bindings component ('%s') disconnected from input."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(this->GetIdForLogs())
+	);
+
 	this->OnInputDisconnected.Broadcast();
 }
