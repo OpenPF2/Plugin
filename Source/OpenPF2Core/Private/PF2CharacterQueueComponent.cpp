@@ -27,42 +27,11 @@ void UPF2CharacterQueueComponent::GetLifetimeReplicatedProps(TArray<FLifetimePro
 
 TScriptInterface<IPF2CharacterInterface> UPF2CharacterQueueComponent::GetActiveCharacter() const
 {
-	TScriptInterface<IPF2CharacterInterface> ActiveCharacter;
-
-	if (this->Count() == 0)
-	{
-		// No active character.
-		ActiveCharacter = TScriptInterface<IPF2CharacterInterface>();
-	}
-	else
-	{
-		AActor*                 ActiveCharacterActor;
-		IPF2CharacterInterface* ActiveCharacterIntf;
-
-		check(this->ActiveCharacterIndex < this->Count());
-
-		ActiveCharacterActor = this->Queue[this->ActiveCharacterIndex];
-		ActiveCharacterIntf  = Cast<IPF2CharacterInterface>(ActiveCharacterActor);
-
-		check(ActiveCharacterIntf != nullptr);
-
-		ActiveCharacter = PF2InterfaceUtilities::ToScriptInterface(ActiveCharacterIntf);
-	}
-
-	return ActiveCharacter;
+	return this->ActiveCharacter;
 }
 
 void UPF2CharacterQueueComponent::Add(const TScriptInterface<IPF2CharacterInterface> Character)
 {
-	UE_LOG(
-		LogPf2Core,
-		Verbose,
-		TEXT("[%s] Character ('%s') has been added to character queue ('%s')."),
-		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(Character->GetIdForLogs()),
-		*(this->GetIdForLogs())
-	);
-
 	check(this->Count() <= (static_cast<uint32>(UINT8_MAX) + 1));
 
 	this->Queue.AddUnique(Character->ToActor());
@@ -200,24 +169,57 @@ FString UPF2CharacterQueueComponent::GetIdForLogs() const
 
 void UPF2CharacterQueueComponent::SetActiveCharacterIndex(const uint8 NewActiveCharacterIndex)
 {
-	const TScriptInterface<IPF2CharacterInterface> OldCharacter = this->GetActiveCharacter();
-	TScriptInterface<IPF2CharacterInterface>       NewCharacter;
-
 	check(NewActiveCharacterIndex < this->Count());
 
 	this->ActiveCharacterIndex = NewActiveCharacterIndex;
-	NewCharacter               = this->GetActiveCharacter();
+
+	this->UpdateActiveCharacter();
+}
+
+void UPF2CharacterQueueComponent::UpdateActiveCharacter()
+{
+	const TScriptInterface<IPF2CharacterInterface> OldCharacter = this->ActiveCharacter;
+	TScriptInterface<IPF2CharacterInterface>       NewCharacter;
+
+	if (this->Count() == 0)
+	{
+		// No active character.
+		NewCharacter = TScriptInterface<IPF2CharacterInterface>();
+	}
+	else
+	{
+		AActor*                 ActiveCharacterActor;
+		IPF2CharacterInterface* ActiveCharacterIntf;
+
+		check(this->ActiveCharacterIndex < this->Count());
+
+		ActiveCharacterActor = this->Queue[this->ActiveCharacterIndex];
+		ActiveCharacterIntf  = Cast<IPF2CharacterInterface>(ActiveCharacterActor);
+
+		if (ActiveCharacterIntf == nullptr)
+		{
+			// BUGBUG: By the time we're here, this should definitely be an OpenPF2 character, but UE will sometimes
+			// replicate entries in this->ControllableCharacters as NULL.
+			NewCharacter = TScriptInterface<IPF2CharacterInterface>();
+		}
+		else
+		{
+			NewCharacter = PF2InterfaceUtilities::ToScriptInterface(ActiveCharacterIntf);
+		}
+	}
+
+	this->ActiveCharacter = NewCharacter;
 
 	if (OldCharacter != NewCharacter)
 	{
-		this->Native_OnActiveCharacterChanged(NewCharacter);
+		this->Native_OnActiveCharacterChanged(OldCharacter, NewCharacter);
 	}
 }
 
 void UPF2CharacterQueueComponent::OnRep_CharacterQueue(const TArray<AActor*> OldCharacters)
 {
 	TArray<IPF2CharacterInterface*> RemovedCharacters,
-									AddedCharacters;
+	                                AddedCharacters;
 
 	// BUGBUG: By the time we're here, this should definitely be an OpenPF2 character, but UE will sometimes replicate
 	// entries in this->ControllableCharacters as NULL.
@@ -247,7 +249,7 @@ void UPF2CharacterQueueComponent::OnRep_CharacterQueue(const TArray<AActor*> Old
 
 void UPF2CharacterQueueComponent::OnRep_ActiveCharacterIndex()
 {
-	this->Native_OnActiveCharacterChanged(this->GetActiveCharacter());
+	this->UpdateActiveCharacter();
 }
 
 void UPF2CharacterQueueComponent::Native_OnCharactersChanged()
@@ -306,12 +308,13 @@ void UPF2CharacterQueueComponent::Native_OnCharacterAdded(
 		*(this->GetIdForLogs())
 	);
 
+	this->UpdateActiveCharacter();
 	this->OnCharacterAdded.Broadcast(AddedCharacter);
 }
 
 void UPF2CharacterQueueComponent::Native_OnCharacterRemoved(
 	const TScriptInterface<IPF2CharacterInterface>& RemovedCharacter,
-	const uint8 RemovedIndex)
+	const uint8                                     RemovedIndex)
 {
 	UE_LOG(
 		LogPf2Core,
@@ -326,15 +329,15 @@ void UPF2CharacterQueueComponent::Native_OnCharacterRemoved(
 	// character or a character prior to it, we move the active character index accordingly.
 	if (this->ActiveCharacterIndex >= RemovedIndex)
 	{
-		if (this->ActiveCharacterIndex != 0)
+		if (this->ActiveCharacterIndex == 0)
 		{
-			// We handle this ourselves here instead of using SetActiveCharacterIndex() since its detection of the
-			// previous active character could be out of bounds at this point.
-			this->ActiveCharacterIndex -= 1;
+			// The last item just got removed, so jump directly to notifying listeners.
+			this->UpdateActiveCharacter();
 		}
-
-		// Manually invoke active character change callback.
-		this->Native_OnActiveCharacterChanged(this->GetActiveCharacter());
+		else
+		{
+			this->SetActiveCharacterIndex(this->ActiveCharacterIndex - 1);
+		}
 	}
 
 	this->OnCharacterRemoved.Broadcast(RemovedCharacter);
@@ -342,16 +345,18 @@ void UPF2CharacterQueueComponent::Native_OnCharacterRemoved(
 
 // ReSharper disable once CppMemberFunctionMayBeConst
 void UPF2CharacterQueueComponent::Native_OnActiveCharacterChanged(
+	const TScriptInterface<IPF2CharacterInterface>& OldCharacter,
 	const TScriptInterface<IPF2CharacterInterface>& NewCharacter)
 {
 	UE_LOG(
 		LogPf2Core,
 		Verbose,
-		TEXT("[%s] Active character in queue ('%s') has changed (now '%s')."),
+		TEXT("[%s] Active character in queue ('%s') has changed (was '%s'; now '%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		*(this->GetIdForLogs()),
-		*(NewCharacter->GetIdForLogs())
+		*((OldCharacter != nullptr) ? OldCharacter->GetIdForLogs() : "null"),
+		*((NewCharacter != nullptr) ? NewCharacter->GetIdForLogs() : "null")
 	);
 
-	this->OnActiveCharacterChanged.Broadcast(NewCharacter);
+	this->OnActiveCharacterChanged.Broadcast(OldCharacter, NewCharacter);
 }

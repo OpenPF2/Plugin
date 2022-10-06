@@ -46,8 +46,9 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 /**
  * Delegate for Blueprints to react to a change in active character.
  */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
 	FPF2ActiveCharacterChangedDelegate,
+	const TScriptInterface<IPF2CharacterInterface>&, OldCharacter,
 	const TScriptInterface<IPF2CharacterInterface>&, NewCharacter
 );
 
@@ -87,6 +88,17 @@ protected:
 	 */
 	UPROPERTY(ReplicatedUsing=OnRep_ActiveCharacterIndex)
 	uint8 ActiveCharacterIndex;
+
+	/**
+	 * A locally cached copy of which character is currently active.
+	 *
+	 * This is NOT replicated; instead, it is derived from the value of ActiveCharacterIndex, which is replicated, and
+	 * gets updated by UpdateActiveCharacter().
+	 *
+	 * @see UpdateActiveCharacter()
+	 */
+	UPROPERTY()
+	TScriptInterface<IPF2CharacterInterface> ActiveCharacter;
 
 public:
 	// =================================================================================================================
@@ -204,6 +216,13 @@ protected:
 	 */
 	void SetActiveCharacterIndex(const uint8 NewActiveCharacterIndex);
 
+	/**
+	 * Updates the locally cached active character reference.
+	 *
+	 * If this actually results in a change to the reference, event listeners are notified.
+	 */
+	void UpdateActiveCharacter();
+
 	// =================================================================================================================
 	// Protected Replication Callbacks
 	// =================================================================================================================
@@ -260,8 +279,11 @@ protected:
 	 *
 	 * If replication is enabled for this component, this is invoked on both the owning client and the server.
 	 *
+	 * @param OldCharacter
+	 *	The character that was previously active in the queue, if any.
 	 * @param NewCharacter
 	 *	The character that is now active in the queue.
 	 */
-	void Native_OnActiveCharacterChanged(const TScriptInterface<IPF2CharacterInterface>& NewCharacter);
+	void Native_OnActiveCharacterChanged(const TScriptInterface<IPF2CharacterInterface>& OldCharacter,
+	                                     const TScriptInterface<IPF2CharacterInterface>& NewCharacter);
 };
