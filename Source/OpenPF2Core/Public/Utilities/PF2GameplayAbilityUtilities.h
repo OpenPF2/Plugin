@@ -37,7 +37,7 @@ namespace PF2GameplayAbilityUtilities
 	 * @return
 	 *	The desired tag.
 	 */
-	FORCEINLINE FGameplayTag GetTag(const FName TagName)
+	FORCEINLINE OPENPF2CORE_API FGameplayTag GetTag(const FName TagName)
 	{
 		return FGameplayTag::RequestGameplayTag(TagName);
 	}
@@ -53,7 +53,7 @@ namespace PF2GameplayAbilityUtilities
 	 * @return
 	 *	The desired tag.
 	 */
-	FORCEINLINE FGameplayTag GetTag(const FString TagName)
+	FORCEINLINE OPENPF2CORE_API FGameplayTag GetTag(const FString TagName)
 	{
 		return GetTag(FName(TagName));
 	}
@@ -71,7 +71,7 @@ namespace PF2GameplayAbilityUtilities
 	 *	- TRUE if given a tag prefix, and there is a tag present in the tag list that starts with that prefix.
 	 *	- FALSE, otherwise.
 	 */
-	FORCEINLINE bool HasTag(const FGameplayTagContainer* Tags, const FName TagNameOrPrefix)
+	FORCEINLINE OPENPF2CORE_API bool HasTag(const FGameplayTagContainer* Tags, const FName TagNameOrPrefix)
 	{
 		return Tags->HasTag(GetTag(TagNameOrPrefix));
 	}
@@ -89,7 +89,7 @@ namespace PF2GameplayAbilityUtilities
 	 *	- TRUE if given a tag prefix, and there is a tag present in the tag list that starts with that prefix.
 	 *	- FALSE, otherwise.
 	 */
-	FORCEINLINE bool HasTag(const FGameplayTagContainer* Tags, const FString TagNameOrPrefix)
+	FORCEINLINE OPENPF2CORE_API bool HasTag(const FGameplayTagContainer* Tags, const FString TagNameOrPrefix)
 	{
 		return Tags->HasTag(GetTag(TagNameOrPrefix));
 	}
@@ -136,7 +136,7 @@ namespace PF2GameplayAbilityUtilities
 	 *	A pointer to the IPF2CharacterAbilitySystemComponentInterface interface of the Ability System Component for the
 	 *	actor described by the given info.
 	 */
-	OPENPF2CORE_API FORCEINLINE IPF2CharacterAbilitySystemInterface* GetCharacterAbilitySystemComponent(
+	FORCEINLINE OPENPF2CORE_API IPF2CharacterAbilitySystemInterface* GetCharacterAbilitySystemComponent(
 		const FGameplayAbilityActorInfo* ActorInfo);
 
 	/**
@@ -150,7 +150,7 @@ namespace PF2GameplayAbilityUtilities
 	 * @return
 	 *	A pointer to the Ability System Component for the actor described by the given info.
 	 */
-	OPENPF2CORE_API FORCEINLINE UAbilitySystemComponent* GetAbilitySystemComponent(
+	FORCEINLINE OPENPF2CORE_API UAbilitySystemComponent* GetAbilitySystemComponent(
 		const FGameplayAbilityActorInfo* ActorInfo);
 
 	/**
@@ -164,7 +164,7 @@ namespace PF2GameplayAbilityUtilities
 	 * @return
 	 *	A pointer to the OpenPF2 attribute set.
 	 */
-	OPENPF2CORE_API FORCEINLINE const UPF2AttributeSet* GetAttributeSet(const FGameplayAbilityActorInfo* ActorInfo);
+	FORCEINLINE OPENPF2CORE_API const UPF2AttributeSet* GetAttributeSet(const FGameplayAbilityActorInfo* ActorInfo);
 
 	/**
 	 * Determines which OpenPF2 character an activated GE has targeted.

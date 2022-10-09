@@ -24,7 +24,7 @@ namespace PF2ArrayUtilities
 	 *	The array to which elements will be added.
 	 */
 	template <typename T>
-	void AddAllUnique(TArray<T> NewElements, TArray<T>& Target)
+	OPENPF2CORE_API void AddAllUnique(TArray<T> NewElements, TArray<T>& Target)
 	{
 		TSet<T> TargetIndex = TSet<T>(Target);
 
@@ -61,7 +61,7 @@ namespace PF2ArrayUtilities
 	 *	The array of values that resulted from applying the transformation to every value of the source array.
 	 */
 	template <typename Out, typename In, typename Func>
-	TArray<Out> Map(const TArray<In> Elements, const Func Callable)
+	OPENPF2CORE_API TArray<Out> Map(const TArray<In> Elements, const Func Callable)
 	{
 		TArray<Out> Result;
 
@@ -110,7 +110,7 @@ namespace PF2ArrayUtilities
 	 *	The result of reducing the values of the array.
 	 */
 	template <typename Out, typename In, typename Func>
-	Out Reduce(const TArray<In> Elements, const Out StartingValue, const Func Callable)
+	OPENPF2CORE_API Out Reduce(const TArray<In> Elements, const Out StartingValue, const Func Callable)
 	{
 		Out PreviousValue = StartingValue;
 
@@ -137,7 +137,7 @@ namespace PF2ArrayUtilities
 	 *	A new array containing all the values of the original array that were not null.
 	 */
 	template <typename T>
-	TArray<T> Filter(const TArray<T> Elements)
+	OPENPF2CORE_API TArray<T> Filter(const TArray<T> Elements)
 	{
 		return Filter<T>(
 			Elements,
@@ -169,7 +169,7 @@ namespace PF2ArrayUtilities
 	 *	A new array containing all the values of the original array for which the callable returned "true".
 	 */
 	template <typename T, typename Func>
-	TArray<T> Filter(const TArray<T> Elements, const Func Callable)
+	OPENPF2CORE_API TArray<T> Filter(const TArray<T> Elements, const Func Callable)
 	{
 		return Elements.FilterByPredicate(Callable);
 	}
@@ -193,7 +193,7 @@ namespace PF2ArrayUtilities
 	 *	The typecast array.
 	 */
 	template <typename In, typename Out>
-	TArray<Out> Cast(TArray<In> InArray)
+	OPENPF2CORE_API TArray<Out> Cast(TArray<In> InArray)
 	{
 		TArray<Out> Result;
 
@@ -224,10 +224,10 @@ namespace PF2ArrayUtilities
 	 *	The array to which elements that were not present in OldArray but are now present in NewArray will be added.
 	 */
 	template <typename T>
-	void CaptureDeltas(const TArray<T> OldArray,
-	                   const TArray<T> NewArray,
-	                   TArray<T>&      OutRemovedElements,
-	                   TArray<T>&      OutAddedElements)
+	OPENPF2CORE_API void CaptureDeltas(const TArray<T> OldArray,
+	                                   const TArray<T> NewArray,
+	                                   TArray<T>&      OutRemovedElements,
+	                                   TArray<T>&      OutAddedElements)
 	{
 		// Identify which elements were removed.
 		for (T const Element : OldArray)
@@ -271,10 +271,10 @@ namespace PF2ArrayUtilities
 	 *	The array to which elements that were not present in OldArray but are now present in NewArray will be added.
 	 */
 	template <typename SrcT, typename ResultT>
-	void CaptureDeltasWithCast(const TArray<SrcT*> OldArray,
-	                           const TArray<SrcT*> NewArray,
-	                           TArray<ResultT*>&   OutRemovedElements,
-	                           TArray<ResultT*>&   OutAddedElements)
+	OPENPF2CORE_API void CaptureDeltasWithCast(const TArray<SrcT*> OldArray,
+	                                           const TArray<SrcT*> NewArray,
+	                                           TArray<ResultT*>&   OutRemovedElements,
+	                                           TArray<ResultT*>&   OutAddedElements)
 	{
 		// Identify which elements were removed.
 		for (SrcT* const Element : OldArray)
