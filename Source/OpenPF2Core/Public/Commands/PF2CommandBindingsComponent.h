@@ -33,6 +33,27 @@ class OPENPF2CORE_API UPF2CommandBindingsComponent : public UActorComponent, pub
 {
 	GENERATED_BODY()
 
+public:
+	// =================================================================================================================
+	// Public Properties - Multicast Delegates
+	// =================================================================================================================
+	/**
+	 * Event fired when local input is connected to this component.
+	 *
+	 * This event is only fired on clients.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Command Bindings")
+	FPF2CommandQueueInputConnectionChangedDelegate OnInputConnected;
+
+	/**
+	 * Event fired when local input is disconnected from this component.
+	 *
+	 * This event is only fired on clients.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Command Bindings")
+	FPF2CommandQueueInputConnectionChangedDelegate OnInputDisconnected;
+
+private:
 	/**
 	 * The input component to which this component is currently wired.
 	 *
@@ -101,25 +122,6 @@ public:
 	// Public Methods - AActorComponent Overrides
 	// =================================================================================================================
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
-	// =================================================================================================================
-	// Public Properties - Multicast Delegates
-	// =================================================================================================================
-	/**
-	 * Event fired when local input is connected to this component.
-	 *
-	 * This event is only fired on clients.
-	 */
-	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Command Bindings")
-	FPF2CommandQueueInputConnectionChangedDelegate OnInputConnected;
-
-	/**
-	 * Event fired when local input is disconnected from this component.
-	 *
-	 * This event is only fired on clients.
-	 */
-	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Command Bindings")
-	FPF2CommandQueueInputConnectionChangedDelegate OnInputDisconnected;
 
 protected:
 	// =================================================================================================================
