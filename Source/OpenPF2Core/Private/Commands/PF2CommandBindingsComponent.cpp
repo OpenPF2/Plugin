@@ -117,9 +117,9 @@ void UPF2CommandBindingsComponent::DisconnectFromInput()
 		}
 
 		this->InputComponent = nullptr;
-	}
 
-	this->Native_OnInputDisconnected();
+		this->Native_OnInputDisconnected();
+	}
 }
 
 void UPF2CommandBindingsComponent::ExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle)
