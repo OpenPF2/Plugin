@@ -9,13 +9,13 @@
 
 #include <Components/InputComponent.h>
 
+#include "PF2CommandBindingsInterface.h"
 #include "PF2CommandInputBinding.generated.h"
 
 // =====================================================================================================================
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2CharacterInterface;
-class IPF2CommandBindingsInterface;
 class UGameplayAbility;
 
 // =====================================================================================================================
@@ -42,7 +42,7 @@ struct FPF2CommandInputBinding
 
 protected:
 	// =================================================================================================================
-	// Protected Fields - Blueprint Accessible
+	// Protected Fields
 	// =================================================================================================================
 	/**
 	 * The handle for the corresponding ability.
@@ -53,15 +53,17 @@ protected:
 	/**
 	 * The handles for input action bindings, if this binding has been connected to input.
 	 */
+	UPROPERTY()
 	TArray<int32> Handles;
 
-	// =================================================================================================================
-	// Protected Fields
-	// =================================================================================================================
 	/**
 	 * The component that is managing this binding.
+	 *
+	 * This is declared as an actor component instead of an interface so that UE interacts with it properly for
+	 * replication. UE will not do this if this component were declared/referenced through an interface field.
 	 */
-	IPF2CommandBindingsInterface* BindingsOwner;
+	UPROPERTY()
+	UActorComponent* BindingsOwner;
 
 public:
 	// =================================================================================================================
@@ -89,7 +91,7 @@ public:
 	                                 IPF2CommandBindingsInterface* Owner) :
 		ActionName(ActionName),
 		AbilitySpecHandle(AbilitySpec.Handle),
-		BindingsOwner(Owner)
+		BindingsOwner(Owner->ToActorComponent())
 	{
 	}
 
@@ -167,7 +169,7 @@ protected:
 	 */
 	FORCEINLINE IPF2CommandBindingsInterface* GetBindingsOwner() const
 	{
-		return this->BindingsOwner;
+		return Cast<IPF2CommandBindingsInterface>(this->BindingsOwner);
 	}
 
 	/*

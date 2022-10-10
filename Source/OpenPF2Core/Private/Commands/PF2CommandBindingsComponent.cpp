@@ -9,6 +9,8 @@
 
 #include <Components/InputComponent.h>
 
+#include <Net/UnrealNetwork.h>
+
 #include "PF2CharacterInterface.h"
 #include "PF2PlayerControllerInterface.h"
 
@@ -149,6 +151,13 @@ FString UPF2CommandBindingsComponent::GetIdForLogs() const
 	);
 }
 
+void UPF2CommandBindingsComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UPF2CommandBindingsComponent, Bindings);
+}
+
 IPF2CharacterInterface* UPF2CommandBindingsComponent::GetOwningCharacter() const
 {
 	AActor*                 OwningActor;
@@ -161,6 +170,39 @@ IPF2CharacterInterface* UPF2CommandBindingsComponent::GetOwningCharacter() const
 	checkf(OwningCharacter != nullptr, TEXT("Owning character must implement IPF2CharacterInterface."));
 
 	return OwningCharacter;
+}
+
+void UPF2CommandBindingsComponent::OnRep_Bindings(const TArray<FPF2CommandInputBinding> OldBindings) const
+{
+	if (this->IsConnectedToInput())
+	{
+		UInputComponent*                Input           = this->GetInputComponent();
+		TArray<FPF2CommandInputBinding> RemovedBindings,
+		                                AddedBindings;
+
+		PF2ArrayUtilities::CaptureStructDeltas(
+			OldBindings,
+			this->Bindings,
+			[](const FPF2CommandInputBinding First, const FPF2CommandInputBinding Second)
+			{
+				return (First.ActionName == Second.ActionName);
+			},
+			RemovedBindings,
+			AddedBindings
+		);
+		// Ensure we disconnect all bindings that were removed so that they don't keep firing.
+
+		for (FPF2CommandInputBinding& RemovedBinding : RemovedBindings)
+		{
+			RemovedBinding.DisconnectFromInput(Input);
+		}
+
+		// Ensure all the new bindings get wired up correctly.
+		for (FPF2CommandInputBinding& AddedBinding : AddedBindings)
+		{
+			AddedBinding.ConnectToInput(Input);
+		}
+	}
 }
 
 void UPF2CommandBindingsComponent::Native_OnInputConnected()
