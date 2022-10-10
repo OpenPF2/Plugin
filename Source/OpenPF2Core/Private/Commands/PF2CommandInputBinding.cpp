@@ -16,6 +16,15 @@ void FPF2CommandInputBinding::ConnectToInput(UInputComponent* InputComponent)
 	{
 		TArray<int32> NewHandles;
 
+		UE_LOG(
+			LogPf2CoreInput,
+			VeryVerbose,
+			TEXT("[%s] Connecting binding for action ('%s') to input in component ('%s')."),
+			*(PF2LogUtilities::GetHostNetId(Cast<UActorComponent>(this->GetBindingsOwner())->GetWorld())),
+			*(this->ActionName.ToString()),
+			*(this->GetBindingsOwner()->GetIdForLogs())
+		);
+
 		// Pressed event
 		NewHandles.Add(
 			this->AddActionBinding(
@@ -42,6 +51,15 @@ void FPF2CommandInputBinding::DisconnectFromInput(UInputComponent* InputComponen
 {
 	if (this->IsConnectedToInput())
 	{
+		UE_LOG(
+			LogPf2CoreInput,
+			VeryVerbose,
+			TEXT("[%s] Disconnecting binding for action ('%s') from input in component ('%s')."),
+			*(PF2LogUtilities::GetHostNetId(Cast<UActorComponent>(this->GetBindingsOwner())->GetWorld())),
+			*(this->ActionName.ToString()),
+			*(this->GetBindingsOwner()->GetIdForLogs())
+		);
+
 		for (const auto& Handle : this->Handles)
 		{
 			InputComponent->RemoveActionBindingForHandle(Handle);
@@ -58,7 +76,7 @@ void FPF2CommandInputBinding::LocalInputPressed(FPF2CommandInputBinding* Binding
 		UE_LOG(
 			LogPf2CoreInput,
 			VeryVerbose,
-			TEXT("Input PRESSED for a null binding.")
+			TEXT("[UNK] Input PRESSED for a null binding.")
 		);
 	}
 	else
@@ -66,7 +84,8 @@ void FPF2CommandInputBinding::LocalInputPressed(FPF2CommandInputBinding* Binding
 		UE_LOG(
 			LogPf2CoreInput,
 			VeryVerbose,
-			TEXT("Input PRESSED for binding of action ('%s') in component ('%s')."),
+			TEXT("[%s] Input PRESSED for binding of action ('%s') in component ('%s')."),
+			*(PF2LogUtilities::GetHostNetId(Cast<UActorComponent>(Binding->GetBindingsOwner())->GetWorld())),
 			*(Binding->ActionName.ToString()),
 			*(Binding->GetBindingsOwner()->GetIdForLogs())
 		);
@@ -82,7 +101,7 @@ void FPF2CommandInputBinding::LocalInputReleased(FPF2CommandInputBinding* Bindin
 		UE_LOG(
 			LogPf2CoreInput,
 			VeryVerbose,
-			TEXT("Input RELEASED for a null binding.")
+			TEXT("[UNK] Input RELEASED for a null binding."),
 		);
 	}
 	else
@@ -90,7 +109,8 @@ void FPF2CommandInputBinding::LocalInputReleased(FPF2CommandInputBinding* Bindin
 		UE_LOG(
 			LogPf2CoreInput,
 			VeryVerbose,
-			TEXT("Input RELEASED for binding of action ('%s') in component ('%s')."),
+			TEXT("[%s] Input RELEASED for binding of action ('%s') in component ('%s')."),
+			*(PF2LogUtilities::GetHostNetId(Cast<UActorComponent>(Binding->GetBindingsOwner())->GetWorld())),
 			*(Binding->ActionName.ToString()),
 			*(Binding->GetBindingsOwner()->GetIdForLogs())
 		);
