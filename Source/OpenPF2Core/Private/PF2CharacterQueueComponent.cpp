@@ -223,7 +223,7 @@ void UPF2CharacterQueueComponent::OnRep_CharacterQueue(const TArray<AActor*> Old
 
 	// BUGBUG: By the time we're here, this should definitely be an OpenPF2 character, but UE will sometimes replicate
 	// entries in this->ControllableCharacters as NULL.
-	PF2ArrayUtilities::CaptureDeltasWithCast(OldCharacters, this->Queue, RemovedCharacters, AddedCharacters);
+	PF2ArrayUtilities::CapturePtrDeltasWithCast(OldCharacters, this->Queue, RemovedCharacters, AddedCharacters);
 
 	// We execute this logic even if we have no registered listeners because we still need to do internal bookkeeping
 	// when the queue changes.

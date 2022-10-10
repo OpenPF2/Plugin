@@ -228,7 +228,7 @@ void UPF2CommandQueueComponent::OnRep_Queue(const TArray<AInfo*>& OldQueue)
 
 		// BUGBUG: By the time we're here, this should definitely be an OpenPF2 command, but UE will sometimes replicate
 		// entries in this->Queue as NULL.
-		PF2ArrayUtilities::CaptureDeltasWithCast(OldQueue, this->Queue, RemovedCommands, AddedCommands);
+		PF2ArrayUtilities::CapturePtrDeltasWithCast(OldQueue, this->Queue, RemovedCommands, AddedCommands);
 
 		for (IPF2CharacterCommandInterface* const& RemovedCommand : RemovedCommands)
 		{
