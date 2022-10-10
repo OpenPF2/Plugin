@@ -537,9 +537,6 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void Multicast_OnEncounterTurnEnded() override;
 
-	// =================================================================================================================
-	// Public Methods - Blueprint Callable
-	// =================================================================================================================
 	/**
 	 * Sets the current level of this character.
 	 *
@@ -638,6 +635,9 @@ protected:
 	 */
 	void GrantAdditionalAbilities();
 
+	// =================================================================================================================
+	// Protected Event Notifications
+	// =================================================================================================================
 	/**
 	 * Callback invoked when a character's level has changed, to allow logic that depends on levels to be refreshed.
 	 *
