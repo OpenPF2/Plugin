@@ -106,20 +106,7 @@ void APF2GameStateBase::Multicast_RefreshAbilityActorInfoForAllCharacters_Implem
 
 			for (const TScriptInterface<IPF2CharacterInterface> Character : Characters)
 			{
-				UAbilitySystemComponent* AbilitySystemComponent = Character->GetAbilitySystemComponent();
-
-				if (AbilitySystemComponent != nullptr)
-				{
-					UE_LOG(
-						LogPf2Core,
-						VeryVerbose,
-						TEXT("[%s] Refreshing ability actor information for character ('%s')."),
-						*(PF2LogUtilities::GetHostNetId(World)),
-						*(Character->GetIdForLogs())
-					);
-
-					AbilitySystemComponent->RefreshAbilityActorInfo();
-				}
+				Character->RefreshAbilities();
 			}
 		}
 	}

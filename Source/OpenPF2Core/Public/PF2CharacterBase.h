@@ -433,7 +433,6 @@ public:
 	// =================================================================================================================
 	// Public Methods
 	// =================================================================================================================
-	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_Controller() override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -478,6 +477,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual TArray<TScriptInterface<IPF2AbilityBoostInterface>> GetPendingAbilityBoosts() const override;
+
+	virtual void InitializeAbilities() override;
+
+	virtual void RefreshAbilities() override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual AActor* ToActor() override;
