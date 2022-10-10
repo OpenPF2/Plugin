@@ -66,9 +66,9 @@ void FPF2CommandInputBinding::LocalInputPressed(FPF2CommandInputBinding* Binding
 		UE_LOG(
 			LogPf2CoreInput,
 			VeryVerbose,
-			TEXT("Input PRESSED for binding of action ('%s') for character ('%s')."),
+			TEXT("Input PRESSED for binding of action ('%s') in component ('%s')."),
 			*(Binding->ActionName.ToString()),
-			*(Binding->Character->GetIdForLogs())
+			*(Binding->GetBindingsOwner()->GetIdForLogs())
 		);
 
 		Binding->ActivateAbility();
@@ -90,9 +90,9 @@ void FPF2CommandInputBinding::LocalInputReleased(FPF2CommandInputBinding* Bindin
 		UE_LOG(
 			LogPf2CoreInput,
 			VeryVerbose,
-			TEXT("Input RELEASED for binding to action ('%s') for character ('%s')."),
+			TEXT("Input RELEASED for binding of action ('%s') in component ('%s')."),
 			*(Binding->ActionName.ToString()),
-			*(Binding->Character->GetIdForLogs())
+			*(Binding->GetBindingsOwner()->GetIdForLogs())
 		);
 
 		Binding->DeactivateAbility();
@@ -118,7 +118,7 @@ int32 FPF2CommandInputBinding::AddActionBinding(UInputComponent*  InputComponent
 
 void FPF2CommandInputBinding::ActivateAbility()
 {
-	this->BindingsOwner->ExecuteBoundAbility(this->AbilitySpecHandle, this->Character);
+	this->GetBindingsOwner()->ExecuteBoundAbility(this->AbilitySpecHandle);
 }
 
 void FPF2CommandInputBinding::DeactivateAbility()

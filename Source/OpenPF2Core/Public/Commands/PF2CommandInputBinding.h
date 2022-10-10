@@ -59,11 +59,6 @@ protected:
 	// Protected Fields
 	// =================================================================================================================
 	/**
-	 * The character to which the ability has been granted.
-	 */
-	IPF2CharacterInterface* Character;
-
-	/**
 	 * The component that is managing this binding.
 	 */
 	IPF2CommandBindingsInterface* BindingsOwner;
@@ -75,7 +70,7 @@ public:
 	/**
 	 * Default constructor (used by Blueprint).
 	 */
-	explicit FPF2CommandInputBinding() : Character(nullptr), BindingsOwner(nullptr)
+	explicit FPF2CommandInputBinding() : BindingsOwner(nullptr)
 	{
 	}
 
@@ -86,18 +81,14 @@ public:
 	 *	The human-friendly name of the action, as configured in project settings (e.g "Jump").
 	 * @param AbilitySpec
 	 *	The specification for the ability.
-	 * @param Character
-	 *	The character to which the ability has been granted.
 	 * @param Owner
 	 *	The component that is managing this binding.
 	 */
 	explicit FPF2CommandInputBinding(const FName&                  ActionName,
 	                                 const FGameplayAbilitySpec    AbilitySpec,
-	                                 IPF2CharacterInterface*       Character,
 	                                 IPF2CommandBindingsInterface* Owner) :
 		ActionName(ActionName),
 		AbilitySpecHandle(AbilitySpec.Handle),
-		Character(Character),
 		BindingsOwner(Owner)
 	{
 	}
@@ -168,6 +159,30 @@ protected:
 	// =================================================================================================================
 	// Protected Instance Methods
 	// =================================================================================================================
+	/**
+	 * Gets the component that is managing this binding.
+	 *
+	 * @return
+	 *	The containing bindings component.
+	 */
+	FORCEINLINE IPF2CommandBindingsInterface* GetBindingsOwner() const
+	{
+		return this->BindingsOwner;
+	}
+
+	/*
+	 * Binds a specific input event/action on the specified input component to the given callback.
+	 *
+	 * @param InputComponent
+	 *	The input component for which input is being bound.
+	 * @param InKeyEvent
+	 *	The event to which the callback will be bound.
+	 * @param Callback
+	 *	The callback to invoke.
+	 *
+	 * @return
+	 *	The handle in the input component of the action binding.
+	 */
 	int32 AddActionBinding(UInputComponent*  InputComponent,
 	                       const EInputEvent InKeyEvent,
 	                       void              (*Callback)(FPF2CommandInputBinding*));

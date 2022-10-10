@@ -43,31 +43,15 @@ public:
 	virtual void ClearBindings() = 0;
 
 	/**
-	 * Populates the bindings array from the abilities that have been granted to the specified character.
+	 * Populates the bindings array from the abilities that have been granted to the owning character.
 	 *
 	 * To prevent duplicate bindings, this can only be called when no bindings have yet been defined or all have been
 	 * cleared.
 	 *
 	 * If input is currently wired up, the new bindings are automatically added to input.
-	 *
-	 * @param Character
-	 *	The character from which to load granted abilities.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
-	virtual void LoadAbilitiesFromCharacter(const TScriptInterface<IPF2CharacterInterface> Character) = 0;
-
-	/**
-	 * Populates the bindings array from the abilities that have been granted to the specified character.
-	 *
-	 * To prevent duplicate bindings, this can only be called when no bindings have yet been defined or all have been
-	 * cleared.
-	 *
-	 * If input is currently wired up, the new bindings are automatically added to input.
-	 *
-	 * @param Character
-	 *	The character from which to load granted abilities.
-	 */
-	virtual void LoadAbilitiesFromCharacter(IPF2CharacterInterface* Character) = 0;
+	virtual void LoadAbilitiesFromCharacter() = 0;
 
 	/**
 	 * Wires-up all bindings to receive input from the given player input component.
@@ -92,15 +76,12 @@ public:
 	virtual void DisconnectFromInput() = 0;
 
 	/**
-	 * Executes the specified ability on the specified character.
+	 * Executes the specified ability on the owning character.
 	 *
 	 * This is expected to be invoked only by a command binding.
 	 *
 	 * @param AbilitySpecHandle
 	 *	The handle for the ability to activate.
-	 * @param Character
-	 *	The character upon which the ability should be activated.
 	 */
-	virtual void ExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	                                 IPF2CharacterInterface*          Character) = 0;
+	virtual void ExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle) = 0;
 };

@@ -7,9 +7,9 @@
 
 #include <Components/ActorComponent.h>
 
+#include "PF2CharacterInterface.h"
 #include "PF2CommandBindingsInterface.h"
 #include "PF2CommandInputBinding.h"
-
 #include "PF2CommandBindingsComponent.generated.h"
 
 // =====================================================================================================================
@@ -63,9 +63,7 @@ public:
 	virtual void ClearBindings() override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void LoadAbilitiesFromCharacter(const TScriptInterface<IPF2CharacterInterface> Character) override;
-
-	virtual void LoadAbilitiesFromCharacter(IPF2CharacterInterface* Character) override;
+	virtual void LoadAbilitiesFromCharacter() override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void ConnectToInput(UInputComponent* NewInputComponent) override;
@@ -73,8 +71,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void DisconnectFromInput() override;
 
-	virtual void ExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	                                 IPF2CharacterInterface* Character) override;
+	virtual void ExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle) override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2ActorComponentInterface Implementation
@@ -134,6 +131,14 @@ protected:
 	{
 		return this->GetInputComponent() != nullptr;
 	}
+
+	/**
+	 * Gets the character of which this component is a part.
+	 *
+	 * @return
+	 *	The character actor that owns this component.
+	 */
+	IPF2CharacterInterface* GetOwningCharacter() const;
 
 	// =================================================================================================================
 	// Protected Native Event Callbacks
