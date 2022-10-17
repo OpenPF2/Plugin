@@ -17,7 +17,6 @@
 #include "Commands/PF2CommandExecuteOrQueueResult.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
-#include "Utilities/PF2LogUtilities.h"
 
 #include "PF2CharacterCommand.generated.h"
 
@@ -49,6 +48,14 @@ protected:
 	 */
 	UPROPERTY(Replicated)
 	FGameplayAbilitySpecHandle AbilitySpecHandle;
+
+	/**
+	 * The cached ability for this command.
+	 *
+	 * This is memoized by APF2CharacterCommand::GetAbility().
+	 */
+	UPROPERTY()
+	mutable UGameplayAbility* CachedAbility;
 
 public:
 	// =================================================================================================================
@@ -208,6 +215,16 @@ protected:
 
 		return Ability;
 	}
+
+	/**
+	 * Sets the ability that this command will execute and the character upon which the ability will be executed.
+	 *
+	 * @param InTargetCharacter
+	 *	The character who would be issued this command.
+	 * @param InAbilitySpecHandle
+	 *	The handle of the ability that this command will trigger when it is executed.
+	 */
+	void SetTargetCharacterAndAbility(AActor* InTargetCharacter, FGameplayAbilitySpecHandle InAbilitySpecHandle);
 
 	/**
 	 * Attempts to cancel this command on the remote server by routing the request through the local player controller.
