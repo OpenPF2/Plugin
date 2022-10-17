@@ -43,7 +43,7 @@ void FPF2CommandInputBinding::ConnectToInput(UInputComponent* InputComponent)
 			)
 		);
 
-		this->Handles = NewHandles;
+		this->InputHandles = NewHandles;
 	}
 }
 
@@ -60,12 +60,12 @@ void FPF2CommandInputBinding::DisconnectFromInput(UInputComponent* InputComponen
 			*(this->GetBindingsOwner()->GetIdForLogs())
 		);
 
-		for (const auto& Handle : this->Handles)
+		for (const auto& Handle : this->InputHandles)
 		{
 			InputComponent->RemoveActionBindingForHandle(Handle);
 		}
 
-		this->Handles.Empty();
+		this->InputHandles.Empty();
 	}
 }
 

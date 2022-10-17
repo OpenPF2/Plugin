@@ -54,7 +54,7 @@ protected:
 	 * The handles for input action bindings, if this binding has been connected to input.
 	 */
 	UPROPERTY()
-	TArray<int32> Handles;
+	TArray<int32> InputHandles;
 
 	/**
 	 * The component that is managing this binding.
@@ -123,7 +123,7 @@ public:
 	 */
 	FORCEINLINE bool IsConnectedToInput() const
 	{
-		return this->Handles.Num() != 0;
+		return this->InputHandles.Num() != 0;
 	}
 
 	/**
