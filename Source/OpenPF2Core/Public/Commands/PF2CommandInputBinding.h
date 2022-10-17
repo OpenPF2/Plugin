@@ -93,6 +93,14 @@ public:
 		AbilitySpecHandle(AbilitySpec.Handle),
 		BindingsOwner(Owner->ToActorComponent())
 	{
+		UE_LOG(
+			LogPf2CoreInput,
+			VeryVerbose,
+			TEXT("Creating an FPF2CommandInputBinding for '%s' action (handle '%s') in command bindings component ('%s')."),
+			*(ActionName.ToString()),
+			*(this->AbilitySpecHandle.ToString()),
+			*(Owner->GetIdForLogs())
+		);
 	}
 
 	// =================================================================================================================
