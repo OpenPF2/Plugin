@@ -65,15 +65,11 @@ private:
 	/**
 	 * The association between inputs and Gameplay Abilities.
 	 *
-	 * This supports replication from the server, but replication is not enabled by default. Unless there is an
-	 * important reason for the server to be manipulating bindings directly rather than bindings just being derived from
-	 * abilities granted to the character through the ASC, it's usually best to refresh this only on the client side.
-	 * This can be accomplished by invoking the LoadAbilitiesFromCharacter() method from the AcknowledgePossession()
-	 * method of the Player Controller. That avoids additional overhead from the command bindings component having to
-	 * replicate every time the ASC has changed.
-	 *
-	 * Alternatively, set this component to be replicated and then any changes made to the bindings will automatically
-	 * update what has been bound to input as long as this component has been wired-up to an input component.
+	 * This supports replication from the server, which is enabled by default since the server is the authority on what
+	 * abilities each character has and the default bindings for those abilities. Abilities are typically loaded by
+	 * invoking LoadAbilitiesFromCharacter() from the server-only OnPossess() method of the Player Controller.
+	 * Replication on this component also ensures any changes made to the bindings will automatically update what is
+	 * bound to input as long as this component has been wired-up to an input component.
 	 */
 	UPROPERTY(ReplicatedUsing=OnRep_Bindings)
 	TArray<FPF2CommandInputBinding> Bindings;
@@ -87,6 +83,8 @@ public:
 	 */
 	explicit UPF2CommandBindingsComponent() : InputComponent(nullptr)
 	{
+		// This component needs to be replicated in order for
+		this->SetIsReplicatedByDefault(true);
 	}
 
 	// =================================================================================================================
