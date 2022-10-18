@@ -106,7 +106,7 @@ void APF2GameStateBase::Multicast_RefreshAbilityActorInfoForAllCharacters_Implem
 
 			for (const TScriptInterface<IPF2CharacterInterface> Character : Characters)
 			{
-				Character->RefreshAbilities();
+				Character->InitializeOrRefreshAbilities();
 			}
 		}
 	}

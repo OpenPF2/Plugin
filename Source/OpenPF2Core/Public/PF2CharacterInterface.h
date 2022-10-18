@@ -169,21 +169,13 @@ public:
 	virtual TArray<TScriptInterface<IPF2AbilityBoostInterface>> GetPendingAbilityBoosts() const = 0;
 
 	/**
-	 * Initializes the ability system component and all other related ability logic for this character.
+	 * Initializes or refreshes the ability system component and all other related ability logic for this character.
 	 *
-	 * This should be called by the Player Controller from the following places:
-	 *   - On the client: In AcknowledgePossession().
-	 *   - On the server: In OnPossess().
+	 * Characters typically invoke this method automatically on both the client and server side whenever they are being
+	 * possessed by a player controller or AI controller, but the game mode or player state may wish to invoke this
+	 * method at other times that the ASC or ASC owner information is stale.
 	 */
-	virtual void InitializeAbilities() = 0;
-
-	/**
-	 * Refreshes the ability system component and all other related ability logic for this character.
-	 *
-	 * This should be called whenever a character's abilities could be stale and must be called when the character's
-	 * owning controller changes.
-	 */
-	virtual void RefreshAbilities() = 0;
+	virtual void InitializeOrRefreshAbilities() = 0;
 
 	/**
 	 * Gets the actor that is implementing this interface.

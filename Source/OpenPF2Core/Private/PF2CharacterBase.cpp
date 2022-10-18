@@ -25,20 +25,20 @@ APF2CharacterBase::APF2CharacterBase() :
 {
 }
 
+void APF2CharacterBase::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	// Init/re-init. abilities on the server side.
+	this->InitializeOrRefreshAbilities();
+}
+
 void APF2CharacterBase::OnRep_Controller()
 {
 	Super::OnRep_Controller();
 
-	// TODO: Determine if we still need this, since we call InitializeAbilities() in AcknowledgePossession. Since both
-	// that and this are invoked client-side, it seems like one of them is unnecessary.
-	//
-	// According to the following docs, the PC should be invoking InitAbilityActorInfo (which we provide via
-	// InitializeAbilities()) and it makes no mention of RefreshAbilityActorInfo() (which we provide via
-	// RefreshAbilities()), but those docs probably aren't assuming that a character is going to become un-possessed
-	// and then re-possessed because of character switching.
-	// https://github.com/tranek/GASDocumentation#412-setup-and-initialization
-	//
-	this->RefreshAbilities();
+	// Init/re-init. abilities on the client side.
+	this->InitializeOrRefreshAbilities();
 }
 
 void APF2CharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -163,7 +163,7 @@ TArray<TScriptInterface<IPF2AbilityBoostInterface>> APF2CharacterBase::GetPendin
 	return this->GetCharacterAbilitySystemComponent()->GetPendingAbilityBoosts();
 }
 
-void APF2CharacterBase::InitializeAbilities()
+void APF2CharacterBase::InitializeOrRefreshAbilities()
 {
 	UAbilitySystemComponent* Asc = this->GetAbilitySystemComponent();
 
@@ -179,47 +179,36 @@ void APF2CharacterBase::InitializeAbilities()
 	}
 	else
 	{
-		UE_LOG(
-			LogPf2CoreAbilities,
-			VeryVerbose,
-			TEXT("[%s] Initializing ASC of character ('%s')."),
-			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-			*(this->GetIdForLogs())
-		);
+		if (this->bAreAbilitiesInitialized)
+		{
+			UE_LOG(
+				LogPf2CoreAbilities,
+				VeryVerbose,
+				TEXT("[%s] Refreshing ASC ability actor info of character ('%s')."),
+				*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+				*(this->GetIdForLogs())
+			);
 
-		Asc->InitAbilityActorInfo(this, this);
+			Asc->RefreshAbilityActorInfo();
+		}
+		else
+		{
+			UE_LOG(
+				LogPf2CoreAbilities,
+				VeryVerbose,
+				TEXT("[%s] Initializing ASC of character ('%s')."),
+				*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+				*(this->GetIdForLogs())
+			);
 
-		this->ActivatePassiveGameplayEffects();
-		this->ApplyAbilityBoostSelections();
-		this->GrantAdditionalAbilities();
-	}
-}
+			Asc->InitAbilityActorInfo(this, this);
 
-void APF2CharacterBase::RefreshAbilities()
-{
-	UAbilitySystemComponent* Asc = this->GetAbilitySystemComponent();
+			this->ActivatePassiveGameplayEffects();
+			this->ApplyAbilityBoostSelections();
+			this->GrantAdditionalAbilities();
 
-	if (Asc == nullptr)
-	{
-		UE_LOG(
-			LogPf2CoreAbilities,
-			Warning,
-			TEXT("[%s] Attempted to refresh ASC ability actor info for character ('%s'), but ASC is null."),
-			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-			*(this->GetIdForLogs())
-		);
-	}
-	else
-	{
-		UE_LOG(
-			LogPf2CoreAbilities,
-			VeryVerbose,
-			TEXT("[%s] Refreshing ASC ability actor info of character ('%s')."),
-			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-			*(this->GetIdForLogs())
-		);
-
-		Asc->RefreshAbilityActorInfo();
+			this->bAreAbilitiesInitialized = true;
+		}
 	}
 }
 

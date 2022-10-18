@@ -144,6 +144,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UPF2AttributeSet* AttributeSet;
 
+	UPROPERTY()
+	bool bAreAbilitiesInitialized;
+
 	/**
 	 * Whether or not managed passive Gameplay Effects have been generated for this character.
 	 */
@@ -405,6 +408,7 @@ protected:
 	                                                         CommandQueueType,
 	                                                         OwnerTrackerType,
 	                                                         AttributeSetType> ComponentFactory) :
+		bAreAbilitiesInitialized(false),
 		bManagedPassiveEffectsGenerated(false),
 		CharacterName(FText::FromString(TEXT("Character"))),
 		CharacterLevel(1)
@@ -433,6 +437,7 @@ public:
 	// =================================================================================================================
 	// Public Methods
 	// =================================================================================================================
+	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_Controller() override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -478,9 +483,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual TArray<TScriptInterface<IPF2AbilityBoostInterface>> GetPendingAbilityBoosts() const override;
 
-	virtual void InitializeAbilities() override;
-
-	virtual void RefreshAbilities() override;
+	virtual void InitializeOrRefreshAbilities() override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual AActor* ToActor() override;
