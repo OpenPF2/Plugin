@@ -294,10 +294,30 @@ void APF2GameModeBase::HandleStartingNewPlayer_Implementation(APlayerController*
 
 	if (RuleSet != nullptr)
 	{
-		IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnPlayableCharacterStarting(
-			RuleSet.GetObject(),
-			NewPlayer->GetCharacter()
-		);
+		const IPF2PlayerControllerInterface* PlayerControllerIntf = Cast<IPF2PlayerControllerInterface>(NewPlayer);
+
+		if (PlayerControllerIntf == nullptr)
+		{
+			// Player controller is not compatible with OpenPF2; fallback to just interacting with the pawn.
+			IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnPlayableCharacterStarting(
+				RuleSet.GetObject(),
+				NewPlayer->GetCharacter()
+			);
+		}
+		else
+		{
+			TArray<TScriptInterface<IPF2CharacterInterface>> ControllableCharacters =
+				PlayerControllerIntf->GetControllableCharacters();
+
+			for (const TScriptInterface<IPF2CharacterInterface>& Character : ControllableCharacters)
+			{
+				// Trigger a "starting" callback for all the characters owned by the player who is joining.
+				IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnPlayableCharacterStarting(
+					RuleSet.GetObject(),
+					Character
+				);
+			}
+		}
 	}
 }
 
