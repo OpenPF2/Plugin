@@ -10,6 +10,8 @@
 #include "Commands/PF2CharacterCommand.h"
 #include "Commands/PF2CommandBindingsInterface.h"
 
+#include "Utilities/PF2LogUtilities.h"
+
 void FPF2CommandInputBinding::ConnectToInput(UInputComponent* InputComponent)
 {
 	if (!this->IsConnectedToInput() && !this->ActionName.IsNone())
