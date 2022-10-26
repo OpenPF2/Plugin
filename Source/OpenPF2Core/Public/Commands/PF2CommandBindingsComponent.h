@@ -13,13 +13,16 @@
 #include "PF2CommandBindingsComponent.generated.h"
 
 // =====================================================================================================================
-// Delegate Types
+// Delegate Declarations
 // =====================================================================================================================
 /**
  * Delegate for Blueprints to react to a command queue getting wired up to input or disconnected from input.
  */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPF2CommandQueueInputConnectionChangedDelegate);
 
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 /**
  * A component for characters that need to support binding execution of Gameplay Abilities to input actions.
  *

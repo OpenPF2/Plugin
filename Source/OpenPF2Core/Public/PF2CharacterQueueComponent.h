@@ -25,7 +25,7 @@ class IPF2CharacterInterface;
 class IPF2PlayerControllerInterface;
 
 // =====================================================================================================================
-// Delegate Types
+// Delegate Declarations
 // =====================================================================================================================
 /**
  * Delegate for Blueprints to react to characters being added or removed from the queue.

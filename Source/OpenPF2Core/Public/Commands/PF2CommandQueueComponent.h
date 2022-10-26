@@ -18,7 +18,7 @@
 #include "PF2CommandQueueComponent.generated.h"
 
 // =====================================================================================================================
-// Delegate Types
+// Delegate Declarations
 // =====================================================================================================================
 /**
  * Delegate for Blueprints to react to commands being added to the queue.

@@ -24,7 +24,7 @@ class IPF2PlayerControllerInterface;
 class IPF2PlayerStateInterface;
 
 // =====================================================================================================================
-// Delegate Types
+// Delegate Declarations
 // =====================================================================================================================
 /**
  * Delegate for Blueprints to react to a change in owning player state.

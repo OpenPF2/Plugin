@@ -27,7 +27,7 @@ class OPENPF2CORE_API UPF2AbilitySystemComponent :
 
 protected:
 	// =================================================================================================================
-	// Protected Fields - Blueprint Accessible
+	// Protected Fields
 	// =================================================================================================================
 	/**
 	 * The Gameplay Effects used to boost abilities.

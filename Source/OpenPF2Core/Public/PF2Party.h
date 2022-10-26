@@ -21,7 +21,7 @@ class IPF2CharacterInterface;
 class IPF2PlayerStateInterface;
 
 // =====================================================================================================================
-// Delegate Types
+// Delegate Declarations
 // =====================================================================================================================
 /**
  * Delegate for Blueprints to react to a change in player membership.
