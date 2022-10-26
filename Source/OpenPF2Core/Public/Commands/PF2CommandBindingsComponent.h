@@ -26,9 +26,10 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPF2CommandQueueInputConnectionChangedDelegat
 /**
  * A component for characters that need to support binding execution of Gameplay Abilities to input actions.
  *
- * Unlike the native input binding support offered by the GAS, this version does not bind input directly to a specific
- * pawn/character. Instead, it allows input to be routed to whichever character the player is currently controlling, and
- * it works automatically with abilities that need to be queued during encounters.
+ * Unlike the native input binding support offered by the GAS, this version makes it possible to dynamically bind and
+ * unbind input to abilities as needed, allowing input to be routed to whichever character the player is currently
+ * controlling. This also works automatically with the character command system, ensuring that commands will be queued
+ * during encounters if required by the MoPRS.
  */
 UCLASS(ClassGroup="OpenPF2-Characters", meta=(BlueprintSpawnableComponent))
 // ReSharper disable once CppClassCanBeFinal
