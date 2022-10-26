@@ -317,6 +317,11 @@ FGameplayTagContainer UPF2AbilitySystemComponent::GetActiveGameplayTags() const
 	return Tags;
 }
 
+FPF2ClientAbilitiesChangeDelegate* UPF2AbilitySystemComponent::GetClientAbilityChangeDelegate()
+{
+	return &this->OnAbilitiesAvailable;
+}
+
 FORCEINLINE int32 UPF2AbilitySystemComponent::GetCharacterLevel() const
 {
 	const IPF2CharacterInterface* OwningCharacter = Cast<IPF2CharacterInterface>(this->GetOwnerActor());
@@ -449,6 +454,25 @@ FString UPF2AbilitySystemComponent::GetIdForLogs() const
 	return this->GetName();
 }
 
+void UPF2AbilitySystemComponent::OnRep_ActivateAbilities()
+{
+	Super::OnRep_ActivateAbilities();
+
+	for (const FGameplayAbilitySpec& Spec : this->ActivatableAbilities.Items)
+	{
+		const UGameplayAbility* SpecAbility = Spec.Ability;
+
+		if (SpecAbility == nullptr)
+		{
+			// Return early, because abilities haven't fully replicated yet. The parent class will call us again using
+			// a timer.
+			return;
+		}
+	}
+
+	this->Native_OnAbilitiesAvailable();
+}
+
 TMultiMap<FName, TSubclassOf<UGameplayEffect>> UPF2AbilitySystemComponent::GetPassiveGameplayEffectsToApply()
 {
 	if (this->CachedPassiveGameplayEffectsToApply.Num() == 0)
@@ -507,6 +531,11 @@ void UPF2AbilitySystemComponent::ActivatePassiveGameplayEffect(
 	{
 		this->ApplyGameplayEffectSpecToTarget(*GameplayEffectSpec, this);
 	}
+}
+
+void UPF2AbilitySystemComponent::Native_OnAbilitiesAvailable()
+{
+	this->OnAbilitiesAvailable.Broadcast();
 }
 
 template <typename Func>

@@ -61,7 +61,7 @@ private:
 	/**
 	 * The input component to which this component is currently wired.
 	 *
-	 * This is not replicated, since it is only of importance to local clients.
+	 * This is not replicated, since it is only of relevance to local clients.
 	 */
 	UPROPERTY()
 	UInputComponent* InputComponent;
@@ -69,13 +69,11 @@ private:
 	/**
 	 * The association between inputs and Gameplay Abilities.
 	 *
-	 * This supports replication from the server, which is enabled by default since the server is the authority on what
-	 * abilities each character has and the default bindings for those abilities. Abilities are typically loaded by
-	 * invoking LoadAbilitiesFromCharacter() from the server-only OnPossess() method of the Player Controller.
-	 * Replication on this component also ensures any changes made to the bindings will automatically update what is
-	 * bound to input as long as this component has been wired-up to an input component.
+	 * This is not replicated because input is only a concern of the local client and not the server. Instead, abilities
+	 * should be loaded by invoking LoadAbilitiesFromCharacter() after abilities have replicated through the ASC from
+	 * the server. This is handled automatically when using the default OpenPF2 player controller implementation.
 	 */
-	UPROPERTY(ReplicatedUsing=OnRep_Bindings)
+	UPROPERTY()
 	TArray<FPF2CommandInputBinding> Bindings;
 
 public:
@@ -87,8 +85,6 @@ public:
 	 */
 	explicit UPF2CommandBindingsComponent() : InputComponent(nullptr)
 	{
-		// This component needs to be replicated in order for
-		this->SetIsReplicatedByDefault(true);
 	}
 
 	// =================================================================================================================
@@ -119,11 +115,6 @@ public:
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
-
-	// =================================================================================================================
-	// Public Methods - AActorComponent Overrides
-	// =================================================================================================================
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
 	// =================================================================================================================
@@ -160,17 +151,6 @@ protected:
 	 *	The character actor that owns this component.
 	 */
 	IPF2CharacterInterface* GetOwningCharacter() const;
-
-	// =================================================================================================================
-	// Protected Replication Callbacks
-	// =================================================================================================================
-	/**
-	 * Replication callback for the "Bindings" property.
-	 *
-	 * This ensures that bindings loaded/defined on the server are applied properly to input on the client.
-	 */
-	UFUNCTION()
-	void OnRep_Bindings(const TArray<FPF2CommandInputBinding> OldBindings) const;
 
 	// =================================================================================================================
 	// Protected Native Event Callbacks
