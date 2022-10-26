@@ -9,6 +9,7 @@
 
 #include <Components/InputComponent.h>
 
+#include "OpenPF2Core.h"
 #include "PF2CommandBindingsInterface.h"
 #include "PF2CommandInputBinding.generated.h"
 
