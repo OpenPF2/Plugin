@@ -19,7 +19,8 @@ class IPF2AbilityBoostInterface;
 // =====================================================================================================================
 // Normal Declarations
 // =====================================================================================================================
-UCLASS()
+UCLASS(ClassGroup="OpenPF2-Characters")
+// ReSharper disable once CppClassCanBeFinal
 class OPENPF2CORE_API UPF2AbilitySystemComponent :
 	public UAbilitySystemComponent, public IPF2CharacterAbilitySystemInterface
 {
