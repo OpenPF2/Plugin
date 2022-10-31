@@ -81,6 +81,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetControllableCharacters() const override;
 
+	virtual void Native_OnPlayableCharactersStarting(TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet) override;
+
 	virtual void Native_OnModeOfPlayChanged(EPF2ModeOfPlayType NewMode) override;
 
 	UFUNCTION(BlueprintCallable)

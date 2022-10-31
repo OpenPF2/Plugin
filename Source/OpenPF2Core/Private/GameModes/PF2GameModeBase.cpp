@@ -294,7 +294,7 @@ void APF2GameModeBase::HandleStartingNewPlayer_Implementation(APlayerController*
 
 	if (RuleSet != nullptr)
 	{
-		const IPF2PlayerControllerInterface* PlayerControllerIntf = Cast<IPF2PlayerControllerInterface>(NewPlayer);
+		IPF2PlayerControllerInterface* PlayerControllerIntf = Cast<IPF2PlayerControllerInterface>(NewPlayer);
 
 		if (PlayerControllerIntf == nullptr)
 		{
@@ -306,17 +306,8 @@ void APF2GameModeBase::HandleStartingNewPlayer_Implementation(APlayerController*
 		}
 		else
 		{
-			TArray<TScriptInterface<IPF2CharacterInterface>> ControllableCharacters =
-				PlayerControllerIntf->GetControllableCharacters();
-
-			for (const TScriptInterface<IPF2CharacterInterface>& Character : ControllableCharacters)
-			{
-				// Trigger a "starting" callback for all the characters owned by the player who is joining.
-				IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnPlayableCharacterStarting(
-					RuleSet.GetObject(),
-					Character
-				);
-			}
+			// Trigger a "starting" callback for all the characters owned by the player who is joining.
+			PlayerControllerIntf->Native_OnPlayableCharactersStarting(RuleSet);
 		}
 	}
 }

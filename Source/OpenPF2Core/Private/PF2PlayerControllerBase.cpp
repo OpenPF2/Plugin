@@ -21,6 +21,7 @@
 #include "Commands/PF2CharacterCommand.h"
 
 #include "GameModes/PF2GameModeInterface.h"
+#include "GameModes/PF2ModeOfPlayRuleSetInterface.h"
 
 #include "Utilities/PF2EnumUtilities.h"
 #include "Utilities/PF2InterfaceUtilities.h"
@@ -92,6 +93,20 @@ TScriptInterface<IPF2PlayerStateInterface> APF2PlayerControllerBase::GetPlayerSt
 TArray<TScriptInterface<IPF2CharacterInterface>> APF2PlayerControllerBase::GetControllableCharacters() const
 {
 	return this->GetCharacterQueue()->ToArray();
+}
+
+void APF2PlayerControllerBase::Native_OnPlayableCharactersStarting(
+	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet)
+{
+	TArray<TScriptInterface<IPF2CharacterInterface>> ControllableCharacters = this->GetControllableCharacters();
+
+	for (const TScriptInterface<IPF2CharacterInterface>& ControllableCharacter : ControllableCharacters)
+	{
+		IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnPlayableCharacterStarting(
+			RuleSet.GetObject(),
+			ControllableCharacter
+		);
+	}
 }
 
 APlayerController* APF2PlayerControllerBase::ToPlayerController()
