@@ -70,8 +70,7 @@ void APF2GameModeBase::TransferCharacterOwnership(
 			LogPf2Core,
 			Warning,
 			TEXT("Character ('%s') lacks an owner tracking component, so it will not be able to respond properly to ownership changes."),
-			*(NewController->GetIdForLogs()),
-			*(Character->GetIdForLogs())
+			*(NewController->GetIdForLogs())
 		);
 	}
 	else
