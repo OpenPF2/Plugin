@@ -224,7 +224,7 @@ void UPF2CommandQueueComponent::OnRep_Queue(const TArray<AInfo*>& OldQueue)
 	if (this->OnCommandAdded.IsBound() || this->OnCommandRemoved.IsBound())
 	{
 		TArray<IPF2CharacterCommandInterface*> RemovedCommands,
-											   AddedCommands;
+		                                       AddedCommands;
 
 		// BUGBUG: By the time we're here, this should definitely be an OpenPF2 command, but UE will sometimes replicate
 		// entries in this->Queue as NULL.
