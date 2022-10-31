@@ -181,7 +181,7 @@ protected:
 		return Cast<IPF2CommandBindingsInterface>(this->BindingsOwner);
 	}
 
-	/*
+	/**
 	 * Binds a specific input event/action on the specified input component to the given callback.
 	 *
 	 * @param InputComponent

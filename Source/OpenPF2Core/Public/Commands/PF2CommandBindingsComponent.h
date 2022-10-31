@@ -162,7 +162,7 @@ protected:
 	 */
 	virtual void Native_OnInputConnected();
 
-	/*
+	/**
 	 * Callback invoked in C++ code when input has been disconnected from this component.
 	 *
 	 * This notifies all event listeners that input has been disconnected.
