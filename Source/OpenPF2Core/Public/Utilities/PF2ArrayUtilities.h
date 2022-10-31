@@ -219,9 +219,9 @@ namespace PF2ArrayUtilities
 	 * @param NewArray
 	 *	The new copy of the array.
 	 * @param EqualityCallback
-	 *   A lambda/delegate taking in two elements and returning whether they are equivalent items. For efficiency, this
-	 *   should compare only a single field in each struct that uniquely identifies it (e.g., a unique ID, a handle, or
-	 *   a name), rather than comparing all fields of the two structs.
+	 *	A lambda/delegate taking in two elements and returning whether they are equivalent items. For efficiency, this
+	 *	should compare only a single field in each struct that uniquely identifies it (e.g., a unique ID, a handle, or
+	 *	a name), rather than comparing all fields of the two structs.
 	 * @param OutRemovedElements
 	 *	The array to which elements that were present in OldArray but are no longer present in NewArray will be added.
 	 * @param OutAddedElements
