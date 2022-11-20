@@ -20,7 +20,7 @@ namespace PF2MapUtilities
 	 *	The keys of the map.
 	 */
 	template<typename Key, typename Value>
-	TArray<Key> GetKeys(const TMap<Key, Value> Map)
+	OPENPF2CORE_API TArray<Key> GetKeys(const TMap<Key, Value> Map)
 	{
 		TArray<Key> Keys;
 
@@ -42,7 +42,7 @@ namespace PF2MapUtilities
 	 *	The keys of the map.
 	 */
 	template<typename Key, typename Value>
-	TArray<Key> GetKeys(const TMultiMap<Key, Value> Map)
+	OPENPF2CORE_API TArray<Key> GetKeys(const TMultiMap<Key, Value> Map)
 	{
 		TArray<Key> Keys;
 
@@ -64,7 +64,7 @@ namespace PF2MapUtilities
 	 *	The values of the map.
 	 */
 	template<typename Key, typename Value>
-	TArray<Value> GetValues(const TMap<Key, Value> Map)
+	OPENPF2CORE_API TArray<Value> GetValues(const TMap<Key, Value> Map)
 	{
 		TArray<Value> Values;
 
@@ -86,7 +86,7 @@ namespace PF2MapUtilities
 	 *	The values of the map.
 	 */
 	template<typename Key, typename Value>
-	TArray<Value> GetValues(const TMultiMap<Key, Value> Map)
+	OPENPF2CORE_API TArray<Value> GetValues(const TMultiMap<Key, Value> Map)
 	{
 		TArray<Value> Values;
 
@@ -108,7 +108,7 @@ namespace PF2MapUtilities
 	 *	The inverted map.
 	 */
 	template<typename Key, typename Value>
-	TMap<Value, Key> Invert(const TMap<Key, Value> InputMap)
+	OPENPF2CORE_API TMap<Value, Key> Invert(const TMap<Key, Value> InputMap)
 	{
 		TMap<Value, Key> OutputMap;
 

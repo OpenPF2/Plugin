@@ -5,6 +5,10 @@
 
 #pragma once
 
+#include <Components/ActorComponent.h>
+
+#include <GameFramework/Actor.h>
+
 #include "PF2ArrayUtilities.h"
 
 #include "UObject/ScriptInterface.h"
@@ -146,8 +150,8 @@ namespace PF2InterfaceUtilities
 	template <class InterfaceType, class UObjectType>
 	FORCEINLINE OPENPF2CORE_API InterfaceType* FindComponentByInterface(AActor* Actor)
 	{
-		InterfaceType*                  Result     = nullptr;
-		const TArray<UActorComponent *> Components = Actor->GetComponentsByInterface(UObjectType::StaticClass());
+		InterfaceType*                 Result     = nullptr;
+		const TArray<UActorComponent*> Components = Actor->GetComponentsByInterface(UObjectType::StaticClass());
 
 		checkf(
 			Components.Num() < 2,
@@ -158,6 +162,7 @@ namespace PF2InterfaceUtilities
 		for (UActorComponent* Component : Components)
 		{
 			Result = Cast<InterfaceType>(Component);
+			break;
 		}
 
 		return Result;

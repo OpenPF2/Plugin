@@ -120,7 +120,7 @@ bool UPF2OwnerTrackingComponent::IsSamePartyAsActor(AActor* OtherActor) const
 		const IPF2OwnerTrackingInterface* OtherComponent =
 			PF2InterfaceUtilities::FindComponentByInterface<IPF2OwnerTrackingInterface, UPF2OwnerTrackingInterface>(OtherActor);
 
-		if (OtherComponent != nullptr)
+		if ((MyOwner != nullptr) && (OtherComponent != nullptr))
 		{
 			const TScriptInterface<IPF2PlayerStateInterface> OtherOwner = OtherComponent->GetStateOfOwningPlayer();
 
@@ -134,14 +134,26 @@ bool UPF2OwnerTrackingComponent::IsSamePartyAsActor(AActor* OtherActor) const
 bool UPF2OwnerTrackingComponent::IsSamePartyAsPlayerWithController(
 	const TScriptInterface<IPF2PlayerControllerInterface> OtherController) const
 {
-	const TScriptInterface<IPF2PlayerStateInterface> PlayerState          = this->GetStateOfOwningPlayer();
-	TScriptInterface<IPF2PlayerStateInterface>       OtherPlayerState;
+	bool                                             Result      = false;
+	const TScriptInterface<IPF2PlayerStateInterface> PlayerState = this->GetStateOfOwningPlayer();
 
-	check(OtherController != nullptr);
+	if (PlayerState != nullptr)
+	{
+		TScriptInterface<IPF2PlayerStateInterface> OtherPlayerState;
 
-	OtherPlayerState = OtherController->GetPlayerState();
+		check(OtherController != nullptr);
 
-	return PlayerState->IsSamePartyAsPlayerWithState(OtherPlayerState);
+		OtherPlayerState = OtherController->GetPlayerState();
+
+		Result = PlayerState->IsSamePartyAsPlayerWithState(OtherPlayerState);
+	}
+
+	return Result;
+}
+
+UActorComponent* UPF2OwnerTrackingComponent::ToActorComponent()
+{
+	return this;
 }
 
 FString UPF2OwnerTrackingComponent::GetIdForLogs() const

@@ -7,36 +7,79 @@
 
 #include <Components/ActorComponent.h>
 
+#include "PF2CharacterInterface.h"
 #include "PF2CommandBindingsInterface.h"
 #include "PF2CommandInputBinding.h"
-
 #include "PF2CommandBindingsComponent.generated.h"
 
+// =====================================================================================================================
+// Delegate Declarations
+// =====================================================================================================================
+/**
+ * Delegate for Blueprints to react to a command queue getting wired up to input or disconnected from input.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPF2CommandQueueInputConnectionChangedDelegate);
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 /**
  * A component for characters that need to support binding execution of Gameplay Abilities to input actions.
  *
- * Unlike the native input binding support offered by the GAS, this version does not bind input directly to a specific
- * pawn/character. Instead, it allows input to be routed to whichever character the player is currently controlling, and
- * it works automatically with abilities that need to be queued during encounters.
+ * Unlike the native input binding support offered by the GAS, this version makes it possible to dynamically bind and
+ * unbind input to abilities as needed, allowing input to be routed to whichever character the player is currently
+ * controlling. This also works automatically with the character command system, ensuring that commands will be queued
+ * during encounters if required by the MoPRS.
  */
 UCLASS(ClassGroup="OpenPF2-Characters", meta=(BlueprintSpawnableComponent))
+// ReSharper disable once CppClassCanBeFinal
 class OPENPF2CORE_API UPF2CommandBindingsComponent : public UActorComponent, public IPF2CommandBindingsInterface
 {
 	GENERATED_BODY()
 
+public:
+	// =================================================================================================================
+	// Public Properties - Multicast Delegates
+	// =================================================================================================================
+	/**
+	 * Event fired when local input is connected to this component.
+	 *
+	 * This event is only fired on clients.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Command Bindings")
+	FPF2CommandQueueInputConnectionChangedDelegate OnInputConnected;
+
+	/**
+	 * Event fired when local input is disconnected from this component.
+	 *
+	 * This event is only fired on clients.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Command Bindings")
+	FPF2CommandQueueInputConnectionChangedDelegate OnInputDisconnected;
+
+private:
 	/**
 	 * The input component to which this component is currently wired.
+	 *
+	 * This is not replicated, since it is only of relevance to local clients.
 	 */
 	UPROPERTY()
 	UInputComponent* InputComponent;
 
 	/**
 	 * The association between inputs and Gameplay Abilities.
+	 *
+	 * This is not replicated because input is only a concern of the local client and not the server. Instead, abilities
+	 * should be loaded by invoking LoadAbilitiesFromCharacter() after abilities have replicated through the ASC from
+	 * the server. This is handled automatically when using the default OpenPF2 player controller implementation.
 	 */
 	UPROPERTY()
 	TArray<FPF2CommandInputBinding> Bindings;
 
 public:
+	// =================================================================================================================
+	// Public Constructor
+	// =================================================================================================================
 	/**
 	 * Default constructor for UPF2CommandBindingsComponent.
 	 */
@@ -51,9 +94,7 @@ public:
 	virtual void ClearBindings() override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void LoadAbilitiesFromCharacter(const TScriptInterface<IPF2CharacterInterface> Character) override;
-
-	virtual void LoadAbilitiesFromCharacter(IPF2CharacterInterface* Character) override;
+	virtual void LoadAbilitiesFromCharacter() override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void ConnectToInput(UInputComponent* NewInputComponent) override;
@@ -61,8 +102,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void DisconnectFromInput() override;
 
-	virtual void ExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	                                 IPF2CharacterInterface* Character) override;
+	virtual void ExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle) override;
+
+	// =================================================================================================================
+	// Public Methods - IPF2ActorComponentInterface Implementation
+	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual UActorComponent* ToActorComponent() override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
@@ -97,4 +143,29 @@ protected:
 	{
 		return this->GetInputComponent() != nullptr;
 	}
+
+	/**
+	 * Gets the character of which this component is a part.
+	 *
+	 * @return
+	 *	The character actor that owns this component.
+	 */
+	IPF2CharacterInterface* GetOwningCharacter() const;
+
+	// =================================================================================================================
+	// Protected Native Event Callbacks
+	// =================================================================================================================
+	/**
+	 * Callback invoked in C++ code when input has been connected to this component.
+	 *
+	 * This notifies all event listeners that input has been connected.
+	 */
+	virtual void Native_OnInputConnected();
+
+	/**
+	 * Callback invoked in C++ code when input has been disconnected from this component.
+	 *
+	 * This notifies all event listeners that input has been disconnected.
+	 */
+	virtual void Native_OnInputDisconnected();
 };

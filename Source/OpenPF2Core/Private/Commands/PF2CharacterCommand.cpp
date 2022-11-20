@@ -32,8 +32,7 @@ IPF2CharacterCommandInterface* APF2CharacterCommand::Create(AActor*             
 
 	Command = World->SpawnActor<APF2CharacterCommand>(StaticClass(), SpawnParameters);
 
-	Command->TargetCharacter   = CharacterActor;
-	Command->AbilitySpecHandle = AbilitySpecHandle;
+	Command->SetTargetCharacterAndAbility(CharacterActor, AbilitySpecHandle);
 
 	return Command;
 }
@@ -183,6 +182,13 @@ EPF2CommandExecuteImmediatelyResult APF2CharacterCommand::AttemptExecuteImmediat
 	);
 
 	return Result;
+}
+
+void APF2CharacterCommand::SetTargetCharacterAndAbility(AActor*                          InTargetCharacter,
+                                                        const FGameplayAbilitySpecHandle InAbilitySpecHandle)
+{
+	this->TargetCharacter   = InTargetCharacter;
+	this->AbilitySpecHandle = InAbilitySpecHandle;
 }
 
 void APF2CharacterCommand::Cancel_WithRemoteServer()
@@ -336,14 +342,19 @@ UAbilitySystemComponent* APF2CharacterCommand::GetAbilitySystemComponent() const
 
 UGameplayAbility* APF2CharacterCommand::GetAbility() const
 {
-	const FGameplayAbilitySpec* AbilitySpec = this->GetAbilitySpec();
-	UGameplayAbility*           Ability     = nullptr;
-
-	if (AbilitySpec != nullptr)
+	if (this->CachedAbility == nullptr)
 	{
-		Ability = AbilitySpec->Ability;
-		check(Ability != nullptr);
+		const FGameplayAbilitySpec* AbilitySpec = this->GetAbilitySpec();
+		UGameplayAbility*           Ability     = nullptr;
+
+		if (AbilitySpec != nullptr)
+		{
+			Ability = AbilitySpec->Ability;
+			check(Ability != nullptr);
+		}
+
+		this->CachedAbility = Ability;
 	}
 
-	return Ability;
+	return this->CachedAbility;
 }

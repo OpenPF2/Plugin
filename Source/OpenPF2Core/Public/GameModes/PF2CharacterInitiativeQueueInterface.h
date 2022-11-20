@@ -12,7 +12,7 @@
 
 #pragma once
 
-#include "Utilities/PF2LogIdentifiableInterface.h"
+#include "PF2ActorComponentInterface.h"
 
 #include "PF2CharacterInitiativeQueueInterface.generated.h"
 
@@ -25,7 +25,7 @@ class IPF2CharacterInterface;
 // Normal Declarations
 // =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
-class UPF2CharacterInitiativeQueueInterface : public UPF2LogIdentifiableInterface
+class UPF2CharacterInitiativeQueueInterface : public UPF2ActorComponentInterface
 {
 	GENERATED_BODY()
 };
@@ -33,7 +33,7 @@ class UPF2CharacterInitiativeQueueInterface : public UPF2LogIdentifiableInterfac
 /**
  * An interface for objects that maintain queues of commands/actions.
  */
-class OPENPF2CORE_API IPF2CharacterInitiativeQueueInterface : public IPF2LogIdentifiableInterface
+class OPENPF2CORE_API IPF2CharacterInitiativeQueueInterface : public IPF2ActorComponentInterface
 {
 	GENERATED_BODY()
 

@@ -7,12 +7,16 @@
 
 #include <Net/UnrealNetwork.h>
 
+#include <UObject/WeakInterfacePtr.h>
+
 #include "Commands/PF2CharacterCommandInterface.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
-UPF2CommandQueueComponent::UPF2CommandQueueComponent()
+const uint8 UPF2CommandQueueComponent::CommandLimitNone = 0;
+
+UPF2CommandQueueComponent::UPF2CommandQueueComponent(): SizeLimit(CommandLimitNone)
 {
 	this->SetIsReplicatedByDefault(true);
 }
@@ -28,11 +32,25 @@ void UPF2CommandQueueComponent::Enqueue(const TScriptInterface<IPF2CharacterComm
 {
 	AInfo* CommandActor = Command->ToActor();
 
-	checkf(!this->Queue.Contains(CommandActor), TEXT("The same command can only exist in the queue once."));
-	this->Queue.Add(CommandActor);
+	if ((this->SizeLimit != CommandLimitNone) && (this->Queue.Num() == this->SizeLimit))
+	{
+		UE_LOG(
+			LogPf2Core,
+			Verbose,
+			TEXT("Command queue ('%s') is already at maximum capacity ('%d'), so command ('%s') will not be enqueued."),
+			*(this->GetIdForLogs()),
+			this->SizeLimit,
+			*(Command->GetIdForLogs())
+		);
+	}
+	else
+	{
+		checkf(!this->Queue.Contains(CommandActor), TEXT("The same command can only exist in the queue once."));
+		this->Queue.Add(CommandActor);
 
-	this->Native_OnCommandAdded(Command);
-	this->Native_OnCommandsChanged();
+		this->Native_OnCommandAdded(Command);
+		this->Native_OnCommandsChanged();
+	}
 }
 
 void UPF2CommandQueueComponent::PeekNext(TScriptInterface<IPF2CharacterCommandInterface>& NextCommand)
@@ -165,6 +183,28 @@ void UPF2CommandQueueComponent::Clear()
 	this->Native_OnCommandsChanged();
 }
 
+TArray<TScriptInterface<IPF2CharacterCommandInterface>> UPF2CommandQueueComponent::ToArray() const
+{
+	return PF2ArrayUtilities::Reduce<TArray<TScriptInterface<IPF2CharacterCommandInterface>>>(
+		this->Queue,
+		TArray<TScriptInterface<IPF2CharacterCommandInterface>>(),
+		[](TArray<TScriptInterface<IPF2CharacterCommandInterface>> Commands,
+		   const TWeakInterfacePtr<IPF2CharacterCommandInterface>  CurrentCommand)
+		{
+			if (CurrentCommand.IsValid())
+			{
+				Commands.Add(PF2InterfaceUtilities::ToScriptInterface(CurrentCommand.Get()));
+			}
+
+			return Commands;
+		});
+}
+
+UActorComponent* UPF2CommandQueueComponent::ToActorComponent()
+{
+	return this;
+}
+
 FString UPF2CommandQueueComponent::GetIdForLogs() const
 {
 	// ReSharper disable CppRedundantParentheses
@@ -179,43 +219,26 @@ FString UPF2CommandQueueComponent::GetIdForLogs() const
 
 void UPF2CommandQueueComponent::OnRep_Queue(const TArray<AInfo*>& OldQueue)
 {
-	TArray<IPF2CharacterCommandInterface*> RemovedCommands,
-	                                       AddedCommands;
-
-	// Identify which commands were removed.
-	for (AInfo* const Command : OldQueue)
+	// Skip unnecessary overhead if we have no listeners. This is only safe because our Native_ callbacks don't do
+	// anything other than notify listeners.
+	if (this->OnCommandAdded.IsBound() || this->OnCommandRemoved.IsBound())
 	{
-		IPF2CharacterCommandInterface* CommandIntf = Cast<IPF2CharacterCommandInterface>(Command);
+		TArray<IPF2CharacterCommandInterface*> RemovedCommands,
+		                                       AddedCommands;
 
 		// BUGBUG: By the time we're here, this should definitely be an OpenPF2 command, but UE will sometimes replicate
 		// entries in this->Queue as NULL.
-		if ((CommandIntf != nullptr) && !this->Queue.Contains(Command))
+		PF2ArrayUtilities::CapturePtrDeltasWithCast(OldQueue, this->Queue, RemovedCommands, AddedCommands);
+
+		for (IPF2CharacterCommandInterface* const& RemovedCommand : RemovedCommands)
 		{
-			RemovedCommands.Add(CommandIntf);
+			this->Native_OnCommandRemoved(PF2InterfaceUtilities::ToScriptInterface(RemovedCommand));
 		}
-	}
 
-	// Identify which commands were added.
-	for (AInfo* const Command : this->Queue)
-	{
-		IPF2CharacterCommandInterface* CommandIntf = Cast<IPF2CharacterCommandInterface>(Command);
-
-		// BUGBUG: By the time we're here, this should definitely be an OpenPF2 command, but UE will sometimes replicate
-		// entries in this->Queue as NULL.
-		if ((CommandIntf != nullptr) && !OldQueue.Contains(Command))
+		for (IPF2CharacterCommandInterface* const& AddedCommand : AddedCommands)
 		{
-			AddedCommands.Add(CommandIntf);
+			this->Native_OnCommandAdded(PF2InterfaceUtilities::ToScriptInterface(AddedCommand));
 		}
-	}
-
-	for (IPF2CharacterCommandInterface* const& RemovedCommand : RemovedCommands)
-	{
-		this->Native_OnCommandRemoved(PF2InterfaceUtilities::ToScriptInterface(RemovedCommand));
-	}
-
-	for (IPF2CharacterCommandInterface* const& AddedCommand : AddedCommands)
-	{
-		this->Native_OnCommandAdded(PF2InterfaceUtilities::ToScriptInterface(AddedCommand));
 	}
 
 	this->Native_OnCommandsChanged();
@@ -223,32 +246,46 @@ void UPF2CommandQueueComponent::OnRep_Queue(const TArray<AInfo*>& OldQueue)
 
 void UPF2CommandQueueComponent::Native_OnCommandsChanged() const
 {
-	TArray<TScriptInterface<IPF2CharacterCommandInterface>> NewCommands;
-
-	for (AInfo* NewCommand : this->Queue)
+	// Skip unnecessary overhead if we have no listeners.
+	if (this->OnCommandsChanged.IsBound())
 	{
-		// BUGBUG: By the time we're here, this should definitely be an OpenPF2 command, but UE will sometimes replicate
-		// entries in this->Queue as NULL.
-		if (NewCommand != nullptr)
+		TArray<TScriptInterface<IPF2CharacterCommandInterface>> NewCommands;
+
+		for (AInfo* NewCommand : this->Queue)
 		{
-			NewCommands.Add(
-				PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(
-					Cast<IPF2CharacterCommandInterface>(NewCommand)
-				)
-			);
+			// BUGBUG: By the time we're here, this should definitely be an OpenPF2 command, but UE will sometimes
+			// replicate entries in this->Queue as NULL.
+			if (NewCommand != nullptr)
+			{
+				NewCommands.Add(
+					PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(
+						Cast<IPF2CharacterCommandInterface>(NewCommand)
+					)
+				);
+			}
 		}
+
+		UE_LOG(
+			LogPf2CoreAbilities,
+			VeryVerbose,
+			TEXT("[%s] Command queue changed ('%s') - %d elements."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(this->GetIdForLogs()),
+			NewCommands.Num()
+		);
+
+		this->OnCommandsChanged.Broadcast(NewCommands);
 	}
-
-	UE_LOG(
-		LogPf2CoreAbilities,
-		VeryVerbose,
-		TEXT("[%s] Command queue changed ('%s') - %d elements."),
-		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(this->GetIdForLogs()),
-		NewCommands.Num()
-	);
-
-	this->OnCommandsChanged.Broadcast(NewCommands);
+	else
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			VeryVerbose,
+			TEXT("[%s] Command queue changed ('%s')."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(this->GetIdForLogs())
+		);
+	}
 }
 
 void UPF2CommandQueueComponent::Native_OnCommandAdded(

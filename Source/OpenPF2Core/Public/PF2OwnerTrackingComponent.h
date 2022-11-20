@@ -24,7 +24,7 @@ class IPF2PlayerControllerInterface;
 class IPF2PlayerStateInterface;
 
 // =====================================================================================================================
-// Delegate Types
+// Delegate Declarations
 // =====================================================================================================================
 /**
  * Delegate for Blueprints to react to a change in owning player state.
@@ -93,13 +93,19 @@ public:
 	) const override;
 
 	// =================================================================================================================
+	// Public Methods - IPF2ActorComponentInterface Implementation
+	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual UActorComponent* ToActorComponent() override;
+
+	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
 
 	// =================================================================================================================
-	// Public Properties - Multicast Delegates
+	// Public Fields - Multicast Delegates
 	// =================================================================================================================
 	/**
 	 * Event fired when the containing actor is owned by a different player.
@@ -169,7 +175,7 @@ protected:
 
 private:
 	// =================================================================================================================
-	// Private Properties
+	// Private Fields
 	// =================================================================================================================
 	/**
 	 * The state of the player who owns the containing actor.

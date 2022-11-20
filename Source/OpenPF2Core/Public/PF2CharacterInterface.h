@@ -107,20 +107,11 @@ public:
 	/**
 	 * Gets an OpenPF2-specific version of the Ability System Component (ASC) for this character.
 	 *
-	 * @param Output
-	 *	The ASC, as an implementation of the interface for character ASCs.
-	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
-	virtual void GetCharacterAbilitySystemComponent(
-		TScriptInterface<IPF2CharacterAbilitySystemInterface>& Output) const = 0;
-
-	/**
-	 * Gets an OpenPF2-specific version of the ASC sub-component of this character.
-	 *
 	 * @return
 	 *	The ASC, as an implementation of the interface for character ASCs.
 	 */
-	virtual IPF2CharacterAbilitySystemInterface* GetCharacterAbilitySystemComponent() const = 0;
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual TScriptInterface<IPF2CharacterAbilitySystemInterface> GetCharacterAbilitySystemComponent() const = 0;
 
 	/**
 	 * Gets the sub-component of this character that is used to track commands queued during encounters.
@@ -167,6 +158,15 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual TArray<TScriptInterface<IPF2AbilityBoostInterface>> GetPendingAbilityBoosts() const = 0;
+
+	/**
+	 * Initializes or refreshes the ability system component and all other related ability logic for this character.
+	 *
+	 * Characters typically invoke this method automatically on both the client and server side whenever they are being
+	 * possessed by a player controller or AI controller, but the game mode or player state may wish to invoke this
+	 * method at other times that the ASC or ASC owner information is stale.
+	 */
+	virtual void InitializeOrRefreshAbilities() = 0;
 
 	/**
 	 * Gets the actor that is implementing this interface.

@@ -5,9 +5,8 @@
 
 #pragma once
 
+#include "PF2ActorComponentInterface.h"
 #include "PF2CommandExecuteImmediatelyResult.h"
-
-#include "Utilities/PF2LogIdentifiableInterface.h"
 
 #include "PF2CommandQueueInterface.generated.h"
 
@@ -20,7 +19,7 @@ class IPF2CharacterCommandInterface;
 // Normal Declarations
 // =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
-class UPF2CommandQueueInterface : public UPF2LogIdentifiableInterface
+class UPF2CommandQueueInterface : public UPF2ActorComponentInterface
 {
 	GENERATED_BODY()
 };
@@ -28,7 +27,7 @@ class UPF2CommandQueueInterface : public UPF2LogIdentifiableInterface
 /**
  * An interface for objects that maintain queues of commands/actions.
  */
-class OPENPF2CORE_API IPF2CommandQueueInterface : public IPF2LogIdentifiableInterface
+class OPENPF2CORE_API IPF2CommandQueueInterface : public IPF2ActorComponentInterface
 {
 	GENERATED_BODY()
 
@@ -115,4 +114,15 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Queues")
 	virtual void Clear() = 0;
+
+	/**
+	 * Converts the contents of this queue into an array of commands.
+	 *
+	 * Changes to the resulting array have no effect on the contents of this queue.
+	 *
+	 * @return
+	 *	The array of commands contained in this queue, in the order they appear in the queue.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Queues")
+	virtual TArray<TScriptInterface<IPF2CharacterCommandInterface>> ToArray() const = 0;
 };

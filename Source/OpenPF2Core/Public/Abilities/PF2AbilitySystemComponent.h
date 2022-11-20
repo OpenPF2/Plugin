@@ -19,15 +19,30 @@ class IPF2AbilityBoostInterface;
 // =====================================================================================================================
 // Normal Declarations
 // =====================================================================================================================
-UCLASS()
+UCLASS(ClassGroup="OpenPF2-Characters")
+// ReSharper disable once CppClassCanBeFinal
 class OPENPF2CORE_API UPF2AbilitySystemComponent :
 	public UAbilitySystemComponent, public IPF2CharacterAbilitySystemInterface
 {
 	GENERATED_BODY()
 
+public:
+	// =================================================================================================================
+	// Public Properties - Multicast Delegates
+	// =================================================================================================================
+	/**
+	 * Event fired to react to character abilities becoming available on the client.
+	 *
+	 * This event is not fired on the server. This can be used to listen to abilities that have been replicated after
+	 * a change remotely. Unlike native engine replication callbacks, this is only invoked after abilities have fully
+	 * replicated; it will not be invoked if some abilities are null.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Ability System")
+	FPF2ClientAbilitiesChangeDelegate OnAbilitiesAvailable;
+
 protected:
 	// =================================================================================================================
-	// Protected Properties - Blueprint Accessible
+	// Protected Fields
 	// =================================================================================================================
 	/**
 	 * The Gameplay Effects used to boost abilities.
@@ -146,6 +161,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual FGameplayTagContainer GetActiveGameplayTags() const override;
 
+	virtual FPF2ClientAbilitiesChangeDelegate* GetClientAbilityChangeDelegate() override;
+
 	// =================================================================================================================
 	// Public Methods - IPF2CharacterAbilitySystemInterface Implementation
 	// =================================================================================================================
@@ -168,7 +185,24 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore) override;
 
+	// =================================================================================================================
+	// Public Methods - IPF2ActorComponentInterface Implementation
+	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual UActorComponent* ToActorComponent() override;
+
+	// =================================================================================================================
+	// Public Methods - IPF2LogIdentifiableInterface Implementation
+	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual FString GetIdForLogs() const override;
+
 protected:
+	// =================================================================================================================
+	// Protected Methods - UAbilitySystemComponent Overrides
+	// =================================================================================================================
+	virtual void OnRep_ActivateAbilities() override;
+
 	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
@@ -262,4 +296,16 @@ protected:
 	 */
 	template<typename Func>
 	void InvokeAndReapplyPassiveGEsInSubsequentWeightGroups(const FName WeightGroup, const Func Callable);
+
+	// =================================================================================================================
+	// Protected Native Event Callbacks
+	// =================================================================================================================
+	/**
+	 * Callback invoked in C++ code when character abilities have become available on the client.
+	 *
+	 * This notifies all event listeners that abilities have been replicated after a change remotely. Unlike native
+	 * engine replication callbacks, this is only invoked after abilities have fully replicated; it will not be invoked
+	 * if some abilities are null.
+	 */
+	virtual void Native_OnAbilitiesAvailable();
 };

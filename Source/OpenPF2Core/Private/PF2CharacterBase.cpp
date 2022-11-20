@@ -29,24 +29,16 @@ void APF2CharacterBase::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
-	if (this->AbilitySystemComponent != nullptr)
-	{
-		this->AbilitySystemComponent->InitAbilityActorInfo(this, this);
-
-		this->ActivatePassiveGameplayEffects();
-		this->ApplyAbilityBoostSelections();
-		this->GrantAdditionalAbilities();
-	}
+	// Init/re-init. abilities on the server side.
+	this->InitializeOrRefreshAbilities();
 }
 
 void APF2CharacterBase::OnRep_Controller()
 {
 	Super::OnRep_Controller();
 
-	if (this->AbilitySystemComponent != nullptr)
-	{
-		this->AbilitySystemComponent->RefreshAbilityActorInfo();
-	}
+	// Init/re-init. abilities on the client side.
+	this->InitializeOrRefreshAbilities();
 }
 
 void APF2CharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -90,24 +82,14 @@ int32 APF2CharacterBase::GetCharacterLevel() const
 	return this->CharacterLevel;
 }
 
-FORCEINLINE void APF2CharacterBase::GetCharacterAbilitySystemComponent(
-	TScriptInterface<IPF2CharacterAbilitySystemInterface>& Output) const
+TScriptInterface<IPF2CharacterAbilitySystemInterface> APF2CharacterBase::GetCharacterAbilitySystemComponent() const
 {
-	// BUGBUG: This is weird, but the way that a TScriptInterface object works is it maintains a reference to a UObject
-	// that *implements* an interface along with a pointer to the part of the UObject that provides the interface
-	// implementation, so we need to provide the concrete object instead of the interface type.
-	Output = this->AbilitySystemComponent;
-}
+	UAbilitySystemComponent*             Asc              = this->GetAbilitySystemComponent();
+	IPF2CharacterAbilitySystemInterface* CharacterAscIntf = Cast<IPF2CharacterAbilitySystemInterface>(Asc);
 
-FORCEINLINE IPF2CharacterAbilitySystemInterface* APF2CharacterBase::GetCharacterAbilitySystemComponent() const
-{
-	// Too bad that ASCs in UE don't implement an interface; otherwise we could extend it so casts like this aren't
-	// needed.
-	IPF2CharacterAbilitySystemInterface* CharacterAsc =
-		Cast<IPF2CharacterAbilitySystemInterface>(this->AbilitySystemComponent);
+	check(CharacterAscIntf != nullptr);
 
-	check(CharacterAsc);
-	return CharacterAsc;
+	return PF2InterfaceUtilities::ToScriptInterface(CharacterAscIntf);
 }
 
 TScriptInterface<IPF2CommandQueueInterface> APF2CharacterBase::GetCommandQueueComponent() const
@@ -171,6 +153,55 @@ TArray<TScriptInterface<IPF2AbilityBoostInterface>> APF2CharacterBase::GetPendin
 	return this->GetCharacterAbilitySystemComponent()->GetPendingAbilityBoosts();
 }
 
+void APF2CharacterBase::InitializeOrRefreshAbilities()
+{
+	UAbilitySystemComponent* Asc = this->GetAbilitySystemComponent();
+
+	if (Asc == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Warning,
+			TEXT("[%s] Attempted to initialize ASC for character ('%s'), but ASC is null."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(this->GetIdForLogs())
+		);
+	}
+	else
+	{
+		if (this->bAreAbilitiesInitialized)
+		{
+			UE_LOG(
+				LogPf2CoreAbilities,
+				VeryVerbose,
+				TEXT("[%s] Refreshing ASC ability actor info of character ('%s')."),
+				*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+				*(this->GetIdForLogs())
+			);
+
+			Asc->RefreshAbilityActorInfo();
+		}
+		else
+		{
+			UE_LOG(
+				LogPf2CoreAbilities,
+				VeryVerbose,
+				TEXT("[%s] Initializing ASC of character ('%s')."),
+				*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+				*(this->GetIdForLogs())
+			);
+
+			Asc->InitAbilityActorInfo(this, this);
+
+			this->ActivatePassiveGameplayEffects();
+			this->ApplyAbilityBoostSelections();
+			this->GrantAdditionalAbilities();
+
+			this->bAreAbilitiesInitialized = true;
+		}
+	}
+}
+
 AActor* APF2CharacterBase::ToActor()
 {
 	return this;
@@ -225,7 +256,8 @@ void APF2CharacterBase::ApplyAbilityBoostSelections()
 
 void APF2CharacterBase::ActivatePassiveGameplayEffects()
 {
-	IPF2CharacterAbilitySystemInterface* CharacterAsc = this->GetCharacterAbilitySystemComponent();
+	const TScriptInterface<IPF2CharacterAbilitySystemInterface> CharacterAsc =
+		this->GetCharacterAbilitySystemComponent();
 
 	if (this->IsAuthorityForEffects() && !CharacterAsc->ArePassiveGameplayEffectsActive())
 	{

@@ -18,7 +18,7 @@
 #include "PF2CommandQueueComponent.generated.h"
 
 // =====================================================================================================================
-// Delegate Types
+// Delegate Declarations
 // =====================================================================================================================
 /**
  * Delegate for Blueprints to react to commands being added to the queue.
@@ -60,6 +60,15 @@ class OPENPF2CORE_API UPF2CommandQueueComponent : public UActorComponent, public
 {
 	GENERATED_BODY()
 
+public:
+	// =================================================================================================================
+	// Public Constants
+	// =================================================================================================================
+	/**
+	 * Special constant value that signifies that there is no limit to the number of commands that can be enqueued.
+	 */
+	static const uint8 CommandLimitNone;
+
 protected:
 	/**
 	 * The queue of commands for the owning character.
@@ -70,9 +79,18 @@ protected:
 	UPROPERTY(ReplicatedUsing=OnRep_Queue)
 	TArray<AInfo*> Queue;
 
+	/**
+	 * The maximum number of commands that can be in the queue at one time.
+	 *
+	 * Once the queue reaches this size, no additional commands will be accepted until at least one command already in
+	 * the queue has been executed or removed.
+	 */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	uint8 SizeLimit;
+
 public:
 	// =================================================================================================================
-	// Public Properties - Multicast Delegates
+	// Public Fields - Multicast Delegates
 	// =================================================================================================================
 	/**
 	 * Event fired when the commands in the queue have changed (commands added, commands removed, or queue cleared).
@@ -131,6 +149,15 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual void Clear() override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<TScriptInterface<IPF2CharacterCommandInterface>> ToArray() const override;
+
+	// =================================================================================================================
+	// Public Methods - IPF2ActorComponentInterface Implementation
+	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual UActorComponent* ToActorComponent() override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation

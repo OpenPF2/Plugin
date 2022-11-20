@@ -15,8 +15,7 @@
 // =====================================================================================================================
 // Forward Declarations (to break recursive dependencies)
 // =====================================================================================================================
-// This is defined in "Abilities/PF2GameplayAbility_BoostAbilityBase.h", but that file depends on this header file, so
-// we have to break the recursive dependency.
+class IPF2AbilityBoostInterface;
 class UPF2AbilityBoostBase;
 
 // =====================================================================================================================
@@ -90,7 +89,6 @@ public:
 	 * If the group into which the GE is being added is already active, then the GE for the boost is activated
 	 * immediately. In addition, any Passive GEs in weight groups after the default weight group of the GE are
 	 * automatically re-applied.
-	 *
 	 *
 	 * @param TargetAbilityScore
 	 *	The ability score that will be boosted.

@@ -10,11 +10,22 @@
 #include "Commands/PF2CharacterCommand.h"
 #include "Commands/PF2CommandBindingsInterface.h"
 
+#include "Utilities/PF2LogUtilities.h"
+
 void FPF2CommandInputBinding::ConnectToInput(UInputComponent* InputComponent)
 {
 	if (!this->IsConnectedToInput() && !this->ActionName.IsNone())
 	{
 		TArray<int32> NewHandles;
+
+		UE_LOG(
+			LogPf2CoreInput,
+			VeryVerbose,
+			TEXT("[%s] Connecting binding for action ('%s') to input in component ('%s')."),
+			*(PF2LogUtilities::GetHostNetId(Cast<UActorComponent>(this->GetBindingsOwner())->GetWorld())),
+			*(this->ActionName.ToString()),
+			*(this->GetBindingsOwner()->GetIdForLogs())
+		);
 
 		// Pressed event
 		NewHandles.Add(
@@ -34,7 +45,7 @@ void FPF2CommandInputBinding::ConnectToInput(UInputComponent* InputComponent)
 			)
 		);
 
-		this->Handles = NewHandles;
+		this->InputHandles = NewHandles;
 	}
 }
 
@@ -42,12 +53,21 @@ void FPF2CommandInputBinding::DisconnectFromInput(UInputComponent* InputComponen
 {
 	if (this->IsConnectedToInput())
 	{
-		for (const auto& Handle : this->Handles)
+		UE_LOG(
+			LogPf2CoreInput,
+			VeryVerbose,
+			TEXT("[%s] Disconnecting binding for action ('%s') from input in component ('%s')."),
+			*(PF2LogUtilities::GetHostNetId(Cast<UActorComponent>(this->GetBindingsOwner())->GetWorld())),
+			*(this->ActionName.ToString()),
+			*(this->GetBindingsOwner()->GetIdForLogs())
+		);
+
+		for (const auto& Handle : this->InputHandles)
 		{
 			InputComponent->RemoveActionBindingForHandle(Handle);
 		}
 
-		this->Handles.Empty();
+		this->InputHandles.Empty();
 	}
 }
 
@@ -56,19 +76,20 @@ void FPF2CommandInputBinding::LocalInputPressed(FPF2CommandInputBinding* Binding
 	if (Binding == nullptr)
 	{
 		UE_LOG(
-			LogPf2CoreKeyBindings,
+			LogPf2CoreInput,
 			VeryVerbose,
-			TEXT("Input PRESSED for a null binding.")
+			TEXT("[UNK] Input PRESSED for a null binding.")
 		);
 	}
 	else
 	{
 		UE_LOG(
-			LogPf2CoreKeyBindings,
+			LogPf2CoreInput,
 			VeryVerbose,
-			TEXT("Input PRESSED for binding of action ('%s') for character ('%s')."),
+			TEXT("[%s] Input PRESSED for binding of action ('%s') in component ('%s')."),
+			*(PF2LogUtilities::GetHostNetId(Cast<UActorComponent>(Binding->GetBindingsOwner())->GetWorld())),
 			*(Binding->ActionName.ToString()),
-			*(Binding->Character->GetIdForLogs())
+			*(Binding->GetBindingsOwner()->GetIdForLogs())
 		);
 
 		Binding->ActivateAbility();
@@ -80,19 +101,20 @@ void FPF2CommandInputBinding::LocalInputReleased(FPF2CommandInputBinding* Bindin
 	if (Binding == nullptr)
 	{
 		UE_LOG(
-			LogPf2CoreKeyBindings,
+			LogPf2CoreInput,
 			VeryVerbose,
-			TEXT("Input RELEASED for a null binding.")
+			TEXT("[UNK] Input RELEASED for a null binding."),
 		);
 	}
 	else
 	{
 		UE_LOG(
-			LogPf2CoreKeyBindings,
+			LogPf2CoreInput,
 			VeryVerbose,
-			TEXT("Input RELEASED for binding to action ('%s') for character ('%s')."),
+			TEXT("[%s] Input RELEASED for binding of action ('%s') in component ('%s')."),
+			*(PF2LogUtilities::GetHostNetId(Cast<UActorComponent>(Binding->GetBindingsOwner())->GetWorld())),
 			*(Binding->ActionName.ToString()),
-			*(Binding->Character->GetIdForLogs())
+			*(Binding->GetBindingsOwner()->GetIdForLogs())
 		);
 
 		Binding->DeactivateAbility();
@@ -118,7 +140,7 @@ int32 FPF2CommandInputBinding::AddActionBinding(UInputComponent*  InputComponent
 
 void FPF2CommandInputBinding::ActivateAbility()
 {
-	this->BindingsOwner->ExecuteBoundAbility(this->AbilitySpecHandle, this->Character);
+	this->GetBindingsOwner()->ExecuteBoundAbility(this->AbilitySpecHandle);
 }
 
 void FPF2CommandInputBinding::DeactivateAbility()

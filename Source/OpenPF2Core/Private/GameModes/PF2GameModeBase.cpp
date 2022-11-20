@@ -70,8 +70,7 @@ void APF2GameModeBase::TransferCharacterOwnership(
 			LogPf2Core,
 			Warning,
 			TEXT("Character ('%s') lacks an owner tracking component, so it will not be able to respond properly to ownership changes."),
-			*(NewController->GetIdForLogs()),
-			*(Character->GetIdForLogs())
+			*(NewController->GetIdForLogs())
 		);
 	}
 	else
@@ -294,10 +293,21 @@ void APF2GameModeBase::HandleStartingNewPlayer_Implementation(APlayerController*
 
 	if (RuleSet != nullptr)
 	{
-		IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnPlayableCharacterStarting(
-			RuleSet.GetObject(),
-			NewPlayer->GetCharacter()
-		);
+		IPF2PlayerControllerInterface* PlayerControllerIntf = Cast<IPF2PlayerControllerInterface>(NewPlayer);
+
+		if (PlayerControllerIntf == nullptr)
+		{
+			// Player controller is not compatible with OpenPF2; fallback to just interacting with the pawn.
+			IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnPlayableCharacterStarting(
+				RuleSet.GetObject(),
+				NewPlayer->GetCharacter()
+			);
+		}
+		else
+		{
+			// Trigger a "starting" callback for all the characters owned by the player who is joining.
+			PlayerControllerIntf->Native_OnPlayableCharactersStarting(RuleSet);
+		}
 	}
 }
 

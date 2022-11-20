@@ -9,6 +9,8 @@
 
 #include <Components/InputComponent.h>
 
+#include <Net/UnrealNetwork.h>
+
 #include "PF2CharacterInterface.h"
 #include "PF2PlayerControllerInterface.h"
 
@@ -33,16 +35,12 @@ void UPF2CommandBindingsComponent::ClearBindings()
 	this->Bindings.Empty();
 }
 
-void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter(const TScriptInterface<IPF2CharacterInterface> Character)
+void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter()
 {
-	this->LoadAbilitiesFromCharacter(PF2InterfaceUtilities::FromScriptInterface(Character));
-}
-
-void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter(IPF2CharacterInterface* Character)
-{
-	UAbilitySystemComponent*     AbilitySystemComponent = Character->GetAbilitySystemComponent();
-	TArray<FGameplayAbilitySpec> ActivatableAbilities   = AbilitySystemComponent->GetActivatableAbilities();
-	int32                        NumMappedAbilities     = 0;
+	const IPF2CharacterInterface* Character              = this->GetOwningCharacter();
+	UAbilitySystemComponent*      AbilitySystemComponent = Character->GetAbilitySystemComponent();
+	TArray<FGameplayAbilitySpec>  ActivatableAbilities   = AbilitySystemComponent->GetActivatableAbilities();
+	int32                         NumMappedAbilities     = 0;
 
 	checkf(
 		this->Bindings.Num() == 0,
@@ -50,7 +48,7 @@ void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter(IPF2CharacterInter
 	);
 
 	UE_LOG(
-		LogPf2CoreKeyBindings,
+		LogPf2CoreInput,
 		VeryVerbose,
 		TEXT("[%s] Loading %d abilities from TargetCharacter ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
@@ -75,11 +73,11 @@ void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter(IPF2CharacterInter
 			DefaultAction = FName();
 		}
 
-		this->Bindings.Add(FPF2CommandInputBinding(DefaultAction, AbilitySpec, Character, this));
+		this->Bindings.Add(FPF2CommandInputBinding(DefaultAction, AbilitySpec, this));
 	}
 
 	UE_LOG(
-		LogPf2CoreKeyBindings,
+		LogPf2CoreInput,
 		VeryVerbose,
 		TEXT("[%s] Loaded %d abilities with default action mappings from TargetCharacter ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
@@ -107,6 +105,8 @@ void UPF2CommandBindingsComponent::ConnectToInput(UInputComponent* NewInputCompo
 	}
 
 	this->InputComponent = NewInputComponent;
+
+	this->Native_OnInputConnected();
 }
 
 void UPF2CommandBindingsComponent::DisconnectFromInput()
@@ -119,17 +119,24 @@ void UPF2CommandBindingsComponent::DisconnectFromInput()
 		}
 
 		this->InputComponent = nullptr;
+
+		this->Native_OnInputDisconnected();
 	}
 }
 
-void UPF2CommandBindingsComponent::ExecuteBoundAbility(
-	const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	IPF2CharacterInterface* Character)
+void UPF2CommandBindingsComponent::ExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle)
 {
+	IPF2CharacterInterface*                               Character        = this->GetOwningCharacter();
 	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
+
 	check(PlayerController != nullptr);
 
 	PlayerController->Server_ExecuteCharacterCommand(AbilitySpecHandle, Character->ToActor());
+}
+
+UActorComponent* UPF2CommandBindingsComponent::ToActorComponent()
+{
+	return this;
 }
 
 FString UPF2CommandBindingsComponent::GetIdForLogs() const
@@ -142,4 +149,44 @@ FString UPF2CommandBindingsComponent::GetIdForLogs() const
 			*(this->GetName())
 		}
 	);
+}
+
+IPF2CharacterInterface* UPF2CommandBindingsComponent::GetOwningCharacter() const
+{
+	AActor*                 OwningActor;
+	IPF2CharacterInterface* OwningCharacter;
+
+	OwningActor = this->GetOwner();
+	check(OwningActor != nullptr);
+
+	OwningCharacter = Cast<IPF2CharacterInterface>(OwningActor);
+	checkf(OwningCharacter != nullptr, TEXT("Owning character must implement IPF2CharacterInterface."));
+
+	return OwningCharacter;
+}
+
+void UPF2CommandBindingsComponent::Native_OnInputConnected()
+{
+	UE_LOG(
+		LogPf2CoreInput,
+		Verbose,
+		TEXT("[%s] Command bindings component ('%s') connected to input."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(this->GetIdForLogs())
+	);
+
+	this->OnInputConnected.Broadcast();
+}
+
+void UPF2CommandBindingsComponent::Native_OnInputDisconnected()
+{
+	UE_LOG(
+		LogPf2CoreInput,
+		Verbose,
+		TEXT("[%s] Command bindings component ('%s') disconnected from input."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(this->GetIdForLogs())
+	);
+
+	this->OnInputDisconnected.Broadcast();
 }

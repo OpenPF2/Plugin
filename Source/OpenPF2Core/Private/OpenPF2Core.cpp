@@ -23,10 +23,12 @@ void FOpenPF2CoreModule::ShutdownModule()
 
 IMPLEMENT_MODULE(FOpenPF2CoreModule, OpenPF2Core)
 
-/** Logging definitions */
+// =====================================================================================================================
+// Logging Definitions
+// =====================================================================================================================
 DEFINE_LOG_CATEGORY(LogPf2Core);
 DEFINE_LOG_CATEGORY(LogPf2CoreAbilities);
 DEFINE_LOG_CATEGORY(LogPf2CoreEncounters);
 DEFINE_LOG_CATEGORY(LogPf2CoreInitiative);
 DEFINE_LOG_CATEGORY(LogPf2CoreStats);
-DEFINE_LOG_CATEGORY(LogPf2CoreKeyBindings);
+DEFINE_LOG_CATEGORY(LogPf2CoreInput);

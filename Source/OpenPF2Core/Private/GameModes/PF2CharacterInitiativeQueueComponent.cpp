@@ -132,6 +132,11 @@ TArray<TScriptInterface<IPF2CharacterInterface>> UPF2CharacterInitiativeQueueCom
 	return PF2InterfaceUtilities::ToScriptInterfaces<IPF2CharacterInterface>(this->CurrentCharacterSequence);
 }
 
+UActorComponent* UPF2CharacterInitiativeQueueComponent::ToActorComponent()
+{
+	return this;
+}
+
 FString UPF2CharacterInitiativeQueueComponent::GetIdForLogs() const
 {
 	return this->GetName();

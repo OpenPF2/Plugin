@@ -20,7 +20,7 @@ namespace PF2EnumUtilities
 	 *	The key/name that corresponds to the value in the enumerated type.
 	 */
 	template<typename T>
-	FString ToString(const T EnumValue)
+	OPENPF2CORE_API FString ToString(const T EnumValue)
 	{
 		FString Name = StaticEnum<T>()->GetNameStringByValue(static_cast<__underlying_type(T)>(EnumValue));
 

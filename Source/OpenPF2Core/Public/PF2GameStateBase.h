@@ -32,7 +32,7 @@ class OPENPF2CORE_API APF2GameStateBase : public AGameStateBase, public IPF2Game
 
 protected:
 	// =================================================================================================================
-	// Protected Properties
+	// Protected Fields
 	// =================================================================================================================
 	/**
 	 * The next player index to assign to a player who joins the game.
@@ -40,7 +40,7 @@ protected:
 	int32 NextPlayerIndex;
 
 	// =================================================================================================================
-	// Protected Properties - Blueprint Accessible
+	// Protected Fields - Blueprint Accessible
 	// =================================================================================================================
 	/**
 	 * The current play mode for all characters in the loaded level.

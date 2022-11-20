@@ -36,7 +36,7 @@ class OPENPF2CORE_API APF2PlayerStateBase : public APlayerState, public IPF2Play
 	GENERATED_BODY()
 
 	// =================================================================================================================
-	// Private Properties
+	// Private Fields
 	// =================================================================================================================
 	/**
 	 * The zero-based index of this player.

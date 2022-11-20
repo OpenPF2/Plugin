@@ -19,6 +19,7 @@
 // Forward Declarations (to break recursive dependencies)
 // =====================================================================================================================
 class IPF2CharacterInterface;
+class IPF2ModeOfPlayRuleSetInterface;
 class IPF2PlayerStateInterface;
 
 // =====================================================================================================================
@@ -132,6 +133,19 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
 	virtual void Server_CancelCharacterCommand(AInfo* Command) = 0;
+
+	// =================================================================================================================
+	// Public Event Notifications from the Game Mode
+	// =================================================================================================================
+	/**
+	 * Notifies this player controller that its playable characters have just entered the world.
+	 *
+	 * (This should normally be invoked only by the game mode).
+	 *
+	 * @param RuleSet
+	 *	The active Mode of Play Rule Set.
+	 */
+	virtual void Native_OnPlayableCharactersStarting(TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet) = 0;
 
 	// =================================================================================================================
 	// Public Event Notifications from the Game State

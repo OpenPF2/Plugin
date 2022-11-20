@@ -144,6 +144,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UPF2AttributeSet* AttributeSet;
 
+	UPROPERTY()
+	bool bAreAbilitiesInitialized;
+
 	/**
 	 * Whether or not managed passive Gameplay Effects have been generated for this character.
 	 */
@@ -359,7 +362,7 @@ protected:
 
 public:
 	// =================================================================================================================
-	// Public Properties - Multicast Delegates
+	// Public Fields - Multicast Delegates
 	// =================================================================================================================
 	/**
 	 * Event fired when character's encounter turn has started.
@@ -405,6 +408,7 @@ protected:
 	                                                         CommandQueueType,
 	                                                         OwnerTrackerType,
 	                                                         AttributeSetType> ComponentFactory) :
+		bAreAbilitiesInitialized(false),
 		bManagedPassiveEffectsGenerated(false),
 		CharacterName(FText::FromString(TEXT("Character"))),
 		CharacterLevel(1)
@@ -462,10 +466,7 @@ public:
 	virtual int32 GetCharacterLevel() const override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void GetCharacterAbilitySystemComponent(
-		TScriptInterface<IPF2CharacterAbilitySystemInterface>& Output) const override;
-
-	virtual IPF2CharacterAbilitySystemInterface* GetCharacterAbilitySystemComponent() const override;
+	virtual TScriptInterface<IPF2CharacterAbilitySystemInterface> GetCharacterAbilitySystemComponent() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2CommandQueueInterface> GetCommandQueueComponent() const override;
@@ -478,6 +479,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual TArray<TScriptInterface<IPF2AbilityBoostInterface>> GetPendingAbilityBoosts() const override;
+
+	virtual void InitializeOrRefreshAbilities() override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual AActor* ToActor() override;
@@ -534,9 +537,6 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void Multicast_OnEncounterTurnEnded() override;
 
-	// =================================================================================================================
-	// Public Methods - Blueprint Callable
-	// =================================================================================================================
 	/**
 	 * Sets the current level of this character.
 	 *
@@ -635,6 +635,9 @@ protected:
 	 */
 	void GrantAdditionalAbilities();
 
+	// =================================================================================================================
+	// Protected Event Notifications
+	// =================================================================================================================
 	/**
 	 * Callback invoked when a character's level has changed, to allow logic that depends on levels to be refreshed.
 	 *

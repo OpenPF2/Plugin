@@ -9,13 +9,14 @@
 
 #include <Components/InputComponent.h>
 
+#include "OpenPF2Core.h"
+#include "PF2CommandBindingsInterface.h"
 #include "PF2CommandInputBinding.generated.h"
 
 // =====================================================================================================================
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2CharacterInterface;
-class IPF2CommandBindingsInterface;
 class UGameplayAbility;
 
 // =====================================================================================================================
@@ -32,7 +33,7 @@ struct FPF2CommandInputBinding
 	GENERATED_BODY()
 
 	// =================================================================================================================
-	// Public Properties - Blueprint Accessible
+	// Public Fields - Blueprint Accessible
 	// =================================================================================================================
 	/**
 	 * The human-friendly name of the action, as configured in project input settings (e.g "Jump", "Fire", etc.).
@@ -42,7 +43,7 @@ struct FPF2CommandInputBinding
 
 protected:
 	// =================================================================================================================
-	// Protected Properties - Blueprint Accessible
+	// Protected Fields
 	// =================================================================================================================
 	/**
 	 * The handle for the corresponding ability.
@@ -53,20 +54,17 @@ protected:
 	/**
 	 * The handles for input action bindings, if this binding has been connected to input.
 	 */
-	TArray<int32> Handles;
-
-	// =================================================================================================================
-	// Protected Properties
-	// =================================================================================================================
-	/**
-	 * The character to which the ability has been granted.
-	 */
-	IPF2CharacterInterface* Character;
+	UPROPERTY()
+	TArray<int32> InputHandles;
 
 	/**
 	 * The component that is managing this binding.
+	 *
+	 * This is declared as an actor component instead of an interface so that UE interacts with it properly for
+	 * replication. UE will not do this if this component were declared/referenced through an interface field.
 	 */
-	IPF2CommandBindingsInterface* BindingsOwner;
+	UPROPERTY()
+	UActorComponent* BindingsOwner;
 
 public:
 	// =================================================================================================================
@@ -75,7 +73,7 @@ public:
 	/**
 	 * Default constructor (used by Blueprint).
 	 */
-	explicit FPF2CommandInputBinding() : Character(nullptr), BindingsOwner(nullptr)
+	explicit FPF2CommandInputBinding() : BindingsOwner(nullptr)
 	{
 	}
 
@@ -86,20 +84,24 @@ public:
 	 *	The human-friendly name of the action, as configured in project settings (e.g "Jump").
 	 * @param AbilitySpec
 	 *	The specification for the ability.
-	 * @param Character
-	 *	The character to which the ability has been granted.
 	 * @param Owner
 	 *	The component that is managing this binding.
 	 */
 	explicit FPF2CommandInputBinding(const FName&                  ActionName,
 	                                 const FGameplayAbilitySpec    AbilitySpec,
-	                                 IPF2CharacterInterface*       Character,
 	                                 IPF2CommandBindingsInterface* Owner) :
 		ActionName(ActionName),
 		AbilitySpecHandle(AbilitySpec.Handle),
-		Character(Character),
-		BindingsOwner(Owner)
+		BindingsOwner(Owner->ToActorComponent())
 	{
+		UE_LOG(
+			LogPf2CoreInput,
+			VeryVerbose,
+			TEXT("Creating an FPF2CommandInputBinding for '%s' action (handle '%s') in command bindings component ('%s')."),
+			*(ActionName.ToString()),
+			*(this->AbilitySpecHandle.ToString()),
+			*(Owner->GetIdForLogs())
+		);
 	}
 
 	// =================================================================================================================
@@ -122,7 +124,7 @@ public:
 	 */
 	FORCEINLINE bool IsConnectedToInput() const
 	{
-		return this->Handles.Num() != 0;
+		return this->InputHandles.Num() != 0;
 	}
 
 	/**
@@ -168,6 +170,30 @@ protected:
 	// =================================================================================================================
 	// Protected Instance Methods
 	// =================================================================================================================
+	/**
+	 * Gets the component that is managing this binding.
+	 *
+	 * @return
+	 *	The containing bindings component.
+	 */
+	FORCEINLINE IPF2CommandBindingsInterface* GetBindingsOwner() const
+	{
+		return Cast<IPF2CommandBindingsInterface>(this->BindingsOwner);
+	}
+
+	/**
+	 * Binds a specific input event/action on the specified input component to the given callback.
+	 *
+	 * @param InputComponent
+	 *	The input component for which input is being bound.
+	 * @param InKeyEvent
+	 *	The event to which the callback will be bound.
+	 * @param Callback
+	 *	The callback to invoke.
+	 *
+	 * @return
+	 *	The handle in the input component of the action binding.
+	 */
 	int32 AddActionBinding(UInputComponent*  InputComponent,
 	                       const EInputEvent InKeyEvent,
 	                       void              (*Callback)(FPF2CommandInputBinding*));

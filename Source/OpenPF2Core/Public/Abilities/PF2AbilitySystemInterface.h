@@ -8,12 +8,22 @@
 #include <GameplayEffect.h>
 #include <GameplayTagContainer.h>
 
-#include <UObject/Interface.h>
-
+#include "PF2ActorComponentInterface.h"
 #include "PF2AbilitySystemInterface.generated.h"
 
+// =====================================================================================================================
+// Delegate Declarations
+// =====================================================================================================================
+/**
+ * Delegate for reacting to abilities changing on the client after replication from the server.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPF2ClientAbilitiesChangeDelegate);
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
-class UPF2AbilitySystemInterface : public UInterface
+class UPF2AbilitySystemInterface : public UPF2ActorComponentInterface
 {
     GENERATED_BODY()
 };
@@ -29,7 +39,7 @@ class UPF2AbilitySystemInterface : public UInterface
  * interact closely with the ASC on the character to have an effect. So, in OpenPF2, that logic lives in ASCs instead to
  * cut down on the number of concerns character base classes are managing.
  */
-class OPENPF2CORE_API IPF2AbilitySystemInterface
+class OPENPF2CORE_API IPF2AbilitySystemInterface : public IPF2ActorComponentInterface
 {
     GENERATED_BODY()
 
@@ -257,4 +267,12 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
 	virtual FGameplayTagContainer GetActiveGameplayTags() const = 0;
+
+	/**
+	 * Gets the dynamic delegate that listeners can use to be notified when abilities are loaded client-side.
+	 *
+	 * @return
+	 *	Direct access to the multicast change delegate.
+	 */
+	virtual FPF2ClientAbilitiesChangeDelegate* GetClientAbilityChangeDelegate() = 0;
 };
