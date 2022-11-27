@@ -16,13 +16,8 @@
 /**
  * Abstract base class for OpenPF2-enabled gameplay abilities.
  *
- * GAs that extend from this base class automatically get ability queuing and de-queuing interactions for free.
- * If a GA supports waiting for initiative (i.e., action queueing while in an encounter), then this ability must be
- * instanced (instancing is required for ability tasks to work). It should additionally be configured as follows:
- * - If bShouldBlockWhenQueued is false, then the GA should be instanced per activation. Otherwise, the ability will
- *   still block.
- * - If bShouldBlockWhenQueued is true, then the GA can be instanced per actor or instanced per activation, since only
- *   one instance of it can be queued/active at a time per actor.
+ * GAs that extend from this base class automatically get the ability to expose an icon, label, and description, and
+ * support a default automatic binding to input.
  */
 UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal
