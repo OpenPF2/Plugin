@@ -13,6 +13,14 @@
 
 #include "PF2GameplayAbilityBase.generated.h"
 
+// =====================================================================================================================
+// Forward Declarations (to minimize header dependencies)
+// =====================================================================================================================
+class IPF2CharacterInterface;
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 /**
  * Abstract base class for OpenPF2-enabled gameplay abilities.
  *
@@ -84,4 +92,16 @@ public:
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
+
+protected:
+	// =================================================================================================================
+	// Protected Methods
+	// =================================================================================================================
+	/**
+	 * Gets the OpenPF2-compatible character to which this ability has been granted.
+	 *
+	 * May be null if this ability has been instantiated but not yet been granted to a character.
+	 */
+	UFUNCTION(BlueprintCallable)
+	TScriptInterface<IPF2CharacterInterface> GetOwningCharacterFromActorInfo() const;
 };

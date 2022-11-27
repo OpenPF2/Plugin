@@ -4,6 +4,10 @@
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "Abilities/PF2GameplayAbilityBase.h"
+
+#include "PF2CharacterInterface.h"
+
+#include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
 UTexture2D* UPF2GameplayAbilityBase::GetAbilityIcon() const
@@ -29,4 +33,22 @@ FName UPF2GameplayAbilityBase::GetDefaultInputActionMapping() const
 FString UPF2GameplayAbilityBase::GetIdForLogs() const
 {
 	return this->GetName();
+}
+
+TScriptInterface<IPF2CharacterInterface> UPF2GameplayAbilityBase::GetOwningCharacterFromActorInfo() const
+{
+	TScriptInterface<IPF2CharacterInterface> Result;
+	AActor*                                  OwningActor     = this->GetOwningActorFromActorInfo();
+	IPF2CharacterInterface*                  OwningCharacter = Cast<IPF2CharacterInterface>(OwningActor);
+
+	if (OwningActor == nullptr)
+	{
+		Result = nullptr;
+	}
+	else
+	{
+		Result = PF2InterfaceUtilities::ToScriptInterface(OwningCharacter);
+	}
+
+	return Result;
 }
