@@ -13,7 +13,7 @@
 #include "PF2CharacterAbilitySystemInterface.generated.h"
 
 // =====================================================================================================================
-// Forward Declarations (to break recursive dependencies)
+// Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2AbilityBoostInterface;
 class UPF2AbilityBoostBase;

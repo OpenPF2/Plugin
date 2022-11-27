@@ -11,7 +11,7 @@
 #include "PF2CommandQueueInterface.generated.h"
 
 // =====================================================================================================================
-// Forward Declarations (to break recursive dependencies)
+// Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2CharacterCommandInterface;
 

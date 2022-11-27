@@ -12,7 +12,7 @@
 #include "PF2CommandBindingsInterface.generated.h"
 
 // =====================================================================================================================
-// Forward Declarations (to break recursive dependencies)
+// Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class UInputComponent;
 class IPF2CharacterInterface;
