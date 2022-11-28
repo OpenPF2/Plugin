@@ -114,6 +114,11 @@ APlayerController* APF2PlayerControllerBase::ToPlayerController()
 	return this;
 }
 
+FVector APF2PlayerControllerBase::GetTargetLocation() const
+{
+	return this->BP_GetTargetLocation();
+}
+
 void APF2PlayerControllerBase::Native_OnModeOfPlayChanged(const EPF2ModeOfPlayType NewMode)
 {
 	UE_LOG(

@@ -72,6 +72,15 @@ public:
 	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetControllableCharacters() const = 0;
 
 	/**
+	 * Gets the last target location that the player has chosen through the UI.
+	 *
+	 * @return
+	 *	The location in the map that the player has chosen for a target.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
+	virtual FVector GetTargetLocation() const = 0;
+
+	/**
 	 * Gets the player controller that is implementing this interface.
 	 *
 	 * @return
