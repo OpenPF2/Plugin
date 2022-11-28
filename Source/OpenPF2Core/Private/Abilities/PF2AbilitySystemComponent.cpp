@@ -322,9 +322,23 @@ FPF2ClientAbilitiesChangeDelegate* UPF2AbilitySystemComponent::GetClientAbilityC
 	return &this->OnAbilitiesAvailable;
 }
 
+TScriptInterface<IPF2CharacterInterface> UPF2AbilitySystemComponent::GetCharacter() const
+{
+	IPF2CharacterInterface* OwningCharacter = Cast<IPF2CharacterInterface>(this->GetOwnerActor());
+
+	if (OwningCharacter == nullptr)
+	{
+		return PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterInterface>(nullptr);
+	}
+	else
+	{
+		return PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterInterface>(OwningCharacter);
+	}
+}
+
 FORCEINLINE int32 UPF2AbilitySystemComponent::GetCharacterLevel() const
 {
-	const IPF2CharacterInterface* OwningCharacter = Cast<IPF2CharacterInterface>(this->GetOwnerActor());
+	const TScriptInterface<IPF2CharacterInterface> OwningCharacter = this->GetCharacter();
 
 	if (OwningCharacter == nullptr)
 	{

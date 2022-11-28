@@ -167,6 +167,9 @@ public:
 	// Public Methods - IPF2CharacterAbilitySystemInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
+	virtual TScriptInterface<IPF2CharacterInterface> GetCharacter() const override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual int32 GetCharacterLevel() const override;
 
 	UFUNCTION(BlueprintCallable)

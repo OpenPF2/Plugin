@@ -17,6 +17,7 @@
 // =====================================================================================================================
 class IPF2AbilityBoostInterface;
 class UPF2AbilityBoostBase;
+class IPF2CharacterInterface;
 
 // =====================================================================================================================
 // Normal Declarations
@@ -38,6 +39,19 @@ class OPENPF2CORE_API IPF2CharacterAbilitySystemInterface : public IPF2AbilitySy
     GENERATED_BODY()
 
 public:
+	/**
+	 * Gets the owning character.
+	 *
+	 * This requires the owning actor to implement IPF2CharacterInterface. If the owning actor does not implement that
+	 * interface, a script interface wrapping nullptr is returned.
+	 *
+	 * @return
+	 *	The character to whom this ASC belongs; or, if the owning actor is not a character, a script interface wrapping
+	 *	nullptr.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Character Ability System")
+	virtual TScriptInterface<IPF2CharacterInterface> GetCharacter() const = 0;
+
 	/**
 	 * Gets the level of the owning character.
 	 *
