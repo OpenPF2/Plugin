@@ -75,10 +75,10 @@ public:
 	 * Gets the last target location that the player has chosen through the UI.
 	 *
 	 * @return
-	 *	The location in the map that the player has chosen for a target.
+	 *	A hit result for the target location that the player has chosen through the UI.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
-	virtual FVector GetTargetLocation() const = 0;
+	virtual FHitResult GetTargetLocation() const = 0;
 
 	/**
 	 * Gets the player controller that is implementing this interface.

@@ -10,7 +10,6 @@
 #include "PF2CharacterInterface.h"
 #include "PF2PlayerControllerInterface.h"
 
-#include "Abilities/PF2AbilitySystemInterface.h"
 #include "Abilities/PF2CharacterAbilitySystemInterface.h"
 
 #include "Utilities/PF2GameplayAbilityUtilities.h"
@@ -64,9 +63,14 @@ void UPF2AbilityTask_AcquireTargetFromPlayerController::Activate()
 		}
 		else
 		{
-			FVector TargetLocation = PlayerController->GetTargetLocation();
+			const FHitResult TargetLocation = PlayerController->GetTargetLocation();
 
-			// FIXME: Create FGameplayAbilityTargetData and FGameplayAbilityTargetDataHandle here.
+			this->NotifyListenersAboutTarget(
+				MakeTargetData(TargetLocation),
+				PF2GameplayAbilityUtilities::GetTag(
+					FName("GameplayAbility.Event.TargetReceived.Location")
+				)
+			);
 		}
 	}
 	else
@@ -133,6 +137,21 @@ void UPF2AbilityTask_AcquireTargetFromPlayerController::NotifyListenersAboutTarg
 			this->OnLocationSelected.Broadcast(Data);
 		}
 	}
+}
+
+FGameplayAbilityTargetDataHandle UPF2AbilityTask_AcquireTargetFromPlayerController::MakeTargetData(
+	const FHitResult& HitResult)
+{
+	FGameplayAbilityTargetDataHandle            ReturnDataHandle;
+	FGameplayAbilityTargetData_SingleTargetHit* ReturnData;
+
+	/** The ReturnData is cleaned up by the FGameplayAbilityTargetDataHandle (via an internal TSharedPtr) */
+	ReturnData            = new FGameplayAbilityTargetData_SingleTargetHit();
+	ReturnData->HitResult = HitResult;
+
+	ReturnDataHandle.Add(ReturnData);
+
+	return ReturnDataHandle;
 }
 
 void UPF2AbilityTask_AcquireTargetFromPlayerController::Native_OnAbilityCancelled() const

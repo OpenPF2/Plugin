@@ -114,7 +114,7 @@ APlayerController* APF2PlayerControllerBase::ToPlayerController()
 	return this;
 }
 
-FVector APF2PlayerControllerBase::GetTargetLocation() const
+FHitResult APF2PlayerControllerBase::GetTargetLocation() const
 {
 	return this->BP_GetTargetLocation();
 }

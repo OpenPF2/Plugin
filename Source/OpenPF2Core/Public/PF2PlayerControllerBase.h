@@ -79,7 +79,7 @@ public:
 	virtual APlayerController* ToPlayerController() override;
 
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
-	virtual FVector GetTargetLocation() const override;
+	virtual FHitResult GetTargetLocation() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetControllableCharacters() const override;
@@ -181,7 +181,7 @@ protected:
 	 *	The location in the map that the player has chosen for a target.
 	 */
 	UFUNCTION(BlueprintImplementableEvent)
-	FVector BP_GetTargetLocation() const;
+	FHitResult BP_GetTargetLocation() const;
 
 	// =================================================================================================================
 	// Blueprint Implementable Events

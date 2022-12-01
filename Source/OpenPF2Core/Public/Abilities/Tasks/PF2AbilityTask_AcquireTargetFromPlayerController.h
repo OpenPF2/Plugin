@@ -91,16 +91,6 @@ protected:
 	 */
 	FGameplayTagContainer RequiredTargetCharacterTags;
 
-	/**
-	 * For location selections: The map location that the player selected.
-	 */
-	const FVector TargetLocation;
-
-	/**
-	 * For character selections: The character that the player selected.
-	 */
-	const TScriptInterface<IPF2CharacterInterface> TargetCharacter;
-
 	// =================================================================================================================
 	// Delegates/Execution Pins
 	// =================================================================================================================
@@ -154,6 +144,8 @@ private:
 	 *	"GameplayAbility.Event.TargetReceived.Location".
 	 */
 	void NotifyListenersAboutTarget(const FGameplayAbilityTargetDataHandle& Data, FGameplayTag TargetTypeTag) const;
+
+	static FGameplayAbilityTargetDataHandle MakeTargetData(const FHitResult& HitResult);
 
 	// =================================================================================================================
 	// Private Native Event Callbacks
