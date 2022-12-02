@@ -39,7 +39,7 @@ class OPENPF2CORE_API UPF2CommandBindingsComponent : public UActorComponent, pub
 
 public:
 	// =================================================================================================================
-	// Public Properties - Multicast Delegates
+	// Public Fields - Multicast Delegates
 	// =================================================================================================================
 	/**
 	 * Event fired when local input is connected to this component.

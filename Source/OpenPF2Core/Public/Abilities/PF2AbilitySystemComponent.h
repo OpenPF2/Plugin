@@ -28,7 +28,7 @@ class OPENPF2CORE_API UPF2AbilitySystemComponent :
 
 public:
 	// =================================================================================================================
-	// Public Properties - Multicast Delegates
+	// Public Fields - Multicast Delegates
 	// =================================================================================================================
 	/**
 	 * Event fired to react to character abilities becoming available on the client.
