@@ -125,7 +125,7 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
 	virtual void Server_ExecuteCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	                                            AActor*          CharacterActor) = 0;
+	                                            AActor*                          CharacterActor) = 0;
 
 	/**
 	 * Requests to cancel a command on the server for one of the characters this player controller can control.
