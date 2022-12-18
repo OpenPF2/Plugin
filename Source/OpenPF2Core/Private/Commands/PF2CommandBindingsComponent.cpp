@@ -9,13 +9,13 @@
 
 #include <Components/InputComponent.h>
 
-#include <Net/UnrealNetwork.h>
-
 #include "PF2CharacterInterface.h"
 #include "PF2PlayerControllerInterface.h"
 
 #include "Abilities/PF2GameplayAbilityInterface.h"
 
+#include "Commands/PF2AbilityExecutionFilterContext.h"
+#include "Commands/PF2AbilityExecutionFilterInterface.h"
 #include "Commands/PF2CharacterCommand.h"
 #include "Commands/PF2CommandInputBinding.h"
 
@@ -127,12 +127,47 @@ void UPF2CommandBindingsComponent::DisconnectFromInput()
 void UPF2CommandBindingsComponent::ExecuteBoundAbility(const FName                      ActionName,
                                                        const FGameplayAbilitySpecHandle AbilitySpecHandle)
 {
-	IPF2CharacterInterface*                               Character        = this->GetOwningCharacter();
-	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
+	IPF2CharacterInterface*                         CharacterIntf = this->GetOwningCharacter();
+	TScriptInterface<IPF2CharacterInterface>		Character;
+	TScriptInterface<IPF2PlayerControllerInterface> PlayerController;
+	FPF2AbilityExecutionFilterContext               FilterContext;
+
+	check(CharacterIntf != nullptr);
+
+	Character        = PF2InterfaceUtilities::ToScriptInterface(CharacterIntf);
+	PlayerController = CharacterIntf->GetPlayerController();
 
 	check(PlayerController != nullptr);
 
-	PlayerController->Server_ExecuteCharacterCommand(AbilitySpecHandle, Character->ToActor());
+	FilterContext = FPF2AbilityExecutionFilterContext(ActionName, Character, AbilitySpecHandle);
+
+	for (const TSubclassOf<UObject> FilterType : this->Filters)
+	{
+		TSubclassOf<UObject>::TBaseType*     RawFilter = FilterType.GetDefaultObject();
+		IPF2AbilityExecutionFilterInterface* Filter    = Cast<IPF2AbilityExecutionFilterInterface>(RawFilter);
+
+		if (Filter == nullptr)
+		{
+			UE_LOG(
+				LogPf2CoreInput,
+				Error,
+				TEXT("Command bindings component ('%s') has a null ability execution filter."),
+				*(this->GetIdForLogs())
+			);
+		}
+		else
+		{
+			FilterContext = Filter->Execute_FilterCommandActivation(RawFilter, FilterContext);
+
+			if (!FilterContext.ShouldProceed())
+			{
+				// The last filter vetoed execution, so let's call the whole thing off.
+				return;
+			}
+		}
+	}
+
+	PlayerController->Server_ExecuteCharacterCommand(FilterContext.AbilityToExecute, CharacterIntf->ToActor());
 }
 
 UActorComponent* UPF2CommandBindingsComponent::ToActorComponent()

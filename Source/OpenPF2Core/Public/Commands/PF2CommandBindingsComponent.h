@@ -15,7 +15,8 @@
 // =====================================================================================================================
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
-class UPF2GameplayAbilityFilterBase;
+class IPF2AbilityExecutionFilterInterface;
+class UPF2AbilityExecutionFilterBase;
 
 // =====================================================================================================================
 // Delegate Declarations
@@ -46,8 +47,13 @@ public:
 	// =================================================================================================================
 	// Public Fields
 	// =================================================================================================================
-	UPROPERTY(EditDefaultsOnly)
-	TArray<UPF2GameplayAbilityFilterBase*> Filters;
+	UPROPERTY(
+		EditDefaultsOnly,
+		meta=(MustImplement="PF2AbilityExecutionFilterInterface"),
+		DisplayName="Ability Execution Filters",
+		Category="OpenPF2 Command Bindings"
+	)
+	TArray<TSubclassOf<UObject>> Filters;
 
 	// =================================================================================================================
 	// Public Fields - Multicast Delegates
