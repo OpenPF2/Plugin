@@ -113,7 +113,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void DisconnectFromInput() override;
 
-	virtual void ExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle) override;
+	virtual void ExecuteBoundAbility(const FName                      ActionName,
+	                                 const FGameplayAbilitySpecHandle AbilitySpecHandle) override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2ActorComponentInterface Implementation

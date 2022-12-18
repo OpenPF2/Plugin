@@ -76,12 +76,14 @@ public:
 	virtual void DisconnectFromInput() = 0;
 
 	/**
-	 * Executes the specified ability on the owning character.
+	 * Executes the specified ability on the owning character in response to the specified action.
 	 *
 	 * This is expected to be invoked only by a command binding.
 	 *
+	 * @param ActionName
+	 *	The name of the input action that invoked this binding.
 	 * @param AbilitySpecHandle
 	 *	The handle for the ability to activate.
 	 */
-	virtual void ExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle) = 0;
+	virtual void ExecuteBoundAbility(const FName ActionName, const FGameplayAbilitySpecHandle AbilitySpecHandle) = 0;
 };

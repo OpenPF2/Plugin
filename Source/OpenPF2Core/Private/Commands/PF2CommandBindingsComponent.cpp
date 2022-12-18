@@ -124,7 +124,8 @@ void UPF2CommandBindingsComponent::DisconnectFromInput()
 	}
 }
 
-void UPF2CommandBindingsComponent::ExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle)
+void UPF2CommandBindingsComponent::ExecuteBoundAbility(const FName                      ActionName,
+                                                       const FGameplayAbilitySpecHandle AbilitySpecHandle)
 {
 	IPF2CharacterInterface*                               Character        = this->GetOwningCharacter();
 	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();

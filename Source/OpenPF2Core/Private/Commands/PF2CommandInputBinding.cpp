@@ -140,7 +140,7 @@ int32 FPF2CommandInputBinding::AddActionBinding(UInputComponent*  InputComponent
 
 void FPF2CommandInputBinding::ActivateAbility()
 {
-	this->GetBindingsOwner()->ExecuteBoundAbility(this->AbilitySpecHandle);
+	this->GetBindingsOwner()->ExecuteBoundAbility(this->ActionName, this->AbilitySpecHandle);
 }
 
 void FPF2CommandInputBinding::DeactivateAbility()
