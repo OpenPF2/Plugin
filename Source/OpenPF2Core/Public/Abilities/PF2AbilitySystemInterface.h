@@ -59,6 +59,70 @@ public:
 	virtual UAbilitySystemComponent* ToAbilitySystemComponent() = 0;
 
 	/**
+	 * Finds one or more granted abilities by their tags.
+	 *
+	 * @param Tags
+	 *	All of the tags that a granted ability must possess in order for it to be returned.
+	 *
+	 * @return
+	 *	The abilities granted to this ASC that have the specified tags.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
+	virtual TArray<FGameplayAbilitySpec> FindAbilitySpecsByTags(const FGameplayTagContainer& Tags) const = 0;
+
+	/**
+	 * Finds the first granted ability having the specified tags.
+	 *
+	 * @param InTags
+	 *	All of the tags that a granted ability must possess in order for it to be returned.
+	 * @param OutMatchFound
+	 *	An output parameter that receives whether an ability spec with the specified tags was found.
+	 *
+	 * @return
+	 *	The first ability granted to this ASC that has the specified tags.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
+	virtual FGameplayAbilitySpec FindAbilitySpecByTags(
+		UPARAM(DisplayName="Tags")
+		const FGameplayTagContainer& InTags,
+
+		UPARAM(DisplayName="Match Found")
+		bool& OutMatchFound
+	) const = 0;
+
+	/**
+	 * Finds the handles of one or more granted abilities by their tags.
+	 *
+	 * @param Tags
+	 *	All of the tags that a granted ability must possess in order for it to be returned.
+	 *
+	 * @return
+	 *	The handles of the abilities granted to this ASC that have the specified tags.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
+	virtual TArray<FGameplayAbilitySpecHandle> FindAbilityHandlesByTags(const FGameplayTagContainer& Tags) const = 0;
+
+	/**
+	 * Finds the handle of the first granted ability having the specified tags.
+	 *
+	 * @param InTags
+	 *	All of the tags that a granted ability must possess in order for it to be returned.
+	 * @param OutMatchFound
+	 *	An output parameter that receives whether an ability spec with the specified tags was found.
+	 *
+	 * @return
+	 *	The handle of the first ability granted to this ASC that has the specified tags.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
+	virtual FGameplayAbilitySpecHandle FindAbilityHandleByTags(
+		UPARAM(DisplayName="Tags")
+		const FGameplayTagContainer& InTags,
+
+		UPARAM(DisplayName="Match Found")
+		bool& OutMatchFound
+	) const = 0;
+
+	/**
 	 * Triggers an ability by handle, providing the given payload as event data.
 	 *
 	 * This can be used to invoke a specific ability by its handle rather than relying on triggering it indirectly via

@@ -109,6 +109,31 @@ public:
 	virtual UAbilitySystemComponent* ToAbilitySystemComponent() override;
 
 	UFUNCTION(BlueprintCallable)
+	virtual TArray<FGameplayAbilitySpec> FindAbilitySpecsByTags(const FGameplayTagContainer& Tags) const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual FGameplayAbilitySpec FindAbilitySpecByTags(
+		UPARAM(DisplayName="Tags")
+		const FGameplayTagContainer& InTags,
+
+		UPARAM(DisplayName="Match Found")
+		bool& OutMatchFound
+	) const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<FGameplayAbilitySpecHandle> FindAbilityHandlesByTags(
+		const FGameplayTagContainer& Tags) const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual FGameplayAbilitySpecHandle FindAbilityHandleByTags(
+		UPARAM(DisplayName="Tags")
+		const FGameplayTagContainer& InTags,
+
+		UPARAM(DisplayName="Match Found")
+		bool& OutMatchFound
+	) const override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual bool TriggerAbilityWithPayload(const FGameplayAbilitySpecHandle AbilityHandle,
 	                                       const FGameplayEventData         Payload) override;
 

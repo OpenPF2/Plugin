@@ -45,6 +45,71 @@ UAbilitySystemComponent* UPF2AbilitySystemComponent::ToAbilitySystemComponent()
 	return Cast<UAbilitySystemComponent>(this);
 }
 
+TArray<FGameplayAbilitySpec> UPF2AbilitySystemComponent::FindAbilitySpecsByTags(const FGameplayTagContainer& Tags) const
+{
+	TArray<FGameplayAbilitySpec*> AbilitiesToActivate;
+
+	this->GetActivatableGameplayAbilitySpecsByAllMatchingTags(Tags, AbilitiesToActivate);
+
+	return PF2ArrayUtilities::Map<FGameplayAbilitySpec>(
+		AbilitiesToActivate,
+		[](const FGameplayAbilitySpec* AbilityPtr)
+		{
+			return *AbilityPtr;
+		}
+	);
+}
+
+FGameplayAbilitySpec UPF2AbilitySystemComponent::FindAbilitySpecByTags(const FGameplayTagContainer& InTags,
+                                                                       bool&                        OutMatchFound) const
+{
+	FGameplayAbilitySpec         MatchingAbility;
+	TArray<FGameplayAbilitySpec> MatchingAbilities = this->FindAbilitySpecsByTags(InTags);
+
+	if (MatchingAbilities.Num() == 0)
+	{
+		OutMatchFound   = false;
+		MatchingAbility = FGameplayAbilitySpec();
+	}
+	else
+	{
+		OutMatchFound   = true;
+		MatchingAbility = MatchingAbilities[0];
+	}
+
+	return MatchingAbility;
+}
+
+TArray<FGameplayAbilitySpecHandle> UPF2AbilitySystemComponent::FindAbilityHandlesByTags(
+	const FGameplayTagContainer& Tags) const
+{
+	return PF2ArrayUtilities::Map<FGameplayAbilitySpecHandle>(
+		this->FindAbilitySpecsByTags(Tags),
+		[](const FGameplayAbilitySpec AbilitySpec)
+		{
+			return AbilitySpec.Handle;
+		}
+	);
+}
+
+FGameplayAbilitySpecHandle UPF2AbilitySystemComponent::FindAbilityHandleByTags(const FGameplayTagContainer& InTags,
+                                                                               bool& OutMatchFound) const
+{
+	FGameplayAbilitySpecHandle Handle;
+	FGameplayAbilitySpec       AbilitySpec = this->FindAbilitySpecByTags(InTags, OutMatchFound);
+
+	if (OutMatchFound)
+	{
+		Handle = AbilitySpec.Handle;
+	}
+	else
+	{
+		Handle = FGameplayAbilitySpecHandle();
+	}
+
+	return Handle;
+}
+
 bool UPF2AbilitySystemComponent::TriggerAbilityWithPayload(const FGameplayAbilitySpecHandle AbilityHandle,
                                                            const FGameplayEventData         Payload)
 {
