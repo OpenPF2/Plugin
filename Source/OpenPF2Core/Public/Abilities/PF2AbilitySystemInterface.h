@@ -59,6 +59,26 @@ public:
 	virtual UAbilitySystemComponent* ToAbilitySystemComponent() = 0;
 
 	/**
+	 * Triggers an ability by handle, providing the given payload as event data.
+	 *
+	 * This can be used to invoke a specific ability by its handle rather than relying on triggering it indirectly via
+	 * an event tag.
+	 *
+	 * @param AbilitySpecHandle
+	 *	The handle of the gameplay ability to invoke.
+	 * @param Payload
+	 *	The payload to pass to the gameplay ability.
+	 *
+	 * @return
+	 *	- true if the ASC believes that the ability was activated (this may return false positives due to failures later
+	 *	  in activation).
+	 *	- false if the ASC knows that the ability is not activated.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
+    virtual bool TriggerAbilityWithPayload(FGameplayAbilitySpecHandle AbilitySpecHandle,
+                                           const FGameplayEventData   Payload) = 0;
+
+	/**
 	 * Adds a passively-applied Gameplay Effect to this ASC.
 	 *
 	 * The GE is added to the weight group specified by a tag on GE; this is known as the "default" weight group of the

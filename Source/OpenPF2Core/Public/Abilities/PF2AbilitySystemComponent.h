@@ -109,6 +109,10 @@ public:
 	virtual UAbilitySystemComponent* ToAbilitySystemComponent() override;
 
 	UFUNCTION(BlueprintCallable)
+	virtual bool TriggerAbilityWithPayload(const FGameplayAbilitySpecHandle AbilityHandle,
+	                                       const FGameplayEventData         Payload) override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual void AddPassiveGameplayEffect(TSubclassOf<UGameplayEffect> Effect) override;
 
 	UFUNCTION(BlueprintCallable)

@@ -45,6 +45,18 @@ UAbilitySystemComponent* UPF2AbilitySystemComponent::ToAbilitySystemComponent()
 	return Cast<UAbilitySystemComponent>(this);
 }
 
+bool UPF2AbilitySystemComponent::TriggerAbilityWithPayload(const FGameplayAbilitySpecHandle AbilityHandle,
+                                                           const FGameplayEventData         Payload)
+{
+	return this->TriggerAbilityFromGameplayEvent(
+		AbilityHandle,
+		this->AbilityActorInfo.Get(),
+		FGameplayTag(),
+		&Payload,
+		*this
+	);
+}
+
 void UPF2AbilitySystemComponent::AddPassiveGameplayEffect(const TSubclassOf<UGameplayEffect> Effect)
 {
 	const FName WeightGroup = PF2GameplayAbilityUtilities::GetWeightGroupOfGameplayEffect(Effect);
