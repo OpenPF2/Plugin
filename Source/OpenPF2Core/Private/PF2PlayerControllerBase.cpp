@@ -261,7 +261,7 @@ bool APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Validate(
 
 void APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Implementation(
 	const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	AActor* CharacterActor,
+	AActor*                          CharacterActor,
 	const FGameplayEventData         AbilityPayload)
 {
 	IPF2CharacterInterface*        TargetCharacter = Cast<IPF2CharacterInterface>(CharacterActor);
