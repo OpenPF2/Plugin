@@ -159,7 +159,7 @@ bool UPF2CommandBindingsComponent::FilterAbilityActivation(
 		}
 	}
 
-	InOutAbilitySpecHandle = FilterContext.GetAbilityToExecute();
+	InOutAbilitySpecHandle = FilterContext.GetHandleOfAbilityToExecute();
 	InOutAbilityPayload    = FilterContext.GetAbilityPayload();
 
 	return true;

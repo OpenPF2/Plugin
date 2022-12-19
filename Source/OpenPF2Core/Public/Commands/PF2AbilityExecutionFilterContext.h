@@ -45,10 +45,10 @@ struct FPF2AbilityExecutionFilterContext
 	bool bProceed;
 
 	/**
-	 * The ability that should be executed after all filters have been invoked.
+	 * The handle of the ability that should be executed after all filters have been invoked.
 	 */
 	UPROPERTY(BlueprintReadWrite)
-	FGameplayAbilitySpecHandle AbilityToExecute;
+	FGameplayAbilitySpecHandle HandleOfAbilityToExecute;
 
 	/**
 	 * The payload to provide when invoking the ability.
@@ -97,14 +97,14 @@ public:
 	 *
 	 * @param Character
 	 *	The character on which the ability will be invoked.
-	 * @param AbilityToExecute
-	 *	The ability that is expected to be executed unless a filter changes it.
+	 * @param HandleOfAbilityToExecute
+	 *	The handle of the ability that is expected to be executed unless a filter changes it.
 	 */
 	explicit FPF2AbilityExecutionFilterContext(
 			const TScriptInterface<IPF2CharacterInterface> Character,
-			const FGameplayAbilitySpecHandle               AbilityToExecute) :
+			const FGameplayAbilitySpecHandle               HandleOfAbilityToExecute) :
 		bProceed(true),
-		AbilityToExecute(AbilityToExecute),
+		HandleOfAbilityToExecute(HandleOfAbilityToExecute),
 		TriggeredInputActionName(FName()),
 		Character(Character)
 	{
@@ -120,15 +120,15 @@ public:
 	 *	The name of the input that was invoked by the player.
 	 * @param Character
 	 *	The character on which the ability will be invoked.
-	 * @param AbilityToExecute
-	 *	The ability that is expected to be executed unless a filter changes it.
+	 * @param HandleOfAbilityToExecute
+	 *	The handle of the ability that is expected to be executed unless a filter changes it.
 	 */
 	explicit FPF2AbilityExecutionFilterContext(
 			const FName                                    TriggeredInputActionName,
 			const TScriptInterface<IPF2CharacterInterface> Character,
-			const FGameplayAbilitySpecHandle               AbilityToExecute) :
+			const FGameplayAbilitySpecHandle               HandleOfAbilityToExecute) :
 		bProceed(true),
-		AbilityToExecute(AbilityToExecute),
+		HandleOfAbilityToExecute(HandleOfAbilityToExecute),
 		TriggeredInputActionName(TriggeredInputActionName),
 		Character(Character)
 	{
@@ -144,18 +144,18 @@ public:
 	 *	The name of the input that was invoked, if the command was invoked by input from the player.
 	 * @param Character
 	 *	The character on which the ability will be invoked.
-	 * @param AbilityToExecute
-	 *	The ability that is expected to be executed unless a filter changes it.
+	 * @param HandleOfAbilityToExecute
+	 *	The handle of the ability that is expected to be executed unless a filter changes it.
 	 * @param AbilityPayload
 	 *	The payload to provide when invoking the ability.
 	 */
 	explicit FPF2AbilityExecutionFilterContext(
 			const FName                                    TriggeredInputActionName,
 			const TScriptInterface<IPF2CharacterInterface> Character,
-			const FGameplayAbilitySpecHandle               AbilityToExecute,
+			const FGameplayAbilitySpecHandle               HandleOfAbilityToExecute,
 			const FGameplayEventData                       AbilityPayload) :
 		bProceed(true),
-		AbilityToExecute(AbilityToExecute),
+		HandleOfAbilityToExecute(HandleOfAbilityToExecute),
 		AbilityPayload(AbilityPayload),
 		TriggeredInputActionName(TriggeredInputActionName),
 		Character(Character)
@@ -181,11 +181,11 @@ public:
 	 * Gets the ability that should be executed after all filters have fired.
 	 *
 	 * @return
-	 *	The ability to execute, if proceeding.
+	 *	The handle of the ability to execute, if proceeding.
 	 */
-	FORCEINLINE FGameplayAbilitySpecHandle GetAbilityToExecute() const
+	FORCEINLINE FGameplayAbilitySpecHandle GetHandleOfAbilityToExecute() const
 	{
-		return this->AbilityToExecute;
+		return this->HandleOfAbilityToExecute;
 	}
 
 	/**
