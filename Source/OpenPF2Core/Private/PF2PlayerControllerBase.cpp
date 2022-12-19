@@ -199,9 +199,16 @@ void APF2PlayerControllerBase::ReleaseCharacter(const TScriptInterface<IPF2Chara
 	this->GetCharacterQueue()->Remove(ReleasedCharacter);
 }
 
+void APF2PlayerControllerBase::ExecuteCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
+                                                       AActor*                          CharacterActor)
+{
+	this->Server_ExecuteCharacterCommand(AbilitySpecHandle, CharacterActor, FGameplayEventData());
+}
+
 bool APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Validate(
 	const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	AActor* CharacterActor)
+	AActor*                          CharacterActor,
+	const FGameplayEventData         AbilityPayload)
 {
 	IPF2CharacterInterface* TargetCharacter = Cast<IPF2CharacterInterface>(CharacterActor);
 	APawn*                  CharacterPawn;
@@ -254,7 +261,8 @@ bool APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Validate(
 
 void APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Implementation(
 	const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	AActor* CharacterActor)
+	AActor* CharacterActor,
+	const FGameplayEventData         AbilityPayload)
 {
 	IPF2CharacterInterface*        TargetCharacter = Cast<IPF2CharacterInterface>(CharacterActor);
 	IPF2CharacterCommandInterface* CharacterCommandIntf;
@@ -276,7 +284,7 @@ void APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Implementation(
 	CharacterPawn = TargetCharacter->ToPawn();
 	check(CharacterPawn != nullptr);
 
-	CharacterCommandIntf = APF2CharacterCommand::Create(TargetCharacter, AbilitySpecHandle);
+	CharacterCommandIntf = APF2CharacterCommand::Create(TargetCharacter, AbilitySpecHandle, AbilityPayload);
 
 	CharacterCommandIntf->AttemptExecuteOrQueue();
 }

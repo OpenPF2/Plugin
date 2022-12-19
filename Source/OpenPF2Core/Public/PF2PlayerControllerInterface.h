@@ -7,6 +7,8 @@
 
 #include <GameplayAbilitySpec.h>
 
+#include <Abilities/GameplayAbilityTypes.h>
+
 #include <GameFramework/Info.h>
 
 #include "GameModes/PF2ModeOfPlayType.h"
@@ -109,6 +111,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
 	virtual void ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter) = 0;
 
+
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
+	virtual void ExecuteCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
+										 AActor*                          CharacterActor) = 0;
+
 	/**
 	 * Builds and executes a command on the server for one of the characters this player controller can control.
 	 *
@@ -119,13 +126,16 @@ public:
 	 * not replicate actors if they are declared/referenced through an interface property.
 	 *
 	 * @param AbilitySpecHandle
-	 *	The handle for the ability to activate.
+	 *	The handle for the ability to wrap in the command when it is activated.
 	 * @param CharacterActor
 	 *	The character upon which the ability should be activated. The given actor must implement IPF2CharacterInterface.
+	 * @param AbilityPayload
+	 *	An optional payload to pass to the ability when it is executed.
 	 */
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
 	virtual void Server_ExecuteCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	                                            AActor*                          CharacterActor) = 0;
+	                                            AActor*                          CharacterActor,
+	                                            const FGameplayEventData         AbilityPayload) = 0;
 
 	/**
 	 * Requests to cancel a command on the server for one of the characters this player controller can control.

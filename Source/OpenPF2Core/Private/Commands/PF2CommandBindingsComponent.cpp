@@ -124,27 +124,19 @@ void UPF2CommandBindingsComponent::DisconnectFromInput()
 	}
 }
 
-void UPF2CommandBindingsComponent::ExecuteBoundAbility(const FName                      ActionName,
-                                                       const FGameplayAbilitySpecHandle AbilitySpecHandle)
+bool UPF2CommandBindingsComponent::FilterAbilityActivation(
+	const FName                                    InActionName,
+	const TScriptInterface<IPF2CharacterInterface> InCharacter,
+	FGameplayAbilitySpecHandle&                    InOutAbilitySpecHandle,
+	FGameplayEventData&                            InOutAbilityPayload)
 {
-	IPF2CharacterInterface*                         CharacterIntf = this->GetOwningCharacter();
-	TScriptInterface<IPF2CharacterInterface>		Character;
-	TScriptInterface<IPF2PlayerControllerInterface> PlayerController;
-	FPF2AbilityExecutionFilterContext               FilterContext;
-
-	check(CharacterIntf != nullptr);
-
-	Character        = PF2InterfaceUtilities::ToScriptInterface(CharacterIntf);
-	PlayerController = CharacterIntf->GetPlayerController();
-
-	check(PlayerController != nullptr);
-
-	FilterContext = FPF2AbilityExecutionFilterContext(ActionName, Character, AbilitySpecHandle);
+	FPF2AbilityExecutionFilterContext FilterContext =
+		FPF2AbilityExecutionFilterContext(InActionName, InCharacter, InOutAbilitySpecHandle, InOutAbilityPayload);
 
 	for (const TSubclassOf<UObject> FilterType : this->Filters)
 	{
-		TSubclassOf<UObject>::TBaseType*     RawFilter = FilterType.GetDefaultObject();
-		IPF2AbilityExecutionFilterInterface* Filter    = Cast<IPF2AbilityExecutionFilterInterface>(RawFilter);
+		TSubclassOf<UObject>::TBaseType*           RawFilter = FilterType.GetDefaultObject();
+		const IPF2AbilityExecutionFilterInterface* Filter    = Cast<IPF2AbilityExecutionFilterInterface>(RawFilter);
 
 		if (Filter == nullptr)
 		{
@@ -162,12 +154,41 @@ void UPF2CommandBindingsComponent::ExecuteBoundAbility(const FName              
 			if (!FilterContext.ShouldProceed())
 			{
 				// The last filter vetoed execution, so let's call the whole thing off.
-				return;
+				return false;
 			}
 		}
 	}
 
-	PlayerController->Server_ExecuteCharacterCommand(FilterContext.AbilityToExecute, CharacterIntf->ToActor());
+	InOutAbilitySpecHandle = FilterContext.GetAbilityToExecute();
+	InOutAbilityPayload    = FilterContext.GetAbilityPayload();
+
+	return true;
+}
+
+void UPF2CommandBindingsComponent::ExecuteBoundAbility(const FName                      ActionName,
+                                                       const FGameplayAbilitySpecHandle AbilitySpecHandle)
+{
+	IPF2CharacterInterface*                         CharacterIntf         = this->GetOwningCharacter();
+	TScriptInterface<IPF2CharacterInterface>        Character;
+	TScriptInterface<IPF2PlayerControllerInterface> PlayerController;
+	FGameplayAbilitySpecHandle                      FilteredAbilityHandle = AbilitySpecHandle;
+	FGameplayEventData                              FilteredAbilityPayload;
+
+	check(CharacterIntf != nullptr);
+
+	Character        = PF2InterfaceUtilities::ToScriptInterface(CharacterIntf);
+	PlayerController = CharacterIntf->GetPlayerController();
+
+	check(PlayerController != nullptr);
+
+	if (this->FilterAbilityActivation(ActionName, Character, FilteredAbilityHandle, FilteredAbilityPayload))
+	{
+		PlayerController->Server_ExecuteCharacterCommand(
+			FilteredAbilityHandle,
+			CharacterIntf->ToActor(),
+			FilteredAbilityPayload
+		);
+	}
 }
 
 UActorComponent* UPF2CommandBindingsComponent::ToActorComponent()

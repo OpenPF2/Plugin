@@ -7,6 +7,7 @@
 
 #include <Components/ActorComponent.h>
 
+#include "PF2AbilityExecutionFilterContext.h"
 #include "PF2CharacterInterface.h"
 #include "PF2CommandBindingsInterface.h"
 #include "PF2CommandInputBinding.h"
@@ -169,6 +170,30 @@ protected:
 	 *	The character actor that owns this component.
 	 */
 	IPF2CharacterInterface* GetOwningCharacter() const;
+
+	/**
+	 * Applies ability execution filters to the activation of a bound ability.
+	 *
+	 * Filters may veto execution of the filter. If a filter does so, the result of this method will be "false".
+	 *
+	 * @param InActionName
+	 *	The name of the input action that was invoked.
+	 * @param InCharacter
+	 *	The character on which the action will be performed.
+	 * @param InOutAbilitySpecHandle
+	 *	The handle for the ability to activate. This will be modified by filter execution.
+	 * @param InOutAbilityPayload
+	 *	The payload to pass to the activated ability. This will be modified by filter execution.
+	 *
+	 * @return
+	 *	- "true" if the ability should proceed to be executed.
+	 *	- "false" if the ability should not be executed because the last filter executed vetoed it.
+	 */
+	bool FilterAbilityActivation(
+		const FName                                    InActionName,
+		const TScriptInterface<IPF2CharacterInterface> InCharacter,
+		FGameplayAbilitySpecHandle&                    InOutAbilitySpecHandle,
+		FGameplayEventData&                            InOutAbilityPayload);
 
 	// =================================================================================================================
 	// Protected Native Event Callbacks

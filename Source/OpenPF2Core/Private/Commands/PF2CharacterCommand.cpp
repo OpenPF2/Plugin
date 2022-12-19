@@ -11,6 +11,7 @@
 
 #include "PF2PlayerControllerInterface.h"
 
+#include "Abilities/PF2AbilitySystemInterface.h"
 #include "Abilities/PF2GameplayAbilityInterface.h"
 
 #include "GameModes/PF2GameModeInterface.h"
@@ -20,7 +21,8 @@
 #include "Utilities/PF2LogUtilities.h"
 
 IPF2CharacterCommandInterface* APF2CharacterCommand::Create(AActor*                          CharacterActor,
-                                                            const FGameplayAbilitySpecHandle AbilitySpecHandle)
+                                                            const FGameplayAbilitySpecHandle AbilitySpecHandle,
+                                                            const FGameplayEventData         AbilityPayload)
 {
 	UWorld*               World           = CharacterActor->GetWorld();
 	FActorSpawnParameters SpawnParameters;
@@ -32,7 +34,7 @@ IPF2CharacterCommandInterface* APF2CharacterCommand::Create(AActor*             
 
 	Command = World->SpawnActor<APF2CharacterCommand>(StaticClass(), SpawnParameters);
 
-	Command->SetTargetCharacterAndAbility(CharacterActor, AbilitySpecHandle);
+	Command->SetTargetCharacterAndAbility(CharacterActor, AbilitySpecHandle, AbilityPayload);
 
 	return Command;
 }
@@ -43,6 +45,7 @@ void APF2CharacterCommand::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 
 	DOREPLIFETIME(APF2CharacterCommand, TargetCharacter);
 	DOREPLIFETIME(APF2CharacterCommand, AbilitySpecHandle);
+	DOREPLIFETIME(APF2CharacterCommand, AbilityPayload);
 }
 
 TScriptInterface<IPF2CharacterInterface> APF2CharacterCommand::GetTargetCharacter() const
@@ -153,42 +156,48 @@ EPF2CommandExecuteOrQueueResult APF2CharacterCommand::AttemptExecuteOrQueue()
 
 EPF2CommandExecuteImmediatelyResult APF2CharacterCommand::AttemptExecuteImmediately()
 {
-	EPF2CommandExecuteImmediatelyResult Result;
+	EPF2CommandExecuteImmediatelyResult Result  = EPF2CommandExecuteImmediatelyResult::None;
+	IPF2AbilitySystemInterface*         AscIntf = this->GetAbilitySystemComponent();
 
-	UE_LOG(
-		LogPf2CoreAbilities,
-		VeryVerbose,
-		TEXT("[%s] AttemptExecuteImmediately() called on command ('%s')."),
-		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(this->GetIdForLogs())
-	);
-
-	if (this->GetAbilitySystemComponent()->TryActivateAbility(this->GetAbilitySpecHandle()))
+	if (AscIntf != nullptr)
 	{
-		Result = EPF2CommandExecuteImmediatelyResult::Activated;
-	}
-	else
-	{
-		Result = EPF2CommandExecuteImmediatelyResult::Blocked;
-	}
+		UE_LOG(
+			LogPf2CoreAbilities,
+			VeryVerbose,
+			TEXT("[%s] AttemptExecuteImmediately() called on command ('%s')."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(this->GetIdForLogs())
+		);
 
-	UE_LOG(
-		LogPf2CoreAbilities,
-		VeryVerbose,
-		TEXT("[%s] AttemptExecuteImmediately() result for command ('%s'): %s."),
-		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(this->GetIdForLogs()),
-		*(PF2EnumUtilities::ToString(Result))
-	);
+		if (AscIntf->TriggerAbilityWithPayload(this->GetAbilitySpecHandle(), this->GetAbilityPayload()))
+		{
+			Result = EPF2CommandExecuteImmediatelyResult::Activated;
+		}
+		else
+		{
+			Result = EPF2CommandExecuteImmediatelyResult::Blocked;
+		}
+
+		UE_LOG(
+			LogPf2CoreAbilities,
+			VeryVerbose,
+			TEXT("[%s] AttemptExecuteImmediately() result for command ('%s'): %s."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(this->GetIdForLogs()),
+			*(PF2EnumUtilities::ToString(Result))
+		);
+	}
 
 	return Result;
 }
 
 void APF2CharacterCommand::SetTargetCharacterAndAbility(AActor*                          InTargetCharacter,
-                                                        const FGameplayAbilitySpecHandle InAbilitySpecHandle)
+                                                        const FGameplayAbilitySpecHandle InAbilitySpecHandle,
+                                                        const FGameplayEventData         InAbilityPayload)
 {
 	this->TargetCharacter   = InTargetCharacter;
 	this->AbilitySpecHandle = InAbilitySpecHandle;
+	this->AbilityPayload    = InAbilityPayload;
 }
 
 void APF2CharacterCommand::Cancel_WithRemoteServer()
@@ -276,11 +285,12 @@ FString APF2CharacterCommand::GetIdForLogs() const
 
 FGameplayAbilitySpec* APF2CharacterCommand::GetAbilitySpec() const
 {
-	FGameplayAbilitySpec*    AbilitySpec = nullptr;
-	UAbilitySystemComponent* Asc         = this->GetAbilitySystemComponent();
+	FGameplayAbilitySpec*       AbilitySpec = nullptr;
+	IPF2AbilitySystemInterface* AscIntf     = this->GetAbilitySystemComponent();
 
-	if (Asc != nullptr)
+	if (AscIntf != nullptr)
 	{
+		UAbilitySystemComponent*         Asc          = AscIntf->ToAbilitySystemComponent();
 		const FGameplayAbilitySpecHandle TargetHandle = this->GetAbilitySpecHandle();
 		const FString                    HostNetId    = PF2LogUtilities::GetHostNetId(this->GetWorld()),
 		                                 AscId        = GetFullNameSafe(Asc),
@@ -321,23 +331,24 @@ FGameplayAbilitySpec* APF2CharacterCommand::GetAbilitySpec() const
 	return AbilitySpec;
 }
 
-UAbilitySystemComponent* APF2CharacterCommand::GetAbilitySystemComponent() const
+IPF2AbilitySystemInterface* APF2CharacterCommand::GetAbilitySystemComponent() const
 {
 	const TScriptInterface<IPF2CharacterInterface> CharacterIntf = this->GetTargetCharacter();
 	UAbilitySystemComponent*                       Asc           = CharacterIntf->GetAbilitySystemComponent();
+	IPF2AbilitySystemInterface*                    AscIntf       = Cast<IPF2AbilitySystemInterface>(Asc);
 
-	if (Asc == nullptr)
+	if (AscIntf == nullptr)
 	{
 		UE_LOG(
 			LogPf2CoreAbilities,
 			Warning,
-			TEXT("[%s] Character ('%s') has no Ability System Component (ASC)."),
+			TEXT("[%s] Character ('%s') has no OpenPF2-compatible Ability System Component (ASC)."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 			*(CharacterIntf->GetIdForLogs())
 		);
 	}
 
-	return Asc;
+	return AscIntf;
 }
 
 UGameplayAbility* APF2CharacterCommand::GetAbility() const

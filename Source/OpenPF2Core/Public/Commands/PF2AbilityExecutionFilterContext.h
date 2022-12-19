@@ -50,6 +50,14 @@ struct FPF2AbilityExecutionFilterContext
 	UPROPERTY(BlueprintReadWrite)
 	FGameplayAbilitySpecHandle AbilityToExecute;
 
+	/**
+	 * The payload to provide when invoking the ability.
+	 *
+	 * Not all abilities use the payload; this is only useful for those that do.
+	 */
+	UPROPERTY(BlueprintReadWrite)
+	FGameplayEventData AbilityPayload;
+
 protected:
 	// =================================================================================================================
 	// Protected Fields
@@ -87,8 +95,29 @@ public:
 	 * TriggeredInputActionName should be equal to the name of the input; otherwise, this should be equal to an empty
 	 * FName.
 	 *
+	 * @param Character
+	 *	The character on which the ability will be invoked.
+	 * @param AbilityToExecute
+	 *	The ability that is expected to be executed unless a filter changes it.
+	 */
+	explicit FPF2AbilityExecutionFilterContext(
+			const TScriptInterface<IPF2CharacterInterface> Character,
+			const FGameplayAbilitySpecHandle               AbilityToExecute) :
+		bProceed(true),
+		AbilityToExecute(AbilityToExecute),
+		TriggeredInputActionName(FName()),
+		Character(Character)
+	{
+	}
+
+	/**
+	 * Constructs a new instance.
+	 *
+	 * This constructor is used for abilities invoked by input from a player. The TriggeredInputActionName should be
+	 * equal to the name of the input that triggered the ability.
+	 *
 	 * @param TriggeredInputActionName
-	 *	The name of the input that was invoked, if the command was invoked by input from the player.
+	 *	The name of the input that was invoked by the player.
 	 * @param Character
 	 *	The character on which the ability will be invoked.
 	 * @param AbilityToExecute
@@ -100,6 +129,34 @@ public:
 			const FGameplayAbilitySpecHandle               AbilityToExecute) :
 		bProceed(true),
 		AbilityToExecute(AbilityToExecute),
+		TriggeredInputActionName(TriggeredInputActionName),
+		Character(Character)
+	{
+	}
+
+	/**
+	 * Constructs a new instance.
+	 *
+	 * This constructor is used for abilities, invoked by input from a player, that accept a payload. The
+	 * TriggeredInputActionName should be equal to the name of the input that triggered the ability.
+	 *
+	 * @param TriggeredInputActionName
+	 *	The name of the input that was invoked, if the command was invoked by input from the player.
+	 * @param Character
+	 *	The character on which the ability will be invoked.
+	 * @param AbilityToExecute
+	 *	The ability that is expected to be executed unless a filter changes it.
+	 * @param AbilityPayload
+	 *	The payload to provide when invoking the ability.
+	 */
+	explicit FPF2AbilityExecutionFilterContext(
+			const FName                                    TriggeredInputActionName,
+			const TScriptInterface<IPF2CharacterInterface> Character,
+			const FGameplayAbilitySpecHandle               AbilityToExecute,
+			const FGameplayEventData                       AbilityPayload) :
+		bProceed(true),
+		AbilityToExecute(AbilityToExecute),
+		AbilityPayload(AbilityPayload),
 		TriggeredInputActionName(TriggeredInputActionName),
 		Character(Character)
 	{
@@ -129,6 +186,19 @@ public:
 	FORCEINLINE FGameplayAbilitySpecHandle GetAbilityToExecute() const
 	{
 		return this->AbilityToExecute;
+	}
+
+	/**
+	 * Gets the payload to provide when invoking the ability.
+	 *
+	 * Not all abilities use the payload; this is only useful for those that do.
+	 *
+	 * @return
+	 *	The ability payload.
+	 */
+	FORCEINLINE FGameplayEventData GetAbilityPayload() const
+	{
+		return this->AbilityPayload;
 	}
 
 	/**

@@ -20,6 +20,14 @@
 
 #include "PF2CharacterCommand.generated.h"
 
+// =====================================================================================================================
+// Forward Declarations (to minimize header dependencies)
+// =====================================================================================================================
+class IPF2AbilitySystemInterface;
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 /**
  * A command that wraps a character ability that can be executed at any time in the future (including immediately).
  *
@@ -48,6 +56,14 @@ protected:
 	 */
 	UPROPERTY(Replicated)
 	FGameplayAbilitySpecHandle AbilitySpecHandle;
+
+	/**
+	 * The payload to provide when invoking the ability.
+	 *
+	 * Not all abilities use the payload; this is only useful for those that do.
+	 */
+	UPROPERTY(Replicated)
+	FGameplayEventData AbilityPayload;
 
 	/**
 	 * The cached ability for this command.
@@ -81,7 +97,7 @@ public:
 	}
 
 	/**
-	 * Creates a new APF2CharacterCommand for the given character and ability specification.
+	 * Creates a new APF2CharacterCommand for the given character and ability handle.
 	 *
 	 * @param Character
 	 *	The character who would be issued the command.
@@ -98,6 +114,26 @@ public:
 	}
 
 	/**
+	 * Creates a new APF2CharacterCommand for the given character, ability handle, and ability payload.
+	 *
+	 * @param Character
+	 *	The character who would be issued the command.
+	 * @param AbilitySpecHandle
+	 *	The handle of the ability that the command will trigger when it is executed.
+	 * @param AbilityPayload
+	 *	The payload to provide when invoking the ability.
+	 *
+	 * @return
+	 *	The new command.
+	 */
+	FORCEINLINE static IPF2CharacterCommandInterface* Create(IPF2CharacterInterface*          Character,
+	                                                         const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	                                                         const FGameplayEventData         AbilityPayload)
+	{
+		return Create(Character->ToActor(), AbilitySpecHandle, AbilityPayload);
+	}
+
+	/**
 	 * Creates a new APF2CharacterCommand for the given character actor and ability specification.
 	 *
 	 * The given actor must implement IPF2CharacterInterface.
@@ -106,13 +142,17 @@ public:
 	 *	The character (as an actor) who would be issued the command.
 	 * @param AbilitySpecHandle
 	 *	The handle of the ability that the command will trigger when it is executed.
+	 * @param AbilityPayload
+	 *	The payload to provide when invoking the ability. This can be omitted when invoking abilities that do not accept
+	 *	a payload.
 	 *
 	 * @return
 	 *	The new command.
 	 */
 	static IPF2CharacterCommandInterface* Create(
 		AActor*                          CharacterActor,
-		const FGameplayAbilitySpecHandle AbilitySpecHandle);
+		const FGameplayAbilitySpecHandle AbilitySpecHandle,
+		const FGameplayEventData         AbilityPayload = FGameplayEventData());
 
 protected:
 	// =================================================================================================================
@@ -177,6 +217,19 @@ protected:
 	}
 
 	/**
+	 * Gets the payload to provide when invoking the ability.
+	 *
+	 * Not all abilities use the payload; this is only useful for those that do.
+	 *
+	 * @return
+	 *	The payload to pass to the ability when it is activated.
+	 */
+	FORCEINLINE FGameplayEventData GetAbilityPayload() const
+	{
+		return this->AbilityPayload;
+	}
+
+	/**
 	 * Gets the specification for the ability that this command will trigger when it is executed.
 	 *
 	 * @return
@@ -191,7 +244,7 @@ protected:
 	 * @return
 	 *	The ASC of the target character; or NULL if the character is somehow missing an Ability System Component.
 	 */
-	UAbilitySystemComponent* GetAbilitySystemComponent() const;
+	IPF2AbilitySystemInterface* GetAbilitySystemComponent() const;
 
 	/**
 	 * Gets the CDO for the ability that this command will trigger when it is executed.
@@ -223,8 +276,12 @@ protected:
 	 *	The character who would be issued this command.
 	 * @param InAbilitySpecHandle
 	 *	The handle of the ability that this command will trigger when it is executed.
+	 * @param InAbilityPayload
+	 *	The payload (if applicable) for the ability.
 	 */
-	void SetTargetCharacterAndAbility(AActor* InTargetCharacter, FGameplayAbilitySpecHandle InAbilitySpecHandle);
+	void SetTargetCharacterAndAbility(AActor*                          InTargetCharacter,
+	                                  const FGameplayAbilitySpecHandle InAbilitySpecHandle,
+	                                  const FGameplayEventData         InAbilityPayload);
 
 	/**
 	 * Attempts to cancel this command on the remote server by routing the request through the local player controller.
