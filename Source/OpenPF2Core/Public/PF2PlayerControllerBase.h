@@ -78,8 +78,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual APlayerController* ToPlayerController() override;
 
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
+	UFUNCTION(BlueprintCallable)
 	virtual FHitResult GetTargetLocation() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void ClearTargetLocation() override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetControllableCharacters() const override;
@@ -280,4 +283,14 @@ protected:
 		meta=(DisplayName="On Encounter Turn Ended")
 	)
 	void BP_OnEncounterTurnEnded();
+
+	/**
+	 * BP event invoked when the last target location the player has chosen through the UI should be cleared.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Player Controllers",
+		meta=(DisplayName="On Clear Target Location", ForceAsFunction)
+	)
+	void BP_OnClearTargetLocation();
 };

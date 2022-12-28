@@ -119,6 +119,11 @@ FHitResult APF2PlayerControllerBase::GetTargetLocation() const
 	return this->BP_GetTargetLocation();
 }
 
+void APF2PlayerControllerBase::ClearTargetLocation()
+{
+	this->BP_OnClearTargetLocation();
+}
+
 void APF2PlayerControllerBase::Native_OnModeOfPlayChanged(const EPF2ModeOfPlayType NewMode)
 {
 	UE_LOG(

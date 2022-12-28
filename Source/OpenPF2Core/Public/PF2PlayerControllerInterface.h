@@ -83,6 +83,12 @@ public:
 	virtual FHitResult GetTargetLocation() const = 0;
 
 	/**
+	 * Clears the target location that the player has chosen through the UI.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
+	virtual void ClearTargetLocation() = 0;
+
+	/**
 	 * Gets the player controller that is implementing this interface.
 	 *
 	 * @return
