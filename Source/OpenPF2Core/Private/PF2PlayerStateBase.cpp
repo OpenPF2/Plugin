@@ -114,7 +114,7 @@ void APF2PlayerStateBase::Native_OnPartyChanged(
 		UE_LOG(
 			LogPf2Core,
 			Verbose,
-			TEXT("Player ('%s') added to party ('%d')."),
+			TEXT("Player ('%s') added to party ('%s')."),
 			*(this->GetIdForLogs()),
 			*(NewParty->GetIdForLogs())
 		);
