@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -149,7 +149,28 @@ bool UPF2CommandBindingsComponent::FilterAbilityActivation(
 		}
 		else
 		{
+			UE_LOG(
+				LogPf2CoreInput,
+				VeryVerbose,
+				TEXT("[%s] [%s] BEFORE applying filter ('%s') - Ability handle: %s."),
+				*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+				*(this->GetIdForLogs()),
+				*(Filter->GetIdForLogs()),
+				*(FilterContext.GetHandleOfAbilityToExecute().ToString())
+			);
+
 			FilterContext = Filter->Execute_FilterCommandActivation(RawFilter, FilterContext);
+
+			UE_LOG(
+				LogPf2CoreInput,
+				VeryVerbose,
+				TEXT("[%s] [%s] AFTER applying filter ('%s') - Proceed: %s, Ability handle: %s."),
+				*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+				*(this->GetIdForLogs()),
+				*(Filter->GetIdForLogs()),
+				(FilterContext.ShouldProceed() ? TEXT("true") : TEXT("false")),
+				*(FilterContext.GetHandleOfAbilityToExecute().ToString())
+			);
 
 			if (!FilterContext.ShouldProceed())
 			{
