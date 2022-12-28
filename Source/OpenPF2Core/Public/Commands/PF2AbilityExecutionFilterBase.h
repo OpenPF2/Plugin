@@ -41,8 +41,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
 
+protected:
 	// =================================================================================================================
-	// Public Methods
+	// Protected Methods
 	// =================================================================================================================
 	/**
 	 * Gets a reference to the world that contains the character who is activating the ability.
