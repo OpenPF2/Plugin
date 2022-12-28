@@ -185,7 +185,11 @@ protected:
 	 * @return
 	 *	The location in the map that the player has chosen for a target.
 	 */
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Player Controllers",
+		meta=(DisplayName="Get Target Location")
+	)
 	FHitResult BP_GetTargetLocation() const;
 
 	// =================================================================================================================
