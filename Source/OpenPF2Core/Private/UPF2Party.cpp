@@ -48,7 +48,7 @@ TArray<TScriptInterface<IPF2PlayerControllerInterface>> APF2Party::GetMemberCont
 {
 	return PF2ArrayUtilities::Map<TScriptInterface<IPF2PlayerControllerInterface>>(
 		this->GetMemberStates(),
-		[](TScriptInterface<IPF2PlayerStateInterface> PlayerState)
+		[](const TScriptInterface<IPF2PlayerStateInterface> PlayerState)
 		{
 			return PlayerState->GetPlayerController();
 		}
