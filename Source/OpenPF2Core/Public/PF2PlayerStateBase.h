@@ -52,6 +52,14 @@ class OPENPF2CORE_API APF2PlayerStateBase : public APlayerState, public IPF2Play
 	UPROPERTY(ReplicatedUsing=OnRep_Party)
 	TScriptInterface<IPF2PartyInterface> Party;
 
+	/**
+	 * The cached player controller for this player state.
+	 *
+	 * This is memoized by APF2PlayerStateBase::GetPlayerController().
+	 */
+	UPROPERTY()
+	mutable TScriptInterface<IPF2PlayerControllerInterface> CachedPlayerController;
+
 public:
 	/**
 	 * Default constructor for APF2PlayerStateBase.
