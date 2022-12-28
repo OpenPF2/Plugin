@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include <UObject/Interface.h>
-
 #include "PF2AbilityExecutionFilterContext.h"
 
 #include "Utilities/PF2LogIdentifiableInterface.h"
