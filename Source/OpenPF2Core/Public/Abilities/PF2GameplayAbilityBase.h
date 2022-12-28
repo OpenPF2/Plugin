@@ -102,6 +102,6 @@ protected:
 	 *
 	 * May be null if this ability has been instantiated but not yet been granted to a character.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
 	TScriptInterface<IPF2CharacterInterface> GetOwningCharacterFromActorInfo() const;
 };
