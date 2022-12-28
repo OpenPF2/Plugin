@@ -109,7 +109,9 @@ public:
 	virtual UAbilitySystemComponent* ToAbilitySystemComponent() override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual TArray<FGameplayAbilitySpec> FindAbilitySpecsByTags(const FGameplayTagContainer& Tags) const override;
+	virtual TArray<FGameplayAbilitySpec> FindAbilitySpecsByTags(
+		const FGameplayTagContainer& Tags,
+		bool                         bOnlyAbilitiesThatSatisfyTagRequirements = true) const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual FGameplayAbilitySpec FindAbilitySpecByTags(
@@ -117,12 +119,17 @@ public:
 		const FGameplayTagContainer& InTags,
 
 		UPARAM(DisplayName="Match Found")
-		bool& OutMatchFound
+		bool& OutMatchFound,
+
+		UPARAM(DisplayName="Only Abilities that Satisfy Tag Requirements")
+		const bool bInOnlyAbilitiesThatSatisfyTagRequirements = true
 	) const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual TArray<FGameplayAbilitySpecHandle> FindAbilityHandlesByTags(
-		const FGameplayTagContainer& Tags) const override;
+		const FGameplayTagContainer& Tags,
+		const bool                   bOnlyAbilitiesThatSatisfyTagRequirements = true
+	) const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual FGameplayAbilitySpecHandle FindAbilityHandleByTags(
@@ -130,7 +137,10 @@ public:
 		const FGameplayTagContainer& InTags,
 
 		UPARAM(DisplayName="Match Found")
-		bool& OutMatchFound
+		bool& OutMatchFound,
+
+		UPARAM(DisplayName="Only Abilities that Satisfy Tag Requirements")
+		const bool bInOnlyAbilitiesThatSatisfyTagRequirements = true
 	) const override;
 
 	UFUNCTION(BlueprintCallable)

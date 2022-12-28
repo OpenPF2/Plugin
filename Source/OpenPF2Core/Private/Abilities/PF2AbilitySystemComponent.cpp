@@ -45,11 +45,17 @@ UAbilitySystemComponent* UPF2AbilitySystemComponent::ToAbilitySystemComponent()
 	return Cast<UAbilitySystemComponent>(this);
 }
 
-TArray<FGameplayAbilitySpec> UPF2AbilitySystemComponent::FindAbilitySpecsByTags(const FGameplayTagContainer& Tags) const
+TArray<FGameplayAbilitySpec> UPF2AbilitySystemComponent::FindAbilitySpecsByTags(
+	const FGameplayTagContainer& Tags,
+	const bool                   bOnlyAbilitiesThatSatisfyTagRequirements) const
 {
 	TArray<FGameplayAbilitySpec*> AbilitiesToActivate;
 
-	this->GetActivatableGameplayAbilitySpecsByAllMatchingTags(Tags, AbilitiesToActivate);
+	this->GetActivatableGameplayAbilitySpecsByAllMatchingTags(
+		Tags,
+		AbilitiesToActivate,
+		bOnlyAbilitiesThatSatisfyTagRequirements
+	);
 
 	return PF2ArrayUtilities::Map<FGameplayAbilitySpec>(
 		AbilitiesToActivate,
@@ -60,11 +66,14 @@ TArray<FGameplayAbilitySpec> UPF2AbilitySystemComponent::FindAbilitySpecsByTags(
 	);
 }
 
-FGameplayAbilitySpec UPF2AbilitySystemComponent::FindAbilitySpecByTags(const FGameplayTagContainer& InTags,
-                                                                       bool&                        OutMatchFound) const
+FGameplayAbilitySpec UPF2AbilitySystemComponent::FindAbilitySpecByTags(
+	const FGameplayTagContainer& InTags,
+	bool&                        OutMatchFound,
+	const bool                   bInOnlyAbilitiesThatSatisfyTagRequirements) const
 {
 	FGameplayAbilitySpec         MatchingAbility;
-	TArray<FGameplayAbilitySpec> MatchingAbilities = this->FindAbilitySpecsByTags(InTags);
+	TArray<FGameplayAbilitySpec> MatchingAbilities =
+		this->FindAbilitySpecsByTags(InTags, bInOnlyAbilitiesThatSatisfyTagRequirements);
 
 	if (MatchingAbilities.Num() == 0)
 	{
@@ -81,10 +90,11 @@ FGameplayAbilitySpec UPF2AbilitySystemComponent::FindAbilitySpecByTags(const FGa
 }
 
 TArray<FGameplayAbilitySpecHandle> UPF2AbilitySystemComponent::FindAbilityHandlesByTags(
-	const FGameplayTagContainer& Tags) const
+	const FGameplayTagContainer& Tags,
+	const bool                   bOnlyAbilitiesThatSatisfyTagRequirements) const
 {
 	return PF2ArrayUtilities::Map<FGameplayAbilitySpecHandle>(
-		this->FindAbilitySpecsByTags(Tags),
+		this->FindAbilitySpecsByTags(Tags, bOnlyAbilitiesThatSatisfyTagRequirements),
 		[](const FGameplayAbilitySpec AbilitySpec)
 		{
 			return AbilitySpec.Handle;
@@ -92,11 +102,14 @@ TArray<FGameplayAbilitySpecHandle> UPF2AbilitySystemComponent::FindAbilityHandle
 	);
 }
 
-FGameplayAbilitySpecHandle UPF2AbilitySystemComponent::FindAbilityHandleByTags(const FGameplayTagContainer& InTags,
-                                                                               bool& OutMatchFound) const
+FGameplayAbilitySpecHandle UPF2AbilitySystemComponent::FindAbilityHandleByTags(
+	const FGameplayTagContainer& InTags,
+	bool&                        OutMatchFound,
+	const bool                   bInOnlyAbilitiesThatSatisfyTagRequirements) const
 {
 	FGameplayAbilitySpecHandle Handle;
-	FGameplayAbilitySpec       AbilitySpec = this->FindAbilitySpecByTags(InTags, OutMatchFound);
+	const FGameplayAbilitySpec AbilitySpec =
+		this->FindAbilitySpecByTags(InTags, OutMatchFound, bInOnlyAbilitiesThatSatisfyTagRequirements);
 
 	if (OutMatchFound)
 	{

@@ -63,12 +63,16 @@ public:
 	 *
 	 * @param Tags
 	 *	All of the tags that a granted ability must possess in order for it to be returned.
+	 * @param bOnlyAbilitiesThatSatisfyTagRequirements
+	 *	Only return a match for an ability that has its tag requirements satisfied and is not blocked.
 	 *
 	 * @return
 	 *	The abilities granted to this ASC that have the specified tags.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
-	virtual TArray<FGameplayAbilitySpec> FindAbilitySpecsByTags(const FGameplayTagContainer& Tags) const = 0;
+	virtual TArray<FGameplayAbilitySpec> FindAbilitySpecsByTags(
+	    const FGameplayTagContainer& Tags,
+	    bool                         bOnlyAbilitiesThatSatisfyTagRequirements = true) const = 0;
 
 	/**
 	 * Finds the first granted ability having the specified tags.
@@ -77,6 +81,8 @@ public:
 	 *	All of the tags that a granted ability must possess in order for it to be returned.
 	 * @param OutMatchFound
 	 *	An output parameter that receives whether an ability spec with the specified tags was found.
+	 * @param bInOnlyAbilitiesThatSatisfyTagRequirements
+	 *	Only return a match for an ability that has its tag requirements satisfied and is not blocked.
 	 *
 	 * @return
 	 *	The first ability granted to this ASC that has the specified tags.
@@ -87,7 +93,10 @@ public:
 		const FGameplayTagContainer& InTags,
 
 		UPARAM(DisplayName="Match Found")
-		bool& OutMatchFound
+		bool& OutMatchFound,
+
+		UPARAM(DisplayName="Only Abilities that Satisfy Tag Requirements")
+		const bool bInOnlyAbilitiesThatSatisfyTagRequirements = true
 	) const = 0;
 
 	/**
@@ -95,12 +104,17 @@ public:
 	 *
 	 * @param Tags
 	 *	All of the tags that a granted ability must possess in order for it to be returned.
+	 * @param bOnlyAbilitiesThatSatisfyTagRequirements
+	 *	Only return a match for an ability that has its tag requirements satisfied and is not blocked.
 	 *
 	 * @return
 	 *	The handles of the abilities granted to this ASC that have the specified tags.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
-	virtual TArray<FGameplayAbilitySpecHandle> FindAbilityHandlesByTags(const FGameplayTagContainer& Tags) const = 0;
+	virtual TArray<FGameplayAbilitySpecHandle> FindAbilityHandlesByTags(
+	    const FGameplayTagContainer& Tags,
+	    const bool                   bOnlyAbilitiesThatSatisfyTagRequirements = true
+	) const = 0;
 
 	/**
 	 * Finds the handle of the first granted ability having the specified tags.
@@ -109,6 +123,8 @@ public:
 	 *	All of the tags that a granted ability must possess in order for it to be returned.
 	 * @param OutMatchFound
 	 *	An output parameter that receives whether an ability spec with the specified tags was found.
+	 * @param bInOnlyAbilitiesThatSatisfyTagRequirements
+	 *	Only return a match for an ability that has its tag requirements satisfied and is not blocked.
 	 *
 	 * @return
 	 *	The handle of the first ability granted to this ASC that has the specified tags.
@@ -119,7 +135,10 @@ public:
 		const FGameplayTagContainer& InTags,
 
 		UPARAM(DisplayName="Match Found")
-		bool& OutMatchFound
+		bool& OutMatchFound,
+
+		UPARAM(DisplayName="Only Abilities that Satisfy Tag Requirements")
+		const bool bInOnlyAbilitiesThatSatisfyTagRequirements = true
 	) const = 0;
 
 	/**
