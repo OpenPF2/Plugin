@@ -160,7 +160,8 @@ protected:
 	// =================================================================================================================
 	explicit APF2CharacterCommand() : TargetCharacter(nullptr)
 	{
-		// Replicate to all players to en
+		// Replicate commands to ensure that, when characters are controlled by AI during encounters, both the server
+		// and the client who is issuing the command can observe its details (icon, description, and callback).
 		this->bReplicates     = true;
 		this->bAlwaysRelevant = true;
 	}
