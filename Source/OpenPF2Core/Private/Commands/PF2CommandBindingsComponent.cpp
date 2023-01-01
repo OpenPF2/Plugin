@@ -22,6 +22,34 @@
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
+bool UPF2CommandBindingsComponent::IsConsumingInput() const
+{
+	return this->bConsumeInput;
+}
+
+void UPF2CommandBindingsComponent::SetConsumeInput(const bool bNewValue)
+{
+	if (this->bConsumeInput != bNewValue)
+	{
+		const int32 BindingsCount = this->Bindings.Num();
+
+		if (BindingsCount == 0)
+		{
+			this->bConsumeInput = bNewValue;
+		}
+		else
+		{
+			UE_LOG(
+				LogPf2CoreInput,
+				Error,
+				TEXT("Command bindings component ('%s') already has '%d' bindings. The 'consume input' setting can only be changed before bindings have been added."),
+				*(this->GetIdForLogs()),
+				BindingsCount
+			);
+		}
+	}
+}
+
 void UPF2CommandBindingsComponent::ClearBindings()
 {
 	if (this->IsConnectedToInput())
@@ -73,7 +101,7 @@ void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter()
 			DefaultAction = FName();
 		}
 
-		this->Bindings.Add(FPF2CommandInputBinding(DefaultAction, AbilitySpec, this));
+		this->Bindings.Add(FPF2CommandInputBinding(DefaultAction, AbilitySpec, this, this->IsConsumingInput()));
 	}
 
 	UE_LOG(

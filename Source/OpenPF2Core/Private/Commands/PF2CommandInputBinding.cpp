@@ -125,17 +125,19 @@ int32 FPF2CommandInputBinding::AddActionBinding(UInputComponent*  InputComponent
                                                 const EInputEvent InKeyEvent,
                                                 void              (*Callback)(FPF2CommandInputBinding*))
 {
-	FInputActionBinding ActionBinding = FInputActionBinding(this->ActionName, InKeyEvent),
-	                    AddResult;
+	FInputActionBinding  ActionBinding = FInputActionBinding(this->ActionName, InKeyEvent);
+	FInputActionBinding* AddResult;
 
 	ActionBinding.ActionDelegate.GetDelegateForManualSet().BindStatic(
 		Callback,
 		this
 	);
 
-	AddResult = InputComponent->AddActionBinding(ActionBinding);
+	AddResult = &InputComponent->AddActionBinding(ActionBinding);
 
-	return AddResult.GetHandle();
+	AddResult->bConsumeInput = this->IsConsumingInput();
+
+	return AddResult->GetHandle();
 }
 
 void FPF2CommandInputBinding::ActivateAbility()

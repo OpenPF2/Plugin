@@ -7,7 +7,6 @@
 
 #include <Components/ActorComponent.h>
 
-#include "PF2AbilityExecutionFilterContext.h"
 #include "PF2CharacterInterface.h"
 #include "PF2CommandBindingsInterface.h"
 #include "PF2CommandInputBinding.h"
@@ -75,6 +74,17 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Command Bindings")
 	FPF2CommandQueueInputConnectionChangedDelegate OnInputDisconnected;
 
+protected:
+	/**
+	 * Whether bindings managed by this component should consume the input when they fire.
+	 *
+	 * - If true, then matching inputs will be consumed by bindings, and a pawn or player controller will not be able to
+	 *   react to them.
+	 * - If false, then a pawn or player controller can react to the input action in addition to bindings handling them.
+	 */
+	UPROPERTY(EditAnywhere, BlueprintGetter=IsConsumingInput, BlueprintSetter=SetConsumeInput)
+	bool bConsumeInput;
+
 private:
 	/**
 	 * The input component to which this component is currently wired.
@@ -101,13 +111,19 @@ public:
 	/**
 	 * Default constructor for UPF2CommandBindingsComponent.
 	 */
-	explicit UPF2CommandBindingsComponent() : InputComponent(nullptr)
+	explicit UPF2CommandBindingsComponent() : bConsumeInput(true), InputComponent(nullptr)
 	{
 	}
 
 	// =================================================================================================================
 	// Public Methods - IPF2CommandBindingsInterface Implementation
 	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual bool IsConsumingInput() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void SetConsumeInput(const bool bNewValue) override;
+
 	UFUNCTION(BlueprintCallable)
 	virtual void ClearBindings() override;
 
