@@ -10,14 +10,14 @@
 
 #include <GameFramework/Pawn.h>
 
-#include "PF2StrategicCameraPawnBase.generated.h"
+#include "PF2BirdsEyeCameraPawnBase.generated.h"
 
 /**
- * Base class for invisible pawns that are possessed while in a top-down, strategic view for encounters.
+ * Base class for invisible pawns that are possessed while in a top-down, tactical view for encounters.
  */
 UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API APF2StrategicCameraPawnBase : public APawn
+class OPENPF2CORE_API APF2BirdsEyeCameraPawnBase : public APawn
 {
 	GENERATED_BODY()
 
@@ -25,7 +25,7 @@ public:
 	// =================================================================================================================
 	// Public Constructors
 	// =================================================================================================================
-	explicit APF2StrategicCameraPawnBase();
+	explicit APF2BirdsEyeCameraPawnBase();
 
 	// =================================================================================================================
 	// Public Methods - AActor Overrides
@@ -192,7 +192,7 @@ protected:
 	// Blueprint Implementable Events
 	// =================================================================================================================
 	/**
-	 * BP event invoked to apply a camera tilt-zoom input to the strategic camera.
+	 * BP event invoked to apply a camera tilt-zoom input to the bird's eye camera.
 	 *
 	 * This is invoked during the tick for this pawn whenever there is a non-zero input for tilt zoom to apply.
 	 *

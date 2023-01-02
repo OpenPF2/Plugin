@@ -7,12 +7,12 @@
 // Pruehs, provided under the MIT License. Copyright (c) 2017 Nick Pruehs.
 //
 
-#include "PF2StrategicCameraPawnBase.h"
+#include "PF2BirdsEyeCameraPawnBase.h"
 
 #include <Camera/CameraComponent.h>
 #include <Components/InputComponent.h>
 
-APF2StrategicCameraPawnBase::APF2StrategicCameraPawnBase()
+APF2BirdsEyeCameraPawnBase::APF2BirdsEyeCameraPawnBase()
 {
 	this->CameraSpeed         = 1000.0f;
 	this->CameraZoomSpeed     = 4000.0f;
@@ -22,7 +22,7 @@ APF2StrategicCameraPawnBase::APF2StrategicCameraPawnBase()
 	this->MaxCameraDistance = 2500.0f;
 }
 
-void APF2StrategicCameraPawnBase::Tick(const float DeltaSeconds)
+void APF2BirdsEyeCameraPawnBase::Tick(const float DeltaSeconds)
 {
 	FVector           Location;
 	UCameraComponent* PlayerPawnCamera;
@@ -61,12 +61,12 @@ void APF2StrategicCameraPawnBase::Tick(const float DeltaSeconds)
 
 }
 
-void APF2StrategicCameraPawnBase::FocusCameraOnActor(AActor* Actor)
+void APF2BirdsEyeCameraPawnBase::FocusCameraOnActor(AActor* Actor)
 {
 	this->FocusCameraOnActors({ Actor });
 }
 
-void APF2StrategicCameraPawnBase::FocusCameraOnActors(TArray<AActor*> Actors)
+void APF2BirdsEyeCameraPawnBase::FocusCameraOnActors(TArray<AActor*> Actors)
 {
 	int32     ActorCount      = 0;
 	FVector2D LocationSum     = FVector2D::ZeroVector;
@@ -94,7 +94,7 @@ void APF2StrategicCameraPawnBase::FocusCameraOnActors(TArray<AActor*> Actors)
 	this->FocusCameraOnLocation(CenterLocation);
 }
 
-void APF2StrategicCameraPawnBase::FocusCameraOnLocation(FVector2D NewCameraLocation)
+void APF2BirdsEyeCameraPawnBase::FocusCameraOnLocation(FVector2D NewCameraLocation)
 {
     // Calculate where to put the camera, considering its angle, to center on the specified location.
     FVector FinalCameraLocation = FVector(NewCameraLocation.X - GetCameraDistance(), NewCameraLocation.Y, 0.0f);
@@ -106,37 +106,37 @@ void APF2StrategicCameraPawnBase::FocusCameraOnLocation(FVector2D NewCameraLocat
     this->SetActorLocation(FinalCameraLocation);
 }
 
-void APF2StrategicCameraPawnBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void APF2BirdsEyeCameraPawnBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis(TEXT("MoveCameraRightLeft"), this, &APF2StrategicCameraPawnBase::MoveCameraRightLeft);
-	PlayerInputComponent->BindAxis(TEXT("MoveCameraUpDown"),    this, &APF2StrategicCameraPawnBase::MoveCameraUpDown);
-    PlayerInputComponent->BindAxis(TEXT("ZoomCamera"),          this, &APF2StrategicCameraPawnBase::ZoomCamera);
-    PlayerInputComponent->BindAxis(TEXT("TiltZoomCamera"),      this, &APF2StrategicCameraPawnBase::TiltZoomCamera);
+	PlayerInputComponent->BindAxis(TEXT("MoveCameraRightLeft"), this, &APF2BirdsEyeCameraPawnBase::MoveCameraRightLeft);
+	PlayerInputComponent->BindAxis(TEXT("MoveCameraUpDown"),    this, &APF2BirdsEyeCameraPawnBase::MoveCameraUpDown);
+    PlayerInputComponent->BindAxis(TEXT("ZoomCamera"),          this, &APF2BirdsEyeCameraPawnBase::ZoomCamera);
+    PlayerInputComponent->BindAxis(TEXT("TiltZoomCamera"),      this, &APF2BirdsEyeCameraPawnBase::TiltZoomCamera);
 }
 
-void APF2StrategicCameraPawnBase::MoveCameraRightLeft(const float Value)
+void APF2BirdsEyeCameraPawnBase::MoveCameraRightLeft(const float Value)
 {
     this->CameraRightLeftAxisValue = Value;
 }
 
-void APF2StrategicCameraPawnBase::MoveCameraUpDown(const float Value)
+void APF2BirdsEyeCameraPawnBase::MoveCameraUpDown(const float Value)
 {
     this->CameraUpDownAxisValue = Value;
 }
 
-void APF2StrategicCameraPawnBase::ZoomCamera(const float Value)
+void APF2BirdsEyeCameraPawnBase::ZoomCamera(const float Value)
 {
     this->CameraZoomAxisValue = Value;
 }
 
-void APF2StrategicCameraPawnBase::TiltZoomCamera(const float Value)
+void APF2BirdsEyeCameraPawnBase::TiltZoomCamera(const float Value)
 {
 	this->CameraTiltZoomAxisValue = Value;
 }
 
-float APF2StrategicCameraPawnBase::GetCameraDistance() const
+float APF2BirdsEyeCameraPawnBase::GetCameraDistance() const
 {
 	const UCameraComponent* Camera = this->FindComponentByClass<UCameraComponent>();
 	float CameraAngle;
