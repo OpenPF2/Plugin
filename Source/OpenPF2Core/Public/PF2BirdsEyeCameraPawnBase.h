@@ -8,6 +8,9 @@
 
 #pragma once
 
+#include <Components/SceneComponent.h>
+#include <Camera/CameraComponent.h>
+
 #include <GameFramework/Pawn.h>
 
 #include "PF2BirdsEyeCameraPawnBase.generated.h"
@@ -140,6 +143,15 @@ protected:
     // Protected Methods
     // =================================================================================================================
 	/**
+	 * Gets the camera component inside this pawn that the player will control and use to see the world.
+	 *
+	 * @return
+	 *	The camera component.
+	 */
+	UFUNCTION(BlueprintNativeEvent, Category="OpenPF2|Bird's Eye Camera Pawns")
+	USceneComponent* GetCameraComponent() const;
+
+	/**
 	 * Applies a horizontal axis input to camera movement.
 	 *
 	 * @param Value
@@ -202,7 +214,8 @@ protected:
 	 */
 	UFUNCTION(
 		BlueprintImplementableEvent,
-		meta=(DisplayName="On Apply Tilt Zoom")
+		meta=(DisplayName="On Apply Tilt Zoom"),
+		Category="OpenPF2|Bird's Eye Camera Pawns"
 	)
 	void BP_OnApplyTiltZoom(const float TiltAmount);
 };

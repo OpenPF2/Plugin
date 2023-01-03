@@ -24,12 +24,12 @@ APF2BirdsEyeCameraPawnBase::APF2BirdsEyeCameraPawnBase()
 
 void APF2BirdsEyeCameraPawnBase::Tick(const float DeltaSeconds)
 {
-	FVector           Location;
-	UCameraComponent* PlayerPawnCamera;
-	const float       CameraRightLeftInput  = FMath::Clamp(this->CameraRightLeftAxisValue, -1.0f, +1.0f);
-	const float       CameraUpDownAxisInput = FMath::Clamp(this->CameraUpDownAxisValue,    -1.0f, +1.0f);
-	const float       TiltZoomInput         = FMath::Clamp(this->CameraTiltZoomAxisValue,  -1.0f, +1.0f),
-	                  TiltZoomValue         = this->CameraTiltZoomSpeed * TiltZoomInput * DeltaSeconds;
+	FVector          Location;
+	USceneComponent* CameraComponent;
+	const float      CameraRightLeftInput  = FMath::Clamp(this->CameraRightLeftAxisValue, -1.0f, +1.0f);
+	const float      CameraUpDownAxisInput = FMath::Clamp(this->CameraUpDownAxisValue, -1.0f, +1.0f);
+	const float      TiltZoomInput         = FMath::Clamp(this->CameraTiltZoomAxisValue, -1.0f, +1.0f),
+	                 TiltZoomValue         = this->CameraTiltZoomSpeed * TiltZoomInput * DeltaSeconds;
 
 	Super::Tick(DeltaSeconds);
 
@@ -41,16 +41,16 @@ void APF2BirdsEyeCameraPawnBase::Tick(const float DeltaSeconds)
 	this->SetActorLocation(Location);
 
     // Apply zoom input.
-    PlayerPawnCamera = this->FindComponentByClass<UCameraComponent>();
+    CameraComponent = this->GetCameraComponent();
 
-    if (IsValid(PlayerPawnCamera))
+    if (IsValid(CameraComponent))
     {
-        FVector CameraLocation = PlayerPawnCamera->GetRelativeLocation();
+        FVector CameraLocation = CameraComponent->GetRelativeLocation();
 
     	CameraLocation.Z += this->CameraZoomSpeed * this->CameraZoomAxisValue * DeltaSeconds;
         CameraLocation.Z = FMath::Clamp(CameraLocation.Z, this->MinCameraDistance, this->MaxCameraDistance);
 
-    	PlayerPawnCamera->SetRelativeLocation(CameraLocation);
+    	CameraComponent->SetRelativeLocation(CameraLocation);
     }
 
 	// Apply tilt-zoom input.
@@ -58,7 +58,6 @@ void APF2BirdsEyeCameraPawnBase::Tick(const float DeltaSeconds)
 	{
 		this->BP_OnApplyTiltZoom(TiltZoomValue);
 	}
-
 }
 
 void APF2BirdsEyeCameraPawnBase::FocusCameraOnActor(AActor* Actor)
@@ -116,6 +115,11 @@ void APF2BirdsEyeCameraPawnBase::SetupPlayerInputComponent(UInputComponent* Play
     PlayerInputComponent->BindAxis(TEXT("TiltZoomCamera"),      this, &APF2BirdsEyeCameraPawnBase::TiltZoomCamera);
 }
 
+USceneComponent* APF2BirdsEyeCameraPawnBase::GetCameraComponent_Implementation() const
+{
+	return this->FindComponentByClass<UCameraComponent>();
+}
+
 void APF2BirdsEyeCameraPawnBase::MoveCameraRightLeft(const float Value)
 {
     this->CameraRightLeftAxisValue = Value;
@@ -138,8 +142,8 @@ void APF2BirdsEyeCameraPawnBase::TiltZoomCamera(const float Value)
 
 float APF2BirdsEyeCameraPawnBase::GetCameraDistance() const
 {
-	const UCameraComponent* Camera = this->FindComponentByClass<UCameraComponent>();
-	float CameraAngle;
+	const USceneComponent* Camera = this->GetCameraComponent();
+	float                  CameraAngle;
 
     if (!IsValid(Camera))
     {
