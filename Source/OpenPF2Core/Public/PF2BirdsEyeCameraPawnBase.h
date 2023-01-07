@@ -148,7 +148,7 @@ protected:
 	 * @return
 	 *	The camera component.
 	 */
-	UFUNCTION(BlueprintNativeEvent, Category="OpenPF2|Bird's Eye Camera Pawns")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="OpenPF2|Bird's Eye Camera Pawns")
 	USceneComponent* GetCameraComponent() const;
 
 	/**
