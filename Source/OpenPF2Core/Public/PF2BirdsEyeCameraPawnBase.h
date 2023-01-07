@@ -44,8 +44,8 @@ public:
      * @param Actor
      *	The actor to focus on.
      */
-    UFUNCTION(BlueprintCallable)
-    void FocusCameraOnActor(AActor* Actor);
+	UFUNCTION(BlueprintCallable)
+	void FocusCameraOnActor(AActor* Actor);
 
 	/**
 	 * Focuses the camera on showing all of the specified actors.
@@ -54,7 +54,7 @@ public:
 	 *	The actors to focus on.
 	 */
 	UFUNCTION(BlueprintCallable)
-    void FocusCameraOnActors(TArray<AActor*> Actors);
+	void FocusCameraOnActors(TArray<AActor*> Actors);
 
 	/**
 	 * Focuses the camera on a specific world location.
@@ -140,8 +140,8 @@ protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	// =================================================================================================================
-    // Protected Methods
-    // =================================================================================================================
+	// Protected Methods
+	// =================================================================================================================
 	/**
 	 * Gets the camera component inside this pawn that the player will control and use to see the world.
 	 *
