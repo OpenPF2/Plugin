@@ -38,7 +38,7 @@ void APF2BirdsEyeCameraPawnBase::Tick(const float DeltaSeconds)
     Location += FVector::RightVector   * this->CameraSpeed * CameraRightLeftInput  * DeltaSeconds;
     Location += FVector::ForwardVector * this->CameraSpeed * CameraUpDownAxisInput * DeltaSeconds;
 
-	this->SetActorLocation(Location);
+	this->SetActorLocation(Location, true);
 
     // Apply zoom input.
     CameraComponent = this->GetCameraComponent();
@@ -50,7 +50,7 @@ void APF2BirdsEyeCameraPawnBase::Tick(const float DeltaSeconds)
     	CameraLocation.Z += this->CameraZoomSpeed * this->CameraZoomAxisValue * DeltaSeconds;
         CameraLocation.Z = FMath::Clamp(CameraLocation.Z, this->MinCameraDistance, this->MaxCameraDistance);
 
-    	CameraComponent->SetRelativeLocation(CameraLocation);
+    	CameraComponent->SetRelativeLocation(CameraLocation, true);
     }
 
 	// Apply tilt-zoom input.
