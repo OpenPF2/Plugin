@@ -26,16 +26,6 @@ class OPENPF2CORE_API APF2BirdsEyeCameraPawnBase : public APawn
 
 public:
 	// =================================================================================================================
-	// Public Constructors
-	// =================================================================================================================
-	explicit APF2BirdsEyeCameraPawnBase();
-
-	// =================================================================================================================
-	// Public Methods - AActor Overrides
-	// =================================================================================================================
-	virtual void Tick(float DeltaSeconds) override;
-
-	// =================================================================================================================
 	// Public Methods
 	// =================================================================================================================
 	/**
@@ -67,43 +57,6 @@ public:
 
 protected:
 	// =================================================================================================================
-	// Protected Fields
-	// =================================================================================================================
-	/**
-	 * The speed (in cm/sec) at which the camera zooms in and out.
-	 */
-	UPROPERTY(EditDefaultsOnly, Category = "Camera Control", meta = (ClampMin = 0))
-	float CameraZoomSpeed;
-
-	/**
-	 * The minimum distance of the camera from the pawn, in cm.
-	 */
-	UPROPERTY(EditDefaultsOnly, Category = "Camera Control", meta = (ClampMin = 0))
-	float MinCameraDistance;
-
-	/**
-	 * The maximum distance of the camera from the pawn, in cm.
-	 */
-	UPROPERTY(EditDefaultsOnly, Category = "Camera Control", meta = (ClampMin = 0))
-	float MaxCameraDistance;
-
-	// =================================================================================================================
-	// Protected Fields
-	// =================================================================================================================
-	/**
-	 * The amount of zoom (in screen space) camera movement to apply.
-	 *
-	 * This is the amount that was set by axis inputs in the previous frame. "Out" is a positive value, while "in" is a
-	 * negative value.
-	 */
-	float CameraZoomAxisValue;
-
-	// =================================================================================================================
-	// Protected Methods - APawn Overrides
-	// =================================================================================================================
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-
-	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
 	/**
@@ -116,39 +69,10 @@ protected:
 	USceneComponent* GetCameraComponent() const;
 
 	/**
-	 * Applies a zoom input to camera movement.
-	 *
-	 * @param Value
-	 *	The amount, as a float between -1.0 and 1.0, to move the camera in or out during the next frame:
-	 *	  -  1.0 represents 100% of camera movement speed outwards (in screen space).
-	 *	  - -1.0 represents 100% of camera movement speed inwards (in screen space).
-	 */
-	void ZoomCamera(const float Value);
-
-	/**
 	 * Gets the distance from the camera to an object in the level.
 	 *
 	 * @return
 	 *	The distance from the camera to the object, in centimeters (cm).
 	 */
 	float GetCameraDistance() const;
-
-	// =================================================================================================================
-	// Blueprint Implementable Events
-	// =================================================================================================================
-	/**
-	 * BP event invoked to apply a camera tilt-zoom input to the bird's eye camera.
-	 *
-	 * This is invoked during the tick for this pawn whenever there is a non-zero input for tilt zoom to apply.
-	 *
-	 * @param TiltAmount
-	 *   The amount of tilt zoom to apply, as a float from -1.0 to 1.0. This amount has already been scaled by the tilt
-	 *   zoom camera speed and should be added to the current tilt zoom amount.
-	 */
-	UFUNCTION(
-		BlueprintImplementableEvent,
-		meta=(DisplayName="On Apply Tilt Zoom"),
-		Category="OpenPF2|Bird's Eye Camera Pawns"
-	)
-	void BP_OnApplyTiltZoom(const float TiltAmount);
 };

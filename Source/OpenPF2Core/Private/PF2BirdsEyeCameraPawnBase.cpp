@@ -12,34 +12,6 @@
 #include <Camera/CameraComponent.h>
 #include <Components/InputComponent.h>
 
-APF2BirdsEyeCameraPawnBase::APF2BirdsEyeCameraPawnBase()
-{
-	this->CameraZoomSpeed = 4000.0f;
-
-	this->MinCameraDistance = 500.0f;
-	this->MaxCameraDistance = 2500.0f;
-}
-
-void APF2BirdsEyeCameraPawnBase::Tick(const float DeltaSeconds)
-{
-	USceneComponent* CameraComponent;
-
-	Super::Tick(DeltaSeconds);
-
-	// Apply zoom input.
-	CameraComponent = this->GetCameraComponent();
-
-	if (IsValid(CameraComponent))
-	{
-		FVector CameraLocation = CameraComponent->GetRelativeLocation();
-
-		CameraLocation.Z += this->CameraZoomSpeed * this->CameraZoomAxisValue * DeltaSeconds;
-		CameraLocation.Z = FMath::Clamp(CameraLocation.Z, this->MinCameraDistance, this->MaxCameraDistance);
-
-		CameraComponent->SetRelativeLocation(CameraLocation, true);
-	}
-}
-
 void APF2BirdsEyeCameraPawnBase::FocusCameraOnActor(AActor* Actor)
 {
 	this->FocusCameraOnActors({Actor});
@@ -85,21 +57,9 @@ void APF2BirdsEyeCameraPawnBase::FocusCameraOnLocation(const FVector2D NewCamera
 	this->SetActorLocation(FinalCameraLocation);
 }
 
-void APF2BirdsEyeCameraPawnBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-	PlayerInputComponent->BindAxis(TEXT("ZoomCamera"), this, &APF2BirdsEyeCameraPawnBase::ZoomCamera);
-}
-
 USceneComponent* APF2BirdsEyeCameraPawnBase::GetCameraComponent_Implementation() const
 {
 	return this->FindComponentByClass<UCameraComponent>();
-}
-
-void APF2BirdsEyeCameraPawnBase::ZoomCamera(const float Value)
-{
-	this->CameraZoomAxisValue = Value;
 }
 
 float APF2BirdsEyeCameraPawnBase::GetCameraDistance() const
