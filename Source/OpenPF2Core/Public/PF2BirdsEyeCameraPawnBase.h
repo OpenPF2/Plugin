@@ -70,22 +70,10 @@ protected:
 	// Protected Fields
 	// =================================================================================================================
 	/**
-	 * The horizontal and vertical camera movement speed in cm/sec.
-	 */
-	UPROPERTY(EditDefaultsOnly, Category = "Camera Control", meta = (ClampMin = 0))
-	float CameraSpeed;
-
-	/**
 	 * The speed (in cm/sec) at which the camera zooms in and out.
 	 */
 	UPROPERTY(EditDefaultsOnly, Category = "Camera Control", meta = (ClampMin = 0))
 	float CameraZoomSpeed;
-
-	/**
-	 * How fast to tilt the camera while rotating, in percentage of input/sec, where (0 => 0%, and 1.0 => 100%).
-	 */
-	UPROPERTY(EditDefaultsOnly, Category = "Camera Control", meta = (ClampMin = 0.0f, ClampMax = 5.0f))
-	float CameraTiltZoomSpeed;
 
 	/**
 	 * The minimum distance of the camera from the pawn, in cm.
@@ -103,36 +91,12 @@ protected:
 	// Protected Fields
 	// =================================================================================================================
 	/**
-	 * The amount of horizontal (in screen space) camera movement to apply.
-	 *
-	 * This is the amount that was set by axis inputs in the previous frame. "Right" is a positive value, while "left"
-	 * is a negative value.
-	 */
-	float CameraRightLeftAxisValue;
-
-	/**
-	 * The amount of vertical (in screen space) camera movement to apply.
-	 *
-	 * This is the amount that was set by axis inputs in the previous frame. "Up" is a positive value, while "down" is a
-	 * negative value.
-	 */
-	float CameraUpDownAxisValue;
-
-	/**
 	 * The amount of zoom (in screen space) camera movement to apply.
 	 *
 	 * This is the amount that was set by axis inputs in the previous frame. "Out" is a positive value, while "in" is a
 	 * negative value.
 	 */
 	float CameraZoomAxisValue;
-
-	/**
-	 * The amount of tilt-and-zoom camera movement to apply.
-	 *
-	 * This is the amount that was set by axis inputs in the previous frame. Tilting up and zooming out is a positive
-	 * value, while tilting down and zooming in is a negative value.
-	 */
-	float CameraTiltZoomAxisValue;
 
 	// =================================================================================================================
 	// Protected Methods - APawn Overrides
@@ -152,26 +116,6 @@ protected:
 	USceneComponent* GetCameraComponent() const;
 
 	/**
-	 * Applies a horizontal axis input to camera movement.
-	 *
-	 * @param Value
-	 *	The amount, as a float between -1.0 and 1.0, to move the camera during the next frame:
-	 *	  -  1.0 represents 100% of camera movement speed to the right (in screen space).
-	 *	  - -1.0 represents 100% of camera movement speed to the left (in screen space).
-	 */
-	void MoveCameraRightLeft(const float Value);
-
-	/**
-	 * Applies a vertical axis input to camera movement.
-	 *
-	 * @param Value
-	*	The amount, as a float between -1.0 and 1.0, to move the camera during the next frame:
-	 *	  -  1.0 represents 100% of camera movement speed up (in screen space).
-	 *	  - -1.0 represents 100% of camera movement speed down (in screen space).
-	 */
-	void MoveCameraUpDown(const float Value);
-
-	/**
 	 * Applies a zoom input to camera movement.
 	 *
 	 * @param Value
@@ -180,17 +124,6 @@ protected:
 	 *	  - -1.0 represents 100% of camera movement speed inwards (in screen space).
 	 */
 	void ZoomCamera(const float Value);
-
-	/**
-	 * Applies a tilt zoom input to camera movement.
-	 *
-	 * @param Value
-	 *	The amount, as a float between -1.0 and 1.0, to tilt and zoom the camera down-in or up-out during the next
-	 *	frame:
-	 *	  -  1.0 represents 100% of camera movement speed up and outwards (in screen space).
-	 *	  - -1.0 represents 100% of camera movement speed down and inwards (in screen space).
-	 */
-	void TiltZoomCamera(const float Value);
 
 	/**
 	 * Gets the distance from the camera to an object in the level.
