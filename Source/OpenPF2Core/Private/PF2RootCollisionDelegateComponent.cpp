@@ -25,6 +25,8 @@ bool UPF2RootCollisionDelegateComponent::MoveComponentImpl(const FVector&      D
 	// --- Start Difference from UPrimitiveComponent
 	if (this->CollisionComponent == nullptr)
 	{
+		// We have no other component on which to perform a collision check, so perform collision checks on this
+		// component instead.
 		return Super::MoveComponentImpl(Delta, NewRotationQuat, bSweep, OutHit, MoveFlags, Teleport);
 	}
 	// --- End Difference from UPrimitiveComponent
@@ -107,6 +109,7 @@ bool UPF2RootCollisionDelegateComponent::MoveComponentImpl(const FVector&      D
 		if (bCollisionEnabled && (DeltaSizeSq > 0.0f))
 		{
 			TArray<FHitResult> Hits;
+
 #if !(UE_BUILD_SHIPPING || UE_BUILD_TEST)
 			if (!this->IsRegistered())
 			{
@@ -161,7 +164,7 @@ bool UPF2RootCollisionDelegateComponent::MoveComponentImpl(const FVector&      D
 				for (int32 HitIdx = 0; HitIdx < Hits.Num(); HitIdx++)
 				{
 					// --- Start Difference from UPrimitiveComponent
-					PullBackHit(Hits[HitIdx], CollisionTraceStart, CollisionTraceEnd, DeltaSize);
+					PullBackHit(Hits[HitIdx], DeltaSize);
 					// --- End Difference from UPrimitiveComponent
 				}
 			}
@@ -288,8 +291,8 @@ bool UPF2RootCollisionDelegateComponent::MoveComponentImpl(const FVector&      D
 #if !(UE_BUILD_SHIPPING || UE_BUILD_TEST)
 			if (UCheatManager::IsDebugCapsuleSweepPawnEnabled() && BlockingHit.bBlockingHit && !this->IsZeroExtent())
 			{
-				// When debugging, the sole purpose for this is to find how capsule trace information was when hit
-				// to resolve stuck or improve our movement system - To turn this on, use DebugCapsuleSweepPawn
+				// When debugging, the sole purpose for this is to find how capsule trace information was when hit to
+				// resolve stuck or improve our movement system - To turn this on, use DebugCapsuleSweepPawn.
 				APawn const* const ActorPawn = (Actor ? Cast<APawn>(Actor) : nullptr);
 
 				if ((ActorPawn  != nullptr) && (ActorPawn->Controller != nullptr) &&
@@ -462,7 +465,8 @@ bool UPF2RootCollisionDelegateComponent::ConvertSweptOverlapsToCurrentOverlaps(
 	bool       bResult              = false;
 	const bool bForceGatherOverlaps = !ShouldCheckOverlapFlagToQueueOverlaps(*this);
 
-	if ((this->GetGenerateOverlapEvents() || bForceGatherOverlaps) && bAllowCachedOverlapsCVar->GetBool())
+	if ((this->GetGenerateOverlapEvents() || bForceGatherOverlaps) &&
+		PrimitiveComponentCVars::bAllowCachedOverlaps->GetBool())
 	{
 		const AActor* Actor = this->GetOwner();
 
@@ -470,7 +474,7 @@ bool UPF2RootCollisionDelegateComponent::ConvertSweptOverlapsToCurrentOverlaps(
 		{
 			// We know we are not overlapping any new components at the end location. Children are ignored here (see
 			// note below).
-			if (bEnableFastOverlapCheckCVar->GetBool())
+			if (PrimitiveComponentCVars::bEnableFastOverlapCheck->GetBool())
 			{
 				// Check components we hit during the sweep, keep only those still overlapping
 				const FCollisionQueryParams UnusedQueryParams(NAME_None, FCollisionQueryParams::GetUnknownStatId());
@@ -538,13 +542,14 @@ bool UPF2RootCollisionDelegateComponent::ConvertRotationOverlapsToCurrentOverlap
 	bool       bResult              = false;
 	const bool bForceGatherOverlaps = !ShouldCheckOverlapFlagToQueueOverlaps(*this);
 
-	if ((this->GetGenerateOverlapEvents() || bForceGatherOverlaps) && bAllowCachedOverlapsCVar->GetBool())
+	if ((this->GetGenerateOverlapEvents() || bForceGatherOverlaps) &&
+		PrimitiveComponentCVars::bAllowCachedOverlaps->GetBool())
 	{
 		const AActor* Actor = this->GetOwner();
 
 		if ((Actor != nullptr) && (Actor->GetRootComponent() == this))
 		{
-			if (bEnableFastOverlapCheckCVar->GetBool())
+			if (PrimitiveComponentCVars::bEnableFastOverlapCheck->GetBool())
 			{
 				// Add all current overlaps that are not children. Children test for their own overlaps after we update
 				// our own, and we ignore children in our own update.

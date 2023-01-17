@@ -30,6 +30,15 @@ class OPENPF2CORE_API UPF2RootCollisionDelegateComponent : public UPrimitiveComp
 	GENERATED_BODY()
 
 protected:
+	/**
+	 * The component against which collision checks will be performed.
+	 *
+	 * This component must be attached to this component, either as a child or grandchild, for movement to work in a
+	 * sensible way, as this component will not perform any direct movement of the collision component. Said
+	 * differently, movement components will move this root component, which will result in its child components moving
+	 * automatically, so if the collision component is expected to move with this root component, it needs to be
+	 * attached to this component.
+	 */
 	UPROPERTY(BlueprintReadOnly, Transient)
 	UPrimitiveComponent* CollisionComponent;
 
@@ -50,8 +59,11 @@ public:
 	/**
 	 * Sets the child component ("sub-component") of this component that will be used for collision checking.
 	 *
-	 * If this is not called and this component is the root component of the actor, collision checks are done against
-	 * this component.
+	 * The component provided must be attached to this component, either as a child or grandchild, for movement to work
+	 * in a sensible way, as this component will not perform any direct movement of the collision component. Said
+	 * differently, movement components will move this root component, which will result in its child components moving
+	 * automatically, so if the collision component is expected to move with this root component, it needs to be
+	 * attached to this component.
 	 *
 	 * @param Component
 	 *	The sub-component against which collision checking should be done.
@@ -63,12 +75,12 @@ private:
 	/**
 	 * Converts a set of overlaps from a sweep to a subset that includes only those at the end location.
 	 *
-	 * This was copied from the UPrimitiveComponent base class, since this method is private in that class.
+	 * (This was copied from the UPrimitiveComponent base class, since this method is private in that class).
 	 *
 	 * @see UPrimitiveComponent::ConvertSweptOverlapsToCurrentOverlaps
 	 *
 	 * @tparam AllocatorType
-	 *	The type of component used to allocate space for entries in overlap arrays.
+	 *	The type of the allocator used by the overlaps array.
 	 *
 	 * @param OutOverlapsAtEndLocation
 	 *	A reference to an array that is modified to include the array of only overlaps at the end location of the sweep.
@@ -95,12 +107,12 @@ private:
 	/**
 	 * Converts a set of overlaps from a symmetric change in rotation to a subset of only those at the end location.
 	 *
-	 * This was copied from the UPrimitiveComponent base class, since this method is private in that class.
+	 * (This was copied from the UPrimitiveComponent base class, since this method is private in that class).
 	 *
 	 * @see UPrimitiveComponent::ConvertRotationOverlapsToCurrentOverlaps
 	 *
 	 * @tparam AllocatorType
-	 *	The type of component used to allocate space for entries in overlap arrays.
+	 *	The type of the allocator used by the overlaps array.
 	 *
 	 * @param OutOverlapsAtEndLocation
 	 *	A reference to an array that is modified to include the array of only overlaps at the end location of the
@@ -119,12 +131,12 @@ private:
 	/**
 	 * Identifies all the overlaps with components that are owned by the given actor.
 	 *
-	 * This was copied from the UPrimitiveComponent base class, since this method is private in that class.
+	 * (This was copied from the UPrimitiveComponent base class, since this method is private in that class).
 	 *
 	 * @see UPrimitiveComponent::GetOverlapsWithActor_Template
 	 *
 	 * @tparam AllocatorType
-	 *	The type of component used to allocate space for entries in overlap arrays.
+	 *	The type of the allocator used by the overlaps array.
 	 *
 	 * @param Actor
 	 *	The actor owning the components of interest.
