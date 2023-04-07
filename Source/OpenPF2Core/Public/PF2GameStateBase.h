@@ -35,9 +35,14 @@ protected:
 	// Protected Fields
 	// =================================================================================================================
 	/**
-	 * The next player index to assign to a player who joins the game.
+	 * The next index to assign to a player who joins the game.
 	 */
 	int32 NextPlayerIndex;
+
+	/**
+	 * The next index to assign to a new party in the game.
+	 */
+	int32 NextPartyIndex;
 
 	// =================================================================================================================
 	// Protected Fields - Blueprint Accessible
@@ -78,6 +83,11 @@ public:
 	virtual FORCEINLINE int32 GetNextAvailablePlayerIndex() override
 	{
 		return this->NextPlayerIndex++;
+	}
+
+	virtual FORCEINLINE int32 GetNextAvailablePartyIndex() override
+	{
+		return this->NextPartyIndex++;
 	}
 
 	UFUNCTION(BlueprintCallable)

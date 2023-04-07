@@ -118,7 +118,7 @@ protected:
 	}
 
 	/**
-	 * Gets the first player index that hasn't yet been assigned to any other player.
+	 * Gets the first index that hasn't yet been assigned to any other player.
 	 *
 	 * @return
 	 *	The next available player index.
@@ -126,6 +126,17 @@ protected:
 	FORCEINLINE int32 GetNextAvailablePlayerIndex() const
 	{
 		return this->GetGameStateIntf()->GetNextAvailablePlayerIndex();
+	}
+
+	/**
+	 * Gets the first index that hasn't yet been assigned to any other party.
+	 *
+	 * @return
+	 *	The next available party index.
+	 */
+	FORCEINLINE int32 GetNextAvailablePartyIndex() const
+	{
+		return this->GetGameStateIntf()->GetNextAvailablePartyIndex();
 	}
 
 	/**

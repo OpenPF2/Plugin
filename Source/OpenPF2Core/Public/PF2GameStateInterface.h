@@ -51,12 +51,20 @@ class OPENPF2CORE_API IPF2GameStateInterface
 
 public:
 	/**
-	 * Gets the first player index that hasn't yet been assigned to any player.
+	 * Gets the first index that hasn't yet been assigned to any player.
 	 *
 	 * @return
 	 *	The next available player index.
 	 */
 	virtual int32 GetNextAvailablePlayerIndex() = 0;
+
+	/**
+	 * Gets the first index that hasn't yet been assigned to any party.
+	 *
+	 * @return
+	 *	The next available party index.
+	 */
+	virtual int32 GetNextAvailablePartyIndex() = 0;
 
 	/**
 	 * Gets the current play mode for all characters in the loaded level.
