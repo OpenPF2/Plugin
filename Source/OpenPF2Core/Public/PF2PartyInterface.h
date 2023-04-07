@@ -106,6 +106,17 @@ public:
 	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetMemberCharacters() const = 0;
 
 	/**
+	 * Gets the bounds and absolute world position of a bounding box encompassing all party members.
+	 *
+	 * @param CenterPoint
+	 *   A reference to the point at the center of the party.
+	 * @param BoxExtent
+	 *   The bounds of an imaginary box that encompasses the party.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Parties")
+	virtual void GetBounds(FVector& CenterPoint, FVector& BoxExtent) = 0;
+
+	/**
 	 * Adds the player having the specified player controller to this party.
 	 *
 	 * @param Controller

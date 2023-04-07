@@ -102,6 +102,9 @@ public:
 	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetMemberCharacters() const override;
 
 	UFUNCTION(BlueprintCallable)
+	virtual void GetBounds(FVector& CenterPoint, FVector& BoxExtent) override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual void AddPlayerToPartyByController(const TScriptInterface<IPF2PlayerControllerInterface>& Controller) override;
 
 	UFUNCTION(BlueprintCallable)
