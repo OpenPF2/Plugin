@@ -118,25 +118,25 @@ protected:
 	}
 
 	/**
-	 * Gets the first index that hasn't yet been assigned to any other player.
+	 * Generates a new, unassigned index for a player.
 	 *
 	 * @return
-	 *	The next available player index.
+	 *	The next player index.
 	 */
-	FORCEINLINE int32 GetNextAvailablePlayerIndex() const
+	FORCEINLINE int32 GeneratePlayerIndex() const
 	{
-		return this->GetGameStateIntf()->GetNextAvailablePlayerIndex();
+		return this->GetGameStateIntf()->GeneratePlayerIndex();
 	}
 
 	/**
-	 * Gets the first index that hasn't yet been assigned to any other party.
+	 * Generates a new, unassigned index for a party.
 	 *
 	 * @return
-	 *	The next available party index.
+	 *	The next party index.
 	 */
-	FORCEINLINE int32 GetNextAvailablePartyIndex() const
+	FORCEINLINE int32 GeneratePartyIndex() const
 	{
-		return this->GetGameStateIntf()->GetNextAvailablePartyIndex();
+		return this->GetGameStateIntf()->GeneratePartyIndex();
 	}
 
 	/**

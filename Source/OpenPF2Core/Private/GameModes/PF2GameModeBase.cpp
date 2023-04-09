@@ -340,7 +340,7 @@ void APF2GameModeBase::AssignPlayerIndex(const APlayerController* PlayerControll
 
 	if (PlayerStateIntf != nullptr)
 	{
-		const uint8 NextPlayerIndex = this->GetNextAvailablePlayerIndex();
+		const uint8 NextPlayerIndex = this->GeneratePlayerIndex();
 
 		PlayerStateIntf->SetPlayerIndex(NextPlayerIndex);
 	}

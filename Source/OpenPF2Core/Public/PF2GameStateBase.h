@@ -80,12 +80,12 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2GameStateInterface Implementation
 	// =================================================================================================================
-	virtual FORCEINLINE int32 GetNextAvailablePlayerIndex() override
+	virtual FORCEINLINE int32 GeneratePlayerIndex() override
 	{
 		return this->NextPlayerIndex++;
 	}
 
-	virtual FORCEINLINE int32 GetNextAvailablePartyIndex() override
+	virtual FORCEINLINE int32 GeneratePartyIndex() override
 	{
 		return this->NextPartyIndex++;
 	}
