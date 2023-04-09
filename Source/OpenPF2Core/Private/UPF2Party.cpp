@@ -168,6 +168,11 @@ FString APF2Party::GetIdForLogs() const
 	);
 }
 
+void APF2Party::SetPartyIndex(const int32 NewPartyIndex)
+{
+	this->PartyIndex = NewPartyIndex;
+}
+
 void APF2Party::Native_OnPlayerAdded(const TScriptInterface<IPF2PlayerStateInterface>& PlayerState)
 {
 	check(PlayerState != nullptr);

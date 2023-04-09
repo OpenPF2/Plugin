@@ -18,6 +18,14 @@
 
 #include "PF2GameModeBase.generated.h"
 
+// =====================================================================================================================
+// Forward Declarations (to minimize header dependencies)
+// =====================================================================================================================
+class APF2Party;
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 /**
  * Default base class for OpenPF2 Game Modes.
  *
@@ -118,6 +126,15 @@ protected:
 	}
 
 	/**
+	 * Gets the active Mode of Play Rule Set (MoPRS) from the game state.
+	 *
+	 * @return
+	 *	The active MoPRS, wrapped in a script interface (for Blueprint). If there is not a compatible game state loaded,
+	 *	or there is no active MoPRS, the script interface wraps nullptr.
+	 */
+	virtual TScriptInterface<IPF2ModeOfPlayRuleSetInterface> GetModeOfPlayRuleSet();
+
+	/**
 	 * Generates a new, unassigned index for a player.
 	 *
 	 * @return
@@ -140,21 +157,24 @@ protected:
 	}
 
 	/**
-	 * Gets the active Mode of Play Rule Set (MoPRS) from the game state.
-	 *
-	 * @return
-	 *	The active MoPRS, wrapped in a script interface (for Blueprint). If there is not a compatible game state loaded,
-	 *	or there is no active MoPRS, the script interface wraps nullptr.
-	 */
-	virtual TScriptInterface<IPF2ModeOfPlayRuleSetInterface> GetModeOfPlayRuleSet();
-
-	/**
 	 * Assigns the specified player controller a new, unused player index.
 	 *
 	 * @param PlayerController
 	 *	The player controller that will be assigned a distinct player index.
 	 */
 	void AssignPlayerIndex(const APlayerController* PlayerController) const;
+
+	/**
+	 * Spawns a new party instance and assigns it a party index.
+	 *
+	 * @param PartyType
+	 *	The specific type of party to generate.
+	 *
+	 * @return
+	 *	The new party instance.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Mode")
+	APF2Party* SpawnParty(TSubclassOf<APF2Party> PartyType);
 
 	/**
 	 * Attempts to change the current play mode for all characters in the loaded level.

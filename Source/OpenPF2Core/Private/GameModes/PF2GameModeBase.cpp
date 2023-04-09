@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -13,6 +13,7 @@
 #include "PF2CharacterInterface.h"
 #include "PF2GameStateInterface.h"
 #include "PF2OwnerTrackingInterface.h"
+#include "PF2Party.h"
 #include "PF2PartyInterface.h"
 #include "PF2PlayerStateInterface.h"
 
@@ -344,6 +345,16 @@ void APF2GameModeBase::AssignPlayerIndex(const APlayerController* PlayerControll
 
 		PlayerStateIntf->SetPlayerIndex(NextPlayerIndex);
 	}
+}
+
+// ReSharper disable once CppUE4BlueprintCallableFunctionMayBeConst
+APF2Party* APF2GameModeBase::SpawnParty(const TSubclassOf<APF2Party> PartyType)
+{
+	APF2Party* Party = this->GetWorld()->SpawnActor<APF2Party>(PartyType);
+
+	Party->SetPartyIndex(this->GeneratePartyIndex());
+
+	return Party;
 }
 
 void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeOfPlay)
