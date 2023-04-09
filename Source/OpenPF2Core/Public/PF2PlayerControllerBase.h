@@ -144,7 +144,7 @@ protected:
 	 *	- If there are characters to control: The active character.
 	 */
 	UFUNCTION(BlueprintPure, Category="OpenPF2|Player Controllers")
-	TScriptInterface<IPF2CharacterInterface> GetActiveCharacter() const;
+	TScriptInterface<IPF2CharacterInterface> GetControlledCharacter() const;
 
 	// =================================================================================================================
 	// Protected Native Event Callbacks

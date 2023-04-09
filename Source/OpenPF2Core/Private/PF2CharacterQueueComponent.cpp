@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -12,7 +12,7 @@
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
-UPF2CharacterQueueComponent::UPF2CharacterQueueComponent(): ActiveCharacterIndex(0)
+UPF2CharacterQueueComponent::UPF2CharacterQueueComponent(): ControlledCharacterIndex(0)
 {
 	this->SetIsReplicatedByDefault(true);
 }
@@ -22,12 +22,12 @@ void UPF2CharacterQueueComponent::GetLifetimeReplicatedProps(TArray<FLifetimePro
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UPF2CharacterQueueComponent, Queue);
-	DOREPLIFETIME(UPF2CharacterQueueComponent, ActiveCharacterIndex);
+	DOREPLIFETIME(UPF2CharacterQueueComponent, ControlledCharacterIndex);
 }
 
-TScriptInterface<IPF2CharacterInterface> UPF2CharacterQueueComponent::GetActiveCharacter() const
+TScriptInterface<IPF2CharacterInterface> UPF2CharacterQueueComponent::GetControlledCharacter() const
 {
-	return this->ActiveCharacter;
+	return this->ControlledCharacter;
 }
 
 void UPF2CharacterQueueComponent::Add(const TScriptInterface<IPF2CharacterInterface> Character)
@@ -92,7 +92,7 @@ TScriptInterface<IPF2CharacterInterface> UPF2CharacterQueueComponent::PreviousCh
 	{
 		uint8 NewCharacterIndex;
 
-		if (this->ActiveCharacterIndex == 0)
+		if (this->ControlledCharacterIndex == 0)
 		{
 			// We're already at the start, so restart with the character at the end of the queue.
 			NewCharacterIndex = this->GetMaxIndex();
@@ -100,13 +100,13 @@ TScriptInterface<IPF2CharacterInterface> UPF2CharacterQueueComponent::PreviousCh
 		else
 		{
 			// We're not yet at the start, so just jump back one character in the queue.
-			NewCharacterIndex = this->ActiveCharacterIndex - 1;
+			NewCharacterIndex = this->ControlledCharacterIndex - 1;
 		}
 
-		this->SetActiveCharacterIndex(NewCharacterIndex);
+		this->SetControlledCharacterIndex(NewCharacterIndex);
 	}
 
-	return this->GetActiveCharacter();
+	return this->GetControlledCharacter();
 }
 
 TScriptInterface<IPF2CharacterInterface> UPF2CharacterQueueComponent::NextCharacter()
@@ -116,7 +116,7 @@ TScriptInterface<IPF2CharacterInterface> UPF2CharacterQueueComponent::NextCharac
 	{
 		uint8 NewCharacterIndex;
 
-		if (this->ActiveCharacterIndex == this->GetMaxIndex())
+		if (this->ControlledCharacterIndex == this->GetMaxIndex())
 		{
 			// We're already at the end, so restart with the character at the start of the queue.
 			NewCharacterIndex = 0;
@@ -124,13 +124,13 @@ TScriptInterface<IPF2CharacterInterface> UPF2CharacterQueueComponent::NextCharac
 		else
 		{
 			// We're not yet at the end, so just jump forward one character in the queue.
-			NewCharacterIndex = this->ActiveCharacterIndex + 1;
+			NewCharacterIndex = this->ControlledCharacterIndex + 1;
 		}
 
-		this->SetActiveCharacterIndex(NewCharacterIndex);
+		this->SetControlledCharacterIndex(NewCharacterIndex);
 	}
 
-	return this->GetActiveCharacter();
+	return this->GetControlledCharacter();
 }
 
 TArray<TScriptInterface<IPF2CharacterInterface>> UPF2CharacterQueueComponent::ToArray() const
@@ -167,18 +167,18 @@ FString UPF2CharacterQueueComponent::GetIdForLogs() const
 	);
 }
 
-void UPF2CharacterQueueComponent::SetActiveCharacterIndex(const uint8 NewActiveCharacterIndex)
+void UPF2CharacterQueueComponent::SetControlledCharacterIndex(const uint8 NewControlledCharacterIndex)
 {
-	check(NewActiveCharacterIndex < this->Count());
+	check(NewControlledCharacterIndex < this->Count());
 
-	this->ActiveCharacterIndex = NewActiveCharacterIndex;
+	this->ControlledCharacterIndex = NewControlledCharacterIndex;
 
-	this->UpdateActiveCharacter();
+	this->UpdateControlledCharacter();
 }
 
-void UPF2CharacterQueueComponent::UpdateActiveCharacter()
+void UPF2CharacterQueueComponent::UpdateControlledCharacter()
 {
-	const TScriptInterface<IPF2CharacterInterface> OldCharacter = this->ActiveCharacter;
+	const TScriptInterface<IPF2CharacterInterface> OldCharacter = this->ControlledCharacter;
 	TScriptInterface<IPF2CharacterInterface>       NewCharacter;
 
 	if (this->Count() == 0)
@@ -188,15 +188,15 @@ void UPF2CharacterQueueComponent::UpdateActiveCharacter()
 	}
 	else
 	{
-		AActor*                 ActiveCharacterActor;
-		IPF2CharacterInterface* ActiveCharacterIntf;
+		AActor*                 ControlledCharacterActor;
+		IPF2CharacterInterface* ControlledCharacterIntf;
 
-		check(this->ActiveCharacterIndex < this->Count());
+		check(this->ControlledCharacterIndex < this->Count());
 
-		ActiveCharacterActor = this->Queue[this->ActiveCharacterIndex];
-		ActiveCharacterIntf  = Cast<IPF2CharacterInterface>(ActiveCharacterActor);
+		ControlledCharacterActor = this->Queue[this->ControlledCharacterIndex];
+		ControlledCharacterIntf  = Cast<IPF2CharacterInterface>(ControlledCharacterActor);
 
-		if (ActiveCharacterIntf == nullptr)
+		if (ControlledCharacterIntf == nullptr)
 		{
 			// BUGBUG: By the time we're here, this should definitely be an OpenPF2 character, but UE will sometimes
 			// replicate entries in this->ControllableCharacters as NULL.
@@ -204,15 +204,15 @@ void UPF2CharacterQueueComponent::UpdateActiveCharacter()
 		}
 		else
 		{
-			NewCharacter = PF2InterfaceUtilities::ToScriptInterface(ActiveCharacterIntf);
+			NewCharacter = PF2InterfaceUtilities::ToScriptInterface(ControlledCharacterIntf);
 		}
 	}
 
-	this->ActiveCharacter = NewCharacter;
+	this->ControlledCharacter = NewCharacter;
 
 	if (OldCharacter != NewCharacter)
 	{
-		this->Native_OnActiveCharacterChanged(OldCharacter, NewCharacter);
+		this->Native_OnControlledCharacterChanged(OldCharacter, NewCharacter);
 	}
 }
 
@@ -247,9 +247,9 @@ void UPF2CharacterQueueComponent::OnRep_CharacterQueue(const TArray<AActor*> Old
 	}
 }
 
-void UPF2CharacterQueueComponent::OnRep_ActiveCharacterIndex()
+void UPF2CharacterQueueComponent::OnRep_ControlledCharacterIndex()
 {
-	this->UpdateActiveCharacter();
+	this->UpdateControlledCharacter();
 }
 
 void UPF2CharacterQueueComponent::Native_OnCharactersChanged()
@@ -308,7 +308,7 @@ void UPF2CharacterQueueComponent::Native_OnCharacterAdded(
 		*(this->GetIdForLogs())
 	);
 
-	this->UpdateActiveCharacter();
+	this->UpdateControlledCharacter();
 	this->OnCharacterAdded.Broadcast(AddedCharacter);
 }
 
@@ -327,16 +327,16 @@ void UPF2CharacterQueueComponent::Native_OnCharacterRemoved(
 
 	// Ensure that we keep the active character cursor in bounds. If the character that was removed was the active
 	// character or a character prior to it, we move the active character index accordingly.
-	if (this->ActiveCharacterIndex >= RemovedIndex)
+	if (this->ControlledCharacterIndex >= RemovedIndex)
 	{
-		if (this->ActiveCharacterIndex == 0)
+		if (this->ControlledCharacterIndex == 0)
 		{
 			// The last item just got removed, so jump directly to notifying listeners.
-			this->UpdateActiveCharacter();
+			this->UpdateControlledCharacter();
 		}
 		else
 		{
-			this->SetActiveCharacterIndex(this->ActiveCharacterIndex - 1);
+			this->SetControlledCharacterIndex(this->ControlledCharacterIndex - 1);
 		}
 	}
 
@@ -344,7 +344,7 @@ void UPF2CharacterQueueComponent::Native_OnCharacterRemoved(
 }
 
 // ReSharper disable once CppMemberFunctionMayBeConst
-void UPF2CharacterQueueComponent::Native_OnActiveCharacterChanged(
+void UPF2CharacterQueueComponent::Native_OnControlledCharacterChanged(
 	const TScriptInterface<IPF2CharacterInterface>& OldCharacter,
 	const TScriptInterface<IPF2CharacterInterface>& NewCharacter)
 {
@@ -358,5 +358,5 @@ void UPF2CharacterQueueComponent::Native_OnActiveCharacterChanged(
 		*((NewCharacter != nullptr) ? NewCharacter->GetIdForLogs() : "null")
 	);
 
-	this->OnActiveCharacterChanged.Broadcast(OldCharacter, NewCharacter);
+	this->OnControlledCharacterChanged.Broadcast(OldCharacter, NewCharacter);
 }

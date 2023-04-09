@@ -46,7 +46,7 @@ public:
 	 *		- If the queue is not empty: a valid character reference.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Player Controllers|Character Queues")
-	virtual TScriptInterface<IPF2CharacterInterface> GetActiveCharacter() const = 0;
+	virtual TScriptInterface<IPF2CharacterInterface> GetControlledCharacter() const = 0;
 
 	/**
 	 * Adds a character to the end of the queue.

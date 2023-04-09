@@ -40,7 +40,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
  * Delegate for Blueprints to react to a change in active character.
  */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
-	FPF2ActiveCharacterChangedDelegate,
+	FPF2ControlledCharacterChangedDelegate,
 	const TScriptInterface<IPF2CharacterInterface>&, OldCharacter,
 	const TScriptInterface<IPF2CharacterInterface>&, NewCharacter
 );
@@ -79,19 +79,19 @@ protected:
 	 *
 	 * This is often referred to as the "cursor" for this queue.
 	 */
-	UPROPERTY(ReplicatedUsing=OnRep_ActiveCharacterIndex)
-	uint8 ActiveCharacterIndex;
+	UPROPERTY(ReplicatedUsing=OnRep_ControlledCharacterIndex)
+	uint8 ControlledCharacterIndex;
 
 	/**
 	 * A locally cached copy of which character is currently active.
 	 *
-	 * This is NOT replicated; instead, it is derived from the value of ActiveCharacterIndex, which is replicated, and
-	 * gets updated by UpdateActiveCharacter().
+	 * This is NOT replicated; instead, it is derived from the value of ControlledCharacterIndex, which is replicated, and
+	 * gets updated by UpdateControlledCharacter().
 	 *
-	 * @see UpdateActiveCharacter()
+	 * @see UpdateControlledCharacter()
 	 */
 	UPROPERTY()
-	TScriptInterface<IPF2CharacterInterface> ActiveCharacter;
+	TScriptInterface<IPF2CharacterInterface> ControlledCharacter;
 
 public:
 	// =================================================================================================================
@@ -127,7 +127,7 @@ public:
 	 * If replication is enabled for this component, this is invoked on both the owning client and the server.
 	 */
 	UPROPERTY(BlueprintAssignable)
-	FPF2ActiveCharacterChangedDelegate OnActiveCharacterChanged;
+	FPF2ControlledCharacterChangedDelegate OnControlledCharacterChanged;
 
 	// =================================================================================================================
 	// Public Constructors
@@ -146,7 +146,7 @@ public:
 	// Public Methods - IPF2CharacterQueueInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
-	virtual TScriptInterface<IPF2CharacterInterface> GetActiveCharacter() const override;
+	virtual TScriptInterface<IPF2CharacterInterface> GetControlledCharacter() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void Add(TScriptInterface<IPF2CharacterInterface> Character) override;
@@ -204,17 +204,17 @@ protected:
 	/**
 	 * Sets the active character index to the specified value, notifying listeners in the process.
 	 *
-	 * @param NewActiveCharacterIndex
+	 * @param NewControlledCharacterIndex
 	 *   The new value for the active character index.
 	 */
-	void SetActiveCharacterIndex(const uint8 NewActiveCharacterIndex);
+	void SetControlledCharacterIndex(const uint8 NewControlledCharacterIndex);
 
 	/**
 	 * Updates the locally cached active character reference.
 	 *
 	 * If this actually results in a change to the reference, event listeners are notified.
 	 */
-	void UpdateActiveCharacter();
+	void UpdateControlledCharacter();
 
 	// =================================================================================================================
 	// Protected Replication Callbacks
@@ -232,7 +232,7 @@ protected:
 	 * Notifies this component that which character is active has been replicated.
 	 */
 	UFUNCTION()
-	void OnRep_ActiveCharacterIndex();
+	void OnRep_ControlledCharacterIndex();
 
 	// =================================================================================================================
 	// Protected Native Event Callbacks
@@ -277,6 +277,6 @@ protected:
 	 * @param NewCharacter
 	 *	The character that is now active in the queue.
 	 */
-	void Native_OnActiveCharacterChanged(const TScriptInterface<IPF2CharacterInterface>& OldCharacter,
-	                                     const TScriptInterface<IPF2CharacterInterface>& NewCharacter);
+	void Native_OnControlledCharacterChanged(const TScriptInterface<IPF2CharacterInterface>& OldCharacter,
+	                                         const TScriptInterface<IPF2CharacterInterface>& NewCharacter);
 };

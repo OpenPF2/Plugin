@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -384,9 +384,9 @@ TScriptInterface<IPF2CharacterQueueInterface> APF2PlayerControllerBase::GetChara
 	return this->ControllableCharacterQueue;
 }
 
-TScriptInterface<IPF2CharacterInterface> APF2PlayerControllerBase::GetActiveCharacter() const
+TScriptInterface<IPF2CharacterInterface> APF2PlayerControllerBase::GetControlledCharacter() const
 {
-	return this->GetCharacterQueue()->GetActiveCharacter();
+	return this->GetCharacterQueue()->GetControlledCharacter();
 }
 
 void APF2PlayerControllerBase::Native_OnPlayerStateAvailable(
