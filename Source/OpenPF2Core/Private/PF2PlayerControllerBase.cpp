@@ -95,6 +95,11 @@ TArray<TScriptInterface<IPF2CharacterInterface>> APF2PlayerControllerBase::GetCo
 	return this->GetCharacterQueue()->ToArray();
 }
 
+TScriptInterface<IPF2CharacterInterface> APF2PlayerControllerBase::GetControlledCharacter() const
+{
+	return this->GetCharacterQueue()->GetControlledCharacter();
+}
+
 void APF2PlayerControllerBase::Native_OnPlayableCharactersStarting(
 	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet)
 {
@@ -382,11 +387,6 @@ FString APF2PlayerControllerBase::GetIdForLogs() const
 TScriptInterface<IPF2CharacterQueueInterface> APF2PlayerControllerBase::GetCharacterQueue() const
 {
 	return this->ControllableCharacterQueue;
-}
-
-TScriptInterface<IPF2CharacterInterface> APF2PlayerControllerBase::GetControlledCharacter() const
-{
-	return this->GetCharacterQueue()->GetControlledCharacter();
 }
 
 void APF2PlayerControllerBase::Native_OnPlayerStateAvailable(

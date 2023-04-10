@@ -87,6 +87,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetControllableCharacters() const override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual TScriptInterface<IPF2CharacterInterface> GetControlledCharacter() const override;
+
 	virtual void Native_OnPlayableCharactersStarting(TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet) override;
 
 	virtual void Native_OnModeOfPlayChanged(EPF2ModeOfPlayType NewMode) override;
@@ -133,18 +136,6 @@ protected:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
 	TScriptInterface<IPF2CharacterQueueInterface> GetCharacterQueue() const;
-
-	/**
-	 * Gets the character that this player is actively controlling.
-	 *
-	 * This can return nullptr if this player has no characters to control.
-	 *
-	 * @return
-	 *	- If there are no characters to control: A script interface wrapping a nullptr.
-	 *	- If there are characters to control: The active character.
-	 */
-	UFUNCTION(BlueprintPure, Category="OpenPF2|Player Controllers")
-	TScriptInterface<IPF2CharacterInterface> GetControlledCharacter() const;
 
 	// =================================================================================================================
 	// Protected Native Event Callbacks

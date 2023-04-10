@@ -74,6 +74,18 @@ public:
 	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetControllableCharacters() const = 0;
 
 	/**
+	 * Gets the character that the player is actively controlling.
+	 *
+	 * This can return nullptr if this player controller has no characters to control.
+	 *
+	 * @return
+	 *	- If there are no characters to control: A script interface wrapping a nullptr.
+	 *	- If there are characters to control: The active character.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
+	virtual TScriptInterface<IPF2CharacterInterface> GetControlledCharacter() const = 0;
+
+	/**
 	 * Gets the last target location that the player has chosen through the UI.
 	 *
 	 * @return
