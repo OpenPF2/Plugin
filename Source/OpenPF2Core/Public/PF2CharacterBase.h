@@ -1,4 +1,4 @@
-// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -529,7 +529,13 @@ public:
 	                                     const struct FGameplayTagContainer* EventTags,
 	                                     const FHitResult                    HitInfo) override;
 
-	virtual void Native_OnHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags) override;
+	virtual void Native_OnHitPointsChanged(const float                  Delta,
+	                                       const float                  NewValue,
+	                                       const FGameplayTagContainer* EventTags) override;
+
+	virtual void Native_OnSpeedChanged(const float                  Delta,
+	                                   const float                  NewValue,
+	                                   const FGameplayTagContainer* EventTags) override;
 
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void Multicast_OnEncounterTurnStarted() override;
@@ -698,6 +704,8 @@ protected:
 	 *
 	 * @param Delta
 	 *	The amount that the character's hit points have changed.
+	 * @param NewValue
+	 *	The new amount of hit points after the change.
 	 * @param EventTags
 	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to hit points.
 	 */
@@ -706,7 +714,28 @@ protected:
 		Category="OpenPF2|Characters",
 		meta=(DisplayName="On Hit Points Changed")
 	)
-	void BP_OnHitPointsChanged(float Delta, const struct FGameplayTagContainer& EventTags);
+	void BP_OnHitPointsChanged(const float                         Delta,
+	                           const float                         NewValue,
+	                           const struct FGameplayTagContainer& EventTags);
+
+	/**
+	 * BP event invoked when this character's speed (i.e., how fast it can move during a stride) has changed.
+	 *
+	 * @param Delta
+	 *	The amount that the character's speed has changed.
+	 * @param NewValue
+	 *	The new amount of speed after the change.
+	 * @param EventTags
+	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to speed.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Characters",
+		meta=(DisplayName="On Speed Changed")
+	)
+	void BP_OnSpeedChanged(const float                  Delta,
+	                       const float                  NewValue,
+	                       const FGameplayTagContainer& EventTags);
 };
 
 /**

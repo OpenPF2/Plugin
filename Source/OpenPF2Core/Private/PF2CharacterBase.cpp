@@ -1,4 +1,4 @@
-// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -303,7 +303,9 @@ void APF2CharacterBase::Native_OnDamageReceived(const float                  Dam
 	);
 }
 
-void APF2CharacterBase::Native_OnHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags)
+void APF2CharacterBase::Native_OnHitPointsChanged(const float                  Delta,
+                                                  const float                  NewValue,
+                                                  const FGameplayTagContainer* EventTags)
 {
 	if ((this->AbilitySystemComponent == nullptr) ||
 		!this->GetCharacterAbilitySystemComponent()->ArePassiveGameplayEffectsActive())
@@ -312,7 +314,21 @@ void APF2CharacterBase::Native_OnHitPointsChanged(const float Delta, const FGame
 		return;
 	}
 
-	this->BP_OnHitPointsChanged(Delta, *EventTags);
+	this->BP_OnHitPointsChanged(Delta, NewValue, *EventTags);
+}
+
+void APF2CharacterBase::Native_OnSpeedChanged(const float                  Delta,
+                                              const float                  NewValue,
+                                              const FGameplayTagContainer* EventTags)
+{
+	if ((this->AbilitySystemComponent == nullptr) ||
+		!this->GetCharacterAbilitySystemComponent()->ArePassiveGameplayEffectsActive())
+	{
+		// Stats are not presently initialized, so bail out to avoid firing off during initialization.
+		return;
+	}
+
+	this->BP_OnSpeedChanged(Delta, NewValue, *EventTags);
 }
 
 void APF2CharacterBase::Multicast_OnEncounterTurnStarted_Implementation()

@@ -1,4 +1,4 @@
-// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -980,4 +980,22 @@ protected:
 	                               const FGameplayEffectContextHandle Context,
 	                               const float                        ValueDelta,
 	                               const FGameplayTagContainer*       EventTags);
+
+	/**
+	 * Notifies this ASC that the speed attribute has changed.
+	 *
+	 * @param TargetCharacter
+	 *	The character receiving the speed change. This is usually the same as the character who owns this ASC.
+	 * @param Context
+	 *	Wrapper around the context of the Gameplay Effect activation.
+	 * @param ValueDelta
+	 *	The amount of the change.
+	 * @param EventTags
+	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to speed.
+	 */
+	void Native_OnSpeedChanged(IPF2CharacterInterface*            TargetCharacter,
+	                           const FGameplayEffectContextHandle Context,
+	                           const float                        ValueDelta,
+	                           const FGameplayTagContainer*       EventTags);
+
 };

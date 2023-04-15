@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -289,11 +289,32 @@ public:
 	 * stats. Once invoked, this method fires off appropriate callbacks into the character's Blueprint event graph.
 	 *
 	 * @param Delta
-	 *	The amount that the character's hit points should change.
+	 *	The amount that the character's hit points have changed.
+	 * @param NewValue
+	 *	The new amount of hit points after the change.
 	 * @param EventTags
 	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to hit points.
 	 */
-	virtual void Native_OnHitPointsChanged(const float Delta, const FGameplayTagContainer* EventTags) = 0;
+	virtual void Native_OnHitPointsChanged(const float                  Delta,
+	                                       const float                  NewValue,
+	                                       const FGameplayTagContainer* EventTags) = 0;
+
+	/**
+	 * Notifies this character that its speed (i.e., how fast it can move during a stride) has changed.
+	 *
+	 * This should only be invoked by the character's attribute set. This does NOT actually modify the character's
+	 * stats. Once invoked, this method fires off appropriate callbacks into the character's Blueprint event graph.
+	 *
+	 * @param Delta
+	 *	The amount that the character's speed has changed.
+	 * @param NewValue
+	 *	The new amount of speed after the change.
+	 * @param EventTags
+	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to hit points.
+	 */
+	virtual void Native_OnSpeedChanged(const float                  Delta,
+	                                   const float                  NewValue,
+	                                   const FGameplayTagContainer* EventTags) = 0;
 
 	// =================================================================================================================
 	// Public Event Notifications from Mode of Play Rule Sets (MoPRS)

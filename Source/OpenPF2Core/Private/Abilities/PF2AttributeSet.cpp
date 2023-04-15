@@ -1,4 +1,4 @@
-// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -528,6 +528,10 @@ void UPF2AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 	{
 		this->Native_OnHitPointsChanged(TargetCharacter, Context, ValueDelta, EventTags);
 	}
+	else if (Data.EvaluatedData.Attribute == this->GetSpeedAttribute())
+	{
+		this->Native_OnSpeedChanged(TargetCharacter, Context, ValueDelta, EventTags);
+	}
 }
 
 void UPF2AttributeSet::Native_OnDamageIncomingChanged(IPF2CharacterInterface*            TargetCharacter,
@@ -585,7 +589,7 @@ void UPF2AttributeSet::Native_OnDamageIncomingChanged(IPF2CharacterInterface*   
 			}
 
 			TargetCharacter->Native_OnDamageReceived(LocalDamage, Instigator, DamageSource, EventTags, HitResult);
-			TargetCharacter->Native_OnHitPointsChanged(-LocalDamage, EventTags);
+			TargetCharacter->Native_OnHitPointsChanged(-LocalDamage, NewHitPoints, EventTags);
 		}
 	}
 }
@@ -601,6 +605,21 @@ void UPF2AttributeSet::Native_OnHitPointsChanged(IPF2CharacterInterface*        
 
 	if (TargetCharacter != nullptr)
 	{
-		TargetCharacter->Native_OnHitPointsChanged(ValueDelta, EventTags);
+		TargetCharacter->Native_OnHitPointsChanged(ValueDelta, ClampedHitPoints, EventTags);
+	}
+}
+
+void UPF2AttributeSet::Native_OnSpeedChanged(IPF2CharacterInterface*            TargetCharacter,
+                                             const FGameplayEffectContextHandle Context,
+                                             const float                        ValueDelta,
+                                             const FGameplayTagContainer*       EventTags)
+{
+	const float ClampedSpeed = FMath::Clamp(this->GetSpeed(), 0.0f, this->GetMaxSpeed());
+
+	this->SetSpeed(ClampedSpeed);
+
+	if (TargetCharacter != nullptr)
+	{
+		TargetCharacter->Native_OnSpeedChanged(ValueDelta, ClampedSpeed, EventTags);
 	}
 }
