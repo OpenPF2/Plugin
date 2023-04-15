@@ -6,6 +6,9 @@
 #include "PF2CharacterBase.h"
 
 #include <AbilitySystemGlobals.h>
+
+#include <GameFramework/CharacterMovementComponent.h>
+
 #include <Net/UnrealNetwork.h>
 #include <UObject/ConstructorHelpers.h>
 
@@ -321,11 +324,20 @@ void APF2CharacterBase::Native_OnSpeedChanged(const float                  Delta
                                               const float                  NewValue,
                                               const FGameplayTagContainer* EventTags)
 {
+	UCharacterMovementComponent* MovementComponent;
+
 	if ((this->AbilitySystemComponent == nullptr) ||
 		!this->GetCharacterAbilitySystemComponent()->ArePassiveGameplayEffectsActive())
 	{
 		// Stats are not presently initialized, so bail out to avoid firing off during initialization.
 		return;
+	}
+
+	MovementComponent = this->GetCharacterMovement();
+
+	if (IsValid(MovementComponent))
+	{
+		MovementComponent->MaxWalkSpeed = NewValue;
 	}
 
 	this->BP_OnSpeedChanged(Delta, NewValue, *EventTags);
