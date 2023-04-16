@@ -945,10 +945,10 @@ public:
 
 protected:
 	/**
-	 * Notifies this ASC that the incoming damage attribute has changed.
+	 * Notifies this ASC that the incoming damage attribute has been changed (typically by a Gameplay Effect).
 	 *
-	 * This updates the character's hit points appropriately, and then dispatches appropriate damage notifications to
-	 * the character.
+	 * This is called after the change has already occurred. This clamps the value to the allowed range and then
+	 * dispatches appropriate damage notifications to the character.
 	 *
 	 * @param TargetCharacter
 	 *	The character receiving the damage. This is usually the same as the character who owns this ASC.
@@ -965,7 +965,10 @@ protected:
 	                                    const FGameplayTagContainer*       EventTags);
 
 	/**
-	 * Notifies this ASC that the hit points attribute has changed.
+	 * Notifies this ASC that the hit points attribute has been changed (typically by a Gameplay Effect).
+	 *
+	 * This is called after the change has already occurred. This clamps the value to the allowed range and then
+	 * dispatches appropriate damage notifications to the character.
 	 *
 	 * @param TargetCharacter
 	 *	The character receiving the hit point change. This is usually the same as the character who owns this ASC.
@@ -982,7 +985,10 @@ protected:
 	                               const FGameplayTagContainer*       EventTags);
 
 	/**
-	 * Notifies this ASC that the speed attribute has changed.
+	 * Notifies this ASC that the speed attribute has been changed (typically by a Gameplay Effect).
+	 *
+	 * This is called after the change has already occurred. This clamps the value to the allowed range and then
+	 * dispatches appropriate damage notifications to the character.
 	 *
 	 * @param TargetCharacter
 	 *	The character receiving the speed change. This is usually the same as the character who owns this ASC.

@@ -539,25 +539,20 @@ void UPF2AttributeSet::Native_OnDamageIncomingChanged(IPF2CharacterInterface*   
                                                       const float                        ValueDelta,
                                                       const FGameplayTagContainer*       EventTags)
 {
-	const float LocalDamage = this->GetTmpDamageIncoming();
+	const float LocalDamage      = this->GetTmpDamageIncoming();
+	const float CurrentHitPoints = this->GetHitPoints();
 
 	if (LocalDamage > 0.0f)
 	{
-		const float OldHitPoints        = this->GetHitPoints();
-		const float CurrentMaxHitPoints = this->GetMaxHitPoints();
-		const float NewHitPoints        = FMath::Clamp(OldHitPoints - LocalDamage, 0.0f, CurrentMaxHitPoints);
-
 		this->SetTmpDamageIncoming(0.0f);
-		this->SetHitPoints(NewHitPoints);
 
 		UE_LOG(
 			LogPf2CoreStats,
 			VeryVerbose,
-			TEXT("Damage: %s - Old HitPoints: %f, Damage: %f, New HitPoints: %f"),
-			*(TargetCharacter->GetCharacterName().ToString()),
-			OldHitPoints,
-			LocalDamage,
-			NewHitPoints
+			TEXT("[%s] Incoming damage: Pre-damage hit points: '%f', Damage: '%f'"),
+			*(TargetCharacter->GetIdForLogs()),
+			CurrentHitPoints,
+			LocalDamage
 		);
 
 		if (TargetCharacter != nullptr)
@@ -589,8 +584,11 @@ void UPF2AttributeSet::Native_OnDamageIncomingChanged(IPF2CharacterInterface*   
 			}
 
 			TargetCharacter->Native_OnDamageReceived(LocalDamage, Instigator, DamageSource, EventTags, HitResult);
-			TargetCharacter->Native_OnHitPointsChanged(-LocalDamage, NewHitPoints, EventTags);
 		}
+
+		// We don't clamp hit points here; it gets clamped by Native_OnHitPointsChanged().
+		this->SetHitPoints(CurrentHitPoints - LocalDamage);
+		this->Native_OnHitPointsChanged(TargetCharacter, Context, -LocalDamage, EventTags);
 	}
 }
 
@@ -599,13 +597,38 @@ void UPF2AttributeSet::Native_OnHitPointsChanged(IPF2CharacterInterface*        
                                                  const float                        ValueDelta,
                                                  const FGameplayTagContainer*       EventTags)
 {
-	const float ClampedHitPoints = FMath::Clamp(this->GetHitPoints(), 0.0f, this->GetMaxHitPoints());
+	const float RawHitPoints     = this->GetHitPoints();
+	const float ClampedHitPoints = FMath::Clamp(RawHitPoints, 0.0f, this->GetMaxHitPoints());
 
-	this->SetHitPoints(ClampedHitPoints);
-
-	if (TargetCharacter != nullptr)
+	if (RawHitPoints != ClampedHitPoints)
 	{
-		TargetCharacter->Native_OnHitPointsChanged(ValueDelta, ClampedHitPoints, EventTags);
+		this->SetHitPoints(ClampedHitPoints);
+	}
+
+	if (ValueDelta == 0)
+	{
+		UE_LOG(
+			LogPf2CoreStats,
+			VeryVerbose,
+			TEXT("[%s] Stat. update (Hit Points): No change ('%f')."),
+			*(TargetCharacter->GetIdForLogs()),
+			ClampedHitPoints
+		);
+	}
+	else
+	{
+		UE_LOG(
+			LogPf2CoreStats,
+			VeryVerbose,
+			TEXT("[%s] Stat. update (Hit Points): Changed to '%f'."),
+			*(TargetCharacter->GetIdForLogs()),
+			ClampedHitPoints
+		);
+
+		if (TargetCharacter != nullptr)
+		{
+			TargetCharacter->Native_OnHitPointsChanged(ValueDelta, ClampedHitPoints, EventTags);
+		}
 	}
 }
 
@@ -614,12 +637,37 @@ void UPF2AttributeSet::Native_OnSpeedChanged(IPF2CharacterInterface*            
                                              const float                        ValueDelta,
                                              const FGameplayTagContainer*       EventTags)
 {
-	const float ClampedSpeed = FMath::Clamp(this->GetSpeed(), 0.0f, this->GetMaxSpeed());
+	const float RawSpeed     = this->GetSpeed();
+	const float ClampedSpeed = FMath::Clamp(RawSpeed, 0.0f, this->GetMaxSpeed());
 
-	this->SetSpeed(ClampedSpeed);
-
-	if (TargetCharacter != nullptr)
+	if (RawSpeed != ClampedSpeed)
 	{
-		TargetCharacter->Native_OnSpeedChanged(ValueDelta, ClampedSpeed, EventTags);
+		this->SetSpeed(ClampedSpeed);
+	}
+
+	if (ValueDelta == 0)
+	{
+		UE_LOG(
+			LogPf2CoreStats,
+			VeryVerbose,
+			TEXT("[%s] Stat. update (Speed): No change ('%f')."),
+			*(TargetCharacter->GetIdForLogs()),
+			ClampedSpeed
+		);
+	}
+	else
+	{
+		UE_LOG(
+			LogPf2CoreStats,
+			VeryVerbose,
+			TEXT("[%s] Stat. update (Speed): Changed to '%f'."),
+			*(TargetCharacter->GetIdForLogs()),
+			ClampedSpeed
+		);
+
+		if (TargetCharacter != nullptr)
+		{
+			TargetCharacter->Native_OnSpeedChanged(ValueDelta, ClampedSpeed, EventTags);
+		}
 	}
 }
