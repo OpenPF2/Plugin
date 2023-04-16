@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -195,6 +195,7 @@ void UPF2AbilityTask_AcquireTargetFromPlayerController::Native_OnTargetDataReady
 
 void UPF2AbilityTask_AcquireTargetFromPlayerController::Native_OnTargetDataNotAvailable()
 {
+	// TODO for later tickets: Implement.
 }
 
 void UPF2AbilityTask_AcquireTargetFromPlayerController::Native_OnTargetDataReplicatedFromClient(
@@ -203,7 +204,7 @@ void UPF2AbilityTask_AcquireTargetFromPlayerController::Native_OnTargetDataRepli
 {
 	UAbilitySystemComponent* Asc = this->GetNativeAbilitySystemComponent();
 
-	// TODO: Validate that the target is acceptable by server rules in order to prevent cheating
+	// TODO for later tickets: Validate that the target is acceptable by server rules in order to prevent cheating.
 
 	Asc->ConsumeClientReplicatedTargetData(
 		this->GetAbilitySpecHandle(),
@@ -216,4 +217,5 @@ void UPF2AbilityTask_AcquireTargetFromPlayerController::Native_OnTargetDataRepli
 
 void UPF2AbilityTask_AcquireTargetFromPlayerController::Native_OnTargetDataNotAvailableFromClient()
 {
+	// TODO for later tickets: Implement.
 }
