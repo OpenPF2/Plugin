@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -28,16 +28,19 @@ UWorld* UPF2AbilityExecutionFilterBase::GetWorld(const FPF2AbilityExecutionFilte
 TScriptInterface<IPF2GameStateInterface> UPF2AbilityExecutionFilterBase::GetGameState(
 	const FPF2AbilityExecutionFilterContext ExecutionContext)
 {
-	const UWorld* World = GetWorld(ExecutionContext);
+	TScriptInterface<IPF2GameStateInterface> Result;
+	const UWorld*                            World = GetWorld(ExecutionContext);
 
 	if (World == nullptr)
 	{
-		return TScriptInterface<IPF2GameStateInterface>(nullptr);
+		Result = TScriptInterface<IPF2GameStateInterface>(nullptr);
 	}
 	else
 	{
 		IPF2GameStateInterface* GameStateIntf = Cast<IPF2GameStateInterface>(World->GetGameState());
 
-		return PF2InterfaceUtilities::ToScriptInterface(GameStateIntf);
+		Result = PF2InterfaceUtilities::ToScriptInterface(GameStateIntf);
 	}
+
+	return Result;
 }
