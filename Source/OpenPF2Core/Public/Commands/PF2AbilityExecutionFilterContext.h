@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -91,10 +91,6 @@ public:
 	/**
 	 * Constructs a new instance.
 	 *
-	 * Commands are typically invoked by input from a player. If the ability being activated was triggered by input, the
-	 * TriggeredInputActionName should be equal to the name of the input; otherwise, this should be equal to an empty
-	 * FName.
-	 *
 	 * @param Character
 	 *	The character on which the ability will be invoked.
 	 * @param HandleOfAbilityToExecute
@@ -178,6 +174,14 @@ public:
 	}
 
 	/**
+	 * Stops activation of all later filters and abilities during this execution.
+	 */
+	FORCEINLINE void CancelActivation()
+	{
+		this->bProceed = false;
+	}
+
+	/**
 	 * Gets the ability that should be executed after all filters have fired.
 	 *
 	 * @return
@@ -231,13 +235,17 @@ public:
 	 */
 	FORCEINLINE UWorld* GetWorld() const
 	{
+		UWorld* World;
+
 		if (this->Character == nullptr)
 		{
-			return nullptr;
+			World = nullptr;
 		}
 		else
 		{
-			return this->Character->ToActor()->GetWorld();
+			World = this->Character->ToActor()->GetWorld();
 		}
+
+		return World;
 	}
 };
