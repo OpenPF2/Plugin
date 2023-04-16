@@ -91,29 +91,31 @@ void UPF2AbilityTask_AcquireTargetFromPlayerController::ExternalCancel()
 
 void UPF2AbilityTask_AcquireTargetFromPlayerController::WaitForTargetFromClient()
 {
-	if (ensure(IsPendingKill() == false))
+	const FGameplayAbilitySpecHandle SpecHandle              = this->GetAbilitySpecHandle();
+	const FPredictionKey             ActivationPredictionKey = this->GetActivationPredictionKey();
+	UAbilitySystemComponent*         Asc                     = this->GetNativeAbilitySystemComponent();
+
+	if (this->IsPendingKill())
 	{
-		const FGameplayAbilitySpecHandle SpecHandle              = this->GetAbilitySpecHandle();
-		const FPredictionKey             ActivationPredictionKey = this->GetActivationPredictionKey();
-		UAbilitySystemComponent*         Asc                     = this->GetNativeAbilitySystemComponent();
-
-		check(this->Ability != nullptr);
-		check(Asc);
-
-		Asc->AbilityTargetDataSetDelegate(SpecHandle, ActivationPredictionKey).AddUObject(
-			this,
-			&UPF2AbilityTask_AcquireTargetFromPlayerController::Native_OnTargetDataReplicatedFromClient
-		);
-
-		Asc->AbilityTargetDataCancelledDelegate(SpecHandle, ActivationPredictionKey).AddUObject(
-			this,
-			&UPF2AbilityTask_AcquireTargetFromPlayerController::Native_OnTargetDataNotAvailableFromClient
-		);
-
-		Asc->CallReplicatedTargetDataDelegatesIfSet(SpecHandle, ActivationPredictionKey);
-
-		this->SetWaitingOnRemotePlayerData();
+		return;
 	}
+
+	check(this->Ability != nullptr);
+	check(Asc);
+
+	Asc->AbilityTargetDataSetDelegate(SpecHandle, ActivationPredictionKey).AddUObject(
+		this,
+		&UPF2AbilityTask_AcquireTargetFromPlayerController::Native_OnTargetDataReplicatedFromClient
+	);
+
+	Asc->AbilityTargetDataCancelledDelegate(SpecHandle, ActivationPredictionKey).AddUObject(
+		this,
+		&UPF2AbilityTask_AcquireTargetFromPlayerController::Native_OnTargetDataNotAvailableFromClient
+	);
+
+	Asc->CallReplicatedTargetDataDelegatesIfSet(SpecHandle, ActivationPredictionKey);
+
+	this->SetWaitingOnRemotePlayerData();
 }
 
 void UPF2AbilityTask_AcquireTargetFromPlayerController::NotifyListenersAboutTarget(
