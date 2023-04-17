@@ -276,11 +276,11 @@ public:
 	 * @param HitInfo
 	 *	Hit result information, including who was hit and where the damage was inflicted.
 	 */
-    virtual void Native_OnDamageReceived(const float                  Damage,
-                                         IPF2CharacterInterface*      InstigatorCharacter,
-                                         AActor*                      DamageSource,
-                                         const FGameplayTagContainer* EventTags,
-                                         const FHitResult             HitInfo) = 0;
+	virtual void Native_OnDamageReceived(const float                  Damage,
+	                                     IPF2CharacterInterface*      InstigatorCharacter,
+	                                     AActor*                      DamageSource,
+	                                     const FGameplayTagContainer* EventTags,
+	                                     const FHitResult             HitInfo) = 0;
 
 	/**
 	 * Notifies this character that its hit points (i.e., health) have changed.
