@@ -13,16 +13,19 @@
 
 #include "PF2GameplayAbilityBase.generated.h"
 
+// =====================================================================================================================
+// Forward Declarations (to minimize header dependencies)
+// =====================================================================================================================
+class IPF2CharacterInterface;
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 /**
  * Abstract base class for OpenPF2-enabled gameplay abilities.
  *
- * GAs that extend from this base class automatically get ability queuing and de-queuing interactions for free.
- * If a GA supports waiting for initiative (i.e., action queueing while in an encounter), then this ability must be
- * instanced (instancing is required for ability tasks to work). It should additionally be configured as follows:
- * - If bShouldBlockWhenQueued is false, then the GA should be instanced per activation. Otherwise, the ability will
- *   still block.
- * - If bShouldBlockWhenQueued is true, then the GA can be instanced per actor or instanced per activation, since only
- *   one instance of it can be queued/active at a time per actor.
+ * GAs that extend from this base class automatically get the ability to expose an icon, label, and description, and
+ * support a default automatic binding to input.
  */
 UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal
@@ -89,4 +92,16 @@ public:
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
+
+protected:
+	// =================================================================================================================
+	// Protected Methods
+	// =================================================================================================================
+	/**
+	 * Gets the OpenPF2-compatible character to which this ability has been granted.
+	 *
+	 * May be null if this ability has been instantiated but not yet been granted to a character.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
+	TScriptInterface<IPF2CharacterInterface> GetOwningCharacterFromActorInfo() const;
 };

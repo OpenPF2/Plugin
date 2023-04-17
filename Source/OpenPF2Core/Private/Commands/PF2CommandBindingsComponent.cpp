@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -9,18 +9,46 @@
 
 #include <Components/InputComponent.h>
 
-#include <Net/UnrealNetwork.h>
-
 #include "PF2CharacterInterface.h"
 #include "PF2PlayerControllerInterface.h"
 
 #include "Abilities/PF2GameplayAbilityInterface.h"
 
+#include "Commands/PF2AbilityExecutionFilterContext.h"
+#include "Commands/PF2AbilityExecutionFilterInterface.h"
 #include "Commands/PF2CharacterCommand.h"
 #include "Commands/PF2CommandInputBinding.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
+
+bool UPF2CommandBindingsComponent::IsConsumingInput() const
+{
+	return this->bConsumeInput;
+}
+
+void UPF2CommandBindingsComponent::SetConsumeInput(const bool bNewValue)
+{
+	if (this->bConsumeInput != bNewValue)
+	{
+		const int32 BindingsCount = this->Bindings.Num();
+
+		if (BindingsCount == 0)
+		{
+			this->bConsumeInput = bNewValue;
+		}
+		else
+		{
+			UE_LOG(
+				LogPf2CoreInput,
+				Error,
+				TEXT("Command bindings component ('%s') already has '%d' bindings. The 'consume input' setting can only be changed before bindings have been added."),
+				*(this->GetIdForLogs()),
+				BindingsCount
+			);
+		}
+	}
+}
 
 void UPF2CommandBindingsComponent::ClearBindings()
 {
@@ -73,7 +101,7 @@ void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter()
 			DefaultAction = FName();
 		}
 
-		this->Bindings.Add(FPF2CommandInputBinding(DefaultAction, AbilitySpec, this));
+		this->Bindings.Add(FPF2CommandInputBinding(DefaultAction, AbilitySpec, this, this->IsConsumingInput()));
 	}
 
 	UE_LOG(
@@ -124,14 +152,92 @@ void UPF2CommandBindingsComponent::DisconnectFromInput()
 	}
 }
 
-void UPF2CommandBindingsComponent::ExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle)
+bool UPF2CommandBindingsComponent::FilterAbilityActivation(
+	const FName                                    InActionName,
+	const TScriptInterface<IPF2CharacterInterface> InCharacter,
+	FGameplayAbilitySpecHandle&                    InOutAbilitySpecHandle,
+	FGameplayEventData&                            InOutAbilityPayload)
 {
-	IPF2CharacterInterface*                               Character        = this->GetOwningCharacter();
-	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
+	FPF2AbilityExecutionFilterContext FilterContext =
+		FPF2AbilityExecutionFilterContext(InActionName, InCharacter, InOutAbilitySpecHandle, InOutAbilityPayload);
+
+	for (const TSubclassOf<UObject> FilterType : this->Filters)
+	{
+		TSubclassOf<UObject>::TBaseType*           RawFilter = FilterType.GetDefaultObject();
+		const IPF2AbilityExecutionFilterInterface* Filter    = Cast<IPF2AbilityExecutionFilterInterface>(RawFilter);
+
+		if (Filter == nullptr)
+		{
+			UE_LOG(
+				LogPf2CoreInput,
+				Error,
+				TEXT("Command bindings component ('%s') has a null ability execution filter."),
+				*(this->GetIdForLogs())
+			);
+		}
+		else
+		{
+			UE_LOG(
+				LogPf2CoreInput,
+				VeryVerbose,
+				TEXT("[%s] [%s] BEFORE applying filter ('%s') - Ability handle: %s."),
+				*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+				*(this->GetIdForLogs()),
+				*(Filter->GetIdForLogs()),
+				*(FilterContext.GetHandleOfAbilityToExecute().ToString())
+			);
+
+			FilterContext = Filter->Execute_FilterCommandActivation(RawFilter, FilterContext);
+
+			UE_LOG(
+				LogPf2CoreInput,
+				VeryVerbose,
+				TEXT("[%s] [%s] AFTER applying filter ('%s') - Proceed: %s, Ability handle: %s."),
+				*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+				*(this->GetIdForLogs()),
+				*(Filter->GetIdForLogs()),
+				(FilterContext.ShouldProceed() ? TEXT("true") : TEXT("false")),
+				*(FilterContext.GetHandleOfAbilityToExecute().ToString())
+			);
+
+			if (!FilterContext.ShouldProceed())
+			{
+				// The last filter vetoed execution, so let's call the whole thing off.
+				return false;
+			}
+		}
+	}
+
+	InOutAbilitySpecHandle = FilterContext.GetHandleOfAbilityToExecute();
+	InOutAbilityPayload    = FilterContext.GetAbilityPayload();
+
+	return true;
+}
+
+void UPF2CommandBindingsComponent::ExecuteBoundAbility(const FName                      ActionName,
+                                                       const FGameplayAbilitySpecHandle AbilitySpecHandle)
+{
+	IPF2CharacterInterface*                         CharacterIntf         = this->GetOwningCharacter();
+	TScriptInterface<IPF2CharacterInterface>        Character;
+	TScriptInterface<IPF2PlayerControllerInterface> PlayerController;
+	FGameplayAbilitySpecHandle                      FilteredAbilityHandle = AbilitySpecHandle;
+	FGameplayEventData                              FilteredAbilityPayload;
+
+	check(CharacterIntf != nullptr);
+
+	Character        = PF2InterfaceUtilities::ToScriptInterface(CharacterIntf);
+	PlayerController = CharacterIntf->GetPlayerController();
 
 	check(PlayerController != nullptr);
 
-	PlayerController->Server_ExecuteCharacterCommand(AbilitySpecHandle, Character->ToActor());
+	if (this->FilterAbilityActivation(ActionName, Character, FilteredAbilityHandle, FilteredAbilityPayload))
+	{
+		PlayerController->Server_ExecuteCharacterCommand(
+			FilteredAbilityHandle,
+			CharacterIntf->ToActor(),
+			FilteredAbilityPayload
+		);
+	}
 }
 
 UActorComponent* UPF2CommandBindingsComponent::ToActorComponent()

@@ -67,17 +67,17 @@ void UPF2CommandQueueComponent::PopNext(TScriptInterface<IPF2CharacterCommandInt
 {
 	if (this->Count() != 0)
 	{
-		IPF2CharacterCommandInterface* NextCommandIntf = Cast<IPF2CharacterCommandInterface>(this->Queue.Pop());
+		this->PeekNext(NextCommand);
 
 		UE_LOG(
 			LogPf2Core,
 			VeryVerbose,
 			TEXT("Popping command ('%s') from command queue ('%s')."),
-			*(NextCommandIntf->GetIdForLogs()),
+			*(NextCommand->GetIdForLogs()),
 			*(this->GetIdForLogs())
 		);
 
-		NextCommand = PF2InterfaceUtilities::ToScriptInterface(NextCommandIntf);
+		this->Queue.RemoveAt(0);
 
 		this->Native_OnCommandRemoved(NextCommand);
 		this->Native_OnCommandsChanged();
@@ -88,17 +88,21 @@ void UPF2CommandQueueComponent::DropNext()
 {
 	if (this->Count() != 0)
 	{
-		IPF2CharacterCommandInterface* NextCommandIntf = Cast<IPF2CharacterCommandInterface>(this->Queue.Pop());
+		TScriptInterface<IPF2CharacterCommandInterface> NextCommand;
+
+		this->PeekNext(NextCommand);
 
 		UE_LOG(
 			LogPf2Core,
 			VeryVerbose,
 			TEXT("Removing command ('%s') from command queue ('%s')."),
-			*(NextCommandIntf->GetIdForLogs()),
+			*(NextCommand->GetIdForLogs()),
 			*(this->GetIdForLogs())
 		);
 
-		this->Native_OnCommandRemoved(PF2InterfaceUtilities::ToScriptInterface(NextCommandIntf));
+		this->Queue.RemoveAt(0);
+
+		this->Native_OnCommandRemoved(NextCommand);
 		this->Native_OnCommandsChanged();
 	}
 }

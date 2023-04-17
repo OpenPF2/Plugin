@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -20,7 +20,7 @@
 #include "PF2GameStateInterface.generated.h"
 
 // =====================================================================================================================
-// Forward Declarations (to break recursive dependencies)
+// Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2CharacterInterface;
 class IPF2ModeOfPlayRuleSetInterface;
@@ -51,12 +51,20 @@ class OPENPF2CORE_API IPF2GameStateInterface
 
 public:
 	/**
-	 * Gets the first player index that hasn't yet been assigned to any player.
+	 * Generates a new, unassigned index for a player.
 	 *
 	 * @return
-	 *	The next available player index.
+	 *	The next player index.
 	 */
-	virtual int32 GetNextAvailablePlayerIndex() = 0;
+	virtual int32 GeneratePlayerIndex() = 0;
+
+	/**
+	 * Generates a new, unassigned index for a party.
+	 *
+	 * @return
+	 *	The next party index.
+	 */
+	virtual int32 GeneratePartyIndex() = 0;
 
 	/**
 	 * Gets the current play mode for all characters in the loaded level.

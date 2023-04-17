@@ -13,6 +13,8 @@
 #include "PF2CharacterInterface.h"
 #include "PF2PlayerStateInterface.h"
 
+#include "Abilities/PF2AbilitySystemInterface.h"
+
 AActor* UPF2ConversionsLibrary::Conv_CharacterIntfToActor(const TScriptInterface<IPF2CharacterInterface>& Character)
 {
 	if (Character == nullptr)
@@ -24,6 +26,21 @@ AActor* UPF2ConversionsLibrary::Conv_CharacterIntfToActor(const TScriptInterface
 	else
 	{
 		return Character->ToActor();
+	}
+}
+
+UAbilitySystemComponent* UPF2ConversionsLibrary::Conv_AscIntfToAsc(
+	const TScriptInterface<IPF2AbilitySystemInterface>& AscIntf)
+{
+	if (AscIntf == nullptr)
+	{
+		// This is neither an assertion error nor a logged error because Blueprints might use this conversion before a
+		// call to "Is valid?" or something that can accept a nullptr.
+		return nullptr;
+	}
+	else
+	{
+		return AscIntf->ToAbilitySystemComponent();
 	}
 }
 

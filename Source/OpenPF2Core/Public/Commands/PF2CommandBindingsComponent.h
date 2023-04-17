@@ -13,6 +13,12 @@
 #include "PF2CommandBindingsComponent.generated.h"
 
 // =====================================================================================================================
+// Forward Declarations (to minimize header dependencies)
+// =====================================================================================================================
+class IPF2AbilityExecutionFilterInterface;
+class UPF2AbilityExecutionFilterBase;
+
+// =====================================================================================================================
 // Delegate Declarations
 // =====================================================================================================================
 /**
@@ -39,7 +45,18 @@ class OPENPF2CORE_API UPF2CommandBindingsComponent : public UActorComponent, pub
 
 public:
 	// =================================================================================================================
-	// Public Properties - Multicast Delegates
+	// Public Fields
+	// =================================================================================================================
+	UPROPERTY(
+		EditDefaultsOnly,
+		meta=(MustImplement="PF2AbilityExecutionFilterInterface"),
+		DisplayName="Ability Execution Filters",
+		Category="OpenPF2 Command Bindings"
+	)
+	TArray<TSubclassOf<UObject>> Filters;
+
+	// =================================================================================================================
+	// Public Fields - Multicast Delegates
 	// =================================================================================================================
 	/**
 	 * Event fired when local input is connected to this component.
@@ -56,6 +73,17 @@ public:
 	 */
 	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Command Bindings")
 	FPF2CommandQueueInputConnectionChangedDelegate OnInputDisconnected;
+
+protected:
+	/**
+	 * Whether bindings managed by this component should consume the input when they fire.
+	 *
+	 * - If true, then matching inputs will be consumed by bindings, and a pawn or player controller will not be able to
+	 *   react to them.
+	 * - If false, then a pawn or player controller can react to the input action in addition to bindings handling them.
+	 */
+	UPROPERTY(EditAnywhere, BlueprintGetter=IsConsumingInput, BlueprintSetter=SetConsumeInput)
+	bool bConsumeInput;
 
 private:
 	/**
@@ -83,13 +111,19 @@ public:
 	/**
 	 * Default constructor for UPF2CommandBindingsComponent.
 	 */
-	explicit UPF2CommandBindingsComponent() : InputComponent(nullptr)
+	explicit UPF2CommandBindingsComponent() : bConsumeInput(true), InputComponent(nullptr)
 	{
 	}
 
 	// =================================================================================================================
 	// Public Methods - IPF2CommandBindingsInterface Implementation
 	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual bool IsConsumingInput() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void SetConsumeInput(const bool bNewValue) override;
+
 	UFUNCTION(BlueprintCallable)
 	virtual void ClearBindings() override;
 
@@ -102,7 +136,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void DisconnectFromInput() override;
 
-	virtual void ExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle) override;
+	virtual void ExecuteBoundAbility(const FName                      ActionName,
+	                                 const FGameplayAbilitySpecHandle AbilitySpecHandle) override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2ActorComponentInterface Implementation
@@ -151,6 +186,30 @@ protected:
 	 *	The character actor that owns this component.
 	 */
 	IPF2CharacterInterface* GetOwningCharacter() const;
+
+	/**
+	 * Applies ability execution filters to the activation of a bound ability.
+	 *
+	 * Filters may veto execution of the filter. If a filter does so, the result of this method will be "false".
+	 *
+	 * @param InActionName
+	 *	The name of the input action that was invoked.
+	 * @param InCharacter
+	 *	The character on which the action will be performed.
+	 * @param InOutAbilitySpecHandle
+	 *	The handle for the ability to activate. This will be modified by filter execution.
+	 * @param InOutAbilityPayload
+	 *	The payload to pass to the activated ability. This will be modified by filter execution.
+	 *
+	 * @return
+	 *	- "true" if the ability should proceed to be executed.
+	 *	- "false" if the ability should not be executed because the last filter executed vetoed it.
+	 */
+	bool FilterAbilityActivation(
+		const FName                                    InActionName,
+		const TScriptInterface<IPF2CharacterInterface> InCharacter,
+		FGameplayAbilitySpecHandle&                    InOutAbilitySpecHandle,
+		FGameplayEventData&                            InOutAbilityPayload);
 
 	// =================================================================================================================
 	// Protected Native Event Callbacks

@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -15,7 +15,7 @@
 #include "PF2PlayerControllerBase.generated.h"
 
 // =====================================================================================================================
-// Forward Declarations (to break recursive dependencies)
+// Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2CharacterCommandInterface;
 class IPF2CharacterInterface;
@@ -79,7 +79,16 @@ public:
 	virtual APlayerController* ToPlayerController() override;
 
 	UFUNCTION(BlueprintCallable)
+	virtual FHitResult GetTargetLocation() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void ClearTargetLocation() override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetControllableCharacters() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual TScriptInterface<IPF2CharacterInterface> GetControlledCharacter() const override;
 
 	virtual void Native_OnPlayableCharactersStarting(TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet) override;
 
@@ -91,9 +100,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter) override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual void ExecuteCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	                                     AActor*                          CharacterActor) override;
+
 	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
 	virtual void Server_ExecuteCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	                                            AActor*                          CharacterActor) override;
+	                                            AActor*                          CharacterActor,
+	                                            const FGameplayEventData         AbilityPayload) override;
 
 	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
 	virtual void Server_CancelCharacterCommand(AInfo* Command) override;
@@ -122,18 +136,6 @@ protected:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
 	TScriptInterface<IPF2CharacterQueueInterface> GetCharacterQueue() const;
-
-	/**
-	 * Gets the character that this player is actively controlling.
-	 *
-	 * This can return nullptr if this player has no characters to control.
-	 *
-	 * @return
-	 *	- If there are no characters to control: A script interface wrapping a nullptr.
-	 *	- If there are characters to control: The active character.
-	 */
-	UFUNCTION(BlueprintPure, Category="OpenPF2|Player Controllers")
-	TScriptInterface<IPF2CharacterInterface> GetActiveCharacter() const;
 
 	// =================================================================================================================
 	// Protected Native Event Callbacks
@@ -167,6 +169,22 @@ protected:
 	 */
 	UFUNCTION()
 	virtual void Native_OnCharacterReleased(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter);
+
+	// =================================================================================================================
+	// Blueprint Implementable Functions
+	// =================================================================================================================
+	/**
+	 * Gets the last target location that the player has chosen through the UI.
+	 *
+	 * @return
+	 *	The location in the map that the player has chosen for a target.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Player Controllers",
+		meta=(DisplayName="Get Target Location")
+	)
+	FHitResult BP_GetTargetLocation() const;
 
 	// =================================================================================================================
 	// Blueprint Implementable Events
@@ -256,4 +274,14 @@ protected:
 		meta=(DisplayName="On Encounter Turn Ended")
 	)
 	void BP_OnEncounterTurnEnded();
+
+	/**
+	 * BP event invoked when the last target location the player has chosen through the UI should be cleared.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Player Controllers",
+		meta=(DisplayName="On Clear Target Location", ForceAsFunction)
+	)
+	void BP_OnClearTargetLocation();
 };

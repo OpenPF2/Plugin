@@ -8,6 +8,10 @@
 
 #include "PF2PlayerStateBase.h"
 
+#include <GameFramework/GameSession.h>
+
+#include <Kismet/GameplayStatics.h>
+
 #include <Net/UnrealNetwork.h>
 
 #include "PF2CharacterInterface.h"
@@ -52,9 +56,44 @@ void APF2PlayerStateBase::SetParty(const TScriptInterface<IPF2PartyInterface> Ne
 
 TScriptInterface<IPF2PlayerControllerInterface> APF2PlayerStateBase::GetPlayerController() const
 {
-	IPF2PlayerControllerInterface* PlayerControllerIntf = Cast<IPF2PlayerControllerInterface>(this->GetOwner());
+	if (this->CachedPlayerController == nullptr)
+	{
+		UWorld*               World     = this->GetWorld();
+		const AGameStateBase* GameState = UGameplayStatics::GetGameState(World);
 
-	return PF2InterfaceUtilities::ToScriptInterface(PlayerControllerIntf);
+		if (GameState == nullptr)
+		{
+			UE_LOG(
+				LogPf2Core,
+				Error,
+				TEXT("No game state is available for player ('%s')."),
+				*(this->GetIdForLogs())
+			);
+		}
+		else
+		{
+			const FUniqueNetIdRepl         UniquePlayerId       = this->GetUniqueId();
+			APlayerController*             PlayerController     = GetPlayerControllerFromNetId(World, *UniquePlayerId);
+			IPF2PlayerControllerInterface* PlayerControllerIntf = Cast<IPF2PlayerControllerInterface>(PlayerController);
+
+			if (PlayerControllerIntf == nullptr)
+			{
+				UE_LOG(
+					LogPf2Core,
+					Error,
+					TEXT("Player ('%s') does not have an OpenPF2-compatible player controller (given '%s' as a player controller)."),
+					*(this->GetIdForLogs()),
+					*GetNameSafe(PlayerController)
+				);
+			}
+			else
+			{
+				this->CachedPlayerController = PF2InterfaceUtilities::ToScriptInterface(PlayerControllerIntf);
+			}
+		}
+	}
+
+	return this->CachedPlayerController;
 }
 
 bool APF2PlayerStateBase::IsSamePartyAsPlayerWithController(
@@ -114,7 +153,7 @@ void APF2PlayerStateBase::Native_OnPartyChanged(
 		UE_LOG(
 			LogPf2Core,
 			Verbose,
-			TEXT("Player ('%s') added to party ('%d')."),
+			TEXT("Player ('%s') added to party ('%s')."),
 			*(this->GetIdForLogs()),
 			*(NewParty->GetIdForLogs())
 		);

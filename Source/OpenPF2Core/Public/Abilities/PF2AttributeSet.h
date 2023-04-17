@@ -1,4 +1,4 @@
-// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -28,7 +28,7 @@
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
 // =====================================================================================================================
-// Forward Declarations (to break recursive dependencies)
+// Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2CharacterInterface;
 
@@ -945,10 +945,10 @@ public:
 
 protected:
 	/**
-	 * Notifies this ASC that the incoming damage attribute has changed.
+	 * Notifies this ASC that the incoming damage attribute has been changed (typically by a Gameplay Effect).
 	 *
-	 * This updates the character's hit points appropriately, and then dispatches appropriate damage notifications to
-	 * the character.
+	 * This is called after the change has already occurred. This clamps the value to the allowed range and then
+	 * dispatches appropriate damage notifications to the character.
 	 *
 	 * @param TargetCharacter
 	 *	The character receiving the damage. This is usually the same as the character who owns this ASC.
@@ -965,7 +965,10 @@ protected:
 	                                    const FGameplayTagContainer*       EventTags);
 
 	/**
-	 * Notifies this ASC that the hit points attribute has changed.
+	 * Notifies this ASC that the hit points attribute has been changed (typically by a Gameplay Effect).
+	 *
+	 * This is called after the change has already occurred. This clamps the value to the allowed range and then
+	 * dispatches appropriate damage notifications to the character.
 	 *
 	 * @param TargetCharacter
 	 *	The character receiving the hit point change. This is usually the same as the character who owns this ASC.
@@ -980,4 +983,25 @@ protected:
 	                               const FGameplayEffectContextHandle Context,
 	                               const float                        ValueDelta,
 	                               const FGameplayTagContainer*       EventTags);
+
+	/**
+	 * Notifies this ASC that the speed attribute has been changed (typically by a Gameplay Effect).
+	 *
+	 * This is called after the change has already occurred. This clamps the value to the allowed range and then
+	 * dispatches appropriate damage notifications to the character.
+	 *
+	 * @param TargetCharacter
+	 *	The character receiving the speed change. This is usually the same as the character who owns this ASC.
+	 * @param Context
+	 *	Wrapper around the context of the Gameplay Effect activation.
+	 * @param ValueDelta
+	 *	The amount of the change.
+	 * @param EventTags
+	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to speed.
+	 */
+	void Native_OnSpeedChanged(IPF2CharacterInterface*            TargetCharacter,
+	                           const FGameplayEffectContextHandle Context,
+	                           const float                        ValueDelta,
+	                           const FGameplayTagContainer*       EventTags);
+
 };

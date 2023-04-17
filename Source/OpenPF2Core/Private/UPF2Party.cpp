@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -6,6 +6,8 @@
 // Portions of this code were adapted from or inspired by the "Real-Time Strategy Plugin for Unreal Engine 4" by Nick
 // Pruehs, provided under the MIT License. Copyright (c) 2017 Nick Pruehs.
 //
+
+#include <Kismet/GameplayStatics.h>
 
 #include <Net/UnrealNetwork.h>
 
@@ -48,7 +50,7 @@ TArray<TScriptInterface<IPF2PlayerControllerInterface>> APF2Party::GetMemberCont
 {
 	return PF2ArrayUtilities::Map<TScriptInterface<IPF2PlayerControllerInterface>>(
 		this->GetMemberStates(),
-		[](TScriptInterface<IPF2PlayerStateInterface> PlayerState)
+		[](const TScriptInterface<IPF2PlayerStateInterface> PlayerState)
 		{
 			return PlayerState->GetPlayerController();
 		}
@@ -81,6 +83,19 @@ TArray<TScriptInterface<IPF2CharacterInterface>> APF2Party::GetMemberCharacters(
 			return PF2InterfaceUtilities::ToScriptInterface(CharacterIntf);
 		}
 	);
+}
+
+void APF2Party::GetBounds(FVector& CenterPoint, FVector& BoxExtent)
+{
+	const TArray<AActor*> PartyActors = PF2ArrayUtilities::Map<AActor*>(
+		this->GetMemberCharacters(),
+		[](TScriptInterface<IPF2CharacterInterface> MemberCharacter)
+		{
+			return MemberCharacter->ToActor();
+		}
+	);
+
+	UGameplayStatics::GetActorArrayBounds(PartyActors, false, CenterPoint, BoxExtent);
 }
 
 void APF2Party::AddPlayerToPartyByController(const TScriptInterface<IPF2PlayerControllerInterface>& Controller)
@@ -151,6 +166,11 @@ FString APF2Party::GetIdForLogs() const
 			this->GetPartyIndex()
 		}
 	);
+}
+
+void APF2Party::SetPartyIndex(const int32 NewPartyIndex)
+{
+	this->PartyIndex = NewPartyIndex;
 }
 
 void APF2Party::Native_OnPlayerAdded(const TScriptInterface<IPF2PlayerStateInterface>& PlayerState)

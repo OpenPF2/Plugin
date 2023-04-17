@@ -17,7 +17,7 @@
 #include "PF2PlayerStateBase.generated.h"
 
 // =====================================================================================================================
-// Forward Declarations (to break recursive dependencies)
+// Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2CharacterInterface;
 
@@ -51,6 +51,14 @@ class OPENPF2CORE_API APF2PlayerStateBase : public APlayerState, public IPF2Play
 	 */
 	UPROPERTY(ReplicatedUsing=OnRep_Party)
 	TScriptInterface<IPF2PartyInterface> Party;
+
+	/**
+	 * The cached player controller for this player state.
+	 *
+	 * This is memoized by APF2PlayerStateBase::GetPlayerController().
+	 */
+	UPROPERTY()
+	mutable TScriptInterface<IPF2PlayerControllerInterface> CachedPlayerController;
 
 public:
 	/**

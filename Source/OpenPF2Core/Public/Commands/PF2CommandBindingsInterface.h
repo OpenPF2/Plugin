@@ -12,7 +12,7 @@
 #include "PF2CommandBindingsInterface.generated.h"
 
 // =====================================================================================================================
-// Forward Declarations (to break recursive dependencies)
+// Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class UInputComponent;
 class IPF2CharacterInterface;
@@ -34,6 +34,30 @@ class OPENPF2CORE_API IPF2CommandBindingsInterface : public IPF2ActorComponentIn
 	GENERATED_BODY()
 
 public:
+	/**
+	 * Gets whether bindings in this component consume input when they fire.
+	 *
+	 * @return
+	 * - If true, then matching inputs will be consumed by bindings, and a pawn or player controller will not be able to
+	 *   react to them.
+	 * - If false, then a pawn or player controller can react to the input action in addition to bindings handling them.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
+	virtual bool IsConsumingInput() const = 0;
+
+	/**
+	 * Sets whether bindings in this component should consume input when they fire.
+	 *
+	 * This can only be modified before bindings have been added to the component.
+	 *
+	 * @param bNewValue
+	 * - If true, then matching inputs will be consumed by bindings, and a pawn or player controller will not be able to
+	 *   react to them.
+	 * - If false, then a pawn or player controller can react to the input action in addition to bindings handling them.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
+	virtual void SetConsumeInput(const bool bNewValue) = 0;
+
 	/**
 	 * Clears all bindings.
 	 *
@@ -76,12 +100,14 @@ public:
 	virtual void DisconnectFromInput() = 0;
 
 	/**
-	 * Executes the specified ability on the owning character.
+	 * Executes the specified ability on the owning character in response to the specified action.
 	 *
 	 * This is expected to be invoked only by a command binding.
 	 *
+	 * @param ActionName
+	 *	The name of the input action that invoked this binding.
 	 * @param AbilitySpecHandle
 	 *	The handle for the ability to activate.
 	 */
-	virtual void ExecuteBoundAbility(const FGameplayAbilitySpecHandle AbilitySpecHandle) = 0;
+	virtual void ExecuteBoundAbility(const FName ActionName, const FGameplayAbilitySpecHandle AbilitySpecHandle) = 0;
 };

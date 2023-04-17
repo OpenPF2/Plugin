@@ -12,7 +12,7 @@
 #include "PF2AbilitySystemComponent.generated.h"
 
 // =====================================================================================================================
-// Forward Declarations (to break recursive dependencies)
+// Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2AbilityBoostInterface;
 
@@ -28,7 +28,7 @@ class OPENPF2CORE_API UPF2AbilitySystemComponent :
 
 public:
 	// =================================================================================================================
-	// Public Properties - Multicast Delegates
+	// Public Fields - Multicast Delegates
 	// =================================================================================================================
 	/**
 	 * Event fired to react to character abilities becoming available on the client.
@@ -109,6 +109,45 @@ public:
 	virtual UAbilitySystemComponent* ToAbilitySystemComponent() override;
 
 	UFUNCTION(BlueprintCallable)
+	virtual TArray<FGameplayAbilitySpec> FindAbilitySpecsByTags(
+		const FGameplayTagContainer& Tags,
+		bool                         bOnlyAbilitiesThatSatisfyTagRequirements = true) const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual FGameplayAbilitySpec FindAbilitySpecByTags(
+		UPARAM(DisplayName="Tags")
+		const FGameplayTagContainer& InTags,
+
+		UPARAM(DisplayName="Match Found")
+		bool& OutMatchFound,
+
+		UPARAM(DisplayName="Only Abilities that Satisfy Tag Requirements")
+		const bool bInOnlyAbilitiesThatSatisfyTagRequirements = true
+	) const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<FGameplayAbilitySpecHandle> FindAbilityHandlesByTags(
+		const FGameplayTagContainer& Tags,
+		const bool                   bOnlyAbilitiesThatSatisfyTagRequirements = true
+	) const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual FGameplayAbilitySpecHandle FindAbilityHandleByTags(
+		UPARAM(DisplayName="Tags")
+		const FGameplayTagContainer& InTags,
+
+		UPARAM(DisplayName="Match Found")
+		bool& OutMatchFound,
+
+		UPARAM(DisplayName="Only Abilities that Satisfy Tag Requirements")
+		const bool bInOnlyAbilitiesThatSatisfyTagRequirements = true
+	) const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual bool TriggerAbilityWithPayload(const FGameplayAbilitySpecHandle AbilityHandle,
+	                                       const FGameplayEventData         Payload) override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual void AddPassiveGameplayEffect(TSubclassOf<UGameplayEffect> Effect) override;
 
 	UFUNCTION(BlueprintCallable)
@@ -166,6 +205,9 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2CharacterAbilitySystemInterface Implementation
 	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual TScriptInterface<IPF2CharacterInterface> GetCharacter() const override;
+
 	UFUNCTION(BlueprintCallable)
 	virtual int32 GetCharacterLevel() const override;
 

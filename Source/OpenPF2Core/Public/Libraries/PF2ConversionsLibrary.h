@@ -14,10 +14,12 @@
 // =====================================================================================================================
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
+class IPF2AbilitySystemInterface;
 class IPF2ActorComponentInterface;
 class IPF2CharacterInterface;
 class IPF2PlayerControllerInterface;
 class IPF2PlayerStateInterface;
+class UAbilitySystemComponent;
 
 // =====================================================================================================================
 // Normal Declarations
@@ -46,6 +48,22 @@ public:
 		Category="OpenPF2|Conversions"
 	)
 	static AActor* Conv_CharacterIntfToActor(const TScriptInterface<IPF2CharacterInterface>& Character);
+
+	/**
+	 * Converts an ability system component interface to a standard ability system component.
+	 *
+	 * @param AscIntf
+	 *	The ability system interface instance to convert.
+	 *
+	 * @return
+	 *	The resulting ASC.
+	 */
+	UFUNCTION(
+		BlueprintPure,
+		meta=(DisplayName = "To Ability System Component", CompactNodeTitle = "->", BlueprintAutocast),
+		Category="OpenPF2|Conversions"
+	)
+	static UAbilitySystemComponent* Conv_AscIntfToAsc(const TScriptInterface<IPF2AbilitySystemInterface>& AscIntf);
 
 	/**
 	 * Converts a character to a pawn.

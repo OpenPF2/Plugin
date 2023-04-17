@@ -18,7 +18,7 @@
 #include "PF2OwnerTrackingComponent.generated.h"
 
 // =====================================================================================================================
-// Forward Declarations (to break recursive dependencies)
+// Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2PlayerControllerInterface;
 class IPF2PlayerStateInterface;

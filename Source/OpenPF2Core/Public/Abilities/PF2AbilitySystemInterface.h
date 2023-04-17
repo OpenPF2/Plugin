@@ -59,6 +59,109 @@ public:
 	virtual UAbilitySystemComponent* ToAbilitySystemComponent() = 0;
 
 	/**
+	 * Finds one or more granted abilities by their tags.
+	 *
+	 * @param Tags
+	 *	All of the tags that a granted ability must possess in order for it to be returned.
+	 * @param bOnlyAbilitiesThatSatisfyTagRequirements
+	 *	Only return a match for an ability that has its tag requirements satisfied and is not blocked.
+	 *
+	 * @return
+	 *	The abilities granted to this ASC that have the specified tags.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
+	virtual TArray<FGameplayAbilitySpec> FindAbilitySpecsByTags(
+	    const FGameplayTagContainer& Tags,
+	    bool                         bOnlyAbilitiesThatSatisfyTagRequirements = true) const = 0;
+
+	/**
+	 * Finds the first granted ability having the specified tags.
+	 *
+	 * @param InTags
+	 *	All of the tags that a granted ability must possess in order for it to be returned.
+	 * @param OutMatchFound
+	 *	An output parameter that receives whether an ability spec with the specified tags was found.
+	 * @param bInOnlyAbilitiesThatSatisfyTagRequirements
+	 *	Only return a match for an ability that has its tag requirements satisfied and is not blocked.
+	 *
+	 * @return
+	 *	The first ability granted to this ASC that has the specified tags.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
+	virtual FGameplayAbilitySpec FindAbilitySpecByTags(
+		UPARAM(DisplayName="Tags")
+		const FGameplayTagContainer& InTags,
+
+		UPARAM(DisplayName="Match Found")
+		bool& OutMatchFound,
+
+		UPARAM(DisplayName="Only Abilities that Satisfy Tag Requirements")
+		const bool bInOnlyAbilitiesThatSatisfyTagRequirements = true
+	) const = 0;
+
+	/**
+	 * Finds the handles of one or more granted abilities by their tags.
+	 *
+	 * @param Tags
+	 *	All of the tags that a granted ability must possess in order for it to be returned.
+	 * @param bOnlyAbilitiesThatSatisfyTagRequirements
+	 *	Only return a match for an ability that has its tag requirements satisfied and is not blocked.
+	 *
+	 * @return
+	 *	The handles of the abilities granted to this ASC that have the specified tags.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
+	virtual TArray<FGameplayAbilitySpecHandle> FindAbilityHandlesByTags(
+	    const FGameplayTagContainer& Tags,
+	    const bool                   bOnlyAbilitiesThatSatisfyTagRequirements = true
+	) const = 0;
+
+	/**
+	 * Finds the handle of the first granted ability having the specified tags.
+	 *
+	 * @param InTags
+	 *	All of the tags that a granted ability must possess in order for it to be returned.
+	 * @param OutMatchFound
+	 *	An output parameter that receives whether an ability spec with the specified tags was found.
+	 * @param bInOnlyAbilitiesThatSatisfyTagRequirements
+	 *	Only return a match for an ability that has its tag requirements satisfied and is not blocked.
+	 *
+	 * @return
+	 *	The handle of the first ability granted to this ASC that has the specified tags.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
+	virtual FGameplayAbilitySpecHandle FindAbilityHandleByTags(
+		UPARAM(DisplayName="Tags")
+		const FGameplayTagContainer& InTags,
+
+		UPARAM(DisplayName="Match Found")
+		bool& OutMatchFound,
+
+		UPARAM(DisplayName="Only Abilities that Satisfy Tag Requirements")
+		const bool bInOnlyAbilitiesThatSatisfyTagRequirements = true
+	) const = 0;
+
+	/**
+	 * Triggers an ability by handle, providing the given payload as event data.
+	 *
+	 * This can be used to invoke a specific ability by its handle rather than relying on triggering it indirectly via
+	 * an event tag.
+	 *
+	 * @param AbilitySpecHandle
+	 *	The handle of the gameplay ability to invoke.
+	 * @param Payload
+	 *	The payload to pass to the gameplay ability.
+	 *
+	 * @return
+	 *	- true if the ASC believes that the ability was activated (this may return false positives due to failures later
+	 *	  in activation).
+	 *	- false if the ASC knows that the ability is not activated.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
+    virtual bool TriggerAbilityWithPayload(FGameplayAbilitySpecHandle AbilitySpecHandle,
+                                           const FGameplayEventData   Payload) = 0;
+
+	/**
 	 * Adds a passively-applied Gameplay Effect to this ASC.
 	 *
 	 * The GE is added to the weight group specified by a tag on GE; this is known as the "default" weight group of the

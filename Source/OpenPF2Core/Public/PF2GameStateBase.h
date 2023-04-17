@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -35,9 +35,14 @@ protected:
 	// Protected Fields
 	// =================================================================================================================
 	/**
-	 * The next player index to assign to a player who joins the game.
+	 * The next index to assign to a player who joins the game.
 	 */
 	int32 NextPlayerIndex;
+
+	/**
+	 * The next index to assign to a new party in the game.
+	 */
+	int32 NextPartyIndex;
 
 	// =================================================================================================================
 	// Protected Fields - Blueprint Accessible
@@ -75,9 +80,14 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2GameStateInterface Implementation
 	// =================================================================================================================
-	virtual FORCEINLINE int32 GetNextAvailablePlayerIndex() override
+	virtual FORCEINLINE int32 GeneratePlayerIndex() override
 	{
 		return this->NextPlayerIndex++;
+	}
+
+	virtual FORCEINLINE int32 GeneratePartyIndex() override
+	{
+		return this->NextPartyIndex++;
 	}
 
 	UFUNCTION(BlueprintCallable)

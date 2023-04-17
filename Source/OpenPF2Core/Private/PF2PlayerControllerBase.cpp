@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -95,6 +95,11 @@ TArray<TScriptInterface<IPF2CharacterInterface>> APF2PlayerControllerBase::GetCo
 	return this->GetCharacterQueue()->ToArray();
 }
 
+TScriptInterface<IPF2CharacterInterface> APF2PlayerControllerBase::GetControlledCharacter() const
+{
+	return this->GetCharacterQueue()->GetControlledCharacter();
+}
+
 void APF2PlayerControllerBase::Native_OnPlayableCharactersStarting(
 	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet)
 {
@@ -112,6 +117,16 @@ void APF2PlayerControllerBase::Native_OnPlayableCharactersStarting(
 APlayerController* APF2PlayerControllerBase::ToPlayerController()
 {
 	return this;
+}
+
+FHitResult APF2PlayerControllerBase::GetTargetLocation() const
+{
+	return this->BP_GetTargetLocation();
+}
+
+void APF2PlayerControllerBase::ClearTargetLocation()
+{
+	this->BP_OnClearTargetLocation();
 }
 
 void APF2PlayerControllerBase::Native_OnModeOfPlayChanged(const EPF2ModeOfPlayType NewMode)
@@ -194,9 +209,16 @@ void APF2PlayerControllerBase::ReleaseCharacter(const TScriptInterface<IPF2Chara
 	this->GetCharacterQueue()->Remove(ReleasedCharacter);
 }
 
+void APF2PlayerControllerBase::ExecuteCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
+                                                       AActor*                          CharacterActor)
+{
+	this->Server_ExecuteCharacterCommand(AbilitySpecHandle, CharacterActor, FGameplayEventData());
+}
+
 bool APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Validate(
 	const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	AActor* CharacterActor)
+	AActor*                          CharacterActor,
+	const FGameplayEventData         AbilityPayload)
 {
 	IPF2CharacterInterface* TargetCharacter = Cast<IPF2CharacterInterface>(CharacterActor);
 	APawn*                  CharacterPawn;
@@ -249,7 +271,8 @@ bool APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Validate(
 
 void APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Implementation(
 	const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	AActor* CharacterActor)
+	AActor*                          CharacterActor,
+	const FGameplayEventData         AbilityPayload)
 {
 	IPF2CharacterInterface*        TargetCharacter = Cast<IPF2CharacterInterface>(CharacterActor);
 	IPF2CharacterCommandInterface* CharacterCommandIntf;
@@ -271,7 +294,7 @@ void APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Implementation(
 	CharacterPawn = TargetCharacter->ToPawn();
 	check(CharacterPawn != nullptr);
 
-	CharacterCommandIntf = APF2CharacterCommand::Create(TargetCharacter, AbilitySpecHandle);
+	CharacterCommandIntf = APF2CharacterCommand::Create(TargetCharacter, AbilitySpecHandle, AbilityPayload);
 
 	CharacterCommandIntf->AttemptExecuteOrQueue();
 }
@@ -364,11 +387,6 @@ FString APF2PlayerControllerBase::GetIdForLogs() const
 TScriptInterface<IPF2CharacterQueueInterface> APF2PlayerControllerBase::GetCharacterQueue() const
 {
 	return this->ControllableCharacterQueue;
-}
-
-TScriptInterface<IPF2CharacterInterface> APF2PlayerControllerBase::GetActiveCharacter() const
-{
-	return this->GetCharacterQueue()->GetActiveCharacter();
 }
 
 void APF2PlayerControllerBase::Native_OnPlayerStateAvailable(

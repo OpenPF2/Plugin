@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -10,7 +10,7 @@
 #include "PF2CharacterQueueInterface.generated.h"
 
 // =====================================================================================================================
-// Forward Declarations (to break recursive dependencies)
+// Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2CharacterInterface;
 
@@ -46,7 +46,7 @@ public:
 	 *		- If the queue is not empty: a valid character reference.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Player Controllers|Character Queues")
-	virtual TScriptInterface<IPF2CharacterInterface> GetActiveCharacter() const = 0;
+	virtual TScriptInterface<IPF2CharacterInterface> GetControlledCharacter() const = 0;
 
 	/**
 	 * Adds a character to the end of the queue.

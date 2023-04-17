@@ -339,9 +339,9 @@ namespace PF2ArrayUtilities
 	 */
 	template <typename SrcT, typename ResultT>
 	void CapturePtrDeltasWithCast(const TArray<SrcT*> OldArray,
-                                  const TArray<SrcT*> NewArray,
-                                  TArray<ResultT*>&   OutRemovedElements,
-                                  TArray<ResultT*>&   OutAddedElements)
+	                              const TArray<SrcT*> NewArray,
+	                              TArray<ResultT*>&   OutRemovedElements,
+	                              TArray<ResultT*>&   OutAddedElements)
 	{
 		// Identify which elements were removed.
 		for (SrcT* const Element : OldArray)

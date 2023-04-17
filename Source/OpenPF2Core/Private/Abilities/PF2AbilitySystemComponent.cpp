@@ -45,6 +45,96 @@ UAbilitySystemComponent* UPF2AbilitySystemComponent::ToAbilitySystemComponent()
 	return Cast<UAbilitySystemComponent>(this);
 }
 
+TArray<FGameplayAbilitySpec> UPF2AbilitySystemComponent::FindAbilitySpecsByTags(
+	const FGameplayTagContainer& Tags,
+	const bool                   bOnlyAbilitiesThatSatisfyTagRequirements) const
+{
+	TArray<FGameplayAbilitySpec*> AbilitiesToActivate;
+
+	this->GetActivatableGameplayAbilitySpecsByAllMatchingTags(
+		Tags,
+		AbilitiesToActivate,
+		bOnlyAbilitiesThatSatisfyTagRequirements
+	);
+
+	return PF2ArrayUtilities::Map<FGameplayAbilitySpec>(
+		AbilitiesToActivate,
+		[](const FGameplayAbilitySpec* AbilityPtr)
+		{
+			return *AbilityPtr;
+		}
+	);
+}
+
+FGameplayAbilitySpec UPF2AbilitySystemComponent::FindAbilitySpecByTags(
+	const FGameplayTagContainer& InTags,
+	bool&                        OutMatchFound,
+	const bool                   bInOnlyAbilitiesThatSatisfyTagRequirements) const
+{
+	FGameplayAbilitySpec         MatchingAbility;
+	TArray<FGameplayAbilitySpec> MatchingAbilities =
+		this->FindAbilitySpecsByTags(InTags, bInOnlyAbilitiesThatSatisfyTagRequirements);
+
+	if (MatchingAbilities.Num() == 0)
+	{
+		OutMatchFound   = false;
+		MatchingAbility = FGameplayAbilitySpec();
+	}
+	else
+	{
+		OutMatchFound   = true;
+		MatchingAbility = MatchingAbilities[0];
+	}
+
+	return MatchingAbility;
+}
+
+TArray<FGameplayAbilitySpecHandle> UPF2AbilitySystemComponent::FindAbilityHandlesByTags(
+	const FGameplayTagContainer& Tags,
+	const bool                   bOnlyAbilitiesThatSatisfyTagRequirements) const
+{
+	return PF2ArrayUtilities::Map<FGameplayAbilitySpecHandle>(
+		this->FindAbilitySpecsByTags(Tags, bOnlyAbilitiesThatSatisfyTagRequirements),
+		[](const FGameplayAbilitySpec AbilitySpec)
+		{
+			return AbilitySpec.Handle;
+		}
+	);
+}
+
+FGameplayAbilitySpecHandle UPF2AbilitySystemComponent::FindAbilityHandleByTags(
+	const FGameplayTagContainer& InTags,
+	bool&                        OutMatchFound,
+	const bool                   bInOnlyAbilitiesThatSatisfyTagRequirements) const
+{
+	FGameplayAbilitySpecHandle Handle;
+	const FGameplayAbilitySpec AbilitySpec =
+		this->FindAbilitySpecByTags(InTags, OutMatchFound, bInOnlyAbilitiesThatSatisfyTagRequirements);
+
+	if (OutMatchFound)
+	{
+		Handle = AbilitySpec.Handle;
+	}
+	else
+	{
+		Handle = FGameplayAbilitySpecHandle();
+	}
+
+	return Handle;
+}
+
+bool UPF2AbilitySystemComponent::TriggerAbilityWithPayload(const FGameplayAbilitySpecHandle AbilityHandle,
+                                                           const FGameplayEventData         Payload)
+{
+	return this->TriggerAbilityFromGameplayEvent(
+		AbilityHandle,
+		this->AbilityActorInfo.Get(),
+		FGameplayTag(),
+		&Payload,
+		*this
+	);
+}
+
 void UPF2AbilitySystemComponent::AddPassiveGameplayEffect(const TSubclassOf<UGameplayEffect> Effect)
 {
 	const FName WeightGroup = PF2GameplayAbilityUtilities::GetWeightGroupOfGameplayEffect(Effect);
@@ -322,9 +412,23 @@ FPF2ClientAbilitiesChangeDelegate* UPF2AbilitySystemComponent::GetClientAbilityC
 	return &this->OnAbilitiesAvailable;
 }
 
+TScriptInterface<IPF2CharacterInterface> UPF2AbilitySystemComponent::GetCharacter() const
+{
+	IPF2CharacterInterface* OwningCharacter = Cast<IPF2CharacterInterface>(this->GetOwnerActor());
+
+	if (OwningCharacter == nullptr)
+	{
+		return PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterInterface>(nullptr);
+	}
+	else
+	{
+		return PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterInterface>(OwningCharacter);
+	}
+}
+
 FORCEINLINE int32 UPF2AbilitySystemComponent::GetCharacterLevel() const
 {
-	const IPF2CharacterInterface* OwningCharacter = Cast<IPF2CharacterInterface>(this->GetOwnerActor());
+	const TScriptInterface<IPF2CharacterInterface> OwningCharacter = this->GetCharacter();
 
 	if (OwningCharacter == nullptr)
 	{

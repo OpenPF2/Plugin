@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -18,6 +18,14 @@
 
 #include "PF2GameModeBase.generated.h"
 
+// =====================================================================================================================
+// Forward Declarations (to minimize header dependencies)
+// =====================================================================================================================
+class APF2Party;
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 /**
  * Default base class for OpenPF2 Game Modes.
  *
@@ -118,17 +126,6 @@ protected:
 	}
 
 	/**
-	 * Gets the first player index that hasn't yet been assigned to any other player.
-	 *
-	 * @return
-	 *	The next available player index.
-	 */
-	FORCEINLINE int32 GetNextAvailablePlayerIndex() const
-	{
-		return this->GetGameStateIntf()->GetNextAvailablePlayerIndex();
-	}
-
-	/**
 	 * Gets the active Mode of Play Rule Set (MoPRS) from the game state.
 	 *
 	 * @return
@@ -138,12 +135,46 @@ protected:
 	virtual TScriptInterface<IPF2ModeOfPlayRuleSetInterface> GetModeOfPlayRuleSet();
 
 	/**
+	 * Generates a new, unassigned index for a player.
+	 *
+	 * @return
+	 *	The next player index.
+	 */
+	FORCEINLINE int32 GeneratePlayerIndex() const
+	{
+		return this->GetGameStateIntf()->GeneratePlayerIndex();
+	}
+
+	/**
+	 * Generates a new, unassigned index for a party.
+	 *
+	 * @return
+	 *	The next party index.
+	 */
+	FORCEINLINE int32 GeneratePartyIndex() const
+	{
+		return this->GetGameStateIntf()->GeneratePartyIndex();
+	}
+
+	/**
 	 * Assigns the specified player controller a new, unused player index.
 	 *
 	 * @param PlayerController
 	 *	The player controller that will be assigned a distinct player index.
 	 */
 	void AssignPlayerIndex(const APlayerController* PlayerController) const;
+
+	/**
+	 * Spawns a new party instance and assigns it a party index.
+	 *
+	 * @param PartyType
+	 *	The specific type of party to generate.
+	 *
+	 * @return
+	 *	The new party instance.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Mode")
+	APF2Party* SpawnParty(TSubclassOf<APF2Party> PartyType);
 
 	/**
 	 * Attempts to change the current play mode for all characters in the loaded level.

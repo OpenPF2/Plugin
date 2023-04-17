@@ -15,7 +15,7 @@
 #include "PF2GameModeInterface.generated.h"
 
 // =====================================================================================================================
-// Forward Declarations (to break recursive dependencies)
+// Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2CharacterCommandInterface;
 class IPF2CharacterInterface;

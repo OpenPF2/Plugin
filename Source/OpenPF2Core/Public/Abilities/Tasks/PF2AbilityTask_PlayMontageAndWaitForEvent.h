@@ -71,7 +71,7 @@ public:
 	 */
 	UFUNCTION(
 		BlueprintCallable,
-		Category="Ability|Tasks",
+		Category="Ability|Tasks|OpenPF2",
 		meta=(
 			HidePin="OwningAbility",
 			DefaultToSelf="OwningAbility",

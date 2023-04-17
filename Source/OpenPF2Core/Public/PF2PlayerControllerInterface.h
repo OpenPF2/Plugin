@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -6,6 +6,8 @@
 #pragma once
 
 #include <GameplayAbilitySpec.h>
+
+#include <Abilities/GameplayAbilityTypes.h>
 
 #include <GameFramework/Info.h>
 
@@ -16,7 +18,7 @@
 #include "PF2PlayerControllerInterface.generated.h"
 
 // =====================================================================================================================
-// Forward Declarations (to break recursive dependencies)
+// Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2CharacterInterface;
 class IPF2ModeOfPlayRuleSetInterface;
@@ -72,6 +74,33 @@ public:
 	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetControllableCharacters() const = 0;
 
 	/**
+	 * Gets the character that the player is actively controlling.
+	 *
+	 * This can return nullptr if this player controller has no characters to control.
+	 *
+	 * @return
+	 *	- If there are no characters to control: A script interface wrapping a nullptr.
+	 *	- If there are characters to control: The active character.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
+	virtual TScriptInterface<IPF2CharacterInterface> GetControlledCharacter() const = 0;
+
+	/**
+	 * Gets the last target location that the player has chosen through the UI.
+	 *
+	 * @return
+	 *	A hit result for the target location that the player has chosen through the UI.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
+	virtual FHitResult GetTargetLocation() const = 0;
+
+	/**
+	 * Clears the target location that the player has chosen through the UI.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
+	virtual void ClearTargetLocation() = 0;
+
+	/**
 	 * Gets the player controller that is implementing this interface.
 	 *
 	 * @return
@@ -100,6 +129,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
 	virtual void ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter) = 0;
 
+
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
+	virtual void ExecuteCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
+										 AActor*                          CharacterActor) = 0;
+
 	/**
 	 * Builds and executes a command on the server for one of the characters this player controller can control.
 	 *
@@ -110,13 +144,16 @@ public:
 	 * not replicate actors if they are declared/referenced through an interface property.
 	 *
 	 * @param AbilitySpecHandle
-	 *	The handle for the ability to activate.
+	 *	The handle for the ability to wrap in the command when it is activated.
 	 * @param CharacterActor
 	 *	The character upon which the ability should be activated. The given actor must implement IPF2CharacterInterface.
+	 * @param AbilityPayload
+	 *	An optional payload to pass to the ability when it is executed.
 	 */
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
 	virtual void Server_ExecuteCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	                                            AActor*          CharacterActor) = 0;
+	                                            AActor*                          CharacterActor,
+	                                            const FGameplayEventData         AbilityPayload) = 0;
 
 	/**
 	 * Requests to cancel a command on the server for one of the characters this player controller can control.

@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -15,7 +15,7 @@
 #include "PF2Party.generated.h"
 
 // =====================================================================================================================
-// Forward Declarations (to break recursive dependencies)
+// Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2CharacterInterface;
 class IPF2PlayerStateInterface;
@@ -102,6 +102,9 @@ public:
 	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetMemberCharacters() const override;
 
 	UFUNCTION(BlueprintCallable)
+	virtual void GetBounds(FVector& CenterPoint, FVector& BoxExtent) override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual void AddPlayerToPartyByController(const TScriptInterface<IPF2PlayerControllerInterface>& Controller) override;
 
 	UFUNCTION(BlueprintCallable)
@@ -118,6 +121,12 @@ public:
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
+
+	// =================================================================================================================
+	// Public Methods
+	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual void SetPartyIndex(int32 NewPartyIndex);
 
 	// =================================================================================================================
 	// Public Fields - Multicast Delegates
