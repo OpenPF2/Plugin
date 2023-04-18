@@ -13,7 +13,7 @@ END_DEFINE_PF_SPEC(FPF2AttributeSetSpec)
 
 void FPF2AttributeSetSpec::Define()
 {
-	BeforeEach([=, this]()
+	BeforeEach([=]()
 	{
 		this->SetupWorld();
 		this->SetupPawn();
@@ -21,7 +21,7 @@ void FPF2AttributeSetSpec::Define()
 		this->BeginPlay();
 	});
 
-	AfterEach([=, this]()
+	AfterEach([=]()
 	{
 		this->DestroyPawn();
 		this->DestroyWorld();
