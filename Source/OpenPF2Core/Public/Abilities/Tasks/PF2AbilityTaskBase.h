@@ -86,7 +86,7 @@ protected:
 	{
 		check(this->HasAbilitySystemComponent());
 
-		return this->AbilitySystemComponent;
+		return this->AbilitySystemComponent.Get();
 	}
 
 	/**

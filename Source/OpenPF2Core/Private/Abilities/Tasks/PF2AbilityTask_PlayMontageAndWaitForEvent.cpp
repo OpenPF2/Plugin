@@ -153,7 +153,7 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::Activate()
 
 void UPF2AbilityTask_PlayMontageAndWaitForEvent::ExternalCancel()
 {
-	check(this->AbilitySystemComponent);
+	check(this->AbilitySystemComponent.IsValid());
 
 	this->Native_OnAbilityCancelled();
 
@@ -221,9 +221,9 @@ FString UPF2AbilityTask_PlayMontageAndWaitForEvent::GetDebugString() const
 
 UAbilitySystemComponent* UPF2AbilityTask_PlayMontageAndWaitForEvent::GetTargetAsc() const
 {
-	check(this->AbilitySystemComponent);
+	check(this->AbilitySystemComponent.IsValid());
 
-	return this->AbilitySystemComponent;
+	return this->AbilitySystemComponent.Get();
 }
 
 bool UPF2AbilityTask_PlayMontageAndWaitForEvent::StopPlayingMontage() const
