@@ -89,8 +89,8 @@ public:
 	 * @return
 	 *	The player controller that owns this player state.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player State")
-	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerController() const = 0;
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player State", DisplayName="Get Player Controller")
+	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerControllerIntf() const = 0;
 
 	/**
 	 * Determines whether the player owning this player state belongs to the same party as another player.

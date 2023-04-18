@@ -54,7 +54,7 @@ void APF2PlayerStateBase::SetParty(const TScriptInterface<IPF2PartyInterface> Ne
 	}
 }
 
-TScriptInterface<IPF2PlayerControllerInterface> APF2PlayerStateBase::GetPlayerController() const
+TScriptInterface<IPF2PlayerControllerInterface> APF2PlayerStateBase::GetPlayerControllerIntf() const
 {
 	if (this->CachedPlayerController == nullptr)
 	{

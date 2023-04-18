@@ -132,7 +132,7 @@ TScriptInterface<IPF2PlayerControllerInterface> APF2CharacterBase::GetPlayerCont
 
 			if (OwnerPlayerState != nullptr)
 			{
-				PlayerController = OwnerPlayerState->GetPlayerController();
+				PlayerController = OwnerPlayerState->GetPlayerControllerIntf();
 			}
 		}
 	}

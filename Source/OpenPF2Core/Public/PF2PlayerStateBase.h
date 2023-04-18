@@ -88,7 +88,7 @@ public:
 	virtual void SetParty(const TScriptInterface<IPF2PartyInterface> NewParty) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerController() const override;
+	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerControllerIntf() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual bool IsSamePartyAsPlayerWithController(

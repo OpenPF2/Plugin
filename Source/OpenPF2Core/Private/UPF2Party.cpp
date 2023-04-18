@@ -52,7 +52,7 @@ TArray<TScriptInterface<IPF2PlayerControllerInterface>> APF2Party::GetMemberCont
 		this->GetMemberStates(),
 		[](const TScriptInterface<IPF2PlayerStateInterface> PlayerState)
 		{
-			return PlayerState->GetPlayerController();
+			return PlayerState->GetPlayerControllerIntf();
 		}
 	);
 }
@@ -114,7 +114,7 @@ void APF2Party::AddPlayerToPartyByState(const TScriptInterface<IPF2PlayerStateIn
 
 	if (!this->MemberStates.Contains(PlayerStateActor))
 	{
-		const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = PlayerState->GetPlayerController();
+		const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = PlayerState->GetPlayerControllerIntf();
 
 		this->MemberStates.AddUnique(PlayerStateActor);
 
@@ -147,7 +147,7 @@ void APF2Party::RemovePlayerFromPartyByState(const TScriptInterface<IPF2PlayerSt
 	{
 		this->MemberStates.Remove(PlayerStateActor);
 
-		for (const auto& Character : PlayerState->GetPlayerController()->GetControllableCharacters())
+		for (const auto& Character : PlayerState->GetPlayerControllerIntf()->GetControllableCharacters())
 		{
 			this->MemberCharacters.Remove(Character->ToActor());
 		}

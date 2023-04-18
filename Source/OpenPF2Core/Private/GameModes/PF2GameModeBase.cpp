@@ -81,7 +81,7 @@ void APF2GameModeBase::TransferCharacterOwnership(
 		if (OldOwnerPlayerState != nullptr)
 		{
 			const TScriptInterface<IPF2PlayerControllerInterface> OldController =
-				OldOwnerPlayerState->GetPlayerController();
+				OldOwnerPlayerState->GetPlayerControllerIntf();
 
 			OldController->ReleaseCharacter(Character);
 		}
