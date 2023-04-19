@@ -6,6 +6,8 @@
 
 #include <Abilities/Tasks/AbilityTask.h>
 
+#include <Animation/AnimInstance.h>
+
 #include "PF2AbilityTaskBase.h"
 
 #include "PF2AbilityTask_PlayMontageAndWaitForEvent.generated.h"

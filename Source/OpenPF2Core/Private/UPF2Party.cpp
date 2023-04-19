@@ -7,6 +7,8 @@
 // Pruehs, provided under the MIT License. Copyright (c) 2017 Nick Pruehs.
 //
 
+#include <GameFramework/PlayerState.h>
+
 #include <Kismet/GameplayStatics.h>
 
 #include <Net/UnrealNetwork.h>

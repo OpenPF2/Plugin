@@ -5,6 +5,11 @@
 
 #include <Components/PrimitiveComponent.h>
 
+#include <Engine/OverlapInfo.h>
+#include <Engine/ScopedMovementUpdate.h>
+
+#include <GameFramework/WorldSettings.h>
+
 #include <Internationalization/Text.h>
 
 #define LOCTEXT_NAMESPACE "PrimitiveComponent"

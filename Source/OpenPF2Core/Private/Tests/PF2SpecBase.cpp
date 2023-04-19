@@ -5,6 +5,8 @@
 
 #include "Tests/PF2SpecBase.h"
 
+#include <Engine/Engine.h>
+
 #include "Abilities/PF2AttributeSet.h"
 #include "Utilities/PF2GameplayAbilityUtilities.h"
 

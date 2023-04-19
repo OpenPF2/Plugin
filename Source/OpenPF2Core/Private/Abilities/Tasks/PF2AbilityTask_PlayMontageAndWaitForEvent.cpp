@@ -7,6 +7,8 @@
 #include <GameFramework/Character.h>
 #include <AbilitySystemComponent.h>
 #include <AbilitySystemGlobals.h>
+#include <AbilitySystemLog.h>
+
 #include <Animation/AnimInstance.h>
 
 UPF2AbilityTask_PlayMontageAndWaitForEvent* UPF2AbilityTask_PlayMontageAndWaitForEvent::CreatePlayMontageAndWaitForEvent(
