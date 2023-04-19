@@ -621,7 +621,7 @@ void UPF2AbilitySystemComponent::ActivatePassiveGameplayEffect(
 	// Ensure that the GE spec is tagged with its weight no matter how the weight was set (either through API or through
 	// a tag in the InheritableGameplayEffectTags field on the GE definition class itself). Without this, only the tag
 	// from the GE definition spec would pass through.
-	GameplayEffectSpec->DynamicAssetTags.AddTag(PF2GameplayAbilityUtilities::GetTag(WeightGroup));
+	GameplayEffectSpec->AddDynamicAssetTag(PF2GameplayAbilityUtilities::GetTag(WeightGroup));
 
 	// Special case: If the GE being activated is our "dummy" GE for dynamic tags, apply tags to it.
 	//
