@@ -12,6 +12,7 @@
 
 #include "UEPrimitiveComponentDefs.h"
 
+// ReSharper disable once IdentifierTypo
 #define LOCTEXT_NAMESPACE "PF2CollisionDelegateComponent"
 
 bool UPF2RootCollisionDelegateComponent::MoveComponentImpl(const FVector&      Delta,

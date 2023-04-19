@@ -9,6 +9,7 @@
 
 #include <HAL/IConsoleManager.h>
 
+// ReSharper disable once IdentifierTypo
 #define LOCTEXT_NAMESPACE "PrimitiveComponent"
 
 // =====================================================================================================================

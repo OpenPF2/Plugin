@@ -12,6 +12,7 @@
 
 #include <Internationalization/Text.h>
 
+// ReSharper disable once IdentifierTypo
 #define LOCTEXT_NAMESPACE "PrimitiveComponent"
 
 // =====================================================================================================================
