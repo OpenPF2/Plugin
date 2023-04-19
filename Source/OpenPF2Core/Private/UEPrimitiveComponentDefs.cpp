@@ -62,7 +62,7 @@ extern bool ShouldIgnoreHitResult(const UWorld*             InWorld,
 		if ((MoveFlags & MOVECOMP_IgnoreBases) && (MovingActor != nullptr))
 		{
 			// Ignore if there's a base relationship between moving actor and hit actor
-			AActor const* const HitActor = TestHit.GetActor();
+			AActor const* const HitActor = TestHit.HitObjectHandle.FetchActor();
 
 			if (HitActor != nullptr)
 			{
