@@ -95,7 +95,7 @@ void UPF2AbilityTask_AcquireTargetFromPlayerController::WaitForTargetFromClient(
 	const FPredictionKey             ActivationPredictionKey = this->GetActivationPredictionKey();
 	UAbilitySystemComponent*         Asc                     = this->GetNativeAbilitySystemComponent();
 
-	if (this->IsPendingKill())
+	if (!IsValid(this))
 	{
 		return;
 	}
