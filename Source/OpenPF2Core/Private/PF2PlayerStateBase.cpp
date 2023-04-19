@@ -73,7 +73,8 @@ TScriptInterface<IPF2PlayerControllerInterface> APF2PlayerStateBase::GetPlayerCo
 		else
 		{
 			const FUniqueNetIdRepl         UniquePlayerId       = this->GetUniqueId();
-			APlayerController*             PlayerController     = GetPlayerControllerFromNetId(World, *UniquePlayerId);
+			const FUniqueNetIdRepl         PlayerNetId          = UniquePlayerId->AsShared();
+			APlayerController*             PlayerController     = GetPlayerControllerFromNetId(World, PlayerNetId);
 			IPF2PlayerControllerInterface* PlayerControllerIntf = Cast<IPF2PlayerControllerInterface>(PlayerController);
 
 			if (PlayerControllerIntf == nullptr)
