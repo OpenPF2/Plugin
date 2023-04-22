@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -60,7 +60,7 @@ END_DEFINE_PF_SPEC(FPF2PerceptionModifierCalculationSpec)
 
 void FPF2PerceptionModifierCalculationSpec::Define()
 {
-	BeforeEach([=, this]()
+	BeforeEach([=]()
 	{
 		this->SetupWorld();
 		this->SetupPawn();
@@ -68,7 +68,7 @@ void FPF2PerceptionModifierCalculationSpec::Define()
 		this->BeginPlay();
 	});
 
-	AfterEach([=, this]()
+	AfterEach([=]()
 	{
 		this->DestroyPawn();
 		this->DestroyWorld();
@@ -79,16 +79,16 @@ void FPF2PerceptionModifierCalculationSpec::Define()
 		const float                AbModScore     = AbilityValues.Key;
 		const TMap<FString, float> TrainingScores = AbilityValues.Value;
 
-		Describe(FString::Format(TEXT("when the character has a Perception Modifier of '{0}'"), {FString::FormatAsNumber(AbModScore)}), [=, this]()
+		Describe(FString::Format(TEXT("when the character has a Perception Modifier of '{0}'"), {FString::FormatAsNumber(AbModScore)}), [=]()
 		{
 			for (const auto ProficiencyValues : TrainingScores)
 			{
 				const FString ProficiencyLevel = ProficiencyValues.Key;
 				const float   ExpectedPcpMod   = ProficiencyValues.Value;
 
-				Describe(FString::Format(TEXT("when the character is '{0}' in Perception"), {ProficiencyLevel}), [=, this]()
+				Describe(FString::Format(TEXT("when the character is '{0}' in Perception"), {ProficiencyLevel}), [=]()
 				{
-					It(FString::Format(TEXT("calculates a Perception Modifier of '{0}'"), {FString::FormatAsNumber(ExpectedPcpMod)}), [=, this]()
+					It(FString::Format(TEXT("calculates a Perception Modifier of '{0}'"), {FString::FormatAsNumber(ExpectedPcpMod)}), [=]()
 					{
 						this->VerifyPerceptionModifier(AbModScore, ProficiencyLevel, ExpectedPcpMod);
 					});

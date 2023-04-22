@@ -354,8 +354,8 @@ void UPF2CharacterQueueComponent::Native_OnControlledCharacterChanged(
 		TEXT("[%s] Active character in queue ('%s') has changed (was '%s'; now '%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		*(this->GetIdForLogs()),
-		*((OldCharacter != nullptr) ? OldCharacter->GetIdForLogs() : "null"),
-		*((NewCharacter != nullptr) ? NewCharacter->GetIdForLogs() : "null")
+		*((OldCharacter.GetInterface() != nullptr) ? OldCharacter->GetIdForLogs() : "null"),
+		*((NewCharacter.GetInterface() != nullptr) ? NewCharacter->GetIdForLogs() : "null")
 	);
 
 	this->OnControlledCharacterChanged.Broadcast(OldCharacter, NewCharacter);

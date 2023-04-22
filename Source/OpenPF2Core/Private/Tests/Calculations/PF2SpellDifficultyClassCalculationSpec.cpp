@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -41,7 +41,7 @@ END_DEFINE_PF_SPEC(FPF2SpellDifficultyClassCalculationsSpec)
 
 void FPF2SpellDifficultyClassCalculationsSpec::Define()
 {
-	BeforeEach([=, this]()
+	BeforeEach([=]()
 	{
 		this->SetupWorld();
 		this->SetupPawn();
@@ -49,7 +49,7 @@ void FPF2SpellDifficultyClassCalculationsSpec::Define()
 		this->BeginPlay();
 	});
 
-	BeforeEach([=, this]()
+	BeforeEach([=]()
 	{
 		const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
 		FAttributeCapture       Attributes   = CaptureAbilityModifierAttributes(AttributeSet);
@@ -63,7 +63,7 @@ void FPF2SpellDifficultyClassCalculationsSpec::Define()
 		}
 	});
 
-	AfterEach([=, this]()
+	AfterEach([=]()
 	{
 		this->DestroyPawn();
 		this->DestroyWorld();
@@ -74,9 +74,9 @@ void FPF2SpellDifficultyClassCalculationsSpec::Define()
 		const FString SpellAbilityName      = SpellAbility.Key,
 		              SpellAbilityAttribute = SpellAbility.Value;
 
-		Describe(FString::Format(TEXT("when the character's Spellcasting Ability is '{0}'"), {SpellAbilityName}), [=, this]
+		Describe(FString::Format(TEXT("when the character's Spellcasting Ability is '{0}'"), {SpellAbilityName}), [=]
 		{
-			BeforeEach([=, this]()
+			BeforeEach([=]()
 			{
 				this->ApplyUnreplicatedTag(FString::Format(TEXT("SpellcastingAbility.{0}"), {SpellAbilityName}));
 			});
@@ -86,9 +86,9 @@ void FPF2SpellDifficultyClassCalculationsSpec::Define()
 				const FString BoostedAbilityName      = BoostedAbility.Key,
 				              BoostedAbilityAttribute = BoostedAbility.Value;
 
-				Describe(FString::Format(TEXT("when the '{0}' Ability Modifier is '5'"), {BoostedAbilityName}), [=, this]
+				Describe(FString::Format(TEXT("when the '{0}' Ability Modifier is '5'"), {BoostedAbilityName}), [=]
 				{
-					BeforeEach([=, this]()
+					BeforeEach([=]()
 					{
 						const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
 						FAttributeCapture       Attributes   = CaptureAbilityModifierAttributes(AttributeSet);
@@ -101,11 +101,11 @@ void FPF2SpellDifficultyClassCalculationsSpec::Define()
 						const FString ProficiencyLevel = Proficiency.Key;
 						const float   ProficiencyValue = Proficiency.Value;
 
-						Describe(FString::Format(TEXT("when the character is '{0}' in Spell Difficulty Class"), {ProficiencyLevel}), [=, this]()
+						Describe(FString::Format(TEXT("when the character is '{0}' in Spell Difficulty Class"), {ProficiencyLevel}), [=]()
 						{
 							float ExpectedSpellDifficultyClassMod;
 
-							BeforeEach([=, this]()
+							BeforeEach([=]()
 							{
 								this->ApplyUnreplicatedTag(FString::Format(TEXT("SpellDc.{0}"), {ProficiencyLevel}));
 							});
@@ -119,7 +119,7 @@ void FPF2SpellDifficultyClassCalculationsSpec::Define()
 								ExpectedSpellDifficultyClassMod = 10.0f + 0.0f + ProficiencyValue;
 							}
 
-							It(FString::Format(TEXT("calculates a Spell Difficulty Class Modifier of '{0}'"), {FString::FormatAsNumber(ExpectedSpellDifficultyClassMod)}), [=, this]()
+							It(FString::Format(TEXT("calculates a Spell Difficulty Class Modifier of '{0}'"), {FString::FormatAsNumber(ExpectedSpellDifficultyClassMod)}), [=]()
 							{
 								const UPF2AttributeSet*             AttributeSet                  = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
 								FAttributeCapture                   Attributes                    = CaptureSpellAttributes(AttributeSet);

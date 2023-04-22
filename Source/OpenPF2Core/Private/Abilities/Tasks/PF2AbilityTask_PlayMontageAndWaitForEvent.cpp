@@ -1,4 +1,4 @@
-// Copyright 2021-2022 Guy Elsmore-Paddock. All Rights Reserved.
+// Copyright 2021-2023 Guy Elsmore-Paddock. All Rights Reserved.
 // Adapted from content that is Copyright Epic Games, Inc. (Action RPG Sample).
 // Licensed only for use with Unreal Engine.
 
@@ -7,6 +7,8 @@
 #include <GameFramework/Character.h>
 #include <AbilitySystemComponent.h>
 #include <AbilitySystemGlobals.h>
+#include <AbilitySystemLog.h>
+
 #include <Animation/AnimInstance.h>
 
 UPF2AbilityTask_PlayMontageAndWaitForEvent* UPF2AbilityTask_PlayMontageAndWaitForEvent::CreatePlayMontageAndWaitForEvent(
@@ -153,7 +155,7 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::Activate()
 
 void UPF2AbilityTask_PlayMontageAndWaitForEvent::ExternalCancel()
 {
-	check(this->AbilitySystemComponent);
+	check(this->AbilitySystemComponent.IsValid());
 
 	this->Native_OnAbilityCancelled();
 
@@ -221,9 +223,9 @@ FString UPF2AbilityTask_PlayMontageAndWaitForEvent::GetDebugString() const
 
 UAbilitySystemComponent* UPF2AbilityTask_PlayMontageAndWaitForEvent::GetTargetAsc() const
 {
-	check(this->AbilitySystemComponent);
+	check(this->AbilitySystemComponent.IsValid());
 
-	return this->AbilitySystemComponent;
+	return this->AbilitySystemComponent.Get();
 }
 
 bool UPF2AbilityTask_PlayMontageAndWaitForEvent::StopPlayingMontage() const

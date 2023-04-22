@@ -1,4 +1,4 @@
-﻿// Adapted from "Runtime/Engine/Private/Components/PrimitiveComponent.cpp" (Unreal Engine 4.27), which is Copyright
+﻿// Adapted from "Runtime/Engine/Private/Components/PrimitiveComponent.cpp" (Unreal Engine 5.1), which is Copyright
 // Epic Games, Inc. Licensed only for use with Unreal Engine.
 
 #include "PF2RootCollisionDelegateComponent.h"
@@ -12,6 +12,7 @@
 
 #include "UEPrimitiveComponentDefs.h"
 
+// ReSharper disable once IdentifierTypo
 #define LOCTEXT_NAMESPACE "PF2CollisionDelegateComponent"
 
 bool UPF2RootCollisionDelegateComponent::MoveComponentImpl(const FVector&      Delta,
@@ -32,7 +33,7 @@ bool UPF2RootCollisionDelegateComponent::MoveComponentImpl(const FVector&      D
 	// --- End Difference from UPrimitiveComponent
 
 	// static things can move before they are registered (e.g. immediately after streaming), but not after.
-	if (this->IsPendingKill() || this->CheckStaticMobilityAndWarn(PrimitiveComponentStatics::MobilityWarnText))
+	if (!IsValid(this) || this->CheckStaticMobilityAndWarn(PrimitiveComponentStatics::MobilityWarnText))
 	{
 		if (OutHit != nullptr)
 		{
@@ -63,7 +64,7 @@ bool UPF2RootCollisionDelegateComponent::MoveComponentImpl(const FVector&      D
 
 	// ComponentSweepMulti does nothing if moving < KINDA_SMALL_NUMBER in distance, so it's important to not try to
 	// sweep distances smaller than that.
-	const float MinMovementDistSq = (bSweep ? FMath::Square(4.f*KINDA_SMALL_NUMBER) : 0.0f);
+	const float MinMovementDistSq = (bSweep ? FMath::Square(4.0f * KINDA_SMALL_NUMBER) : 0.0f);
 
 	if (DeltaSizeSq <= MinMovementDistSq)
 	{
@@ -104,37 +105,38 @@ bool UPF2RootCollisionDelegateComponent::MoveComponentImpl(const FVector&      D
 		FVector NewLocation = TraceStart;
 
 		// Perform movement collision checking if needed for this actor.
-		const bool bCollisionEnabled = this->IsQueryCollisionEnabled();
+		const bool    bCollisionEnabled = this->IsQueryCollisionEnabled();
+		UWorld* const MyWorld           = GetWorld();
 
-		if (bCollisionEnabled && (DeltaSizeSq > 0.0f))
+		if ((MyWorld != nullptr) && bCollisionEnabled && (DeltaSizeSq > 0.0f))
 		{
 			TArray<FHitResult> Hits;
 
 #if !(UE_BUILD_SHIPPING || UE_BUILD_TEST)
-			if (!this->IsRegistered())
+			if (!this->IsRegistered() && !MyWorld->bIsTearingDown)
 			{
 				if (Actor == nullptr)
 				{
+					//-V523
 					ensureMsgf(
 						this->IsRegistered(),
-						TEXT("MovedComponent %s not initialized"),
+						TEXT("Non-actor MovedComponent %s not registered during sweep"),
 						*this->GetFullName()
 					);
 				}
 				else
-				{ //-V523
+				{
 					ensureMsgf(
 						this->IsRegistered(),
-						TEXT("%s MovedComponent %s not initialized deleteme %d"),
+						TEXT("%s MovedComponent %s not registered during sweep (IsValid %d)"),
 						*Actor->GetName(),
 						*this->GetName(),
-						Actor->IsPendingKill()
+						IsValid(Actor)
 					);
 				}
 			}
 #endif
 
-			UWorld* const            MyWorld              = this->GetWorld();
 			static const FName       TraceTagName         = TEXT("MoveComponent");
 			const bool               bForceGatherOverlaps = !ShouldCheckOverlapFlagToQueueOverlaps(*this);
 			FComponentQueryParams    Params(SCENE_QUERY_STAT(MoveComponent), Actor);
@@ -176,7 +178,7 @@ bool UPF2RootCollisionDelegateComponent::MoveComponentImpl(const FVector&      D
 			if (bHadBlockingHit || (this->GetGenerateOverlapEvents() || bForceGatherOverlaps))
 			{
 				int32 BlockingHitIndex          = INDEX_NONE;
-				float BlockingHitNormalDotDelta = BIG_NUMBER;
+				float BlockingHitNormalDotDelta = UE_BIG_NUMBER;
 
 				for (int32 HitIdx = 0; HitIdx < Hits.Num(); HitIdx++)
 				{
@@ -212,7 +214,7 @@ bool UPF2RootCollisionDelegateComponent::MoveComponentImpl(const FVector&      D
 						UPrimitiveComponent* OverlapComponent = TestHit.Component.Get();
 
 						if ((OverlapComponent != nullptr) &&
-							(OverlapComponent->GetGenerateOverlapEvents() || bForceGatherOverlaps))
+						    (OverlapComponent->GetGenerateOverlapEvents() || bForceGatherOverlaps))
 						{
 							// --- Start Difference from UPrimitiveComponent
 							bool bShouldIgnoreOverlapResult =
@@ -220,7 +222,7 @@ bool UPF2RootCollisionDelegateComponent::MoveComponentImpl(const FVector&      D
 									MyWorld,
 									Actor,
 									*this->CollisionComponent,
-									TestHit.GetActor(),
+									TestHit.HitObjectHandle.FetchActor(),
 									*OverlapComponent,
 									/*bCheckOverlapFlags=*/ !bForceGatherOverlaps
 								);
@@ -295,7 +297,7 @@ bool UPF2RootCollisionDelegateComponent::MoveComponentImpl(const FVector&      D
 				// resolve stuck or improve our movement system - To turn this on, use DebugCapsuleSweepPawn.
 				APawn const* const ActorPawn = (Actor ? Cast<APawn>(Actor) : nullptr);
 
-				if ((ActorPawn  != nullptr) && (ActorPawn->Controller != nullptr) &&
+				if ((ActorPawn != nullptr) && (ActorPawn->Controller != nullptr) &&
 					ActorPawn->Controller->IsLocalPlayerController())
 				{
 					APlayerController const* const PC = CastChecked<APlayerController>(ActorPawn->Controller);
@@ -307,6 +309,7 @@ bool UPF2RootCollisionDelegateComponent::MoveComponentImpl(const FVector&      D
 
 						FCollisionShape CapsuleShape = FCollisionShape::MakeCapsule(CylExtent);
 
+						// --- Start Difference from UPrimitiveComponent
 						PC->CheatManager->AddCapsuleSweepDebugInfo(
 							CollisionTraceStart,
 							CollisionTraceEnd,
@@ -319,6 +322,7 @@ bool UPF2RootCollisionDelegateComponent::MoveComponentImpl(const FVector&      D
 							true,
 							(BlockingHit.bStartPenetrating && BlockingHit.bBlockingHit) ? true : false
 						);
+						// --- End Difference from UPrimitiveComponent
 					}
 				}
 			}
@@ -345,7 +349,9 @@ bool UPF2RootCollisionDelegateComponent::MoveComponentImpl(const FVector&      D
 	{
 		// not sweeping, just go directly to the new transform
 		bMoved = this->InternalSetWorldLocationAndRotation(TraceEnd, NewRotationQuat, bSkipPhysicsMove, Teleport);
+
 		bRotationOnly = (DeltaSizeSq == 0);
+
 		bIncludesOverlapsAtEnd =
 			bRotationOnly &&
 			(this->AreSymmetricRotations(InitialRotationQuat, NewRotationQuat, this->GetComponentScale())) &&
@@ -414,7 +420,7 @@ bool UPF2RootCollisionDelegateComponent::MoveComponentImpl(const FVector&      D
 	const bool bAllowHitDispatch =
 		!BlockingHit.bStartPenetrating || !(MoveFlags & MOVECOMP_DisableBlockingOverlapDispatch);
 
-	if (BlockingHit.bBlockingHit && bAllowHitDispatch && !this->IsPendingKill())
+	if (BlockingHit.bBlockingHit && bAllowHitDispatch && IsValid(this))
 	{
 		check(bFilledHitResult);
 
@@ -439,7 +445,9 @@ bool UPF2RootCollisionDelegateComponent::MoveComponentImpl(const FVector&      D
 		}
 		else
 		{
+			// --- Start Difference from UPrimitiveComponent
 			OutHit->Init(CollisionTraceStart, CollisionTraceEnd);
+			// --- End Difference from UPrimitiveComponent
 		}
 	}
 
@@ -488,7 +496,7 @@ bool UPF2RootCollisionDelegateComponent::ConvertSweptOverlapsToCurrentOverlaps(
 					UPrimitiveComponent* OtherPrimitive = OtherOverlap.OverlapInfo.GetComponent();
 
 					if ((OtherPrimitive != nullptr) &&
-						(OtherPrimitive->GetGenerateOverlapEvents() || bForceGatherOverlaps))
+					    (OtherPrimitive->GetGenerateOverlapEvents() || bForceGatherOverlaps))
 					{
 						if (OtherPrimitive->bMultiBodyOverlap)
 						{
@@ -497,7 +505,7 @@ bool UPF2RootCollisionDelegateComponent::ConvertSweptOverlapsToCurrentOverlaps(
 							return false;
 						}
 						else if ((Cast<USkeletalMeshComponent>(OtherPrimitive) != nullptr) ||
-								 (Cast<USkeletalMeshComponent>(this) != nullptr))
+						         (Cast<USkeletalMeshComponent>(this) != nullptr))
 						{
 							// SkeletalMeshComponent does not support this operation, and would return false in the test
 							// when an actual query could return true.

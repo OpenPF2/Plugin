@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -89,8 +89,8 @@ public:
 	 * @return
 	 *	The player controller that owns this player state.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player State")
-	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerController() const = 0;
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player State", DisplayName="Get Player Controller")
+	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerControllerIntf() const = 0;
 
 	/**
 	 * Determines whether the player owning this player state belongs to the same party as another player.

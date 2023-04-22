@@ -150,20 +150,20 @@ void APF2PlayerControllerBase::GiveCharacter(const TScriptInterface<IPF2Characte
 	int32                                        ThisPartyIndex  = IPF2PartyInterface::PartyIndexNone,
 	                                             OtherPartyIndex = IPF2PartyInterface::PartyIndexNone;
 
-	check(GivenCharacter != nullptr);
+	check(GivenCharacter.GetInterface() != nullptr);
 
-	if (ThisParty != nullptr)
+	if (ThisParty.GetInterface() != nullptr)
 	{
 		ThisPartyIndex = ThisParty->GetPartyIndex();
 	}
 
 	OwnerTracker = GivenCharacter->GetOwnerTrackingComponent();
 
-	if (OwnerTracker != nullptr)
+	if (OwnerTracker.GetInterface() != nullptr)
 	{
 		const TScriptInterface<IPF2PartyInterface> OtherParty = OwnerTracker->GetParty();
 
-		if (OtherParty != nullptr)
+		if (OtherParty.GetInterface() != nullptr)
 		{
 			OtherPartyIndex = OtherParty->GetPartyIndex();
 		}
@@ -318,7 +318,7 @@ bool APF2PlayerControllerBase::Server_CancelCharacterCommand_Validate(AInfo* Com
 	{
 		const TScriptInterface<IPF2CharacterInterface> TargetCharacter = CommandIntf->GetTargetCharacter();
 
-		if (TargetCharacter == nullptr)
+		if (TargetCharacter.GetInterface() == nullptr)
 		{
 			UE_LOG(
 				LogPf2CoreAbilities,
@@ -392,7 +392,7 @@ TScriptInterface<IPF2CharacterQueueInterface> APF2PlayerControllerBase::GetChara
 void APF2PlayerControllerBase::Native_OnPlayerStateAvailable(
 	const TScriptInterface<IPF2PlayerStateInterface> NewPlayerState)
 {
-	if (NewPlayerState == nullptr)
+	if (NewPlayerState.GetInterface() == nullptr)
 	{
 		return;
 	}

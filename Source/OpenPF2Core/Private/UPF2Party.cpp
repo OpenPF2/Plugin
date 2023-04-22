@@ -7,6 +7,8 @@
 // Pruehs, provided under the MIT License. Copyright (c) 2017 Nick Pruehs.
 //
 
+#include <GameFramework/PlayerState.h>
+
 #include <Kismet/GameplayStatics.h>
 
 #include <Net/UnrealNetwork.h>
@@ -52,7 +54,7 @@ TArray<TScriptInterface<IPF2PlayerControllerInterface>> APF2Party::GetMemberCont
 		this->GetMemberStates(),
 		[](const TScriptInterface<IPF2PlayerStateInterface> PlayerState)
 		{
-			return PlayerState->GetPlayerController();
+			return PlayerState->GetPlayerControllerIntf();
 		}
 	);
 }
@@ -100,7 +102,7 @@ void APF2Party::GetBounds(FVector& CenterPoint, FVector& BoxExtent)
 
 void APF2Party::AddPlayerToPartyByController(const TScriptInterface<IPF2PlayerControllerInterface>& Controller)
 {
-	check(Controller != nullptr);
+	check(Controller.GetInterface() != nullptr);
 	this->AddPlayerToPartyByState(Controller->GetPlayerState());
 }
 
@@ -114,11 +116,11 @@ void APF2Party::AddPlayerToPartyByState(const TScriptInterface<IPF2PlayerStateIn
 
 	if (!this->MemberStates.Contains(PlayerStateActor))
 	{
-		const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = PlayerState->GetPlayerController();
+		const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = PlayerState->GetPlayerControllerIntf();
 
 		this->MemberStates.AddUnique(PlayerStateActor);
 
-		check(PlayerController != nullptr);
+		check(PlayerController.GetInterface() != nullptr);
 
 		for (const auto& Character : PlayerController->GetControllableCharacters())
 		{
@@ -131,7 +133,7 @@ void APF2Party::AddPlayerToPartyByState(const TScriptInterface<IPF2PlayerStateIn
 
 void APF2Party::RemovePlayerFromPartyByController(const TScriptInterface<IPF2PlayerControllerInterface>& Controller)
 {
-	check(Controller != nullptr);
+	check(Controller.GetInterface() != nullptr);
 	this->RemovePlayerFromPartyByState(Controller->GetPlayerState());
 }
 
@@ -139,7 +141,7 @@ void APF2Party::RemovePlayerFromPartyByState(const TScriptInterface<IPF2PlayerSt
 {
 	APlayerState* PlayerStateActor;
 
-	check(PlayerState != nullptr);
+	check(PlayerState.GetInterface() != nullptr);
 
 	PlayerStateActor = PlayerState->ToPlayerState();
 
@@ -147,7 +149,7 @@ void APF2Party::RemovePlayerFromPartyByState(const TScriptInterface<IPF2PlayerSt
 	{
 		this->MemberStates.Remove(PlayerStateActor);
 
-		for (const auto& Character : PlayerState->GetPlayerController()->GetControllableCharacters())
+		for (const auto& Character : PlayerState->GetPlayerControllerIntf()->GetControllableCharacters())
 		{
 			this->MemberCharacters.Remove(Character->ToActor());
 		}
@@ -175,7 +177,7 @@ void APF2Party::SetPartyIndex(const int32 NewPartyIndex)
 
 void APF2Party::Native_OnPlayerAdded(const TScriptInterface<IPF2PlayerStateInterface>& PlayerState)
 {
-	check(PlayerState != nullptr);
+	check(PlayerState.GetInterface() != nullptr);
 
 	// Notify listeners.
 	this->BP_OnPlayerAdded(PlayerState);
@@ -184,7 +186,7 @@ void APF2Party::Native_OnPlayerAdded(const TScriptInterface<IPF2PlayerStateInter
 
 void APF2Party::Native_OnPlayerRemoved(const TScriptInterface<IPF2PlayerStateInterface>& PlayerState)
 {
-	check(PlayerState != nullptr);
+	check(PlayerState.GetInterface() != nullptr);
 
 	// Notify listeners.
 	this->BP_OnPlayerRemoved(PlayerState);

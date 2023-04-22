@@ -1,10 +1,12 @@
-// Copyright 2021-2022 Guy Elsmore-Paddock. All Rights Reserved.
+// Copyright 2021-2023 Guy Elsmore-Paddock. All Rights Reserved.
 // Adapted from content that is Copyright Epic Games, Inc. (Action RPG Sample).
 // Licensed only for use with Unreal Engine.
 
 #pragma once
 
 #include <Abilities/Tasks/AbilityTask.h>
+
+#include <Animation/AnimInstance.h>
 
 #include "PF2AbilityTaskBase.h"
 

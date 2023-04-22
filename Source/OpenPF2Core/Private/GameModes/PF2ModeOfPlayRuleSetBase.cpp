@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -28,7 +28,7 @@ void APF2ModeOfPlayRuleSetBase::AttemptToCancelCommand_Implementation(
 	TScriptInterface<IPF2CharacterInterface>    Character;
 	TScriptInterface<IPF2CommandQueueInterface> CommandQueue;
 
-	if (Command == nullptr)
+	if (Command.GetInterface() == nullptr)
 	{
 		UE_LOG(
 			LogPf2CoreAbilities,
@@ -41,7 +41,7 @@ void APF2ModeOfPlayRuleSetBase::AttemptToCancelCommand_Implementation(
 
 	Character = Command->GetTargetCharacter();
 
-	if (Character == nullptr)
+	if (Character.GetInterface() == nullptr)
 	{
 		UE_LOG(
 			LogPf2CoreAbilities,
@@ -55,7 +55,7 @@ void APF2ModeOfPlayRuleSetBase::AttemptToCancelCommand_Implementation(
 
 	CommandQueue = Character->GetCommandQueueComponent();
 
-	if (Character == nullptr)
+	if (Character.GetInterface() == nullptr)
 	{
 		UE_LOG(
 			LogPf2CoreAbilities,

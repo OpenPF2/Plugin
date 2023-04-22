@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -63,7 +63,7 @@ END_DEFINE_PF_SPEC(FPF2SkillModifierCalculationSpec)
 
 void FPF2SkillModifierCalculationSpec::Define()
 {
-	BeforeEach([=, this]()
+	BeforeEach([=]()
 	{
 		this->SetupWorld();
 		this->SetupPawn();
@@ -71,13 +71,13 @@ void FPF2SkillModifierCalculationSpec::Define()
 		this->BeginPlay();
 	});
 
-	AfterEach([=, this]()
+	AfterEach([=]()
 	{
 		this->DestroyPawn();
 		this->DestroyWorld();
 	});
 
-	Describe("Acrobatics Skill", [=, this]
+	Describe("Acrobatics Skill", [=]
 	{
 		const FString AbModFriendlyName             = TEXT("Dexterity");
 		const FString AbModAttributeName            = TEXT("AbDexterityModifier");
@@ -92,7 +92,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		);
 	});
 
-	Describe("Arcana Skill", [=, this]
+	Describe("Arcana Skill", [=]
 	{
 		const FString AbModFriendlyName             = TEXT("Intelligence");
 		const FString AbModAttributeName            = TEXT("AbIntelligenceModifier");
@@ -107,7 +107,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		);
 	});
 
-	Describe("Athletics Skill", [=, this]
+	Describe("Athletics Skill", [=]
 	{
 		const FString AbModFriendlyName             = TEXT("Strength");
 		const FString AbModAttributeName            = TEXT("AbStrengthModifier");
@@ -122,7 +122,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		);
 	});
 
-	Describe("Crafting Skill", [=, this]
+	Describe("Crafting Skill", [=]
 	{
 		const FString AbModFriendlyName             = TEXT("Intelligence");
 		const FString AbModAttributeName            = TEXT("AbIntelligenceModifier");
@@ -137,7 +137,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		);
 	});
 
-	Describe("Deception Skill", [=, this]
+	Describe("Deception Skill", [=]
 	{
 		const FString AbModFriendlyName             = TEXT("Charisma");
 		const FString AbModAttributeName            = TEXT("AbCharismaModifier");
@@ -152,7 +152,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		);
 	});
 
-	Describe("Diplomacy Skill", [=, this]
+	Describe("Diplomacy Skill", [=]
 	{
 		const FString AbModFriendlyName             = TEXT("Charisma");
 		const FString AbModAttributeName            = TEXT("AbCharismaModifier");
@@ -167,7 +167,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		);
 	});
 
-	Describe("Intimidation Skill", [=, this]
+	Describe("Intimidation Skill", [=]
 	{
 		const FString AbModFriendlyName             = TEXT("Charisma");
 		const FString AbModAttributeName            = TEXT("AbCharismaModifier");
@@ -182,7 +182,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		);
 	});
 
-	Describe("Lore 1 Skill", [=, this]
+	Describe("Lore 1 Skill", [=]
 	{
 		const FString AbModFriendlyName             = TEXT("Intelligence");
 		const FString AbModAttributeName            = TEXT("AbIntelligenceModifier");
@@ -197,7 +197,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		);
 	});
 
-	Describe("Lore 2 Skill", [=, this]
+	Describe("Lore 2 Skill", [=]
 	{
 		const FString AbModFriendlyName             = TEXT("Intelligence");
 		const FString AbModAttributeName            = TEXT("AbIntelligenceModifier");
@@ -212,7 +212,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		);
 	});
 
-	Describe("Medicine Skill", [=, this]
+	Describe("Medicine Skill", [=]
 	{
 		const FString AbModFriendlyName             = TEXT("Wisdom");
 		const FString AbModAttributeName            = TEXT("AbWisdomModifier");
@@ -227,7 +227,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		);
 	});
 
-	Describe("Nature Skill", [=, this]
+	Describe("Nature Skill", [=]
 	{
 		const FString AbModFriendlyName             = TEXT("Wisdom");
 		const FString AbModAttributeName            = TEXT("AbWisdomModifier");
@@ -242,7 +242,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		);
 	});
 
-	Describe("Occultism Skill", [=, this]
+	Describe("Occultism Skill", [=]
 	{
 		const FString AbModFriendlyName             = TEXT("Intelligence");
 		const FString AbModAttributeName            = TEXT("AbIntelligenceModifier");
@@ -257,7 +257,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		);
 	});
 
-	Describe("Performance Skill", [=, this]
+	Describe("Performance Skill", [=]
 	{
 		const FString AbModFriendlyName             = TEXT("Charisma");
 		const FString AbModAttributeName            = TEXT("AbCharismaModifier");
@@ -272,7 +272,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		);
 	});
 
-	Describe("Religion Skill", [=, this]
+	Describe("Religion Skill", [=]
 	{
 		const FString AbModFriendlyName             = TEXT("Wisdom");
 		const FString AbModAttributeName            = TEXT("AbWisdomModifier");
@@ -287,7 +287,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		);
 	});
 
-	Describe("Society Skill", [=, this]
+	Describe("Society Skill", [=]
 	{
 		const FString AbModFriendlyName             = TEXT("Intelligence");
 		const FString AbModAttributeName            = TEXT("AbIntelligenceModifier");
@@ -302,7 +302,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		);
 	});
 
-	Describe("Stealth Skill", [=, this]
+	Describe("Stealth Skill", [=]
 	{
 		const FString AbModFriendlyName             = TEXT("Dexterity");
 		const FString AbModAttributeName            = TEXT("AbDexterityModifier");
@@ -317,7 +317,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		);
 	});
 
-	Describe("Survival Skill", [=, this]
+	Describe("Survival Skill", [=]
 	{
 		const FString AbModFriendlyName             = TEXT("Wisdom");
 		const FString AbModAttributeName            = TEXT("AbWisdomModifier");
@@ -332,7 +332,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 		);
 	});
 
-	Describe("Thievery Skill", [=, this]
+	Describe("Thievery Skill", [=]
 	{
 		const FString AbModFriendlyName             = TEXT("Dexterity");
 		const FString AbModAttributeName            = TEXT("AbDexterityModifier");
@@ -363,16 +363,16 @@ void FPF2SkillModifierCalculationSpec::VerifySkillModifier(const FString AbModFr
 		const float                AbModScore     = AbilityValues.Key;
 		const TMap<FString, float> TrainingScores = AbilityValues.Value;
 
-		Describe(FString::Format(TEXT("when the character has a '{0}' Modifier of '{1}'"), {AbModFriendlyName, FString::FormatAsNumber(AbModScore)}), [=, this]()
+		Describe(FString::Format(TEXT("when the character has a '{0}' Modifier of '{1}'"), {AbModFriendlyName, FString::FormatAsNumber(AbModScore)}), [=]()
 		{
 			for (const auto ProficiencyValues : TrainingScores)
 			{
 				const FString ProficiencyLevel  = ProficiencyValues.Key;
 				const float   ExpectedSkillMod = ProficiencyValues.Value;
 
-				Describe(FString::Format(TEXT("when the character is '{0}' in '{1}' skill"), {ProficiencyLevel, SkillModAttributeFriendlyName}), [=, this]()
+				Describe(FString::Format(TEXT("when the character is '{0}' in '{1}' skill"), {ProficiencyLevel, SkillModAttributeFriendlyName}), [=]()
 				{
-					It(FString::Format(TEXT("calculates a '{0}' skill of '{1}'"), {SkillModAttributeFriendlyName, FString::FormatAsNumber(ExpectedSkillMod)}), [=, this]()
+					It(FString::Format(TEXT("calculates a '{0}' skill of '{1}'"), {SkillModAttributeFriendlyName, FString::FormatAsNumber(ExpectedSkillMod)}), [=]()
 					{
 						this->VerifySkillModifier(
 							AbModAttributeName,

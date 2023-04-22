@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -63,7 +63,7 @@ END_DEFINE_PF_SPEC(FPF2SavingThrowModifierCalculationSpec)
 
 void FPF2SavingThrowModifierCalculationSpec::Define()
 {
-	BeforeEach([=, this]()
+	BeforeEach([=]()
 	{
 		this->SetupWorld();
 		this->SetupPawn();
@@ -71,13 +71,13 @@ void FPF2SavingThrowModifierCalculationSpec::Define()
 		this->BeginPlay();
 	});
 
-	AfterEach([=, this]()
+	AfterEach([=]()
 	{
 		this->DestroyPawn();
 		this->DestroyWorld();
 	});
 
-	Describe("Fortitude Saving Throws", [=, this]
+	Describe("Fortitude Saving Throws", [=]
 	{
 		const FString AbModFriendlyName              = TEXT("Constitution");
 		const FString AbModAttributeName             = TEXT("AbConstitutionModifier");
@@ -92,7 +92,7 @@ void FPF2SavingThrowModifierCalculationSpec::Define()
 		);
 	});
 
-	Describe("Reflex Saving Throws", [=, this]
+	Describe("Reflex Saving Throws", [=]
 	{
 		const FString AbModFriendlyName              = TEXT("Dexterity");
 		const FString AbModAttributeName             = TEXT("AbDexterityModifier");
@@ -107,7 +107,7 @@ void FPF2SavingThrowModifierCalculationSpec::Define()
 		);
 	});
 
-	Describe("Will Saving Throws", [=, this]
+	Describe("Will Saving Throws", [=]
 	{
 		const FString AbModFriendlyName              = TEXT("Wisdom");
 		const FString AbModAttributeName             = TEXT("AbWisdomModifier");
@@ -138,16 +138,16 @@ void FPF2SavingThrowModifierCalculationSpec::VerifySavingThrowModifier(const FSt
 		const float                AbModScore     = AbilityValues.Key;
 		const TMap<FString, float> TrainingScores = AbilityValues.Value;
 
-		Describe(FString::Format(TEXT("when the character has a '{0}' modifier of '{1}'"), {AbModFriendlyName, FString::FormatAsNumber(AbModScore)}), [=, this]()
+		Describe(FString::Format(TEXT("when the character has a '{0}' modifier of '{1}'"), {AbModFriendlyName, FString::FormatAsNumber(AbModScore)}), [=]()
 		{
 			for (const auto ProficiencyValues : TrainingScores)
 			{
 				const FString ProficiencyLevel  = ProficiencyValues.Key;
 				const float   ExpectedSavingMod = ProficiencyValues.Value;
 
-				Describe(FString::Format(TEXT("when the character is '{0}' in '{1}' saving throws"), {ProficiencyLevel, SavingModAttributeFriendlyName}), [=, this]()
+				Describe(FString::Format(TEXT("when the character is '{0}' in '{1}' saving throws"), {ProficiencyLevel, SavingModAttributeFriendlyName}), [=]()
 				{
-					It(FString::Format(TEXT("calculates a '{0}' saving throw of '{1}'"), {SavingModAttributeFriendlyName, FString::FormatAsNumber(ExpectedSavingMod)}), [=, this]()
+					It(FString::Format(TEXT("calculates a '{0}' saving throw of '{1}'"), {SavingModAttributeFriendlyName, FString::FormatAsNumber(ExpectedSavingMod)}), [=]()
 					{
 						this->VerifySavingThrowModifier(
 							AbModAttributeName,

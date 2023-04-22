@@ -1,12 +1,18 @@
-﻿// Adapted from "Runtime/Engine/Private/Components/PrimitiveComponent.cpp" (Unreal Engine 4.27), which is Copyright
+﻿// Adapted from "Runtime/Engine/Private/Components/PrimitiveComponent.cpp" (Unreal Engine 5.1), which is Copyright
 // Epic Games, Inc. Licensed only for use with Unreal Engine.
 
 #pragma once
 
 #include <Components/PrimitiveComponent.h>
 
+#include <Engine/OverlapInfo.h>
+#include <Engine/ScopedMovementUpdate.h>
+
+#include <GameFramework/WorldSettings.h>
+
 #include <Internationalization/Text.h>
 
+// ReSharper disable once IdentifierTypo
 #define LOCTEXT_NAMESPACE "PrimitiveComponent"
 
 // =====================================================================================================================
@@ -51,38 +57,11 @@ struct FPredicateOverlapHasDifferentActor
 	bool operator() (const FOverlapInfo& Info) const
 	{
 		// MyOwnerPtr is always valid, so we don't need the IsValid() checks in the WeakObjectPtr comparison operator.
-		return !MyOwnerPtr.HasSameIndexAndSerialNumber(Info.OverlapInfo.Actor);
+		return !MyOwnerPtr.HasSameIndexAndSerialNumber(Info.OverlapInfo.HitObjectHandle.FetchActor());
 	}
 
 private:
 	const TWeakObjectPtr<const AActor> MyOwnerPtr;
-};
-
-/**
- * Predicate that searches for an overlap having the same index, serial number, and body index as the given overlap.
- *
- * (This was copied from PrimitiveComponent.cpp, since it was a private definition).
- */
-struct FFastOverlapInfoCompare
-{
-	explicit FFastOverlapInfoCompare(const FOverlapInfo& BaseInfo): MyBaseInfo(BaseInfo)
-	{
-	}
-
-	bool operator() (const FOverlapInfo& Info) const
-	{
-		return MyBaseInfo.OverlapInfo.Component.HasSameIndexAndSerialNumber(Info.OverlapInfo.Component)
-			&& MyBaseInfo.GetBodyIndex() == Info.GetBodyIndex();
-	}
-
-	bool operator() (const FOverlapInfo* Info) const
-	{
-		return MyBaseInfo.OverlapInfo.Component.HasSameIndexAndSerialNumber(Info->OverlapInfo.Component)
-			&& MyBaseInfo.GetBodyIndex() == Info->GetBodyIndex();
-	}
-
-private:
-	const FOverlapInfo& MyBaseInfo;
 };
 
 // =====================================================================================================================

@@ -1,4 +1,4 @@
-// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -430,7 +430,7 @@ FORCEINLINE int32 UPF2AbilitySystemComponent::GetCharacterLevel() const
 {
 	const TScriptInterface<IPF2CharacterInterface> OwningCharacter = this->GetCharacter();
 
-	if (OwningCharacter == nullptr)
+	if (OwningCharacter.GetInterface() == nullptr)
 	{
 		return 1;
 	}
@@ -621,7 +621,7 @@ void UPF2AbilitySystemComponent::ActivatePassiveGameplayEffect(
 	// Ensure that the GE spec is tagged with its weight no matter how the weight was set (either through API or through
 	// a tag in the InheritableGameplayEffectTags field on the GE definition class itself). Without this, only the tag
 	// from the GE definition spec would pass through.
-	GameplayEffectSpec->DynamicAssetTags.AddTag(PF2GameplayAbilityUtilities::GetTag(WeightGroup));
+	GameplayEffectSpec->AddDynamicAssetTag(PF2GameplayAbilityUtilities::GetTag(WeightGroup));
 
 	// Special case: If the GE being activated is our "dummy" GE for dynamic tags, apply tags to it.
 	//

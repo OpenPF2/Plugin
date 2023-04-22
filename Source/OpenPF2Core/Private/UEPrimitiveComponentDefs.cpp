@@ -1,4 +1,4 @@
-﻿// Adapted from "Runtime/Engine/Private/Components/PrimitiveComponent.cpp" (Unreal Engine 4.27), which is Copyright
+﻿// Adapted from "Runtime/Engine/Private/Components/PrimitiveComponent.cpp" (Unreal Engine 5.1), which is Copyright
 // Epic Games, Inc. Licensed only for use with Unreal Engine.
 
 #pragma once
@@ -9,6 +9,7 @@
 
 #include <HAL/IConsoleManager.h>
 
+// ReSharper disable once IdentifierTypo
 #define LOCTEXT_NAMESPACE "PrimitiveComponent"
 
 // =====================================================================================================================
@@ -62,7 +63,7 @@ extern bool ShouldIgnoreHitResult(const UWorld*             InWorld,
 		if ((MoveFlags & MOVECOMP_IgnoreBases) && (MovingActor != nullptr))
 		{
 			// Ignore if there's a base relationship between moving actor and hit actor
-			AActor const* const HitActor = TestHit.GetActor();
+			AActor const* const HitActor = TestHit.HitObjectHandle.FetchActor();
 
 			if (HitActor != nullptr)
 			{
@@ -78,11 +79,11 @@ extern bool ShouldIgnoreHitResult(const UWorld*             InWorld,
 		if (((TestHit.Distance < PrimitiveComponentCVars::HitDistanceTolerance->GetFloat()) || TestHit.bStartPenetrating) &&
 			!(MoveFlags & MOVECOMP_NeverIgnoreBlockingOverlaps))
 		{
- 			const float DotTolerance = PrimitiveComponentCVars::InitialOverlapTolerance->GetFloat();
+			const float DotTolerance = PrimitiveComponentCVars::InitialOverlapTolerance->GetFloat();
 
 			// Dot product of movement direction against 'exit' direction
 			const FVector MovementDir = MovementDirDenormalized.GetSafeNormal();
-			const float MoveDot = (TestHit.ImpactNormal | MovementDir);
+			const float   MoveDot     = (TestHit.ImpactNormal | MovementDir);
 
 			const bool bMovingOut = MoveDot > DotTolerance;
 
@@ -93,34 +94,34 @@ extern bool ShouldIgnoreHitResult(const UWorld*             InWorld,
 					UE_LOG(
 						LogTemp,
 						Log,
-						 TEXT("Overlapping %s Dir %s Dot %f Normal %s Depth %f"),
-						 *GetNameSafe(TestHit.Component.Get()),
-						 *MovementDir.ToString(),
-						 MoveDot,
-						 *TestHit.ImpactNormal.ToString(),
-						 TestHit.PenetrationDepth
+						TEXT("Overlapping %s Dir %s Dot %f Normal %s Depth %f"),
+						*GetNameSafe(TestHit.Component.Get()),
+						*MovementDir.ToString(),
+						MoveDot,
+						*TestHit.ImpactNormal.ToString(),
+						TestHit.PenetrationDepth
 					);
 
 					DrawDebugDirectionalArrow(
 						InWorld,
 						TestHit.TraceStart,
 						TestHit.TraceStart + 30.f * TestHit.ImpactNormal,
-						5.f,
-						bMovingOut ? FColor(64,128,255) : FColor(255,64,64),
+						5.0f,
+						bMovingOut ? FColor(64, 128, 255) : FColor(255, 64, 64),
 						false,
-						4.f
+						4.0f
 					);
 
-					if (TestHit.PenetrationDepth > KINDA_SMALL_NUMBER)
+					if (TestHit.PenetrationDepth > UE_KINDA_SMALL_NUMBER)
 					{
 						DrawDebugDirectionalArrow(
 							InWorld,
 							TestHit.TraceStart,
 							TestHit.TraceStart + TestHit.PenetrationDepth * TestHit.Normal,
-							5.f,
-							FColor(64,255,64),
+							5.0f,
+							FColor(64, 255, 64),
 							false,
-							4.f
+							4.0f
 						);
 					}
 				}

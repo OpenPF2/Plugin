@@ -281,7 +281,7 @@ protected:
 	UFUNCTION(
 		BlueprintImplementableEvent,
 		Category="OpenPF2|Player Controllers",
-		meta=(DisplayName="On Clear Target Location", ForceAsFunction)
+		meta=(DisplayName="On Clear Target Location")
 	)
 	void BP_OnClearTargetLocation();
 };

@@ -46,17 +46,17 @@ void UPF2AbilityTask_AcquireTargetFromPlayerController::Activate()
 
 		CharacterAscIntf = this->GetCharacterAbilitySystemComponent();
 
-		if (CharacterAscIntf != nullptr)
+		if (CharacterAscIntf.GetInterface() != nullptr)
 		{
 			CharacterIntf = CharacterAscIntf->GetCharacter();
 		}
 
-		if (CharacterIntf != nullptr)
+		if (CharacterIntf.GetInterface() != nullptr)
 		{
 			PlayerController = CharacterIntf->GetPlayerController();
 		}
 
-		if (PlayerController == nullptr)
+		if (PlayerController.GetInterface() == nullptr)
 		{
 			// No player controller to interrogate.
 			this->EndTask();
@@ -95,7 +95,7 @@ void UPF2AbilityTask_AcquireTargetFromPlayerController::WaitForTargetFromClient(
 	const FPredictionKey             ActivationPredictionKey = this->GetActivationPredictionKey();
 	UAbilitySystemComponent*         Asc                     = this->GetNativeAbilitySystemComponent();
 
-	if (this->IsPendingKill())
+	if (!IsValid(this))
 	{
 		return;
 	}

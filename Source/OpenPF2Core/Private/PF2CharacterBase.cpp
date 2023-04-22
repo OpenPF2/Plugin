@@ -113,7 +113,7 @@ TScriptInterface<IPF2PlayerControllerInterface> APF2CharacterBase::GetPlayerCont
 	// for a party character in exploration mode. For any other situation, we have to use the owner tracking component
 	// (if there is one) to identify the PC for this character. If this doesn't work, then this character isn't
 	// controllable by any PCs right now but might be controllable by AI (e.g. by the story or campaign).
-	if (PlayerController == nullptr)
+	if (PlayerController.GetInterface() == nullptr)
 	{
 		const TScriptInterface<IPF2OwnerTrackingInterface> OwnerTrackingComponent = this->GetOwnerTrackingComponent();
 
@@ -125,19 +125,21 @@ TScriptInterface<IPF2PlayerControllerInterface> APF2CharacterBase::GetPlayerCont
 			*(this->GetIdForLogs())
 		);
 
-		if (OwnerTrackingComponent != nullptr)
+		if (OwnerTrackingComponent.GetInterface() != nullptr)
 		{
 			const TScriptInterface<IPF2PlayerStateInterface> OwnerPlayerState =
 				OwnerTrackingComponent->GetStateOfOwningPlayer();
 
-			if (OwnerPlayerState != nullptr)
+			if (OwnerPlayerState.GetInterface() != nullptr)
 			{
-				PlayerController = OwnerPlayerState->GetPlayerController();
+				PlayerController = OwnerPlayerState->GetPlayerControllerIntf();
 			}
 		}
 	}
 
-	if (PlayerController == nullptr)
+	// If this is *still* null, we weren't able to find an owner tracking component in this character, or the controller
+	// of the character is a player controller that is not OpenPF2-compatible.
+	if (PlayerController.GetInterface() == nullptr)
 	{
 		UE_LOG(
 			LogPf2Core,

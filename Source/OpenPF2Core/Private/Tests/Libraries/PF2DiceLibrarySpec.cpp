@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -29,7 +29,7 @@ void FPF2DiceLibrarySpec::Define()
 		int MaxRoll;
 	};
 
-	Describe(TEXT("RollStringSum"), [=, this]
+	Describe(TEXT("RollStringSum"), [=]
 	{
 		TArray<FDiceRollStringTestTuple> ExpectedRanges =
 		{
@@ -48,9 +48,9 @@ void FPF2DiceLibrarySpec::Define()
 			const int     MinRoll    = TestParameters.MinRoll,
 			              MaxRoll    = TestParameters.MaxRoll;
 
-			Describe(FString::Format(TEXT("when given '{0}'"), {RollString}), [=, this]
+			Describe(FString::Format(TEXT("when given '{0}'"), {RollString}), [=]
 			{
-				It(FString::Format(TEXT("returns a number greater than or equal to '{0}' over 10 rolls"), {FString::FormatAsNumber(MinRoll)}), [=, this]
+				It(FString::Format(TEXT("returns a number greater than or equal to '{0}' over 10 rolls"), {FString::FormatAsNumber(MinRoll)}), [=]
 				{
 					float MinRollSeen = 9999;
 
@@ -73,7 +73,7 @@ void FPF2DiceLibrarySpec::Define()
 					);
 				});
 
-				It(FString::Format(TEXT("returns a number less than or equal to '{0}' over 10 rolls"), {FString::FormatAsNumber(MaxRoll)}), [=, this]
+				It(FString::Format(TEXT("returns a number less than or equal to '{0}' over 10 rolls"), {FString::FormatAsNumber(MaxRoll)}), [=]
 				{
 					float MaxRollSeen = -1;
 
@@ -98,7 +98,7 @@ void FPF2DiceLibrarySpec::Define()
 		}
 	});
 
-	Describe(TEXT("RollSum"), [=, this]
+	Describe(TEXT("RollSum"), [=]
 	{
 		TArray<FDiceRollTestTuple> ExpectedRanges =
 		{
@@ -117,9 +117,9 @@ void FPF2DiceLibrarySpec::Define()
 			          MinRoll   = TestParameters.MinRoll,
 			          MaxRoll   = TestParameters.MaxRoll;
 
-			Describe(FString::Format(TEXT("when given '{0}d{1}'"), {FString::FormatAsNumber(RollCount), FString::FormatAsNumber(DieSize)}), [=, this]
+			Describe(FString::Format(TEXT("when given '{0}d{1}'"), {FString::FormatAsNumber(RollCount), FString::FormatAsNumber(DieSize)}), [=]
 			{
-				It(FString::Format(TEXT("returns a number greater than or equal to '{0}' over 10 rolls"), {FString::FormatAsNumber(MinRoll)}), [=, this]
+				It(FString::Format(TEXT("returns a number greater than or equal to '{0}' over 10 rolls"), {FString::FormatAsNumber(MinRoll)}), [=]
 				{
 					float MinRollSeen = 9999;
 
@@ -142,7 +142,7 @@ void FPF2DiceLibrarySpec::Define()
 					);
 				});
 
-				It(FString::Format(TEXT("returns a number less than or equal to '{0}' over 10 rolls"), {FString::FormatAsNumber(MaxRoll)}), [=, this]
+				It(FString::Format(TEXT("returns a number less than or equal to '{0}' over 10 rolls"), {FString::FormatAsNumber(MaxRoll)}), [=]
 				{
 					float MaxRollSeen = -1;
 
@@ -167,7 +167,7 @@ void FPF2DiceLibrarySpec::Define()
 		}
 	});
 
-	Describe(TEXT("RollString"), [=, this]
+	Describe(TEXT("RollString"), [=]
 	{
 		TArray<FDiceRollStringTestTuple> ExpectedRanges =
 		{
@@ -186,9 +186,9 @@ void FPF2DiceLibrarySpec::Define()
 			const int     MinRoll    = TestParameters.MinRoll,
 			              MaxRoll    = TestParameters.MaxRoll;
 
-			Describe(FString::Format(TEXT("when given '{0}'"), {RollString}), [=, this]
+			Describe(FString::Format(TEXT("when given '{0}'"), {RollString}), [=]
 			{
-				It(FString::Format(TEXT("returns a number greater than or equal to '{0}' over 10 rolls"), {FString::FormatAsNumber(MinRoll)}), [=, this]
+				It(FString::Format(TEXT("returns a number greater than or equal to '{0}' over 10 rolls"), {FString::FormatAsNumber(MinRoll)}), [=]
 				{
 					float MinRollSeen = 9999;
 
@@ -211,7 +211,7 @@ void FPF2DiceLibrarySpec::Define()
 					);
 				});
 
-				It(FString::Format(TEXT("returns a number less than or equal to '{0}' over 10 rolls"), {FString::FormatAsNumber(MaxRoll)}), [=, this]
+				It(FString::Format(TEXT("returns a number less than or equal to '{0}' over 10 rolls"), {FString::FormatAsNumber(MaxRoll)}), [=]
 				{
 					float MaxRollSeen = -1;
 
@@ -236,13 +236,13 @@ void FPF2DiceLibrarySpec::Define()
 		}
 	});
 
-	Describe(TEXT("Roll"), [=, this]
+	Describe(TEXT("Roll"), [=]
 	{
 		for (int DieSize = 1; DieSize < 64; ++DieSize)
 		{
-			Describe(FString::Format(TEXT("when given a '{0}'-sided die"), {FString::FormatAsNumber(DieSize)}), [=, this]
+			Describe(FString::Format(TEXT("when given a '{0}'-sided die"), {FString::FormatAsNumber(DieSize)}), [=]
 			{
-				It(TEXT("returns an array that contains one result for each roll"), [=, this]
+				It(TEXT("returns an array that contains one result for each roll"), [=]
 				{
 					TestEqual(
 						FString::Format(TEXT("Roll(3, {0}).Num() == 3"), {DieSize}),
@@ -257,7 +257,7 @@ void FPF2DiceLibrarySpec::Define()
 					);
 				});
 
-				It(TEXT("returns a number greater than or equal to '1' over 10 rolls"), [=, this]
+				It(TEXT("returns a number greater than or equal to '1' over 10 rolls"), [=]
 				{
 					float               MinRollSeen = 9999;
 					const TArray<int32> Rolls       = UPF2DiceLibrary::Roll(10, DieSize);
@@ -273,7 +273,7 @@ void FPF2DiceLibrarySpec::Define()
 					);
 				});
 
-				It(FString::Format(TEXT("returns a number less than or equal to '{0}' over 10 rolls"), {FString::FormatAsNumber(DieSize)}), [=, this]
+				It(FString::Format(TEXT("returns a number less than or equal to '{0}' over 10 rolls"), {FString::FormatAsNumber(DieSize)}), [=]
 				{
 					float               MaxRollSeen = -1;
 					const TArray<int32> Rolls       = UPF2DiceLibrary::Roll(10, DieSize);
@@ -297,7 +297,7 @@ void FPF2DiceLibrarySpec::Define()
 		}
 	});
 
-	Describe(TEXT("NextSizeString"), [=, this]
+	Describe(TEXT("NextSizeString"), [=]
 	{
 		TMap<FString, FString> ExpectedValues =
 		{
@@ -313,9 +313,9 @@ void FPF2DiceLibrarySpec::Define()
 			const FString RollExpression = TestParameters.Key;
 			const FString ExpectedOutput = TestParameters.Value;
 
-			Describe(FString::Format(TEXT("when given '{0}'"), {RollExpression}), [=, this]
+			Describe(FString::Format(TEXT("when given '{0}'"), {RollExpression}), [=]
 			{
-				It(FString::Format(TEXT("returns '{0}'"), {ExpectedOutput}), [=, this]
+				It(FString::Format(TEXT("returns '{0}'"), {ExpectedOutput}), [=]
 				{
 					TestEqual(
 						"Result",
@@ -327,7 +327,7 @@ void FPF2DiceLibrarySpec::Define()
 		}
 	});
 
-	Describe(TEXT("NextSize"), [=, this]
+	Describe(TEXT("NextSize"), [=]
 	{
 		TMap<int32, int32> ExpectedValues =
 		{
@@ -342,9 +342,9 @@ void FPF2DiceLibrarySpec::Define()
 			const int32 DieSize        = TestParameters.Key;
 			const int32 ExpectedOutput = TestParameters.Value;
 
-			Describe(FString::Format(TEXT("when given '{0}'"), {FString::FormatAsNumber(DieSize)}), [=, this]
+			Describe(FString::Format(TEXT("when given '{0}'"), {FString::FormatAsNumber(DieSize)}), [=]
 			{
-				It(FString::Format(TEXT("returns '{0}'"), {FString::FormatAsNumber(ExpectedOutput)}), [=, this]
+				It(FString::Format(TEXT("returns '{0}'"), {FString::FormatAsNumber(ExpectedOutput)}), [=]
 				{
 					TestEqual(
 						"Result",

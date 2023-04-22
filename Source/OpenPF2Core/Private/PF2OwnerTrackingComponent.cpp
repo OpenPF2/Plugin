@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -51,22 +51,22 @@ void UPF2OwnerTrackingComponent::SetParty(const TScriptInterface<IPF2PartyInterf
 		int32                                            OwningPartyIndex = IPF2PartyInterface::PartyIndexNone,
 		                                                 NewPartyIndex    = IPF2PartyInterface::PartyIndexNone;
 
-		if (PlayerState != nullptr)
+		if (PlayerState.GetInterface() != nullptr)
 		{
 			const TScriptInterface<IPF2PartyInterface> OwningPlayerParty = PlayerState->GetParty();
 
-			if (OwningPlayerParty != nullptr)
+			if (OwningPlayerParty.GetInterface() != nullptr)
 			{
 				OwningPartyIndex = OwningPlayerParty->GetPartyIndex();
 			}
 		}
 
-		if (NewParty != nullptr)
+		if (NewParty.GetInterface() != nullptr)
 		{
 			NewPartyIndex = NewParty->GetPartyIndex();
 		}
 
-		if ((PlayerState == nullptr) || (OwningPartyIndex == NewPartyIndex))
+		if ((PlayerState.GetInterface() == nullptr) || (OwningPartyIndex == NewPartyIndex))
 		{
 			this->Party = Cast<AInfo>(NewParty.GetObject());
 
@@ -120,7 +120,7 @@ bool UPF2OwnerTrackingComponent::IsSamePartyAsActor(AActor* OtherActor) const
 		const IPF2OwnerTrackingInterface* OtherComponent =
 			PF2InterfaceUtilities::FindComponentByInterface<IPF2OwnerTrackingInterface, UPF2OwnerTrackingInterface>(OtherActor);
 
-		if ((MyOwner != nullptr) && (OtherComponent != nullptr))
+		if ((MyOwner.GetInterface() != nullptr) && (OtherComponent != nullptr))
 		{
 			const TScriptInterface<IPF2PlayerStateInterface> OtherOwner = OtherComponent->GetStateOfOwningPlayer();
 
@@ -137,11 +137,11 @@ bool UPF2OwnerTrackingComponent::IsSamePartyAsPlayerWithController(
 	bool                                             Result      = false;
 	const TScriptInterface<IPF2PlayerStateInterface> PlayerState = this->GetStateOfOwningPlayer();
 
-	if (PlayerState != nullptr)
+	if (PlayerState.GetInterface() != nullptr)
 	{
 		TScriptInterface<IPF2PlayerStateInterface> OtherPlayerState;
 
-		check(OtherController != nullptr);
+		check(OtherController.GetInterface() != nullptr);
 
 		OtherPlayerState = OtherController->GetPlayerState();
 
