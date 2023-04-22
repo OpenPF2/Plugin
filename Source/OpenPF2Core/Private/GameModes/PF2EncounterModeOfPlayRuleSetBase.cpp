@@ -84,7 +84,7 @@ void APF2EncounterModeOfPlayRuleSetBase::StartTurnForCharacter(
 {
 	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
 
-	check(Character != nullptr);
+	check(Character.GetInterface() != nullptr);
 
 	UE_LOG(
 		LogPf2CoreEncounters,
@@ -95,7 +95,7 @@ void APF2EncounterModeOfPlayRuleSetBase::StartTurnForCharacter(
 
 	this->SetActiveCharacter(Character);
 
-	if (PlayerController != nullptr)
+	if (PlayerController.GetInterface() != nullptr)
 	{
 		IPF2PlayerControllerInterface::Execute_Multicast_OnEncounterTurnStarted(PlayerController.GetObject());
 	}
@@ -107,7 +107,7 @@ void APF2EncounterModeOfPlayRuleSetBase::EndTurnForCharacter(const TScriptInterf
 {
 	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
 
-	check(Character != nullptr);
+	check(Character.GetInterface() != nullptr);
 
 	UE_LOG(
 		LogPf2CoreEncounters,
@@ -118,7 +118,7 @@ void APF2EncounterModeOfPlayRuleSetBase::EndTurnForCharacter(const TScriptInterf
 
 	this->SetActiveCharacter(TScriptInterface<IPF2CharacterInterface>(nullptr));
 
-	if (PlayerController != nullptr)
+	if (PlayerController.GetInterface() != nullptr)
 	{
 		IPF2PlayerControllerInterface::Execute_Multicast_OnEncounterTurnEnded(PlayerController.GetObject());
 	}
@@ -132,7 +132,7 @@ bool APF2EncounterModeOfPlayRuleSetBase::DoesCharacterHaveNextCommandQueued(
 	bool                                              Result;
 	const TScriptInterface<IPF2CommandQueueInterface> CommandQueue = Character->GetCommandQueueComponent();
 
-	if (CommandQueue == nullptr)
+	if (CommandQueue.GetInterface() == nullptr)
 	{
 		UE_LOG(
 			LogPf2CoreEncounters,
@@ -149,7 +149,7 @@ bool APF2EncounterModeOfPlayRuleSetBase::DoesCharacterHaveNextCommandQueued(
 
 		CommandQueue->PeekNext(NextCommand);
 
-		Result = (NextCommand != nullptr);
+		Result = (NextCommand.GetInterface() != nullptr);
 	}
 
 	return Result;
@@ -161,7 +161,7 @@ void APF2EncounterModeOfPlayRuleSetBase::QueueCommandForCharacter(
 {
 	const TScriptInterface<IPF2CommandQueueInterface> CommandQueue = Character->GetCommandQueueComponent();
 
-	if (CommandQueue == nullptr)
+	if (CommandQueue.GetInterface() == nullptr)
 	{
 		UE_LOG(
 			LogPf2CoreEncounters,
@@ -191,7 +191,7 @@ void APF2EncounterModeOfPlayRuleSetBase::CancelQueuedCommandsForAllCharacters()
 	{
 		const TScriptInterface<IPF2CommandQueueInterface> CommandQueue = Character->GetCommandQueueComponent();
 
-		if (CommandQueue == nullptr)
+		if (CommandQueue.GetInterface() == nullptr)
 		{
 			UE_LOG(
 				LogPf2CoreEncounters,
@@ -213,7 +213,7 @@ EPF2CommandExecuteImmediatelyResult APF2EncounterModeOfPlayRuleSetBase::ExecuteN
 	EPF2CommandExecuteImmediatelyResult               Result;
 	const TScriptInterface<IPF2CommandQueueInterface> CommandQueue = Character->GetCommandQueueComponent();
 
-	if (CommandQueue == nullptr)
+	if (CommandQueue.GetInterface() == nullptr)
 	{
 		UE_LOG(
 			LogPf2CoreEncounters,
@@ -238,7 +238,7 @@ void APF2EncounterModeOfPlayRuleSetBase::PeekNextQueuedCommandForCharacter(
 {
 	const TScriptInterface<IPF2CommandQueueInterface> CommandQueue = Character->GetCommandQueueComponent();
 
-	if (CommandQueue == nullptr)
+	if (CommandQueue.GetInterface() == nullptr)
 	{
 		UE_LOG(
 			LogPf2CoreEncounters,
@@ -261,7 +261,7 @@ void APF2EncounterModeOfPlayRuleSetBase::PopNextCommandQueuedForCharacter(
 {
 	const TScriptInterface<IPF2CommandQueueInterface> CommandQueue = Character->GetCommandQueueComponent();
 
-	if (CommandQueue == nullptr)
+	if (CommandQueue.GetInterface() == nullptr)
 	{
 		UE_LOG(
 			LogPf2CoreEncounters,

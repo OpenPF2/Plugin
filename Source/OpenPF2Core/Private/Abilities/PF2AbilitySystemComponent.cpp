@@ -430,7 +430,7 @@ FORCEINLINE int32 UPF2AbilitySystemComponent::GetCharacterLevel() const
 {
 	const TScriptInterface<IPF2CharacterInterface> OwningCharacter = this->GetCharacter();
 
-	if (OwningCharacter == nullptr)
+	if (OwningCharacter.GetInterface() == nullptr)
 	{
 		return 1;
 	}

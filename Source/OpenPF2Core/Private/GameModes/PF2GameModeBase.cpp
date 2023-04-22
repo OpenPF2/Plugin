@@ -61,11 +61,11 @@ void APF2GameModeBase::TransferCharacterOwnership(
 {
 	TScriptInterface<IPF2OwnerTrackingInterface> OwnerTracker;
 
-	check(Character != nullptr);
+	check(Character.GetInterface() != nullptr);
 
 	OwnerTracker = Character->GetOwnerTrackingComponent();
 
-	if (OwnerTracker == nullptr)
+	if (OwnerTracker.GetInterface() == nullptr)
 	{
 		UE_LOG(
 			LogPf2Core,
@@ -78,7 +78,7 @@ void APF2GameModeBase::TransferCharacterOwnership(
 	{
 		const TScriptInterface<IPF2PlayerStateInterface> OldOwnerPlayerState = OwnerTracker->GetStateOfOwningPlayer();
 
-		if (OldOwnerPlayerState != nullptr)
+		if (OldOwnerPlayerState.GetInterface() != nullptr)
 		{
 			const TScriptInterface<IPF2PlayerControllerInterface> OldController =
 				OldOwnerPlayerState->GetPlayerControllerIntf();
@@ -89,7 +89,7 @@ void APF2GameModeBase::TransferCharacterOwnership(
 		OwnerTracker->SetOwningPlayerByController(NewController);
 	}
 
-	if (NewController == nullptr)
+	if (NewController.GetInterface() == nullptr)
 	{
 		UE_LOG(
 			LogPf2Core,
@@ -121,7 +121,7 @@ void APF2GameModeBase::SwitchPartyOfPlayer(const TScriptInterface<IPF2PlayerCont
 	const TScriptInterface<IPF2PlayerStateInterface> PlayerState = PlayerController->GetPlayerState();
 	TScriptInterface<IPF2PartyInterface>             OldParty;
 
-	check(PlayerState != nullptr);
+	check(PlayerState.GetInterface() != nullptr);
 
 	OldParty = PlayerState->GetParty();
 
@@ -144,17 +144,17 @@ void APF2GameModeBase::SwitchPartyOfPlayerAndOwnedCharacters(
 	TScriptInterface<IPF2PlayerStateInterface> PlayerState;
 	TScriptInterface<IPF2PartyInterface>       OldParty;
 
-	check(PlayerController != nullptr);
+	check(PlayerController.GetInterface() != nullptr);
 
 	PlayerState = PlayerController->GetPlayerState();
-	check(PlayerState != nullptr);
+	check(PlayerState.GetInterface() != nullptr);
 
 	OldParty = PlayerState->GetParty();
 
 	if (OldParty != NewParty)
 	{
 		// Remove from old party, if there is one.
-		if (OldParty != nullptr)
+		if (OldParty.GetInterface() != nullptr)
 		{
 			OldParty->RemovePlayerFromPartyByState(PlayerState);
 		}
@@ -170,7 +170,7 @@ void APF2GameModeBase::SwitchPartyOfPlayerAndOwnedCharacters(
 		}
 
 		// Notify the new party, if there is one.
-		if (NewParty != nullptr)
+		if (NewParty.GetInterface() != nullptr)
 		{
 			NewParty->AddPlayerToPartyByState(PlayerState);
 		}
@@ -196,7 +196,7 @@ void APF2GameModeBase::AddCharacterToEncounter(const TScriptInterface<IPF2Charac
 {
 	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
 
-	if (RuleSet == nullptr)
+	if (RuleSet.GetInterface() == nullptr)
 	{
 		UE_LOG(
 			LogPf2CoreEncounters,
@@ -215,7 +215,7 @@ void APF2GameModeBase::RemoveCharacterFromEncounter(const TScriptInterface<IPF2C
 {
 	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
 
-	if (RuleSet == nullptr)
+	if (RuleSet.GetInterface() == nullptr)
 	{
 		UE_LOG(
 			LogPf2CoreEncounters,
@@ -236,7 +236,7 @@ EPF2CommandExecuteOrQueueResult APF2GameModeBase::AttemptToExecuteOrQueueCommand
 	EPF2CommandExecuteOrQueueResult                        Result;
 	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
 
-	if (RuleSet == nullptr)
+	if (RuleSet.GetInterface() == nullptr)
 	{
 		UE_LOG(
 			LogPf2CoreEncounters,
@@ -260,7 +260,7 @@ void APF2GameModeBase::AttemptToCancelCommand(TScriptInterface<IPF2CharacterComm
 {
 	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
 
-	if (RuleSet == nullptr)
+	if (RuleSet.GetInterface() == nullptr)
 	{
 		UE_LOG(
 			LogPf2CoreEncounters,
@@ -292,7 +292,7 @@ void APF2GameModeBase::HandleStartingNewPlayer_Implementation(APlayerController*
 
 	RuleSet = this->GetModeOfPlayRuleSet();
 
-	if (RuleSet != nullptr)
+	if (RuleSet.GetInterface() != nullptr)
 	{
 		IPF2PlayerControllerInterface* PlayerControllerIntf = Cast<IPF2PlayerControllerInterface>(NewPlayer);
 
@@ -362,7 +362,7 @@ void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeO
 	const TScriptInterface<IPF2GameStateInterface> Pf2GameState =
 		PF2InterfaceUtilities::ToScriptInterface(this->GetGameStateIntf());
 
-	if (Pf2GameState == nullptr)
+	if (Pf2GameState.GetInterface() == nullptr)
 	{
 		UE_LOG(
 			LogPf2Core,
@@ -382,7 +382,7 @@ void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeO
 			// We're not in any mode.
 			bCanTransition = true;
 		}
-		else if (OldRuleSet == nullptr)
+		else if (OldRuleSet.GetInterface() == nullptr)
 		{
 			// This typically should not happen. If it does, then the game designer is missing a rule set mapping. By
 			// default, we'll allow the transition since we have no rule set to veto it.
@@ -425,7 +425,7 @@ void APF2GameModeBase::ForceSwitchModeOfPlay(const EPF2ModeOfPlayType NewModeOfP
 	const TScriptInterface<IPF2GameStateInterface> Pf2GameState =
 		PF2InterfaceUtilities::ToScriptInterface(this->GetGameStateIntf());
 
-	if (Pf2GameState == nullptr)
+	if (Pf2GameState.GetInterface() == nullptr)
 	{
 		UE_LOG(
 			LogPf2Core,
@@ -440,7 +440,7 @@ void APF2GameModeBase::ForceSwitchModeOfPlay(const EPF2ModeOfPlayType NewModeOfP
 		const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> OldRuleSet    = Pf2GameState->GetModeOfPlayRuleSet();
 		const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> NewRuleSet    = this->CreateModeOfPlayRuleSet(NewModeOfPlay);
 
-		if (OldRuleSet != nullptr)
+		if (OldRuleSet.GetInterface() != nullptr)
 		{
 			AActor* OldRuleSetActor = Cast<AActor>(OldRuleSet.GetObject());
 
@@ -456,7 +456,7 @@ void APF2GameModeBase::ForceSwitchModeOfPlay(const EPF2ModeOfPlayType NewModeOfP
 
 		Pf2GameState->SetModeOfPlay(NewModeOfPlay, NewRuleSet);
 
-		if (NewRuleSet != nullptr)
+		if (NewRuleSet.GetInterface() != nullptr)
 		{
 			IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnModeOfPlayStart(NewRuleSet.GetObject(), NewModeOfPlay);
 		}

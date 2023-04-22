@@ -237,7 +237,7 @@ public:
 	{
 		UWorld* World;
 
-		if (this->Character == nullptr)
+		if (this->Character.GetInterface() == nullptr)
 		{
 			World = nullptr;
 		}

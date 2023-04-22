@@ -228,7 +228,7 @@ void UPF2CommandBindingsComponent::ExecuteBoundAbility(const FName              
 	Character        = PF2InterfaceUtilities::ToScriptInterface(CharacterIntf);
 	PlayerController = CharacterIntf->GetPlayerController();
 
-	check(PlayerController != nullptr);
+	check(PlayerController.GetInterface() != nullptr);
 
 	if (this->FilterAbilityActivation(ActionName, Character, FilteredAbilityHandle, FilteredAbilityPayload))
 	{

@@ -28,7 +28,7 @@ void APF2ModeOfPlayRuleSetBase::AttemptToCancelCommand_Implementation(
 	TScriptInterface<IPF2CharacterInterface>    Character;
 	TScriptInterface<IPF2CommandQueueInterface> CommandQueue;
 
-	if (Command == nullptr)
+	if (Command.GetInterface() == nullptr)
 	{
 		UE_LOG(
 			LogPf2CoreAbilities,
@@ -41,7 +41,7 @@ void APF2ModeOfPlayRuleSetBase::AttemptToCancelCommand_Implementation(
 
 	Character = Command->GetTargetCharacter();
 
-	if (Character == nullptr)
+	if (Character.GetInterface() == nullptr)
 	{
 		UE_LOG(
 			LogPf2CoreAbilities,
@@ -55,7 +55,7 @@ void APF2ModeOfPlayRuleSetBase::AttemptToCancelCommand_Implementation(
 
 	CommandQueue = Character->GetCommandQueueComponent();
 
-	if (Character == nullptr)
+	if (Character.GetInterface() == nullptr)
 	{
 		UE_LOG(
 			LogPf2CoreAbilities,

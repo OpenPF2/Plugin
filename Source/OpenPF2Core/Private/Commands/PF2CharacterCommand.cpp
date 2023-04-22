@@ -205,7 +205,7 @@ void APF2CharacterCommand::Cancel_WithRemoteServer()
 	const TScriptInterface<IPF2CharacterInterface>        Character        = this->GetTargetCharacter();
 	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
 
-	if (PlayerController == nullptr)
+	if (PlayerController.GetInterface() == nullptr)
 	{
 		UE_LOG(
 			LogPf2CoreAbilities,

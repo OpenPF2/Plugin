@@ -116,7 +116,7 @@ EPF2CommandExecuteImmediatelyResult UPF2CommandQueueComponent::PopAndExecuteNext
 	// it is.
 	this->PeekNext(NextCommand);
 
-	if (NextCommand == nullptr)
+	if (NextCommand.GetInterface() == nullptr)
 	{
 		UE_LOG(
 			LogPf2Core,

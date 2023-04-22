@@ -56,7 +56,7 @@ void APF2PlayerStateBase::SetParty(const TScriptInterface<IPF2PartyInterface> Ne
 
 TScriptInterface<IPF2PlayerControllerInterface> APF2PlayerStateBase::GetPlayerControllerIntf() const
 {
-	if (this->CachedPlayerController == nullptr)
+	if (this->CachedPlayerController.GetInterface() == nullptr)
 	{
 		UWorld*               World     = this->GetWorld();
 		const AGameStateBase* GameState = UGameplayStatics::GetGameState(World);
@@ -100,7 +100,7 @@ TScriptInterface<IPF2PlayerControllerInterface> APF2PlayerStateBase::GetPlayerCo
 bool APF2PlayerStateBase::IsSamePartyAsPlayerWithController(
 	const TScriptInterface<IPF2PlayerControllerInterface>& OtherPlayerController) const
 {
-	check(OtherPlayerController != nullptr);
+	check(OtherPlayerController.GetInterface() != nullptr);
 
 	return this->IsSamePartyAsPlayerWithState(OtherPlayerController->GetPlayerState());
 }
@@ -111,8 +111,8 @@ bool APF2PlayerStateBase::IsSamePartyAsPlayerWithState(
 	const TScriptInterface<IPF2PartyInterface> ThisParty  = this->GetParty();
 	TScriptInterface<IPF2PartyInterface>       OtherParty;
 
-	check(OtherPlayerState != nullptr);
-	check(ThisParty != nullptr);
+	check(OtherPlayerState.GetInterface() != nullptr);
+	check(ThisParty.GetInterface() != nullptr);
 
 	OtherParty = OtherPlayerState->GetParty();
 
@@ -138,7 +138,8 @@ void APF2PlayerStateBase::Native_OnPartyChanged(
 	const TScriptInterface<IPF2PartyInterface> OldParty,
 	const TScriptInterface<IPF2PartyInterface> NewParty)
 {
-	if ((OldParty != nullptr) && (NewParty == nullptr))
+	if ((OldParty.GetInterface() != nullptr) &&
+	    (NewParty.GetInterface() == nullptr))
 	{
 		UE_LOG(
 			LogPf2Core,
@@ -149,7 +150,7 @@ void APF2PlayerStateBase::Native_OnPartyChanged(
 		);
 	}
 
-	if (NewParty != nullptr)
+	if (NewParty.GetInterface() != nullptr)
 	{
 		UE_LOG(
 			LogPf2Core,

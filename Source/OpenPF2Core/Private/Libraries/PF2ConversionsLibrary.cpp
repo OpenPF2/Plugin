@@ -17,7 +17,7 @@
 
 AActor* UPF2ConversionsLibrary::Conv_CharacterIntfToActor(const TScriptInterface<IPF2CharacterInterface>& Character)
 {
-	if (Character == nullptr)
+	if (Character.GetInterface() == nullptr)
 	{
 		// This is neither an assertion error nor a logged error because Blueprints might use this conversion before a
 		// call to "Is valid?" or something that can accept a nullptr.
@@ -32,7 +32,7 @@ AActor* UPF2ConversionsLibrary::Conv_CharacterIntfToActor(const TScriptInterface
 UAbilitySystemComponent* UPF2ConversionsLibrary::Conv_AscIntfToAsc(
 	const TScriptInterface<IPF2AbilitySystemInterface>& AscIntf)
 {
-	if (AscIntf == nullptr)
+	if (AscIntf.GetInterface() == nullptr)
 	{
 		// This is neither an assertion error nor a logged error because Blueprints might use this conversion before a
 		// call to "Is valid?" or something that can accept a nullptr.
@@ -46,7 +46,7 @@ UAbilitySystemComponent* UPF2ConversionsLibrary::Conv_AscIntfToAsc(
 
 APawn* UPF2ConversionsLibrary::Conv_CharacterIntfToPawn(const TScriptInterface<IPF2CharacterInterface>& Character)
 {
-	if (Character == nullptr)
+	if (Character.GetInterface() == nullptr)
 	{
 		// This is neither an assertion error nor a logged error because Blueprints might use this conversion before a
 		// call to "Is valid?" or something that can accept a nullptr.
@@ -61,7 +61,7 @@ APawn* UPF2ConversionsLibrary::Conv_CharacterIntfToPawn(const TScriptInterface<I
 AController* UPF2ConversionsLibrary::Conv_PlayerControllerIntfToController(
 	const TScriptInterface<IPF2PlayerControllerInterface>& PlayerController)
 {
-	if (PlayerController == nullptr)
+	if (PlayerController.GetInterface() == nullptr)
 	{
 		// This is neither an assertion error nor a logged error because Blueprints might use this conversion before a
 		// call to "Is valid?" or something that can accept a nullptr.
@@ -76,7 +76,7 @@ AController* UPF2ConversionsLibrary::Conv_PlayerControllerIntfToController(
 APlayerController* UPF2ConversionsLibrary::Conv_PlayerControllerIntfToPlayerController(
 	const TScriptInterface<IPF2PlayerControllerInterface>& PlayerController)
 {
-	if (PlayerController == nullptr)
+	if (PlayerController.GetInterface() == nullptr)
 	{
 		// This is neither an assertion error nor a logged error because Blueprints might use this conversion before a
 		// call to "Is valid?" or something that can accept a nullptr.
@@ -91,7 +91,7 @@ APlayerController* UPF2ConversionsLibrary::Conv_PlayerControllerIntfToPlayerCont
 APlayerState* UPF2ConversionsLibrary::Conv_PlayerStateIntfToPlayerState(
 	const TScriptInterface<IPF2PlayerStateInterface>& PlayerState)
 {
-	if (PlayerState == nullptr)
+	if (PlayerState.GetInterface() == nullptr)
 	{
 		// This is neither an assertion error nor a logged error because Blueprints might use this conversion before a
 		// call to "Is valid?" or something that can accept a nullptr.
@@ -106,7 +106,7 @@ APlayerState* UPF2ConversionsLibrary::Conv_PlayerStateIntfToPlayerState(
 UActorComponent* UPF2ConversionsLibrary::Conv_ActorComponentIntfToActorComponent(
 	const TScriptInterface<IPF2ActorComponentInterface>& ActorComponent)
 {
-	if (ActorComponent == nullptr)
+	if (ActorComponent.GetInterface() == nullptr)
 	{
 		// This is neither an assertion error nor a logged error because Blueprints might use this conversion before a
 		// call to "Is valid?" or something that can accept a nullptr.
