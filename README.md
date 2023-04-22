@@ -8,6 +8,9 @@ with mechanics similar to Pathfinder&trade; 2nd Edition by Paizo Publishing.
 All abilities and stats are implemented using the Gameplay Ability System (GAS)
 plug-in that ships with Unreal Engine.
 
+## Compatibility
+This plug-in is only maintained and compatible with Unreal Engine 5.1 and later.
+
 ## Current Status
 **This plug-in is in pre-alpha status. It is not yet expected to be useful for
 production-grade projects, but it may be a useful reference for you even in
@@ -101,10 +104,10 @@ At a high level, the MVP scope includes:
 - **All weapons** outlined in Chapter 6, "Equipment" of Core Rulebook.
 
 ## Installation
-1. Check-out the project into the `Plugins/` folder of your larger UE4 project.
+1. Check-out the project into the `Plugins/` folder of your larger UE5 project.
    Ensure that the folder into which you check-out the project is named 
    `OpenPF2Core`.
-2. Modify the `*.uproject` file of your larger UE4 project to ensure that both
+2. Modify the `*.uproject` file of your larger UE5 project to ensure that both
    the `OpenPF2Core` and `GameplayAbilities` plug-ins are enabled, like so:
    ```json
    "Plugins": [
@@ -128,8 +131,8 @@ At a high level, the MVP scope includes:
    ```
 5. Compile your project.
 6. Copy the `Config/Tags/` folder from the plug-in into your project's `Config` folder.
-   _Even in UE 4.27, this is still required. The engine
-   [does not automatically scan or package config files provided by plugins](https://docs.unrealengine.com/4.27/en-US/ProductionPipelines/Plugins/#pluginsinprojects)._
+   _Even in UE 5.1, this is still required. The engine
+   [does not automatically scan or package config files provided by plugins](https://docs.unrealengine.com/5.1/en-US/plugins-in-unreal-engine/#pluginsinprojects)._
 
 ## Licensing
 ### Open-source Licenses
