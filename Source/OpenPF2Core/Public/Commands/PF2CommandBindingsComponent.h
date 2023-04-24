@@ -119,6 +119,9 @@ public:
 	// Public Methods - IPF2CommandBindingsInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
+	virtual TArray<FPF2CommandInputBinding> GetBindings() const override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual bool IsConsumingInput() const override;
 
 	UFUNCTION(BlueprintCallable)

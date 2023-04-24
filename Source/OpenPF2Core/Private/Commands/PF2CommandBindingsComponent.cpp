@@ -22,6 +22,11 @@
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
+TArray<FPF2CommandInputBinding> UPF2CommandBindingsComponent::GetBindings() const
+{
+	return this->Bindings;
+}
+
 bool UPF2CommandBindingsComponent::IsConsumingInput() const
 {
 	return this->bConsumeInput;

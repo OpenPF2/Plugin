@@ -14,8 +14,10 @@
 // =====================================================================================================================
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
-class UInputComponent;
 class IPF2CharacterInterface;
+class UInputComponent;
+
+struct FPF2CommandInputBinding;
 
 // =====================================================================================================================
 // Normal Declarations
@@ -34,6 +36,15 @@ class OPENPF2CORE_API IPF2CommandBindingsInterface : public IPF2ActorComponentIn
 	GENERATED_BODY()
 
 public:
+	/**
+	 * Gets a copy of the bindings in this component.
+	 *
+	 * @return
+	 *	The current bindings between input and commands.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
+	virtual TArray<FPF2CommandInputBinding> GetBindings() const = 0;
+
 	/**
 	 * Gets whether bindings in this component consume input when they fire.
 	 *
