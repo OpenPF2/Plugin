@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -8,9 +8,9 @@
 #include <Components/ActorComponent.h>
 
 #include "PF2CharacterInterface.h"
-#include "PF2CommandBindingsInterface.h"
-#include "PF2CommandInputBinding.h"
-#include "PF2CommandBindingsComponent.generated.h"
+#include "PF2AbilityBindingsInterface.h"
+#include "PF2AbilityInputBinding.h"
+#include "PF2AbilityBindingsComponent.generated.h"
 
 // =====================================================================================================================
 // Forward Declarations (to minimize header dependencies)
@@ -22,9 +22,9 @@ class UPF2AbilityExecutionFilterBase;
 // Delegate Declarations
 // =====================================================================================================================
 /**
- * Delegate for Blueprints to react to a command queue getting wired up to input or disconnected from input.
+ * Delegate for Blueprints to react to a bindings component getting wired up to input or disconnected from input.
  */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPF2CommandQueueInputConnectionChangedDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPF2AbilityBindingsInputConnectionChangedDelegate);
 
 // =====================================================================================================================
 // Normal Declarations
@@ -39,7 +39,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPF2CommandQueueInputConnectionChangedDelegat
  */
 UCLASS(ClassGroup="OpenPF2-Characters", meta=(BlueprintSpawnableComponent))
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API UPF2CommandBindingsComponent : public UActorComponent, public IPF2CommandBindingsInterface
+class OPENPF2CORE_API UPF2AbilityBindingsComponent : public UActorComponent, public IPF2AbilityBindingsInterface
 {
 	GENERATED_BODY()
 
@@ -64,7 +64,7 @@ public:
 	 * This event is only fired on clients.
 	 */
 	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Command Bindings")
-	FPF2CommandQueueInputConnectionChangedDelegate OnInputConnected;
+	FPF2AbilityBindingsInputConnectionChangedDelegate OnInputConnected;
 
 	/**
 	 * Event fired when local input is disconnected from this component.
@@ -72,7 +72,7 @@ public:
 	 * This event is only fired on clients.
 	 */
 	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Command Bindings")
-	FPF2CommandQueueInputConnectionChangedDelegate OnInputDisconnected;
+	FPF2AbilityBindingsInputConnectionChangedDelegate OnInputDisconnected;
 
 protected:
 	/**
@@ -102,24 +102,24 @@ private:
 	 * the server. This is handled automatically when using the default OpenPF2 player controller implementation.
 	 */
 	UPROPERTY()
-	TArray<FPF2CommandInputBinding> Bindings;
+	TArray<FPF2AbilityInputBinding> Bindings;
 
 public:
 	// =================================================================================================================
 	// Public Constructor
 	// =================================================================================================================
 	/**
-	 * Default constructor for UPF2CommandBindingsComponent.
+	 * Default constructor for UPF2AbilityBindingsComponent.
 	 */
-	explicit UPF2CommandBindingsComponent() : bConsumeInput(true), InputComponent(nullptr)
+	explicit UPF2AbilityBindingsComponent() : bConsumeInput(true), InputComponent(nullptr)
 	{
 	}
 
 	// =================================================================================================================
-	// Public Methods - IPF2CommandBindingsInterface Implementation
+	// Public Methods - IPF2AbilityBindingsInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
-	virtual TArray<FPF2CommandInputBinding> GetBindings() const override;
+	virtual TArray<FPF2AbilityInputBinding> GetBindings() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual bool IsConsumingInput() const override;
