@@ -12,6 +12,25 @@
 
 #include "Utilities/PF2LogUtilities.h"
 
+FPF2CommandInputBinding::FPF2CommandInputBinding(const FName&                  ActionName,
+                                                 const FGameplayAbilitySpec&   AbilitySpec,
+                                                 IPF2CommandBindingsInterface* Owner,
+                                                 const bool                    bConsumeInput):
+	ActionName(ActionName),
+	AbilitySpecHandle(AbilitySpec.Handle),
+	BindingsOwner(Owner->ToActorComponent()),
+	bConsumeInput(bConsumeInput)
+{
+	UE_LOG(
+		LogPf2CoreInput,
+		VeryVerbose,
+		TEXT("Creating an FPF2CommandInputBinding for '%s' action (handle '%s') in command bindings component ('%s')."),
+		*(ActionName.ToString()),
+		*(this->AbilitySpecHandle.ToString()),
+		*(Owner->GetIdForLogs())
+	);
+}
+
 void FPF2CommandInputBinding::ConnectToInput(UInputComponent* InputComponent)
 {
 	if (!this->IsConnectedToInput() && !this->ActionName.IsNone())
@@ -119,6 +138,11 @@ void FPF2CommandInputBinding::LocalInputReleased(FPF2CommandInputBinding* Bindin
 
 		Binding->DeactivateAbility();
 	}
+}
+
+FORCEINLINE IPF2CommandBindingsInterface* FPF2CommandInputBinding::GetBindingsOwner() const
+{
+	return Cast<IPF2CommandBindingsInterface>(this->BindingsOwner);
 }
 
 int32 FPF2CommandInputBinding::AddActionBinding(UInputComponent*  InputComponent,
