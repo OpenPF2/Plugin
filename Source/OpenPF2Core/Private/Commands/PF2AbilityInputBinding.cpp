@@ -1,20 +1,20 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-#include "Commands/PF2CommandInputBinding.h"
+#include "Commands/PF2AbilityInputBinding.h"
 
 #include "OpenPF2Core.h"
 
+#include "Commands/PF2AbilityBindingsInterface.h"
 #include "Commands/PF2CharacterCommand.h"
-#include "Commands/PF2CommandBindingsInterface.h"
 
 #include "Utilities/PF2LogUtilities.h"
 
-FPF2CommandInputBinding::FPF2CommandInputBinding(const FName&                  ActionName,
+FPF2AbilityInputBinding::FPF2AbilityInputBinding(const FName&                  ActionName,
                                                  const FGameplayAbilitySpec&   AbilitySpec,
-                                                 IPF2CommandBindingsInterface* Owner,
+                                                 IPF2AbilityBindingsInterface* Owner,
                                                  const bool                    bConsumeInput):
 	ActionName(ActionName),
 	AbilitySpecHandle(AbilitySpec.Handle),
@@ -24,14 +24,14 @@ FPF2CommandInputBinding::FPF2CommandInputBinding(const FName&                  A
 	UE_LOG(
 		LogPf2CoreInput,
 		VeryVerbose,
-		TEXT("Creating an FPF2CommandInputBinding for '%s' action (handle '%s') in command bindings component ('%s')."),
+		TEXT("Creating an FPF2AbilityInputBinding for '%s' action (handle '%s') in command bindings component ('%s')."),
 		*(ActionName.ToString()),
 		*(this->AbilitySpecHandle.ToString()),
 		*(Owner->GetIdForLogs())
 	);
 }
 
-void FPF2CommandInputBinding::ConnectToInput(UInputComponent* InputComponent)
+void FPF2AbilityInputBinding::ConnectToInput(UInputComponent* InputComponent)
 {
 	if (!this->IsConnectedToInput() && !this->ActionName.IsNone())
 	{
@@ -51,7 +51,7 @@ void FPF2CommandInputBinding::ConnectToInput(UInputComponent* InputComponent)
 			this->AddActionBinding(
 				InputComponent,
 				IE_Pressed,
-				&FPF2CommandInputBinding::LocalInputPressed
+				&FPF2AbilityInputBinding::LocalInputPressed
 			)
 		);
 
@@ -60,7 +60,7 @@ void FPF2CommandInputBinding::ConnectToInput(UInputComponent* InputComponent)
 			this->AddActionBinding(
 				InputComponent,
 				IE_Released,
-				&FPF2CommandInputBinding::LocalInputReleased
+				&FPF2AbilityInputBinding::LocalInputReleased
 			)
 		);
 
@@ -68,7 +68,7 @@ void FPF2CommandInputBinding::ConnectToInput(UInputComponent* InputComponent)
 	}
 }
 
-void FPF2CommandInputBinding::DisconnectFromInput(UInputComponent* InputComponent)
+void FPF2AbilityInputBinding::DisconnectFromInput(UInputComponent* InputComponent)
 {
 	if (this->IsConnectedToInput())
 	{
@@ -90,7 +90,7 @@ void FPF2CommandInputBinding::DisconnectFromInput(UInputComponent* InputComponen
 	}
 }
 
-void FPF2CommandInputBinding::LocalInputPressed(FPF2CommandInputBinding* Binding)
+void FPF2AbilityInputBinding::LocalInputPressed(FPF2AbilityInputBinding* Binding)
 {
 	if (Binding == nullptr)
 	{
@@ -115,7 +115,7 @@ void FPF2CommandInputBinding::LocalInputPressed(FPF2CommandInputBinding* Binding
 	}
 }
 
-void FPF2CommandInputBinding::LocalInputReleased(FPF2CommandInputBinding* Binding)
+void FPF2AbilityInputBinding::LocalInputReleased(FPF2AbilityInputBinding* Binding)
 {
 	if (Binding == nullptr)
 	{
@@ -140,14 +140,14 @@ void FPF2CommandInputBinding::LocalInputReleased(FPF2CommandInputBinding* Bindin
 	}
 }
 
-FORCEINLINE IPF2CommandBindingsInterface* FPF2CommandInputBinding::GetBindingsOwner() const
+FORCEINLINE IPF2AbilityBindingsInterface* FPF2AbilityInputBinding::GetBindingsOwner() const
 {
-	return Cast<IPF2CommandBindingsInterface>(this->BindingsOwner);
+	return Cast<IPF2AbilityBindingsInterface>(this->BindingsOwner);
 }
 
-int32 FPF2CommandInputBinding::AddActionBinding(UInputComponent*  InputComponent,
+int32 FPF2AbilityInputBinding::AddActionBinding(UInputComponent*  InputComponent,
                                                 const EInputEvent InKeyEvent,
-                                                void              (*Callback)(FPF2CommandInputBinding*))
+                                                void              (*Callback)(FPF2AbilityInputBinding*))
 {
 	FInputActionBinding  ActionBinding = FInputActionBinding(this->ActionName, InKeyEvent);
 	FInputActionBinding* AddResult;
@@ -164,12 +164,12 @@ int32 FPF2CommandInputBinding::AddActionBinding(UInputComponent*  InputComponent
 	return AddResult->GetHandle();
 }
 
-void FPF2CommandInputBinding::ActivateAbility()
+void FPF2AbilityInputBinding::ActivateAbility()
 {
 	this->GetBindingsOwner()->ExecuteBoundAbility(this->ActionName, this->AbilitySpecHandle);
 }
 
-void FPF2CommandInputBinding::DeactivateAbility()
+void FPF2AbilityInputBinding::DeactivateAbility()
 {
 	// Default implementation -- Do nothing.
 }

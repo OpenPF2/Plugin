@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -9,21 +9,22 @@
 
 #include "PF2ActorComponentInterface.h"
 
-#include "PF2CommandBindingsInterface.generated.h"
+#include "PF2AbilityBindingsInterface.generated.h"
 
 // =====================================================================================================================
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2CharacterInterface;
+class IPF2AbilityBindingsInterface;
 class UInputComponent;
 
-struct FPF2CommandInputBinding;
+struct FPF2AbilityInputBinding;
 
 // =====================================================================================================================
 // Normal Declarations
 // =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
-class UPF2CommandBindingsInterface : public UPF2ActorComponentInterface
+class UPF2AbilityBindingsInterface : public UPF2ActorComponentInterface
 {
 	GENERATED_BODY()
 };
@@ -31,7 +32,7 @@ class UPF2CommandBindingsInterface : public UPF2ActorComponentInterface
 /**
  * An interface for components that maintain Gameplay Ability input action bindings for characters.
  */
-class OPENPF2CORE_API IPF2CommandBindingsInterface : public IPF2ActorComponentInterface
+class OPENPF2CORE_API IPF2AbilityBindingsInterface : public IPF2ActorComponentInterface
 {
 	GENERATED_BODY()
 
@@ -43,7 +44,7 @@ public:
 	 *	The current bindings between input and commands.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
-	virtual TArray<FPF2CommandInputBinding> GetBindings() const = 0;
+	virtual TArray<FPF2AbilityInputBinding> GetBindings() const = 0;
 
 	/**
 	 * Gets whether bindings in this component consume input when they fire.

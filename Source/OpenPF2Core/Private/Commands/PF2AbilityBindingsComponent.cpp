@@ -3,7 +3,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-#include "Commands/PF2CommandBindingsComponent.h"
+#include "Commands/PF2AbilityBindingsComponent.h"
 
 #include <AbilitySystemComponent.h>
 
@@ -16,23 +16,23 @@
 
 #include "Commands/PF2AbilityExecutionFilterContext.h"
 #include "Commands/PF2AbilityExecutionFilterInterface.h"
+#include "Commands/PF2AbilityInputBinding.h"
 #include "Commands/PF2CharacterCommand.h"
-#include "Commands/PF2CommandInputBinding.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
-TArray<FPF2CommandInputBinding> UPF2CommandBindingsComponent::GetBindings() const
+TArray<FPF2AbilityInputBinding> UPF2AbilityBindingsComponent::GetBindings() const
 {
 	return this->Bindings;
 }
 
-bool UPF2CommandBindingsComponent::IsConsumingInput() const
+bool UPF2AbilityBindingsComponent::IsConsumingInput() const
 {
 	return this->bConsumeInput;
 }
 
-void UPF2CommandBindingsComponent::SetConsumeInput(const bool bNewValue)
+void UPF2AbilityBindingsComponent::SetConsumeInput(const bool bNewValue)
 {
 	if (this->bConsumeInput != bNewValue)
 	{
@@ -55,11 +55,11 @@ void UPF2CommandBindingsComponent::SetConsumeInput(const bool bNewValue)
 	}
 }
 
-void UPF2CommandBindingsComponent::ClearBindings()
+void UPF2AbilityBindingsComponent::ClearBindings()
 {
 	if (this->IsConnectedToInput())
 	{
-		for (FPF2CommandInputBinding& Binding : this->Bindings)
+		for (FPF2AbilityInputBinding& Binding : this->Bindings)
 		{
 			Binding.DisconnectFromInput(this->GetInputComponent());
 		}
@@ -68,7 +68,7 @@ void UPF2CommandBindingsComponent::ClearBindings()
 	this->Bindings.Empty();
 }
 
-void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter()
+void UPF2AbilityBindingsComponent::LoadAbilitiesFromCharacter()
 {
 	const IPF2CharacterInterface* Character              = this->GetOwningCharacter();
 	UAbilitySystemComponent*      AbilitySystemComponent = Character->GetAbilitySystemComponent();
@@ -106,7 +106,7 @@ void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter()
 			DefaultAction = FName();
 		}
 
-		this->Bindings.Add(FPF2CommandInputBinding(DefaultAction, AbilitySpec, this, this->IsConsumingInput()));
+		this->Bindings.Add(FPF2AbilityInputBinding(DefaultAction, AbilitySpec, this, this->IsConsumingInput()));
 	}
 
 	UE_LOG(
@@ -125,14 +125,14 @@ void UPF2CommandBindingsComponent::LoadAbilitiesFromCharacter()
 	}
 }
 
-void UPF2CommandBindingsComponent::ConnectToInput(UInputComponent* NewInputComponent)
+void UPF2AbilityBindingsComponent::ConnectToInput(UInputComponent* NewInputComponent)
 {
 	checkf(
 		!this->IsConnectedToInput() || (this->InputComponent == NewInputComponent),
 		TEXT("Command bindings cannot be wired-up to two different input components at the same time.")
 	);
 
-	for (FPF2CommandInputBinding& Binding : this->Bindings)
+	for (FPF2AbilityInputBinding& Binding : this->Bindings)
 	{
 		Binding.ConnectToInput(NewInputComponent);
 	}
@@ -142,11 +142,11 @@ void UPF2CommandBindingsComponent::ConnectToInput(UInputComponent* NewInputCompo
 	this->Native_OnInputConnected();
 }
 
-void UPF2CommandBindingsComponent::DisconnectFromInput()
+void UPF2AbilityBindingsComponent::DisconnectFromInput()
 {
 	if (this->IsConnectedToInput())
 	{
-		for (FPF2CommandInputBinding& Binding : this->Bindings)
+		for (FPF2AbilityInputBinding& Binding : this->Bindings)
 		{
 			Binding.DisconnectFromInput(this->InputComponent);
 		}
@@ -157,7 +157,7 @@ void UPF2CommandBindingsComponent::DisconnectFromInput()
 	}
 }
 
-bool UPF2CommandBindingsComponent::FilterAbilityActivation(
+bool UPF2AbilityBindingsComponent::FilterAbilityActivation(
 	const FName                                    InActionName,
 	const TScriptInterface<IPF2CharacterInterface> InCharacter,
 	FGameplayAbilitySpecHandle&                    InOutAbilitySpecHandle,
@@ -219,7 +219,7 @@ bool UPF2CommandBindingsComponent::FilterAbilityActivation(
 	return true;
 }
 
-void UPF2CommandBindingsComponent::ExecuteBoundAbility(const FName                      ActionName,
+void UPF2AbilityBindingsComponent::ExecuteBoundAbility(const FName                      ActionName,
                                                        const FGameplayAbilitySpecHandle AbilitySpecHandle)
 {
 	IPF2CharacterInterface*                         CharacterIntf         = this->GetOwningCharacter();
@@ -245,12 +245,12 @@ void UPF2CommandBindingsComponent::ExecuteBoundAbility(const FName              
 	}
 }
 
-UActorComponent* UPF2CommandBindingsComponent::ToActorComponent()
+UActorComponent* UPF2AbilityBindingsComponent::ToActorComponent()
 {
 	return this;
 }
 
-FString UPF2CommandBindingsComponent::GetIdForLogs() const
+FString UPF2AbilityBindingsComponent::GetIdForLogs() const
 {
 	// ReSharper disable CppRedundantParentheses
 	return FString::Format(
@@ -262,7 +262,7 @@ FString UPF2CommandBindingsComponent::GetIdForLogs() const
 	);
 }
 
-IPF2CharacterInterface* UPF2CommandBindingsComponent::GetOwningCharacter() const
+IPF2CharacterInterface* UPF2AbilityBindingsComponent::GetOwningCharacter() const
 {
 	AActor*                 OwningActor;
 	IPF2CharacterInterface* OwningCharacter;
@@ -276,7 +276,7 @@ IPF2CharacterInterface* UPF2CommandBindingsComponent::GetOwningCharacter() const
 	return OwningCharacter;
 }
 
-void UPF2CommandBindingsComponent::Native_OnInputConnected()
+void UPF2AbilityBindingsComponent::Native_OnInputConnected()
 {
 	UE_LOG(
 		LogPf2CoreInput,
@@ -289,7 +289,7 @@ void UPF2CommandBindingsComponent::Native_OnInputConnected()
 	this->OnInputConnected.Broadcast();
 }
 
-void UPF2CommandBindingsComponent::Native_OnInputDisconnected()
+void UPF2AbilityBindingsComponent::Native_OnInputDisconnected()
 {
 	UE_LOG(
 		LogPf2CoreInput,

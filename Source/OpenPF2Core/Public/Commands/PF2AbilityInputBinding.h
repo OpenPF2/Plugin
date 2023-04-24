@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -10,11 +10,12 @@
 #include <Components/InputComponent.h>
 
 #include "OpenPF2Core.h"
-#include "PF2CommandInputBinding.generated.h"
+#include "PF2AbilityInputBinding.generated.h"
 
 // =====================================================================================================================
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
+class IPF2AbilityBindingsInterface;
 class IPF2CharacterInterface;
 class UGameplayAbility;
 
@@ -27,7 +28,7 @@ class UGameplayAbility;
  * The ability must already have been granted to the character.
  */
 USTRUCT(BlueprintType)
-struct FPF2CommandInputBinding
+struct FPF2AbilityInputBinding
 {
 	GENERATED_BODY()
 
@@ -83,12 +84,12 @@ public:
 	/**
 	 * Default constructor (used by Blueprint).
 	 */
-	explicit FPF2CommandInputBinding() : BindingsOwner(nullptr), bConsumeInput(true)
+	explicit FPF2AbilityInputBinding() : BindingsOwner(nullptr), bConsumeInput(true)
 	{
 	}
 
 	/**
-	 * Constructor for initializing a FPF2CommandInputBinding from a granted ability.
+	 * Constructor for initializing a FPF2AbilityInputBinding from a granted ability.
 	 *
 	 * @param ActionName
 	 *	The human-friendly name of the action, as configured in project settings (e.g "Jump").
@@ -103,9 +104,9 @@ public:
 	 *	  - If false, then a pawn or player controller can react to the input action in addition to the binding being
 	 *	    invoked.
 	 */
-	explicit FPF2CommandInputBinding(const FName&                  ActionName,
+	explicit FPF2AbilityInputBinding(const FName&                  ActionName,
 	                                 const FGameplayAbilitySpec&   AbilitySpec,
-	                                 IPF2CommandBindingsInterface* Owner,
+	                                 IPF2AbilityBindingsInterface* Owner,
 	                                 const bool                    bConsumeInput = true);
 
 	// =================================================================================================================
@@ -114,7 +115,7 @@ public:
 	/**
 	 * Default destructor.
 	 */
-	virtual ~FPF2CommandInputBinding() = default;
+	virtual ~FPF2AbilityInputBinding() = default;
 
 	// =================================================================================================================
 	// Public Methods
@@ -175,7 +176,7 @@ protected:
 	 * @param Binding
 	 *	The binding to notify of a button activation.
 	 */
-	static void LocalInputPressed(FPF2CommandInputBinding* Binding);
+	static void LocalInputPressed(FPF2AbilityInputBinding* Binding);
 
 	/**
 	 * Notifies the specified binding instance that the input action it corresponds to has been released.
@@ -183,7 +184,7 @@ protected:
 	 * @param Binding
 	 *	The binding to notify of a button release.
 	 */
-	static void LocalInputReleased(FPF2CommandInputBinding* Binding);
+	static void LocalInputReleased(FPF2AbilityInputBinding* Binding);
 
 	// =================================================================================================================
 	// Protected Instance Methods
@@ -194,7 +195,7 @@ protected:
 	 * @return
 	 *	The containing bindings component.
 	 */
-	IPF2CommandBindingsInterface* GetBindingsOwner() const;
+	IPF2AbilityBindingsInterface* GetBindingsOwner() const;
 
 	/**
 	 * Binds a specific input event/action on the specified input component to the given callback.
@@ -211,7 +212,7 @@ protected:
 	 */
 	int32 AddActionBinding(UInputComponent*  InputComponent,
 	                       const EInputEvent InKeyEvent,
-	                       void              (*Callback)(FPF2CommandInputBinding*));
+	                       void              (*Callback)(FPF2AbilityInputBinding*));
 
 	/**
 	 * Assembles and executes a command that invokes the ability associated with this binding.
