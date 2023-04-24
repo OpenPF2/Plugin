@@ -10,7 +10,6 @@
 #include <Components/InputComponent.h>
 
 #include "OpenPF2Core.h"
-#include "PF2CommandBindingsInterface.h"
 #include "PF2CommandInputBinding.generated.h"
 
 // =====================================================================================================================
@@ -105,23 +104,9 @@ public:
 	 *	    invoked.
 	 */
 	explicit FPF2CommandInputBinding(const FName&                  ActionName,
-	                                 const FGameplayAbilitySpec    AbilitySpec,
+	                                 const FGameplayAbilitySpec&   AbilitySpec,
 	                                 IPF2CommandBindingsInterface* Owner,
-	                                 const bool                    bConsumeInput = true) :
-		ActionName(ActionName),
-		AbilitySpecHandle(AbilitySpec.Handle),
-		BindingsOwner(Owner->ToActorComponent()),
-		bConsumeInput(bConsumeInput)
-	{
-		UE_LOG(
-			LogPf2CoreInput,
-			VeryVerbose,
-			TEXT("Creating an FPF2CommandInputBinding for '%s' action (handle '%s') in command bindings component ('%s')."),
-			*(ActionName.ToString()),
-			*(this->AbilitySpecHandle.ToString()),
-			*(Owner->GetIdForLogs())
-		);
-	}
+	                                 const bool                    bConsumeInput = true);
 
 	// =================================================================================================================
 	// Public Destructors
@@ -209,10 +194,7 @@ protected:
 	 * @return
 	 *	The containing bindings component.
 	 */
-	FORCEINLINE IPF2CommandBindingsInterface* GetBindingsOwner() const
-	{
-		return Cast<IPF2CommandBindingsInterface>(this->BindingsOwner);
-	}
+	IPF2CommandBindingsInterface* GetBindingsOwner() const;
 
 	/**
 	 * Binds a specific input event/action on the specified input component to the given callback.
