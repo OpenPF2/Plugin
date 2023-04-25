@@ -300,11 +300,35 @@ void APF2GameModeBase::HandleStartingNewPlayer_Implementation(APlayerController*
 
 		if (PlayerControllerIntf == nullptr)
 		{
-			// Player controller is not compatible with OpenPF2; fallback to just interacting with the pawn.
-			IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnPlayableCharacterStarting(
-				RuleSet.GetObject(),
-				NewPlayer->GetCharacter()
-			);
+			ACharacter*             Character     = NewPlayer->GetCharacter();
+			IPF2CharacterInterface* CharacterIntf = Cast<IPF2CharacterInterface>(Character);
+
+			if (CharacterIntf == nullptr)
+			{
+				UE_LOG(
+					LogPf2Core,
+					Error,
+					TEXT("Unable to notify player controller (%s) nor pawn that character (%s) is starting. Neither the character nor player controller are compatible with OpenPF2."),
+					*(GetNameSafe(NewPlayer)),
+					*(GetNameSafe(Character))
+				);
+			}
+			else
+			{
+				UE_LOG(
+					LogPf2Core,
+					Error,
+					TEXT("Unable to notify player controller (%s) that character (%s) is starting. The player controller is not compatible with OpenPF2. The pawn will be notified."),
+					*(GetNameSafe(NewPlayer)),
+					*(GetNameSafe(Character))
+				);
+
+				// Player controller is not compatible with OpenPF2; fallback to just interacting with the pawn.
+				IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnPlayableCharacterStarting(
+					RuleSet.GetObject(),
+					PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterInterface>(CharacterIntf)
+				);
+			}
 		}
 		else
 		{
