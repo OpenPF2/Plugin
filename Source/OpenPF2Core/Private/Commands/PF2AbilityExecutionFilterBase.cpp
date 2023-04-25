@@ -5,6 +5,8 @@
 
 #include "Commands/PF2AbilityExecutionFilterBase.h"
 
+#include <Engine/World.h>
+
 #include "PF2GameStateInterface.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
