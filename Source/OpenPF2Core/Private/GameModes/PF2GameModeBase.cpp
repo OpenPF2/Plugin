@@ -10,6 +10,8 @@
 
 #include <EngineUtils.h>
 
+#include <GameFramework/Character.h>
+
 #include "PF2CharacterInterface.h"
 #include "PF2GameStateInterface.h"
 #include "PF2OwnerTrackingInterface.h"
