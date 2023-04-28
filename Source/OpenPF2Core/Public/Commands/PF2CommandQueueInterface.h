@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -39,7 +39,7 @@ public:
 	 *	The command to add to the queue.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Queues")
-	virtual void Enqueue(TScriptInterface<IPF2CharacterCommandInterface> Command) = 0;
+	virtual void Enqueue(const TScriptInterface<IPF2CharacterCommandInterface>& Command) = 0;
 
 	/**
 	 * Returns the next command (if there is one) in the queue.
@@ -98,7 +98,7 @@ public:
 	 *	- false if the command was not in the queue.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Queues")
-	virtual bool Remove(TScriptInterface<IPF2CharacterCommandInterface> Command) = 0;
+	virtual bool Remove(const TScriptInterface<IPF2CharacterCommandInterface>& Command) = 0;
 
 	/**
 	 * Gets the count of how many commands are in the queue.

@@ -28,7 +28,7 @@ void UPF2CommandQueueComponent::GetLifetimeReplicatedProps(TArray<FLifetimePrope
 	DOREPLIFETIME(UPF2CommandQueueComponent, Queue);
 }
 
-void UPF2CommandQueueComponent::Enqueue(const TScriptInterface<IPF2CharacterCommandInterface> Command)
+void UPF2CommandQueueComponent::Enqueue(const TScriptInterface<IPF2CharacterCommandInterface>& Command)
 {
 	AInfo* CommandActor = Command->ToActor();
 
@@ -161,7 +161,7 @@ EPF2CommandExecuteImmediatelyResult UPF2CommandQueueComponent::PopAndExecuteNext
 	return Result;
 }
 
-bool UPF2CommandQueueComponent::Remove(const TScriptInterface<IPF2CharacterCommandInterface> Command)
+bool UPF2CommandQueueComponent::Remove(const TScriptInterface<IPF2CharacterCommandInterface>& Command)
 {
 	AInfo*      CommandActor       = Command->ToActor();
 	const int32 CountOfRemoved     = this->Queue.Remove(CommandActor);
@@ -193,7 +193,7 @@ TArray<TScriptInterface<IPF2CharacterCommandInterface>> UPF2CommandQueueComponen
 		this->Queue,
 		TArray<TScriptInterface<IPF2CharacterCommandInterface>>(),
 		[](TArray<TScriptInterface<IPF2CharacterCommandInterface>> Commands,
-		   const TWeakInterfacePtr<IPF2CharacterCommandInterface>  CurrentCommand)
+		   const TWeakInterfacePtr<IPF2CharacterCommandInterface>& CurrentCommand)
 		{
 			if (CurrentCommand.IsValid())
 			{

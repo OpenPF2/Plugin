@@ -22,7 +22,7 @@
 
 IPF2CharacterCommandInterface* APF2CharacterCommand::Create(AActor*                          CharacterActor,
                                                             const FGameplayAbilitySpecHandle AbilitySpecHandle,
-                                                            const FGameplayEventData         AbilityPayload)
+                                                            const FGameplayEventData&        AbilityPayload)
 {
 	UWorld*               World           = CharacterActor->GetWorld();
 	FActorSpawnParameters SpawnParameters;
@@ -193,7 +193,7 @@ EPF2CommandExecuteImmediatelyResult APF2CharacterCommand::AttemptExecuteImmediat
 
 void APF2CharacterCommand::SetTargetCharacterAndAbility(AActor*                          InTargetCharacter,
                                                         const FGameplayAbilitySpecHandle InAbilitySpecHandle,
-                                                        const FGameplayEventData         InAbilityPayload)
+                                                        const FGameplayEventData&        InAbilityPayload)
 {
 	this->TargetCharacter   = InTargetCharacter;
 	this->AbilitySpecHandle = InAbilitySpecHandle;

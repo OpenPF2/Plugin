@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -128,7 +128,7 @@ public:
 	 */
 	FORCEINLINE static IPF2CharacterCommandInterface* Create(IPF2CharacterInterface*          Character,
 	                                                         const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	                                                         const FGameplayEventData         AbilityPayload)
+	                                                         const FGameplayEventData&        AbilityPayload)
 	{
 		return Create(Character->ToActor(), AbilitySpecHandle, AbilityPayload);
 	}
@@ -152,7 +152,7 @@ public:
 	static IPF2CharacterCommandInterface* Create(
 		AActor*                          CharacterActor,
 		const FGameplayAbilitySpecHandle AbilitySpecHandle,
-		const FGameplayEventData         AbilityPayload = FGameplayEventData());
+		const FGameplayEventData&        AbilityPayload = FGameplayEventData());
 
 protected:
 	// =================================================================================================================
@@ -282,7 +282,7 @@ protected:
 	 */
 	void SetTargetCharacterAndAbility(AActor*                          InTargetCharacter,
 	                                  const FGameplayAbilitySpecHandle InAbilitySpecHandle,
-	                                  const FGameplayEventData         InAbilityPayload);
+	                                  const FGameplayEventData&        InAbilityPayload);
 
 	/**
 	 * Attempts to cancel this command on the remote server by routing the request through the local player controller.

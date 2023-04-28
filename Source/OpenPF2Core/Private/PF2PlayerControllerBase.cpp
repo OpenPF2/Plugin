@@ -218,7 +218,7 @@ void APF2PlayerControllerBase::ExecuteCharacterCommand(const FGameplayAbilitySpe
 bool APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Validate(
 	const FGameplayAbilitySpecHandle AbilitySpecHandle,
 	AActor*                          CharacterActor,
-	const FGameplayEventData         AbilityPayload)
+	const FGameplayEventData&        AbilityPayload)
 {
 	IPF2CharacterInterface* TargetCharacter = Cast<IPF2CharacterInterface>(CharacterActor);
 	APawn*                  CharacterPawn;
@@ -272,7 +272,7 @@ bool APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Validate(
 void APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Implementation(
 	const FGameplayAbilitySpecHandle AbilitySpecHandle,
 	AActor*                          CharacterActor,
-	const FGameplayEventData         AbilityPayload)
+	const FGameplayEventData&        AbilityPayload)
 {
 	IPF2CharacterInterface*        TargetCharacter = Cast<IPF2CharacterInterface>(CharacterActor);
 	IPF2CharacterCommandInterface* CharacterCommandIntf;

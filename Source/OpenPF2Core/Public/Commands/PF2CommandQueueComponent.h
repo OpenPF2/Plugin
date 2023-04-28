@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -127,7 +127,7 @@ public:
 	// Public Methods - IPF2CommandQueueInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
-	virtual void Enqueue(TScriptInterface<IPF2CharacterCommandInterface> Command) override;
+	virtual void Enqueue(const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void PeekNext(TScriptInterface<IPF2CharacterCommandInterface>& NextCommand) override;
@@ -142,7 +142,7 @@ public:
 	virtual EPF2CommandExecuteImmediatelyResult PopAndExecuteNext() override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual bool Remove(TScriptInterface<IPF2CharacterCommandInterface> Command) override;
+	virtual bool Remove(const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual int Count() override;
