@@ -62,5 +62,5 @@ protected:
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category="OpenPF2|Gameplay Ability Execution Filters")
 	static TScriptInterface<IPF2GameStateInterface> GetGameState(
-		const FPF2AbilityExecutionFilterContext ExecutionContext);
+		const FPF2AbilityExecutionFilterContext& ExecutionContext);
 };

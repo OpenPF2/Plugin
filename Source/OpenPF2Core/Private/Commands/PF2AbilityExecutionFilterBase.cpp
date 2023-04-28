@@ -28,7 +28,7 @@ UWorld* UPF2AbilityExecutionFilterBase::GetWorld(const FPF2AbilityExecutionFilte
 }
 
 TScriptInterface<IPF2GameStateInterface> UPF2AbilityExecutionFilterBase::GetGameState(
-	const FPF2AbilityExecutionFilterContext ExecutionContext)
+	const FPF2AbilityExecutionFilterContext& ExecutionContext)
 {
 	TScriptInterface<IPF2GameStateInterface> Result;
 	const UWorld*                            World = GetWorld(ExecutionContext);
