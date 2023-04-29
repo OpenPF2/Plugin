@@ -101,13 +101,13 @@ public:
 	virtual void ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void ExecuteCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	                                     AActor*                          CharacterActor) override;
+	virtual void ExecuteAbilityAsCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	                                              AActor*                          CharacterActor) override;
 
 	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
-	virtual void Server_ExecuteCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	                                            AActor*                          CharacterActor,
-	                                            const FGameplayEventData         AbilityPayload) override;
+	virtual void Server_ExecuteAbilityAsCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	                                                     AActor*                          CharacterActor,
+	                                                     const FGameplayEventData&        AbilityPayload) override;
 
 	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
 	virtual void Server_CancelCharacterCommand(AInfo* Command) override;

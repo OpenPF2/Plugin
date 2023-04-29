@@ -209,13 +209,13 @@ void APF2PlayerControllerBase::ReleaseCharacter(const TScriptInterface<IPF2Chara
 	this->GetCharacterQueue()->Remove(ReleasedCharacter);
 }
 
-void APF2PlayerControllerBase::ExecuteCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-                                                       AActor*                          CharacterActor)
+void APF2PlayerControllerBase::ExecuteAbilityAsCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
+                                                                AActor*                          CharacterActor)
 {
-	this->Server_ExecuteCharacterCommand(AbilitySpecHandle, CharacterActor, FGameplayEventData());
+	this->Server_ExecuteAbilityAsCharacterCommand(AbilitySpecHandle, CharacterActor, FGameplayEventData());
 }
 
-bool APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Validate(
+bool APF2PlayerControllerBase::Server_ExecuteAbilityAsCharacterCommand_Validate(
 	const FGameplayAbilitySpecHandle AbilitySpecHandle,
 	AActor*                          CharacterActor,
 	const FGameplayEventData&        AbilityPayload)
@@ -228,7 +228,7 @@ bool APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Validate(
 		UE_LOG(
 			LogPf2CoreAbilities,
 			Error,
-			TEXT("Server_ExecuteCharacterCommand(%s,%s): Character must implement IPF2CharacterInterface."),
+			TEXT("Server_ExecuteAbilityAsCharacterCommand(%s,%s): Character must implement IPF2CharacterInterface."),
 			*(AbilitySpecHandle.ToString()),
 			*(GetNameSafe(CharacterActor))
 		);
@@ -243,7 +243,7 @@ bool APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Validate(
 		UE_LOG(
 			LogPf2CoreAbilities,
 			Error,
-			TEXT("Server_ExecuteCharacterCommand(%s,%s): Non-pawn character passed to player controller ('%s')."),
+			TEXT("Server_ExecuteAbilityAsCharacterCommand(%s,%s): Non-pawn character passed to player controller ('%s')."),
 			*(AbilitySpecHandle.ToString()),
 			*(TargetCharacter->GetIdForLogs()),
 			*(this->GetIdForLogs())
@@ -257,7 +257,7 @@ bool APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Validate(
 		UE_LOG(
 			LogPf2CoreAbilities,
 			Error,
-			TEXT("Server_ExecuteCharacterCommand(%s,%s): Target character must be controllable by this player controller ('%s')."),
+			TEXT("Server_ExecuteAbilityAsCharacterCommand(%s,%s): Target character must be controllable by this player controller ('%s')."),
 			*(AbilitySpecHandle.ToString()),
 			*(TargetCharacter->GetIdForLogs()),
 			*(this->GetIdForLogs())
@@ -269,7 +269,7 @@ bool APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Validate(
 	return true;
 }
 
-void APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Implementation(
+void APF2PlayerControllerBase::Server_ExecuteAbilityAsCharacterCommand_Implementation(
 	const FGameplayAbilitySpecHandle AbilitySpecHandle,
 	AActor*                          CharacterActor,
 	const FGameplayEventData&        AbilityPayload)
@@ -281,7 +281,7 @@ void APF2PlayerControllerBase::Server_ExecuteCharacterCommand_Implementation(
 	UE_LOG(
 		LogPf2CoreAbilities,
 		VeryVerbose,
-		TEXT("Server_ExecuteCharacterCommand(%s,%s) called on player controller ('%s')."),
+		TEXT("Server_ExecuteAbilityAsCharacterCommand(%s,%s) called on player controller ('%s')."),
 		*(AbilitySpecHandle.ToString()),
 		*(GetNameSafe(CharacterActor)),
 		*(this->GetIdForLogs())
