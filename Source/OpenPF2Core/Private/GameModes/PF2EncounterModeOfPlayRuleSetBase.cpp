@@ -256,7 +256,7 @@ void APF2EncounterModeOfPlayRuleSetBase::PeekNextQueuedCommandForCharacter(
 }
 
 void APF2EncounterModeOfPlayRuleSetBase::PopNextCommandQueuedForCharacter(
-	const TScriptInterface<IPF2CharacterInterface>& Character,
+	const TScriptInterface<IPF2CharacterInterface>&  Character,
 	TScriptInterface<IPF2CharacterCommandInterface>& NextCommand)
 {
 	const TScriptInterface<IPF2CommandQueueInterface> CommandQueue = Character->GetCommandQueueComponent();
