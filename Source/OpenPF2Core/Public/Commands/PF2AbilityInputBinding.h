@@ -38,19 +38,19 @@ struct FPF2AbilityInputBinding
 	/**
 	 * The human-friendly name of the action, as configured in project input settings (e.g "Jump", "Fire", etc.).
 	 */
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FName ActionName;
 
-protected:
 	// =================================================================================================================
 	// Protected Fields
 	// =================================================================================================================
 	/**
 	 * The handle for the corresponding ability.
 	 */
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FGameplayAbilitySpecHandle AbilitySpecHandle;
 
+protected:
 	/**
 	 * The handles for input action bindings, if this binding has been connected to input.
 	 */
