@@ -129,40 +129,56 @@ public:
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
 	virtual void ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter) = 0;
 
-
+	/**
+	 * Builds and executes a command on the server for one of the characters this player controller can control.
+	 *
+	 * The resulting command may be queued if the active MoPRS is requiring abilities to be queued (e.g., during
+	 * encounters).
+	 *
+	 * The given character must be controllable by this player controller, but may be possessed by either this player
+	 * controller or an AI controller. Since this is an RPC, the character is passed as an actor instead of as an
+	 * interface reference because UE will not replicate actors if they are declared/referenced through an interface
+	 * property.
+	 *
+	 * @param AbilitySpecHandle
+	 *	The handle for the ability to wrap in the command when it is activated.
+	 * @param CharacterActor
+	 *	The character upon which the ability should be activated. The given actor must implement IPF2CharacterInterface.
+	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
-	virtual void ExecuteCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-										 AActor*                          CharacterActor) = 0;
+	virtual void ExecuteAbilityAsCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	                                              AActor*                          CharacterActor) = 0;
 
 	/**
 	 * Builds and executes a command on the server for one of the characters this player controller can control.
 	 *
-	 * The given character must be controllable by this player controller, but may be possessed by either this player
-	 * controller or an AI controller.
+	 * The resulting command may be queued if the active MoPRS is requiring abilities to be queued (e.g., during
+	 * encounters).
 	 *
-	 * Since this is an RPC, the character is passed as an actor instead of as an interface reference because UE will
-	 * not replicate actors if they are declared/referenced through an interface property.
+	 * The given character must be controllable by this player controller, but may be possessed by either this player
+	 * controller or an AI controller. Since this is an RPC, the character is passed as an actor instead of as an
+	 * interface reference because UE will not replicate actors if they are declared/referenced through an interface
+	 * property.
 	 *
 	 * @param AbilitySpecHandle
 	 *	The handle for the ability to wrap in the command when it is activated.
 	 * @param CharacterActor
 	 *	The character upon which the ability should be activated. The given actor must implement IPF2CharacterInterface.
 	 * @param AbilityPayload
-	 *	An optional payload to pass to the ability when it is executed.
+	 *	The payload to pass to the ability when it is executed.
 	 */
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
-	virtual void Server_ExecuteCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	                                            AActor*                          CharacterActor,
-	                                            const FGameplayEventData         AbilityPayload) = 0;
+	virtual void Server_ExecuteAbilityAsCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	                                                     AActor*                          CharacterActor,
+	                                                     const FGameplayEventData&        AbilityPayload) = 0;
 
 	/**
 	 * Requests to cancel a command on the server for one of the characters this player controller can control.
 	 *
 	 * The character that the command targets must be controllable by this player controller, but may be possessed by
-	 * either this player controller or an AI controller.
-	 *
-	 * Since this is an RPC, the command is passed as an actor instead of as an interface reference because UE will
-	 * not replicate actors if they are declared/referenced through an interface property.
+	 * either this player controller or an AI controller. Since this is an RPC, the command is passed as an actor
+	 * instead of as an interface reference because UE will not replicate actors if they are declared/referenced through
+	 * an interface property.
 	 *
 	 * @param Command
 	 *	The command that should be cancelled. The given actor must implement the

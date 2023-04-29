@@ -217,12 +217,13 @@ protected:
 	/**
 	 * Assembles and executes a command that invokes the ability associated with this binding.
 	 *
-	 * The ability may be queued if the active MoPRS is requiring abilities to be queued (e.g., encounters).
+	 * The ability will be wrapped in a character command for execution. The resulting command may be queued if the
+	 * active MoPRS is requiring abilities to be queued (e.g., during encounters).
 	 */
 	virtual void ActivateAbility();
 
 	/**
-	 * Notifies the ability that the player is no longer invoking the ability associated with this binding.
+	 * Notifies the ability that the player no longer wishes to invoke the ability associated with this binding.
 	 *
 	 * The default implementation does nothing.
 	 */
