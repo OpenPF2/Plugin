@@ -1,4 +1,4 @@
-﻿// Copyright 2021-2022 Guy Elsmore-Paddock. All Rights Reserved.
+﻿// Copyright 2021-2023 Guy Elsmore-Paddock. All Rights Reserved.
 // Adapted from content that is Copyright Epic Games, Inc. (Action RPG Sample).
 // Licensed only for use with Unreal Engine.
 
@@ -113,7 +113,16 @@ protected:
 	virtual void Define() override = 0;
 
 	template <typename BlueprintType>
-	static TSubclassOf<BlueprintType> LoadBlueprint(const FString FolderPath, const FString BlueprintName);
+	static TSubclassOf<BlueprintType> LoadBlueprint(const FString FolderPath, const FString BlueprintName)
+	{
+		const FString ObjectPath =
+			FString::Printf(TEXT("BlueprintGeneratedClass'%s/%s.%s_C'"), *FolderPath, *BlueprintName, *BlueprintName);
+
+		const TSoftClassPtr<BlueprintType> ObjectClass =
+			TSoftClassPtr<BlueprintType>(FSoftObjectPath(ObjectPath));
+
+		return ObjectClass.LoadSynchronous();
+	}
 
 	static FAttributeCapture CaptureAttributes(const UPF2AttributeSet* AttributeSet);
 	static FAttributeCapture CaptureAbilityAttributes(const UPF2AttributeSet* AttributeSet);

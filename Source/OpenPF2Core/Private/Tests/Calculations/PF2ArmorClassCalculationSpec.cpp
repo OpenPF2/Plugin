@@ -141,5 +141,5 @@ void FPF2ArmorClassCalculationSpec::Define()
 
 TSubclassOf<UGameplayEffect> FPF2ArmorClassCalculationSpec::LoadGE() const
 {
-	return this->LoadBlueprint<UGameplayEffect>(this->BlueprintPath, this->ClassDcGameEffectCalc);
+	return LoadBlueprint<UGameplayEffect>(this->BlueprintPath, this->ClassDcGameEffectCalc);
 }

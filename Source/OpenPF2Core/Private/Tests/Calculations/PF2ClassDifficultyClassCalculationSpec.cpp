@@ -146,5 +146,5 @@ void FPF2ClassDifficultyClassCalculationSpec::Define()
 
 TSubclassOf<UGameplayEffect> FPF2ClassDifficultyClassCalculationSpec::LoadGE() const
 {
-	return this->LoadBlueprint<UGameplayEffect>(this->BlueprintPath, this->ClassDcGameEffectCalc);
+	return LoadBlueprint<UGameplayEffect>(this->BlueprintPath, this->ClassDcGameEffectCalc);
 }

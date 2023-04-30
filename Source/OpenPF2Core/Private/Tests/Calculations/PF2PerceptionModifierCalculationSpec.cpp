@@ -100,7 +100,7 @@ void FPF2PerceptionModifierCalculationSpec::Define()
 
 TSubclassOf<UGameplayEffect> FPF2PerceptionModifierCalculationSpec::LoadGE() const
 {
-	return this->LoadBlueprint<UGameplayEffect>(this->BlueprintPath, this->PerceptionGameEffectCalc);
+	return LoadBlueprint<UGameplayEffect>(this->BlueprintPath, this->PerceptionGameEffectCalc);
 }
 
 void FPF2PerceptionModifierCalculationSpec::VerifyPerceptionModifier(const float   AbModScore,

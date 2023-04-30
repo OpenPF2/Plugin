@@ -10,18 +10,6 @@
 #include "Abilities/PF2AttributeSet.h"
 #include "Utilities/PF2GameplayAbilityUtilities.h"
 
-template <typename BlueprintType>
-TSubclassOf<BlueprintType> FPF2SpecBase::LoadBlueprint(const FString FolderPath, const FString BlueprintName)
-{
-	const FString ObjectPath =
-		FString::Printf(TEXT("BlueprintGeneratedClass'%s/%s.%s_C'"), *FolderPath, *BlueprintName, *BlueprintName);
-
-	const TSoftClassPtr<BlueprintType> ObjectClass =
-		TSoftClassPtr<BlueprintType>(FSoftObjectPath(ObjectPath));
-
-	return ObjectClass.LoadSynchronous();
-}
-
 FAttributeCapture FPF2SpecBase::CaptureAttributes(const UPF2AttributeSet* AttributeSet)
 {
 	FAttributeCapture Capture =

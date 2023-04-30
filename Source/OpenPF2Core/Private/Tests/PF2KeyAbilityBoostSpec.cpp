@@ -122,5 +122,5 @@ void FKeyAbilityBoostSpec::Define()
 
 TSubclassOf<UGameplayEffect> FKeyAbilityBoostSpec::LoadGE() const
 {
-	return this->LoadBlueprint<UGameplayEffect>(this->BlueprintPath, this->KeyAbilityBoostGameEffectCalc);
+	return LoadBlueprint<UGameplayEffect>(this->BlueprintPath, this->KeyAbilityBoostGameEffectCalc);
 }

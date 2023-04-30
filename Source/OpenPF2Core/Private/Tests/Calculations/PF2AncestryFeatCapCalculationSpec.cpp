@@ -101,5 +101,5 @@ void FPF2AncestryFeatCapCalculationSpec::Define()
 
 TSubclassOf<UGameplayEffect> FPF2AncestryFeatCapCalculationSpec::LoadGE() const
 {
-	return this->LoadBlueprint<UGameplayEffect>(this->BlueprintPath, this->AncestryFeatCapGameEffectCalc);
+	return LoadBlueprint<UGameplayEffect>(this->BlueprintPath, this->AncestryFeatCapGameEffectCalc);
 }

@@ -150,5 +150,5 @@ void FPF2SpellDifficultyClassCalculationsSpec::Define()
 
 TSubclassOf<UGameplayEffect> FPF2SpellDifficultyClassCalculationsSpec::LoadGE() const
 {
-	return this->LoadBlueprint<UGameplayEffect>(this->BlueprintPath, this->SpellDifficultyClassGameEffectCalc);
+	return LoadBlueprint<UGameplayEffect>(this->BlueprintPath, this->SpellDifficultyClassGameEffectCalc);
 }

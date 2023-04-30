@@ -382,7 +382,7 @@ void FPF2AbilityModSpec::LoadMMCs()
 	for (auto& BlueprintName : this->AbModMmcNames)
 	{
 		TSubclassOf<UPF2AbilityModifierCalculationBase> CalculationBP =
-			this->LoadBlueprint<UPF2AbilityModifierCalculationBase>(this->BlueprintPath, BlueprintName);
+			LoadBlueprint<UPF2AbilityModifierCalculationBase>(this->BlueprintPath, BlueprintName);
 
 		this->AbModMMCs.Add(BlueprintName, CalculationBP);
 	}
@@ -393,7 +393,7 @@ void FPF2AbilityModSpec::LoadGEs()
 	for (auto& BlueprintName : this->AbModGeNames)
 	{
 		TSubclassOf<UGameplayEffect> GameplayEffectBP =
-			this->LoadBlueprint<UGameplayEffect>(this->BlueprintPath, BlueprintName);
+			LoadBlueprint<UGameplayEffect>(this->BlueprintPath, BlueprintName);
 
 		this->AbModGEs.Add(BlueprintName, GameplayEffectBP);
 	}
