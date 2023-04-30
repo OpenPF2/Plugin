@@ -150,5 +150,5 @@ void FPF2SpellAttackRollCalculationsSpec::Define()
 
 TSubclassOf<UGameplayEffect> FPF2SpellAttackRollCalculationsSpec::LoadGE() const
 {
-	return this->LoadBlueprint<UGameplayEffect>(this->BlueprintPath, this->SpellAttackRollGameEffectCalc);
+	return LoadBlueprint<UGameplayEffect>(this->BlueprintPath, this->SpellAttackRollGameEffectCalc);
 }

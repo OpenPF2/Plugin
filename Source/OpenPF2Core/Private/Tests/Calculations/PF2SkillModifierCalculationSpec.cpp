@@ -350,7 +350,7 @@ void FPF2SkillModifierCalculationSpec::Define()
 
 TSubclassOf<UGameplayEffect> FPF2SkillModifierCalculationSpec::LoadGE() const
 {
-	return this->LoadBlueprint<UGameplayEffect>(this->BlueprintPath, this->SkillGameEffectCalc);
+	return LoadBlueprint<UGameplayEffect>(this->BlueprintPath, this->SkillGameEffectCalc);
 }
 
 void FPF2SkillModifierCalculationSpec::VerifySkillModifier(const FString AbModFriendlyName,
