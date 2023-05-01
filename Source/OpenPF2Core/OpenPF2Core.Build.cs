@@ -4,6 +4,7 @@
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 using UnrealBuildTool;
 
+// ReSharper disable once InconsistentNaming
 public class OpenPF2Core: ModuleRules
 {
 	public OpenPF2Core(ReadOnlyTargetRules Target) : base(Target)
@@ -13,7 +14,7 @@ public class OpenPF2Core: ModuleRules
 		PrivatePCHHeaderFile = "Public/OpenPF2Core.h";
 
 		PublicDependencyModuleNames.AddRange(
-			new string[]
+			new[]
 			{
 				"Core",
 				"AIModule",
@@ -24,11 +25,14 @@ public class OpenPF2Core: ModuleRules
 		);
 
 		PrivateDependencyModuleNames.AddRange(
-			new string[]
+			new[]
 			{
+				"BlueprintGraph",
 				"CoreUObject",
 				"Engine",
 				"GameplayAbilities",
+				"KismetCompiler",
+				"UnrealEd",
 				"Slate",
 				"SlateCore",
 			}
