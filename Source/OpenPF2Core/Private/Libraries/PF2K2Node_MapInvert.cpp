@@ -144,16 +144,6 @@ FString UPF2K2Node_MapInvert::GetIdForLogs() const
 	return this->GetFullName();
 }
 
-UEdGraphPin* UPF2K2Node_MapInvert::GetInputPin() const
-{
-	return this->FindPinChecked(InputPinName, EGPD_Input);
-}
-
-UEdGraphPin* UPF2K2Node_MapInvert::GetOutputPin() const
-{
-	return this->FindPinChecked(OutputPinName, EGPD_Output);
-}
-
 void UPF2K2Node_MapInvert::PropagateLinkedPinType(UEdGraphPin* LocalPin)
 {
 	UEdGraphPin* InputPin  = this->GetInputPin();

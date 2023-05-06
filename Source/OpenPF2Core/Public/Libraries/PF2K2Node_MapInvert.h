@@ -78,7 +78,10 @@ protected:
 	 * @return
 	 *	The input graph pin from this node instance.
 	 */
-	UEdGraphPin* GetInputPin() const;
+	FORCEINLINE UEdGraphPin* GetInputPin() const
+	{
+		return this->FindPinChecked(InputPinName, EGPD_Input);
+	}
 
 	/**
 	 * Gets the output pin object.
@@ -86,7 +89,10 @@ protected:
 	 * @return
 	 *	The output graph pin from this node instance.
 	 */
-	UEdGraphPin* GetOutputPin() const;
+	FORCEINLINE UEdGraphPin* GetOutputPin() const
+	{
+		return this->FindPinChecked(OutputPinName, EGPD_Output);
+	}
 
 	/**
 	 * Updates the specified pin of this node to match the type of the pin to which it is connected.
