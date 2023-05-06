@@ -27,24 +27,6 @@
 const FName UPF2K2Node_MapInvert::InputPinName  = TEXT("Map");
 const FName UPF2K2Node_MapInvert::OutputPinName = TEXT("InvertedMap");
 
-FText UPF2K2Node_MapInvert::GetMenuCategory() const
-{
-	return LOCTEXT("MapMenuCategory", "OpenPF2|Utility|Map");
-}
-
-void UPF2K2Node_MapInvert::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const
-{
-	UClass* Action = this->GetClass();
-
-	if (ActionRegistrar.IsOpenForRegistration(Action))
-	{
-		UBlueprintNodeSpawner* Spawner = UBlueprintNodeSpawner::Create(Action);
-		check(Spawner != nullptr);
-
-		ActionRegistrar.AddBlueprintAction(Action, Spawner);
-	}
-}
-
 FText UPF2K2Node_MapInvert::GetNodeTitle(const ENodeTitleType::Type TitleType) const
 {
 	if (TitleType == ENodeTitleType::MenuTitle)
@@ -68,7 +50,7 @@ FText UPF2K2Node_MapInvert::GetTooltipText() const
 void UPF2K2Node_MapInvert::AllocateDefaultPins()
 {
 	FCreatePinParams InputParams,
-	                 OutputParams;
+					 OutputParams;
 
 	// Input pin.
 	InputParams.ContainerType = EPinContainerType::Map;
@@ -77,6 +59,24 @@ void UPF2K2Node_MapInvert::AllocateDefaultPins()
 	// Output pin.
 	OutputParams.ContainerType = EPinContainerType::Map;
 	CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Wildcard, OutputPinName, OutputParams);
+}
+
+FText UPF2K2Node_MapInvert::GetMenuCategory() const
+{
+	return LOCTEXT("MapMenuCategory", "OpenPF2|Utility|Map");
+}
+
+void UPF2K2Node_MapInvert::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const
+{
+	UClass* Action = this->GetClass();
+
+	if (ActionRegistrar.IsOpenForRegistration(Action))
+	{
+		UBlueprintNodeSpawner* Spawner = UBlueprintNodeSpawner::Create(Action);
+		check(Spawner != nullptr);
+
+		ActionRegistrar.AddBlueprintAction(Action, Spawner);
+	}
 }
 
 void UPF2K2Node_MapInvert::NotifyPinConnectionListChanged(UEdGraphPin* Pin)
