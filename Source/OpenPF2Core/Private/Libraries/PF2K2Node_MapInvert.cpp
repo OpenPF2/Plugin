@@ -183,23 +183,23 @@ void UPF2K2Node_MapInvert::PropagateLinkedPinType(UEdGraphPin* LocalPin)
 // ReSharper disable once CppMemberFunctionMayBeConst
 void UPF2K2Node_MapInvert::PropagatePinType(const UEdGraphPin* OtherPin, const UEdGraphPin* LocalPin)
 {
-	UEdGraphPin*          InputPin         = this->GetInputPin();
-	UEdGraphPin*          OutputPin        = this->GetOutputPin();
-	const FEdGraphPinType ConnectedPinType = OtherPin->PinType;
+	const FEdGraphPinType OtherPinType = OtherPin->PinType;
+	UEdGraphPin*          InputPin     = this->GetInputPin();
+	UEdGraphPin*          OutputPin    = this->GetOutputPin();
 
-	if ((ConnectedPinType.PinCategory != UEdGraphSchema_K2::PC_Wildcard) &&
-		(ConnectedPinType.PinValueType.TerminalCategory != UEdGraphSchema_K2::PC_Wildcard))
+	if ((OtherPinType.PinCategory != UEdGraphSchema_K2::PC_Wildcard) &&
+		(OtherPinType.PinValueType.TerminalCategory != UEdGraphSchema_K2::PC_Wildcard))
 	{
 		check(OtherPin != InputPin);
 
 		if (LocalPin == InputPin)
 		{
-			this->PropagatePinType(ConnectedPinType, InputPin, OutputPin);
+			this->PropagatePinType(OtherPinType, InputPin, OutputPin);
 		}
 
 		if (LocalPin == OutputPin)
 		{
-			this->PropagatePinType(ConnectedPinType, OutputPin, InputPin);
+			this->PropagatePinType(OtherPinType, OutputPin, InputPin);
 		}
 
 		this->ValidateKeyType();
