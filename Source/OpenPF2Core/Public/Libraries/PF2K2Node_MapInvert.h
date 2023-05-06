@@ -27,18 +27,19 @@ public:
 	// =================================================================================================================
 	// Public Methods - UEdGraphNode Overrides
 	// =================================================================================================================
-	virtual FText GetMenuCategory() const override;
-	virtual void  GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const override;
 	virtual FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
 	virtual FText GetTooltipText() const override;
 	virtual void AllocateDefaultPins() override;
-	virtual void NotifyPinConnectionListChanged(UEdGraphPin* Pin) override;
-	virtual void PostReconstructNode() override;
-	virtual void ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) override;
 
 	// =================================================================================================================
 	// Public Methods - UK2Node Overrides
 	// =================================================================================================================
+	virtual FText GetMenuCategory() const override;
+	virtual void GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const override;
+	virtual void NotifyPinConnectionListChanged(UEdGraphPin* Pin) override;
+	virtual void PostReconstructNode() override;
+	virtual void ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph) override;
+
 	virtual bool ShouldDrawCompact() const override
 	{
 		return true;
