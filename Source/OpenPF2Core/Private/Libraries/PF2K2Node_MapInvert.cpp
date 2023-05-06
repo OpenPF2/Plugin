@@ -164,7 +164,7 @@ void UPF2K2Node_MapInvert::PropagateLinkedPinType(UEdGraphPin* LocalPin)
 				this->ResetPinToWildcard(OutputPin);
 			}
 		}
-		else
+		else if (LocalPin == InputPin)
 		{
 			// We only propagate type changes that originate from the input pin.
 			//
@@ -172,10 +172,7 @@ void UPF2K2Node_MapInvert::PropagateLinkedPinType(UEdGraphPin* LocalPin)
 			// input pins, but this created a "constness" conflict if the output pin of this node was connected to a
 			// const input pin in another node, since that would force the input pin of this node to be const when it
 			// didn't need to be.
-			if (LocalPin == InputPin)
-			{
-				this->PropagatePinType(ConnectedToPin, LocalPin);
-			}
+			this->PropagatePinType(ConnectedToPin, LocalPin);
 		}
 	}
 }
