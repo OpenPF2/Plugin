@@ -3,8 +3,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-// ReSharper disable CppRedundantQualifier
-
 #include "Libraries/PF2K2Node_MapInvert.h"
 
 #include <BlueprintActionDatabaseRegistrar.h>
@@ -23,6 +21,7 @@
 
 #include "Utilities/PF2BlueprintUtilities.h"
 
+// ReSharper disable once IdentifierTypo
 #define LOCTEXT_NAMESPACE "K2Node_MapInvert"
 
 const FName UPF2K2Node_MapInvert::InputPinName  = TEXT("Map");
@@ -68,16 +67,16 @@ FText UPF2K2Node_MapInvert::GetTooltipText() const
 
 void UPF2K2Node_MapInvert::AllocateDefaultPins()
 {
-	UEdGraphNode::FCreatePinParams InputParams,
-	                               OutputParams;
+	FCreatePinParams InputParams,
+	                 OutputParams;
 
 	// Input pin.
 	InputParams.ContainerType = EPinContainerType::Map;
-	CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Wildcard, UPF2K2Node_MapInvert::InputPinName, InputParams);
+	CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Wildcard, InputPinName, InputParams);
 
 	// Output pin.
 	OutputParams.ContainerType = EPinContainerType::Map;
-	CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Wildcard, UPF2K2Node_MapInvert::OutputPinName, OutputParams);
+	CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Wildcard, OutputPinName, OutputParams);
 }
 
 void UPF2K2Node_MapInvert::NotifyPinConnectionListChanged(UEdGraphPin* Pin)
@@ -147,12 +146,12 @@ FString UPF2K2Node_MapInvert::GetIdForLogs() const
 
 UEdGraphPin* UPF2K2Node_MapInvert::GetInputPin() const
 {
-	return this->FindPinChecked(UPF2K2Node_MapInvert::InputPinName, EGPD_Input);
+	return this->FindPinChecked(InputPinName, EGPD_Input);
 }
 
 UEdGraphPin* UPF2K2Node_MapInvert::GetOutputPin() const
 {
-	return this->FindPinChecked(UPF2K2Node_MapInvert::OutputPinName, EGPD_Output);
+	return this->FindPinChecked(OutputPinName, EGPD_Output);
 }
 
 void UPF2K2Node_MapInvert::PropagateLinkedPinType(UEdGraphPin* LocalPin)
