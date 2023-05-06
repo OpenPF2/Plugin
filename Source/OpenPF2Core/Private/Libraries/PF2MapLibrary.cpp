@@ -7,14 +7,76 @@
 
 #include "Libraries/PF2MapLibrary.h"
 
+#include <UObject/ScriptMacros.h>
+
 DEFINE_FUNCTION(UPF2MapLibrary::execInvertMap)
 {
-	P_GET_TMAP_REF_UNCHECKED(InputMap);
-	P_GET_TMAP_REF_UNCHECKED(OutputMap);
+	P_GET_TMAP_PTR_UNCHECKED(InputMap);
+	P_GET_TMAP_PTR_UNCHECKED(OutputMap);
 	P_FINISH;
 
 	P_NATIVE_BEGIN;
 	UPF2MapLibrary::GenericMap_Invert(InputMapAddr, InputMapProperty, OutputMapAddr, OutputMapProperty);
+	P_NATIVE_END;
+}
+
+DEFINE_FUNCTION(UPF2MapLibrary::execGetMapPairIterator)
+{
+	P_GET_TMAP_PTR_UNCHECKED(Map);
+	P_FINISH;
+
+	P_NATIVE_BEGIN;
+
+	// ReSharper disable CppReinterpretCastFromVoidPtr
+	// ReSharper disable CppCStyleCast
+	*(FPF2MapPairIterator*)Z_Param__Result=FPF2MapPairIterator(MapProperty, MapAddr);
+	// ReSharper enable CppReinterpretCastFromVoidPtr
+	// ReSharper enable CppCStyleCast
+	P_NATIVE_END;
+}
+
+DEFINE_FUNCTION(UPF2MapLibrary::execDoesMapPairIteratorHavePair)
+{
+	// ReSharper disable once CppLocalVariableMayBeConst
+	P_GET_STRUCT_REF(FPF2MapPairIterator, Iterator);
+	P_FINISH;
+
+	P_NATIVE_BEGIN;
+	*(bool*)Z_Param__Result=Iterator.HasPair();
+	P_NATIVE_END;
+}
+
+DEFINE_FUNCTION(UPF2MapLibrary::execIncrementMapPairIterator)
+{
+	P_GET_STRUCT_REF(FPF2MapPairIterator, Iterator);
+	P_FINISH;
+
+	P_NATIVE_BEGIN;
+	++Iterator;
+    P_NATIVE_END;
+}
+
+DEFINE_FUNCTION(UPF2MapLibrary::execGetKeyFromMapPairIterator)
+{
+	// ReSharper disable once CppLocalVariableMayBeConst
+	P_GET_STRUCT_REF(FPF2MapPairIterator, Iterator);
+	P_GET_OBJECT_PTR_UNCHECKED(Value);
+	P_FINISH;
+
+	P_NATIVE_BEGIN;
+	Iterator.GetCurrentKey(ValueAddr);
+	P_NATIVE_END;
+}
+
+DEFINE_FUNCTION(UPF2MapLibrary::execGetValueFromMapPairIterator)
+{
+	// ReSharper disable once CppLocalVariableMayBeConst
+	P_GET_STRUCT_REF(FPF2MapPairIterator, Iterator);
+	P_GET_OBJECT_PTR_UNCHECKED(Value);
+	P_FINISH;
+
+	P_NATIVE_BEGIN;
+	Iterator.GetCurrentValue(ValueAddr);
 	P_NATIVE_END;
 }
 
