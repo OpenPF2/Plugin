@@ -263,7 +263,7 @@ void UPF2K2Node_MapInvert::ResetPinToWildcard(UEdGraphPin* TargetPin)
 	UE_LOG(
 		LogPf2CoreBlueprintNodes,
 		VeryVerbose,
-		TEXT("[%s] Resetting pin (%s) on Invert node to being a wildcard."),
+		TEXT("[%s] Resetting pin (%s) to being a wildcard."),
 		*(this->GetIdForLogs()),
 		*(TargetPin->GetName())
 	);
