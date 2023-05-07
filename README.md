@@ -8,10 +8,51 @@ with mechanics similar to Pathfinder&trade; 2nd Edition by Paizo Publishing.
 All abilities and stats are implemented using the Gameplay Ability System (GAS)
 plug-in that ships with Unreal Engine.
 
+## Why OpenPF2?
+
+OpenPF2 is a labor of love from experienced developers who believe in the power
+of UE and want to bring that power to role-playing game development. We’re here
+to give independent game developers the structure, starting content, and support
+to experiment and implement Action RPGs or turn-based RPGs quickly, with as
+little or as much C++ code as they feel comfortable with.
+
+Unlike other RPG frameworks on the Unreal Marketplace, OpenPF2 is:
+- **Open-source (here on GitHub),** so you can always look under the hood and
+  suggest or contribute changes.
+- **Free to use in any UE project.** We believe that the best kind of
+  prototyping shouldn’t cost you anything.
+- **Available for commercial licensing.** As a proof-of-concept blossoms into a
+  closed-source venture, we’re open to licensing our code privately for a fee,
+  so you don’t need to deal with the complexity of sharing parts of your
+  codebase if you require full control of your IP.
+- **More than just a framework.** OpenPF2 is preloaded with **content** based on
+  the Pathfinder® Second Edition Core Rulebook, making it easy to create new
+  characters and enemies by filling out character sheets rather than having to
+  implement and balance your own stats.
+- **Modular and pluggable.** Use as little or as much of our existing classes
+  and content as you like in your project. 
+    - Each system in the framework communicates with other systems through
+      standard interfaces (in the `UINTERFACE` sense), so every major component
+      can be replaced with a custom component if you don't like the default
+      implementation. 
+    - All PF2 sample content from the core rulebook is in a separate section
+      from content required for the framework to function, so you can pick
+      whichever parts you want to include or completely roll your own without
+      breaking the essential framework parts.      
+- **Blueprint-friendly.** Most of the framework is exposed to Blueprint so you
+  can dive in and build prototypes or assemble production-grade abilities right
+  from the start with a minimum of C++ knowledge.
+- **Built on the Gameplay Ability System (GAS)**–a standard component of
+  Unreal Engine supported by Epic Games, rather than a custom,
+  in-house framework. GAS plays nicely with other plug-ins and frameworks and
+  receives updates and improvements from Epic themselves.
+
 ## Compatibility
+
 This plug-in is only maintained and compatible with Unreal Engine 5.1 and later.
 
 ## Current Status
+
 **This plug-in is in pre-alpha status. It is not yet expected to be useful for
 production-grade projects, but it may be a useful reference for you even in
 its current state.**
@@ -103,7 +144,21 @@ At a high level, the MVP scope includes:
 - **Metric units** for all measurements (e.g., reach, height, stride, etc.).
 - **All weapons** outlined in Chapter 6, "Equipment" of Core Rulebook.
 
+## Note on Units
+
+Pathfinder 2E materials—including the Core Rulebook—use imperial units
+(feet), but Unreal Engine uses metric units, so OpenPF2 does as well. In the
+real world, 1 foot is equal to 0.3048 meters; but, to avoid having to deal with
+decimal values, OpenPF2 uses a simple conversion of `1.5 meters per 5 feet`
+that slightly rounds values (1.5 meters equals ~4.92 feet in the real world).
+
+To convert units provided by Pathfinder 2E materials into those used in
+OpenPF2, simply multiply the provided value (in feet) by a ratio of `1.5/5`.
+For example, if a weapon has a range of 60 feet, then its range in OpenPF2 is
+`60 feet * 1.5 meters/5 feet = 18 meters`.
+
 ## Installation
+
 1. Check-out the project into the `Plugins/` folder of your larger UE5 project.
    Ensure that the folder into which you check-out the project is named 
    `OpenPF2Core`.
@@ -135,7 +190,9 @@ At a high level, the MVP scope includes:
    [does not automatically scan or package config files provided by plugins](https://docs.unrealengine.com/5.1/en-US/plugins-in-unreal-engine/#pluginsinprojects)._
 
 ## Licensing
+
 ### Open-source Licenses
+
 Since this plug-in incorporates content and elements that were originally
 created by Paizo Publishing, the code in this repository is licensed under a
 mix of the Open Game License (OGL) version 1.0a and the Mozilla Public License
@@ -154,6 +211,7 @@ its file header. If you encounter a file that lacks a license in its header,
 please [file an issue](https://github.com/OpenPF2/PF2Core/issues/new). 
 
 ### Alternate, Commercial Licensing (for Proprietary Projects)
+
 If you are developing a commercial, proprietary, or closed-source game or
 project that is otherwise incompatible with the open-source OGL and MPL 
 licensing of this plug-in, the author is willing to discuss alternate, custom 
@@ -164,20 +222,17 @@ The license will be among the following parties:
 * The author of this plug-in project (Guy Elsmore-Paddock).
 * Paizo Publishing (for Pathfinder 2E Core Mechanics).
 
-If you are interested in a custom license, please [DM me on 
-Twitter](https://twitter.com/guypaddock).
+If you are interested in a custom license, please reach out to us (see 
+"Reach Out" below). 
 
-## Note on Units
-Pathfinder 2E materials—including the Core Rulebook—use imperial units
-(feet), but Unreal Engine uses metric units, so OpenPF2 does as well. In the
-real world, 1 foot is equal to 0.3048 meters; but, to avoid having to deal with
-decimal values, OpenPF2 uses a simple conversion of `1.5 meters per 5 feet`
-that slightly rounds values (1.5 meters equals ~4.92 feet in the real world).
 
-To convert units provided by Pathfinder 2E materials into those used in
-OpenPF2, simply multiply the provided value (in feet) by a ratio of `1.5/5`.
-For example, if a weapon has a range of 60 feet, then its range in OpenPF2 is
-`60 feet * 1.5 meters/5 feet = 18 meters`.
+## Reach Out
+
+Interested in joining the project? Having trouble getting started with the code?
+Want to explore a custom license? Here are a few ways to get in touch with us:
+
+- [Join our Discord server](https://discord.gg/8HtYdvNNWd)
+- [DM the project lead (Guy) on Reddit](https://www.reddit.com/message/compose/?to=GuyPaddock).
 
 ---
 <small>
