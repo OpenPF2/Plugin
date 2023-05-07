@@ -66,14 +66,13 @@ At a high level, the MVP scope includes:
 - 1 **character class** (Barbarian).
 - 1 **archetype** (Barbarian).
 - **35 character backgrounds**.
-- **17 skills** _(already modeled as of November 2021)_, and **skill actions**.
-- **Dice/rolling** math library _(already implemented as of December 2021)_.
+- **17 skills**, and **skill actions**.
+- **Dice/rolling** math library.
 - Various **Kismet/Blueprint function libraries** for all math sourced from the 
-  Core Rulebook _(development on-going)_.
-- **Network-ready** game logic _(development on-going; all parts of PF2 are
-  being developed and tested with networking ability from the start)_.
-- **Character stats** as Gameplay Attribute Sets _(already implemented as of 
-  November 2021)_.
+  Core Rulebook.
+- **Network-ready** game logic (all parts of PF2 are being developed and tested
+  with networking ability from the start).
+- **Character stats** as Gameplay Attribute Sets.
 - **Character metadata** including **languages known**, **alignment**, and 
   **deity**.
 - **Character creation UI:** A basic one, included as a starter template to be
@@ -88,22 +87,20 @@ At a high level, the MVP scope includes:
   - **Armor** types and armor class.
   - **Damage to items and equipment:** Items can take damage and become 
     destroyed from use.
-- **Encounter/exploration/down-time mode** system with rules-switching for each 
-  _(development already in progress)_.
+- **Encounter/exploration/down-time mode** system with rules-switching for each.
 - **Automatic transitions** from **exploration into encounter** mode upon enemy
-  sighting _(development already in progress)_.
-- **Encounter** rules _(development already in progress)_.
+  sighting.
+- **Encounter** rules.
   - **Encounter participant tracking** (i.e., which characters of the party and
     which "enemy" NPCs are in the encounter, with ability for characters to be
     added after encounter has already started).
   - Automatic **rolling of initiative** when characters join encounters.
   - **Combat following initiative order**, with either **turn-based or real-time
-    player controls and interactions** _(development already in progress)_.
+    player controls and interactions**.
   - Actions:
     - **Binding actions to controls**, including associated UI for bindings.
     - **Action queuing** (i.e., allowing player to queue actions in real time to
-      be executed when it is their turn, per initiative order) _(Completed as of
-      November 2022)_.
+      be executed when it is their turn, per initiative order).
     - **Action selection**, including associated UI for selecting actions.
     - **Actions with triggers**.
     - **Action points** enforcement (e.g., one-point actions, two-point actions,
@@ -128,7 +125,7 @@ At a high level, the MVP scope includes:
 - **Conditions and afflictions** (poisoned, stunned, unconscious, etc.)
 - **Hit points and health tracking**.
 - **Damage types** as GAS Gameplay Effects and **damage type resistances** as
-  GAS Gameplay Attributes _(development already in progress)_.
+  GAS Gameplay Attributes.
 - **Difficulty class (DC)** and other types of **checks**, including related
   math and rolls:
   - Attack rolls
