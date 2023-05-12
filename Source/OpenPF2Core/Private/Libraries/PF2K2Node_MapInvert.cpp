@@ -116,8 +116,6 @@ void UPF2K2Node_MapInvert::ExpandNode(FKismetCompilerContext& CompilerContext, U
 	InvertInputMap  = PinCallFunction->FindPinChecked(TEXT("InputMap"));
 	InvertOutputMap = PinCallFunction->FindPinChecked(TEXT("OutputMap"));
 
-	check((InvertInputMap != nullptr) && (InvertOutputMap != nullptr));
-
 	InvertInputMap->PinType  = InputPin->PinType;
 	InvertOutputMap->PinType = OutputPin->PinType;
 
