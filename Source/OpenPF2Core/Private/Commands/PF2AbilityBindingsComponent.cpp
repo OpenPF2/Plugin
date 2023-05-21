@@ -22,11 +22,6 @@
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
-TArray<FPF2AbilityInputBinding> UPF2AbilityBindingsComponent::GetBindings() const
-{
-	return this->Bindings;
-}
-
 bool UPF2AbilityBindingsComponent::IsConsumingInput() const
 {
 	return this->bConsumeInput;
@@ -123,6 +118,36 @@ void UPF2AbilityBindingsComponent::LoadAbilitiesFromCharacter()
 		// Wire up all the new bindings.
 		this->ConnectToInput(this->GetInputComponent());
 	}
+}
+
+TMap<FName, TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilityBindingsComponent::GetBindingsMap() const
+{
+	UAbilitySystemComponent* Asc = this->GetOwningCharacter()->GetAbilitySystemComponent();
+
+	return PF2ArrayUtilities::Reduce(
+		this->Bindings,
+		TMap<FName, TScriptInterface<IPF2GameplayAbilityInterface>>(),
+		[Asc](TMap<FName, TScriptInterface<IPF2GameplayAbilityInterface>> ResultMap,
+		      const FPF2AbilityInputBinding&                              CurrentBinding)
+		{
+			const FGameplayAbilitySpec* AbilitySpec = Asc->FindAbilitySpecFromHandle(CurrentBinding.AbilitySpecHandle);
+
+			if (AbilitySpec != nullptr)
+			{
+				IPF2GameplayAbilityInterface* Ability = Cast<IPF2GameplayAbilityInterface>(AbilitySpec->Ability);
+
+				if (Ability != nullptr)
+				{
+					ResultMap.Add(
+						CurrentBinding.ActionName,
+						PF2InterfaceUtilities::ToScriptInterface<IPF2GameplayAbilityInterface>(Ability)
+					);
+				}
+			}
+
+			return ResultMap;
+		}
+	);
 }
 
 void UPF2AbilityBindingsComponent::ConnectToInput(UInputComponent* NewInputComponent)

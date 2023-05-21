@@ -14,14 +14,15 @@
 // =====================================================================================================================
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
-class IPF2CharacterInterface;
 class IPF2AbilityBindingsInterface;
+class IPF2CharacterInterface;
+class IPF2GameplayAbilityInterface;
 class UInputComponent;
 
 struct FPF2AbilityInputBinding;
 
 // =====================================================================================================================
-// Normal Declarations
+// Normal Declarations - Types
 // =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2AbilityBindingsInterface : public UPF2ActorComponentInterface
@@ -37,15 +38,6 @@ class OPENPF2CORE_API IPF2AbilityBindingsInterface : public IPF2ActorComponentIn
 	GENERATED_BODY()
 
 public:
-	/**
-	 * Gets a copy of the bindings in this component.
-	 *
-	 * @return
-	 *	The current bindings between input and commands.
-	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
-	virtual TArray<FPF2AbilityInputBinding> GetBindings() const = 0;
-
 	/**
 	 * Gets whether bindings in this component consume input when they fire.
 	 *
@@ -88,6 +80,15 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
 	virtual void LoadAbilitiesFromCharacter() = 0;
+
+	/**
+	 * Gets a copy of the bindings in this component.
+	 *
+	 * @return
+	 *	The current bindings between input and commands.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
+	virtual TMap<FName, TScriptInterface<IPF2GameplayAbilityInterface>> GetBindingsMap() const = 0;
 
 	/**
 	 * Wires-up all bindings to receive input from the given player input component.
