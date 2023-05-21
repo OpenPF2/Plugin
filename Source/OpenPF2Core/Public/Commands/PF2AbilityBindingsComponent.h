@@ -119,9 +119,6 @@ public:
 	// Public Methods - IPF2AbilityBindingsInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
-	virtual TArray<FPF2AbilityInputBinding> GetBindings() const override;
-
-	UFUNCTION(BlueprintCallable)
 	virtual bool IsConsumingInput() const override;
 
 	UFUNCTION(BlueprintCallable)
@@ -132,6 +129,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual void LoadAbilitiesFromCharacter() override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual TMap<FName, TScriptInterface<IPF2GameplayAbilityInterface>> GetBindingsMap() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void ConnectToInput(UInputComponent* NewInputComponent) override;
