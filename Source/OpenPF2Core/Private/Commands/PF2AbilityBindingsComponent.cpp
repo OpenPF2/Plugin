@@ -21,6 +21,13 @@
 
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
+#include "Utilities/PF2MapUtilities.h"
+
+UPF2AbilityBindingsInterfaceEvents* UPF2AbilityBindingsComponent::GetEvents() const
+{
+	check(this->Events != nullptr);
+	return this->Events;
+}
 
 bool UPF2AbilityBindingsComponent::IsConsumingInput() const
 {
@@ -50,17 +57,40 @@ void UPF2AbilityBindingsComponent::SetConsumeInput(const bool bNewValue)
 	}
 }
 
+void UPF2AbilityBindingsComponent::DisconnectBindingFromInput(FPF2AbilityInputBinding& Binding) const
+{
+	return Binding.DisconnectFromInput(this->GetInputComponent());
+}
+
+void UPF2AbilityBindingsComponent::Native_OnBindingsChanged()
+{
+	this->GetEvents()->OnAbilityBindingsChangedDelegate.Broadcast(this);
+}
+
 void UPF2AbilityBindingsComponent::ClearBindings()
 {
 	if (this->IsConnectedToInput())
 	{
-		for (FPF2AbilityInputBinding& Binding : this->Bindings)
+		for (auto PairIterator = this->Bindings.CreateIterator(); PairIterator; ++PairIterator)
 		{
-			Binding.DisconnectFromInput(this->GetInputComponent());
+			FPF2AbilityInputBinding& Binding = PairIterator.Value();
+
+			this->DisconnectBindingFromInput(Binding);
 		}
 	}
 
 	this->Bindings.Empty();
+	this->Native_OnBindingsChanged();
+}
+
+void UPF2AbilityBindingsComponent::ClearBinding(const FName& ActionName)
+{
+	if (this->Bindings.Contains(ActionName))
+	{
+		this->DisconnectBindingFromInput(this->Bindings[ActionName]);
+		this->Bindings.Remove(ActionName);
+		this->Native_OnBindingsChanged();
+	}
 }
 
 void UPF2AbilityBindingsComponent::LoadAbilitiesFromCharacter()
@@ -101,7 +131,7 @@ void UPF2AbilityBindingsComponent::LoadAbilitiesFromCharacter()
 			DefaultAction = FName();
 		}
 
-		this->Bindings.Add(FPF2AbilityInputBinding(DefaultAction, AbilitySpec, this, this->IsConsumingInput()));
+		this->SetBindingWithoutBroadcast(DefaultAction, AbilitySpec);
 	}
 
 	UE_LOG(
@@ -118,6 +148,26 @@ void UPF2AbilityBindingsComponent::LoadAbilitiesFromCharacter()
 		// Wire up all the new bindings.
 		this->ConnectToInput(this->GetInputComponent());
 	}
+
+	this->Native_OnBindingsChanged();
+}
+
+void UPF2AbilityBindingsComponent::SetBinding(const FName& ActionName, const FGameplayAbilitySpec& AbilitySpec)
+{
+	this->SetBindingWithoutBroadcast(ActionName, AbilitySpec);
+	this->Native_OnBindingsChanged();
+}
+
+void UPF2AbilityBindingsComponent::SetBindingWithoutBroadcast(const FName& ActionName,
+	const FGameplayAbilitySpec& AbilitySpec)
+{
+	if (this->Bindings.Contains(ActionName))
+	{
+		// Disconnect the old binding before replacing it.
+		this->DisconnectBindingFromInput(this->Bindings[ActionName]);
+	}
+
+	this->Bindings.Add(ActionName, FPF2AbilityInputBinding(ActionName, AbilitySpec, this, this->IsConsumingInput()));
 }
 
 TMap<FName, TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilityBindingsComponent::GetBindingsMap() const
@@ -125,7 +175,7 @@ TMap<FName, TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilityBindingsC
 	UAbilitySystemComponent* Asc = this->GetOwningCharacter()->GetAbilitySystemComponent();
 
 	return PF2ArrayUtilities::Reduce(
-		this->Bindings,
+		PF2MapUtilities::GetValues(this->Bindings),
 		TMap<FName, TScriptInterface<IPF2GameplayAbilityInterface>>(),
 		[Asc](TMap<FName, TScriptInterface<IPF2GameplayAbilityInterface>> ResultMap,
 		      const FPF2AbilityInputBinding&                              CurrentBinding)
@@ -157,8 +207,10 @@ void UPF2AbilityBindingsComponent::ConnectToInput(UInputComponent* NewInputCompo
 		TEXT("Command bindings cannot be wired-up to two different input components at the same time.")
 	);
 
-	for (FPF2AbilityInputBinding& Binding : this->Bindings)
+	for (auto PairIterator = this->Bindings.CreateIterator(); PairIterator; ++PairIterator)
 	{
+		FPF2AbilityInputBinding& Binding = PairIterator.Value();
+
 		Binding.ConnectToInput(NewInputComponent);
 	}
 
@@ -171,8 +223,10 @@ void UPF2AbilityBindingsComponent::DisconnectFromInput()
 {
 	if (this->IsConnectedToInput())
 	{
-		for (FPF2AbilityInputBinding& Binding : this->Bindings)
+		for (auto PairIterator = this->Bindings.CreateIterator(); PairIterator; ++PairIterator)
 		{
+			FPF2AbilityInputBinding& Binding = PairIterator.Value();
+
 			Binding.DisconnectFromInput(this->InputComponent);
 		}
 

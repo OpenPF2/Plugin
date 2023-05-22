@@ -85,6 +85,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintGetter=IsConsumingInput, BlueprintSetter=SetConsumeInput)
 	bool bConsumeInput;
 
+	UPROPERTY()
+	UPF2AbilityBindingsInterfaceEvents* Events;
+
 private:
 	/**
 	 * The input component to which this component is currently wired.
@@ -102,7 +105,7 @@ private:
 	 * the server. This is handled automatically when using the default OpenPF2 player controller implementation.
 	 */
 	UPROPERTY()
-	TArray<FPF2AbilityInputBinding> Bindings;
+	TMap<FName, FPF2AbilityInputBinding> Bindings;
 
 public:
 	// =================================================================================================================
@@ -113,11 +116,15 @@ public:
 	 */
 	explicit UPF2AbilityBindingsComponent() : bConsumeInput(true), InputComponent(nullptr)
 	{
+		this->Events = CreateDefaultSubobject<UPF2AbilityBindingsInterfaceEvents>("InterfaceEvents");
 	}
 
 	// =================================================================================================================
 	// Public Methods - IPF2AbilityBindingsInterface Implementation
 	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual UPF2AbilityBindingsInterfaceEvents* GetEvents() const override;
+
 	UFUNCTION(BlueprintCallable)
 	virtual bool IsConsumingInput() const override;
 
@@ -128,7 +135,13 @@ public:
 	virtual void ClearBindings() override;
 
 	UFUNCTION(BlueprintCallable)
+	virtual void ClearBinding(const FName& ActionName) override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual void LoadAbilitiesFromCharacter() override;
+
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
+	virtual void SetBinding(const FName& ActionName, const FGameplayAbilitySpec& AbilitySpec) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual TMap<FName, TScriptInterface<IPF2GameplayAbilityInterface>> GetBindingsMap() const override;
@@ -190,6 +203,8 @@ protected:
 	 */
 	IPF2CharacterInterface* GetOwningCharacter() const;
 
+	void SetBindingWithoutBroadcast(const FName& ActionName, const FGameplayAbilitySpec& AbilitySpec);
+
 	/**
 	 * Applies ability execution filters to the activation of a bound ability.
 	 *
@@ -214,9 +229,13 @@ protected:
 		FGameplayAbilitySpecHandle&                    InOutAbilitySpecHandle,
 		FGameplayEventData&                            InOutAbilityPayload);
 
+	void DisconnectBindingFromInput(FPF2AbilityInputBinding& Binding) const;
+
 	// =================================================================================================================
 	// Protected Native Event Callbacks
 	// =================================================================================================================
+	virtual void Native_OnBindingsChanged();
+
 	/**
 	 * Callback invoked in C++ code when input has been connected to this component.
 	 *

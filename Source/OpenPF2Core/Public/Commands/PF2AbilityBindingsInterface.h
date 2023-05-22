@@ -6,6 +6,7 @@
 #pragma once
 
 #include <GameplayAbilitySpec.h>
+#include <UObject/ScriptInterface.h>
 
 #include "PF2ActorComponentInterface.h"
 
@@ -22,8 +23,35 @@ class UInputComponent;
 struct FPF2AbilityInputBinding;
 
 // =====================================================================================================================
+// Normal Declarations - Delegates
+// =====================================================================================================================
+/**
+ * Delegate for reacting to command bindings changing/being rebound.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
+	FPF2AbilityBindingsChangedDelegate,
+	TScriptInterface<IPF2AbilityBindingsInterface>, BindingsComponent
+);
+
+// =====================================================================================================================
 // Normal Declarations - Types
 // =====================================================================================================================
+UCLASS()
+class OPENPF2CORE_API UPF2AbilityBindingsInterfaceEvents : public UObject
+{
+	GENERATED_BODY()
+
+public:
+	// =================================================================================================================
+	// Public Fields - Multicast Delegates
+	// =================================================================================================================
+	/**
+	 * Event fired when ability bindings in the owning component change (e.g. abilities are bound to different inputs).
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Command Bindings")
+	FPF2AbilityBindingsChangedDelegate OnAbilityBindingsChangedDelegate;
+};
+
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2AbilityBindingsInterface : public UPF2ActorComponentInterface
 {
@@ -62,6 +90,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
 	virtual void SetConsumeInput(const bool bNewValue) = 0;
 
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
+	virtual UPF2AbilityBindingsInterfaceEvents* GetEvents() const = 0;
+
 	/**
 	 * Clears all bindings.
 	 *
@@ -69,6 +100,9 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
 	virtual void ClearBindings() = 0;
+
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
+	virtual void ClearBinding(const FName& ActionName) = 0;
 
 	/**
 	 * Populates the bindings array from the abilities that have been granted to the owning character.
@@ -80,6 +114,9 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
 	virtual void LoadAbilitiesFromCharacter() = 0;
+
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
+	virtual void SetBinding(const FName& ActionName, const FGameplayAbilitySpec& AbilitySpec) = 0;
 
 	/**
 	 * Gets a copy of the bindings in this component.
