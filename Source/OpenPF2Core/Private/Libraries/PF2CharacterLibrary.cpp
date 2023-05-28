@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -7,7 +7,10 @@
 
 #include <Engine/World.h>
 
+#include "PF2CharacterInterface.h"
 #include "PF2PlayerControllerInterface.h"
+
+#include "Libraries/PF2ActorLibrary.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
 
@@ -47,4 +50,10 @@ TArray<TScriptInterface<IPF2CharacterInterface>> UPF2CharacterLibrary::GetPlayer
 			return Characters;
 		}
 	);
+}
+
+TScriptInterface<IInterface> UPF2CharacterLibrary::GetComponentByInterface(
+	const TScriptInterface<IPF2CharacterInterface> Character, const TSubclassOf<UInterface> Interface)
+{
+	return UPF2ActorLibrary::GetComponentByInterface(Character->ToActor(), Interface);
 }
