@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -37,7 +37,7 @@ public:
 	 * @return
 	 *	Either the component that matches the given interface; or, nullptr if there is no such component.
 	 */
-	UFUNCTION(BlueprintPure, Category = "OpenPF2|Actors", meta = (DeterminesOutputType = "Interface"))
+	UFUNCTION(BlueprintPure, Category = "OpenPF2|Actors|Components", meta = (DeterminesOutputType = "Interface"))
 	static TScriptInterface<IInterface> GetComponentByInterface(const AActor*                 Actor,
 	                                                            const TSubclassOf<UInterface> Interface);
 };
