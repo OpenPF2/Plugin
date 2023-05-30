@@ -63,7 +63,7 @@ public:
 	 *
 	 * This event is only fired on clients.
 	 */
-	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Command Bindings")
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Ability Bindings")
 	FPF2AbilityBindingsInputConnectionChangedDelegate OnInputConnected;
 
 	/**
@@ -71,7 +71,7 @@ public:
 	 *
 	 * This event is only fired on clients.
 	 */
-	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Command Bindings")
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Ability Bindings")
 	FPF2AbilityBindingsInputConnectionChangedDelegate OnInputDisconnected;
 
 protected:
@@ -140,7 +140,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void LoadAbilitiesFromCharacter() override;
 
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
+	UFUNCTION(BlueprintCallable)
 	virtual void SetBinding(const FName& ActionName, const FGameplayAbilitySpec& AbilitySpec) override;
 
 	UFUNCTION(BlueprintCallable)

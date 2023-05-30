@@ -48,7 +48,7 @@ public:
 	/**
 	 * Event fired when ability bindings in the owning component change (e.g. abilities are bound to different inputs).
 	 */
-	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Command Bindings")
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Ability Bindings")
 	FPF2AbilityBindingsChangedDelegate OnAbilityBindingsChangedDelegate;
 };
 
@@ -74,7 +74,7 @@ public:
 	 *   react to them.
 	 * - If false, then a pawn or player controller can react to the input action in addition to bindings handling them.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
 	virtual bool IsConsumingInput() const = 0;
 
 	/**
@@ -87,10 +87,10 @@ public:
 	 *   react to them.
 	 * - If false, then a pawn or player controller can react to the input action in addition to bindings handling them.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
 	virtual void SetConsumeInput(const bool bNewValue) = 0;
 
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
 	virtual UPF2AbilityBindingsInterfaceEvents* GetEvents() const = 0;
 
 	/**
@@ -98,10 +98,10 @@ public:
 	 *
 	 * If input is currently wired up, bindings are removed from input before being cleared.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
 	virtual void ClearBindings() = 0;
 
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
 	virtual void ClearBinding(const FName& ActionName) = 0;
 
 	/**
@@ -112,10 +112,10 @@ public:
 	 *
 	 * If input is currently wired up, the new bindings are automatically added to input.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
 	virtual void LoadAbilitiesFromCharacter() = 0;
 
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
 	virtual void SetBinding(const FName& ActionName, const FGameplayAbilitySpec& AbilitySpec) = 0;
 
 	/**
@@ -124,7 +124,7 @@ public:
 	 * @return
 	 *	The current bindings between input and commands.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
 	virtual TMap<FName, TScriptInterface<IPF2GameplayAbilityInterface>> GetBindingsMap() const = 0;
 
 	/**
@@ -136,7 +136,7 @@ public:
 	 * @param InputComponent
 	 *	The component to which input should be bound.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
 	virtual void ConnectToInput(UInputComponent* InputComponent) = 0;
 
 	/**
@@ -146,7 +146,7 @@ public:
 	 *
 	 * Only bindings that have been wired up will be affected; any new binding that is not yet wired up will be ignored.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Bindings")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
 	virtual void DisconnectFromInput() = 0;
 
 	/**
