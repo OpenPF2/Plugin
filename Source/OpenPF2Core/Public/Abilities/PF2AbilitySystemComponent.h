@@ -100,7 +100,10 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2AbilitySystemInterface Implementation
 	// =================================================================================================================
-	virtual bool ArePassiveGameplayEffectsActive() override
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<TScriptInterface<IPF2GameplayAbilityInterface>> GetAbilities() const override;
+
+	virtual bool ArePassiveGameplayEffectsActive() const override
 	{
 		return this->ActivatedWeightGroups.Num() != 0;
 	}

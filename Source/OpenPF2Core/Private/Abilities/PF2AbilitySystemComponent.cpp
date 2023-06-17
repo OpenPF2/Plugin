@@ -10,6 +10,8 @@
 #include "PF2CharacterConstants.h"
 #include "PF2CharacterInterface.h"
 
+#include "Abilities/PF2GameplayAbilityInterface.h"
+
 #include "Utilities/PF2ArrayUtilities.h"
 #include "Utilities/PF2EnumUtilities.h"
 #include "Utilities/PF2InterfaceUtilities.h"
@@ -38,6 +40,27 @@ UPF2AbilitySystemComponent::UPF2AbilitySystemComponent()
 		// Allow boost effects to be looked-up by ability name later.
 		this->AbilityBoostEffects.Add(Ability, BoostGeFinder.Object);
 	}
+}
+
+TArray<TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilitySystemComponent::GetAbilities() const
+{
+	return PF2ArrayUtilities::Reduce(
+		this->GetActivatableAbilities(),
+		TArray<TScriptInterface<IPF2GameplayAbilityInterface>>(),
+		[this](
+			TArray<TScriptInterface<IPF2GameplayAbilityInterface>> Abilities,
+			const FGameplayAbilitySpec& CurrentAbilitySpec)
+		{
+			IPF2GameplayAbilityInterface* AbilityIntf =
+				Cast<IPF2GameplayAbilityInterface>(CurrentAbilitySpec.Ability.Get());
+
+			if (AbilityIntf != nullptr)
+			{
+				Abilities.Add(PF2InterfaceUtilities::ToScriptInterface(AbilityIntf));
+			}
+
+			return Abilities;
+		});
 }
 
 UAbilitySystemComponent* UPF2AbilitySystemComponent::ToAbilitySystemComponent()
