@@ -12,6 +12,11 @@
 #include "PF2AbilitySystemInterface.generated.h"
 
 // =====================================================================================================================
+// Forward Declarations (to minimize header dependencies)
+// =====================================================================================================================
+class IPF2GameplayAbilityInterface;
+
+// =====================================================================================================================
 // Delegate Declarations
 // =====================================================================================================================
 /**
@@ -44,6 +49,15 @@ class OPENPF2CORE_API IPF2AbilitySystemInterface : public IPF2ActorComponentInte
     GENERATED_BODY()
 
 public:
+    /**
+     * Gets the activatable OpenPF2-compatible abilities that have been granted to this character.
+     *
+     * @return
+     *	The abilities this character possesses.
+     */
+    UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
+	virtual TArray<TScriptInterface<IPF2GameplayAbilityInterface>> GetAbilities() const = 0;
+
 	/**
 	 * Gets whether passively-applied Gameplay Effects are currently active on this ASC.
 	 *
