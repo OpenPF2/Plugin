@@ -46,8 +46,11 @@ class OPENPF2CORE_API IPF2AbilitySystemInterface : public IPF2ActorComponentInte
 public:
 	/**
 	 * Gets whether passively-applied Gameplay Effects are currently active on this ASC.
+	 *
+	 * @return
+	 *	Whether passive gameplay effects have been activated on this ASC.
 	 */
-	virtual bool ArePassiveGameplayEffectsActive() = 0;
+	virtual bool ArePassiveGameplayEffectsActive() const = 0;
 
 	/**
 	 * Gets this Ability System Component as a standard ASC.
