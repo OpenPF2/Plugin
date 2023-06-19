@@ -90,6 +90,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual FName GetDefaultInputActionMapping() const override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual FGameplayAbilitySpec ToGameplayAbilitySpecForCharacter(
+		const TScriptInterface<IPF2CharacterInterface> Character,
+		bool& bOutSpecFound
+	) const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual FGameplayAbilitySpecHandle ToGameplayAbilitySpecHandleForCharacter(
+		const TScriptInterface<IPF2CharacterInterface> Character,
+		bool& bOutSpecHandleFound
+	) const override;
+
 protected:
 	// =================================================================================================================
 	// Protected Methods
