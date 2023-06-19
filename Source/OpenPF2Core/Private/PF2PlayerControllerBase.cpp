@@ -210,85 +210,78 @@ void APF2PlayerControllerBase::ReleaseCharacter(const TScriptInterface<IPF2Chara
 }
 
 bool APF2PlayerControllerBase::Server_ExecuteAbilityAsCharacterCommand_Validate(
-	const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	AActor* CharacterActor
-)
+	const TScriptInterface<IPF2GameplayAbilityInterface>& Ability,
+	AActor*                                               CharacterActor)
 {
-	return APF2PlayerControllerBase::Server_ExecuteAbilityAsCharacterCommandWithPayload_Validate(
-		AbilitySpecHandle,
-		CharacterActor,
-		FGameplayEventData()
-	);
+	bool bIsValid = false;
+
+	if (this->IsControllableCharacterPawn(CharacterActor))
+	{
+		IPF2CharacterInterface*    TargetCharacterIntf = Cast<IPF2CharacterInterface>(CharacterActor);
+		bool                       bWasSpecFound;
+
+		// Search for spec and validate that it exists, but don't do anything with the result.
+		Ability->ToGameplayAbilitySpecHandleForCharacter(
+			PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterInterface>(TargetCharacterIntf),
+			bWasSpecFound
+		);
+
+		bIsValid = bWasSpecFound;
+	}
+
+	return bIsValid;
 }
 
 void APF2PlayerControllerBase::Server_ExecuteAbilityAsCharacterCommand_Implementation(
-	const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	AActor* CharacterActor
-)
+	const TScriptInterface<IPF2GameplayAbilityInterface>& Ability,
+	AActor*                                               CharacterActor)
 {
-	this->Server_ExecuteAbilityAsCharacterCommandWithPayload_Implementation(
+	IPF2CharacterInterface*    TargetCharacterIntf = Cast<IPF2CharacterInterface>(CharacterActor);
+	FGameplayAbilitySpecHandle AbilitySpecHandle;
+	bool                       bWasSpecFound;
+
+	AbilitySpecHandle = Ability->ToGameplayAbilitySpecHandleForCharacter(
+		PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterInterface>(TargetCharacterIntf),
+		bWasSpecFound
+	);
+
+	if (bWasSpecFound)
+	{
+		this->Server_ExecuteAbilitySpecAsCharacterCommandWithPayload_Implementation(
+			AbilitySpecHandle,
+			CharacterActor,
+			FGameplayEventData()
+		);
+	}
+}
+
+bool APF2PlayerControllerBase::Server_ExecuteAbilitySpecAsCharacterCommand_Validate(
+	const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	AActor* CharacterActor)
+{
+	return this->IsControllableCharacterPawn(CharacterActor);
+}
+
+void APF2PlayerControllerBase::Server_ExecuteAbilitySpecAsCharacterCommand_Implementation(
+	const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	AActor* CharacterActor)
+{
+	this->Server_ExecuteAbilitySpecAsCharacterCommandWithPayload_Implementation(
 		AbilitySpecHandle,
 		CharacterActor,
 		FGameplayEventData()
 	);
 }
 
-bool APF2PlayerControllerBase::Server_ExecuteAbilityAsCharacterCommandWithPayload_Validate(
+bool APF2PlayerControllerBase::Server_ExecuteAbilitySpecAsCharacterCommandWithPayload_Validate(
 	const FGameplayAbilitySpecHandle AbilitySpecHandle,
 	AActor*                          CharacterActor,
-	const FGameplayEventData&        AbilityPayload
-)
+	const FGameplayEventData&        AbilityPayload)
 {
-	IPF2CharacterInterface* TargetCharacter = Cast<IPF2CharacterInterface>(CharacterActor);
-	APawn*                  CharacterPawn;
-
-	if (TargetCharacter == nullptr)
-	{
-		UE_LOG(
-			LogPf2CoreAbilities,
-			Error,
-			TEXT("Server_ExecuteAbilityAsCharacterCommand(%s,%s): Character must implement IPF2CharacterInterface."),
-			*(AbilitySpecHandle.ToString()),
-			*(GetNameSafe(CharacterActor))
-		);
-
-		return false;
-	}
-
-	CharacterPawn = TargetCharacter->ToPawn();
-
-	if (CharacterPawn == nullptr)
-	{
-		UE_LOG(
-			LogPf2CoreAbilities,
-			Error,
-			TEXT("Server_ExecuteAbilityAsCharacterCommand(%s,%s): Non-pawn character passed to player controller ('%s')."),
-			*(AbilitySpecHandle.ToString()),
-			*(TargetCharacter->GetIdForLogs()),
-			*(this->GetIdForLogs())
-		);
-
-		return false;
-	}
-
-	if ((CharacterPawn->GetController() != this) && !this->GetControllableCharacters().Contains(CharacterPawn))
-	{
-		UE_LOG(
-			LogPf2CoreAbilities,
-			Error,
-			TEXT("Server_ExecuteAbilityAsCharacterCommand(%s,%s): Target character must be controllable by this player controller ('%s')."),
-			*(AbilitySpecHandle.ToString()),
-			*(TargetCharacter->GetIdForLogs()),
-			*(this->GetIdForLogs())
-		);
-
-		return false;
-	}
-
-	return true;
+	return this->IsControllableCharacterPawn(CharacterActor);
 }
 
-void APF2PlayerControllerBase::Server_ExecuteAbilityAsCharacterCommandWithPayload_Implementation(
+void APF2PlayerControllerBase::Server_ExecuteAbilitySpecAsCharacterCommandWithPayload_Implementation(
 	const FGameplayAbilitySpecHandle AbilitySpecHandle,
 	AActor*                          CharacterActor,
 	const FGameplayEventData&        AbilityPayload)
@@ -300,7 +293,7 @@ void APF2PlayerControllerBase::Server_ExecuteAbilityAsCharacterCommandWithPayloa
 	UE_LOG(
 		LogPf2CoreAbilities,
 		VeryVerbose,
-		TEXT("Server_ExecuteAbilityAsCharacterCommand(%s,%s) called on player controller ('%s')."),
+		TEXT("Server_ExecuteAbilitySpecAsCharacterCommandWithPayload(%s,%s) called on player controller ('%s')."),
 		*(AbilitySpecHandle.ToString()),
 		*(GetNameSafe(CharacterActor)),
 		*(this->GetIdForLogs())
@@ -316,6 +309,54 @@ void APF2PlayerControllerBase::Server_ExecuteAbilityAsCharacterCommandWithPayloa
 	CharacterCommandIntf = APF2CharacterCommand::Create(TargetCharacter, AbilitySpecHandle, AbilityPayload);
 
 	CharacterCommandIntf->AttemptExecuteOrQueue();
+}
+
+bool APF2PlayerControllerBase::IsControllableCharacterPawn(AActor* CharacterActor) const
+{
+	IPF2CharacterInterface* TargetCharacter = Cast<IPF2CharacterInterface>(CharacterActor);
+	APawn*                  CharacterPawn;
+
+	if (TargetCharacter == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("IsControllableCharacterPawn(%s): Character must implement IPF2CharacterInterface."),
+			*(GetNameSafe(CharacterActor))
+		);
+
+		return false;
+	}
+
+	CharacterPawn = TargetCharacter->ToPawn();
+
+	if (CharacterPawn == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("IsControllableCharacterPawn(%s): Non-pawn character passed to player controller ('%s')."),
+			*(TargetCharacter->GetIdForLogs()),
+			*(this->GetIdForLogs())
+		);
+
+		return false;
+	}
+
+	if ((CharacterPawn->GetController() != this) && !this->GetControllableCharacters().Contains(CharacterPawn))
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("IsControllableCharacterPawn(%s): Target character must be controllable by this player controller ('%s')."),
+			*(TargetCharacter->GetIdForLogs()),
+			*(this->GetIdForLogs())
+		);
+
+		return false;
+	}
+
+	return true;
 }
 
 bool APF2PlayerControllerBase::Server_CancelCharacterCommand_Validate(AInfo* Command)
