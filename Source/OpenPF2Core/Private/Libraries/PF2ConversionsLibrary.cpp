@@ -15,6 +15,27 @@
 
 #include "Abilities/PF2AbilitySystemInterface.h"
 
+FString UPF2ConversionsLibrary::Conv_LogIdentifiableIntfToString(
+	const TScriptInterface<IPF2LogIdentifiableInterface> Object)
+{
+	if (Object.GetInterface() == nullptr)
+	{
+		// This is neither an assertion error nor a logged error because Blueprints might use this conversion before a
+		// call to "Is valid?" or something that can accept a nullptr.
+		return FString();
+	}
+	else
+	{
+		return Object->GetIdForLogs();
+	}
+}
+
+FText UPF2ConversionsLibrary::Conv_LogIdentifiableIntfToText(
+	const TScriptInterface<IPF2LogIdentifiableInterface> Object)
+{
+	return FText::FromString(Conv_LogIdentifiableIntfToString(Object));
+}
+
 AActor* UPF2ConversionsLibrary::Conv_CharacterIntfToActor(const TScriptInterface<IPF2CharacterInterface>& Character)
 {
 	if (Character.GetInterface() == nullptr)
