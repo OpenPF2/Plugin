@@ -17,6 +17,7 @@
 class IPF2AbilitySystemInterface;
 class IPF2ActorComponentInterface;
 class IPF2CharacterInterface;
+class IPF2LogIdentifiableInterface;
 class IPF2PlayerControllerInterface;
 class IPF2PlayerStateInterface;
 class UAbilitySystemComponent;
@@ -33,6 +34,38 @@ class UPF2ConversionsLibrary final : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 public:
+	/**
+	 * Converts a log-identifiable object to a string.
+	 *
+	 * @param Object
+	 *	The log-identifiable object to convert.
+	 *
+	 * @return
+	 *	The resulting string.
+	 */
+	UFUNCTION(
+		BlueprintPure,
+		meta=(DisplayName = "To log ID string", CompactNodeTitle = "->", BlueprintAutocast),
+		Category="OpenPF2|Conversions"
+	)
+	static FString Conv_LogIdentifiableIntfToString(const TScriptInterface<IPF2LogIdentifiableInterface> Object);
+
+	/**
+	 * Converts a log-identifiable object to text.
+	 *
+	 * @param Object
+	 *	The log-identifiable object to convert.
+	 *
+	 * @return
+	 *	The resulting text.
+	 */
+	UFUNCTION(
+		BlueprintPure,
+		meta=(DisplayName = "To log ID text", CompactNodeTitle = "->", BlueprintAutocast),
+		Category="OpenPF2|Conversions"
+	)
+	static FText Conv_LogIdentifiableIntfToText(const TScriptInterface<IPF2LogIdentifiableInterface> Object);
+
 	/**
 	 * Converts a character to an actor.
 	 *
