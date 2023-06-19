@@ -316,7 +316,7 @@ void UPF2AbilityBindingsComponent::ExecuteBoundAbility(const FName              
 
 	if (this->FilterAbilityActivation(ActionName, Character, FilteredAbilityHandle, FilteredAbilityPayload))
 	{
-		PlayerController->Server_ExecuteAbilityAsCharacterCommand(
+		PlayerController->Server_ExecuteAbilityAsCharacterCommandWithPayload(
 			FilteredAbilityHandle,
 			CharacterIntf->ToActor(),
 			FilteredAbilityPayload

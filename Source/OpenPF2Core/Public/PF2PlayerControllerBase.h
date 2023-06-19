@@ -100,14 +100,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter) override;
 
-	UFUNCTION(BlueprintCallable)
-	virtual void ExecuteAbilityAsCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	                                              AActor*                          CharacterActor) override;
-
 	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
 	virtual void Server_ExecuteAbilityAsCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	                                                     AActor*                          CharacterActor,
-	                                                     const FGameplayEventData&        AbilityPayload) override;
+	                                                     AActor*                          CharacterActor) override;
+
+	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
+	virtual void Server_ExecuteAbilityAsCharacterCommandWithPayload(
+		const FGameplayAbilitySpecHandle AbilitySpecHandle,
+		AActor*                          CharacterActor,
+		const FGameplayEventData&        AbilityPayload
+	) override;
 
 	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
 	virtual void Server_CancelCharacterCommand(AInfo* Command) override;
