@@ -209,16 +209,35 @@ void APF2PlayerControllerBase::ReleaseCharacter(const TScriptInterface<IPF2Chara
 	this->GetCharacterQueue()->Remove(ReleasedCharacter);
 }
 
-void APF2PlayerControllerBase::ExecuteAbilityAsCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-                                                                AActor*                          CharacterActor)
-{
-	this->Server_ExecuteAbilityAsCharacterCommand(AbilitySpecHandle, CharacterActor, FGameplayEventData());
-}
-
 bool APF2PlayerControllerBase::Server_ExecuteAbilityAsCharacterCommand_Validate(
 	const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	AActor* CharacterActor
+)
+{
+	return APF2PlayerControllerBase::Server_ExecuteAbilityAsCharacterCommandWithPayload_Validate(
+		AbilitySpecHandle,
+		CharacterActor,
+		FGameplayEventData()
+	);
+}
+
+void APF2PlayerControllerBase::Server_ExecuteAbilityAsCharacterCommand_Implementation(
+	const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	AActor* CharacterActor
+)
+{
+	this->Server_ExecuteAbilityAsCharacterCommandWithPayload_Implementation(
+		AbilitySpecHandle,
+		CharacterActor,
+		FGameplayEventData()
+	);
+}
+
+bool APF2PlayerControllerBase::Server_ExecuteAbilityAsCharacterCommandWithPayload_Validate(
+	const FGameplayAbilitySpecHandle AbilitySpecHandle,
 	AActor*                          CharacterActor,
-	const FGameplayEventData&        AbilityPayload)
+	const FGameplayEventData&        AbilityPayload
+)
 {
 	IPF2CharacterInterface* TargetCharacter = Cast<IPF2CharacterInterface>(CharacterActor);
 	APawn*                  CharacterPawn;
@@ -269,7 +288,7 @@ bool APF2PlayerControllerBase::Server_ExecuteAbilityAsCharacterCommand_Validate(
 	return true;
 }
 
-void APF2PlayerControllerBase::Server_ExecuteAbilityAsCharacterCommand_Implementation(
+void APF2PlayerControllerBase::Server_ExecuteAbilityAsCharacterCommandWithPayload_Implementation(
 	const FGameplayAbilitySpecHandle AbilitySpecHandle,
 	AActor*                          CharacterActor,
 	const FGameplayEventData&        AbilityPayload)

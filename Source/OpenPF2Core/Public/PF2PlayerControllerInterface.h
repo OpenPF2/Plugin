@@ -145,9 +145,9 @@ public:
 	 * @param CharacterActor
 	 *	The character upon which the ability should be activated. The given actor must implement IPF2CharacterInterface.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
-	virtual void ExecuteAbilityAsCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	                                              AActor*                          CharacterActor) = 0;
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
+	virtual void Server_ExecuteAbilityAsCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	                                                     AActor*                          CharacterActor) = 0;
 
 	/**
 	 * Builds and executes a command on the server for one of the characters this player controller can control.
@@ -168,9 +168,11 @@ public:
 	 *	The payload to pass to the ability when it is executed.
 	 */
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
-	virtual void Server_ExecuteAbilityAsCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	                                                     AActor*                          CharacterActor,
-	                                                     const FGameplayEventData&        AbilityPayload) = 0;
+	virtual void Server_ExecuteAbilityAsCharacterCommandWithPayload(
+		const FGameplayAbilitySpecHandle AbilitySpecHandle,
+		AActor*                          CharacterActor,
+		const FGameplayEventData&        AbilityPayload
+    ) = 0;
 
 	/**
 	 * Requests to cancel a command on the server for one of the characters this player controller can control.
