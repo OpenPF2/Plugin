@@ -101,11 +101,17 @@ public:
 	virtual void ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter) override;
 
 	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
-	virtual void Server_ExecuteAbilityAsCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	                                                     AActor*                          CharacterActor) override;
+	virtual void Server_ExecuteAbilityAsCharacterCommand(
+		const TScriptInterface<IPF2GameplayAbilityInterface>& Ability,
+		AActor*                                               CharacterActor
+	) override;
 
 	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
-	virtual void Server_ExecuteAbilityAsCharacterCommandWithPayload(
+	virtual void Server_ExecuteAbilitySpecAsCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	                                                         AActor*                          CharacterActor) override;
+
+	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
+	virtual void Server_ExecuteAbilitySpecAsCharacterCommandWithPayload(
 		const FGameplayAbilitySpecHandle AbilitySpecHandle,
 		AActor*                          CharacterActor,
 		const FGameplayEventData&        AbilityPayload
@@ -138,6 +144,18 @@ protected:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
 	TScriptInterface<IPF2CharacterQueueInterface> GetCharacterQueue() const;
+
+	/**
+	 * Validates whether the given character is a controllable, OpenPF2-compatible pawn.
+	 *
+	 * @param CharacterActor
+	 *	The character to validate.
+	 *
+	 * @return
+	 *	- true if the character is a pawn, OpenPF2-compatible, and controlled by this player controller.
+	 *	- false, otherwise.
+	 */
+	bool IsControllableCharacterPawn(AActor* CharacterActor) const;
 
 	// =================================================================================================================
 	// Protected Native Event Callbacks

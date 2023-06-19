@@ -21,6 +21,7 @@
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2CharacterInterface;
+class IPF2GameplayAbilityInterface;
 class IPF2ModeOfPlayRuleSetInterface;
 class IPF2PlayerStateInterface;
 
@@ -132,6 +133,33 @@ public:
 	/**
 	 * Builds and executes a command on the server for one of the characters this player controller can control.
 	 *
+	 * The given ability is used to look up an ability handle in the ASC of the character. If the given character has
+	 * not been granted an ability that matches the given ability, this RPC will not execute. For efficiency, if the
+	 * caller already has an ability handle, it is preferable to use Server_ExecuteAbilitySpecAsCharacterCommand()
+	 * instead.
+	 *
+	 * The resulting command may be queued if the active MoPRS is requiring abilities to be queued (e.g., during
+	 * encounters).
+	 *
+	 * The given character must be controllable by this player controller, but may be possessed by either this player
+	 * controller or an AI controller. Since this is an RPC, the character is passed as an actor instead of as an
+	 * interface reference because UE will not replicate actors if they are declared/referenced through an interface
+	 * property.
+	 *
+	 * @param Ability
+	 *	The ability to wrap in the command when it is activated.
+	 * @param CharacterActor
+	 *	The character upon which the ability should be activated. The given actor must implement IPF2CharacterInterface.
+	 */
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
+	virtual void Server_ExecuteAbilityAsCharacterCommand(
+		const TScriptInterface<IPF2GameplayAbilityInterface>& Ability,
+		AActor*                                               CharacterActor
+	) = 0;
+
+	/**
+	 * Builds and executes a command on the server for one of the characters this player controller can control.
+	 *
 	 * The resulting command may be queued if the active MoPRS is requiring abilities to be queued (e.g., during
 	 * encounters).
 	 *
@@ -146,8 +174,8 @@ public:
 	 *	The character upon which the ability should be activated. The given actor must implement IPF2CharacterInterface.
 	 */
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
-	virtual void Server_ExecuteAbilityAsCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	                                                     AActor*                          CharacterActor) = 0;
+	virtual void Server_ExecuteAbilitySpecAsCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
+	                                                         AActor*                          CharacterActor) = 0;
 
 	/**
 	 * Builds and executes a command on the server for one of the characters this player controller can control.
@@ -168,11 +196,11 @@ public:
 	 *	The payload to pass to the ability when it is executed.
 	 */
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
-	virtual void Server_ExecuteAbilityAsCharacterCommandWithPayload(
+	virtual void Server_ExecuteAbilitySpecAsCharacterCommandWithPayload(
 		const FGameplayAbilitySpecHandle AbilitySpecHandle,
 		AActor*                          CharacterActor,
 		const FGameplayEventData&        AbilityPayload
-    ) = 0;
+	) = 0;
 
 	/**
 	 * Requests to cancel a command on the server for one of the characters this player controller can control.
