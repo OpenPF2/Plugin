@@ -9,8 +9,6 @@
 
 #include "Abilities/PF2GameplayAbilityInterface.h"
 
-#include "Utilities/PF2LogIdentifiableInterface.h"
-
 #include "PF2GameplayAbilityBase.generated.h"
 
 // =====================================================================================================================
@@ -31,8 +29,7 @@ UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal
 class UPF2GameplayAbilityBase :
 	public UGameplayAbility,
-	public IPF2GameplayAbilityInterface,
-	public IPF2LogIdentifiableInterface
+	public IPF2GameplayAbilityInterface
 {
 	GENERATED_BODY()
 
@@ -73,6 +70,12 @@ protected:
 
 public:
 	// =================================================================================================================
+	// Public Methods - IPF2LogIdentifiableInterface Implementation
+	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual FString GetIdForLogs() const override;
+
+	// =================================================================================================================
 	// Public Methods - IPF2GameplayAbilityInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
@@ -86,12 +89,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual FName GetDefaultInputActionMapping() const override;
-
-	// =================================================================================================================
-	// Public Methods - IPF2LogIdentifiableInterface Implementation
-	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
-	virtual FString GetIdForLogs() const override;
 
 protected:
 	// =================================================================================================================

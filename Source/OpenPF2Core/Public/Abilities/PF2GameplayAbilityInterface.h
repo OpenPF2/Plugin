@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <UObject/Interface.h>
+#include "Utilities/PF2LogIdentifiableInterface.h"
 
 #include "PF2GameplayAbilityInterface.generated.h"
 
@@ -18,7 +18,7 @@ class UTexture2D;
 // Normal Declarations
 // =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
-class UPF2GameplayAbilityInterface : public UInterface
+class UPF2GameplayAbilityInterface : public UPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 };
@@ -26,7 +26,7 @@ class UPF2GameplayAbilityInterface : public UInterface
 /**
  * An interface for OpenPF2-compatible Gameplay Abilities.
  */
-class OPENPF2CORE_API IPF2GameplayAbilityInterface
+class OPENPF2CORE_API IPF2GameplayAbilityInterface : public IPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 

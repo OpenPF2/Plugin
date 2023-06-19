@@ -8,7 +8,11 @@
 #include "PF2CharacterInterface.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
-#include "Utilities/PF2LogUtilities.h"
+
+FString UPF2GameplayAbilityBase::GetIdForLogs() const
+{
+	return this->GetName();
+}
 
 UTexture2D* UPF2GameplayAbilityBase::GetAbilityIcon() const
 {
@@ -28,11 +32,6 @@ FText UPF2GameplayAbilityBase::GetAbilityDescription() const
 FName UPF2GameplayAbilityBase::GetDefaultInputActionMapping() const
 {
 	return this->DefaultInputActionMapping;
-}
-
-FString UPF2GameplayAbilityBase::GetIdForLogs() const
-{
-	return this->GetName();
 }
 
 TScriptInterface<IPF2CharacterInterface> UPF2GameplayAbilityBase::GetOwningCharacterFromActorInfo() const
