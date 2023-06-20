@@ -16,6 +16,8 @@
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2AbilityExecutionFilterInterface;
+class UEnhancedInputComponent;
+class UInputAction;
 class UPF2AbilityExecutionFilterBase;
 
 // =====================================================================================================================
@@ -95,17 +97,17 @@ private:
 	 * This is not replicated, since it is only of relevance to local clients.
 	 */
 	UPROPERTY()
-	UInputComponent* InputComponent;
+	UEnhancedInputComponent* InputComponent;
 
 	/**
-	 * The association between inputs and Gameplay Abilities.
+	 * The association between input actions and Gameplay Abilities.
 	 *
 	 * This is not replicated because input is only a concern of the local client and not the server. Instead, abilities
 	 * should be loaded by invoking LoadAbilitiesFromCharacter() after abilities have replicated through the ASC from
 	 * the server. This is handled automatically when using the default OpenPF2 player controller implementation.
 	 */
 	UPROPERTY()
-	TMap<FName, FPF2AbilityInputBinding> Bindings;
+	TMap<const UInputAction*, UPF2AbilityInputBinding*> Bindings;
 
 public:
 	// =================================================================================================================
@@ -135,24 +137,24 @@ public:
 	virtual void ClearBindings() override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void ClearBinding(const FName& ActionName) override;
+	virtual void ClearBinding(const UInputAction* Action) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void LoadAbilitiesFromCharacter() override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void SetBinding(const FName& ActionName, const FGameplayAbilitySpec& AbilitySpec) override;
+	virtual void SetBinding(UInputAction* Action, const FGameplayAbilitySpec& AbilitySpec) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual TMap<FName, TScriptInterface<IPF2GameplayAbilityInterface>> GetBindingsMap() const override;
+	virtual TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>> GetBindingsMap() const override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void ConnectToInput(UInputComponent* NewInputComponent) override;
+	virtual void ConnectToInput(UEnhancedInputComponent* NewInputComponent) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void DisconnectFromInput() override;
 
-	virtual void ExecuteBoundAbility(const FName                      ActionName,
+	virtual void ExecuteBoundAbility(const UInputAction*              Action,
 	                                 const FGameplayAbilitySpecHandle AbilitySpecHandle) override;
 
 	// =================================================================================================================
@@ -172,13 +174,13 @@ protected:
 	// Protected Methods
 	// =================================================================================================================
 	/**
-	 * Gets the input component to which this bindings component is wired up to, if it is wired up.
+	 * Gets the enhanced input component to which this bindings component is wired up to, if it is wired up.
 	 *
 	 * @return
 	 *	- If this component is currently wired-up to input: the input component to which it is wired up.
 	 *	- If this component is not currently wired-up to input: null.
 	 */
-	FORCEINLINE UInputComponent* GetInputComponent() const
+	FORCEINLINE UEnhancedInputComponent* GetInputComponent() const
 	{
 		return this->InputComponent;
 	}
@@ -203,15 +205,23 @@ protected:
 	 */
 	IPF2CharacterInterface* GetOwningCharacter() const;
 
-	void SetBindingWithoutBroadcast(const FName& ActionName, const FGameplayAbilitySpec& AbilitySpec);
+	/**
+	 * Binds an ability to a particular input action without notifying listeners.
+	 *
+	 * @param Action
+	 *	The action to which the ability will be bound.
+	 * @param AbilitySpec
+	 *	The ability to bind.
+	 */
+	void SetBindingWithoutBroadcast(UInputAction* Action, const FGameplayAbilitySpec& AbilitySpec);
 
 	/**
 	 * Applies ability execution filters to the activation of a bound ability.
 	 *
 	 * Filters may veto execution of the filter. If a filter does so, the result of this method will be "false".
 	 *
-	 * @param InActionName
-	 *	The name of the input action that was invoked.
+	 * @param InAction
+	 *	The input action that was invoked.
 	 * @param InCharacter
 	 *	The character on which the action will be performed.
 	 * @param InOutAbilitySpecHandle
@@ -224,12 +234,12 @@ protected:
 	 *	- "false" if the ability should not be executed because the last filter executed vetoed it.
 	 */
 	bool FilterAbilityActivation(
-		const FName                                    InActionName,
+		const UInputAction*                            InAction,
 		const TScriptInterface<IPF2CharacterInterface> InCharacter,
 		FGameplayAbilitySpecHandle&                    InOutAbilitySpecHandle,
 		FGameplayEventData&                            InOutAbilityPayload);
 
-	void DisconnectBindingFromInput(FPF2AbilityInputBinding& Binding) const;
+	void DisconnectBindingFromInput(UPF2AbilityInputBinding* Binding) const;
 
 	// =================================================================================================================
 	// Protected Native Event Callbacks

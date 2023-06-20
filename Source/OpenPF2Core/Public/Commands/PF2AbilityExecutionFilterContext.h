@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <InputAction.h>
+
 #include "PF2CharacterInterface.h"
 #include "PF2AbilityExecutionFilterContext.generated.h"
 
@@ -12,6 +14,7 @@
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2CharacterCommandInterface;
+class UInputAction;
 
 // =====================================================================================================================
 // Normal Declarations
@@ -63,10 +66,10 @@ protected:
 	// Protected Fields
 	// =================================================================================================================
 	/**
-	 * The name of the input action that was invoked, if the ability was invoked by input from the player.
+	 * The input action that was invoked, if the ability was invoked by input from the player.
 	 */
 	UPROPERTY(BlueprintReadOnly)
-	FName TriggeredInputActionName;
+	const UInputAction* TriggeredInputAction;
 
 	/**
 	 * The character on which the ability will be executed.
@@ -83,7 +86,7 @@ public:
 	 */
 	explicit FPF2AbilityExecutionFilterContext() :
 		bProceed(true),
-		TriggeredInputActionName(FName()),
+		TriggeredInputAction(nullptr),
 		Character(TScriptInterface<IPF2CharacterInterface>(nullptr))
 	{
 	}
@@ -101,7 +104,7 @@ public:
 			const FGameplayAbilitySpecHandle               HandleOfAbilityToExecute) :
 		bProceed(true),
 		HandleOfAbilityToExecute(HandleOfAbilityToExecute),
-		TriggeredInputActionName(FName()),
+		TriggeredInputAction(nullptr),
 		Character(Character)
 	{
 	}
@@ -109,23 +112,22 @@ public:
 	/**
 	 * Constructs a new instance.
 	 *
-	 * This constructor is used for abilities invoked by input from a player. The TriggeredInputActionName should be
-	 * equal to the name of the input that triggered the ability.
+	 * This constructor is used for abilities invoked by input from a player.
 	 *
-	 * @param TriggeredInputActionName
-	 *	The name of the input that was invoked by the player.
+	 * @param TriggeredInputAction
+	 *	The input action that was invoked by the player.
 	 * @param Character
 	 *	The character on which the ability will be invoked.
 	 * @param HandleOfAbilityToExecute
 	 *	The handle of the ability that is expected to be executed unless a filter changes it.
 	 */
 	explicit FPF2AbilityExecutionFilterContext(
-			const FName                                    TriggeredInputActionName,
-			const TScriptInterface<IPF2CharacterInterface> Character,
-			const FGameplayAbilitySpecHandle               HandleOfAbilityToExecute) :
+		const UInputAction*                            TriggeredInputAction,
+		const TScriptInterface<IPF2CharacterInterface> Character,
+		const FGameplayAbilitySpecHandle               HandleOfAbilityToExecute) :
 		bProceed(true),
 		HandleOfAbilityToExecute(HandleOfAbilityToExecute),
-		TriggeredInputActionName(TriggeredInputActionName),
+		TriggeredInputAction(TriggeredInputAction),
 		Character(Character)
 	{
 	}
@@ -136,8 +138,8 @@ public:
 	 * This constructor is used for abilities, invoked by input from a player, that accept a payload. The
 	 * TriggeredInputActionName should be equal to the name of the input that triggered the ability.
 	 *
-	 * @param TriggeredInputActionName
-	 *	The name of the input that was invoked, if the command was invoked by input from the player.
+	 * @param TriggeredInputAction
+	 *	The input action that was invoked by the player.
 	 * @param Character
 	 *	The character on which the ability will be invoked.
 	 * @param HandleOfAbilityToExecute
@@ -146,14 +148,14 @@ public:
 	 *	The payload to provide when invoking the ability.
 	 */
 	explicit FPF2AbilityExecutionFilterContext(
-			const FName                                    TriggeredInputActionName,
+			const UInputAction*                            TriggeredInputAction,
 			const TScriptInterface<IPF2CharacterInterface> Character,
 			const FGameplayAbilitySpecHandle               HandleOfAbilityToExecute,
-			const FGameplayEventData                       AbilityPayload) :
+			const FGameplayEventData&                      AbilityPayload) :
 		bProceed(true),
 		HandleOfAbilityToExecute(HandleOfAbilityToExecute),
 		AbilityPayload(AbilityPayload),
-		TriggeredInputActionName(TriggeredInputActionName),
+		TriggeredInputAction(TriggeredInputAction),
 		Character(Character)
 	{
 	}
@@ -206,14 +208,14 @@ public:
 	}
 
 	/**
-	 * Gets the name of the input action (if any) that triggered invocation of the ability.
+	 * Gets the input action (if any) that triggered invocation of the ability.
 	 *
 	 * @return
-	 *	The name of the input action that the player invoked.
+	 *	The input action that the player invoked.
 	 */
-	FORCEINLINE FName GetTriggeredInputActionName() const
+	FORCEINLINE const UInputAction* GetTriggeredInputAction() const
 	{
-		return this->TriggeredInputActionName;
+		return this->TriggeredInputAction;
 	}
 
 	/**

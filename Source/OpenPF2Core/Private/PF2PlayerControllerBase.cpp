@@ -359,6 +359,11 @@ bool APF2PlayerControllerBase::IsControllableCharacterPawn(AActor* CharacterActo
 	return true;
 }
 
+UEnhancedInputComponent* APF2PlayerControllerBase::GetEnhancedInputComponent() const
+{
+	return Cast<UEnhancedInputComponent>(this->InputComponent);
+}
+
 bool APF2PlayerControllerBase::Server_CancelCharacterCommand_Validate(AInfo* Command)
 {
 	const IPF2CharacterCommandInterface* CommandIntf = Cast<IPF2CharacterCommandInterface>(Command);

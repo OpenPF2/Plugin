@@ -13,6 +13,7 @@
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2CharacterInterface;
+class UInputAction;
 class UTexture2D;
 
 // =====================================================================================================================
@@ -70,7 +71,7 @@ public:
 	 *	The name of the input action that should trigger this ability by default.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
-	virtual FName GetDefaultInputActionMapping() const = 0;
+	virtual UInputAction* GetDefaultInputActionMapping() const = 0;
 
 	/**
 	 * Locates and returns the ability spec in the given character's ASC that corresponds to this ability.

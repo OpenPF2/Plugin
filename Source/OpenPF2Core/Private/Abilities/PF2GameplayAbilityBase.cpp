@@ -29,7 +29,7 @@ FText UPF2GameplayAbilityBase::GetAbilityDescription() const
 	return this->Description;
 }
 
-FName UPF2GameplayAbilityBase::GetDefaultInputActionMapping() const
+UInputAction* UPF2GameplayAbilityBase::GetDefaultInputActionMapping() const
 {
 	return this->DefaultInputActionMapping;
 }

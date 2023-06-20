@@ -57,9 +57,9 @@ void UPF2AbilityBindingsComponent::SetConsumeInput(const bool bNewValue)
 	}
 }
 
-void UPF2AbilityBindingsComponent::DisconnectBindingFromInput(FPF2AbilityInputBinding& Binding) const
+void UPF2AbilityBindingsComponent::DisconnectBindingFromInput(UPF2AbilityInputBinding* Binding) const
 {
-	return Binding.DisconnectFromInput(this->GetInputComponent());
+	return Binding->DisconnectFromInput(this->GetInputComponent());
 }
 
 void UPF2AbilityBindingsComponent::Native_OnBindingsChanged()
@@ -73,7 +73,7 @@ void UPF2AbilityBindingsComponent::ClearBindings()
 	{
 		for (auto PairIterator = this->Bindings.CreateIterator(); PairIterator; ++PairIterator)
 		{
-			FPF2AbilityInputBinding& Binding = PairIterator.Value();
+			UPF2AbilityInputBinding* Binding = PairIterator.Value();
 
 			this->DisconnectBindingFromInput(Binding);
 		}
@@ -83,12 +83,12 @@ void UPF2AbilityBindingsComponent::ClearBindings()
 	this->Native_OnBindingsChanged();
 }
 
-void UPF2AbilityBindingsComponent::ClearBinding(const FName& ActionName)
+void UPF2AbilityBindingsComponent::ClearBinding(const UInputAction* Action)
 {
-	if (this->Bindings.Contains(ActionName))
+	if (this->Bindings.Contains(Action))
 	{
-		this->DisconnectBindingFromInput(this->Bindings[ActionName]);
-		this->Bindings.Remove(ActionName);
+		this->DisconnectBindingFromInput(this->Bindings[Action]);
+		this->Bindings.Remove(Action);
 		this->Native_OnBindingsChanged();
 	}
 }
@@ -116,9 +116,9 @@ void UPF2AbilityBindingsComponent::LoadAbilitiesFromCharacter()
 
 	for (const FGameplayAbilitySpec& AbilitySpec : ActivatableAbilities)
 	{
-		const UGameplayAbility*             Ability       = AbilitySpec.Ability;
-		const IPF2GameplayAbilityInterface* AbilityIntf   = Cast<IPF2GameplayAbilityInterface>(Ability);
-		FName                               DefaultAction;
+		const UGameplayAbility*             Ability     = AbilitySpec.Ability;
+		const IPF2GameplayAbilityInterface* AbilityIntf = Cast<IPF2GameplayAbilityInterface>(Ability);
+		UInputAction*                       DefaultAction;
 
 		if (AbilityIntf != nullptr)
 		{
@@ -128,7 +128,7 @@ void UPF2AbilityBindingsComponent::LoadAbilitiesFromCharacter()
 		else
 		{
 			// Fallback for interoperability with non-OpenPF2 abilities.
-			DefaultAction = FName();
+			DefaultAction = nullptr;
 		}
 
 		this->SetBindingWithoutBroadcast(DefaultAction, AbilitySpec);
@@ -152,35 +152,39 @@ void UPF2AbilityBindingsComponent::LoadAbilitiesFromCharacter()
 	this->Native_OnBindingsChanged();
 }
 
-void UPF2AbilityBindingsComponent::SetBinding(const FName& ActionName, const FGameplayAbilitySpec& AbilitySpec)
+void UPF2AbilityBindingsComponent::SetBinding(UInputAction* Action, const FGameplayAbilitySpec& AbilitySpec)
 {
-	this->SetBindingWithoutBroadcast(ActionName, AbilitySpec);
+	this->SetBindingWithoutBroadcast(Action, AbilitySpec);
 	this->Native_OnBindingsChanged();
 }
 
-void UPF2AbilityBindingsComponent::SetBindingWithoutBroadcast(const FName& ActionName,
+void UPF2AbilityBindingsComponent::SetBindingWithoutBroadcast(
+	UInputAction*               Action,
 	const FGameplayAbilitySpec& AbilitySpec)
 {
-	if (this->Bindings.Contains(ActionName))
+	UPF2AbilityInputBinding* NewBinding = NewObject<UPF2AbilityInputBinding>(this);
+
+	if (this->Bindings.Contains(Action))
 	{
 		// Disconnect the old binding before replacing it.
-		this->DisconnectBindingFromInput(this->Bindings[ActionName]);
+		this->DisconnectBindingFromInput(this->Bindings[Action]);
 	}
 
-	this->Bindings.Add(ActionName, FPF2AbilityInputBinding(ActionName, AbilitySpec, this, this->IsConsumingInput()));
+	NewBinding->Initialize(Action, AbilitySpec, this, this->IsConsumingInput());
+	this->Bindings.Add(Action, NewBinding);
 }
 
-TMap<FName, TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilityBindingsComponent::GetBindingsMap() const
+TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilityBindingsComponent::GetBindingsMap() const
 {
 	UAbilitySystemComponent* Asc = this->GetOwningCharacter()->GetAbilitySystemComponent();
 
 	return PF2ArrayUtilities::Reduce(
 		PF2MapUtilities::GetValues(this->Bindings),
-		TMap<FName, TScriptInterface<IPF2GameplayAbilityInterface>>(),
-		[Asc](TMap<FName, TScriptInterface<IPF2GameplayAbilityInterface>> ResultMap,
-		      const FPF2AbilityInputBinding&                              CurrentBinding)
+		TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>>(),
+		[Asc](TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>> ResultMap,
+		      const UPF2AbilityInputBinding*                                      CurrentBinding)
 		{
-			const FGameplayAbilitySpec* AbilitySpec = Asc->FindAbilitySpecFromHandle(CurrentBinding.AbilitySpecHandle);
+			const FGameplayAbilitySpec* AbilitySpec = Asc->FindAbilitySpecFromHandle(CurrentBinding->AbilitySpecHandle);
 
 			if (AbilitySpec != nullptr)
 			{
@@ -189,7 +193,7 @@ TMap<FName, TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilityBindingsC
 				if (Ability != nullptr)
 				{
 					ResultMap.Add(
-						CurrentBinding.ActionName,
+						CurrentBinding->Action,
 						PF2InterfaceUtilities::ToScriptInterface<IPF2GameplayAbilityInterface>(Ability)
 					);
 				}
@@ -200,7 +204,7 @@ TMap<FName, TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilityBindingsC
 	);
 }
 
-void UPF2AbilityBindingsComponent::ConnectToInput(UInputComponent* NewInputComponent)
+void UPF2AbilityBindingsComponent::ConnectToInput(UEnhancedInputComponent* NewInputComponent)
 {
 	checkf(
 		!this->IsConnectedToInput() || (this->InputComponent == NewInputComponent),
@@ -209,9 +213,9 @@ void UPF2AbilityBindingsComponent::ConnectToInput(UInputComponent* NewInputCompo
 
 	for (auto PairIterator = this->Bindings.CreateIterator(); PairIterator; ++PairIterator)
 	{
-		FPF2AbilityInputBinding& Binding = PairIterator.Value();
+		UPF2AbilityInputBinding* Binding = PairIterator.Value();
 
-		Binding.ConnectToInput(NewInputComponent);
+		Binding->ConnectToInput(NewInputComponent);
 	}
 
 	this->InputComponent = NewInputComponent;
@@ -225,9 +229,9 @@ void UPF2AbilityBindingsComponent::DisconnectFromInput()
 	{
 		for (auto PairIterator = this->Bindings.CreateIterator(); PairIterator; ++PairIterator)
 		{
-			FPF2AbilityInputBinding& Binding = PairIterator.Value();
+			UPF2AbilityInputBinding* Binding = PairIterator.Value();
 
-			Binding.DisconnectFromInput(this->InputComponent);
+			Binding->DisconnectFromInput(this->InputComponent);
 		}
 
 		this->InputComponent = nullptr;
@@ -237,13 +241,13 @@ void UPF2AbilityBindingsComponent::DisconnectFromInput()
 }
 
 bool UPF2AbilityBindingsComponent::FilterAbilityActivation(
-	const FName                                    InActionName,
+	const UInputAction*                            InAction,
 	const TScriptInterface<IPF2CharacterInterface> InCharacter,
 	FGameplayAbilitySpecHandle&                    InOutAbilitySpecHandle,
 	FGameplayEventData&                            InOutAbilityPayload)
 {
 	FPF2AbilityExecutionFilterContext FilterContext =
-		FPF2AbilityExecutionFilterContext(InActionName, InCharacter, InOutAbilitySpecHandle, InOutAbilityPayload);
+		FPF2AbilityExecutionFilterContext(InAction, InCharacter, InOutAbilitySpecHandle, InOutAbilityPayload);
 
 	for (const TSubclassOf<UObject> FilterType : this->Filters)
 	{
@@ -298,7 +302,7 @@ bool UPF2AbilityBindingsComponent::FilterAbilityActivation(
 	return true;
 }
 
-void UPF2AbilityBindingsComponent::ExecuteBoundAbility(const FName                      ActionName,
+void UPF2AbilityBindingsComponent::ExecuteBoundAbility(const UInputAction*              Action,
                                                        const FGameplayAbilitySpecHandle AbilitySpecHandle)
 {
 	IPF2CharacterInterface*                         CharacterIntf         = this->GetOwningCharacter();
@@ -314,7 +318,7 @@ void UPF2AbilityBindingsComponent::ExecuteBoundAbility(const FName              
 
 	check(PlayerController.GetInterface() != nullptr);
 
-	if (this->FilterAbilityActivation(ActionName, Character, FilteredAbilityHandle, FilteredAbilityPayload))
+	if (this->FilterAbilityActivation(Action, Character, FilteredAbilityHandle, FilteredAbilityPayload))
 	{
 		PlayerController->Server_ExecuteAbilitySpecAsCharacterCommandWithPayload(
 			FilteredAbilityHandle,
