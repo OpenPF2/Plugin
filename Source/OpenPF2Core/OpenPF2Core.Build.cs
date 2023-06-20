@@ -21,6 +21,7 @@ public class OpenPF2Core: ModuleRules
 				"GameplayAbilities",
 				"GameplayTags",
 				"GameplayTasks",
+				"EnhancedInput",
 			}
 		);
 

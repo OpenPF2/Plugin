@@ -15,6 +15,7 @@
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2CharacterInterface;
+class UInputAction;
 
 // =====================================================================================================================
 // Normal Declarations
@@ -56,17 +57,14 @@ protected:
 	FText Description;
 
 	/**
-	 * The default human-friendly input action that triggers this ability (if applicable).
-	 *
-	 * The name provided here must match the name of an input action configured in project input settings (e.g "Jump",
-	 * "Fire", etc.).
+	 * The default input action that triggers this ability (if applicable).
 	 *
 	 * This is used to pre-populate bindings for this ability. If left blank, this ability has no default binding and
 	 * must be assigned a binding at run-time. If populated, the input action can still be overridden at run-time (e.g.,
 	 * if you are writing a game in which the player can remap keys).
 	 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="OpenPF2 Input")
-	FName DefaultInputActionMapping;
+	UInputAction* DefaultInputActionMapping;
 
 public:
 	// =================================================================================================================
@@ -88,7 +86,7 @@ public:
 	virtual FText GetAbilityDescription() const override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual FName GetDefaultInputActionMapping() const override;
+	virtual UInputAction* GetDefaultInputActionMapping() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual FGameplayAbilitySpec ToGameplayAbilitySpecForCharacter(

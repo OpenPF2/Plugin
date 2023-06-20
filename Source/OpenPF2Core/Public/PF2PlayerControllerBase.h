@@ -8,10 +8,11 @@
 
 #pragma once
 
+#include <EnhancedInputComponent.h>
+
 #include <GameFramework/PlayerController.h>
 
 #include "PF2PlayerControllerInterface.h"
-
 #include "PF2PlayerControllerBase.generated.h"
 
 // =====================================================================================================================
@@ -156,6 +157,15 @@ protected:
 	 *	- false, otherwise.
 	 */
 	bool IsControllableCharacterPawn(AActor* CharacterActor) const;
+
+	/**
+	 * Gets the enhanced input component of this player controller.
+	 *
+	 * @return
+	 *	The enhanced input component.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
+	UEnhancedInputComponent* GetEnhancedInputComponent() const;
 
 	// =================================================================================================================
 	// Protected Native Event Callbacks

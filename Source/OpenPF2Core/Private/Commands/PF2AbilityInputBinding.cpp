@@ -5,6 +5,8 @@
 
 #include "Commands/PF2AbilityInputBinding.h"
 
+#include <EnhancedInputComponent.h>
+
 #include "OpenPF2Core.h"
 
 #include "Commands/PF2AbilityBindingsInterface.h"
@@ -12,63 +14,69 @@
 
 #include "Utilities/PF2LogUtilities.h"
 
-FPF2AbilityInputBinding::FPF2AbilityInputBinding(const FName&                  ActionName,
-                                                 const FGameplayAbilitySpec&   AbilitySpec,
-                                                 IPF2AbilityBindingsInterface* Owner,
-                                                 const bool                    bConsumeInput):
-	ActionName(ActionName),
-	AbilitySpecHandle(AbilitySpec.Handle),
-	BindingsOwner(Owner->ToActorComponent()),
-	bConsumeInput(bConsumeInput)
+void UPF2AbilityInputBinding::Initialize(UInputAction*                 NewAction,
+                                         const FGameplayAbilitySpec&   NewAbilitySpec,
+                                         IPF2AbilityBindingsInterface* NewOwner,
+                                         const bool                    bNewConsumeInput)
 {
+	this->Action            = NewAction;
+	this->AbilitySpecHandle = NewAbilitySpec.Handle;
+	this->BindingsOwner     = NewOwner->ToActorComponent();
+	this->bConsumeInput     = bNewConsumeInput;
+
 	UE_LOG(
 		LogPf2CoreInput,
 		VeryVerbose,
-		TEXT("Creating an FPF2AbilityInputBinding for '%s' action (handle '%s') in command bindings component ('%s')."),
-		*(ActionName.ToString()),
+		TEXT("Creating an UPF2AbilityInputBinding for '%s' action (handle '%s') in command bindings component ('%s')."),
+		*(this->GetActionName()),
 		*(this->AbilitySpecHandle.ToString()),
-		*(Owner->GetIdForLogs())
+		*(NewOwner->GetIdForLogs())
 	);
 }
 
-void FPF2AbilityInputBinding::ConnectToInput(UInputComponent* InputComponent)
+void UPF2AbilityInputBinding::ConnectToInput(UEnhancedInputComponent* InputComponent)
 {
-	if (!this->IsConnectedToInput() && !this->ActionName.IsNone())
+	if (!this->IsConnectedToInput() && this->HasAction())
 	{
-		TArray<int32> NewHandles;
+		const UInputAction*               TargetAction = this->GetAction();
+		FEnhancedInputActionEventBinding *PressedBinding,
+		                                 *ReleasedBinding;
+		TArray<int32>                     NewHandles;
 
 		UE_LOG(
 			LogPf2CoreInput,
 			VeryVerbose,
 			TEXT("[%s] Connecting binding for action ('%s') to input in component ('%s')."),
 			*(PF2LogUtilities::GetHostNetId(Cast<UActorComponent>(this->GetBindingsOwner())->GetWorld())),
-			*(this->ActionName.ToString()),
+			*(this->GetActionName()),
 			*(this->GetBindingsOwner()->GetIdForLogs())
 		);
 
-		// Pressed event
-		NewHandles.Add(
-			this->AddActionBinding(
-				InputComponent,
-				IE_Pressed,
-				&FPF2AbilityInputBinding::LocalInputPressed
-			)
+		// Pressed event.
+		PressedBinding = &InputComponent->BindAction(
+			TargetAction,
+			ETriggerEvent::Started,
+			this,
+			&UPF2AbilityInputBinding::LocalInputPressed
 		);
 
-		// Released event
-		NewHandles.Add(
-			this->AddActionBinding(
-				InputComponent,
-				IE_Released,
-				&FPF2AbilityInputBinding::LocalInputReleased
-			)
+		NewHandles.Add(PressedBinding->GetHandle());
+
+		// Released event.
+		ReleasedBinding = &InputComponent->BindAction(
+			TargetAction,
+			ETriggerEvent::Completed,
+			this,
+			&UPF2AbilityInputBinding::LocalInputReleased
 		);
+
+		NewHandles.Add(ReleasedBinding->GetHandle());
 
 		this->InputHandles = NewHandles;
 	}
 }
 
-void FPF2AbilityInputBinding::DisconnectFromInput(UInputComponent* InputComponent)
+void UPF2AbilityInputBinding::DisconnectFromInput(UEnhancedInputComponent* InputComponent)
 {
 	if (this->IsConnectedToInput())
 	{
@@ -77,99 +85,62 @@ void FPF2AbilityInputBinding::DisconnectFromInput(UInputComponent* InputComponen
 			VeryVerbose,
 			TEXT("[%s] Disconnecting binding for action ('%s') from input in component ('%s')."),
 			*(PF2LogUtilities::GetHostNetId(Cast<UActorComponent>(this->GetBindingsOwner())->GetWorld())),
-			*(this->ActionName.ToString()),
+			*(this->GetActionName()),
 			*(this->GetBindingsOwner()->GetIdForLogs())
 		);
 
 		for (const auto& Handle : this->InputHandles)
 		{
-			InputComponent->RemoveActionBindingForHandle(Handle);
+			InputComponent->RemoveBindingByHandle(Handle);
 		}
 
 		this->InputHandles.Empty();
 	}
 }
 
-void FPF2AbilityInputBinding::LocalInputPressed(FPF2AbilityInputBinding* Binding)
-{
-	if (Binding == nullptr)
-	{
-		UE_LOG(
-			LogPf2CoreInput,
-			VeryVerbose,
-			TEXT("[UNK] Input PRESSED for a null binding.")
-		);
-	}
-	else
-	{
-		UE_LOG(
-			LogPf2CoreInput,
-			VeryVerbose,
-			TEXT("[%s] Input PRESSED for binding of action ('%s') in component ('%s')."),
-			*(PF2LogUtilities::GetHostNetId(Cast<UActorComponent>(Binding->GetBindingsOwner())->GetWorld())),
-			*(Binding->ActionName.ToString()),
-			*(Binding->GetBindingsOwner()->GetIdForLogs())
-		);
-
-		Binding->ActivateAbility();
-	}
-}
-
-void FPF2AbilityInputBinding::LocalInputReleased(FPF2AbilityInputBinding* Binding)
-{
-	if (Binding == nullptr)
-	{
-		UE_LOG(
-			LogPf2CoreInput,
-			VeryVerbose,
-			TEXT("[UNK] Input RELEASED for a null binding."),
-		);
-	}
-	else
-	{
-		UE_LOG(
-			LogPf2CoreInput,
-			VeryVerbose,
-			TEXT("[%s] Input RELEASED for binding of action ('%s') in component ('%s')."),
-			*(PF2LogUtilities::GetHostNetId(Cast<UActorComponent>(Binding->GetBindingsOwner())->GetWorld())),
-			*(Binding->ActionName.ToString()),
-			*(Binding->GetBindingsOwner()->GetIdForLogs())
-		);
-
-		Binding->DeactivateAbility();
-	}
-}
-
-FORCEINLINE IPF2AbilityBindingsInterface* FPF2AbilityInputBinding::GetBindingsOwner() const
+FORCEINLINE IPF2AbilityBindingsInterface* UPF2AbilityInputBinding::GetBindingsOwner() const
 {
 	return Cast<IPF2AbilityBindingsInterface>(this->BindingsOwner);
 }
 
-int32 FPF2AbilityInputBinding::AddActionBinding(UInputComponent*  InputComponent,
-                                                const EInputEvent InKeyEvent,
-                                                void              (*Callback)(FPF2AbilityInputBinding*))
+void UPF2AbilityInputBinding::LocalInputPressed()
 {
-	FInputActionBinding  ActionBinding = FInputActionBinding(this->ActionName, InKeyEvent);
-	FInputActionBinding* AddResult;
+	IPF2AbilityBindingsInterface* Owner = this->GetBindingsOwner();
 
-	ActionBinding.ActionDelegate.GetDelegateForManualSet().BindStatic(
-		Callback,
-		this
+	UE_LOG(
+		LogPf2CoreInput,
+		VeryVerbose,
+		TEXT("[%s] Input PRESSED for binding of action ('%s') in component ('%s')."),
+		*(PF2LogUtilities::GetHostNetId(Cast<UActorComponent>(Owner)->GetWorld())),
+		*(this->GetActionName()),
+		*(Owner->GetIdForLogs())
 	);
 
-	AddResult = &InputComponent->AddActionBinding(ActionBinding);
-
-	AddResult->bConsumeInput = this->IsConsumingInput();
-
-	return AddResult->GetHandle();
+	this->ActivateAbility();
 }
 
-void FPF2AbilityInputBinding::ActivateAbility()
+void UPF2AbilityInputBinding::LocalInputReleased()
 {
-	this->GetBindingsOwner()->ExecuteBoundAbility(this->ActionName, this->AbilitySpecHandle);
+	IPF2AbilityBindingsInterface* Owner = this->GetBindingsOwner();
+
+	UE_LOG(
+		LogPf2CoreInput,
+		VeryVerbose,
+		TEXT("[%s] Input RELEASED for binding of action ('%s') in component ('%s')."),
+		*(PF2LogUtilities::GetHostNetId(Cast<UActorComponent>(Owner)->GetWorld())),
+		*(this->GetActionName()),
+		*(Owner->GetIdForLogs())
+	);
+
+	this->DeactivateAbility();
 }
 
-void FPF2AbilityInputBinding::DeactivateAbility()
+void UPF2AbilityInputBinding::ActivateAbility()
+{
+	this->GetBindingsOwner()->ExecuteBoundAbility(this->GetAction(), this->AbilitySpecHandle);
+}
+
+void UPF2AbilityInputBinding::DeactivateAbility()
 {
 	// Default implementation -- Do nothing.
 }

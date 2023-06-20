@@ -12,6 +12,7 @@
 
 #include "PF2AbilityBindingsInterface.generated.h"
 
+class UEnhancedInputComponent;
 // =====================================================================================================================
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
@@ -19,8 +20,8 @@ class IPF2AbilityBindingsInterface;
 class IPF2CharacterInterface;
 class IPF2GameplayAbilityInterface;
 class UInputComponent;
-
-struct FPF2AbilityInputBinding;
+class UInputAction;
+class UPF2AbilityInputBinding;
 
 // =====================================================================================================================
 // Normal Declarations - Delegates
@@ -90,19 +91,31 @@ public:
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
 	virtual void SetConsumeInput(const bool bNewValue) = 0;
 
+	/**
+	 * Gets the events object used for binding Blueprint callbacks to this component.
+	 *
+	 * @return
+	 *	The events object for this interface.
+	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
 	virtual UPF2AbilityBindingsInterfaceEvents* GetEvents() const = 0;
 
 	/**
-	 * Clears all bindings.
+	 * Clears all bindings from this component.
 	 *
 	 * If input is currently wired up, bindings are removed from input before being cleared.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
 	virtual void ClearBindings() = 0;
 
+	/**
+	 * Clear a specific binding from this component.
+	 *
+	 * @param Action
+	 *	The action for which a binding is to be cleared.
+	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
-	virtual void ClearBinding(const FName& ActionName) = 0;
+	virtual void ClearBinding(const UInputAction* Action) = 0;
 
 	/**
 	 * Populates the bindings array from the abilities that have been granted to the owning character.
@@ -115,8 +128,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
 	virtual void LoadAbilitiesFromCharacter() = 0;
 
+	/**
+	 * Binds an ability to a particular input action.
+	 *
+	 * @param Action
+	 *	The action to which the ability will be bound.
+	 * @param AbilitySpec
+	 *	The ability to bind.
+	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
-	virtual void SetBinding(const FName& ActionName, const FGameplayAbilitySpec& AbilitySpec) = 0;
+	virtual void SetBinding(UInputAction* Action, const FGameplayAbilitySpec& AbilitySpec) = 0;
 
 	/**
 	 * Gets a copy of the bindings in this component.
@@ -125,7 +146,7 @@ public:
 	 *	The current bindings between input and commands.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
-	virtual TMap<FName, TScriptInterface<IPF2GameplayAbilityInterface>> GetBindingsMap() const = 0;
+	virtual TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>> GetBindingsMap() const = 0;
 
 	/**
 	 * Wires-up all bindings to receive input from the given player input component.
@@ -137,7 +158,7 @@ public:
 	 *	The component to which input should be bound.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
-	virtual void ConnectToInput(UInputComponent* InputComponent) = 0;
+	virtual void ConnectToInput(UEnhancedInputComponent* InputComponent) = 0;
 
 	/**
 	 * Removes the association between actions and the input component, allowing all bindings to be re-assigned.
@@ -154,10 +175,11 @@ public:
 	 *
 	 * This is expected to be invoked only by a command binding.
 	 *
-	 * @param ActionName
-	 *	The name of the input action that invoked this binding.
+	 * @param Action
+	 *	The input action that invoked the binding.
 	 * @param AbilitySpecHandle
 	 *	The handle for the ability to activate.
 	 */
-	virtual void ExecuteBoundAbility(const FName ActionName, const FGameplayAbilitySpecHandle AbilitySpecHandle) = 0;
+	virtual void ExecuteBoundAbility(const UInputAction*              Action,
+	                                 const FGameplayAbilitySpecHandle AbilitySpecHandle) = 0;
 };
