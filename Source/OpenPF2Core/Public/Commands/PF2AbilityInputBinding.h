@@ -69,17 +69,6 @@ protected:
 	UPROPERTY()
 	UActorComponent* BindingsOwner;
 
-	/**
-	 * Whether this binding should consume the input when it fires.
-	 *
-	 * - If true, then the input will be consumed by this binding and a pawn or player controller will not be able to
-	 *   react to it.
-	 * - If false, then a pawn or player controller can react to the input action in addition to the binding being
-	 *   invoked.
-	 */
-	UPROPERTY()
-	bool bConsumeInput;
-
 public:
 	// =================================================================================================================
 	// Public Constructors
@@ -87,7 +76,7 @@ public:
 	/**
 	 * Default constructor (used by Blueprint).
 	 */
-	explicit UPF2AbilityInputBinding() : Action(nullptr), BindingsOwner(nullptr), bConsumeInput(true)
+	explicit UPF2AbilityInputBinding() : Action(nullptr), BindingsOwner(nullptr)
 	{
 	}
 
@@ -103,17 +92,10 @@ public:
 	 *	The specification for the ability.
 	 * @param NewOwner
 	 *	The component that is managing this binding.
-	 * @param bNewConsumeInput
-	 *	Whether the binding should consume the input when it fires.
-	 *	  - If true, then the input will be consumed by this binding and a pawn or player controller will not be able to
-	 *	    react to it.
-	 *	  - If false, then a pawn or player controller can react to the input action in addition to the binding being
-	 *	    invoked.
 	 */
 	void Initialize(UInputAction*                 NewAction,
 	                const FGameplayAbilitySpec&   NewAbilitySpec,
-	                IPF2AbilityBindingsInterface* NewOwner,
-	                const bool                    bNewConsumeInput = true);
+	                IPF2AbilityBindingsInterface* NewOwner);
 
 	/**
 	 * Determines whether the ability in this binding has been connected to an input component.
@@ -125,20 +107,6 @@ public:
 	FORCEINLINE bool IsConnectedToInput() const
 	{
 		return this->InputHandles.Num() != 0;
-	}
-
-	/**
-	 * Gets whether this binding consumes input when it fires.
-	 *
-	 * @return
-	 * - If true, then the input will be consumed by this binding and a pawn or player controller will not be able to
-	 *   react to it.
-	 * - If false, then a pawn or player controller can react to the input action in addition to the binding being
-	 *   invoked.
-	 */
-	FORCEINLINE bool IsConsumingInput() const
-	{
-		return this->bConsumeInput;
 	}
 
 	/**

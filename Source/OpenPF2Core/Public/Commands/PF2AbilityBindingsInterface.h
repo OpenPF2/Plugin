@@ -68,30 +68,6 @@ class OPENPF2CORE_API IPF2AbilityBindingsInterface : public IPF2ActorComponentIn
 
 public:
 	/**
-	 * Gets whether bindings in this component consume input when they fire.
-	 *
-	 * @return
-	 * - If true, then matching inputs will be consumed by bindings, and a pawn or player controller will not be able to
-	 *   react to them.
-	 * - If false, then a pawn or player controller can react to the input action in addition to bindings handling them.
-	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
-	virtual bool IsConsumingInput() const = 0;
-
-	/**
-	 * Sets whether bindings in this component should consume input when they fire.
-	 *
-	 * This can only be modified before bindings have been added to the component.
-	 *
-	 * @param bNewValue
-	 * - If true, then matching inputs will be consumed by bindings, and a pawn or player controller will not be able to
-	 *   react to them.
-	 * - If false, then a pawn or player controller can react to the input action in addition to bindings handling them.
-	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
-	virtual void SetConsumeInput(const bool bNewValue) = 0;
-
-	/**
 	 * Gets the events object used for binding Blueprint callbacks to this component.
 	 *
 	 * @return

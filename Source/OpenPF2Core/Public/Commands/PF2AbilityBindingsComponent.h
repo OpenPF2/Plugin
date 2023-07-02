@@ -91,16 +91,6 @@ public:
 	FPF2AbilityBindingsInputConnectionChangedDelegate OnInputDisconnected;
 
 protected:
-	/**
-	 * Whether bindings managed by this component should consume the input when they fire.
-	 *
-	 * - If true, then matching inputs will be consumed by bindings, and a pawn or player controller will not be able to
-	 *   react to them.
-	 * - If false, then a pawn or player controller can react to the input action in addition to bindings handling them.
-	 */
-	UPROPERTY(EditAnywhere, BlueprintGetter=IsConsumingInput, BlueprintSetter=SetConsumeInput)
-	bool bConsumeInput;
-
 	UPROPERTY()
 	UPF2AbilityBindingsInterfaceEvents* Events;
 
@@ -130,7 +120,7 @@ public:
 	/**
 	 * Default constructor for UPF2AbilityBindingsComponent.
 	 */
-	explicit UPF2AbilityBindingsComponent() : bConsumeInput(true), InputComponent(nullptr)
+	explicit UPF2AbilityBindingsComponent() : InputComponent(nullptr)
 	{
 		this->Events = CreateDefaultSubobject<UPF2AbilityBindingsInterfaceEvents>("InterfaceEvents");
 	}
@@ -140,12 +130,6 @@ public:
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
 	virtual UPF2AbilityBindingsInterfaceEvents* GetEvents() const override;
-
-	UFUNCTION(BlueprintCallable)
-	virtual bool IsConsumingInput() const override;
-
-	UFUNCTION(BlueprintCallable)
-	virtual void SetConsumeInput(const bool bNewValue) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void ClearBindings() override;
