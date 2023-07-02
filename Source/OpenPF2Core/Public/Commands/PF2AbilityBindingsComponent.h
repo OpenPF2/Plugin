@@ -51,6 +51,18 @@ public:
 	// =================================================================================================================
 	// Public Fields
 	// =================================================================================================================
+	/**
+	 * Filters to apply to the activation of abilities through this component.
+	 *
+	 * This makes it possible to redirect an input action to one or more abilities depending upon the state of the game
+	 * or something about the character. For example, consider an input action that works as follows:
+	 * - While in exploration mode: the input action results in the character attempting their default attack.
+	 * - While in encounter mode:
+	 *   - If the character is targeting an empty square: the input action results in the character moving to the
+	 *     square.
+	 *   - If the character is targeting an square containing an enemy: the input action results in the character
+	 *     attempting their default attack.
+	 */
 	UPROPERTY(
 		EditDefaultsOnly,
 		meta=(MustImplement="PF2AbilityExecutionFilterInterface"),
