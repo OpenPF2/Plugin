@@ -55,5 +55,5 @@ public:
 	 *	The updated context.
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category="OpenPF2|Gameplay Ability Execution Filters")
-	FPF2AbilityExecutionFilterContext FilterCommandActivation(const FPF2AbilityExecutionFilterContext Context);
+	FPF2AbilityExecutionFilterContext FilterAbilityActivation(const FPF2AbilityExecutionFilterContext Context);
 };

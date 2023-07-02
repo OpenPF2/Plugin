@@ -275,7 +275,7 @@ bool UPF2AbilityBindingsComponent::FilterAbilityActivation(
 				*(FilterContext.GetHandleOfAbilityToExecute().ToString())
 			);
 
-			FilterContext = Filter->Execute_FilterCommandActivation(RawFilter, FilterContext);
+			FilterContext = Filter->Execute_FilterAbilityActivation(RawFilter, FilterContext);
 
 			UE_LOG(
 				LogPf2CoreInput,
