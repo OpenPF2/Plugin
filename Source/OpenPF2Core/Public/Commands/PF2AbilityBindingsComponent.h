@@ -230,6 +230,14 @@ protected:
 	void SetBindingWithoutBroadcast(UInputAction* Action, const FGameplayAbilitySpec& AbilitySpec);
 
 	/**
+	 * Stops listening for input for the specified binding.
+	 *
+	 * @param Binding
+	 *	The binding to disconnect from input.
+	 */
+	void DisconnectBindingFromInput(UPF2AbilityInputBinding* Binding) const;
+
+	/**
 	 * Applies ability execution filters to the activation of a bound ability.
 	 *
 	 * Filters may veto execution of the filter. If a filter does so, the result of this method will be "false".
@@ -252,8 +260,6 @@ protected:
 		const TScriptInterface<IPF2CharacterInterface> InCharacter,
 		FGameplayAbilitySpecHandle&                    InOutAbilitySpecHandle,
 		FGameplayEventData&                            InOutAbilityPayload);
-
-	void DisconnectBindingFromInput(UPF2AbilityInputBinding* Binding) const;
 
 	// =================================================================================================================
 	// Protected Native Event Callbacks
