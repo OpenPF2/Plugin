@@ -7,9 +7,11 @@
 
 #include <Components/ActorComponent.h>
 
-#include "PF2CharacterInterface.h"
+#include <Containers/Map.h>
+
 #include "PF2AbilityBindingsInterface.h"
 #include "PF2AbilityInputBinding.h"
+#include "PF2CharacterInterface.h"
 #include "PF2AbilityBindingsComponent.generated.h"
 
 // =====================================================================================================================
