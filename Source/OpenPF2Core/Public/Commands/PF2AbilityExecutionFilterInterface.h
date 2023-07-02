@@ -33,9 +33,12 @@ class UPF2AbilityExecutionFilterInterface : public UPF2LogIdentifiableInterface
  *   2. Activating an alternate ability rather than the ability that would normally be invoked.
  *   3. Dropping execution of the ability all together.
  *
- * Any combination of the outcomes above can exist in the same filter, controlled by conditionals.
+ * Any combination of the outcomes above can exist in the same filter, controlled by conditionals. Filters can also be
+ * chained.
  *
- * Filters can be chained.
+ * Filters provide more flexibility than relying on tag-based blocking in abilities and gameplay effects alone, but they
+ * are not intended to replace tag-based approaches. Rather, filters are useful when you need a straightforward way to
+ * vary which gameplay ability gets executed by the same input action.
  */
 class OPENPF2CORE_API IPF2AbilityExecutionFilterInterface : public IPF2LogIdentifiableInterface
 {
