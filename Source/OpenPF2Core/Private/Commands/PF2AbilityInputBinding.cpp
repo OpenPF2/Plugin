@@ -16,13 +16,11 @@
 
 void UPF2AbilityInputBinding::Initialize(UInputAction*                 NewAction,
                                          const FGameplayAbilitySpec&   NewAbilitySpec,
-                                         IPF2AbilityBindingsInterface* NewOwner,
-                                         const bool                    bNewConsumeInput)
+                                         IPF2AbilityBindingsInterface* NewOwner)
 {
 	this->Action            = NewAction;
 	this->AbilitySpecHandle = NewAbilitySpec.Handle;
 	this->BindingsOwner     = NewOwner->ToActorComponent();
-	this->bConsumeInput     = bNewConsumeInput;
 
 	UE_LOG(
 		LogPf2CoreInput,

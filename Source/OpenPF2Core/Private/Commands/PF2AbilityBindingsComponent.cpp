@@ -29,34 +29,6 @@ UPF2AbilityBindingsInterfaceEvents* UPF2AbilityBindingsComponent::GetEvents() co
 	return this->Events;
 }
 
-bool UPF2AbilityBindingsComponent::IsConsumingInput() const
-{
-	return this->bConsumeInput;
-}
-
-void UPF2AbilityBindingsComponent::SetConsumeInput(const bool bNewValue)
-{
-	if (this->bConsumeInput != bNewValue)
-	{
-		const int32 BindingsCount = this->Bindings.Num();
-
-		if (BindingsCount == 0)
-		{
-			this->bConsumeInput = bNewValue;
-		}
-		else
-		{
-			UE_LOG(
-				LogPf2CoreInput,
-				Error,
-				TEXT("Command bindings component ('%s') already has '%d' bindings. The 'consume input' setting can only be changed before bindings have been added."),
-				*(this->GetIdForLogs()),
-				BindingsCount
-			);
-		}
-	}
-}
-
 void UPF2AbilityBindingsComponent::DisconnectBindingFromInput(UPF2AbilityInputBinding* Binding) const
 {
 	return Binding->DisconnectFromInput(this->GetInputComponent());
@@ -170,7 +142,7 @@ void UPF2AbilityBindingsComponent::SetBindingWithoutBroadcast(
 		this->DisconnectBindingFromInput(this->Bindings[Action]);
 	}
 
-	NewBinding->Initialize(Action, AbilitySpec, this, this->IsConsumingInput());
+	NewBinding->Initialize(Action, AbilitySpec, this);
 	this->Bindings.Add(Action, NewBinding);
 }
 
