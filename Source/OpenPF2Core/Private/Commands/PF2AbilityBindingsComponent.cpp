@@ -112,30 +112,60 @@ void UPF2AbilityBindingsComponent::LoadAbilitiesFromCharacter()
 		*(Character->GetIdForLogs())
 	);
 
-	for (const FGameplayAbilitySpec& AbilitySpec : ActivatableAbilities)
+	for (const FPF2InputActionMapping& Mapping : this->GetDefaultAbilityMappings())
 	{
-		const UGameplayAbility*             Ability     = AbilitySpec.Ability;
-		const IPF2GameplayAbilityInterface* AbilityIntf = Cast<IPF2GameplayAbilityInterface>(Ability);
-		UInputAction*                       DefaultAction;
+		const UGameplayAbility* TargetAbility = Mapping.GetAbility();
+		bool                    bFoundAbility = false;
 
-		if (AbilityIntf != nullptr)
+		for (const FGameplayAbilitySpec& AbilitySpec : ActivatableAbilities)
 		{
-			DefaultAction = AbilityIntf->GetDefaultInputActionMapping();
-			++NumMappedAbilities;
-		}
-		else
-		{
-			// Fallback for interoperability with non-OpenPF2 abilities.
-			DefaultAction = nullptr;
+			const UGameplayAbility* Ability = AbilitySpec.Ability;
+
+			if (TargetAbility == Ability)
+			{
+				const IPF2GameplayAbilityInterface* AbilityIntf = Cast<IPF2GameplayAbilityInterface>(Ability);
+
+				if (AbilityIntf == nullptr)
+				{
+					UE_LOG(
+						LogPf2CoreInput,
+						Warning,
+						TEXT("[%s] Ability ('%s') does not implement IPF2GameplayAbilityInterface."),
+						*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+						*(GetNameSafe(Ability))
+					);
+				}
+				else
+				{
+					UInputAction* DefaultAction = Mapping.GetInputAction();
+
+					this->SetBindingWithoutBroadcast(DefaultAction, AbilitySpec);
+
+					++NumMappedAbilities;
+				}
+
+				bFoundAbility = true;
+			}
 		}
 
-		this->SetBindingWithoutBroadcast(DefaultAction, AbilitySpec);
+		if (!bFoundAbility)
+		{
+			UE_LOG(
+				LogPf2CoreInput,
+				Warning,
+				TEXT("[%s] Character ('%s') has not been granted the ability ('%s') that is bound to input action ('%s')."),
+				*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+				*(Character->GetIdForLogs()),
+				*(GetNameSafe(TargetAbility)),
+				*(GetNameSafe(Mapping.GetInputAction()))
+			);
+		}
 	}
 
 	UE_LOG(
 		LogPf2CoreInput,
 		VeryVerbose,
-		TEXT("[%s] Loaded %d abilities with default action mappings from TargetCharacter ('%s')."),
+		TEXT("[%s] Loaded input bindings for %d abilities from TargetCharacter ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		NumMappedAbilities,
 		*(Character->GetIdForLogs())
@@ -152,6 +182,7 @@ void UPF2AbilityBindingsComponent::LoadAbilitiesFromCharacter()
 
 void UPF2AbilityBindingsComponent::ConnectToInput(UEnhancedInputComponent* NewInputComponent)
 {
+	check(NewInputComponent != nullptr);
 	checkf(
 		!this->IsConnectedToInput() || (this->InputComponent == NewInputComponent),
 		TEXT("Command bindings cannot be wired-up to two different input components at the same time.")

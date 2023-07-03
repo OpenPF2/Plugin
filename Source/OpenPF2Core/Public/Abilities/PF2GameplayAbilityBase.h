@@ -56,16 +56,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="OpenPF2 Appearance")
 	FText Description;
 
-	/**
-	 * The default input action that triggers this ability (if applicable).
-	 *
-	 * This is used to pre-populate bindings for this ability. If left blank, this ability has no default binding and
-	 * must be assigned a binding at run-time. If populated, the input action can still be overridden at run-time (e.g.,
-	 * if you are writing a game in which the player can remap keys).
-	 */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="OpenPF2 Input")
-	UInputAction* DefaultInputActionMapping;
-
 public:
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
@@ -84,9 +74,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual FText GetAbilityDescription() const override;
-
-	UFUNCTION(BlueprintCallable)
-	virtual UInputAction* GetDefaultInputActionMapping() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual FGameplayAbilitySpec ToGameplayAbilitySpecForCharacter(
