@@ -64,16 +64,6 @@ public:
 	virtual FText GetAbilityDescription() const = 0;
 
 	/**
-	 * Gets the default human-friendly input action that triggers this ability (if applicable).
-	 * If left blank, this ability has no default binding and must be assigned a binding at run-time.
-	 *
-	 * @return
-	 *	The name of the input action that should trigger this ability by default.
-	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
-	virtual UInputAction* GetDefaultInputActionMapping() const = 0;
-
-	/**
 	 * Locates and returns the ability spec in the given character's ASC that corresponds to this ability.
 	 *
 	 * @param Character

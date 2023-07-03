@@ -12,6 +12,9 @@
 #include "PF2AbilityBindingsInterface.h"
 #include "PF2AbilityInputBinding.h"
 #include "PF2CharacterInterface.h"
+
+#include "Abilities/PF2InputActionMapping.h"
+
 #include "PF2AbilityBindingsComponent.generated.h"
 
 // =====================================================================================================================
@@ -51,6 +54,20 @@ public:
 	// =================================================================================================================
 	// Public Fields
 	// =================================================================================================================
+	/**
+	 * The default map of input actions to the abilities they trigger.
+	 *
+	 * This is used to pre-populate bindings for this component. If left blank, the owning character has no default
+	 * bindings and must be assigned bindings at run-time. If populated, each binding can still be overridden at
+	 * run-time (e.g., if you are writing a game in which the player can remap actions).
+	 */
+	UPROPERTY(
+		EditDefaultsOnly,
+		Category="OpenPF2 Command Bindings",
+		meta=(TitleProperty=InputAction)
+	)
+	TArray<FPF2InputActionMapping> DefaultAbilityMappings;
+
 	/**
 	 * Filters to apply to the activation of abilities through this component.
 	 *
@@ -193,6 +210,17 @@ protected:
 	FORCEINLINE bool IsConnectedToInput() const
 	{
 		return this->GetInputComponent() != nullptr;
+	}
+
+	/**
+	 * Gets the default map of input actions to the abilities they trigger.
+	 *
+	 * @return
+	 *	The default bindings for this component.
+	 */
+	FORCEINLINE TArray<FPF2InputActionMapping> GetDefaultAbilityMappings() const
+	{
+		return this->DefaultAbilityMappings;
 	}
 
 	/**

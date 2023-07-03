@@ -29,11 +29,6 @@ FText UPF2GameplayAbilityBase::GetAbilityDescription() const
 	return this->Description;
 }
 
-UInputAction* UPF2GameplayAbilityBase::GetDefaultInputActionMapping() const
-{
-	return this->DefaultInputActionMapping;
-}
-
 FGameplayAbilitySpec UPF2GameplayAbilityBase::ToGameplayAbilitySpecForCharacter(
 	const TScriptInterface<IPF2CharacterInterface> Character,
 	bool& bOutSpecFound
