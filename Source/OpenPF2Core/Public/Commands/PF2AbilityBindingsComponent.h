@@ -276,6 +276,11 @@ protected:
 	// =================================================================================================================
 	// Protected Native Event Callbacks
 	// =================================================================================================================
+	/**
+	 * Callback invoked in C++ code when bindings are added, removed, or cleared.
+	 *
+	 * This notifies all event listeners that bindings have changed.
+	 */
 	virtual void Native_OnBindingsChanged();
 
 	/**
