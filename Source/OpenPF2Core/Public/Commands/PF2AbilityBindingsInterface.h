@@ -77,6 +77,26 @@ public:
 	virtual UPF2AbilityBindingsInterfaceEvents* GetEvents() const = 0;
 
 	/**
+	 * Gets a copy of the bindings in this component.
+	 *
+	 * @return
+	 *	The current bindings between input and commands.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
+	virtual TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>> GetBindingsMap() const = 0;
+
+	/**
+	 * Binds an ability to a particular input action.
+	 *
+	 * @param Action
+	 *	The action to which the ability will be bound.
+	 * @param AbilitySpec
+	 *	The ability to bind.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
+	virtual void SetBinding(UInputAction* Action, const FGameplayAbilitySpec& AbilitySpec) = 0;
+
+	/**
 	 * Clears all bindings from this component.
 	 *
 	 * If input is currently wired up, bindings are removed from input before being cleared.
@@ -103,26 +123,6 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
 	virtual void LoadAbilitiesFromCharacter() = 0;
-
-	/**
-	 * Binds an ability to a particular input action.
-	 *
-	 * @param Action
-	 *	The action to which the ability will be bound.
-	 * @param AbilitySpec
-	 *	The ability to bind.
-	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
-	virtual void SetBinding(UInputAction* Action, const FGameplayAbilitySpec& AbilitySpec) = 0;
-
-	/**
-	 * Gets a copy of the bindings in this component.
-	 *
-	 * @return
-	 *	The current bindings between input and commands.
-	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
-	virtual TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>> GetBindingsMap() const = 0;
 
 	/**
 	 * Wires-up all bindings to receive input from the given player input component.

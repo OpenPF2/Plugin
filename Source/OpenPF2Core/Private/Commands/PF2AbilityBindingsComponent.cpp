@@ -29,14 +29,40 @@ UPF2AbilityBindingsInterfaceEvents* UPF2AbilityBindingsComponent::GetEvents() co
 	return this->Events;
 }
 
-void UPF2AbilityBindingsComponent::DisconnectBindingFromInput(UPF2AbilityInputBinding* Binding) const
+TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilityBindingsComponent::GetBindingsMap() const
 {
-	return Binding->DisconnectFromInput(this->GetInputComponent());
+	UAbilitySystemComponent* Asc = this->GetOwningCharacter()->GetAbilitySystemComponent();
+
+	return PF2ArrayUtilities::Reduce(
+		PF2MapUtilities::GetValues(this->Bindings),
+		TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>>(),
+		[Asc](TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>> ResultMap,
+		      const UPF2AbilityInputBinding*                                      CurrentBinding)
+		{
+			const FGameplayAbilitySpec* AbilitySpec = Asc->FindAbilitySpecFromHandle(CurrentBinding->AbilitySpecHandle);
+
+			if (AbilitySpec != nullptr)
+			{
+				IPF2GameplayAbilityInterface* Ability = Cast<IPF2GameplayAbilityInterface>(AbilitySpec->Ability);
+
+				if (Ability != nullptr)
+				{
+					ResultMap.Add(
+						CurrentBinding->Action,
+						PF2InterfaceUtilities::ToScriptInterface<IPF2GameplayAbilityInterface>(Ability)
+					);
+				}
+			}
+
+			return ResultMap;
+		}
+	);
 }
 
-void UPF2AbilityBindingsComponent::Native_OnBindingsChanged()
+void UPF2AbilityBindingsComponent::SetBinding(UInputAction* Action, const FGameplayAbilitySpec& AbilitySpec)
 {
-	this->GetEvents()->OnAbilityBindingsChangedDelegate.Broadcast(this);
+	this->SetBindingWithoutBroadcast(Action, AbilitySpec);
+	this->Native_OnBindingsChanged();
 }
 
 void UPF2AbilityBindingsComponent::ClearBindings()
@@ -124,58 +150,6 @@ void UPF2AbilityBindingsComponent::LoadAbilitiesFromCharacter()
 	this->Native_OnBindingsChanged();
 }
 
-void UPF2AbilityBindingsComponent::SetBinding(UInputAction* Action, const FGameplayAbilitySpec& AbilitySpec)
-{
-	this->SetBindingWithoutBroadcast(Action, AbilitySpec);
-	this->Native_OnBindingsChanged();
-}
-
-void UPF2AbilityBindingsComponent::SetBindingWithoutBroadcast(
-	UInputAction*               Action,
-	const FGameplayAbilitySpec& AbilitySpec)
-{
-	UPF2AbilityInputBinding* NewBinding = NewObject<UPF2AbilityInputBinding>(this);
-
-	if (this->Bindings.Contains(Action))
-	{
-		// Disconnect the old binding before replacing it.
-		this->DisconnectBindingFromInput(this->Bindings[Action]);
-	}
-
-	NewBinding->Initialize(Action, AbilitySpec, this);
-	this->Bindings.Add(Action, NewBinding);
-}
-
-TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilityBindingsComponent::GetBindingsMap() const
-{
-	UAbilitySystemComponent* Asc = this->GetOwningCharacter()->GetAbilitySystemComponent();
-
-	return PF2ArrayUtilities::Reduce(
-		PF2MapUtilities::GetValues(this->Bindings),
-		TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>>(),
-		[Asc](TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>> ResultMap,
-		      const UPF2AbilityInputBinding*                                      CurrentBinding)
-		{
-			const FGameplayAbilitySpec* AbilitySpec = Asc->FindAbilitySpecFromHandle(CurrentBinding->AbilitySpecHandle);
-
-			if (AbilitySpec != nullptr)
-			{
-				IPF2GameplayAbilityInterface* Ability = Cast<IPF2GameplayAbilityInterface>(AbilitySpec->Ability);
-
-				if (Ability != nullptr)
-				{
-					ResultMap.Add(
-						CurrentBinding->Action,
-						PF2InterfaceUtilities::ToScriptInterface<IPF2GameplayAbilityInterface>(Ability)
-					);
-				}
-			}
-
-			return ResultMap;
-		}
-	);
-}
-
 void UPF2AbilityBindingsComponent::ConnectToInput(UEnhancedInputComponent* NewInputComponent)
 {
 	checkf(
@@ -210,6 +184,84 @@ void UPF2AbilityBindingsComponent::DisconnectFromInput()
 
 		this->Native_OnInputDisconnected();
 	}
+}
+
+void UPF2AbilityBindingsComponent::ExecuteBoundAbility(const UInputAction*              Action,
+                                                       const FGameplayAbilitySpecHandle AbilitySpecHandle)
+{
+	IPF2CharacterInterface*                         CharacterIntf         = this->GetOwningCharacter();
+	TScriptInterface<IPF2CharacterInterface>        Character;
+	TScriptInterface<IPF2PlayerControllerInterface> PlayerController;
+	FGameplayAbilitySpecHandle                      FilteredAbilityHandle = AbilitySpecHandle;
+	FGameplayEventData                              FilteredAbilityPayload;
+
+	check(CharacterIntf != nullptr);
+
+	Character        = PF2InterfaceUtilities::ToScriptInterface(CharacterIntf);
+	PlayerController = CharacterIntf->GetPlayerController();
+
+	check(PlayerController.GetInterface() != nullptr);
+
+	if (this->FilterAbilityActivation(Action, Character, FilteredAbilityHandle, FilteredAbilityPayload))
+	{
+		PlayerController->Server_ExecuteAbilitySpecAsCharacterCommandWithPayload(
+			FilteredAbilityHandle,
+			CharacterIntf->ToActor(),
+			FilteredAbilityPayload
+		);
+	}
+}
+
+UActorComponent* UPF2AbilityBindingsComponent::ToActorComponent()
+{
+	return this;
+}
+
+FString UPF2AbilityBindingsComponent::GetIdForLogs() const
+{
+	// ReSharper disable CppRedundantParentheses
+	return FString::Format(
+		TEXT("{0}.{1}"),
+		{
+			*(GetNameSafe(this->GetOwner())),
+			*(this->GetName())
+		}
+	);
+}
+
+IPF2CharacterInterface* UPF2AbilityBindingsComponent::GetOwningCharacter() const
+{
+	AActor*                 OwningActor;
+	IPF2CharacterInterface* OwningCharacter;
+
+	OwningActor = this->GetOwner();
+	check(OwningActor != nullptr);
+
+	OwningCharacter = Cast<IPF2CharacterInterface>(OwningActor);
+	checkf(OwningCharacter != nullptr, TEXT("Owning character must implement IPF2CharacterInterface."));
+
+	return OwningCharacter;
+}
+
+void UPF2AbilityBindingsComponent::SetBindingWithoutBroadcast(
+	UInputAction*               Action,
+	const FGameplayAbilitySpec& AbilitySpec)
+{
+	UPF2AbilityInputBinding* NewBinding = NewObject<UPF2AbilityInputBinding>(this);
+
+	if (this->Bindings.Contains(Action))
+	{
+		// Disconnect the old binding before replacing it.
+		this->DisconnectBindingFromInput(this->Bindings[Action]);
+	}
+
+	NewBinding->Initialize(Action, AbilitySpec, this);
+	this->Bindings.Add(Action, NewBinding);
+}
+
+void UPF2AbilityBindingsComponent::DisconnectBindingFromInput(UPF2AbilityInputBinding* Binding) const
+{
+	return Binding->DisconnectFromInput(this->GetInputComponent());
 }
 
 bool UPF2AbilityBindingsComponent::FilterAbilityActivation(
@@ -274,61 +326,9 @@ bool UPF2AbilityBindingsComponent::FilterAbilityActivation(
 	return true;
 }
 
-void UPF2AbilityBindingsComponent::ExecuteBoundAbility(const UInputAction*              Action,
-                                                       const FGameplayAbilitySpecHandle AbilitySpecHandle)
+void UPF2AbilityBindingsComponent::Native_OnBindingsChanged()
 {
-	IPF2CharacterInterface*                         CharacterIntf         = this->GetOwningCharacter();
-	TScriptInterface<IPF2CharacterInterface>        Character;
-	TScriptInterface<IPF2PlayerControllerInterface> PlayerController;
-	FGameplayAbilitySpecHandle                      FilteredAbilityHandle = AbilitySpecHandle;
-	FGameplayEventData                              FilteredAbilityPayload;
-
-	check(CharacterIntf != nullptr);
-
-	Character        = PF2InterfaceUtilities::ToScriptInterface(CharacterIntf);
-	PlayerController = CharacterIntf->GetPlayerController();
-
-	check(PlayerController.GetInterface() != nullptr);
-
-	if (this->FilterAbilityActivation(Action, Character, FilteredAbilityHandle, FilteredAbilityPayload))
-	{
-		PlayerController->Server_ExecuteAbilitySpecAsCharacterCommandWithPayload(
-			FilteredAbilityHandle,
-			CharacterIntf->ToActor(),
-			FilteredAbilityPayload
-		);
-	}
-}
-
-UActorComponent* UPF2AbilityBindingsComponent::ToActorComponent()
-{
-	return this;
-}
-
-FString UPF2AbilityBindingsComponent::GetIdForLogs() const
-{
-	// ReSharper disable CppRedundantParentheses
-	return FString::Format(
-		TEXT("{0}.{1}"),
-		{
-			*(GetNameSafe(this->GetOwner())),
-			*(this->GetName())
-		}
-	);
-}
-
-IPF2CharacterInterface* UPF2AbilityBindingsComponent::GetOwningCharacter() const
-{
-	AActor*                 OwningActor;
-	IPF2CharacterInterface* OwningCharacter;
-
-	OwningActor = this->GetOwner();
-	check(OwningActor != nullptr);
-
-	OwningCharacter = Cast<IPF2CharacterInterface>(OwningActor);
-	checkf(OwningCharacter != nullptr, TEXT("Owning character must implement IPF2CharacterInterface."));
-
-	return OwningCharacter;
+	this->GetEvents()->OnAbilityBindingsChangedDelegate.Broadcast(this);
 }
 
 void UPF2AbilityBindingsComponent::Native_OnInputConnected()
