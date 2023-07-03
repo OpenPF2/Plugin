@@ -132,6 +132,12 @@ public:
 	virtual UPF2AbilityBindingsInterfaceEvents* GetEvents() const override;
 
 	UFUNCTION(BlueprintCallable)
+	virtual TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>> GetBindingsMap() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void SetBinding(UInputAction* Action, const FGameplayAbilitySpec& AbilitySpec) override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual void ClearBindings() override;
 
 	UFUNCTION(BlueprintCallable)
@@ -139,12 +145,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual void LoadAbilitiesFromCharacter() override;
-
-	UFUNCTION(BlueprintCallable)
-	virtual void SetBinding(UInputAction* Action, const FGameplayAbilitySpec& AbilitySpec) override;
-
-	UFUNCTION(BlueprintCallable)
-	virtual TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>> GetBindingsMap() const override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void ConnectToInput(UEnhancedInputComponent* NewInputComponent) override;
