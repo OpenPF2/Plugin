@@ -359,7 +359,12 @@ bool UPF2AbilityBindingsComponent::FilterAbilityActivation(
 
 void UPF2AbilityBindingsComponent::Native_OnBindingsChanged()
 {
-	this->GetEvents()->OnAbilityBindingsChangedDelegate.Broadcast(this);
+	const FPF2AbilityBindingsChangedDelegate BindingsChangedDelegate = this->GetEvents()->OnAbilityBindingsChangedDelegate;
+
+	if (BindingsChangedDelegate.IsBound())
+	{
+		BindingsChangedDelegate.Broadcast(this);
+	}
 }
 
 void UPF2AbilityBindingsComponent::Native_OnInputConnected()
@@ -372,7 +377,10 @@ void UPF2AbilityBindingsComponent::Native_OnInputConnected()
 		*(this->GetIdForLogs())
 	);
 
-	this->OnInputConnected.Broadcast();
+	if (this->OnInputConnected.IsBound())
+	{
+		this->OnInputConnected.Broadcast();
+	}
 }
 
 void UPF2AbilityBindingsComponent::Native_OnInputDisconnected()
@@ -385,5 +393,8 @@ void UPF2AbilityBindingsComponent::Native_OnInputDisconnected()
 		*(this->GetIdForLogs())
 	);
 
-	this->OnInputDisconnected.Broadcast();
+	if (this->OnInputDisconnected.IsBound())
+	{
+		this->OnInputDisconnected.Broadcast();
+	}
 }
