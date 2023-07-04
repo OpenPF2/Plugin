@@ -68,7 +68,7 @@ class OPENPF2CORE_API IPF2AbilityBindingsInterface : public IPF2ActorComponentIn
 
 public:
 	/**
-	 * Gets the events object used for binding Blueprint callbacks to this component.
+	 * Gets the events object used for binding Blueprint callbacks to events from this component.
 	 *
 	 * @return
 	 *	The events object for this interface.
