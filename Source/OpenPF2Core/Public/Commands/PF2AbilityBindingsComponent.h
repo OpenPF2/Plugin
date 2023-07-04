@@ -82,7 +82,7 @@ public:
 	 */
 	UPROPERTY(
 		EditDefaultsOnly,
-		meta=(MustImplement="PF2AbilityExecutionFilterInterface"),
+		meta=(MustImplement="/Script/OpenPF2Core.PF2AbilityExecutionFilterInterface"),
 		DisplayName="Ability Execution Filters",
 		Category="OpenPF2 Command Bindings"
 	)
