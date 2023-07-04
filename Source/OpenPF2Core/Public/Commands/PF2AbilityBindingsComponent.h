@@ -108,6 +108,9 @@ public:
 	FPF2AbilityBindingsInputConnectionChangedDelegate OnInputDisconnected;
 
 protected:
+	/**
+	 * The events object used for binding Blueprint callbacks to events from this component.
+	 */
 	UPROPERTY()
 	UPF2AbilityBindingsInterfaceEvents* Events;
 
@@ -135,7 +138,7 @@ public:
 	// Public Constructor
 	// =================================================================================================================
 	/**
-	 * Default constructor for UPF2AbilityBindingsComponent.
+	 * Default constructor.
 	 */
 	explicit UPF2AbilityBindingsComponent() : InputComponent(nullptr)
 	{
