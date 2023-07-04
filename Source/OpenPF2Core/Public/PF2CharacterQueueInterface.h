@@ -5,8 +5,9 @@
 
 #pragma once
 
-#include "PF2ActorComponentInterface.h"
+#include <Components/ActorComponent.h>
 
+#include "PF2ActorComponentInterface.h"
 #include "PF2CharacterQueueInterface.generated.h"
 
 // =====================================================================================================================
