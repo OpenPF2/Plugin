@@ -14,6 +14,7 @@
 
 UPF2CharacterQueueComponent::UPF2CharacterQueueComponent(): ControlledCharacterIndex(0)
 {
+	this->Events = CreateDefaultSubobject<UPF2CharacterQueueInterfaceEvents>("InterfaceEvents");
 	this->SetIsReplicatedByDefault(true);
 }
 
@@ -23,6 +24,12 @@ void UPF2CharacterQueueComponent::GetLifetimeReplicatedProps(TArray<FLifetimePro
 
 	DOREPLIFETIME(UPF2CharacterQueueComponent, Queue);
 	DOREPLIFETIME(UPF2CharacterQueueComponent, ControlledCharacterIndex);
+}
+
+UPF2CharacterQueueInterfaceEvents* UPF2CharacterQueueComponent::GetEvents() const
+{
+	check(this->Events != nullptr);
+	return this->Events;
 }
 
 TScriptInterface<IPF2CharacterInterface> UPF2CharacterQueueComponent::GetControlledCharacter() const
@@ -254,7 +261,9 @@ void UPF2CharacterQueueComponent::OnRep_ControlledCharacterIndex()
 
 void UPF2CharacterQueueComponent::Native_OnCharactersChanged()
 {
-	if (this->OnCharactersChanged.IsBound())
+	const FPF2CharacterQueueChangedDelegate CharacterChangedDelegate = this->GetEvents()->OnCharactersChanged;
+
+	if (CharacterChangedDelegate.IsBound())
 	{
 		TArray<TScriptInterface<IPF2CharacterInterface>> NewCharacters;
 
@@ -281,7 +290,7 @@ void UPF2CharacterQueueComponent::Native_OnCharactersChanged()
 			NewCharacters.Num()
 		);
 
-		this->OnCharactersChanged.Broadcast(NewCharacters);
+		CharacterChangedDelegate.Broadcast(NewCharacters);
 	}
 	else
 	{
@@ -299,6 +308,8 @@ void UPF2CharacterQueueComponent::Native_OnCharactersChanged()
 void UPF2CharacterQueueComponent::Native_OnCharacterAdded(
 	const TScriptInterface<IPF2CharacterInterface>& AddedCharacter)
 {
+	const FPF2CharacterAddedOrRemovedDelegate CharacterAddedDelegate = this->GetEvents()->OnCharacterAdded;
+
 	UE_LOG(
 		LogPf2Core,
 		Verbose,
@@ -309,13 +320,19 @@ void UPF2CharacterQueueComponent::Native_OnCharacterAdded(
 	);
 
 	this->UpdateControlledCharacter();
-	this->OnCharacterAdded.Broadcast(AddedCharacter);
+
+	if (CharacterAddedDelegate.IsBound())
+	{
+		CharacterAddedDelegate.Broadcast(AddedCharacter);
+	}
 }
 
 void UPF2CharacterQueueComponent::Native_OnCharacterRemoved(
 	const TScriptInterface<IPF2CharacterInterface>& RemovedCharacter,
 	const uint8                                     RemovedIndex)
 {
+	const FPF2CharacterAddedOrRemovedDelegate CharacterRemovedDelegate = this->GetEvents()->OnCharacterRemoved;
+
 	UE_LOG(
 		LogPf2Core,
 		Verbose,
@@ -340,7 +357,10 @@ void UPF2CharacterQueueComponent::Native_OnCharacterRemoved(
 		}
 	}
 
-	this->OnCharacterRemoved.Broadcast(RemovedCharacter);
+	if (CharacterRemovedDelegate.IsBound())
+	{
+		CharacterRemovedDelegate.Broadcast(RemovedCharacter);
+	}
 }
 
 // ReSharper disable once CppMemberFunctionMayBeConst
@@ -348,6 +368,9 @@ void UPF2CharacterQueueComponent::Native_OnControlledCharacterChanged(
 	const TScriptInterface<IPF2CharacterInterface>& OldCharacter,
 	const TScriptInterface<IPF2CharacterInterface>& NewCharacter)
 {
+	const FPF2ControlledCharacterChangedDelegate ControlledCharacterChangedDelegate =
+		this->GetEvents()->OnControlledCharacterChanged;
+
 	UE_LOG(
 		LogPf2Core,
 		Verbose,
@@ -358,5 +381,8 @@ void UPF2CharacterQueueComponent::Native_OnControlledCharacterChanged(
 		*((NewCharacter.GetInterface() != nullptr) ? NewCharacter->GetIdForLogs() : "null")
 	);
 
-	this->OnControlledCharacterChanged.Broadcast(OldCharacter, NewCharacter);
+	if (ControlledCharacterChangedDelegate.IsBound())
+	{
+		ControlledCharacterChangedDelegate.Broadcast(OldCharacter, NewCharacter);
+	}
 }

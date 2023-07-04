@@ -18,34 +18,6 @@ class IPF2CharacterInterface;
 class IPF2PlayerControllerInterface;
 
 // =====================================================================================================================
-// Delegate Declarations
-// =====================================================================================================================
-/**
- * Delegate for Blueprints to react to characters being added or removed from the queue.
- */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
-	FPF2CharacterAddedOrRemovedDelegate,
-	const TScriptInterface<IPF2CharacterInterface>&, Character
-);
-
-/**
- * Delegate for Blueprints to react to the queue changing in any way (characters added or removed, or queue cleared).
- */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
-	FPF2CharacterQueueChangedDelegate,
-	const TArray<TScriptInterface<IPF2CharacterInterface>>&, Characters
-);
-
-/**
- * Delegate for Blueprints to react to a change in active character.
- */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
-	FPF2ControlledCharacterChangedDelegate,
-	const TScriptInterface<IPF2CharacterInterface>&, OldCharacter,
-	const TScriptInterface<IPF2CharacterInterface>&, NewCharacter
-);
-
-// =====================================================================================================================
 // Normal Declarations
 // =====================================================================================================================
 /**
@@ -65,6 +37,12 @@ protected:
 	// =================================================================================================================
 	// Protected Fields
 	// =================================================================================================================
+	/**
+	 * The events object used for binding Blueprint callbacks to events from this component.
+	 */
+	UPROPERTY()
+	UPF2CharacterQueueInterfaceEvents* Events;
+
 	/**
 	 * The character(s) in this queue.
 	 *
@@ -95,41 +73,6 @@ protected:
 
 public:
 	// =================================================================================================================
-	// Public Fields - Multicast Delegates
-	// =================================================================================================================
-	/**
-	 * Event fired when the characters in the queue have changed (characters added, commands removed, or queue cleared).
-	 *
-	 * If replication is enabled for this component, this is invoked on both the owning client and the server.
-	 */
-	UPROPERTY(BlueprintAssignable)
-	FPF2CharacterQueueChangedDelegate OnCharactersChanged;
-
-	/**
-	 * Event fired when a character is added to the queue.
-	 *
-	 * If replication is enabled for this component, this is invoked on both the owning client and the server.
-	 */
-	UPROPERTY(BlueprintAssignable)
-	FPF2CharacterAddedOrRemovedDelegate OnCharacterAdded;
-
-	/**
-	 * Event fired when a character is removed from the queue.
-	 *
-	 * If replication is enabled for this component, this is invoked on both the owning client and the server.
-	 */
-	UPROPERTY(BlueprintAssignable)
-	FPF2CharacterAddedOrRemovedDelegate OnCharacterRemoved;
-
-	/**
-	 * Event fired when a change in active character occurs.
-	 *
-	 * If replication is enabled for this component, this is invoked on both the owning client and the server.
-	 */
-	UPROPERTY(BlueprintAssignable)
-	FPF2ControlledCharacterChangedDelegate OnControlledCharacterChanged;
-
-	// =================================================================================================================
 	// Public Constructors
 	// =================================================================================================================
 	/**
@@ -145,6 +88,9 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2CharacterQueueInterface Implementation
 	// =================================================================================================================
+	UFUNCTION(BlueprintCallable)
+	virtual UPF2CharacterQueueInterfaceEvents* GetEvents() const override;
+
 	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2CharacterInterface> GetControlledCharacter() const override;
 

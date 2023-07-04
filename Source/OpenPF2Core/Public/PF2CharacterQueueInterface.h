@@ -15,25 +15,101 @@
 class IPF2CharacterInterface;
 
 // =====================================================================================================================
-// Normal Declarations
+// Normal Declarations - Delegates
 // =====================================================================================================================
+/**
+ * Delegate for Blueprints to react to characters being added or removed from the queue.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
+	FPF2CharacterAddedOrRemovedDelegate,
+	const TScriptInterface<IPF2CharacterInterface>&, Character
+);
+
+/**
+ * Delegate for Blueprints to react to the queue changing in any way (characters added or removed, or queue cleared).
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
+	FPF2CharacterQueueChangedDelegate,
+	const TArray<TScriptInterface<IPF2CharacterInterface>>&, Characters
+);
+
+/**
+ * Delegate for Blueprints to react to a change in active character.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
+	FPF2ControlledCharacterChangedDelegate,
+	const TScriptInterface<IPF2CharacterInterface>&, OldCharacter,
+	const TScriptInterface<IPF2CharacterInterface>&, NewCharacter
+);
+
+// =====================================================================================================================
+// Normal Declarations - Types
+// =====================================================================================================================
+UCLASS()
+class OPENPF2CORE_API UPF2CharacterQueueInterfaceEvents : public UObject
+{
+	GENERATED_BODY()
+
+public:
+	// =================================================================================================================
+	// Public Fields - Multicast Delegates
+	// =================================================================================================================
+	/**
+	 * Event fired when the characters in the queue have changed (characters added, commands removed, or queue cleared).
+	 *
+	 * If replication is enabled for this component, this is invoked on both the owning client and the server.
+	 */
+	UPROPERTY(BlueprintAssignable)
+	FPF2CharacterQueueChangedDelegate OnCharactersChanged;
+
+	/**
+	 * Event fired when a character is added to the queue.
+	 *
+	 * If replication is enabled for this component, this is invoked on both the owning client and the server.
+	 */
+	UPROPERTY(BlueprintAssignable)
+	FPF2CharacterAddedOrRemovedDelegate OnCharacterAdded;
+
+	/**
+	 * Event fired when a character is removed from the queue.
+	 *
+	 * If replication is enabled for this component, this is invoked on both the owning client and the server.
+	 */
+	UPROPERTY(BlueprintAssignable)
+	FPF2CharacterAddedOrRemovedDelegate OnCharacterRemoved;
+
+	/**
+	 * Event fired when a change in active character occurs.
+	 *
+	 * If replication is enabled for this component, this is invoked on both the owning client and the server.
+	 */
+	UPROPERTY(BlueprintAssignable)
+	FPF2ControlledCharacterChangedDelegate OnControlledCharacterChanged;
+};
+
+/**
+ * An interface for objects that maintain queues of characters in a ring buffer/circular buffer.
+ */
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2CharacterQueueInterface : public UPF2ActorComponentInterface
 {
 	GENERATED_BODY()
 };
 
-// =====================================================================================================================
-// Normal Declarations
-// =====================================================================================================================
-/**
- * An interface for objects that maintain queues of characters in a ring buffer/circular buffer.
- */
 class OPENPF2CORE_API IPF2CharacterQueueInterface : public IPF2ActorComponentInterface
 {
 	GENERATED_BODY()
 
 public:
+	/**
+	 * Gets the events object used for binding Blueprint callbacks to events from this component.
+	 *
+	 * @return
+	 *	The events object for this interface.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Player Controllers|Character Queues")
+	virtual UPF2CharacterQueueInterfaceEvents* GetEvents() const = 0;
+
 	/**
 	 * Gets the character that the cursor is currently pointing at.
 	 *
