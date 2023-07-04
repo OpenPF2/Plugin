@@ -29,20 +29,24 @@
 
 APF2PlayerControllerBase::APF2PlayerControllerBase()
 {
-	UPF2CharacterQueueComponent* CharacterQueue =
+	IPF2CharacterQueueInterface* CharacterQueue =
 		this->CreateDefaultSubobject<UPF2CharacterQueueComponent>(TEXT("ControllableCharacters"));
 
-	CharacterQueue->OnCharacterAdded.AddDynamic(
+	UPF2CharacterQueueInterfaceEvents* CharacterQueueEvents = CharacterQueue->GetEvents();
+
+	check(CharacterQueueEvents != nullptr);
+
+	CharacterQueueEvents->OnCharacterAdded.AddDynamic(
 		this,
 		&APF2PlayerControllerBase::Native_OnCharacterGiven
 	);
 
-	CharacterQueue->OnCharacterRemoved.AddDynamic(
+	CharacterQueueEvents->OnCharacterRemoved.AddDynamic(
 		this,
 		&APF2PlayerControllerBase::Native_OnCharacterReleased
 	);
 
-	this->ControllableCharacterQueue = CharacterQueue;
+	this->ControllableCharacterQueue = CharacterQueue->ToActorComponent();
 }
 
 void APF2PlayerControllerBase::InitPlayerState()
