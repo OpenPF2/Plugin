@@ -3,7 +3,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-#include "Libraries/PF2K2Node_ForEachMapPair.h"
+#include "PF2K2Node_ForEachMapPair.h"
 
 #include <BlueprintActionDatabaseRegistrar.h>
 #include <BlueprintNodeSpawner.h>
@@ -18,6 +18,8 @@
 #include <Styling/AppStyle.h>
 
 #include <Textures/SlateIcon.h>
+
+#include "OpenPF2Core.h"
 
 #include "Libraries/PF2MapLibrary.h"
 
@@ -402,7 +404,7 @@ void UPF2K2Node_ForEachMapPair::PropagateInputPinType(const UEdGraphPin* OtherPi
 		CurrentValuePin->PinType = FEdGraphPinType::GetPinTypeForTerminalType(OtherPin->PinType.PinValueType);
 
 		UE_LOG(
-			LogPf2CoreBlueprintNodes,
+			LogPf2BlueprintNodes,
 			VeryVerbose,
 			TEXT("[%s] Changed input pin (%s) type to \"%s\", key pin (%s) type to \"%s\"), and value pin (%s) type to \"%s\"."),
 			*(this->GetIdForLogs()),
@@ -422,7 +424,7 @@ void UPF2K2Node_ForEachMapPair::ResetPinToWildcard(UEdGraphPin* TargetPin)
 	const EPinContainerType ContainerType = TargetPin->PinType.ContainerType;
 
 	UE_LOG(
-		LogPf2CoreBlueprintNodes,
+		LogPf2BlueprintNodes,
 		VeryVerbose,
 		TEXT("[%s] Resetting pin (%s) to being a wildcard."),
 		*(this->GetIdForLogs()),

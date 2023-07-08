@@ -105,7 +105,7 @@ void UPF2MapLibrary::GenericMap_Invert(const void* InputMapAddr,
 			OutputKeyProperty->ExportTextItem_Direct(ValueString, InputMapValuePtr, nullptr, nullptr, PPF_None);
 
 			UE_LOG(
-				LogPf2CoreBlueprintNodes,
+				LogPf2BlueprintNodes,
 				Warning,
 				TEXT("GenericMap_Invert: Key (%s) already exists in output map (%s)."),
 				*ValueString,

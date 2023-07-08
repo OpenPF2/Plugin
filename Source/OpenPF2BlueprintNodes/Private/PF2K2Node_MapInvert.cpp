@@ -3,7 +3,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-#include "Libraries/PF2K2Node_MapInvert.h"
+#include "PF2K2Node_MapInvert.h"
 
 #include <BlueprintActionDatabaseRegistrar.h>
 #include <BlueprintNodeSpawner.h>
@@ -16,6 +16,8 @@
 #include <Kismet2/BlueprintEditorUtils.h>
 
 #include <Widgets/Notifications/SNotificationList.h>
+
+#include "OpenPF2Core.h"
 
 #include "Libraries/PF2MapLibrary.h"
 
@@ -120,7 +122,7 @@ void UPF2K2Node_MapInvert::ExpandNode(FKismetCompilerContext& CompilerContext, U
 	InvertOutputMap->PinType = OutputPin->PinType;
 
 	UE_LOG(
-		LogPf2CoreBlueprintNodes,
+		LogPf2BlueprintNodes,
 		VeryVerbose,
 		TEXT("[%s] Populated nested input pin (%s) as \"%s\" and nested output pin (%s) to \"%s\"."),
 		*(this->GetIdForLogs()),
@@ -210,7 +212,7 @@ void UPF2K2Node_MapInvert::PropagatePinType(const FEdGraphPinType& PinType,
 	InverseTargetPin->PinType = PF2BlueprintUtilities::InvertMapPinType(PinType);
 
 	UE_LOG(
-		LogPf2CoreBlueprintNodes,
+		LogPf2BlueprintNodes,
 		VeryVerbose,
 		TEXT("[%s] Changed local pin (%s) to \"%s\" and local pin (%s) to \"%s\"."),
 		*(this->GetIdForLogs()),
@@ -259,7 +261,7 @@ void UPF2K2Node_MapInvert::ValidateKeyType()
 void UPF2K2Node_MapInvert::ResetPinToWildcard(UEdGraphPin* TargetPin)
 {
 	UE_LOG(
-		LogPf2CoreBlueprintNodes,
+		LogPf2BlueprintNodes,
 		VeryVerbose,
 		TEXT("[%s] Resetting pin (%s) to being a wildcard."),
 		*(this->GetIdForLogs()),
