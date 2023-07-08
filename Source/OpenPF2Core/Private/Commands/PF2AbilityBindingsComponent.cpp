@@ -23,6 +23,11 @@
 #include "Utilities/PF2LogUtilities.h"
 #include "Utilities/PF2MapUtilities.h"
 
+UObject* UPF2AbilityBindingsComponent::GetGenericEventsObject() const
+{
+	return this->GetEvents();
+}
+
 UPF2AbilityBindingsInterfaceEvents* UPF2AbilityBindingsComponent::GetEvents() const
 {
 	check(this->Events != nullptr);

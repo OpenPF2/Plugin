@@ -26,6 +26,11 @@ void UPF2CharacterQueueComponent::GetLifetimeReplicatedProps(TArray<FLifetimePro
 	DOREPLIFETIME(UPF2CharacterQueueComponent, ControlledCharacterIndex);
 }
 
+UObject* UPF2CharacterQueueComponent::GetGenericEventsObject() const
+{
+	return this->GetEvents();
+}
+
 UPF2CharacterQueueInterfaceEvents* UPF2CharacterQueueComponent::GetEvents() const
 {
 	check(this->Events != nullptr);
