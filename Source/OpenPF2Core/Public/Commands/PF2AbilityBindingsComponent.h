@@ -12,6 +12,7 @@
 #include "PF2AbilityBindingsInterface.h"
 #include "PF2AbilityInputBinding.h"
 #include "PF2CharacterInterface.h"
+#include "PF2EventsInterface.h"
 
 #include "Abilities/PF2InputActionMapping.h"
 
@@ -46,7 +47,10 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPF2AbilityBindingsInputConnectionChangedDele
  */
 UCLASS(ClassGroup="OpenPF2-Characters", meta=(BlueprintSpawnableComponent))
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API UPF2AbilityBindingsComponent : public UActorComponent, public IPF2AbilityBindingsInterface
+class OPENPF2CORE_API UPF2AbilityBindingsComponent :
+	public UActorComponent,
+	public IPF2EventsInterface,
+	public IPF2AbilityBindingsInterface
 {
 	GENERATED_BODY()
 
@@ -144,6 +148,11 @@ public:
 	{
 		this->Events = CreateDefaultSubobject<UPF2AbilityBindingsInterfaceEvents>("InterfaceEvents");
 	}
+
+	// =================================================================================================================
+	// Public Methods - IPF2EventsInterface Implementation
+	// =================================================================================================================
+	virtual UObject* GetGenericEventsObject() const override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2AbilityBindingsInterface Implementation
