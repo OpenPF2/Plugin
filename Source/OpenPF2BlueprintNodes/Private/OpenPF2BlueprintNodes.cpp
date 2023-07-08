@@ -5,7 +5,7 @@
 
 #include "OpenPF2BlueprintNodes.h"
 
-#define LOCTEXT_NAMESPACE "FOpenPF2BlueprintNodes"
+#define LOCTEXT_NAMESPACE "OpenPF2BlueprintNodes"
 
 void FOpenPF2BlueprintNodes::StartupModule()
 {

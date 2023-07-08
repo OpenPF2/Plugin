@@ -26,7 +26,7 @@
 #include "Utilities/PF2BlueprintUtilities.h"
 
 // ReSharper disable once IdentifierTypo
-#define LOCTEXT_NAMESPACE "K2Node_ForEachMapPair"
+#define LOCTEXT_NAMESPACE "PF2K2Node"
 
 const FName UPF2K2Node_ForEachMapPair::MapInputPinName(TEXT("Map"));
 const FName UPF2K2Node_ForEachMapPair::InsideLoopPinName(TEXT("LoopBody"));
