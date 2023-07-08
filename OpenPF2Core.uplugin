@@ -19,6 +19,11 @@
 			"Name": "OpenPF2Core",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "OpenPF2EditorSupport",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [

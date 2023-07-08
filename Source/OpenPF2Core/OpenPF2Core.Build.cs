@@ -5,7 +5,7 @@
 using UnrealBuildTool;
 
 // ReSharper disable once InconsistentNaming
-public class OpenPF2Core: ModuleRules
+public class OpenPF2Core : ModuleRules
 {
 	public OpenPF2Core(ReadOnlyTargetRules Target) : base(Target)
 	{
