@@ -9,7 +9,7 @@
 
 #include "InterfaceEventsDetailCustomization.h"
 #include "PF2CharacterQueueComponent.h"
-#include "PF2EventsInterface.h"
+#include "PF2EventEmitterInterface.h"
 
 #define LOCTEXT_NAMESPACE "FOpenPF2EditorSupport"
 
@@ -40,7 +40,7 @@ TArray<UClass*> FOpenPF2EditorSupport::GetClassesWithInterfaceEvents()
 	{
 		UClass* Class = *It;
 
-		if (Class->ImplementsInterface(UPF2EventsInterface::StaticClass()))
+		if (Class->ImplementsInterface(UPF2EventEmitterInterface::StaticClass()))
 		{
 			Implementors.Add(Class);
 		}

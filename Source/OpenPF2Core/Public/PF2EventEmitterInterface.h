@@ -7,13 +7,13 @@
 
 #include <UObject/Interface.h>
 
-#include "PF2EventsInterface.generated.h"
+#include "PF2EventEmitterInterface.generated.h"
 
 // =====================================================================================================================
 // Normal Declarations - Types
 // =====================================================================================================================
 UINTERFACE(BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
-class OPENPF2CORE_API UPF2EventsInterface : public UInterface
+class OPENPF2CORE_API UPF2EventEmitterInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -38,7 +38,7 @@ class OPENPF2CORE_API UPF2EventsInterface : public UInterface
  *      is used internally by the editor to expose delegates of the Events object as though they were events of the
  *      Implementation Class, to make it easier to use Implementation Classes following this Events object pattern.
  */
-class OPENPF2CORE_API IPF2EventsInterface : public IInterface
+class OPENPF2CORE_API IPF2EventEmitterInterface : public IInterface
 {
 	GENERATED_BODY()
 

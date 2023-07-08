@@ -12,7 +12,7 @@
 #include "PF2AbilityBindingsInterface.h"
 #include "PF2AbilityInputBinding.h"
 #include "PF2CharacterInterface.h"
-#include "PF2EventsInterface.h"
+#include "PF2EventEmitterInterface.h"
 
 #include "Abilities/PF2InputActionMapping.h"
 
@@ -49,7 +49,7 @@ UCLASS(ClassGroup="OpenPF2-Characters", meta=(BlueprintSpawnableComponent))
 // ReSharper disable once CppClassCanBeFinal
 class OPENPF2CORE_API UPF2AbilityBindingsComponent :
 	public UActorComponent,
-	public IPF2EventsInterface,
+	public IPF2EventEmitterInterface,
 	public IPF2AbilityBindingsInterface
 {
 	GENERATED_BODY()
@@ -150,7 +150,7 @@ public:
 	}
 
 	// =================================================================================================================
-	// Public Methods - IPF2EventsInterface Implementation
+	// Public Methods - IPF2EventEmitterInterface Implementation
 	// =================================================================================================================
 	virtual UObject* GetGenericEventsObject() const override;
 
