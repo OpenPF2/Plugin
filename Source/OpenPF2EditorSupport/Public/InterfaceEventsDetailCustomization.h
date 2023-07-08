@@ -11,7 +11,7 @@
 
 #include <Input/Reply.h>
 
-class IPF2EventsInterface;
+class IPF2EventEmitterInterface;
 
 // ReSharper disable once CppClassCanBeFinal
 class FInterfaceEventsDetailCustomization : public IDetailCustomization

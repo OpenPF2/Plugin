@@ -19,7 +19,7 @@
 #include <Widgets/Layout/SWidgetSwitcher.h>
 
 #include "OpenPF2EditorSupport.h"
-#include "PF2EventsInterface.h"
+#include "PF2EventEmitterInterface.h"
 
 #define LOCTEXT_NAMESPACE "InterfaceEventsDetailCustomization"
 
@@ -49,7 +49,7 @@ void FInterfaceEventsDetailCustomization::AddEventsCategory(IDetailLayoutBuilder
                                                             const FName           SelectedVariableName) const
 {
 	UClass*                    SelectedObjectClass = SelectedObject->GetClass();
-	const IPF2EventsInterface* SelectedEventsIntf  = Cast<IPF2EventsInterface>(SelectedObject);
+	const IPF2EventEmitterInterface* SelectedEventsIntf  = Cast<IPF2EventEmitterInterface>(SelectedObject);
 
 	const UBlueprint* BlueprintObj = this->GetBlueprint();
 	check(BlueprintObj != nullptr);

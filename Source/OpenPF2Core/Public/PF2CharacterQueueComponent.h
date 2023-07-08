@@ -8,7 +8,7 @@
 #include <Components/ActorComponent.h>
 
 #include "PF2CharacterQueueInterface.h"
-#include "PF2EventsInterface.h"
+#include "PF2EventEmitterInterface.h"
 
 #include "PF2CharacterQueueComponent.generated.h"
 
@@ -30,7 +30,7 @@ class IPF2PlayerControllerInterface;
 UCLASS(ClassGroup="OpenPF2-PlayerControllers", meta=(BlueprintSpawnableComponent))
 class OPENPF2CORE_API UPF2CharacterQueueComponent final :
 	public UActorComponent,
-	public IPF2EventsInterface,
+	public IPF2EventEmitterInterface,
 	public IPF2CharacterQueueInterface
 {
 	GENERATED_BODY()
@@ -88,7 +88,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	// =================================================================================================================
-	// Public Methods - IPF2EventsInterface Implementation
+	// Public Methods - IPF2EventEmitterInterface Implementation
 	// =================================================================================================================
 	virtual UObject* GetGenericEventsObject() const override;
 
