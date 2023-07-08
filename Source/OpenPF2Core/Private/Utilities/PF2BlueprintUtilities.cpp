@@ -31,7 +31,7 @@ namespace PF2BlueprintUtilities
 		else
 		{
 			UE_LOG(
-				LogPf2CoreBlueprintNodes,
+				LogPf2BlueprintNodes,
 				Error,
 				TEXT("Only Map pin types can be inverted (given \"%s\")."),
 				*(PF2BlueprintUtilities::GetTypeDescription(PinType).ToString())

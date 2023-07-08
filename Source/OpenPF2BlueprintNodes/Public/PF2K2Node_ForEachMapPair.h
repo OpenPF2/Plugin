@@ -18,7 +18,7 @@ class UObject;
 struct FLinearColor;
 
 /**
- * A custom Blueprint node for iterating over each key and value of a map.
+ * A Blueprint node for iterating over each key and value of a map.
  */
 UCLASS(MinimalAPI)
 class UPF2K2Node_ForEachMapPair : public UK2Node, public IPF2LogIdentifiableInterface

@@ -8,14 +8,14 @@
 #include <Modules/ModuleManager.h>
 
 /**
+ * Log category for logic evaluated by OpenPF2 blueprint nodes.
+ */
+OPENPF2CORE_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2BlueprintNodes, Log, VeryVerbose);
+
+/**
  * Log category for logic evaluated by the OpenPF2 core code.
  */
 OPENPF2CORE_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2Core, Log, VeryVerbose);
-
-/**
- * Log category for logic evaluated by OpenPF2 blueprint nodes.
- */
-OPENPF2CORE_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2CoreBlueprintNodes, Log, VeryVerbose);
 
 /**
  * Log category for logic evaluated by OpenPF2 code that executes abilities and actions.

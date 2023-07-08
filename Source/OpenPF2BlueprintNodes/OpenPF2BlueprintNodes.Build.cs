@@ -6,37 +6,29 @@
 using UnrealBuildTool;
 
 // ReSharper disable once InconsistentNaming
-public class OpenPF2EditorSupport : ModuleRules
+public class OpenPF2BlueprintNodes : ModuleRules
 {
-    public OpenPF2EditorSupport(ReadOnlyTargetRules Target) : base(Target)
+    public OpenPF2BlueprintNodes(ReadOnlyTargetRules Target) : base(Target)
     {
-	    PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+	    PublicDependencyModuleNames.AddRange(
+		    new[]
+		    {
+			    "OpenPF2Core",
+		    }
+	    );
 
-	    PrivatePCHHeaderFile = "Public/OpenPF2EditorSupport.h";
-
-		PublicDependencyModuleNames.AddRange(
-			new[]
-			{
-				"OpenPF2Core",
-				"OpenPF2BlueprintNodes",
-            }
-        );
-
-        PrivateDependencyModuleNames.AddRange(
+	    PrivateDependencyModuleNames.AddRange(
 			new[]
 			{
 				"BlueprintGraph",
                 "Core",
 				"CoreUObject",
-                "DetailCustomizations",
                 "Engine",
-                "GraphEditor",
-                "Kismet",
+				"GraphEditor",
 				"KismetCompiler",
 				"PropertyEditor",
                 "Slate",
                 "SlateCore",
-                "SubobjectEditor",
                 "UnrealEd",
             }
         );

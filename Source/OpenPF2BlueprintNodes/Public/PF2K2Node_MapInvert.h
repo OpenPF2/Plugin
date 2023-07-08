@@ -14,9 +14,10 @@
 class UEdGraphPin;
 
 /**
- * A custom Blueprint node for inverting maps.
+ * A Blueprint node for inverting maps of nearly any type.
  *
- * During inversion, the keys and values of a map, so that for each pair the key becomes the value and vice-versa.
+ * Inverts the keys and values of a map, so that for each pair the key becomes the value and vice-versa. The values in
+ * the map must support the GetTypeHash() function.
  */
 UCLASS(MinimalAPI)
 class UPF2K2Node_MapInvert : public UK2Node, public IPF2LogIdentifiableInterface

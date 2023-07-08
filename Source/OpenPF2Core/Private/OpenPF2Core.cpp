@@ -26,9 +26,9 @@ IMPLEMENT_MODULE(FOpenPF2CoreModule, OpenPF2Core)
 // =====================================================================================================================
 // Logging Definitions
 // =====================================================================================================================
+DEFINE_LOG_CATEGORY(LogPf2BlueprintNodes);
 DEFINE_LOG_CATEGORY(LogPf2Core);
 DEFINE_LOG_CATEGORY(LogPf2CoreAbilities);
-DEFINE_LOG_CATEGORY(LogPf2CoreBlueprintNodes);
 DEFINE_LOG_CATEGORY(LogPf2CoreEncounters);
 DEFINE_LOG_CATEGORY(LogPf2CoreInitiative);
 DEFINE_LOG_CATEGORY(LogPf2CoreStats);

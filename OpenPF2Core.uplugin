@@ -21,6 +21,11 @@
 			"LoadingPhase": "Default"
 		},
 		{
+			"Name": "OpenPF2BlueprintNodes",
+			"Type": "UncookedOnly",
+			"LoadingPhase": "PreDefault"
+		},
+		{
 			"Name": "OpenPF2EditorSupport",
 			"Type": "Editor",
 			"LoadingPhase": "Default"

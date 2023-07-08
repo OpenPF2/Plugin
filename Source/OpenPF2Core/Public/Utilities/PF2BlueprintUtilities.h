@@ -30,7 +30,7 @@ namespace PF2BlueprintUtilities
 	 *	The invert map pin type. The key type matches the value type of PinType, and the value type matches the
 	 *	key type of PinType.
 	 */
-	FEdGraphPinType InvertMapPinType(const FEdGraphPinType& PinType);
+	OPENPF2CORE_API FEdGraphPinType InvertMapPinType(const FEdGraphPinType& PinType);
 
 	/**
 	 * Gets a human-friendly description of a blueprint pin.
@@ -41,7 +41,7 @@ namespace PF2BlueprintUtilities
 	 * @return
 	 *	The human-friendly description.
 	 */
-	FText GetTypeDescription(const FEdGraphPinType& PinType);
+	OPENPF2CORE_API FText GetTypeDescription(const FEdGraphPinType& PinType);
 
 	/**
 	 * Gets a human-friendly description of the type of a terminal graph pin.
@@ -52,7 +52,7 @@ namespace PF2BlueprintUtilities
 	 * @return
 	 *	The human-friendly description of the pin type.
 	 */
-	FText DescribePinType(const FEdGraphTerminalType& TerminalPinType);
+	OPENPF2CORE_API FText DescribePinType(const FEdGraphTerminalType& TerminalPinType);
 
 	/**
 	 * Gets a human-friendly description of the type of a node graph pin.
@@ -63,5 +63,5 @@ namespace PF2BlueprintUtilities
 	 * @return
 	 *	The human-friendly description of the pin type.
 	 */
-	FText DescribePinType(const FEdGraphPinType& PinType);
+	OPENPF2CORE_API FText DescribePinType(const FEdGraphPinType& PinType);
 }
