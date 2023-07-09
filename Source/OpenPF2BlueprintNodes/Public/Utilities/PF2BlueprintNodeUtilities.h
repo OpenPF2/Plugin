@@ -5,13 +5,14 @@
 
 #pragma once
 
-#include <Internationalization/Text.h>
 #include <EdGraph/EdGraphPin.h>
 
+#include <Internationalization/Text.h>
+
 /**
- * Various utilities for functional programming with arrays and similar structures.
+ * Various utility methods for simplifying the logic of Blueprint nodes.
  */
-namespace PF2BlueprintUtilities
+namespace PF2BlueprintNodeUtilities
 {
 	/**
 	 * Inverts the key and value types of a map graph pin, so that the key type becomes the value type and vice-versa.
@@ -30,7 +31,7 @@ namespace PF2BlueprintUtilities
 	 *	The invert map pin type. The key type matches the value type of PinType, and the value type matches the
 	 *	key type of PinType.
 	 */
-	OPENPF2CORE_API FEdGraphPinType InvertMapPinType(const FEdGraphPinType& PinType);
+	OPENPF2BLUEPRINTNODES_API FEdGraphPinType InvertMapPinType(const FEdGraphPinType& PinType);
 
 	/**
 	 * Gets a human-friendly description of a blueprint pin.
@@ -41,7 +42,7 @@ namespace PF2BlueprintUtilities
 	 * @return
 	 *	The human-friendly description.
 	 */
-	OPENPF2CORE_API FText GetTypeDescription(const FEdGraphPinType& PinType);
+	OPENPF2BLUEPRINTNODES_API FText GetTypeDescription(const FEdGraphPinType& PinType);
 
 	/**
 	 * Gets a human-friendly description of the type of a terminal graph pin.
@@ -52,7 +53,7 @@ namespace PF2BlueprintUtilities
 	 * @return
 	 *	The human-friendly description of the pin type.
 	 */
-	OPENPF2CORE_API FText DescribePinType(const FEdGraphTerminalType& TerminalPinType);
+	OPENPF2BLUEPRINTNODES_API FText DescribePinType(const FEdGraphTerminalType& TerminalPinType);
 
 	/**
 	 * Gets a human-friendly description of the type of a node graph pin.
@@ -63,5 +64,5 @@ namespace PF2BlueprintUtilities
 	 * @return
 	 *	The human-friendly description of the pin type.
 	 */
-	OPENPF2CORE_API FText DescribePinType(const FEdGraphPinType& PinType);
+	OPENPF2BLUEPRINTNODES_API FText DescribePinType(const FEdGraphPinType& PinType);
 }

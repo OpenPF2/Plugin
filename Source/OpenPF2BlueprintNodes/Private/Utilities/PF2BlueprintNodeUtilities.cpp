@@ -1,15 +1,17 @@
 // Portions adapted from Unreal Engine 5.1, which is Copyright Epic Games, Inc.
 // Licensed only for use with Unreal Engine.
 
-#include "Utilities/PF2BlueprintUtilities.h"
+#include "Utilities/PF2BlueprintNodeUtilities.h"
 
 #include <EdGraphSchema_K2.h>
 
 #include <EdGraph/EdGraphPin.h>
 
-#define LOCTEXT_NAMESPACE "BlueprintSnapNodes"
+#include "OpenPF2Core.h"
 
-namespace PF2BlueprintUtilities
+#define LOCTEXT_NAMESPACE "PF2BlueprintNodeUtilities"
+
+namespace PF2BlueprintNodeUtilities
 {
 	FEdGraphPinType InvertMapPinType(const FEdGraphPinType& PinType)
 	{
@@ -34,7 +36,7 @@ namespace PF2BlueprintUtilities
 				LogPf2BlueprintNodes,
 				Error,
 				TEXT("Only Map pin types can be inverted (given \"%s\")."),
-				*(PF2BlueprintUtilities::GetTypeDescription(PinType).ToString())
+				*(GetTypeDescription(PinType).ToString())
 			);
 
 			return PinType;

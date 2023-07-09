@@ -21,7 +21,7 @@
 
 #include "Libraries/PF2MapLibrary.h"
 
-#include "Utilities/PF2BlueprintUtilities.h"
+#include "Utilities/PF2BlueprintNodeUtilities.h"
 
 // ReSharper disable once IdentifierTypo
 #define LOCTEXT_NAMESPACE "PF2K2Node"
@@ -127,9 +127,9 @@ void UPF2K2Node_MapInvert::ExpandNode(FKismetCompilerContext& CompilerContext, U
 		TEXT("[%s] Populated nested input pin (%s) as \"%s\" and nested output pin (%s) to \"%s\"."),
 		*(this->GetIdForLogs()),
 		*(InvertInputMap->GetName()),
-		*(PF2BlueprintUtilities::GetTypeDescription(InvertInputMap->PinType).ToString()),
+		*(PF2BlueprintNodeUtilities::GetTypeDescription(InvertInputMap->PinType).ToString()),
 		*(InvertOutputMap->GetName()),
-		*(PF2BlueprintUtilities::GetTypeDescription(InvertOutputMap->PinType).ToString())
+		*(PF2BlueprintNodeUtilities::GetTypeDescription(InvertOutputMap->PinType).ToString())
 	);
 
 	CompilerContext.MovePinLinksToIntermediate(*InputPin,  *InvertInputMap);
@@ -209,7 +209,7 @@ void UPF2K2Node_MapInvert::PropagatePinType(const FEdGraphPinType& PinType,
                                             UEdGraphPin*           InverseTargetPin)
 {
 	RegularTargetPin->PinType = PinType;
-	InverseTargetPin->PinType = PF2BlueprintUtilities::InvertMapPinType(PinType);
+	InverseTargetPin->PinType = PF2BlueprintNodeUtilities::InvertMapPinType(PinType);
 
 	UE_LOG(
 		LogPf2BlueprintNodes,
@@ -217,9 +217,9 @@ void UPF2K2Node_MapInvert::PropagatePinType(const FEdGraphPinType& PinType,
 		TEXT("[%s] Changed local pin (%s) to \"%s\" and local pin (%s) to \"%s\"."),
 		*(this->GetIdForLogs()),
 		*(RegularTargetPin->GetName()),
-		*(PF2BlueprintUtilities::GetTypeDescription(RegularTargetPin->PinType).ToString()),
+		*(PF2BlueprintNodeUtilities::GetTypeDescription(RegularTargetPin->PinType).ToString()),
 		*(InverseTargetPin->GetName()),
-		*(PF2BlueprintUtilities::GetTypeDescription(InverseTargetPin->PinType).ToString())
+		*(PF2BlueprintNodeUtilities::GetTypeDescription(InverseTargetPin->PinType).ToString())
 	);
 }
 

@@ -23,7 +23,7 @@
 
 #include "Libraries/PF2MapLibrary.h"
 
-#include "Utilities/PF2BlueprintUtilities.h"
+#include "Utilities/PF2BlueprintNodeUtilities.h"
 
 // ReSharper disable once IdentifierTypo
 #define LOCTEXT_NAMESPACE "PF2K2Node"
@@ -409,11 +409,11 @@ void UPF2K2Node_ForEachMapPair::PropagateInputPinType(const UEdGraphPin* OtherPi
 			TEXT("[%s] Changed input pin (%s) type to \"%s\", key pin (%s) type to \"%s\"), and value pin (%s) type to \"%s\"."),
 			*(this->GetIdForLogs()),
 			*(MapInputPin->GetName()),
-			*(PF2BlueprintUtilities::GetTypeDescription(MapInputPin->PinType).ToString()),
+			*(PF2BlueprintNodeUtilities::GetTypeDescription(MapInputPin->PinType).ToString()),
 			*(CurrentKeyPin->GetName()),
-			*(PF2BlueprintUtilities::GetTypeDescription(CurrentKeyPin->PinType).ToString()),
+			*(PF2BlueprintNodeUtilities::GetTypeDescription(CurrentKeyPin->PinType).ToString()),
 			*(CurrentValuePin->GetName()),
-			*(PF2BlueprintUtilities::GetTypeDescription(CurrentValuePin->PinType).ToString())
+			*(PF2BlueprintNodeUtilities::GetTypeDescription(CurrentValuePin->PinType).ToString())
 		);
 	}
 }
