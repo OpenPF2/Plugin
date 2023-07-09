@@ -8,7 +8,6 @@
 #include <DetailCategoryBuilder.h>
 #include <DetailLayoutBuilder.h>
 #include <DetailWidgetRow.h>
-#include <K2Node_ComponentBoundEvent.h>
 
 #include <Engine/Blueprint.h>
 
@@ -20,6 +19,9 @@
 
 #include "OpenPF2EditorSupport.h"
 #include "PF2EventEmitterInterface.h"
+#include "PF2K2Node_EventEmitterBoundEvent.h"
+
+#include "Utilities/PF2BlueprintEditorUtilities.h"
 
 #define LOCTEXT_NAMESPACE "InterfaceEventsDetailCustomization"
 
@@ -31,51 +33,49 @@ void FInterfaceEventsDetailCustomization::CustomizeDetails(IDetailLayoutBuilder&
 
 	if ((SelectedObjects.Num() == 1) && SelectedObjects[0].IsValid())
 	{
-		const UObject*                        SelectedObject      = SelectedObjects[0].Get();
-		UBlueprint*                           ContainingBlueprint = GetBlueprintContainingObject(SelectedObject);
-		const FSubobjectEditorTreeNodePtrType SelectedTreeNode    = GetSelectedTreeNodeInBlueprint(ContainingBlueprint);
+		const UObject* SelectedObject      = SelectedObjects[0].Get();
+		UBlueprint*    ContainingBlueprint = PF2BlueprintEditorUtilities::GetBlueprintContainingObject(SelectedObject);
 
-		if ((ContainingBlueprint != nullptr) && (SelectedTreeNode.IsValid()))
+		const FSubobjectEditorTreeNode* SelectedTreeNode =
+			PF2BlueprintEditorUtilities::GetSelectedTreeNodeInBlueprint(ContainingBlueprint);
+
+		if ((ContainingBlueprint != nullptr) && (SelectedTreeNode != nullptr))
 		{
-			this->Blueprint = ContainingBlueprint;
-
-			this->AddEventsCategory(DetailBuilder, SelectedObject, SelectedTreeNode.Get()->GetVariableName());
+			this->AddEventsCategory(
+				DetailBuilder,
+				ContainingBlueprint,
+				SelectedTreeNode->GetVariableName(),
+				SelectedObject
+			);
 		}
 	}
 }
 
 void FInterfaceEventsDetailCustomization::AddEventsCategory(IDetailLayoutBuilder& DetailBuilder,
-															const UObject*        SelectedObject,
-                                                            const FName           SelectedVariableName) const
+                                                            UBlueprint*           Blueprint,
+                                                            const FName           SelectedVariableName,
+                                                            const UObject*        SelectedObject) const
 {
-	UClass*                    SelectedObjectClass = SelectedObject->GetClass();
-	const IPF2EventEmitterInterface* SelectedEventsIntf  = Cast<IPF2EventEmitterInterface>(SelectedObject);
-
-	const UBlueprint* BlueprintObj = this->GetBlueprint();
-	check(BlueprintObj != nullptr);
-
-	if ((SelectedObjectClass != nullptr) && (SelectedEventsIntf != nullptr) && BlueprintObj->AllowsDynamicBinding())
+	if ((SelectedObject != nullptr) && (Blueprint != nullptr) && Blueprint->AllowsDynamicBinding())
 	{
-		// If the object property can't be resolved for the property or it has a null events object, we can't use its
-		// events.
-		const FObjectProperty* VariableProperty =
-			FindFProperty<FObjectProperty>(BlueprintObj->SkeletonGeneratedClass, SelectedVariableName);
+		// If the object property can't be resolved for the property or it is missing a valid events object, we can't
+		// use its events.
+		const FObjectProperty* VariableProperty = FindPropertyInBlueprint(Blueprint, SelectedVariableName);
 
-		const UObject* EventsObject = SelectedEventsIntf->GetGenericEventsObject();
-
-		if ((VariableProperty != nullptr) && (EventsObject != nullptr))
+		if (VariableProperty != nullptr)
 		{
-			const UClass* EventsObjectClass = EventsObject->GetClass();
+			UClass*       SelectedObjectClass = SelectedObject->GetClass();
+			const UClass* EventsObjectClass   = IPF2EventEmitterInterface::GetEventsClassOfObject(SelectedObject);
 
-			if ((EventsObjectClass != nullptr) && FBlueprintEditorUtils::CanClassGenerateEvents(EventsObjectClass))
+			if ((SelectedObjectClass != nullptr) && (EventsObjectClass != nullptr) &&
+				FBlueprintEditorUtils::CanClassGenerateEvents(EventsObjectClass))
 			{
 				for (TFieldIterator<FMulticastDelegateProperty> PropertyIt(EventsObjectClass, EFieldIteratorFlags::IncludeSuper); PropertyIt; ++PropertyIt)
 				{
 					const FMulticastDelegateProperty* Property = *PropertyIt;
+					static const FName                HideInDetailPanelName("HideInDetailPanel");
 
-					static const FName HideInDetailPanelName("HideInDetailPanel");
-
-					// Check for multicast delegates that we can safely assign
+					// Check for multicast delegates that we can safely assign.
 					if (!Property->HasAnyPropertyFlags(CPF_Parm) && Property->HasAllPropertyFlags(CPF_BlueprintAssignable) &&
 						!Property->HasMetaData(HideInDetailPanelName))
 					{
@@ -122,17 +122,19 @@ void FInterfaceEventsDetailCustomization::AddEventsCategory(IDetailLayoutBuilder
 									.ContentPadding(FMargin(3.0, 2.0))
 									.OnClicked(
 										this,
-										&FInterfaceEventsDetailCustomization::HandleAddOrViewEventForVariable,
-										EventName,
+										&FInterfaceEventsDetailCustomization::OnAddOrViewButtonClicked,
+										MakeWeakObjectPtr(Blueprint),
 										SelectedVariableName,
-										MakeWeakObjectPtr(SelectedObjectClass))
+										MakeWeakObjectPtr(SelectedObjectClass),
+										EventName)
 									[
 										SNew(SWidgetSwitcher)
 										.WidgetIndex(
 											this,
-											&FInterfaceEventsDetailCustomization::GetAddOrViewIndexForButton,
-											EventName,
-											SelectedVariableName)
+											&FInterfaceEventsDetailCustomization::GetIconIndexForAddOrViewButton,
+											MakeWeakObjectPtr(Blueprint),
+											SelectedVariableName,
+											EventName)
 
 										+ SWidgetSwitcher::Slot()
 										[
@@ -157,154 +159,68 @@ void FInterfaceEventsDetailCustomization::AddEventsCategory(IDetailLayoutBuilder
 	}
 }
 
-FReply FInterfaceEventsDetailCustomization::HandleAddOrViewEventForVariable(
-	const FName                  EventName,
-	const FName                  PropertyName,
-	const TWeakObjectPtr<UClass> PropertyClass) const
+// ReSharper disable once CppMemberFunctionMayBeStatic
+int32 FInterfaceEventsDetailCustomization::GetIconIndexForAddOrViewButton(const TWeakObjectPtr<UBlueprint> BlueprintPtr,
+                                                                          const FName VariableName,
+                                                                          const FName EventName) const
 {
-	UBlueprint* BlueprintObj = this->GetBlueprint();
-	check(BlueprintObj != nullptr);
+	int32             IconIndex;
+	const UBlueprint* Blueprint = BlueprintPtr.Get();
 
-	// Find the corresponding variable property in the Blueprint
-	// ReSharper disable once CppTooWideScope
-	FObjectProperty* VariableProperty =
-		FindFProperty<FObjectProperty>(BlueprintObj->SkeletonGeneratedClass, PropertyName);
-
-	if (VariableProperty)
+	if (Blueprint == nullptr)
 	{
-		if (!FKismetEditorUtilities::FindBoundEventForComponent(BlueprintObj, EventName, VariableProperty->GetFName()))
-		{
-			FKismetEditorUtilities::CreateNewBoundEventForClass(PropertyClass.Get(), EventName, BlueprintObj, VariableProperty);
-		}
-		else
-		{
-			// ReSharper disable once CppTooWideScope
-			const UK2Node_ComponentBoundEvent* ExistingNode =
-				FKismetEditorUtilities::FindBoundEventForComponent(
-					BlueprintObj,
-					EventName,
-					VariableProperty->GetFName()
-				);
+		// Blueprint has been garbage collected; default to not allowing add.
+		IconIndex = 0;
+	}
+	else if (UPF2K2Node_EventEmitterBoundEvent::FindExisting(Blueprint, VariableName, EventName) == nullptr)
+	{
+		// Does not exist; will need to add.
+		IconIndex = 1;
+	}
+	else
+	{
+		// Already exists; will navigate to where it appears.
+		IconIndex = 0;
+	}
 
-			if ( ExistingNode )
+	return IconIndex;
+}
+
+// ReSharper disable once CppMemberFunctionMayBeStatic
+FReply FInterfaceEventsDetailCustomization::OnAddOrViewButtonClicked(const TWeakObjectPtr<UBlueprint> BlueprintPtr,
+                                                                     const FName                      VariableName,
+                                                                     const TWeakObjectPtr<UClass>     VariableClass,
+                                                                     const FName                      EventName) const
+{
+	const UBlueprint* Blueprint = BlueprintPtr.Get();
+
+	if (Blueprint != nullptr)
+	{
+		FObjectProperty* VariableProperty = FindPropertyInBlueprint(Blueprint, VariableName);
+
+		if (VariableProperty != nullptr)
+		{
+			const UPF2K2Node_EventEmitterBoundEvent* ExistingNode =
+				UPF2K2Node_EventEmitterBoundEvent::FindExisting(Blueprint, VariableProperty->GetFName(), EventName);
+
+			if (ExistingNode == nullptr)
 			{
+				// Does not exist; let's add it!
+				UPF2K2Node_EventEmitterBoundEvent::CreateNew(
+					Blueprint,
+					VariableProperty,
+					VariableClass.Get(),
+					EventName);
+			}
+			else
+			{
+				// Already exists; bring it into view.
 				FKismetEditorUtilities::BringKismetToFocusAttentionOnObject(ExistingNode);
 			}
 		}
 	}
 
 	return FReply::Handled();
-}
-
-
-int32 FInterfaceEventsDetailCustomization::GetAddOrViewIndexForButton(const FName EventName,
-                                                                      const FName PropertyName) const
-{
-	const UBlueprint* BlueprintObj = this->GetBlueprint();
-	check(BlueprintObj != nullptr);
-
-	if (FKismetEditorUtilities::FindBoundEventForComponent(BlueprintObj, EventName, PropertyName))
-	{
-		// View
-		return 0;
-	}
-	else
-	{
-		// Add
-		return 1;
-	}
-}
-
-UBlueprint* FInterfaceEventsDetailCustomization::GetBlueprintContainingObject(const UObject* SelectedObject)
-{
-	UBlueprint* ContainingBlueprint = nullptr;
-
-	if (SelectedObject != nullptr)
-	{
-		const UClass* OutermostClass = SelectedObject->GetOutermostObject()->GetClass();
-
-		if (OutermostClass != nullptr)
-		{
-			ContainingBlueprint = UBlueprint::GetBlueprintFromClass(OutermostClass);
-		}
-	}
-
-	return ContainingBlueprint;
-}
-
-FSubobjectEditorTreeNodePtrType FInterfaceEventsDetailCustomization::GetSelectedTreeNodeInBlueprint(
-	const UBlueprint* Blueprint)
-{
-	FSubobjectEditorTreeNodePtrType    SelectedNode    = nullptr;
-	const TSharedPtr<SSubobjectEditor> SubobjectEditor = GetSubobjectEditorForBlueprint(Blueprint);
-
-	if (SubobjectEditor.IsValid())
-	{
-		TArray<FSubobjectEditorTreeNodePtrType> SelectedNodes = SubobjectEditor->GetSelectedNodes();
-
-		if (SelectedNodes.Num() == 1)
-		{
-			SelectedNode = SelectedNodes[0];
-		}
-	}
-
-	return SelectedNode;
-}
-
-TSharedPtr<SSubobjectEditor> FInterfaceEventsDetailCustomization::GetSubobjectEditorForBlueprint(
-	const UBlueprint* Blueprint)
-{
-	TSharedPtr<SSubobjectEditor> SubobjectEditor = nullptr;
-	const FBlueprintEditor*      BlueprintEditor = GetBlueprintEditorForBlueprint(Blueprint);
-
-	if (BlueprintEditor != nullptr)
-	{
-		SubobjectEditor = BlueprintEditor->GetSubobjectEditor();
-	}
-
-	return SubobjectEditor;
-}
-
-FBlueprintEditor* FInterfaceEventsDetailCustomization::GetBlueprintEditorForBlueprint(const UBlueprint* Blueprint)
-{
-	FBlueprintEditor* Editor = nullptr;
-
-	if (Blueprint != nullptr)
-	{
-		const UEdGraph* EditorGraph = Blueprint->GetLastEditedUberGraph();
-
-		Editor = GetBlueprintEditorForGraph(EditorGraph);
-	}
-
-	return Editor;
-}
-
-FBlueprintEditor* FInterfaceEventsDetailCustomization::GetBlueprintEditorForGraph(const UEdGraph* Graph)
-{
-	FBlueprintEditor* Editor = nullptr;
-
-	if (Graph != nullptr)
-	{
-		UBlueprint*            OuterBlueprint       = Cast<UBlueprint>(Graph->GetOuter());
-		UAssetEditorSubsystem* AssetEditorSubsystem = GEditor->GetEditorSubsystem<UAssetEditorSubsystem>();
-
-		if ((OuterBlueprint != nullptr) && (AssetEditorSubsystem != nullptr))
-		{
-			IAssetEditorInstance* AssetEditor = AssetEditorSubsystem->FindEditorForAsset(OuterBlueprint, false);
-
-			if (AssetEditor != nullptr)
-			{
-				FAssetEditorToolkit* AssetEditorToolkit = static_cast<FAssetEditorToolkit*>(AssetEditor);
-
-				if (AssetEditorToolkit->IsBlueprintEditor())
-				{
-					Editor = static_cast<FBlueprintEditor*>(AssetEditorToolkit);
-				}
-			}
-		}
-	}
-
-	return Editor;
 }
 
 #undef LOCTEXT_NAMESPACE

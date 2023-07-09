@@ -8,31 +8,30 @@
 #include <PropertyEditorModule.h>
 
 #include "InterfaceEventsDetailCustomization.h"
-#include "PF2CharacterQueueComponent.h"
 #include "PF2EventEmitterInterface.h"
 
 #define LOCTEXT_NAMESPACE "FOpenPF2EditorSupport"
 
-void FOpenPF2EditorSupport::StartupModule()
+void FOpenPF2EditorSupport::RegisterEmitterEventsCustomizations(FPropertyEditorModule& PropertyModule)
 {
-	FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
-
-	this->InitializeInterfaceEventsCustomizations(PropertyModule);
-
-	PropertyModule.NotifyCustomizationModuleChanged();
-}
-
-void FOpenPF2EditorSupport::ShutdownModule()
-{
-	if (FModuleManager::Get().IsModuleLoaded("PropertyEditor"))
+	for (const UClass* DerivedClass : GetEventEmitterClasses())
 	{
-		FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
-
-		this->UnregisterInterfaceEventsCustomizations(PropertyModule);
+		PropertyModule.RegisterCustomClassLayout(
+			DerivedClass->GetFName(),
+			FOnGetDetailCustomizationInstance::CreateStatic(&FInterfaceEventsDetailCustomization::MakeInstance)
+		);
 	}
 }
 
-TArray<UClass*> FOpenPF2EditorSupport::GetClassesWithInterfaceEvents()
+void FOpenPF2EditorSupport::UnregisterEmitterEventsCustomizations(FPropertyEditorModule& PropertyModule)
+{
+	for (const UClass* DerivedClass : GetEventEmitterClasses())
+	{
+		PropertyModule.UnregisterCustomClassLayout(DerivedClass->GetFName());
+	}
+}
+
+TArray<UClass*> FOpenPF2EditorSupport::GetEventEmitterClasses()
 {
 	TArray<UClass*> Implementors;
 
@@ -49,24 +48,22 @@ TArray<UClass*> FOpenPF2EditorSupport::GetClassesWithInterfaceEvents()
 	return Implementors;
 }
 
-// ReSharper disable once CppMemberFunctionMayBeStatic
-void FOpenPF2EditorSupport::InitializeInterfaceEventsCustomizations(FPropertyEditorModule& PropertyModule) const
+void FOpenPF2EditorSupport::StartupModule()
 {
-	for (const UClass* DerivedClass : GetClassesWithInterfaceEvents())
-	{
-		PropertyModule.RegisterCustomClassLayout(
-			DerivedClass->GetFName(),
-			FOnGetDetailCustomizationInstance::CreateStatic(&FInterfaceEventsDetailCustomization::MakeInstance)
-		);
-	}
+	FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
+
+	this->RegisterEmitterEventsCustomizations(PropertyModule);
+
+	PropertyModule.NotifyCustomizationModuleChanged();
 }
 
-// ReSharper disable once CppMemberFunctionMayBeStatic
-void FOpenPF2EditorSupport::UnregisterInterfaceEventsCustomizations(FPropertyEditorModule& PropertyModule) const
+void FOpenPF2EditorSupport::ShutdownModule()
 {
-	for (const UClass* DerivedClass : GetClassesWithInterfaceEvents())
+	if (FModuleManager::Get().IsModuleLoaded("PropertyEditor"))
 	{
-		PropertyModule.UnregisterCustomClassLayout(DerivedClass->GetFName());
+		FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
+
+		this->UnregisterEmitterEventsCustomizations(PropertyModule);
 	}
 }
 
