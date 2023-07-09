@@ -23,7 +23,32 @@ protected:
 	// =================================================================================================================
 	// Protected Static Methods
 	// =================================================================================================================
-	static TArray<UClass*> GetClassesWithInterfaceEvents();
+	/**
+	 * Registers a customization of the "Details" panel in the Blueprint Editor for every OpenPF2 event emitter.
+	 *
+	 * @param PropertyModule
+	 *	The loaded instance of the editor's property editing module.
+	 */
+	static void RegisterEmitterEventsCustomizations(FPropertyEditorModule& PropertyModule);
+
+	/**
+	 * Unregisters all customizations of the "Details" panel from the Blueprint Editor.
+	 *
+	 * @param PropertyModule
+	 *	The loaded instance of the editor's property editing module.
+	 */
+	static void UnregisterEmitterEventsCustomizations(FPropertyEditorModule& PropertyModule);
+
+	/**
+	 * Identifies all classes that implement the event emitter interface.
+	 *
+	 * These classes return an Events Object to which delegates can be bound so that consumers of those classes can
+	 * depend only on the interfaces of the objects rather than their concrete types.
+	 *
+	 * @return
+	 *	An array of classes that implement the UPF2EventEmitterInterface.
+	 */
+	static TArray<UClass*> GetEventEmitterClasses();
 
 public:
 	// =================================================================================================================
@@ -31,11 +56,4 @@ public:
 	// =================================================================================================================
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
-
-protected:
-	// =================================================================================================================
-	// Protected Instance Methods
-	// =================================================================================================================
-	void InitializeInterfaceEventsCustomizations(FPropertyEditorModule& PropertyModule) const;
-	void UnregisterInterfaceEventsCustomizations(FPropertyEditorModule& PropertyModule) const;
 };
