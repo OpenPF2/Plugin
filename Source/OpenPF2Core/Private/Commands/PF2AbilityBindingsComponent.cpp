@@ -292,6 +292,13 @@ void UPF2AbilityBindingsComponent::SetBindingWithoutBroadcast(
 	}
 
 	NewBinding->Initialize(Action, AbilitySpec, this);
+
+	// If we are already connected to input, ensure the new binding is as well.
+	if (this->IsConnectedToInput())
+	{
+		NewBinding->ConnectToInput(this->GetInputComponent());
+	}
+
 	this->Bindings.Add(Action, NewBinding);
 }
 
