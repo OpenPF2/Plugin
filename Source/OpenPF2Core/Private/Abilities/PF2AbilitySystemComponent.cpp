@@ -181,7 +181,7 @@ TArray<FGameplayAbilitySpecHandle> UPF2AbilitySystemComponent::FindAbilityHandle
 {
 	return PF2ArrayUtilities::Map<FGameplayAbilitySpecHandle>(
 		this->FindAbilitySpecsByTags(Tags, bOnlyAbilitiesThatSatisfyTagRequirements),
-		[](const FGameplayAbilitySpec AbilitySpec)
+		[](const FGameplayAbilitySpec& AbilitySpec)
 		{
 			return AbilitySpec.Handle;
 		}
