@@ -151,7 +151,7 @@ TArray<TScriptInterface<IPF2CharacterInterface>> UPF2CharacterQueueComponent::To
 		this->Queue,
 		TArray<TScriptInterface<IPF2CharacterInterface>>(),
 		[](TArray<TScriptInterface<IPF2CharacterInterface>> Characters,
-		   const TWeakInterfacePtr<IPF2CharacterInterface>  CurrentCharacter)
+		   const TWeakInterfacePtr<IPF2CharacterInterface>& CurrentCharacter)
 		{
 			if (CurrentCharacter.IsValid())
 			{
