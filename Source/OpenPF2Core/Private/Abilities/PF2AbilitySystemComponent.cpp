@@ -42,6 +42,40 @@ UPF2AbilitySystemComponent::UPF2AbilitySystemComponent()
 	}
 }
 
+TScriptInterface<IPF2GameplayAbilityInterface> UPF2AbilitySystemComponent::GetAbilityInstanceFromSpec(
+	const FGameplayAbilitySpec& AbilitySpec) const
+{
+	TScriptInterface<IPF2GameplayAbilityInterface> AbilitySIntf;
+	UGameplayAbility*                              AbilityInstance;
+	IPF2GameplayAbilityInterface*                  AbilityIntf = nullptr;
+
+	// First, look for an instanced ability.
+	AbilityInstance = AbilitySpec.GetPrimaryInstance();
+
+	// If not instanced, get the CDO.
+	if (AbilityInstance == nullptr)
+	{
+		AbilityInstance = AbilitySpec.Ability;
+	}
+
+	// Ensure we don't return an object that's marked for kill.
+	if (IsValid(AbilityInstance))
+	{
+		AbilityIntf = Cast<IPF2GameplayAbilityInterface>(AbilityInstance);
+	}
+
+	if (AbilityIntf == nullptr)
+	{
+		AbilitySIntf = TScriptInterface<IPF2GameplayAbilityInterface>(nullptr);
+	}
+	else
+	{
+		AbilitySIntf = PF2InterfaceUtilities::ToScriptInterface(AbilityIntf);
+	}
+
+	return AbilitySIntf;
+}
+
 TArray<TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilitySystemComponent::GetAbilities() const
 {
 	return PF2ArrayUtilities::Reduce(
@@ -51,12 +85,41 @@ TArray<TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilitySystemComponen
 			TArray<TScriptInterface<IPF2GameplayAbilityInterface>> Abilities,
 			const FGameplayAbilitySpec& CurrentAbilitySpec)
 		{
-			IPF2GameplayAbilityInterface* AbilityIntf =
-				Cast<IPF2GameplayAbilityInterface>(CurrentAbilitySpec.Ability.Get());
+			const TScriptInterface<IPF2GameplayAbilityInterface> AbilityIntf =
+				this->GetAbilityInstanceFromSpec(CurrentAbilitySpec);
 
 			if (AbilityIntf != nullptr)
 			{
-				Abilities.Add(PF2InterfaceUtilities::ToScriptInterface(AbilityIntf));
+				Abilities.Add(AbilityIntf);
+			}
+
+			return Abilities;
+		});
+}
+
+TArray<TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilitySystemComponent::GetAbilitiesByTags(
+	const FGameplayTagContainer& Tags,
+	bool bExactMatch) const
+{
+	return PF2ArrayUtilities::Reduce(
+		this->GetActivatableAbilities(),
+		TArray<TScriptInterface<IPF2GameplayAbilityInterface>>(),
+		[this, &Tags, bExactMatch](
+			TArray<TScriptInterface<IPF2GameplayAbilityInterface>> Abilities,
+			const FGameplayAbilitySpec& CurrentAbilitySpec)
+		{
+			const TScriptInterface<IPF2GameplayAbilityInterface> AbilityIntf =
+				this->GetAbilityInstanceFromSpec(CurrentAbilitySpec);
+
+			if (AbilityIntf != nullptr)
+			{
+				const UGameplayAbility* Ability = AbilityIntf->ToGameplayAbility();
+
+				if ((bExactMatch && Ability->AbilityTags.HasAll(Tags)) ||
+					(!bExactMatch && Ability->AbilityTags.HasAny(Tags)))
+				{
+					Abilities.Add(AbilityIntf);
+				}
 			}
 
 			return Abilities;
