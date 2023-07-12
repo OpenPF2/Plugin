@@ -84,7 +84,7 @@ UPF2K2Node_EventEmitterBoundEvent* UPF2K2Node_EventEmitterBoundEvent::FindExisti
 			const UPF2K2Node_EventEmitterBoundEvent* BoundEvent = *NodeIter;
 
 			if ((BoundEvent->EmitterVariableName == EmitterVariableName) &&
-				(BoundEvent->DelegatePropertyName == EventName))
+			    (BoundEvent->DelegatePropertyName == EventName))
 			{
 				Node = *NodeIter;
 				break;

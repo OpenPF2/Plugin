@@ -8,29 +8,29 @@ using UnrealBuildTool;
 // ReSharper disable once InconsistentNaming
 public class OpenPF2BlueprintNodes : ModuleRules
 {
-    public OpenPF2BlueprintNodes(ReadOnlyTargetRules Target) : base(Target)
-    {
-	    PublicDependencyModuleNames.AddRange(
-		    new[]
-		    {
-			    "OpenPF2Core",
-		    }
-	    );
+	public OpenPF2BlueprintNodes(ReadOnlyTargetRules Target) : base(Target)
+	{
+		PublicDependencyModuleNames.AddRange(
+			new[]
+			{
+				"OpenPF2Core",
+			}
+		);
 
-	    PrivateDependencyModuleNames.AddRange(
+		PrivateDependencyModuleNames.AddRange(
 			new[]
 			{
 				"BlueprintGraph",
-                "Core",
+				"Core",
 				"CoreUObject",
-                "Engine",
+				"Engine",
 				"GraphEditor",
 				"KismetCompiler",
 				"PropertyEditor",
-                "Slate",
-                "SlateCore",
-                "UnrealEd",
-            }
-        );
-    }
+				"Slate",
+				"SlateCore",
+				"UnrealEd",
+			}
+		);
+	}
 }
