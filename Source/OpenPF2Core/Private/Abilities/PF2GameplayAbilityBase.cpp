@@ -29,6 +29,11 @@ FText UPF2GameplayAbilityBase::GetAbilityDescription() const
 	return this->Description;
 }
 
+UGameplayAbility* UPF2GameplayAbilityBase::ToGameplayAbility()
+{
+	return this;
+}
+
 FGameplayAbilitySpec UPF2GameplayAbilityBase::ToGameplayAbilitySpecForCharacter(
 	const TScriptInterface<IPF2CharacterInterface> Character,
 	bool& bOutSpecFound
