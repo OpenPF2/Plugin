@@ -64,6 +64,15 @@ public:
 	virtual FText GetAbilityDescription() const = 0;
 
 	/**
+	 * Gets the gameplay ability that is implementing this interface.
+	 *
+	 * @return
+	 *	This gameplay ability, as a UObject.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
+	virtual UGameplayAbility* ToGameplayAbility() = 0;
+
+	/**
 	 * Locates and returns the ability spec in the given character's ASC that corresponds to this ability.
 	 *
 	 * @param Character

@@ -76,6 +76,9 @@ public:
 	virtual FText GetAbilityDescription() const override;
 
 	UFUNCTION(BlueprintCallable)
+	virtual UGameplayAbility* ToGameplayAbility() override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual FGameplayAbilitySpec ToGameplayAbilitySpecForCharacter(
 		const TScriptInterface<IPF2CharacterInterface> Character,
 		bool& bOutSpecFound
