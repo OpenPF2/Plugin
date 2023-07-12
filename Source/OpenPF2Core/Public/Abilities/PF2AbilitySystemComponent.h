@@ -101,7 +101,16 @@ public:
 	// Public Methods - IPF2AbilitySystemInterface Implementation
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
+	virtual TScriptInterface<IPF2GameplayAbilityInterface> GetAbilityInstanceFromSpec(
+		const FGameplayAbilitySpec& AbilitySpec) const override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual TArray<TScriptInterface<IPF2GameplayAbilityInterface>> GetAbilities() const override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<TScriptInterface<IPF2GameplayAbilityInterface>> GetAbilitiesByTags(
+		const FGameplayTagContainer& Tags,
+		bool bExactMatch = true) const override;
 
 	virtual bool ArePassiveGameplayEffectsActive() const override
 	{

@@ -49,14 +49,47 @@ class OPENPF2CORE_API IPF2AbilitySystemInterface : public IPF2ActorComponentInte
     GENERATED_BODY()
 
 public:
+	/**
+	 * Converts an ability specification into an OpenPF2-compatible ability instance.
+	 *
+	 * Only abilities not marked for kill that implement IPF2GameplayAbilityInterface are returned.
+	 *
+	 * @param AbilitySpec
+	 *	The gameplay ability specification to convert into an OpenPF2 Gameplay Ability interface instance.
+	 *
+	 * @return
+	 *	Either the gameplay ability as an instance of IPF2GameplayAbilityInterface, or nullptr if: an instance of the
+	 *	ability is not available, the ability is marked pending for kill, or the ability is not OpenPF2-compatible.
+	 */
+    UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
+	virtual TScriptInterface<IPF2GameplayAbilityInterface> GetAbilityInstanceFromSpec(
+		const FGameplayAbilitySpec& AbilitySpec) const = 0;
+
     /**
-     * Gets the activatable OpenPF2-compatible abilities that have been granted to this character.
+     * Gets all activatable OpenPF2-compatible abilities that were granted to this character.
      *
      * @return
      *	The abilities this character possesses.
      */
     UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
 	virtual TArray<TScriptInterface<IPF2GameplayAbilityInterface>> GetAbilities() const = 0;
+
+	/**
+	 * Gets the activatable OpenPF2-compatible abilities having the specified tags and were granted to this character.
+	 *
+	 * @param Tags
+	 *	The tags that abilities of interest must have.
+	 * @param bExactMatch
+	 *	Whether matching abilities must have all of the tags specified. Otherwise, abilities matching any of the tags
+	 *	will be returned.
+	 *
+	 * @return
+	 *	The abilities having the specified tags that this character possesses.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
+	virtual TArray<TScriptInterface<IPF2GameplayAbilityInterface>> GetAbilitiesByTags(
+		const FGameplayTagContainer& Tags,
+		bool bExactMatch = true) const = 0;
 
 	/**
 	 * Gets whether passively-applied Gameplay Effects are currently active on this ASC.
