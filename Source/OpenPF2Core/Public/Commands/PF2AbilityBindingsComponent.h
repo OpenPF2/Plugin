@@ -115,8 +115,8 @@ protected:
 	/**
 	 * The events object used for binding Blueprint callbacks to events from this component.
 	 */
-	UPROPERTY()
-	UPF2AbilityBindingsInterfaceEvents* Events;
+	UPROPERTY(Transient)
+	mutable UPF2AbilityBindingsInterfaceEvents* Events;
 
 private:
 	/**
@@ -144,9 +144,8 @@ public:
 	/**
 	 * Default constructor.
 	 */
-	explicit UPF2AbilityBindingsComponent() : InputComponent(nullptr)
+	explicit UPF2AbilityBindingsComponent() : Events(nullptr), InputComponent(nullptr)
 	{
-		this->Events = CreateDefaultSubobject<UPF2AbilityBindingsInterfaceEvents>("InterfaceEvents");
 	}
 
 	// =================================================================================================================
