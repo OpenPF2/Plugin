@@ -12,9 +12,8 @@
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
-UPF2CharacterQueueComponent::UPF2CharacterQueueComponent(): ControlledCharacterIndex(0)
+UPF2CharacterQueueComponent::UPF2CharacterQueueComponent() : Events(nullptr), ControlledCharacterIndex(0)
 {
-	this->Events = CreateDefaultSubobject<UPF2CharacterQueueInterfaceEvents>("InterfaceEvents");
 	this->SetIsReplicatedByDefault(true);
 }
 
@@ -33,7 +32,18 @@ UObject* UPF2CharacterQueueComponent::GetGenericEventsObject() const
 
 UPF2CharacterQueueInterfaceEvents* UPF2CharacterQueueComponent::GetEvents() const
 {
-	check(this->Events != nullptr);
+	if (this->Events == nullptr)
+	{
+		// BUGBUG: This has to be instantiated here rather than via CreateDefaultSubobject() in the constructor, or it
+		// breaks multiplayer. It seems that when created in the constructor, all instances of this component end up
+		// sharing one events object leading to all players receiving the event whenever a multicast event is broadcast.
+		// This typically results in a crash since the addresses of callbacks aren't valid on all clients.
+		this->Events = NewObject<UPF2CharacterQueueInterfaceEvents>(
+			const_cast<UPF2CharacterQueueComponent*>(this),
+			FName(TEXT("InterfaceEvents"))
+		);
+	}
+
 	return this->Events;
 }
 

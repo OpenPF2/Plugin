@@ -42,8 +42,8 @@ protected:
 	/**
 	 * The events object used for binding Blueprint callbacks to events from this component.
 	 */
-	UPROPERTY()
-	UPF2CharacterQueueInterfaceEvents* Events;
+	UPROPERTY(Transient)
+	mutable UPF2CharacterQueueInterfaceEvents* Events;
 
 	/**
 	 * The character(s) in this queue.

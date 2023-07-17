@@ -29,24 +29,8 @@
 
 APF2PlayerControllerBase::APF2PlayerControllerBase()
 {
-	IPF2CharacterQueueInterface* CharacterQueue =
+	this->ControllableCharacterQueue =
 		this->CreateDefaultSubobject<UPF2CharacterQueueComponent>(TEXT("ControllableCharacters"));
-
-	UPF2CharacterQueueInterfaceEvents* CharacterQueueEvents = CharacterQueue->GetEvents();
-
-	check(CharacterQueueEvents != nullptr);
-
-	CharacterQueueEvents->OnCharacterAdded.AddDynamic(
-		this,
-		&APF2PlayerControllerBase::Native_OnCharacterGiven
-	);
-
-	CharacterQueueEvents->OnCharacterRemoved.AddDynamic(
-		this,
-		&APF2PlayerControllerBase::Native_OnCharacterReleased
-	);
-
-	this->ControllableCharacterQueue = CharacterQueue->ToActorComponent();
 }
 
 void APF2PlayerControllerBase::InitPlayerState()
@@ -61,6 +45,26 @@ void APF2PlayerControllerBase::OnRep_PlayerState()
 	Super::OnRep_PlayerState();
 
 	this->Native_OnPlayerStateAvailable(this->GetPlayerState());
+}
+
+void APF2PlayerControllerBase::PostInitializeComponents()
+{
+	UPF2CharacterQueueInterfaceEvents* CharacterQueueEvents;
+
+	Super::PostInitializeComponents();
+
+	CharacterQueueEvents = this->GetCharacterQueue()->GetEvents();
+	check(CharacterQueueEvents != nullptr);
+
+	CharacterQueueEvents->OnCharacterAdded.AddDynamic(
+		this,
+		&APF2PlayerControllerBase::Native_OnCharacterGiven
+	);
+
+	CharacterQueueEvents->OnCharacterRemoved.AddDynamic(
+		this,
+		&APF2PlayerControllerBase::Native_OnCharacterReleased
+	);
 }
 
 void APF2PlayerControllerBase::SetPawn(APawn* NewPawn)
