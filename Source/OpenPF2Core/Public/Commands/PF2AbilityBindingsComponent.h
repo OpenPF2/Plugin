@@ -124,7 +124,7 @@ private:
 	 *
 	 * This is not replicated, since it is only of relevance to local clients.
 	 */
-	UPROPERTY()
+	UPROPERTY(Transient)
 	UEnhancedInputComponent* InputComponent;
 
 	/**

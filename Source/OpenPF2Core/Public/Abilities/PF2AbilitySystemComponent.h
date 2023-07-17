@@ -45,6 +45,13 @@ protected:
 	// Protected Fields
 	// =================================================================================================================
 	/**
+	 * Whether character abilities have been replicated from the server at least once for the owning character.
+	 *
+	 * @see UPF2AbilitySystemComponent::OnRep_ActivateAbilities()
+	 */
+	bool bAreAbilitiesAvailable;
+
+	/**
 	 * The Gameplay Effects used to boost abilities.
 	 *
 	 * For each pair in the map, the key is the type ability score that the effect boosts and the value is the GE for
@@ -260,6 +267,22 @@ protected:
 	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
+
+	/**
+	 * Gets whether character abilities have been replicated from the server at least once for the owning character.
+	 *
+	 * @see UPF2AbilitySystemComponent::OnRep_ActivateAbilities()
+	 *
+	 * @return
+	 *	- true if OnRep_ActivateAbilities() has been called at least once with all abilities replicated.
+	 *	- false if OnRep_ActivateAbilities() has either not been called or did not get a full snapshot of abilities
+	 *	  from the server yet.
+	 */
+	FORCEINLINE bool AreAbilitiesAvailable() const
+	{
+		return this->bAreAbilitiesAvailable;
+	}
+
 	/**
 	 * Gets or builds the list of all passive gameplay effects to activate, organized by weight group.
 	 *
