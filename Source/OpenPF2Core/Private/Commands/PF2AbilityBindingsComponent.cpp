@@ -384,7 +384,7 @@ bool UPF2AbilityBindingsComponent::FilterAbilityActivation(
 
 void UPF2AbilityBindingsComponent::Native_OnBindingsChanged()
 {
-	const FPF2AbilityBindingsChangedDelegate BindingsChangedDelegate = this->GetEvents()->OnAbilityBindingsChangedDelegate;
+	const FPF2AbilityBindingsChangedDelegate BindingsChangedDelegate = this->GetEvents()->OnAbilityBindingsChanged;
 
 	if (BindingsChangedDelegate.IsBound())
 	{
