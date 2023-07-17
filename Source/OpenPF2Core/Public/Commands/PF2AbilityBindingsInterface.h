@@ -50,7 +50,7 @@ public:
 	 * Event fired when ability bindings in the owning component change (e.g. abilities are bound to different inputs).
 	 */
 	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Ability Bindings")
-	FPF2AbilityBindingsChangedDelegate OnAbilityBindingsChangedDelegate;
+	FPF2AbilityBindingsChangedDelegate OnAbilityBindingsChanged;
 };
 
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
