@@ -424,6 +424,8 @@ public:
 	/**
 	 * Gets the dynamic delegate that listeners can use to be notified when abilities are loaded client-side.
 	 *
+	 * @fixme https://github.com/OpenPF2/PF2Core/issues/39
+	 *
 	 * @return
 	 *	Direct access to the multicast change delegate.
 	 */
