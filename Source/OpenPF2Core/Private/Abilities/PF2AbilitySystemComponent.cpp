@@ -15,8 +15,9 @@
 #include "Utilities/PF2ArrayUtilities.h"
 #include "Utilities/PF2EnumUtilities.h"
 #include "Utilities/PF2InterfaceUtilities.h"
+#include "Utilities/PF2LogUtilities.h"
 
-UPF2AbilitySystemComponent::UPF2AbilitySystemComponent()
+UPF2AbilitySystemComponent::UPF2AbilitySystemComponent() : bAreAbilitiesAvailable(false)
 {
 	const FString DynamicTagsGeFilename =
 		PF2CharacterConstants::GetBlueprintPath(*PF2CharacterConstants::GeDynamicTagsName);
@@ -648,6 +649,12 @@ void UPF2AbilitySystemComponent::OnRep_ActivateAbilities()
 {
 	Super::OnRep_ActivateAbilities();
 
+	if (this->AreAbilitiesAvailable())
+	{
+		// Nothing further to do.
+		return;
+	}
+
 	for (const FGameplayAbilitySpec& Spec : this->ActivatableAbilities.Items)
 	{
 		const UGameplayAbility* SpecAbility = Spec.Ability;
@@ -659,6 +666,9 @@ void UPF2AbilitySystemComponent::OnRep_ActivateAbilities()
 			return;
 		}
 	}
+
+	// Prevent future event notifications for this instance.
+	this->bAreAbilitiesAvailable = true;
 
 	this->Native_OnAbilitiesAvailable();
 }
@@ -725,6 +735,14 @@ void UPF2AbilitySystemComponent::ActivatePassiveGameplayEffect(
 
 void UPF2AbilitySystemComponent::Native_OnAbilitiesAvailable()
 {
+	UE_LOG(
+		LogPf2CoreAbilities,
+		VeryVerbose,
+		TEXT("[%s] Abilities have replicated from the server for ASC [%s]."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(this->GetIdForLogs())
+	);
+
 	this->OnAbilitiesAvailable.Broadcast();
 }
 
