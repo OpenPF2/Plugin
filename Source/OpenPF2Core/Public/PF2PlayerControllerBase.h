@@ -70,7 +70,7 @@ public:
 	// =================================================================================================================
 	virtual void PostInitializeComponents() override;
 
-	virtual void SetPawn(APawn* NewPawn) override;
+	virtual void SetPawn(APawn* InPawn) override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2PlayerControllerInterface Implementation
