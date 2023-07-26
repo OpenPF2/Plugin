@@ -29,7 +29,7 @@ namespace PF2BlueprintEditorUtilities
 	OPENPF2EDITORSUPPORT_API UBlueprint* GetBlueprintContainingObject(const UObject* Object);
 
 	/**
-	 * Gets the object that is select (if any) in the "My Blueprint" view of the Blueprint Editor.
+	 * Gets the object that is selected (if any) in the "My Blueprint" view of the Blueprint Editor.
 	 *
 	 * This is null-safe. If Object is a null pointer, the result will be a null pointer.
 	 *
