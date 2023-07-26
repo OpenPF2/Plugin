@@ -67,18 +67,20 @@ void APF2PlayerControllerBase::PostInitializeComponents()
 	);
 }
 
-void APF2PlayerControllerBase::SetPawn(APawn* NewPawn)
+void APF2PlayerControllerBase::SetPawn(APawn* InPawn)
 {
+	const IPF2CharacterInterface* NewCharacterIntf = Cast<IPF2CharacterInterface>(InPawn);
+
 	UE_LOG(
 		LogPf2Core,
 		VeryVerbose,
 		TEXT("[%s] Player controller ('%s') has taken possession of pawn ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		*(this->GetName()),
-		*(GetFullNameSafe(NewPawn))
+		*(this->GetIdForLogs()),
+		*((NewCharacterIntf == nullptr) ? GetFullNameSafe(InPawn) : NewCharacterIntf->GetIdForLogs())
 	);
 
-	Super::SetPawn(NewPawn);
+	Super::SetPawn(InPawn);
 }
 
 TScriptInterface<IPF2PlayerStateInterface> APF2PlayerControllerBase::GetPlayerState() const
