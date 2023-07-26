@@ -163,9 +163,9 @@ public:
 	 * Initializes or refreshes the ability system component and all other related ability logic for this character.
 	 *
 	 * Characters typically invoke this method automatically on both the client and server side whenever they are being
-	 * possessed by a player controller or AI controller, but the game mode or player state may wish to invoke this
-	 * method at other times that the ASC or ASC owner information is stale.
+	 * possessed by a player controller or AI controller.
 	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual void InitializeOrRefreshAbilities() = 0;
 
 	/**

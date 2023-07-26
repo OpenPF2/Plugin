@@ -105,13 +105,4 @@ public:
 	 */
 	virtual void SetModeOfPlay(const EPF2ModeOfPlayType                         NewMode,
 	                           TScriptInterface<IPF2ModeOfPlayRuleSetInterface> NewRuleSet) = 0;
-
-	/**
-	 * Notifies all clients to refresh ability actor info for all of their characters.
-	 *
-	 * This should only be called on the server. It should be triggered whenever the controller/owner of any character
-	 * changes, as a workaround for UE-78453.
-	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game State")
-	virtual void RefreshAbilityActorInfoForAllCharacters() = 0;
 };
