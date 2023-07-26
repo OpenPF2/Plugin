@@ -106,17 +106,18 @@ void UPF2K2Node_ForEachMapPair::PostReconstructNode()
 
 void UPF2K2Node_ForEachMapPair::ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph)
 {
+	bool                         bResult             = true;
+	const UEdGraphSchema_K2     *Schema;
+	UK2Node_CallFunction        *GetIteratorNode,
+	                            *IteratorHasPairNode;
+	UK2Node_AssignmentStatement *IteratorAssignNode;
+	UK2Node_IfThenElse          *BranchNode;
+	UK2Node_ExecutionSequence   *SequenceInsideLoop;
+	UEdGraphPin                 *IteratorVariablePin;
+
 	Super::ExpandNode(CompilerContext, SourceGraph);
 
-	const UEdGraphSchema_K2* Schema  = CompilerContext.GetSchema();
-	bool                     bResult = true;
-
-	UK2Node_CallFunction *       GetIteratorNode,
-	                     *       IteratorHasPairNode;
-	UK2Node_AssignmentStatement* IteratorAssignNode;
-	UK2Node_IfThenElse*          BranchNode;
-	UK2Node_ExecutionSequence*   SequenceInsideLoop;
-	UEdGraphPin*                 IteratorVariablePin;
+	Schema = CompilerContext.GetSchema();
 
 	// =================================================================================================================
 	// Loop Initialization
