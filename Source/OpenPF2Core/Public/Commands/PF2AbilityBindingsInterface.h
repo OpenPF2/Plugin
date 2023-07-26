@@ -12,13 +12,13 @@
 
 #include "PF2AbilityBindingsInterface.generated.h"
 
-class UEnhancedInputComponent;
 // =====================================================================================================================
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2AbilityBindingsInterface;
 class IPF2CharacterInterface;
 class IPF2GameplayAbilityInterface;
+class UEnhancedInputComponent;
 class UInputComponent;
 class UInputAction;
 class UPF2AbilityInputBinding;
