@@ -68,7 +68,7 @@ void FInterfaceEventsDetailCustomization::AddEventsCategory(IDetailLayoutBuilder
 			const UClass* EventsObjectClass   = IPF2EventEmitterInterface::GetEventsClassOfObject(SelectedObject);
 
 			if ((SelectedObjectClass != nullptr) && (EventsObjectClass != nullptr) &&
-				FBlueprintEditorUtils::CanClassGenerateEvents(EventsObjectClass))
+			    FBlueprintEditorUtils::CanClassGenerateEvents(EventsObjectClass))
 			{
 				for (TFieldIterator<FMulticastDelegateProperty> PropertyIt(EventsObjectClass, EFieldIteratorFlags::IncludeSuper); PropertyIt; ++PropertyIt)
 				{
@@ -77,7 +77,7 @@ void FInterfaceEventsDetailCustomization::AddEventsCategory(IDetailLayoutBuilder
 
 					// Check for multicast delegates that we can safely assign.
 					if (!Property->HasAnyPropertyFlags(CPF_Parm) && Property->HasAllPropertyFlags(CPF_BlueprintAssignable) &&
-						!Property->HasMetaData(HideInDetailPanelName))
+					    !Property->HasMetaData(HideInDetailPanelName))
 					{
 						const FName EventName = Property->GetFName();
 						const FText EventText = Property->GetDisplayNameText();

@@ -83,8 +83,7 @@ public:
 	)
 	static UPARAM(DisplayName = "Iterator") FPF2MapPairIterator GetMapPairIterator(
 		UPARAM(ref)
-		TMap<int32, int32>& Map
-	);
+		TMap<int32, int32>& Map);
 	DECLARE_FUNCTION(execGetMapPairIterator);
 
 	/**
@@ -100,8 +99,7 @@ public:
 	)
 	static void IncrementMapPairIterator(
 		UPARAM(ref)
-		FPF2MapPairIterator& Iterator
-	);
+		FPF2MapPairIterator& Iterator);
 	DECLARE_FUNCTION(execIncrementMapPairIterator);
 
 	/**
@@ -182,7 +180,6 @@ protected:
 		const void* InputMapAddr,
 		const FMapProperty* InputMapProperty,
 		const void* OutputMapAddr,
-		const FMapProperty* OutputMapProperty
-	);
+		const FMapProperty* OutputMapProperty);
 	// ReSharper restore IdentifierTypo
 };

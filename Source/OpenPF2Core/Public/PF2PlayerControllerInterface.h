@@ -154,8 +154,7 @@ public:
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
 	virtual void Server_ExecuteAbilityAsCharacterCommand(
 		const TScriptInterface<IPF2GameplayAbilityInterface>& Ability,
-		AActor*                                               CharacterActor
-	) = 0;
+		AActor*                                               CharacterActor) = 0;
 
 	/**
 	 * Builds and executes a command on the server for one of the characters this player controller can control.
@@ -199,8 +198,7 @@ public:
 	virtual void Server_ExecuteAbilitySpecAsCharacterCommandWithPayload(
 		const FGameplayAbilitySpecHandle AbilitySpecHandle,
 		AActor*                          CharacterActor,
-		const FGameplayEventData&        AbilityPayload
-	) = 0;
+		const FGameplayEventData&        AbilityPayload) = 0;
 
 	/**
 	 * Requests to cancel a command on the server for one of the characters this player controller can control.
