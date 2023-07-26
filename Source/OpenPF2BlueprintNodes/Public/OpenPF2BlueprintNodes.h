@@ -10,7 +10,10 @@
 #include <Modules/ModuleManager.h>
 
 /**
- * Top-level module for the OpenPF2 Editor Support plug-in.
+ * Top-level module for the OpenPF2 Blueprint Nodes plug-in.
+ *
+ * This module exposes the logic that custom OpenPF2 Blueprint nodes execute at run-time in uncooked builds. In a cooked
+ * build, nodes have already been compiled and this module is then not necessary.
  */
 class FOpenPF2BlueprintNodes final : public IModuleInterface
 {

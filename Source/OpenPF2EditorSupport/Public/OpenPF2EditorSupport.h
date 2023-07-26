@@ -16,6 +16,8 @@ OPENPF2EDITORSUPPORT_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2EditorSupport, Log, V
 
 /**
  * Top-level module for the OpenPF2 Editor Support plug-in.
+ *
+ * This exposes UI elements for use by game designers while editing Blueprints. It is not used in a shipping build.
  */
 class FOpenPF2EditorSupport final : public IModuleInterface
 {

@@ -14,6 +14,11 @@
 // =====================================================================================================================
 // Macro Declarations
 // =====================================================================================================================
+/**
+ * Thunk macro for obtaining a TMap parameter without checking its type.
+ *
+ * This is needed when interacting with pins that accept a wildcard map type.
+ */
 // ReSharper disable once IdentifierTypo
 #define P_GET_TMAP_PTR_UNCHECKED(ParamName)                                                \
 	Stack.MostRecentProperty = nullptr;                                                    \
@@ -26,6 +31,11 @@
 		return;                                                                            \
 	}
 
+/**
+ * Thunk macro for obtaining a UObject parameter without checking its type.
+ *
+ * This is needed when interacting with pins that accept a wildcard type.
+ */
 #define P_GET_OBJECT_PTR_UNCHECKED(ParamName)                                              \
 	Stack.MostRecentProperty = nullptr;                                                    \
 	Stack.StepCompiledIn<FUInt32Property>(nullptr);                                        \
