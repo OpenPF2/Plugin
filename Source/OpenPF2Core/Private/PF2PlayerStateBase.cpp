@@ -8,6 +8,8 @@
 
 #include "PF2PlayerStateBase.h"
 
+#include <Engine/World.h>
+
 #include <GameFramework/GameSession.h>
 
 #include <Kismet/GameplayStatics.h>
