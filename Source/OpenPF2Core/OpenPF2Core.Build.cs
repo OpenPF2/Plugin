@@ -28,12 +28,9 @@ public class OpenPF2Core : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new[]
 			{
-				"BlueprintGraph",
 				"CoreUObject",
 				"Engine",
 				"GameplayAbilities",
-				"KismetCompiler",
-				"UnrealEd",
 				"Slate",
 				"SlateCore",
 			}
