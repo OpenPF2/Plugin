@@ -30,7 +30,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPF2ClientAbilitiesChangeDelegate);
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2AbilitySystemInterface : public UPF2ActorComponentInterface
 {
-    GENERATED_BODY()
+	GENERATED_BODY()
 };
 
 /**
@@ -46,7 +46,7 @@ class UPF2AbilitySystemInterface : public UPF2ActorComponentInterface
  */
 class OPENPF2CORE_API IPF2AbilitySystemInterface : public IPF2ActorComponentInterface
 {
-    GENERATED_BODY()
+	GENERATED_BODY()
 
 public:
 	/**
@@ -61,17 +61,17 @@ public:
 	 *	Either the gameplay ability as an instance of IPF2GameplayAbilityInterface, or nullptr if: an instance of the
 	 *	ability is not available, the ability is marked pending for kill, or the ability is not OpenPF2-compatible.
 	 */
-    UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
 	virtual TScriptInterface<IPF2GameplayAbilityInterface> GetAbilityInstanceFromSpec(
 		const FGameplayAbilitySpec& AbilitySpec) const = 0;
 
-    /**
-     * Gets all activatable OpenPF2-compatible abilities that were granted to this character.
-     *
-     * @return
-     *	The abilities this character possesses.
-     */
-    UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
+	/**
+	 * Gets all activatable OpenPF2-compatible abilities that were granted to this character.
+	 *
+	 * @return
+	 *	The abilities this character possesses.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
 	virtual TArray<TScriptInterface<IPF2GameplayAbilityInterface>> GetAbilities() const = 0;
 
 	/**
@@ -89,7 +89,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
 	virtual TArray<TScriptInterface<IPF2GameplayAbilityInterface>> GetAbilitiesByTags(
 		const FGameplayTagContainer& Tags,
-		bool bExactMatch = true) const = 0;
+		bool                         bExactMatch = true) const = 0;
 
 	/**
 	 * Gets whether passively-applied Gameplay Effects are currently active on this ASC.
@@ -121,8 +121,8 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
 	virtual TArray<FGameplayAbilitySpec> FindAbilitySpecsByTags(
-	    const FGameplayTagContainer& Tags,
-	    bool                         bOnlyAbilitiesThatSatisfyTagRequirements = true) const = 0;
+		const FGameplayTagContainer& Tags,
+		bool                         bOnlyAbilitiesThatSatisfyTagRequirements = true) const = 0;
 
 	/**
 	 * Finds the first granted ability having the specified tags.
@@ -146,8 +146,7 @@ public:
 		bool& OutMatchFound,
 
 		UPARAM(DisplayName="Only Abilities that Satisfy Tag Requirements")
-		const bool bInOnlyAbilitiesThatSatisfyTagRequirements = true
-	) const = 0;
+		const bool bInOnlyAbilitiesThatSatisfyTagRequirements = true) const = 0;
 
 	/**
 	 * Finds the handles of one or more granted abilities by their tags.
@@ -162,9 +161,8 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
 	virtual TArray<FGameplayAbilitySpecHandle> FindAbilityHandlesByTags(
-	    const FGameplayTagContainer& Tags,
-	    const bool                   bOnlyAbilitiesThatSatisfyTagRequirements = true
-	) const = 0;
+		const FGameplayTagContainer& Tags,
+		const bool                   bOnlyAbilitiesThatSatisfyTagRequirements = true) const = 0;
 
 	/**
 	 * Finds the handle of the first granted ability having the specified tags.
@@ -188,8 +186,7 @@ public:
 		bool& OutMatchFound,
 
 		UPARAM(DisplayName="Only Abilities that Satisfy Tag Requirements")
-		const bool bInOnlyAbilitiesThatSatisfyTagRequirements = true
-	) const = 0;
+		const bool bInOnlyAbilitiesThatSatisfyTagRequirements = true) const = 0;
 
 	/**
 	 * Triggers an ability by handle, providing the given payload as event data.
@@ -208,8 +205,8 @@ public:
 	 *	- false if the ASC knows that the ability is not activated.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
-    virtual bool TriggerAbilityWithPayload(FGameplayAbilitySpecHandle AbilitySpecHandle,
-                                           const FGameplayEventData   Payload) = 0;
+	virtual bool TriggerAbilityWithPayload(FGameplayAbilitySpecHandle AbilitySpecHandle,
+	                                       const FGameplayEventData   Payload) = 0;
 
 	/**
 	 * Adds a passively-applied Gameplay Effect to this ASC.
@@ -244,9 +241,8 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
 	virtual void AddPassiveGameplayEffectWithWeight(
-		const FName WeightGroup,
-		const TSubclassOf<UGameplayEffect> Effect
-	) = 0;
+		const FName                        WeightGroup,
+		const TSubclassOf<UGameplayEffect> Effect) = 0;
 
 	/**
 	 * Sets all of the passive Gameplay Effects on this ASC to the given set.

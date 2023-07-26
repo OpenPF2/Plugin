@@ -26,7 +26,7 @@ UPF2K2Node_EventEmitterBoundEvent* UPF2K2Node_EventEmitterBoundEvent::CreateNew(
 	UPF2K2Node_EventEmitterBoundEvent* NewNode = nullptr;
 
 	if ((Blueprint != nullptr) && (EmitterVariable != nullptr) && (EmitterClass != nullptr) &&
-		(EventName != NAME_None))
+	    (EventName != NAME_None))
 	{
 		const UClass* EventsObjectClass = IPF2EventEmitterInterface::GetEventsClassOfCDO(EmitterClass);
 

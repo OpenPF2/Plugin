@@ -52,7 +52,7 @@ FText UPF2K2Node_MapInvert::GetTooltipText() const
 void UPF2K2Node_MapInvert::AllocateDefaultPins()
 {
 	FCreatePinParams InputParams,
-					 OutputParams;
+	                 OutputParams;
 
 	// Input pin.
 	InputParams.ContainerType = EPinContainerType::Map;

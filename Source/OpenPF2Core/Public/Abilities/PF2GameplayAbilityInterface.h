@@ -88,8 +88,7 @@ public:
 		const TScriptInterface<IPF2CharacterInterface> Character,
 
 		UPARAM(DisplayName="Spec Found")
-		bool& bOutSpecFound
-	) const = 0;
+		bool& bOutSpecFound) const = 0;
 
 	/**
 	 * Locates and returns the handle of the ability spec in the given character's ASC that corresponds to this ability.
@@ -107,6 +106,5 @@ public:
 		const TScriptInterface<IPF2CharacterInterface> Character,
 
 		UPARAM(DisplayName="Spec Handle Found")
-		bool& bOutSpecHandleFound
-	) const = 0;
+		bool& bOutSpecHandleFound) const = 0;
 };
