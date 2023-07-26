@@ -18,8 +18,8 @@ class IPF2EventEmitterInterface;
  *
  * Events Objects are exposed through OpenPF2 interfaces to enable consumers of an interface to bind delegates without
  * having to be coupled to the specific type of the object implementing each interface. This customization allows the
- * delegates exposed by an Events Object to be used in a Blueprint in the same way as delegated directly on the object
- * that implements the interface.
+ * delegates exposed by an Events Object to be used in a Blueprint in the same way as delegates directly on the object
+ * that implements the interface (the "Event Emitter").
  *
  * @see IPF2EventEmitterInterface
  */

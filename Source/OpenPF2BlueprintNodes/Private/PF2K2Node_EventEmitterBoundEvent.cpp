@@ -282,7 +282,7 @@ void UPF2K2Node_EventEmitterBoundEvent::HandleVariableRenamed(UBlueprint*  InBlu
 	if ((InVariableClass != nullptr) && InVariableClass->IsChildOf(InBlueprint->GeneratedClass))
 	{
 		// This could be the case if the component that this was originally bound to was removed, and a new one was
-		// added in it's place. @see UE-88511
+		// added in its place. @see UE-88511
 		if (InNewVarName == this->EmitterVariableName)
 		{
 			FCompilerResultsLog LogResults;
