@@ -30,10 +30,15 @@ APF2CharacterBase::APF2CharacterBase() :
 
 void APF2CharacterBase::PossessedBy(AController* NewController)
 {
+	const AController* OldController = this->GetController();
+
 	Super::PossessedBy(NewController);
 
-	// Init/re-init. abilities on the server side.
-	this->InitializeOrRefreshAbilities();
+	if (OldController != NewController)
+	{
+		// Init/re-init. abilities on the server side.
+		this->InitializeOrRefreshAbilities();
+	}
 }
 
 void APF2CharacterBase::OnRep_Controller()
