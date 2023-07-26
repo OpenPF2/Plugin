@@ -67,6 +67,17 @@ public:
 	 */
 	UGameplayAbility* GetAbility() const
 	{
-		return this->Ability.GetDefaultObject();
+		UGameplayAbility* AbilityCDO;
+
+		if (this->Ability == nullptr)
+		{
+			AbilityCDO = nullptr;
+		}
+		else
+		{
+			AbilityCDO = this->Ability.GetDefaultObject();
+		}
+
+		return AbilityCDO;
 	};
 };
