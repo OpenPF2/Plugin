@@ -131,6 +131,9 @@ protected:
 	 *	The binding that specifies the target variable/property and target event.
 	 * @param DelegateProperty
 	 *	The delegate property of the events object from which an event will be unbound.
+	 *
+	 * @return
+	 *	A script delegate that references the delegate property.
 	 */
 	FScriptDelegate BuildScriptDelegate(UObject*                                  Owner,
 	                                    const FBlueprintComponentDelegateBinding& Binding,
