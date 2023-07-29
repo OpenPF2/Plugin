@@ -129,7 +129,7 @@ protected:
 	 * @return
 	 *	OpenPF2-specific controllers for all players in the world.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Mode of Play Rule Sets|Character Initiative Queues")
 	TArray<TScriptInterface<IPF2PlayerControllerInterface>> GetPlayerControllers() const;
 
 	/**
@@ -138,7 +138,7 @@ protected:
 	 * @return
 	 *	OpenPF2-specific controllers for all players in the world.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Mode of Play Rule Sets|Character Initiative Queues")
 	TArray<TScriptInterface<IPF2CharacterInterface>> GetPlayerControlledCharacters() const;
 
 	/**

@@ -153,6 +153,6 @@ protected:
 	 * @param NewActiveCharacter
 	 *	The character to make the active character.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Turns")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Encounters")
 	void SetActiveCharacter(const TScriptInterface<IPF2CharacterInterface>& NewActiveCharacter);
 };

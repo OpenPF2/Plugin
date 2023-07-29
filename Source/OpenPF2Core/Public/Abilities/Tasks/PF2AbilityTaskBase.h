@@ -62,7 +62,7 @@ protected:
 	 *	The ability as a PF2 ability script interface instance. If the ability is unset or not OpenPF2-compatible, the
 	 *	script interface wraps nullptr.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Abilities")
 	TScriptInterface<IPF2GameplayAbilityInterface> GetAbility() const;
 
 	/**
@@ -96,7 +96,7 @@ protected:
 	 *	The ASC as a PF2 ASC script interface instance. If the ASC is unset or not OpenPF2-compatible, the script
 	 *	interface wraps nullptr.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Abilities")
 	TScriptInterface<IPF2AbilitySystemInterface> GetAbilitySystemComponent() const;
 
 	/**
@@ -106,6 +106,6 @@ protected:
 	 *	The ASC as a PF2 character ASC script interface instance. If the ASC is unset or not an OpenPF2 character ASC,
 	 *	the script interface wraps nullptr.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Abilities")
 	TScriptInterface<IPF2CharacterAbilitySystemInterface> GetCharacterAbilitySystemComponent() const;
 };

@@ -51,7 +51,7 @@ protected:
 	 * @return
 	 *	OpenPF2-specific controllers for all players in the world.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Characters")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets")
 	TArray<TScriptInterface<IPF2PlayerControllerInterface>> GetPlayerControllers() const;
 
 	/**
@@ -60,6 +60,6 @@ protected:
 	 * @return
 	 *	OpenPF2-specific controllers for all players in the world.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Characters")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets")
 	TArray<TScriptInterface<IPF2CharacterInterface>> GetPlayerControlledCharacters() const;
 };

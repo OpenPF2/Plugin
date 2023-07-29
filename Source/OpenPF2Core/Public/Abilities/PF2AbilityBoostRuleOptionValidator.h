@@ -62,7 +62,7 @@ public:
 	 * @return
 	 *	The number of boosts that can still be applied.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Ability Boosts|Rule Option Validators")
 	int32 GetRemainingBoostCount() const;
 
 	/**
@@ -71,7 +71,7 @@ public:
 	 * @return
 	 *	The set of abilities that can be boosted, according to the rule options in this matcher.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Ability Boosts|Rule Option Validators")
 	TSet<EPF2CharacterAbilityScoreType> GetRemainingOptions();
 
 	/**
@@ -80,7 +80,7 @@ public:
 	 * @return
 	 *	true if the number of remaining boosts is greater than 0; or, false, otherwise.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Ability Boosts|Rule Option Validators")
 	bool HasRemainingBoosts();
 
 	/**
@@ -91,7 +91,7 @@ public:
 	 * @param NewRuleOptions
 	 *	The options to add to the validator.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Ability Boosts|Rule Option Validators")
 	void AppendRuleOptions(const TArray<FPF2AbilityBoostRuleOption> NewRuleOptions);
 
 	/**
@@ -102,7 +102,7 @@ public:
 	 * @param RuleOption
 	 *	The option to add to the validator.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Ability Boosts|Rule Option Validators")
 	void AddRuleOption(const FPF2AbilityBoostRuleOption RuleOption);
 
 	/**
@@ -114,7 +114,7 @@ public:
 	 * @return
 	 *	true if a boost of the specified ability would be allowed; false if it would not be allowed.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Ability Boosts|Rule Option Validators")
 	bool CanApplyAbilityBoost(EPF2CharacterAbilityScoreType AbilityScoreType);
 
 	/**
@@ -126,7 +126,7 @@ public:
 	 * @param AbilityScoreType
 	 *	The type of ability score that is being boosted.
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Ability Boosts|Rule Option Validators")
 	void ApplyAbilityBoost(EPF2CharacterAbilityScoreType AbilityScoreType);
 
 protected:
