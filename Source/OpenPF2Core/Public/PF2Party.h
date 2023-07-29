@@ -93,6 +93,9 @@ public:
 	virtual int32 GetPartyIndex() const override;
 
 	UFUNCTION(BlueprintCallable)
+	virtual void SetPartyIndex(int32 NewPartyIndex) override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual TArray<TScriptInterface<IPF2PlayerControllerInterface>> GetMemberControllers() const override;
 
 	UFUNCTION(BlueprintCallable)
@@ -121,12 +124,6 @@ public:
 	// =================================================================================================================
 	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
-
-	// =================================================================================================================
-	// Public Methods
-	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
-	virtual void SetPartyIndex(int32 NewPartyIndex);
 
 	// =================================================================================================================
 	// Public Fields - Multicast Delegates

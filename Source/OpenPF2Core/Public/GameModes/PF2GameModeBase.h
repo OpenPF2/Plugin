@@ -174,7 +174,10 @@ protected:
 	 *	The new party instance.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Mode")
-	APF2Party* SpawnParty(TSubclassOf<APF2Party> PartyType);
+	TScriptInterface<IPF2PartyInterface> SpawnParty(
+		UPARAM(meta=(MustImplement="/Script/OpenPF2Core.PF2PartyInterface"))
+		const TSubclassOf<AActor> PartyType
+	);
 
 	/**
 	 * Attempts to change the current play mode for all characters in the loaded level.

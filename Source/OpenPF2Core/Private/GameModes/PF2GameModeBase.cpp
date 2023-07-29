@@ -374,13 +374,30 @@ void APF2GameModeBase::AssignPlayerIndex(const APlayerController* PlayerControll
 }
 
 // ReSharper disable once CppUE4BlueprintCallableFunctionMayBeConst
-APF2Party* APF2GameModeBase::SpawnParty(const TSubclassOf<APF2Party> PartyType)
+TScriptInterface<IPF2PartyInterface> APF2GameModeBase::SpawnParty(const TSubclassOf<AActor> PartyType)
 {
-	APF2Party* Party = this->GetWorld()->SpawnActor<APF2Party>(PartyType);
+	TScriptInterface<IPF2PartyInterface> NewParty;
 
-	Party->SetPartyIndex(this->GeneratePartyIndex());
+	if (PartyType->ImplementsInterface(UPF2PartyInterface::StaticClass()))
+	{
+		IPF2PartyInterface* Party = this->GetWorld()->SpawnActor<IPF2PartyInterface>(PartyType);
 
-	return Party;
+		Party->SetPartyIndex(this->GeneratePartyIndex());
+
+		NewParty = PF2InterfaceUtilities::ToScriptInterface(Party);
+	}
+	else
+	{
+		UE_LOG(
+			LogPf2Core,
+			Error,
+			TEXT("Party Type must implement IPF2PartyInterface.")
+		);
+
+		NewParty = TScriptInterface<IPF2PartyInterface>(nullptr);
+	}
+
+	return NewParty;
 }
 
 void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeOfPlay)
