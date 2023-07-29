@@ -69,25 +69,18 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2OwnerTrackingInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2PartyInterface> GetParty() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void SetParty(const TScriptInterface<IPF2PartyInterface> NewParty) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2PlayerStateInterface> GetStateOfOwningPlayer() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void SetOwningPlayerByController(const TScriptInterface<IPF2PlayerControllerInterface> NewController) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void SetOwningPlayerByState(const TScriptInterface<IPF2PlayerStateInterface> NewPlayerState) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual bool IsSamePartyAsActor(AActor* OtherActor) const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual bool IsSamePartyAsPlayerWithController(
 		const TScriptInterface<IPF2PlayerControllerInterface> OtherController
 	) const override;
@@ -95,13 +88,11 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2ActorComponentInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual UActorComponent* ToActorComponent() override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
 
 	// =================================================================================================================

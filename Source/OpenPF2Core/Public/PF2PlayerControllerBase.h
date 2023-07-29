@@ -75,50 +75,42 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2PlayerControllerInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2PlayerStateInterface> GetPlayerState() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual APlayerController* ToPlayerController() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual FHitResult GetTargetLocation() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void ClearTargetLocation() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetControllableCharacters() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2CharacterInterface> GetControlledCharacter() const override;
 
 	virtual void Native_OnPlayableCharactersStarting(TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet) override;
 
 	virtual void Native_OnModeOfPlayChanged(EPF2ModeOfPlayType NewMode) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void GiveCharacter(const TScriptInterface<IPF2CharacterInterface>& GivenCharacter) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter) override;
 
-	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
+	UFUNCTION(Server, Reliable, WithValidation)
 	virtual void Server_ExecuteAbilityAsCharacterCommand(
 		const TScriptInterface<IPF2GameplayAbilityInterface>& Ability,
 		AActor*                                               CharacterActor) override;
 
-	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
+	UFUNCTION(Server, Reliable, WithValidation)
 	virtual void Server_ExecuteAbilitySpecAsCharacterCommand(const FGameplayAbilitySpecHandle AbilitySpecHandle,
 	                                                         AActor*                          CharacterActor) override;
 
-	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
+	UFUNCTION(Server, Reliable, WithValidation)
 	virtual void Server_ExecuteAbilitySpecAsCharacterCommandWithPayload(
 		const FGameplayAbilitySpecHandle AbilitySpecHandle,
 		AActor*                          CharacterActor,
 		const FGameplayEventData&        AbilityPayload) override;
 
-	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
+	UFUNCTION(Server, Reliable, WithValidation)
 	virtual void Server_CancelCharacterCommand(AInfo* Command) override;
 
 	UFUNCTION(NetMulticast, Reliable)
@@ -130,7 +122,6 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
 
 protected:

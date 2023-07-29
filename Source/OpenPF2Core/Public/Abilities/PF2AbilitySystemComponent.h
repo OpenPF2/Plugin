@@ -107,14 +107,11 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2AbilitySystemInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2GameplayAbilityInterface> GetAbilityInstanceFromSpec(
 		const FGameplayAbilitySpec& AbilitySpec) const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TArray<TScriptInterface<IPF2GameplayAbilityInterface>> GetAbilities() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TArray<TScriptInterface<IPF2GameplayAbilityInterface>> GetAbilitiesByTags(
 		const FGameplayTagContainer& Tags,
 		bool bExactMatch = true) const override;
@@ -124,15 +121,12 @@ public:
 		return this->ActivatedWeightGroups.Num() != 0;
 	}
 
-	UFUNCTION(BlueprintCallable)
 	virtual UAbilitySystemComponent* ToAbilitySystemComponent() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TArray<FGameplayAbilitySpec> FindAbilitySpecsByTags(
 		const FGameplayTagContainer& Tags,
 		bool                         bOnlyAbilitiesThatSatisfyTagRequirements = true) const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual FGameplayAbilitySpec FindAbilitySpecByTags(
 		UPARAM(DisplayName="Tags")
 		const FGameplayTagContainer& InTags,
@@ -144,13 +138,11 @@ public:
 		const bool bInOnlyAbilitiesThatSatisfyTagRequirements = true
 	) const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TArray<FGameplayAbilitySpecHandle> FindAbilityHandlesByTags(
 		const FGameplayTagContainer& Tags,
 		const bool                   bOnlyAbilitiesThatSatisfyTagRequirements = true
 	) const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual FGameplayAbilitySpecHandle FindAbilityHandleByTags(
 		UPARAM(DisplayName="Tags")
 		const FGameplayTagContainer& InTags,
@@ -162,14 +154,11 @@ public:
 		const bool bInOnlyAbilitiesThatSatisfyTagRequirements = true
 	) const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual bool TriggerAbilityWithPayload(const FGameplayAbilitySpecHandle AbilityHandle,
 	                                       const FGameplayEventData         Payload) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void AddPassiveGameplayEffect(TSubclassOf<UGameplayEffect> Effect) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void AddPassiveGameplayEffectWithWeight(
 		const FName WeightGroup,
 		const TSubclassOf<UGameplayEffect> Effect
@@ -177,46 +166,32 @@ public:
 
 	virtual void SetPassiveGameplayEffects(const TMultiMap<FName, TSubclassOf<UGameplayEffect>> Effects) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void RemoveAllPassiveGameplayEffects() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void ActivateAllPassiveGameplayEffects() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void DeactivateAllPassiveGameplayEffects() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TSet<FName> ActivatePassiveGameplayEffectsAfter(const FName StartingWeightGroup) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TSet<FName> DeactivatePassiveGameplayEffectsAfter(const FName StartingWeightGroup) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual bool ActivatePassiveGameplayEffects(const FName WeightGroup) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual bool DeactivatePassiveGameplayEffects(const FName WeightGroup) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void AddDynamicTag(const FGameplayTag Tag) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void AppendDynamicTags(const FGameplayTagContainer Tags) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void SetDynamicTags(const FGameplayTagContainer Tags) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void RemoveDynamicTag(const FGameplayTag Tag) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void RemoveDynamicTags(const FGameplayTagContainer Tags) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void RemoveAllDynamicTags() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual FGameplayTagContainer GetActiveGameplayTags() const override;
 
 	virtual FPF2ClientAbilitiesChangeDelegate* GetClientAbilityChangeDelegate() override;
@@ -224,38 +199,30 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2CharacterAbilitySystemInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2CharacterInterface> GetCharacter() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual int32 GetCharacterLevel() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> GetAbilityScoreValues() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TArray<TScriptInterface<IPF2AbilityBoostInterface>> GetPendingAbilityBoosts() const override;
 
-	UFUNCTION(BlueprintCallable)
-	virtual FORCEINLINE TSubclassOf<UGameplayEffect> GetBoostEffectForAbility(
+	virtual TSubclassOf<UGameplayEffect> GetBoostEffectForAbility(
 		const EPF2CharacterAbilityScoreType AbilityScore) override
 	{
 		return this->AbilityBoostEffects[AbilityScore];
 	}
 
-	UFUNCTION(BlueprintCallable)
 	virtual void ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore) override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2ActorComponentInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual UActorComponent* ToActorComponent() override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
 
 protected:

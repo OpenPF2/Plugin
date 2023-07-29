@@ -86,43 +86,31 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2PartyInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual FText GetPartyName() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual int32 GetPartyIndex() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void SetPartyIndex(int32 NewPartyIndex) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TArray<TScriptInterface<IPF2PlayerControllerInterface>> GetMemberControllers() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TArray<TScriptInterface<IPF2PlayerStateInterface>> GetMemberStates() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetMemberCharacters() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void GetBounds(FVector& CenterPoint, FVector& BoxExtent) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void AddPlayerToPartyByController(const TScriptInterface<IPF2PlayerControllerInterface>& Controller) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void AddPlayerToPartyByState(const TScriptInterface<IPF2PlayerStateInterface>& PlayerState) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void RemovePlayerFromPartyByController(const TScriptInterface<IPF2PlayerControllerInterface>& Controller) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void RemovePlayerFromPartyByState(const TScriptInterface<IPF2PlayerStateInterface>& PlayerState) override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
 
 	// =================================================================================================================

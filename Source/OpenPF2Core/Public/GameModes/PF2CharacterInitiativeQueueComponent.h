@@ -85,38 +85,29 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2CharacterInitiativeQueueInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual bool IsEmpty() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void SetCharacterInitiative(const TScriptInterface<IPF2CharacterInterface>& Character,
 	                                    const int32                                     Initiative) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual bool IsInitiativeSetForCharacter(const TScriptInterface<IPF2CharacterInterface>& Character) const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void ClearInitiativeForCharacter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void ClearInitiativeForAllCharacters() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2CharacterInterface> GetNextCharacterByInitiative() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetCharactersInInitiativeOrder() const override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2ActorComponentInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual UActorComponent* ToActorComponent() override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
 
 protected:

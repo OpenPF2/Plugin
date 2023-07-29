@@ -60,31 +60,24 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2GameplayAbilityInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual UTexture2D* GetAbilityIcon() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual FText GetAbilityLabel() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual FText GetAbilityDescription() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual UGameplayAbility* ToGameplayAbility() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual FGameplayAbilitySpec ToGameplayAbilitySpecForCharacter(
 		const TScriptInterface<IPF2CharacterInterface> Character,
 		bool& bOutSpecFound
 	) const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual FGameplayAbilitySpecHandle ToGameplayAbilitySpecHandleForCharacter(
 		const TScriptInterface<IPF2CharacterInterface> Character,
 		bool& bOutSpecHandleFound

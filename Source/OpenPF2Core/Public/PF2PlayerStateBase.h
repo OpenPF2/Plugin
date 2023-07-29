@@ -76,37 +76,29 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2PlayerStateInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual int32 GetPlayerIndex() const override;
 
 	virtual void SetPlayerIndex(int32 NewPlayerIndex) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2PartyInterface> GetParty() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void SetParty(const TScriptInterface<IPF2PartyInterface> NewParty) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerControllerIntf() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual bool IsSamePartyAsPlayerWithController(
 		const TScriptInterface<IPF2PlayerControllerInterface>& OtherPlayerController
 	) const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual bool IsSamePartyAsPlayerWithState(
 		const TScriptInterface<IPF2PlayerStateInterface>& OtherPlayerState
 	) const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual APlayerState* ToPlayerState() override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
 
 protected:

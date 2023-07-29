@@ -126,43 +126,32 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2CommandQueueInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual void Enqueue(const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void PeekNext(TScriptInterface<IPF2CharacterCommandInterface>& NextCommand) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void PopNext(TScriptInterface<IPF2CharacterCommandInterface>& NextCommand) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void DropNext() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual EPF2CommandExecuteImmediatelyResult PopAndExecuteNext() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual bool Remove(const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual int Count() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void Clear() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TArray<TScriptInterface<IPF2CharacterCommandInterface>> ToArray() const override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2ActorComponentInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual UActorComponent* ToActorComponent() override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
 
 protected:

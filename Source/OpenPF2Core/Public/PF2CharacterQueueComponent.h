@@ -95,43 +95,32 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2CharacterQueueInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual UPF2CharacterQueueInterfaceEvents* GetEvents() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2CharacterInterface> GetControlledCharacter() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void Add(TScriptInterface<IPF2CharacterInterface> Character) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual bool Remove(TScriptInterface<IPF2CharacterInterface> Character) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual int Count() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void Clear() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2CharacterInterface> PreviousCharacter() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2CharacterInterface> NextCharacter() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TArray<TScriptInterface<IPF2CharacterInterface>> ToArray() const override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2ActorComponentInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual UActorComponent* ToActorComponent() override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
 
 protected:
