@@ -82,13 +82,10 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2AbilityBoostInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual FText GetDescription() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TArray<FPF2AbilityBoostRuleOption> GetBoostRuleOptions() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual UGameplayAbility* ToGameplayAbility() override;
 
 protected:

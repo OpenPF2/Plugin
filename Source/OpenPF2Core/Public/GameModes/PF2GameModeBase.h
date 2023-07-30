@@ -56,44 +56,34 @@ public:
 	virtual TScriptInterface<IPF2ModeOfPlayRuleSetInterface> CreateModeOfPlayRuleSet(
 		const EPF2ModeOfPlayType ModeOfPlay) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void TransferCharacterOwnership(
 		const TScriptInterface<IPF2CharacterInterface>        Character,
 		const TScriptInterface<IPF2PlayerControllerInterface> NewController
 	) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void SwitchPartyOfPlayer(
 		const TScriptInterface<IPF2PlayerControllerInterface> PlayerController,
 		const TScriptInterface<IPF2PartyInterface>            NewParty
 	) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void SwitchPartyOfPlayerAndOwnedCharacters(
 		const TScriptInterface<IPF2PlayerControllerInterface> PlayerController,
 		const TScriptInterface<IPF2PartyInterface>            NewParty
 	) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void RequestEncounterMode() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void RequestExplorationMode() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void RequestDowntimeMode() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void AddCharacterToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void RemoveCharacterFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual EPF2CommandExecuteOrQueueResult AttemptToExecuteOrQueueCommand(
 		TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void AttemptToCancelCommand(TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
 protected:
@@ -174,7 +164,10 @@ protected:
 	 *	The new party instance.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Mode")
-	APF2Party* SpawnParty(TSubclassOf<APF2Party> PartyType);
+	TScriptInterface<IPF2PartyInterface> SpawnParty(
+		UPARAM(meta=(MustImplement="/Script/OpenPF2Core.PF2PartyInterface"))
+		const TSubclassOf<AActor> PartyType
+	);
 
 	/**
 	 * Attempts to change the current play mode for all characters in the loaded level.

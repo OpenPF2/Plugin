@@ -48,6 +48,11 @@ int32 APF2Party::GetPartyIndex() const
 	return this->PartyIndex;
 }
 
+void APF2Party::SetPartyIndex(const int32 NewPartyIndex)
+{
+	this->PartyIndex = NewPartyIndex;
+}
+
 TArray<TScriptInterface<IPF2PlayerControllerInterface>> APF2Party::GetMemberControllers() const
 {
 	return PF2ArrayUtilities::Map<TScriptInterface<IPF2PlayerControllerInterface>>(
@@ -168,11 +173,6 @@ FString APF2Party::GetIdForLogs() const
 			this->GetPartyIndex()
 		}
 	);
-}
-
-void APF2Party::SetPartyIndex(const int32 NewPartyIndex)
-{
-	this->PartyIndex = NewPartyIndex;
 }
 
 void APF2Party::Native_OnPlayerAdded(const TScriptInterface<IPF2PlayerStateInterface>& PlayerState)

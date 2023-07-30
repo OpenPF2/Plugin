@@ -74,6 +74,17 @@ public:
 	virtual int32 GetPartyIndex() const = 0;
 
 	/**
+	 * Sets the index of this party.
+	 *
+	 * This should only be invoked by the game mode.
+	 *
+	 * @param NewPartyIndex
+	 *	The new zero-based numeric index of this party.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Parties")
+	virtual void SetPartyIndex(int32 NewPartyIndex) = 0;
+
+	/**
 	 * Gets player controllers for all players belonging to this party.
 	 *
 	 * - On the server: This will contain all player controllers affiliated with this party.

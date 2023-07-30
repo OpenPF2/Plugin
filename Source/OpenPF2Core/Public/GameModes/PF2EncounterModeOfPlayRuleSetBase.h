@@ -76,58 +76,42 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2EncounterModeOfPlayRuleSetInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual bool HavePlayableCharacters() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void SetCharacterInitiative(const TScriptInterface<IPF2CharacterInterface>& Character,
 	                                    const int32                                     Initiative) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual bool IsInitiativeSetForCharacter(const TScriptInterface<IPF2CharacterInterface>& Character) const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void ClearInitiativeForCharacter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void ClearInitiativeForAllCharacters() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2CharacterInterface> GetNextCharacterByInitiative() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetAllCharactersInInitiativeOrder() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2CharacterInterface> GetActiveCharacter() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void StartTurnForCharacter(const TScriptInterface<IPF2CharacterInterface> Character) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void EndTurnForCharacter(const TScriptInterface<IPF2CharacterInterface> Character) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual bool DoesCharacterHaveNextCommandQueued(const TScriptInterface<IPF2CharacterInterface>& Character) const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void QueueCommandForCharacter(
 		const TScriptInterface<IPF2CharacterInterface>&        Character,
 		const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void CancelQueuedCommandsForAllCharacters() override;
 
-	UFUNCTION(BlueprintCallable)
-	virtual UPARAM(DisplayName = "Activation Result") EPF2CommandExecuteImmediatelyResult
-		ExecuteNextQueuedCommandForCharacter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
+	virtual EPF2CommandExecuteImmediatelyResult ExecuteNextQueuedCommandForCharacter(
+		const TScriptInterface<IPF2CharacterInterface>& Character) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void PeekNextQueuedCommandForCharacter(
 		const TScriptInterface<IPF2CharacterInterface>&  Character,
 		TScriptInterface<IPF2CharacterCommandInterface>& NextCommand) const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void PopNextCommandQueuedForCharacter(
 		const TScriptInterface<IPF2CharacterInterface>&  Character,
 		TScriptInterface<IPF2CharacterCommandInterface>& NextCommand) override;
@@ -153,6 +137,6 @@ protected:
 	 * @param NewActiveCharacter
 	 *	The character to make the active character.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Turns")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Encounters")
 	void SetActiveCharacter(const TScriptInterface<IPF2CharacterInterface>& NewActiveCharacter);
 };

@@ -444,54 +444,40 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
 
 	// =================================================================================================================
 	// Public Methods - IAbilitySystemInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2CharacterInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual FText GetCharacterName() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual UTexture2D* GetCharacterPortrait() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual int32 GetCharacterLevel() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2CharacterAbilitySystemInterface> GetCharacterAbilitySystemComponent() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2CommandQueueInterface> GetCommandQueueComponent() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2OwnerTrackingInterface> GetOwnerTrackingComponent() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2PlayerControllerInterface> GetPlayerController() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TArray<TScriptInterface<IPF2AbilityBoostInterface>> GetPendingAbilityBoosts() const override;
 
 	virtual void InitializeOrRefreshAbilities() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual AActor* ToActor() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual APawn* ToPawn() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual bool IsAlive() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void AddAbilityBoostSelection(const TSubclassOf<UPF2AbilityBoostBase>   BoostGameplayAbility,
 	                                      const TSet<EPF2CharacterAbilityScoreType> SelectedAbilities) override;
 
@@ -511,16 +497,12 @@ public:
 	 *	5. During activation, the boost GA calls the ApplyAbilityBoost() method on the ASC for this character to
 	 *	   activate each valid boost selection.
 	 */
-	UFUNCTION(BlueprintCallable)
 	virtual void ApplyAbilityBoostSelections() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void ActivatePassiveGameplayEffects() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void DeactivatePassiveGameplayEffects() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void AddAndActivateGameplayAbility(const TSubclassOf<UGameplayAbility> Ability) override;
 
 	virtual void Native_OnDamageReceived(const float                         Damage,

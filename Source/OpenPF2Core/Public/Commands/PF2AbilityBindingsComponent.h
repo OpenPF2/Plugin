@@ -156,28 +156,20 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2AbilityBindingsInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual UPF2AbilityBindingsInterfaceEvents* GetEvents() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>> GetBindingsMap() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void SetBinding(UInputAction* Action, const FGameplayAbilitySpec& AbilitySpec) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void ClearBindings() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void ClearBinding(const UInputAction* Action) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void LoadAbilitiesFromCharacter() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void ConnectToInput(UEnhancedInputComponent* NewInputComponent) override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void DisconnectFromInput() override;
 
 	virtual void ExecuteBoundAbility(const UInputAction*              Action,
@@ -186,13 +178,11 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2ActorComponentInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual UActorComponent* ToActorComponent() override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
 
 protected:

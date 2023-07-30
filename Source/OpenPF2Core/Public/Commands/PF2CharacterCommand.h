@@ -172,34 +172,25 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2CharacterCommandInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual TScriptInterface<IPF2CharacterInterface> GetTargetCharacter() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual UTexture2D* GetCommandIcon() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual FText GetCommandLabel() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual FText GetCommandDescription() const override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual EPF2CommandExecuteOrQueueResult AttemptExecuteOrQueue() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual EPF2CommandExecuteImmediatelyResult AttemptExecuteImmediately() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual void AttemptCancel() override;
 
-	UFUNCTION(BlueprintCallable)
 	virtual AInfo* ToActor() override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
-	UFUNCTION(BlueprintCallable)
 	virtual FString GetIdForLogs() const override;
 
 protected:
