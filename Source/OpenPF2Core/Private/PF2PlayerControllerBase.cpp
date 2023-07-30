@@ -465,7 +465,7 @@ TScriptInterface<IPF2CharacterQueueInterface> APF2PlayerControllerBase::GetChara
 }
 
 void APF2PlayerControllerBase::Native_OnPlayerStateAvailable(
-	const TScriptInterface<IPF2PlayerStateInterface> NewPlayerState)
+	const TScriptInterface<IPF2PlayerStateInterface>& NewPlayerState)
 {
 	if (NewPlayerState.GetInterface() == nullptr)
 	{

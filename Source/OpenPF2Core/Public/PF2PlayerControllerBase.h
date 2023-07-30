@@ -171,7 +171,7 @@ protected:
 	 *	The player state that was just made available.
 	 */
 	UFUNCTION()
-	virtual void Native_OnPlayerStateAvailable(TScriptInterface<IPF2PlayerStateInterface> NewPlayerState);
+	virtual void Native_OnPlayerStateAvailable(const TScriptInterface<IPF2PlayerStateInterface>& NewPlayerState);
 
 	/**
 	 * Callback invoked in C++ code when the player has taken ownership of a character.

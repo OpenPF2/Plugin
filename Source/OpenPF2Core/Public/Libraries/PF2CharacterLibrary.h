@@ -72,6 +72,6 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, Category = "OpenPF2|Characters|Components", meta = (DeterminesOutputType = "Interface"))
 	static TScriptInterface<IInterface> GetComponentByInterface(
-		const TScriptInterface<IPF2CharacterInterface> Character,
-		const TSubclassOf<UInterface>                  Interface);
+		const TScriptInterface<IPF2CharacterInterface>& Character,
+		const TSubclassOf<UInterface>                   Interface);
 };

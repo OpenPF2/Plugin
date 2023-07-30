@@ -27,7 +27,7 @@ class IPF2GameplayAbilityInterface;
  */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 	FPF2ClientAbilitiesLoadedDelegate,
-	TScriptInterface<IPF2AbilitySystemInterface>, AbilitySystemComponent
+	const TScriptInterface<IPF2AbilitySystemInterface>&, AbilitySystemComponent
 );
 
 // =====================================================================================================================

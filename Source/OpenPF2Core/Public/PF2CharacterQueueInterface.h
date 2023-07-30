@@ -40,7 +40,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
  */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
 	FPF2CharacterQueueChangedDelegate,
-	const TScriptInterface<IPF2CharacterQueueInterface>,     CharacterQueueComponent,
+	const TScriptInterface<IPF2CharacterQueueInterface>&,    CharacterQueueComponent,
 	const TArray<TScriptInterface<IPF2CharacterInterface>>&, Characters
 );
 
@@ -56,9 +56,9 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
  */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(
 	FPF2ControlledCharacterChangedDelegate,
-	const TScriptInterface<IPF2CharacterQueueInterface>, CharacterQueueComponent,
-	const TScriptInterface<IPF2CharacterInterface>&,     OldCharacter,
-	const TScriptInterface<IPF2CharacterInterface>&,     NewCharacter
+	const TScriptInterface<IPF2CharacterQueueInterface>&, CharacterQueueComponent,
+	const TScriptInterface<IPF2CharacterInterface>&,      OldCharacter,
+	const TScriptInterface<IPF2CharacterInterface>&,      NewCharacter
 );
 
 // =====================================================================================================================

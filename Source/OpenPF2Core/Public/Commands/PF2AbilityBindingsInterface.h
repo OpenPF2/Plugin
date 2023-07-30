@@ -34,7 +34,7 @@ class UPF2AbilityInputBinding;
  */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 	FPF2AbilityBindingsInputConnectionChangedDelegate,
-	TScriptInterface<IPF2AbilityBindingsInterface>, BindingsComponent
+	const TScriptInterface<IPF2AbilityBindingsInterface>&, BindingsComponent
 );
 
 /**
@@ -45,7 +45,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
  */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 	FPF2AbilityBindingsChangedDelegate,
-	TScriptInterface<IPF2AbilityBindingsInterface>, BindingsComponent
+	const TScriptInterface<IPF2AbilityBindingsInterface>&, BindingsComponent
 );
 
 // =====================================================================================================================

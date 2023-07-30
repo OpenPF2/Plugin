@@ -74,8 +74,8 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostSelection
 	 *	The ability scores that the player selected, out of the options offered by the Boost GA.
 	 */
 	explicit FPF2CharacterAbilityBoostSelection(
-		const TSubclassOf<UPF2AbilityBoostBase>   BoostGameplayAbility,
-		const TSet<EPF2CharacterAbilityScoreType> SelectedAbilities) :
+		const TSubclassOf<UPF2AbilityBoostBase>    BoostGameplayAbility,
+		const TSet<EPF2CharacterAbilityScoreType>& SelectedAbilities) :
 			BoostGameplayAbility(BoostGameplayAbility),
 			SelectedAbilities(SelectedAbilities)
 	{

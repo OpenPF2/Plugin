@@ -93,9 +93,9 @@ public:
 
 	virtual TScriptInterface<IPF2CharacterInterface> GetActiveCharacter() const override;
 
-	virtual void StartTurnForCharacter(const TScriptInterface<IPF2CharacterInterface> Character) override;
+	virtual void StartTurnForCharacter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
 
-	virtual void EndTurnForCharacter(const TScriptInterface<IPF2CharacterInterface> Character) override;
+	virtual void EndTurnForCharacter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
 
 	virtual bool DoesCharacterHaveNextCommandQueued(const TScriptInterface<IPF2CharacterInterface>& Character) const override;
 
