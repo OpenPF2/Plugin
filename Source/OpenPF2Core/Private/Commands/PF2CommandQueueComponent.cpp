@@ -16,7 +16,7 @@
 
 const uint8 UPF2CommandQueueComponent::CommandLimitNone = 0;
 
-UPF2CommandQueueComponent::UPF2CommandQueueComponent(): SizeLimit(CommandLimitNone)
+UPF2CommandQueueComponent::UPF2CommandQueueComponent(): Events(nullptr), SizeLimit(CommandLimitNone)
 {
 	this->SetIsReplicatedByDefault(true);
 }
@@ -26,6 +26,28 @@ void UPF2CommandQueueComponent::GetLifetimeReplicatedProps(TArray<FLifetimePrope
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UPF2CommandQueueComponent, Queue);
+}
+
+UObject* UPF2CommandQueueComponent::GetGenericEventsObject() const
+{
+	return this->GetEvents();
+}
+
+UPF2CommandQueueInterfaceEvents* UPF2CommandQueueComponent::GetEvents() const
+{
+	if (this->Events == nullptr)
+	{
+		// BUGBUG: This has to be instantiated here rather than via CreateDefaultSubobject() in the constructor, or it
+		// breaks multiplayer. It seems that when created in the constructor, all instances of this component end up
+		// sharing one events object leading to all players receiving the event whenever a multicast event is broadcast.
+		// This typically results in a crash since the addresses of callbacks aren't valid on all clients.
+		this->Events = NewObject<UPF2CommandQueueInterfaceEvents>(
+			const_cast<UPF2CommandQueueComponent*>(this),
+			FName(TEXT("InterfaceEvents"))
+		);
+	}
+
+	return this->Events;
 }
 
 void UPF2CommandQueueComponent::Enqueue(const TScriptInterface<IPF2CharacterCommandInterface>& Command)
@@ -223,9 +245,11 @@ FString UPF2CommandQueueComponent::GetIdForLogs() const
 
 void UPF2CommandQueueComponent::OnRep_Queue(const TArray<AInfo*>& OldQueue)
 {
+	UPF2CommandQueueInterfaceEvents* InterfaceEvents = this->GetEvents();
+
 	// Skip unnecessary overhead if we have no listeners. This is only safe because our Native_ callbacks don't do
 	// anything other than notify listeners.
-	if (this->OnCommandAdded.IsBound() || this->OnCommandRemoved.IsBound())
+	if (InterfaceEvents->OnCommandAdded.IsBound() || InterfaceEvents->OnCommandRemoved.IsBound())
 	{
 		TArray<IPF2CharacterCommandInterface*> RemovedCommands,
 		                                       AddedCommands;
@@ -248,10 +272,12 @@ void UPF2CommandQueueComponent::OnRep_Queue(const TArray<AInfo*>& OldQueue)
 	this->Native_OnCommandsChanged();
 }
 
-void UPF2CommandQueueComponent::Native_OnCommandsChanged() const
+void UPF2CommandQueueComponent::Native_OnCommandsChanged()
 {
+	FPF2CommandQueueChangedDelegate& OnCommandsChanged = this->GetEvents()->OnCommandsChanged;
+
 	// Skip unnecessary overhead if we have no listeners.
-	if (this->OnCommandsChanged.IsBound())
+	if (OnCommandsChanged.IsBound())
 	{
 		TArray<TScriptInterface<IPF2CharacterCommandInterface>> NewCommands;
 
@@ -278,7 +304,7 @@ void UPF2CommandQueueComponent::Native_OnCommandsChanged() const
 			NewCommands.Num()
 		);
 
-		this->OnCommandsChanged.Broadcast(NewCommands);
+		OnCommandsChanged.Broadcast(this, NewCommands);
 	}
 	else
 	{
@@ -293,8 +319,10 @@ void UPF2CommandQueueComponent::Native_OnCommandsChanged() const
 }
 
 void UPF2CommandQueueComponent::Native_OnCommandAdded(
-	const TScriptInterface<IPF2CharacterCommandInterface>& CommandAdded) const
+	const TScriptInterface<IPF2CharacterCommandInterface>& CommandAdded)
 {
+	FPF2CommandAddedToOrRemovedFromQueueDelegate& OnCommandAdded = this->GetEvents()->OnCommandAdded;
+
 	UE_LOG(
 		LogPf2CoreAbilities,
 		VeryVerbose,
@@ -304,12 +332,17 @@ void UPF2CommandQueueComponent::Native_OnCommandAdded(
 		*(this->GetIdForLogs())
 	);
 
-	this->OnCommandAdded.Broadcast(CommandAdded);
+	if (OnCommandAdded.IsBound())
+	{
+		OnCommandAdded.Broadcast(this, CommandAdded);
+	}
 }
 
 void UPF2CommandQueueComponent::Native_OnCommandRemoved(
-	const TScriptInterface<IPF2CharacterCommandInterface>& CommandRemoved) const
+	const TScriptInterface<IPF2CharacterCommandInterface>& CommandRemoved)
 {
+	FPF2CommandAddedToOrRemovedFromQueueDelegate& OnCommandRemoved = this->GetEvents()->OnCommandRemoved;
+
 	UE_LOG(
 		LogPf2CoreAbilities,
 		VeryVerbose,
@@ -319,5 +352,8 @@ void UPF2CommandQueueComponent::Native_OnCommandRemoved(
 		*(this->GetIdForLogs())
 	);
 
-	this->OnCommandRemoved.Broadcast(CommandRemoved);
+	if (OnCommandRemoved.IsBound())
+	{
+		OnCommandRemoved.Broadcast(this, CommandRemoved);
+	}
 }

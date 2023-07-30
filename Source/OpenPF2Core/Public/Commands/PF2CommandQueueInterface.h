@@ -16,8 +16,75 @@
 class IPF2CharacterCommandInterface;
 
 // =====================================================================================================================
-// Normal Declarations
+// Normal Declarations - Delegates
 // =====================================================================================================================
+/**
+ * Delegate for Blueprints to react to the queue changing (e.g., commands added or removed, or queue cleared).
+ *
+ * @param CommandQueueComponent
+ *	The component broadcasting this event.
+ * @param Command
+ *	The command that was added or removed.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
+	FPF2CommandAddedToOrRemovedFromQueueDelegate,
+	const TScriptInterface<IPF2CommandQueueInterface> &,    CommandQueueComponent,
+	const TScriptInterface<IPF2CharacterCommandInterface>&, Command
+);
+
+/**
+ * Delegate for Blueprints to react to the queue contents changing (e.g., commands added or removed, or queue cleared).
+ *
+ * @param CommandQueueComponent
+ *	The component broadcasting this event.
+ * @param Commands
+ *	An updated copy of the command queue after the change has occurred.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
+	FPF2CommandQueueChangedDelegate,
+	const TScriptInterface<IPF2CommandQueueInterface>&,             CommandQueueComponent,
+	const TArray<TScriptInterface<IPF2CharacterCommandInterface>>&, Commands
+);
+
+// =====================================================================================================================
+// Normal Declarations - Types
+// =====================================================================================================================
+/**
+ * The "Events" object for PF2CommandQueueInterface.
+ *
+ * This is a concrete UObject that contains only the dynamic multicast delegates that instances of the interface expose
+ * to consumers for binding.
+ *
+ * @see IPF2EventEmitterInterface
+ */
+UCLASS()
+class OPENPF2CORE_API UPF2CommandQueueInterfaceEvents : public UObject
+{
+	GENERATED_BODY()
+
+public:
+	// =================================================================================================================
+	// Public Fields - Multicast Delegates
+	// =================================================================================================================
+	/**
+	 * Event fired when the commands in the queue have changed (commands added, commands removed, or queue cleared).
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Command Queues")
+	FPF2CommandQueueChangedDelegate OnCommandsChanged;
+
+	/**
+	 * Event fired when a command has been added to this queue.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Command Queues")
+	FPF2CommandAddedToOrRemovedFromQueueDelegate OnCommandAdded;
+
+	/**
+	 * Event fired when a command has been removed from this queue.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Command Queues")
+	FPF2CommandAddedToOrRemovedFromQueueDelegate OnCommandRemoved;
+};
+
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2CommandQueueInterface : public UPF2ActorComponentInterface
 {
@@ -32,6 +99,15 @@ class OPENPF2CORE_API IPF2CommandQueueInterface : public IPF2ActorComponentInter
 	GENERATED_BODY()
 
 public:
+	/**
+	 * Gets the events object used for binding Blueprint callbacks to events from this component.
+	 *
+	 * @return
+	 *	The events object for this interface.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Queues")
+	virtual UPF2CommandQueueInterfaceEvents* GetEvents() const = 0;
+
 	/**
 	 * Adds a command to the end of the queue.
 	 *
