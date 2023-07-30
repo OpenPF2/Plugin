@@ -47,7 +47,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
 // Normal Declarations - Types
 // =====================================================================================================================
 /**
- * The "Events" object for IPF2CharacterQueueInterface.
+ * The "Events" object for PF2CharacterQueueInterface.
  *
  * This is a concrete UObject that contains only the dynamic multicast delegates that instances of the interface expose
  * to consumers for binding.

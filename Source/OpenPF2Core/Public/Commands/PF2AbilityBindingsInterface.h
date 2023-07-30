@@ -52,7 +52,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 // Normal Declarations - Types
 // =====================================================================================================================
 /**
- * The "Events" object for IPF2AbilityBindingsInterface.
+ * The "Events" object for PF2AbilityBindingsInterface.
  *
  * This is a concrete UObject that contains only the dynamic multicast delegates that instances of the interface expose
  * to consumers for binding.

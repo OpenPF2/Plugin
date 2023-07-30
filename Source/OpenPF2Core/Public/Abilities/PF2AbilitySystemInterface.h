@@ -34,7 +34,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 // Normal Declarations - Types
 // =====================================================================================================================
 /**
- * The "Events" object for UPF2AbilitySystemInterface.
+ * The "Events" object for PF2AbilitySystemInterface.
  *
  * This is a concrete UObject that contains only the dynamic multicast delegates that instances of the interface expose
  * to consumers for binding.
