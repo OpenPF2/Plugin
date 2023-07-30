@@ -68,7 +68,7 @@ public:
 	 *
 	 * If replication is enabled for this component, this is invoked on both the owning client and the server.
 	 */
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Player Controllers|Character Queues")
 	FPF2CharacterQueueChangedDelegate OnCharactersChanged;
 
 	/**
@@ -76,7 +76,7 @@ public:
 	 *
 	 * If replication is enabled for this component, this is invoked on both the owning client and the server.
 	 */
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Player Controllers|Character Queues")
 	FPF2CharacterAddedOrRemovedDelegate OnCharacterAdded;
 
 	/**
@@ -84,7 +84,7 @@ public:
 	 *
 	 * If replication is enabled for this component, this is invoked on both the owning client and the server.
 	 */
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Player Controllers|Character Queues")
 	FPF2CharacterAddedOrRemovedDelegate OnCharacterRemoved;
 
 	/**
@@ -92,7 +92,7 @@ public:
 	 *
 	 * If replication is enabled for this component, this is invoked on both the owning client and the server.
 	 */
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Player Controllers|Character Queues")
 	FPF2ControlledCharacterChangedDelegate OnControlledCharacterChanged;
 };
 
