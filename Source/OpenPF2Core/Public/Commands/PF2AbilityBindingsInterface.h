@@ -27,7 +27,21 @@ class UPF2AbilityInputBinding;
 // Normal Declarations - Delegates
 // =====================================================================================================================
 /**
+ * Delegate for Blueprints to react to a bindings component getting wired up to input or disconnected from input.
+ *
+ * @param BindingsComponent
+ *	The component broadcasting this event.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
+	FPF2AbilityBindingsInputConnectionChangedDelegate,
+	TScriptInterface<IPF2AbilityBindingsInterface>, BindingsComponent
+);
+
+/**
  * Delegate for reacting to command bindings changing/being rebound.
+ *
+ * @param BindingsComponent
+ *	The component broadcasting this event.
  */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 	FPF2AbilityBindingsChangedDelegate,
@@ -59,6 +73,22 @@ public:
 	 */
 	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Ability Bindings")
 	FPF2AbilityBindingsChangedDelegate OnAbilityBindingsChanged;
+
+	/**
+	 * Event fired when local input is connected to this component.
+	 *
+	 * This event is only fired on clients.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Ability Bindings")
+	FPF2AbilityBindingsInputConnectionChangedDelegate OnInputConnected;
+
+	/**
+	 * Event fired when local input is disconnected from this component.
+	 *
+	 * This event is only fired on clients.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Ability Bindings")
+	FPF2AbilityBindingsInputConnectionChangedDelegate OnInputDisconnected;
 };
 
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
