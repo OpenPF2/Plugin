@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include <Components/ActorComponent.h>
-
 #include "PF2ActorComponentInterface.h"
 #include "PF2CharacterQueueInterface.generated.h"
 
@@ -20,27 +18,47 @@ class IPF2CharacterInterface;
 // =====================================================================================================================
 /**
  * Delegate for Blueprints to react to characters being added or removed from the queue.
+ *
+ * @param CharacterQueueComponent
+ *	The component broadcasting this event.
+ * @param Character
+ *	The character that was added or removed.
  */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
 	FPF2CharacterAddedOrRemovedDelegate,
-	const TScriptInterface<IPF2CharacterInterface>&, Character
+	const TScriptInterface<IPF2CharacterQueueInterface>&, CharacterQueueComponent,
+	const TScriptInterface<IPF2CharacterInterface>&,      Character
 );
 
 /**
  * Delegate for Blueprints to react to the queue changing in any way (characters added or removed, or queue cleared).
+ *
+ * @param CharacterQueueComponent
+ *	The component broadcasting this event.
+ * @param Characters
+ *	An updated copy of the character queue after the change has occurred.
  */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
 	FPF2CharacterQueueChangedDelegate,
+	const TScriptInterface<IPF2CharacterQueueInterface>,     CharacterQueueComponent,
 	const TArray<TScriptInterface<IPF2CharacterInterface>>&, Characters
 );
 
 /**
  * Delegate for Blueprints to react to a change in active character.
+ *
+ * @param CharacterQueueComponent
+ *	The component broadcasting this event.
+ * @param OldCharacter
+ *	The character that was previously active.
+ * @param NewCharacter
+ *	The character that is now active.
  */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(
 	FPF2ControlledCharacterChangedDelegate,
-	const TScriptInterface<IPF2CharacterInterface>&, OldCharacter,
-	const TScriptInterface<IPF2CharacterInterface>&, NewCharacter
+	const TScriptInterface<IPF2CharacterQueueInterface>, CharacterQueueComponent,
+	const TScriptInterface<IPF2CharacterInterface>&,     OldCharacter,
+	const TScriptInterface<IPF2CharacterInterface>&,     NewCharacter
 );
 
 // =====================================================================================================================
