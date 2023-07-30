@@ -17,7 +17,7 @@
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
-UPF2AbilitySystemComponent::UPF2AbilitySystemComponent() : bAreAbilitiesAvailable(false)
+UPF2AbilitySystemComponent::UPF2AbilitySystemComponent() : Events(nullptr), bAreAbilitiesAvailable(false)
 {
 	const FString DynamicTagsGeFilename =
 		PF2CharacterConstants::GetBlueprintPath(*PF2CharacterConstants::GeDynamicTagsName);
@@ -41,6 +41,29 @@ UPF2AbilitySystemComponent::UPF2AbilitySystemComponent() : bAreAbilitiesAvailabl
 		// Allow boost effects to be looked-up by ability name later.
 		this->AbilityBoostEffects.Add(Ability, BoostGeFinder.Object);
 	}
+}
+
+UObject* UPF2AbilitySystemComponent::GetGenericEventsObject() const
+{
+	return this->GetEvents();
+}
+
+UPF2AbilitySystemInterfaceEvents* UPF2AbilitySystemComponent::GetEvents() const
+{
+	if (this->Events == nullptr)
+	{
+		// BUGBUG: This has to be instantiated here rather than via CreateDefaultSubobject() in the constructor, or it
+		// breaks multiplayer. It seems that when created in the constructor, this component ends up as part of the CDO
+		// and then all instances of this component share *one* events object, leading to all game clients being
+		// notified about every multicast event broadcast for all instances. This typically results in a crash since the
+		// addresses of callbacks aren't valid for clients who don't own the component handling the event.
+		this->Events = NewObject<UPF2AbilitySystemInterfaceEvents>(
+			const_cast<UPF2AbilitySystemComponent*>(this),
+			FName(TEXT("InterfaceEvents"))
+		);
+	}
+
+	return this->Events;
 }
 
 TScriptInterface<IPF2GameplayAbilityInterface> UPF2AbilitySystemComponent::GetAbilityInstanceFromSpec(
@@ -494,11 +517,6 @@ FGameplayTagContainer UPF2AbilitySystemComponent::GetActiveGameplayTags() const
 	return Tags;
 }
 
-FPF2ClientAbilitiesChangeDelegate* UPF2AbilitySystemComponent::GetClientAbilityChangeDelegate()
-{
-	return &this->OnAbilitiesAvailable;
-}
-
 TScriptInterface<IPF2CharacterInterface> UPF2AbilitySystemComponent::GetCharacter() const
 {
 	IPF2CharacterInterface* OwningCharacter = Cast<IPF2CharacterInterface>(this->GetOwnerActor());
@@ -735,6 +753,8 @@ void UPF2AbilitySystemComponent::ActivatePassiveGameplayEffect(
 
 void UPF2AbilitySystemComponent::Native_OnAbilitiesAvailable()
 {
+	const FPF2ClientAbilitiesLoadedDelegate& OnAbilitiesAvailable = this->GetEvents()->OnAbilitiesLoaded;
+
 	UE_LOG(
 		LogPf2CoreAbilities,
 		VeryVerbose,
@@ -743,7 +763,10 @@ void UPF2AbilitySystemComponent::Native_OnAbilitiesAvailable()
 		*(this->GetIdForLogs())
 	);
 
-	this->OnAbilitiesAvailable.Broadcast();
+	if (OnAbilitiesAvailable.IsBound())
+	{
+		OnAbilitiesAvailable.Broadcast(this);
+	}
 }
 
 template <typename Func>
