@@ -71,9 +71,12 @@ private:
 
 public:
 	// =================================================================================================================
-	// Constructors
+	// Public Constructors
 	// =================================================================================================================
-	UPF2OwnerTrackingComponent();
+	/**
+	 * Default constructor for UPF2OwnerTrackingComponent.
+	 */
+	explicit UPF2OwnerTrackingComponent();
 
 	// =================================================================================================================
 	// Public Methods - UActorComponent Overrides
