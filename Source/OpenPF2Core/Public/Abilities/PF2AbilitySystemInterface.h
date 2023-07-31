@@ -83,6 +83,9 @@ class OPENPF2CORE_API IPF2AbilitySystemInterface : public IPF2ActorComponentInte
 	GENERATED_BODY()
 
 public:
+	// =================================================================================================================
+	// Public Methods
+	// =================================================================================================================
 	/**
 	 * Gets the events object used for binding Blueprint callbacks to events from this component.
 	 *
