@@ -23,7 +23,7 @@
 
 #include "Utilities/PF2InterfaceUtilities.h"
 
-UPF2OwnerTrackingComponent::UPF2OwnerTrackingComponent()
+UPF2OwnerTrackingComponent::UPF2OwnerTrackingComponent() : Events(nullptr)
 {
 	this->SetIsReplicatedByDefault(true);
 }
@@ -34,6 +34,29 @@ void UPF2OwnerTrackingComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProp
 
 	DOREPLIFETIME(UPF2OwnerTrackingComponent, OwningPlayerState);
 	DOREPLIFETIME(UPF2OwnerTrackingComponent, Party);
+}
+
+UObject* UPF2OwnerTrackingComponent::GetGenericEventsObject() const
+{
+	return this->GetEvents();
+}
+
+UPF2OwnerTrackingInterfaceEvents* UPF2OwnerTrackingComponent::GetEvents() const
+{
+	if (this->Events == nullptr)
+	{
+		// BUGBUG: This has to be instantiated here rather than via CreateDefaultSubobject() in the constructor, or it
+		// breaks multiplayer. It seems that when created in the constructor, this component ends up as part of the CDO
+		// and then all instances of this component share *one* events object, leading to all game clients being
+		// notified about every multicast event broadcast for all instances. This typically results in a crash since the
+		// addresses of callbacks aren't valid for clients who don't own the component handling the event.
+		this->Events = NewObject<UPF2OwnerTrackingInterfaceEvents>(
+			const_cast<UPF2OwnerTrackingComponent*>(this),
+			FName(TEXT("InterfaceEvents"))
+		);
+	}
+
+	return this->Events;
 }
 
 TScriptInterface<IPF2PartyInterface> UPF2OwnerTrackingComponent::GetParty() const
@@ -183,7 +206,7 @@ FString UPF2OwnerTrackingComponent::GetIdForLogs() const
 	);
 }
 
-void UPF2OwnerTrackingComponent::OnRep_OwningPlayerState(APlayerState* OldOwner) const
+void UPF2OwnerTrackingComponent::OnRep_OwningPlayerState(APlayerState* OldOwner)
 {
 	const TScriptInterface<IPF2PlayerStateInterface> OldPf2Owner = OldOwner;
 	const TScriptInterface<IPF2PlayerStateInterface> NewPf2Owner = this->OwningPlayerState;
@@ -191,7 +214,7 @@ void UPF2OwnerTrackingComponent::OnRep_OwningPlayerState(APlayerState* OldOwner)
     this->Native_OnOwningPlayerStateChanged(OldPf2Owner, NewPf2Owner);
 }
 
-void UPF2OwnerTrackingComponent::OnRep_Party(AInfo* OldParty) const
+void UPF2OwnerTrackingComponent::OnRep_Party(AInfo* OldParty)
 {
 	const TScriptInterface<IPF2PartyInterface> OldPf2Party = OldParty;
 	const TScriptInterface<IPF2PartyInterface> NewPf2Party = this->Party;
@@ -201,13 +224,23 @@ void UPF2OwnerTrackingComponent::OnRep_Party(AInfo* OldParty) const
 
 void UPF2OwnerTrackingComponent::Native_OnOwningPlayerStateChanged(
 	const TScriptInterface<IPF2PlayerStateInterface> OldOwner,
-	const TScriptInterface<IPF2PlayerStateInterface> NewOwner) const
+	const TScriptInterface<IPF2PlayerStateInterface> NewOwner)
 {
-	this->OnOwnerChanged.Broadcast(this->GetOwner(), OldOwner, NewOwner);
+	const FPF2OwnerComponentOwningPlayerStateChangedDelegate& OnOwnerChanged = this->GetEvents()->OnOwnerChanged;
+
+	if (OnOwnerChanged.IsBound())
+	{
+		OnOwnerChanged.Broadcast(this, this->GetOwner(), OldOwner, NewOwner);
+	}
 }
 
 void UPF2OwnerTrackingComponent::Native_OnPartyChanged(const TScriptInterface<IPF2PartyInterface> OldParty,
-                                                       const TScriptInterface<IPF2PartyInterface> NewParty) const
+                                                       const TScriptInterface<IPF2PartyInterface> NewParty)
 {
-	this->OnPartyChanged.Broadcast(this->GetOwner(), OldParty, NewParty);
+	const FPF2OwnerComponentPartyChangedDelegate& OnPartyChanged = this->GetEvents()->OnPartyChanged;
+
+	if (OnPartyChanged.IsBound())
+	{
+		OnPartyChanged.Broadcast(this, this->GetOwner(), OldParty, NewParty);
+	}
 }
