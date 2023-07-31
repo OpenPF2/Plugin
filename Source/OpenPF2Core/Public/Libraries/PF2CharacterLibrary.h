@@ -6,6 +6,7 @@
 #pragma once
 
 #include <Kismet/BlueprintFunctionLibrary.h>
+#include <Templates/SubclassOf.h>
 
 #include "PF2CharacterLibrary.generated.h"
 
