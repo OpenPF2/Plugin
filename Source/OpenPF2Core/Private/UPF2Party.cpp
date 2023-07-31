@@ -61,7 +61,7 @@ UPF2PartyInterfaceEvents* APF2Party::GetEvents() const
 	return this->Events;
 }
 
-inline FText APF2Party::GetPartyName() const
+FText APF2Party::GetPartyName() const
 {
 	return this->PartyName;
 }
