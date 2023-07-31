@@ -123,7 +123,7 @@ void UPF2OwnerTrackingComponent::SetOwningPlayerByController(
 
 void UPF2OwnerTrackingComponent::SetOwningPlayerByState(const TScriptInterface<IPF2PlayerStateInterface> NewPlayerState)
 {
-	const TScriptInterface<IPF2PlayerStateInterface> OldOwningPlayerState = this->OwningPlayerState;
+	const TScriptInterface<IPF2PlayerStateInterface> OldOwningPlayerState = this->GetStateOfOwningPlayer();
 
 	if (NewPlayerState != OldOwningPlayerState)
 	{
@@ -209,7 +209,7 @@ FString UPF2OwnerTrackingComponent::GetIdForLogs() const
 void UPF2OwnerTrackingComponent::OnRep_OwningPlayerState(APlayerState* OldOwner)
 {
 	const TScriptInterface<IPF2PlayerStateInterface> OldPf2Owner = OldOwner;
-	const TScriptInterface<IPF2PlayerStateInterface> NewPf2Owner = this->OwningPlayerState;
+	const TScriptInterface<IPF2PlayerStateInterface> NewPf2Owner = this->GetStateOfOwningPlayer();
 
     this->Native_OnOwningPlayerStateChanged(OldPf2Owner, NewPf2Owner);
 }
@@ -217,7 +217,7 @@ void UPF2OwnerTrackingComponent::OnRep_OwningPlayerState(APlayerState* OldOwner)
 void UPF2OwnerTrackingComponent::OnRep_Party(AInfo* OldParty)
 {
 	const TScriptInterface<IPF2PartyInterface> OldPf2Party = OldParty;
-	const TScriptInterface<IPF2PartyInterface> NewPf2Party = this->Party;
+	const TScriptInterface<IPF2PartyInterface> NewPf2Party = this->GetParty();
 
 	this->Native_OnPartyChanged(OldPf2Party, NewPf2Party);
 }
