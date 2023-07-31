@@ -29,8 +29,49 @@ class IPF2OwnerTrackingInterface;
 class IPF2PlayerControllerInterface;
 
 // =====================================================================================================================
-// Normal Declarations
+// Normal Declarations - Delegates
 // =====================================================================================================================
+/**
+ * Delegate for Blueprints to react to when a character's turn has started or ended.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
+	FPF2CharacterTurnDelegate,
+	const TScriptInterface<IPF2CharacterInterface>&, Character
+);
+
+// =====================================================================================================================
+// Normal Declarations - Types
+// =====================================================================================================================
+/**
+ * The "Events" object for PF2CharacterInterface.
+ *
+ * This is a concrete UObject that contains only the dynamic multicast delegates that instances of the interface expose
+ * to consumers for binding.
+ *
+ * @see IPF2EventEmitterInterface
+ */
+UCLASS()
+class OPENPF2CORE_API UPF2CharacterInterfaceEvents : public UObject
+{
+	GENERATED_BODY()
+
+public:
+	// =================================================================================================================
+	// Public Fields - Multicast Delegates
+	// =================================================================================================================
+	/**
+	 * Event fired when character's encounter turn has started.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Characters")
+	FPF2CharacterTurnDelegate OnEncounterTurnStarted;
+
+	/**
+	 * Event fired when character's encounter turn has ended.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Characters")
+	FPF2CharacterTurnDelegate OnEncounterTurnEnded;
+};
+
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2CharacterInterface : public UAbilitySystemInterface
 {
@@ -71,6 +112,15 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
 	virtual FString GetIdForLogs() const = 0;
+
+	/**
+	 * Gets the events object used for binding Blueprint callbacks to events from this component.
+	 *
+	 * @return
+	 *	The events object for this interface.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Characters")
+	virtual UPF2CharacterInterfaceEvents* GetEvents() const = 0;
 
 	/**
 	 * Returns the name of this character, as set by the game designer.
