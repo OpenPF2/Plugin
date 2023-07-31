@@ -38,6 +38,29 @@ void APF2Party::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetim
 	DOREPLIFETIME(APF2Party, MemberCharacters);
 }
 
+UObject* APF2Party::GetGenericEventsObject() const
+{
+	return this->GetEvents();
+}
+
+UPF2PartyInterfaceEvents* APF2Party::GetEvents() const
+{
+	if (this->Events == nullptr)
+	{
+		// BUGBUG: This has to be instantiated here rather than via CreateDefaultSubobject() in the constructor, or it
+		// breaks multiplayer. It seems that when created in the constructor, this component ends up as part of the CDO
+		// and then all instances of this component share *one* events object, leading to all game clients being
+		// notified about every multicast event broadcast for all instances. This typically results in a crash since the
+		// addresses of callbacks aren't valid for clients who don't own the component handling the event.
+		this->Events = NewObject<UPF2PartyInterfaceEvents>(
+			const_cast<APF2Party*>(this),
+			FName(TEXT("InterfaceEvents"))
+		);
+	}
+
+	return this->Events;
+}
+
 inline FText APF2Party::GetPartyName() const
 {
 	return this->PartyName;
@@ -177,18 +200,30 @@ FString APF2Party::GetIdForLogs() const
 
 void APF2Party::Native_OnPlayerAdded(const TScriptInterface<IPF2PlayerStateInterface>& PlayerState)
 {
+	const FPF2PartyMemberAddedOrRemovedDelegate& OnPlayerAdded = this->GetEvents()->OnPlayerAdded;
+
 	check(PlayerState.GetInterface() != nullptr);
 
 	// Notify listeners.
 	this->BP_OnPlayerAdded(PlayerState);
-	this->OnPlayerAdded.Broadcast(this, PlayerState);
+
+	if (OnPlayerAdded.IsBound())
+	{
+		OnPlayerAdded.Broadcast(this, PlayerState);
+	}
 }
 
 void APF2Party::Native_OnPlayerRemoved(const TScriptInterface<IPF2PlayerStateInterface>& PlayerState)
 {
+	const FPF2PartyMemberAddedOrRemovedDelegate& OnPlayerRemoved = this->GetEvents()->OnPlayerRemoved;
+
 	check(PlayerState.GetInterface() != nullptr);
 
 	// Notify listeners.
 	this->BP_OnPlayerRemoved(PlayerState);
-	this->OnPlayerRemoved.Broadcast(this, PlayerState);
+
+	if (OnPlayerRemoved.IsBound())
+	{
+		OnPlayerRemoved.Broadcast(this, PlayerState);
+	}
 }
