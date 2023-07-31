@@ -46,6 +46,29 @@ protected:
 	UPROPERTY(Transient)
 	mutable UPF2OwnerTrackingInterfaceEvents* Events;
 
+private:
+	// =================================================================================================================
+	// Private Fields
+	// =================================================================================================================
+	/**
+	 * The state of the player who owns the containing actor.
+	 *
+	 * This is a standard player state (instead of an interface) for replication. UE will not replicate actors if they
+	 * are declared/referenced through an interface property. The value of this property MUST implement
+	 * IPF2PlayerStateInterface.
+	 */
+	UPROPERTY(ReplicatedUsing=OnRep_OwningPlayerState)
+	APlayerState* OwningPlayerState;
+
+	/**
+	 * The party to which the containing actor is affiliated, if any.
+	 *
+	 * This is an info actor (instead of an interface) for replication. UE will not replicate actors if they are
+	 * declared/referenced through an interface property. The value of this property MUST implement IPF2PartyInterface.
+	 */
+	UPROPERTY(ReplicatedUsing=OnRep_Party)
+	AInfo* Party;
+
 public:
 	// =================================================================================================================
 	// Constructors
@@ -146,27 +169,4 @@ protected:
 		const TScriptInterface<IPF2PartyInterface> OldParty,
 		const TScriptInterface<IPF2PartyInterface> NewParty
 	);
-
-private:
-	// =================================================================================================================
-	// Private Fields
-	// =================================================================================================================
-	/**
-	 * The state of the player who owns the containing actor.
-	 *
-	 * This is a standard player state (instead of an interface) for replication. UE will not replicate actors if they
-	 * are declared/referenced through an interface property. The value of this property MUST implement
-	 * IPF2PlayerStateInterface.
-	 */
-	UPROPERTY(ReplicatedUsing=OnRep_OwningPlayerState)
-	APlayerState* OwningPlayerState;
-
-	/**
-	 * The party to which the containing actor is affiliated, if any.
-	 *
-	 * This is an info actor (instead of an interface) for replication. UE will not replicate actors if they are
-	 * declared/referenced through an interface property. The value of this property MUST implement IPF2PartyInterface.
-	 */
-	UPROPERTY(ReplicatedUsing=OnRep_Party)
-	AInfo* Party;
 };
