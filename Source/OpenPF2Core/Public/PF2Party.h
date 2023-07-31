@@ -138,6 +138,11 @@ protected:
 	 */
 	void Native_OnPlayerRemoved(const TScriptInterface<IPF2PlayerStateInterface>& PlayerState);
 
+	/**
+	 * Notifies this party that players have been added to or removed from this party.
+	 */
+	void Native_OnMembersChanged();
+
 	// =================================================================================================================
 	// Blueprint Implementable Events
 	// =================================================================================================================

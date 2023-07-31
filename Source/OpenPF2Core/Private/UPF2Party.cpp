@@ -156,6 +156,7 @@ void APF2Party::AddPlayerToPartyByState(const TScriptInterface<IPF2PlayerStateIn
 		}
 
 		this->Native_OnPlayerAdded(PlayerState);
+		this->Native_OnMembersChanged();
 	}
 }
 
@@ -183,6 +184,7 @@ void APF2Party::RemovePlayerFromPartyByState(const TScriptInterface<IPF2PlayerSt
 		}
 
 		this->Native_OnPlayerRemoved(PlayerState);
+		this->Native_OnMembersChanged();
 	}
 }
 
@@ -204,7 +206,6 @@ void APF2Party::Native_OnPlayerAdded(const TScriptInterface<IPF2PlayerStateInter
 
 	check(PlayerState.GetInterface() != nullptr);
 
-	// Notify listeners.
 	this->BP_OnPlayerAdded(PlayerState);
 
 	if (OnPlayerAdded.IsBound())
@@ -219,11 +220,20 @@ void APF2Party::Native_OnPlayerRemoved(const TScriptInterface<IPF2PlayerStateInt
 
 	check(PlayerState.GetInterface() != nullptr);
 
-	// Notify listeners.
 	this->BP_OnPlayerRemoved(PlayerState);
 
 	if (OnPlayerRemoved.IsBound())
 	{
 		OnPlayerRemoved.Broadcast(this, PlayerState);
+	}
+}
+
+void APF2Party::Native_OnMembersChanged()
+{
+	const FPF2PartyMembersChangedDelegate OnPartyMembersChanged = this->GetEvents()->OnPartyMembersChanged;
+
+	if (OnPartyMembersChanged.IsBound())
+	{
+		OnPartyMembersChanged.Broadcast(this, this->GetMemberStates());
 	}
 }

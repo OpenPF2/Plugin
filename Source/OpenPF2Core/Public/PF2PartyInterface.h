@@ -38,6 +38,20 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
 	const TScriptInterface<IPF2PlayerStateInterface>&, PlayerState
 );
 
+/**
+ * Delegate for Blueprints to react to queue membership changing (players added or removed, or party cleared).
+ *
+ * @param Party
+ *	The party broadcasting this event.
+ * @param PlayerStates
+ *	An array containing the player state for each player who is currently a member of the party.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
+	FPF2PartyMembersChangedDelegate,
+	const TScriptInterface<IPF2PartyInterface>&,               Party,
+	const TArray<TScriptInterface<IPF2PlayerStateInterface>>&, PlayerStates
+);
+
 // =====================================================================================================================
 // Normal Declarations - Types
 // =====================================================================================================================
@@ -58,6 +72,12 @@ public:
 	// =================================================================================================================
 	// Public Fields - Multicast Delegates
 	// =================================================================================================================
+	/**
+	 * Event fired when the commands in the queue have changed (commands added, commands removed, or queue cleared).
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Parties")
+	FPF2PartyMembersChangedDelegate OnPartyMembersChanged;
+
 	/**
 	 * Event fired when a player is added to this party.
 	 */
