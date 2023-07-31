@@ -41,19 +41,19 @@ void APF2CharacterBase::PossessedBy(AController* NewController)
 	}
 }
 
+void APF2CharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(APF2CharacterBase, CharacterLevel);
+}
+
 void APF2CharacterBase::OnRep_Controller()
 {
 	Super::OnRep_Controller();
 
 	// Init/re-init. abilities on the client side.
 	this->InitializeOrRefreshAbilities();
-}
-
-void APF2CharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(APF2CharacterBase, CharacterLevel);
 }
 
 FString APF2CharacterBase::GetIdForLogs() const

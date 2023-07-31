@@ -420,11 +420,15 @@ protected:
 
 public:
 	// =================================================================================================================
-	// Public Methods
+	// Public Methods - ACharacter Overrides
 	// =================================================================================================================
 	virtual void PossessedBy(AController* NewController) override;
-	virtual void OnRep_Controller() override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	// =================================================================================================================
+	// Public Methods - APawn Overrides
+	// =================================================================================================================
+	virtual void OnRep_Controller() override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
@@ -437,8 +441,15 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	// =================================================================================================================
+	// Public Methods - IPF2EventEmitterInterface Implementation
+	// =================================================================================================================
+	virtual UObject* GetGenericEventsObject() const override;
+
+	// =================================================================================================================
 	// Public Methods - IPF2CharacterInterface Implementation
 	// =================================================================================================================
+	virtual UPF2CharacterInterfaceEvents* GetEvents() const override;
+
 	virtual FText GetCharacterName() const override;
 
 	virtual UTexture2D* GetCharacterPortrait() const override;
