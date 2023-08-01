@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -20,8 +20,81 @@ class IPF2PlayerControllerInterface;
 class IPF2PlayerStateInterface;
 
 // =====================================================================================================================
-// Normal Declarations
+// Normal Declarations - Delegates
 // =====================================================================================================================
+/**
+ * Delegate for Blueprints to react to a change in owning player state.
+ *
+ * @param OwnerTrackingComponent
+ *	The component broadcasting this event.
+ * @param Actor
+ *	The actor whose ownership is changing.
+ * @param OldOwner
+ *	The player state of the previous player who owned the actor, if any.
+ * @param NewOwner
+ *	The player state of the current player who owns the actor, if any.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(
+	FPF2OwnerComponentOwningPlayerStateChangedDelegate,
+	const TScriptInterface<IPF2OwnerTrackingInterface>&, OwnerTrackingComponent,
+	AActor*,                                             Actor,
+	TScriptInterface<IPF2PlayerStateInterface>,          OldOwner,
+	TScriptInterface<IPF2PlayerStateInterface>,          NewOwner
+);
+
+/**
+ * Delegate for Blueprints to react to a change in party affiliation.
+ *
+ * @param OwnerTrackingComponent
+ *	The component broadcasting this event.
+ * @param Actor
+ *	The actor whose party affiliation is changing.
+ * @param OldParty
+ *	The previous party to which the actor was affiliated, if any.
+ * @param NewOwner
+ *	The current party to which the actor is affiliated, if any.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(
+	FPF2OwnerComponentPartyChangedDelegate,
+	const TScriptInterface<IPF2OwnerTrackingInterface>&, OwnerTrackingComponent,
+	AActor*,                                             Actor,
+	TScriptInterface<IPF2PartyInterface>,                OldParty,
+	TScriptInterface<IPF2PartyInterface>,                NewParty
+);
+
+// =====================================================================================================================
+// Normal Declarations - Types
+// =====================================================================================================================
+/**
+ * The "Events" object for PF2OwnerTrackingInterface.
+ *
+ * This is a concrete UObject that contains only the dynamic multicast delegates that instances of the interface expose
+ * to consumers for binding.
+ *
+ * @see IPF2EventEmitterInterface
+ */
+UCLASS()
+class OPENPF2CORE_API UPF2OwnerTrackingInterfaceEvents : public UObject
+{
+	GENERATED_BODY()
+
+public:
+	// =================================================================================================================
+	// Public Fields - Multicast Delegates
+	// =================================================================================================================
+	/**
+	 * Event fired when the containing actor is owned by a different player.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Actors|Owner Tracking")
+	FPF2OwnerComponentOwningPlayerStateChangedDelegate OnOwnerChanged;
+
+	/**
+	 * Event fired when the containing actor changes party affiliations.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Actors|Owner Tracking")
+	FPF2OwnerComponentPartyChangedDelegate OnPartyChanged;
+};
+
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2OwnerTrackingInterface : public UPF2ActorComponentInterface
 {
@@ -40,12 +113,21 @@ public:
 	// Public Methods
 	// =================================================================================================================
 	/**
+	 * Gets the events object used for binding Blueprint callbacks to events from this component.
+	 *
+	 * @return
+	 *	The events object for this interface.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
+	virtual UPF2OwnerTrackingInterfaceEvents* GetEvents() const = 0;
+
+	/**
 	 * Gets the party with which the containing actor is affiliated.
 	 *
 	 * @return
 	 *   The party to which this character corresponds.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Owner Tracking")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Actors|Owner Tracking")
 	virtual TScriptInterface<IPF2PartyInterface> GetParty() const = 0;
 
 	/**
@@ -56,7 +138,7 @@ public:
 	 * @param NewParty
 	 *   The new party to which this character will belong.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Owner Tracking")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Actors|Owner Tracking")
 	virtual void SetParty(const TScriptInterface<IPF2PartyInterface> NewParty) = 0;
 
 	/**
@@ -65,7 +147,7 @@ public:
 	 * @return
 	 *	The interface to the player state of the player who owns this actor.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Owner Tracking")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Actors|Owner Tracking")
 	virtual TScriptInterface<IPF2PlayerStateInterface> GetStateOfOwningPlayer() const = 0;
 
 	/**
@@ -74,7 +156,7 @@ public:
 	 * @param NewController
 	 *	The player controller for player that now owns this actor.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Owner Tracking")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Actors|Owner Tracking")
 	virtual void SetOwningPlayerByController(const TScriptInterface<IPF2PlayerControllerInterface> NewController) = 0;
 
 	/**
@@ -83,7 +165,7 @@ public:
 	 * @param NewPlayerState
 	 *	The state for player that now owns this actor.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Owner Tracking")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Actors|Owner Tracking")
 	virtual void SetOwningPlayerByState(const TScriptInterface<IPF2PlayerStateInterface> NewPlayerState) = 0;
 
 	/**
@@ -95,7 +177,7 @@ public:
 	 * @return
 	 *	TRUE if this actor belongs to the same party as the other actor.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Owner Tracking")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Actors|Owner Tracking")
 	virtual bool IsSamePartyAsActor(AActor* OtherActor) const = 0;
 
 	/**
@@ -104,7 +186,7 @@ public:
 	 * @return
 	 *	TRUE if this actor belongs to the same party as the player the given controller controls.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Owner Tracking")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Actors|Owner Tracking")
 	virtual bool IsSamePartyAsPlayerWithController(
 		const TScriptInterface<IPF2PlayerControllerInterface> OtherController
 	) const = 0;

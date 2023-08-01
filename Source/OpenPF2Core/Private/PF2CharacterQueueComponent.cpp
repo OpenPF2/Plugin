@@ -305,7 +305,7 @@ void UPF2CharacterQueueComponent::Native_OnCharactersChanged()
 			NewCharacters.Num()
 		);
 
-		CharacterChangedDelegate.Broadcast(NewCharacters);
+		CharacterChangedDelegate.Broadcast(this, NewCharacters);
 	}
 	else
 	{
@@ -338,7 +338,7 @@ void UPF2CharacterQueueComponent::Native_OnCharacterAdded(
 
 	if (CharacterAddedDelegate.IsBound())
 	{
-		CharacterAddedDelegate.Broadcast(AddedCharacter);
+		CharacterAddedDelegate.Broadcast(this, AddedCharacter);
 	}
 }
 
@@ -374,7 +374,7 @@ void UPF2CharacterQueueComponent::Native_OnCharacterRemoved(
 
 	if (CharacterRemovedDelegate.IsBound())
 	{
-		CharacterRemovedDelegate.Broadcast(RemovedCharacter);
+		CharacterRemovedDelegate.Broadcast(this, RemovedCharacter);
 	}
 }
 
@@ -398,6 +398,6 @@ void UPF2CharacterQueueComponent::Native_OnControlledCharacterChanged(
 
 	if (ControlledCharacterChangedDelegate.IsBound())
 	{
-		ControlledCharacterChangedDelegate.Broadcast(OldCharacter, NewCharacter);
+		ControlledCharacterChangedDelegate.Broadcast(this, OldCharacter, NewCharacter);
 	}
 }

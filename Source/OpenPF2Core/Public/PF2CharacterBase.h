@@ -74,8 +74,8 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostSelection
 	 *	The ability scores that the player selected, out of the options offered by the Boost GA.
 	 */
 	explicit FPF2CharacterAbilityBoostSelection(
-		const TSubclassOf<UPF2AbilityBoostBase>   BoostGameplayAbility,
-		const TSet<EPF2CharacterAbilityScoreType> SelectedAbilities) :
+		const TSubclassOf<UPF2AbilityBoostBase>    BoostGameplayAbility,
+		const TSet<EPF2CharacterAbilityScoreType>& SelectedAbilities) :
 			BoostGameplayAbility(BoostGameplayAbility),
 			SelectedAbilities(SelectedAbilities)
 	{
@@ -95,14 +95,6 @@ struct OPENPF2CORE_API FPF2CharacterAbilityBoostSelection
 };
 
 /**
- * Delegate for Blueprints to react to when a character's turn has started or ended.
- */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
-	FPF2CharacterTurnDelegate,
-	TScriptInterface<IPF2CharacterInterface>, Character
-);
-
-/**
  * Base class for both playable and non-playable characters in OpenPF2.
  *
  * OpenPF2-based games must extend this class if they have custom character attributes or abilities.
@@ -111,6 +103,7 @@ UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal
 class OPENPF2CORE_API APF2CharacterBase :
 	public ACharacter,
+	public IPF2EventEmitterInterface,
 	public IPF2CharacterInterface,
 	public IPF2LogIdentifiableInterface
 {
@@ -120,6 +113,12 @@ protected:
 	// =================================================================================================================
 	// Protected Fields
 	// =================================================================================================================
+	/**
+	 * The events object used for binding Blueprint callbacks to events from this component.
+	 */
+	UPROPERTY(Transient)
+	mutable UPF2CharacterInterfaceEvents* Events;
+
 	/**
 	 * The Ability System Component (ASC) used for interfacing this character with the Gameplay Abilities System (GAS).
 	 */
@@ -362,21 +361,6 @@ protected:
 
 public:
 	// =================================================================================================================
-	// Public Fields - Multicast Delegates
-	// =================================================================================================================
-	/**
-	 * Event fired when character's encounter turn has started.
-	 */
-	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Characters")
-	FPF2CharacterTurnDelegate OnEncounterTurnStarted;
-
-	/**
-	 * Event fired when character's encounter turn has ended.
-	 */
-	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Characters")
-	FPF2CharacterTurnDelegate OnEncounterTurnEnded;
-
-	// =================================================================================================================
 	// Public Constructors
 	// =================================================================================================================
 	/**
@@ -408,6 +392,7 @@ protected:
 	                                                         CommandQueueType,
 	                                                         OwnerTrackerType,
 	                                                         AttributeSetType> ComponentFactory) :
+		Events(nullptr),
 		bAreAbilitiesInitialized(false),
 		bManagedPassiveEffectsGenerated(false),
 		CharacterName(FText::FromString(TEXT("Character"))),
@@ -435,11 +420,15 @@ protected:
 
 public:
 	// =================================================================================================================
-	// Public Methods
+	// Public Methods - ACharacter Overrides
 	// =================================================================================================================
 	virtual void PossessedBy(AController* NewController) override;
-	virtual void OnRep_Controller() override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	// =================================================================================================================
+	// Public Methods - APawn Overrides
+	// =================================================================================================================
+	virtual void OnRep_Controller() override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
@@ -452,8 +441,15 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	// =================================================================================================================
+	// Public Methods - IPF2EventEmitterInterface Implementation
+	// =================================================================================================================
+	virtual UObject* GetGenericEventsObject() const override;
+
+	// =================================================================================================================
 	// Public Methods - IPF2CharacterInterface Implementation
 	// =================================================================================================================
+	virtual UPF2CharacterInterfaceEvents* GetEvents() const override;
+
 	virtual FText GetCharacterName() const override;
 
 	virtual UTexture2D* GetCharacterPortrait() const override;

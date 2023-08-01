@@ -17,16 +17,50 @@
 class IPF2GameplayAbilityInterface;
 
 // =====================================================================================================================
-// Delegate Declarations
+// Normal Declarations - Delegates
 // =====================================================================================================================
 /**
  * Delegate for reacting to abilities changing on the client after replication from the server.
+ *
+ * @param AbilitySystemComponent
+ *	The component broadcasting this event.
  */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPF2ClientAbilitiesChangeDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
+	FPF2ClientAbilitiesLoadedDelegate,
+	const TScriptInterface<IPF2AbilitySystemInterface>&, AbilitySystemComponent
+);
 
 // =====================================================================================================================
-// Normal Declarations
+// Normal Declarations - Types
 // =====================================================================================================================
+/**
+ * The "Events" object for PF2AbilitySystemInterface.
+ *
+ * This is a concrete UObject that contains only the dynamic multicast delegates that instances of the interface expose
+ * to consumers for binding.
+ *
+ * @see IPF2EventEmitterInterface
+ */
+UCLASS()
+class OPENPF2CORE_API UPF2AbilitySystemInterfaceEvents : public UObject
+{
+	GENERATED_BODY()
+
+public:
+	// =================================================================================================================
+	// Public Fields - Multicast Delegates
+	// =================================================================================================================
+	/**
+	 * Event fired to react to character abilities becoming available on the client.
+	 *
+	 * This event is not fired on the server. This can be used to listen to abilities that have been replicated after
+	 * a change remotely. Unlike native engine replication callbacks, this is only invoked after abilities have fully
+	 * replicated; it will not be invoked if some abilities are null.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Ability System")
+	FPF2ClientAbilitiesLoadedDelegate OnAbilitiesLoaded;
+};
+
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2AbilitySystemInterface : public UPF2ActorComponentInterface
 {
@@ -49,6 +83,18 @@ class OPENPF2CORE_API IPF2AbilitySystemInterface : public IPF2ActorComponentInte
 	GENERATED_BODY()
 
 public:
+	// =================================================================================================================
+	// Public Methods
+	// =================================================================================================================
+	/**
+	 * Gets the events object used for binding Blueprint callbacks to events from this component.
+	 *
+	 * @return
+	 *	The events object for this interface.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
+	virtual UPF2AbilitySystemInterfaceEvents* GetEvents() const = 0;
+
 	/**
 	 * Converts an ability specification into an OpenPF2-compatible ability instance.
 	 *
@@ -416,14 +462,4 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
 	virtual FGameplayTagContainer GetActiveGameplayTags() const = 0;
-
-	/**
-	 * Gets the dynamic delegate that listeners can use to be notified when abilities are loaded client-side.
-	 *
-	 * @fixme https://github.com/OpenPF2/PF2Core/issues/39
-	 *
-	 * @return
-	 *	Direct access to the multicast change delegate.
-	 */
-	virtual FPF2ClientAbilitiesChangeDelegate* GetClientAbilityChangeDelegate() = 0;
 };

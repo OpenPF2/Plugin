@@ -22,8 +22,75 @@ class IPF2PlayerControllerInterface;
 class IPF2PlayerStateInterface;
 
 // =====================================================================================================================
-// Normal Declarations
+// Normal Declarations - Delegates
 // =====================================================================================================================
+/**
+ * Delegate for Blueprints to react to a change in player membership.
+ *
+ * @param Party
+ *	The party broadcasting this event.
+ * @param PlayerState
+ *	The player state of the player who was added to or removed from the party.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
+	FPF2PartyMemberAddedOrRemovedDelegate,
+	const TScriptInterface<IPF2PartyInterface>&,       Party,
+	const TScriptInterface<IPF2PlayerStateInterface>&, PlayerState
+);
+
+/**
+ * Delegate for Blueprints to react to queue membership changing (players added or removed, or party cleared).
+ *
+ * @param Party
+ *	The party broadcasting this event.
+ * @param PlayerStates
+ *	An array containing the player state for each player who is currently a member of the party.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
+	FPF2PartyMembersChangedDelegate,
+	const TScriptInterface<IPF2PartyInterface>&,               Party,
+	const TArray<TScriptInterface<IPF2PlayerStateInterface>>&, PlayerStates
+);
+
+// =====================================================================================================================
+// Normal Declarations - Types
+// =====================================================================================================================
+/**
+ * The "Events" object for PF2PartyInterface.
+ *
+ * This is a concrete UObject that contains only the dynamic multicast delegates that instances of the interface expose
+ * to consumers for binding.
+ *
+ * @see IPF2EventEmitterInterface
+ */
+UCLASS()
+class OPENPF2CORE_API UPF2PartyInterfaceEvents : public UObject
+{
+	GENERATED_BODY()
+
+public:
+	// =================================================================================================================
+	// Public Fields - Multicast Delegates
+	// =================================================================================================================
+	/**
+	 * Event fired when the commands in the queue have changed (commands added, commands removed, or queue cleared).
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Parties")
+	FPF2PartyMembersChangedDelegate OnPartyMembersChanged;
+
+	/**
+	 * Event fired when a player is added to this party.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Parties")
+	FPF2PartyMemberAddedOrRemovedDelegate OnPlayerAdded;
+
+	/**
+	 * Event fired when a player is removed from this party.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Parties")
+	FPF2PartyMemberAddedOrRemovedDelegate OnPlayerRemoved;
+};
+
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2PartyInterface : public UPF2LogIdentifiableInterface
 {
@@ -55,6 +122,15 @@ public:
 	// =================================================================================================================
 	// Public Methods
 	// =================================================================================================================
+	/**
+	 * Gets the events object used for binding Blueprint callbacks to events from this component.
+	 *
+	 * @return
+	 *	The events object for this interface.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Parties")
+	virtual UPF2PartyInterfaceEvents* GetEvents() const = 0;
+
 	/**
 	 * Gets the player-readable name of this party.
 	 *

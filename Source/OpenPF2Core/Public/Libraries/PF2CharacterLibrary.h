@@ -6,6 +6,7 @@
 #pragma once
 
 #include <Kismet/BlueprintFunctionLibrary.h>
+#include <Templates/SubclassOf.h>
 
 #include "PF2CharacterLibrary.generated.h"
 
@@ -72,6 +73,6 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, Category = "OpenPF2|Characters|Components", meta = (DeterminesOutputType = "Interface"))
 	static TScriptInterface<IInterface> GetComponentByInterface(
-		const TScriptInterface<IPF2CharacterInterface> Character,
-		const TSubclassOf<UInterface>                  Interface);
+		const TScriptInterface<IPF2CharacterInterface>& Character,
+		const TSubclassOf<UInterface>                   Interface);
 };

@@ -394,6 +394,8 @@ void UPF2AbilityBindingsComponent::Native_OnBindingsChanged()
 
 void UPF2AbilityBindingsComponent::Native_OnInputConnected()
 {
+	const FPF2AbilityBindingsInputConnectionChangedDelegate& OnInputConnected = this->GetEvents()->OnInputConnected;
+
 	UE_LOG(
 		LogPf2CoreInput,
 		Verbose,
@@ -402,14 +404,17 @@ void UPF2AbilityBindingsComponent::Native_OnInputConnected()
 		*(this->GetIdForLogs())
 	);
 
-	if (this->OnInputConnected.IsBound())
+	if (OnInputConnected.IsBound())
 	{
-		this->OnInputConnected.Broadcast();
+		OnInputConnected.Broadcast(this);
 	}
 }
 
 void UPF2AbilityBindingsComponent::Native_OnInputDisconnected()
 {
+	const FPF2AbilityBindingsInputConnectionChangedDelegate& OnInputDisconnected =
+		this->GetEvents()->OnInputDisconnected;
+
 	UE_LOG(
 		LogPf2CoreInput,
 		Verbose,
@@ -418,8 +423,8 @@ void UPF2AbilityBindingsComponent::Native_OnInputDisconnected()
 		*(this->GetIdForLogs())
 	);
 
-	if (this->OnInputDisconnected.IsBound())
+	if (OnInputDisconnected.IsBound())
 	{
-		this->OnInputDisconnected.Broadcast();
+		OnInputDisconnected.Broadcast(this);
 	}
 }

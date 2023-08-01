@@ -27,14 +27,6 @@ class UInputAction;
 class UPF2AbilityExecutionFilterBase;
 
 // =====================================================================================================================
-// Delegate Declarations
-// =====================================================================================================================
-/**
- * Delegate for Blueprints to react to a bindings component getting wired up to input or disconnected from input.
- */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPF2AbilityBindingsInputConnectionChangedDelegate);
-
-// =====================================================================================================================
 // Normal Declarations
 // =====================================================================================================================
 /**
@@ -91,25 +83,6 @@ public:
 		Category="OpenPF2 Command Bindings"
 	)
 	TArray<TSubclassOf<UObject>> Filters;
-
-	// =================================================================================================================
-	// Public Fields - Multicast Delegates
-	// =================================================================================================================
-	/**
-	 * Event fired when local input is connected to this component.
-	 *
-	 * This event is only fired on clients.
-	 */
-	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Ability Bindings")
-	FPF2AbilityBindingsInputConnectionChangedDelegate OnInputConnected;
-
-	/**
-	 * Event fired when local input is disconnected from this component.
-	 *
-	 * This event is only fired on clients.
-	 */
-	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Ability Bindings")
-	FPF2AbilityBindingsInputConnectionChangedDelegate OnInputDisconnected;
 
 protected:
 	/**

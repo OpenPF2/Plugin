@@ -465,7 +465,7 @@ TScriptInterface<IPF2CharacterQueueInterface> APF2PlayerControllerBase::GetChara
 }
 
 void APF2PlayerControllerBase::Native_OnPlayerStateAvailable(
-	const TScriptInterface<IPF2PlayerStateInterface> NewPlayerState)
+	const TScriptInterface<IPF2PlayerStateInterface>& NewPlayerState)
 {
 	if (NewPlayerState.GetInterface() == nullptr)
 	{
@@ -485,12 +485,15 @@ void APF2PlayerControllerBase::Native_OnPlayerStateAvailable(
 	this->BP_OnPlayerStateAvailable(NewPlayerState);
 }
 
-void APF2PlayerControllerBase::Native_OnCharacterGiven(const TScriptInterface<IPF2CharacterInterface>& GivenCharacter)
+void APF2PlayerControllerBase::Native_OnCharacterGiven(
+	const TScriptInterface<IPF2CharacterQueueInterface>& CharacterQueueComponent,
+	const TScriptInterface<IPF2CharacterInterface>& GivenCharacter)
 {
 	this->BP_OnCharacterGiven(GivenCharacter);
 }
 
 void APF2PlayerControllerBase::Native_OnCharacterReleased(
+	const TScriptInterface<IPF2CharacterQueueInterface>& CharacterQueueComponent,
 	const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter)
 {
 	this->BP_OnCharacterGiven(ReleasedCharacter);

@@ -27,18 +27,32 @@ class UPF2AbilityInputBinding;
 // Normal Declarations - Delegates
 // =====================================================================================================================
 /**
+ * Delegate for Blueprints to react to a bindings component getting wired up to input or disconnected from input.
+ *
+ * @param BindingsComponent
+ *	The component broadcasting this event.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
+	FPF2AbilityBindingsInputConnectionChangedDelegate,
+	const TScriptInterface<IPF2AbilityBindingsInterface>&, BindingsComponent
+);
+
+/**
  * Delegate for reacting to command bindings changing/being rebound.
+ *
+ * @param BindingsComponent
+ *	The component broadcasting this event.
  */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 	FPF2AbilityBindingsChangedDelegate,
-	TScriptInterface<IPF2AbilityBindingsInterface>, BindingsComponent
+	const TScriptInterface<IPF2AbilityBindingsInterface>&, BindingsComponent
 );
 
 // =====================================================================================================================
 // Normal Declarations - Types
 // =====================================================================================================================
 /**
- * The "Events" object for IPF2AbilityBindingsInterface.
+ * The "Events" object for PF2AbilityBindingsInterface.
  *
  * This is a concrete UObject that contains only the dynamic multicast delegates that instances of the interface expose
  * to consumers for binding.
@@ -59,6 +73,22 @@ public:
 	 */
 	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Ability Bindings")
 	FPF2AbilityBindingsChangedDelegate OnAbilityBindingsChanged;
+
+	/**
+	 * Event fired when local input is connected to this component.
+	 *
+	 * This event is only fired on clients.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Ability Bindings")
+	FPF2AbilityBindingsInputConnectionChangedDelegate OnInputConnected;
+
+	/**
+	 * Event fired when local input is disconnected from this component.
+	 *
+	 * This event is only fired on clients.
+	 */
+	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Ability Bindings")
+	FPF2AbilityBindingsInputConnectionChangedDelegate OnInputDisconnected;
 };
 
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))

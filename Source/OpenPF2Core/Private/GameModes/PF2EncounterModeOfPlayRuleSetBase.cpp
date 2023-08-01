@@ -80,7 +80,7 @@ TScriptInterface<IPF2CharacterInterface> APF2EncounterModeOfPlayRuleSetBase::Get
 }
 
 void APF2EncounterModeOfPlayRuleSetBase::StartTurnForCharacter(
-	const TScriptInterface<IPF2CharacterInterface> Character)
+	const TScriptInterface<IPF2CharacterInterface>& Character)
 {
 	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
 
@@ -103,7 +103,7 @@ void APF2EncounterModeOfPlayRuleSetBase::StartTurnForCharacter(
 	IPF2CharacterInterface::Execute_Multicast_OnEncounterTurnStarted(Character.GetObject());
 }
 
-void APF2EncounterModeOfPlayRuleSetBase::EndTurnForCharacter(const TScriptInterface<IPF2CharacterInterface> Character)
+void APF2EncounterModeOfPlayRuleSetBase::EndTurnForCharacter(const TScriptInterface<IPF2CharacterInterface>& Character)
 {
 	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController = Character->GetPlayerController();
 

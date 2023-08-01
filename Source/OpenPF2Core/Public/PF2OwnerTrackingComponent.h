@@ -13,6 +13,7 @@
 #include <GameFramework/Controller.h>
 #include <GameFramework/Info.h>
 
+#include "PF2EventEmitterInterface.h"
 #include "PF2OwnerTrackingInterface.h"
 
 #include "PF2OwnerTrackingComponent.generated.h"
@@ -24,42 +25,58 @@ class IPF2PlayerControllerInterface;
 class IPF2PlayerStateInterface;
 
 // =====================================================================================================================
-// Delegate Declarations
-// =====================================================================================================================
-/**
- * Delegate for Blueprints to react to a change in owning player state.
- */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(
-	FPF2OwnerComponentOwningPlayerStateChangedDelegate,
-	AActor*,                                    Actor,
-	TScriptInterface<IPF2PlayerStateInterface>, OldOwner,
-	TScriptInterface<IPF2PlayerStateInterface>, NewOwner
-);
-
-/**
- * Delegate for Blueprints to react to a change in party affiliation.
- */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(
-	FPF2OwnerComponentPartyChangedDelegate,
-	AActor*,                              Actor,
-	TScriptInterface<IPF2PartyInterface>, OldParty,
-	TScriptInterface<IPF2PartyInterface>, NewParty
-);
-
-// =====================================================================================================================
 // Normal Declarations
 // =====================================================================================================================
 UCLASS(ClassGroup="OpenPF2-Characters", meta=(BlueprintSpawnableComponent))
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API UPF2OwnerTrackingComponent : public UActorComponent, public IPF2OwnerTrackingInterface
+class OPENPF2CORE_API UPF2OwnerTrackingComponent :
+	public UActorComponent,
+	public IPF2EventEmitterInterface,
+	public IPF2OwnerTrackingInterface
 {
 	GENERATED_BODY()
 
+protected:
+	// =================================================================================================================
+	// Protected Fields
+	// =================================================================================================================
+	/**
+	 * The events object used for binding Blueprint callbacks to events from this component.
+	 */
+	UPROPERTY(Transient)
+	mutable UPF2OwnerTrackingInterfaceEvents* Events;
+
+private:
+	// =================================================================================================================
+	// Private Fields
+	// =================================================================================================================
+	/**
+	 * The state of the player who owns the containing actor.
+	 *
+	 * This is a standard player state (instead of an interface) for replication. UE will not replicate actors if they
+	 * are declared/referenced through an interface property. The value of this property MUST implement
+	 * IPF2PlayerStateInterface.
+	 */
+	UPROPERTY(ReplicatedUsing=OnRep_OwningPlayerState)
+	APlayerState* OwningPlayerState;
+
+	/**
+	 * The party to which the containing actor is affiliated, if any.
+	 *
+	 * This is an info actor (instead of an interface) for replication. UE will not replicate actors if they are
+	 * declared/referenced through an interface property. The value of this property MUST implement IPF2PartyInterface.
+	 */
+	UPROPERTY(ReplicatedUsing=OnRep_Party)
+	AInfo* Party;
+
 public:
 	// =================================================================================================================
-	// Constructors
+	// Public Constructors
 	// =================================================================================================================
-	UPF2OwnerTrackingComponent();
+	/**
+	 * Default constructor for UPF2OwnerTrackingComponent.
+	 */
+	explicit UPF2OwnerTrackingComponent();
 
 	// =================================================================================================================
 	// Public Methods - UActorComponent Overrides
@@ -67,8 +84,15 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	// =================================================================================================================
+	// Public Methods - IPF2EventEmitterInterface Implementation
+	// =================================================================================================================
+	virtual UObject* GetGenericEventsObject() const override;
+
+	// =================================================================================================================
 	// Public Methods - IPF2OwnerTrackingInterface Implementation
 	// =================================================================================================================
+	virtual UPF2OwnerTrackingInterfaceEvents* GetEvents() const override;
+
 	virtual TScriptInterface<IPF2PartyInterface> GetParty() const override;
 
 	virtual void SetParty(const TScriptInterface<IPF2PartyInterface> NewParty) override;
@@ -95,21 +119,6 @@ public:
 	// =================================================================================================================
 	virtual FString GetIdForLogs() const override;
 
-	// =================================================================================================================
-	// Public Fields - Multicast Delegates
-	// =================================================================================================================
-	/**
-	 * Event fired when the containing actor is owned by a different player.
-	 */
-	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Owner Tracking")
-	FPF2OwnerComponentOwningPlayerStateChangedDelegate OnOwnerChanged;
-
-	/**
-	 * Event fired when the containing actor changes party affiliations.
-	 */
-	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Owner Tracking")
-	FPF2OwnerComponentPartyChangedDelegate OnPartyChanged;
-
 protected:
 	// =================================================================================================================
 	// Protected Replication Callbacks
@@ -121,7 +130,7 @@ protected:
 	 *	The previous owner of the containing actor.
 	 */
 	UFUNCTION()
-	void OnRep_OwningPlayerState(APlayerState* OldOwner) const;
+	void OnRep_OwningPlayerState(APlayerState* OldOwner);
 
 	/**
 	 * Notifies this component that the party to which the containing actor is affiliated has been replicated.
@@ -130,7 +139,7 @@ protected:
 	 *	The previous party affiliation of the containing actor.
 	 */
 	UFUNCTION()
-	void OnRep_Party(AInfo* OldParty) const;
+	void OnRep_Party(AInfo* OldParty);
 
 	// =================================================================================================================
 	// Protected Native Event Notifications
@@ -148,7 +157,7 @@ protected:
 	void Native_OnOwningPlayerStateChanged(
 		const TScriptInterface<IPF2PlayerStateInterface> OldOwner,
 		const TScriptInterface<IPF2PlayerStateInterface> NewOwner
-	) const;
+	);
 
 	/**
 	 * Notifies all event listeners that the party to which the containing actor is affiliated has changed.
@@ -162,28 +171,5 @@ protected:
 	void Native_OnPartyChanged(
 		const TScriptInterface<IPF2PartyInterface> OldParty,
 		const TScriptInterface<IPF2PartyInterface> NewParty
-	) const;
-
-private:
-	// =================================================================================================================
-	// Private Fields
-	// =================================================================================================================
-	/**
-	 * The state of the player who owns the containing actor.
-	 *
-	 * This is a standard player state (instead of an interface) for replication. UE will not replicate actors if they
-	 * are declared/referenced through an interface property. The value of this property MUST implement
-	 * IPF2PlayerStateInterface.
-	 */
-	UPROPERTY(ReplicatedUsing=OnRep_OwningPlayerState)
-	APlayerState* OwningPlayerState;
-
-	/**
-	 * The party to which the containing actor is affiliated, if any.
-	 *
-	 * This is an info actor (instead of an interface) for replication. UE will not replicate actors if they are
-	 * declared/referenced through an interface property. The value of this property MUST implement IPF2PartyInterface.
-	 */
-	UPROPERTY(ReplicatedUsing=OnRep_Party)
-	AInfo* Party;
+	);
 };

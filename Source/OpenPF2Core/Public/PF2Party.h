@@ -10,6 +10,7 @@
 
 #include <GameFramework/Info.h>
 
+#include "PF2EventEmitterInterface.h"
 #include "PF2PartyInterface.h"
 
 #include "PF2Party.generated.h"
@@ -21,18 +22,6 @@ class IPF2CharacterInterface;
 class IPF2PlayerStateInterface;
 
 // =====================================================================================================================
-// Delegate Declarations
-// =====================================================================================================================
-/**
- * Delegate for Blueprints to react to a change in player membership.
- */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
-	FPF2PartyMemberChangedDelegate,
-	TScriptInterface<IPF2PartyInterface>,       Party,
-	TScriptInterface<IPF2PlayerStateInterface>, PlayerState
-);
-
-// =====================================================================================================================
 // Normal Declarations
 // =====================================================================================================================
 /**
@@ -40,11 +29,20 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
  */
 UCLASS(BlueprintType, Blueprintable)
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API APF2Party : public AInfo, public IPF2PartyInterface
+class OPENPF2CORE_API APF2Party : public AInfo, public IPF2EventEmitterInterface, public IPF2PartyInterface
 {
 	GENERATED_BODY()
 
 protected:
+	// =================================================================================================================
+	// Protected Fields
+	// =================================================================================================================
+	/**
+	 * The events object used for binding Blueprint callbacks to events from this component.
+	 */
+	UPROPERTY(Transient)
+	mutable UPF2PartyInterfaceEvents* Events;
+
 	/**
 	 * The player-readable name of this party.
 	 */
@@ -76,7 +74,13 @@ protected:
 	TArray<AActor*> MemberCharacters;
 
 public:
-	APF2Party();
+	// =================================================================================================================
+	// Public Constructors
+	// =================================================================================================================
+	/**
+	 * Default constructor for APF2Party.
+	 */
+	explicit APF2Party();
 
 	// =================================================================================================================
 	// Public Methods - AActor Overrides
@@ -84,8 +88,15 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	// =================================================================================================================
+	// Public Methods - IPF2EventEmitterInterface Implementation
+	// =================================================================================================================
+	virtual UObject* GetGenericEventsObject() const override;
+
+	// =================================================================================================================
 	// Public Methods - IPF2PartyInterface Implementation
 	// =================================================================================================================
+	virtual UPF2PartyInterfaceEvents* GetEvents() const override;
+
 	virtual FText GetPartyName() const override;
 
 	virtual int32 GetPartyIndex() const override;
@@ -113,21 +124,6 @@ public:
 	// =================================================================================================================
 	virtual FString GetIdForLogs() const override;
 
-	// =================================================================================================================
-	// Public Fields - Multicast Delegates
-	// =================================================================================================================
-	/**
-	 * Event fired when a player is added to this party.
-	 */
-	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Parties")
-	FPF2PartyMemberChangedDelegate OnPlayerAdded;
-
-	/**
-	 * Event fired when a player is removed from this party.
-	 */
-	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Parties")
-	FPF2PartyMemberChangedDelegate OnPlayerRemoved;
-
 protected:
 	// =================================================================================================================
 	// Protected Native Event Callbacks
@@ -147,6 +143,11 @@ protected:
 	 *	The state of the player that corresponds to the player that was removed from this party.
 	 */
 	void Native_OnPlayerRemoved(const TScriptInterface<IPF2PlayerStateInterface>& PlayerState);
+
+	/**
+	 * Notifies this party that players have been added to or removed from this party.
+	 */
+	void Native_OnMembersChanged();
 
 	// =================================================================================================================
 	// Blueprint Implementable Events

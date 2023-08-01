@@ -171,25 +171,35 @@ protected:
 	 *	The player state that was just made available.
 	 */
 	UFUNCTION()
-	virtual void Native_OnPlayerStateAvailable(TScriptInterface<IPF2PlayerStateInterface> NewPlayerState);
+	virtual void Native_OnPlayerStateAvailable(const TScriptInterface<IPF2PlayerStateInterface>& NewPlayerState);
 
 	/**
 	 * Callback invoked in C++ code when the player has taken ownership of a character.
 	 *
+	 * @param CharacterQueueComponent
+	 *	The component maintaining the list of characters in this player controller.
 	 * @param GivenCharacter
 	 *	The character that is now controllable by the player.
 	 */
 	UFUNCTION()
-	virtual void Native_OnCharacterGiven(const TScriptInterface<IPF2CharacterInterface>& GivenCharacter);
+	virtual void Native_OnCharacterGiven(
+		const TScriptInterface<IPF2CharacterQueueInterface>& CharacterQueueComponent,
+		const TScriptInterface<IPF2CharacterInterface>&      GivenCharacter
+	);
 
 	/**
 	 * Callback invoked in C++ code when the player has been released of ownership of a character.
 	 *
+	* @param CharacterQueueComponent
+	 *	The component maintaining the list of characters in this player controller.
 	 * @param ReleasedCharacter
 	 *	The character that is no longer controllable by the player.
 	 */
 	UFUNCTION()
-	virtual void Native_OnCharacterReleased(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter);
+	virtual void Native_OnCharacterReleased(
+		const TScriptInterface<IPF2CharacterQueueInterface>& CharacterQueueComponent,
+		const TScriptInterface<IPF2CharacterInterface>&      ReleasedCharacter
+	);
 
 	// =================================================================================================================
 	// Blueprint Implementable Functions

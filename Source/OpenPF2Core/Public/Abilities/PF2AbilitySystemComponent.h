@@ -8,6 +8,7 @@
 #include <AbilitySystemComponent.h>
 
 #include "PF2CharacterAbilitySystemInterface.h"
+#include "PF2EventEmitterInterface.h"
 
 #include "PF2AbilitySystemComponent.generated.h"
 
@@ -20,30 +21,23 @@ class IPF2AbilityBoostInterface;
 // Normal Declarations
 // =====================================================================================================================
 UCLASS(ClassGroup="OpenPF2-Characters")
-// ReSharper disable once CppClassCanBeFinal
 class OPENPF2CORE_API UPF2AbilitySystemComponent :
-	public UAbilitySystemComponent, public IPF2CharacterAbilitySystemInterface
+	public UAbilitySystemComponent,
+	public IPF2EventEmitterInterface,
+	public IPF2CharacterAbilitySystemInterface
 {
 	GENERATED_BODY()
-
-public:
-	// =================================================================================================================
-	// Public Fields - Multicast Delegates
-	// =================================================================================================================
-	/**
-	 * Event fired to react to character abilities becoming available on the client.
-	 *
-	 * This event is not fired on the server. This can be used to listen to abilities that have been replicated after
-	 * a change remotely. Unlike native engine replication callbacks, this is only invoked after abilities have fully
-	 * replicated; it will not be invoked if some abilities are null.
-	 */
-	UPROPERTY(BlueprintAssignable, Category="OpenPF2|Components|Characters|Ability System")
-	FPF2ClientAbilitiesChangeDelegate OnAbilitiesAvailable;
 
 protected:
 	// =================================================================================================================
 	// Protected Fields
 	// =================================================================================================================
+	/**
+	 * The events object used for binding Blueprint callbacks to events from this component.
+	 */
+	UPROPERTY(Transient)
+	mutable UPF2AbilitySystemInterfaceEvents* Events;
+
 	/**
 	 * Whether character abilities have been replicated from the server at least once for the owning character.
 	 *
@@ -105,8 +99,15 @@ public:
 	explicit UPF2AbilitySystemComponent();
 
 	// =================================================================================================================
+	// Public Methods - IPF2EventEmitterInterface Implementation
+	// =================================================================================================================
+	virtual UObject* GetGenericEventsObject() const override;
+
+	// =================================================================================================================
 	// Public Methods - IPF2AbilitySystemInterface Implementation
 	// =================================================================================================================
+	virtual UPF2AbilitySystemInterfaceEvents* GetEvents() const override;
+
 	virtual TScriptInterface<IPF2GameplayAbilityInterface> GetAbilityInstanceFromSpec(
 		const FGameplayAbilitySpec& AbilitySpec) const override;
 
@@ -193,8 +194,6 @@ public:
 	virtual void RemoveAllDynamicTags() override;
 
 	virtual FGameplayTagContainer GetActiveGameplayTags() const override;
-
-	virtual FPF2ClientAbilitiesChangeDelegate* GetClientAbilityChangeDelegate() override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2CharacterAbilitySystemInterface Implementation

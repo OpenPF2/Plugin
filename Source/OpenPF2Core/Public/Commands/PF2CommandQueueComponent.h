@@ -7,42 +7,14 @@
 
 #include <Components/ActorComponent.h>
 
-#include <Containers/CircularQueue.h>
-
 #include <GameFramework/Info.h>
 
 #include "PF2CommandQueueInterface.h"
+#include "PF2EventEmitterInterface.h"
 
 #include "Commands/PF2CharacterCommandInterface.h"
 
 #include "PF2CommandQueueComponent.generated.h"
-
-// =====================================================================================================================
-// Delegate Declarations
-// =====================================================================================================================
-/**
- * Delegate for Blueprints to react to commands being added to the queue.
- */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
-	FPF2CommandAddedToQueueDelegate,
-	const TScriptInterface<IPF2CharacterCommandInterface>&, Command
-);
-
-/**
- * Delegate for Blueprints to react to commands being removed from the queue.
- */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
-	FPF2CommandRemovedFromQueueDelegate,
-	const TScriptInterface<IPF2CharacterCommandInterface>&, Command
-);
-
-/**
- * Delegate for Blueprints to react to the queue changing in any way (commands added or removed, or queue cleared).
- */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
-	FPF2CommandQueueChangedDelegate,
-	const TArray<TScriptInterface<IPF2CharacterCommandInterface>>&, Commands
-);
 
 // =====================================================================================================================
 // Normal Declarations
@@ -56,7 +28,10 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
  */
 UCLASS(ClassGroup="OpenPF2-Characters", meta=(BlueprintSpawnableComponent))
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API UPF2CommandQueueComponent : public UActorComponent, public IPF2CommandQueueInterface
+class OPENPF2CORE_API UPF2CommandQueueComponent :
+	public UActorComponent,
+	public IPF2EventEmitterInterface,
+	public IPF2CommandQueueInterface
 {
 	GENERATED_BODY()
 
@@ -70,6 +45,12 @@ public:
 	static const uint8 CommandLimitNone;
 
 protected:
+	/**
+	 * The events object used for binding Blueprint callbacks to events from this component.
+	 */
+	UPROPERTY(Transient)
+	mutable UPF2CommandQueueInterfaceEvents* Events;
+
 	/**
 	 * The queue of commands for the owning character.
 	 *
@@ -90,33 +71,12 @@ protected:
 
 public:
 	// =================================================================================================================
-	// Public Fields - Multicast Delegates
-	// =================================================================================================================
-	/**
-	 * Event fired when the commands in the queue have changed (commands added, commands removed, or queue cleared).
-	 */
-	UPROPERTY(BlueprintAssignable)
-	FPF2CommandQueueChangedDelegate OnCommandsChanged;
-
-	/**
-	 * Event fired when a command has been added to this queue.
-	 */
-	UPROPERTY(BlueprintAssignable)
-	FPF2CommandAddedToQueueDelegate OnCommandAdded;
-
-	/**
-	 * Event fired when a command has been removed from this queue.
-	 */
-	UPROPERTY(BlueprintAssignable)
-	FPF2CommandRemovedFromQueueDelegate OnCommandRemoved;
-
-	// =================================================================================================================
 	// Public Constructors
 	// =================================================================================================================
 	/**
 	 * Default constructor for UPF2CommandQueueComponent.
 	 */
-	UPF2CommandQueueComponent();
+	explicit UPF2CommandQueueComponent();
 
 	// =================================================================================================================
 	// Public Methods - AActorComponent Overrides
@@ -124,8 +84,15 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	// =================================================================================================================
+	// Public Methods - IPF2EventEmitterInterface Implementation
+	// =================================================================================================================
+	virtual UObject* GetGenericEventsObject() const override;
+
+	// =================================================================================================================
 	// Public Methods - IPF2CommandQueueInterface Implementation
 	// =================================================================================================================
+	virtual UPF2CommandQueueInterfaceEvents* GetEvents() const override;
+
 	virtual void Enqueue(const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
 	virtual void PeekNext(TScriptInterface<IPF2CharacterCommandInterface>& NextCommand) override;
@@ -173,7 +140,7 @@ protected:
 	/**
 	 * Callback invoked when commands in this queue have changed (commands added, commands removed, or queue cleared).
 	 */
-	void Native_OnCommandsChanged() const;
+	void Native_OnCommandsChanged();
 
 	/**
 	 * Callback invoked when a command has been added to this queue.
@@ -181,7 +148,7 @@ protected:
 	 * @param CommandAdded
 	 *	The command that was added.
 	 */
-	void Native_OnCommandAdded(const TScriptInterface<IPF2CharacterCommandInterface>& CommandAdded) const;
+	void Native_OnCommandAdded(const TScriptInterface<IPF2CharacterCommandInterface>& CommandAdded);
 
 	/**
 	 * Callback invoked when a command has been removed from this queue.
@@ -189,5 +156,5 @@ protected:
 	 * @param CommandRemoved
 	 *	The command that was removed.
 	 */
-	void Native_OnCommandRemoved(const TScriptInterface<IPF2CharacterCommandInterface>& CommandRemoved) const;
+	void Native_OnCommandRemoved(const TScriptInterface<IPF2CharacterCommandInterface>& CommandRemoved);
 };

@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -174,7 +174,7 @@ public:
 	 *	The character for whom a turn is starting.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Encounter Mode of Play Rule Sets|Turns")
-	virtual void StartTurnForCharacter(const TScriptInterface<IPF2CharacterInterface> Character) = 0;
+	virtual void StartTurnForCharacter(const TScriptInterface<IPF2CharacterInterface>& Character) = 0;
 
 	/**
 	 * Signals the end of the specified character's turn.
@@ -183,7 +183,7 @@ public:
 	 *	The character for whom a turn is ending.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Encounter Mode of Play Rule Sets|Turns")
-	virtual void EndTurnForCharacter(const TScriptInterface<IPF2CharacterInterface> Character) = 0;
+	virtual void EndTurnForCharacter(const TScriptInterface<IPF2CharacterInterface>& Character) = 0;
 
 	/**
 	 * Returns whether there is another command queued for the specified character.
