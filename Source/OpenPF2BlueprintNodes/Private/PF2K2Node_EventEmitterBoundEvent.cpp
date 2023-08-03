@@ -12,6 +12,8 @@
 #include <Kismet2/CompilerResultsLog.h>
 #include <Kismet2/KismetEditorUtilities.h>
 
+#include <Logging/MessageLog.h>
+
 #include "OpenPF2Core.h"
 #include "PF2EventEmitterDelegateBinding.h"
 #include "PF2EventEmitterInterface.h"

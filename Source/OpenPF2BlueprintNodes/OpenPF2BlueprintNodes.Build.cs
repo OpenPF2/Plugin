@@ -10,6 +10,8 @@ public class OpenPF2BlueprintNodes : ModuleRules
 {
 	public OpenPF2BlueprintNodes(ReadOnlyTargetRules Target) : base(Target)
 	{
+		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_2;
+
 		PublicDependencyModuleNames.AddRange(
 			new[]
 			{

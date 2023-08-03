@@ -331,7 +331,7 @@ bool UPF2AbilityBindingsComponent::FilterAbilityActivation(
 
 	for (const TSubclassOf<UObject> FilterType : this->Filters)
 	{
-		TSubclassOf<UObject>::TBaseType*           RawFilter = FilterType.GetDefaultObject();
+		UObject*                                   RawFilter = FilterType.GetDefaultObject();
 		const IPF2AbilityExecutionFilterInterface* Filter    = Cast<IPF2AbilityExecutionFilterInterface>(RawFilter);
 
 		if (Filter == nullptr)
