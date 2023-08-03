@@ -6,7 +6,7 @@
 
 #include <Abilities/Tasks/AbilityTask.h>
 
-#include <Animation/AnimInstance.h>
+#include <Animation/AnimMontage.h>
 
 #include "PF2AbilityTaskBase.h"
 
