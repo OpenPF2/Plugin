@@ -196,7 +196,7 @@ FString UPF2AbilityTask_PlayMontageAndWaitForEvent::GetDebugString() const
 	if (this->HasAbility())
 	{
 		const FGameplayAbilityActorInfo* ActorInfo    = Ability->GetCurrentActorInfo();
-		UAnimInstance*                   AnimInstance = ActorInfo->GetAnimInstance();
+		const UAnimInstance*             AnimInstance = ActorInfo->GetAnimInstance();
 
 		if (AnimInstance != nullptr)
 		{
