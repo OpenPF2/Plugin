@@ -23,21 +23,88 @@ namespace PrimitiveComponentStatics
 // =====================================================================================================================
 // Console Variables (CVars)
 // =====================================================================================================================
-// ReSharper disable CppUE4CodingStandardNamingViolationWarning
-namespace PrimitiveComponentCVars
+// Each of these mirrors the CVars declared in PrimitiveComponent.h that are required for the functions we've copied or
+// modified from UPrimitiveComponent. UE does not export the raw values for linking, so have to look up the CVars at
+// run time. These are in a Pf2-specific namespace to avoid definition clashing with what's been defined in
+// PrimitiveComponent.h.
+namespace PF2PrimitiveComponentCVars
 {
-	const IConsoleManager& ConsoleManager = IConsoleManager::Get();
+	IConsoleVariable* bEnableFastOverlapCheck = nullptr;
+	IConsoleVariable* bAllowCachedOverlaps    = nullptr;
+	IConsoleVariable* InitialOverlapTolerance = nullptr;
+	IConsoleVariable* HitDistanceTolerance    = nullptr;
 
-	extern const IConsoleVariable* bEnableFastOverlapCheck                 = ConsoleManager.FindConsoleVariable(TEXT("p.EnableFastOverlapCheck"));
-	extern const IConsoleVariable* bAllowCachedOverlaps                    = ConsoleManager.FindConsoleVariable(TEXT("p.AllowCachedOverlaps"));
-	extern const IConsoleVariable* InitialOverlapTolerance                 = ConsoleManager.FindConsoleVariable(TEXT("p.InitialOverlapTolerance"));
-	extern const IConsoleVariable* HitDistanceTolerance                    = ConsoleManager.FindConsoleVariable(TEXT("p.HitDistanceTolerance"));
-	extern const IConsoleVariable* bAlwaysCreatePhysicsStateConversionHack = ConsoleManager.FindConsoleVariable(TEXT("p.AlwaysCreatePhysicsStateConversionHack"));
 #if !(UE_BUILD_SHIPPING || UE_BUILD_TEST)
-	extern const IConsoleVariable* bShowInitialOverlaps                    = ConsoleManager.FindConsoleVariable(TEXT("p.ShowInitialOverlaps"));
+	IConsoleVariable* bShowInitialOverlaps    = nullptr;
+#endif // !(UE_BUILD_SHIPPING || UE_BUILD_TEST)
+
+	bool IsFastOverlapCheckEnabled()
+	{
+		if (bEnableFastOverlapCheck == nullptr)
+		{
+			const IConsoleManager& ConsoleManager = IConsoleManager::Get();
+
+			bEnableFastOverlapCheck = ConsoleManager.FindConsoleVariable(TEXT("p.EnableFastOverlapCheck"));
+		}
+
+		check(bEnableFastOverlapCheck != nullptr);
+		return bEnableFastOverlapCheck->GetBool();
+	}
+
+	bool AreCachedOverlapsAllowed()
+	{
+		if (bAllowCachedOverlaps == nullptr)
+		{
+			const IConsoleManager& ConsoleManager = IConsoleManager::Get();
+
+			bAllowCachedOverlaps = ConsoleManager.FindConsoleVariable(TEXT("p.AllowCachedOverlaps"));
+		}
+
+		check(bAllowCachedOverlaps != nullptr);
+		return bAllowCachedOverlaps->GetBool();
+	}
+
+	float GetInitialOverlapTolerance()
+	{
+		if (InitialOverlapTolerance == nullptr)
+		{
+			const IConsoleManager& ConsoleManager = IConsoleManager::Get();
+
+			InitialOverlapTolerance = ConsoleManager.FindConsoleVariable(TEXT("p.InitialOverlapTolerance"));
+		}
+
+		check(InitialOverlapTolerance != nullptr);
+		return InitialOverlapTolerance->GetFloat();
+	}
+
+	float GetHitDistanceTolerance()
+	{
+		if (HitDistanceTolerance == nullptr)
+		{
+			const IConsoleManager& ConsoleManager = IConsoleManager::Get();
+
+			HitDistanceTolerance = ConsoleManager.FindConsoleVariable(TEXT("p.HitDistanceTolerance"));
+		}
+
+		check(HitDistanceTolerance != nullptr);
+		return HitDistanceTolerance->GetFloat();
+	}
+
+#if !(UE_BUILD_SHIPPING || UE_BUILD_TEST)
+	bool ShouldShowInitialOverlaps()
+	{
+		if (bShowInitialOverlaps == nullptr)
+		{
+			const IConsoleManager& ConsoleManager = IConsoleManager::Get();
+
+			bShowInitialOverlaps = ConsoleManager.FindConsoleVariable(TEXT("p.ShowInitialOverlaps"));
+		}
+
+		check(bShowInitialOverlaps != nullptr);
+		return bShowInitialOverlaps->GetBool();
+	}
 #endif // !(UE_BUILD_SHIPPING || UE_BUILD_TEST)
 }
-// ReSharper restore CppUE4CodingStandardNamingViolationWarning
 
 // =====================================================================================================================
 // Global Utility Methods
@@ -76,10 +143,10 @@ extern bool ShouldIgnoreHitResult(const UWorld*             InWorld,
 
 		// If we started penetrating, we may want to ignore it if we are moving out of penetration.
 		// This helps prevent getting stuck in walls.
-		if (((TestHit.Distance < PrimitiveComponentCVars::HitDistanceTolerance->GetFloat()) || TestHit.bStartPenetrating) &&
+		if (((TestHit.Distance < PF2PrimitiveComponentCVars::GetHitDistanceTolerance()) || TestHit.bStartPenetrating) &&
 			!(MoveFlags & MOVECOMP_NeverIgnoreBlockingOverlaps))
 		{
-			const float DotTolerance = PrimitiveComponentCVars::InitialOverlapTolerance->GetFloat();
+			const float DotTolerance = PF2PrimitiveComponentCVars::GetInitialOverlapTolerance();
 
 			// Dot product of movement direction against 'exit' direction
 			const FVector MovementDir = MovementDirDenormalized.GetSafeNormal();
@@ -89,7 +156,7 @@ extern bool ShouldIgnoreHitResult(const UWorld*             InWorld,
 
 	#if !(UE_BUILD_SHIPPING || UE_BUILD_TEST)
 			{
-				if (PrimitiveComponentCVars::bShowInitialOverlaps->GetBool())
+				if (PF2PrimitiveComponentCVars::ShouldShowInitialOverlaps())
 				{
 					UE_LOG(
 						LogTemp,

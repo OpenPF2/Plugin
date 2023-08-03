@@ -6,7 +6,6 @@
 #include <Components/PrimitiveComponent.h>
 
 #include <Engine/OverlapInfo.h>
-#include <Engine/ScopedMovementUpdate.h>
 
 #include <GameFramework/WorldSettings.h>
 
@@ -26,43 +25,21 @@ namespace PrimitiveComponentStatics
 // =====================================================================================================================
 // Console Variables (CVars)
 // =====================================================================================================================
-// ReSharper disable CppUE4CodingStandardNamingViolationWarning
-namespace PrimitiveComponentCVars
+// Each of these mirrors the CVars declared in PrimitiveComponent.h that are required for the functions we've copied or
+// modified from UPrimitiveComponent. UE does not export the raw values for linking, so have to look up the CVars at
+// run time. These are in a Pf2-specific namespace to avoid definition clashing with what's been defined in
+// PrimitiveComponent.h.
+namespace PF2PrimitiveComponentCVars
 {
-	extern const IConsoleVariable* bEnableFastOverlapCheck;
-	extern const IConsoleVariable* bAllowCachedOverlaps;
-	extern const IConsoleVariable* InitialOverlapTolerance;
-	extern const IConsoleVariable* HitDistanceTolerance;
-	extern const IConsoleVariable* bAlwaysCreatePhysicsStateConversionHack;
+	bool IsFastOverlapCheckEnabled();
+	bool AreCachedOverlapsAllowed();
+	float GetInitialOverlapTolerance();
+	float GetHitDistanceTolerance();
+
 #if !(UE_BUILD_SHIPPING || UE_BUILD_TEST)
-	extern const IConsoleVariable* bShowInitialOverlaps;
+	bool ShouldShowInitialOverlaps();
 #endif // !(UE_BUILD_SHIPPING || UE_BUILD_TEST)
 }
-// ReSharper restore CppUE4CodingStandardNamingViolationWarning
-
-// =====================================================================================================================
-// Struct Definitions
-// =====================================================================================================================
-/**
- * Predicate that searches for an overlap with an actor other than the given owner.
- *
- * (This was copied from PrimitiveComponent.cpp, since it was a private definition).
- */
-struct FPredicateOverlapHasDifferentActor
-{
-	explicit FPredicateOverlapHasDifferentActor(const AActor& Owner): MyOwnerPtr(&Owner)
-	{
-	}
-
-	bool operator() (const FOverlapInfo& Info) const
-	{
-		// MyOwnerPtr is always valid, so we don't need the IsValid() checks in the WeakObjectPtr comparison operator.
-		return !MyOwnerPtr.HasSameIndexAndSerialNumber(Info.OverlapInfo.HitObjectHandle.FetchActor());
-	}
-
-private:
-	const TWeakObjectPtr<const AActor> MyOwnerPtr;
-};
 
 // =====================================================================================================================
 // Template Methods
@@ -83,9 +60,9 @@ private:
  * @return
  *	The index of the target overlap in the array of overlaps, or INDEX_NONE if no match was found.
  */
-template<class AllocatorType>
+template <class AllocatorType>
 FORCEINLINE_DEBUGGABLE int32 IndexOfOverlapFast(const TArray<FOverlapInfo, AllocatorType>& OverlapArray,
-												const FOverlapInfo&                        SearchItem)
+                                                const FOverlapInfo&                        SearchItem)
 {
 	return OverlapArray.IndexOfByPredicate(FFastOverlapInfoCompare(SearchItem));
 }
@@ -103,9 +80,9 @@ FORCEINLINE_DEBUGGABLE int32 IndexOfOverlapFast(const TArray<FOverlapInfo, Alloc
  * @param NewOverlap
  *	The overlap to add to the array.
  */
-template<class AllocatorType>
+template <class AllocatorType>
 FORCEINLINE_DEBUGGABLE void AddUniqueOverlapFast(TArray<FOverlapInfo, AllocatorType>& OverlapArray,
-												 FOverlapInfo&&                       NewOverlap)
+                                                 FOverlapInfo&&                       NewOverlap)
 {
 	if (IndexOfOverlapFast(OverlapArray, NewOverlap) == INDEX_NONE)
 	{
@@ -116,38 +93,6 @@ FORCEINLINE_DEBUGGABLE void AddUniqueOverlapFast(TArray<FOverlapInfo, AllocatorT
 // =====================================================================================================================
 // Inlined Utility Methods
 // =====================================================================================================================
-/**
- * Determines if overlaps should always be queued, or queued only if GetGenerateOverlapEvents() returns true.
- *
- * The determination is based on the settings of the current movement scope. If the component does not have an active
- * movement scope, the result is always `true`.
- *
- * (This was copied from PrimitiveComponent.cpp, since it was a private definition).
- *
- * @param ThisComponent
- *	The component for which overlaps are being checked.
- *
- * @return
- *	- true if overlaps should be queued only if GetGenerateOverlapEvents() returns true. This is the default value if
- *	  there is no active movement scope.
- *	- false if overlaps should always be queued, regardless of what GetGenerateOverlapEvents() returns.
- */
-FORCEINLINE_DEBUGGABLE bool ShouldCheckOverlapFlagToQueueOverlaps(const UPrimitiveComponent& ThisComponent)
-{
-	const FScopedMovementUpdate* CurrentUpdate = ThisComponent.GetCurrentScopedMovement();
-
-	if (CurrentUpdate == nullptr)
-	{
-		// By default we require the GetGenerateOverlapEvents() to queue up overlaps, since we require it to trigger
-		// events.
-		return true;
-	}
-	else
-	{
-		return CurrentUpdate->RequiresOverlapsEventFlag();
-	}
-}
-
 /**
  * Determines if overlap between two actors and their associated components should be ignored.
  *
