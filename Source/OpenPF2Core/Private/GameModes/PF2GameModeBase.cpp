@@ -204,7 +204,7 @@ void APF2GameModeBase::AddCharacterToEncounter(const TScriptInterface<IPF2Charac
 			LogPf2CoreEncounters,
 			Error,
 			TEXT("No MoPRS is set. Ignoring request to add character ('%s') to encounter."),
-			*(Character->GetCharacterName().ToString())
+			*(Character->GetIdForLogs())
 		);
 	}
 	else
