@@ -15,7 +15,6 @@
 #include "PF2CharacterInterface.h"
 #include "PF2GameStateInterface.h"
 #include "PF2OwnerTrackingInterface.h"
-#include "PF2Party.h"
 #include "PF2PartyInterface.h"
 #include "PF2PlayerStateInterface.h"
 
