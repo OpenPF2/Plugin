@@ -9,6 +9,8 @@
 #include "PF2ModeOfPlayRuleSetInterface.h"
 #include "PF2PlayerControllerInterface.h"
 
+#include "GameModes/PF2ModeOfPlayType.h"
+
 #include "PF2ModeOfPlayRuleSetBase.generated.h"
 
 /**
@@ -26,6 +28,16 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2ModeOfPlayRuleSetInterface Implementation
 	// =================================================================================================================
+	virtual void OnModeOfPlayStart(const EPF2ModeOfPlayType ModeOfPlay) override;
+
+	virtual void OnPlayableCharacterStarting(const TScriptInterface<IPF2CharacterInterface>& Character) override;
+
+	virtual void OnCharacterAddedToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
+
+	virtual void OnCharacterRemovedFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
+
+	virtual void OnModeOfPlayEnd(const EPF2ModeOfPlayType ModeOfPlay) override;
+
 	virtual EPF2CommandExecuteOrQueueResult AttemptToExecuteOrQueueCommand_Implementation(
 		const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
@@ -33,6 +45,90 @@ public:
 		const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
 protected:
+	// =================================================================================================================
+	// Blueprint Implementable Events
+	// =================================================================================================================
+	/**
+	 * Callback to notify this rule set that the mode of play that invoked it is now active.
+	 *
+	 * The rule set should use this as an opportunity to initialize its state (e.g., roll initiative, assemble a list of
+	 * enemies, etc.).
+	 *
+	 * @param ModeOfPlay
+	 *	The mode of play that is just starting.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Mode of Play Rule Sets",
+		meta=(DisplayName="On Mode of Play Start")
+	)
+	void BP_OnModeOfPlayStart(EPF2ModeOfPlayType ModeOfPlay);
+
+	/**
+	 * Callback to notify this rule set that a playable character has just joined the game.
+	 *
+	 * This only fires if a player joins the game while this rule set is already active. The rule set should use this as
+	 * an opportunity to update character-tracking logic (e.g., add the player to an existing, on-going encounter,
+	 * etc.).
+	 *
+	 * @param Character
+	 *	The character of the player who just connected.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Mode of Play Rule Sets",
+		meta=(DisplayName="On Playable Character Starting")
+	)
+	void BP_OnPlayableCharacterStarting(const TScriptInterface<IPF2CharacterInterface>& Character);
+
+	/**
+	 * Callback to notify this rule set that a character should be added to the current encounter.
+	 *
+	 * The rule set can choose to ignore this event if it's not applicable (e.g., this rule set is not for an
+	 * encounter). This callback should also be ignored if the given character is already part of the encounter.
+	 *
+	 * @param Character
+	 *	The character being added to the encounter.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Mode of Play Rule Sets",
+		meta=(DisplayName="On Character Added to Encounter")
+	)
+	void BP_OnCharacterAddedToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character);
+
+	/**
+	 * Callback to notify this rule set that a character should be removed from the current encounter.
+	 *
+	 * The rule set can choose to ignore this event if it's not applicable (e.g., this rule set is not for an
+	 * encounter). This callback should also be ignored if the given character is not part of the encounter.
+	 *
+	 * @param Character
+	 *	The character being removed from the encounter.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Mode of Play Rule Sets",
+		meta=(DisplayName="On Character Removed from Encounter")
+	)
+	void BP_OnCharacterRemovedFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character);
+
+	/**
+	 * Callback to notify this rule set to wrap-up prior to a change in mode of play.
+	 *
+	 * The rule set should use this as an opportunity to apply any long-lasting effects of the mode (e.g., calculate
+	 * experience and hero points, end encounter-only gameplay effects or abilities, etc.).
+	 *
+	 * @param ModeOfPlay
+	 *	The mode of play that is ending.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Mode of Play Rule Sets",
+		meta=(DisplayName="On Mode of Play End")
+	)
+	void BP_OnModeOfPlayEnd(EPF2ModeOfPlayType ModeOfPlay);
+
 	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================

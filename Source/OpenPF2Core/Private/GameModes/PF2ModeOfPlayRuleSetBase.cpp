@@ -15,6 +15,32 @@
 #include "Libraries/PF2CharacterCommandLibrary.h"
 #include "Libraries/PF2CharacterLibrary.h"
 
+void APF2ModeOfPlayRuleSetBase::OnModeOfPlayStart(const EPF2ModeOfPlayType ModeOfPlay)
+{
+	this->BP_OnModeOfPlayStart(ModeOfPlay);
+}
+
+void APF2ModeOfPlayRuleSetBase::OnPlayableCharacterStarting(const TScriptInterface<IPF2CharacterInterface>& Character)
+{
+	this->BP_OnPlayableCharacterStarting(Character);
+}
+
+void APF2ModeOfPlayRuleSetBase::OnCharacterAddedToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character)
+{
+	this->BP_OnCharacterAddedToEncounter(Character);
+}
+
+void APF2ModeOfPlayRuleSetBase::OnCharacterRemovedFromEncounter(
+	const TScriptInterface<IPF2CharacterInterface>& Character)
+{
+	this->BP_OnCharacterRemovedFromEncounter(Character);
+}
+
+void APF2ModeOfPlayRuleSetBase::OnModeOfPlayEnd(const EPF2ModeOfPlayType ModeOfPlay)
+{
+	this->BP_OnModeOfPlayEnd(ModeOfPlay);
+}
+
 EPF2CommandExecuteOrQueueResult APF2ModeOfPlayRuleSetBase::AttemptToExecuteOrQueueCommand_Implementation(
 	const TScriptInterface<IPF2CharacterCommandInterface>& Command)
 {

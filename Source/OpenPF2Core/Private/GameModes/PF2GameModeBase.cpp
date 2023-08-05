@@ -209,7 +209,7 @@ void APF2GameModeBase::AddCharacterToEncounter(const TScriptInterface<IPF2Charac
 	}
 	else
 	{
-		IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnCharacterAddedToEncounter(RuleSet.GetObject(), Character);
+		RuleSet->OnCharacterAddedToEncounter(Character);
 	}
 }
 
@@ -228,7 +228,7 @@ void APF2GameModeBase::RemoveCharacterFromEncounter(const TScriptInterface<IPF2C
 	}
 	else
 	{
-		IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnCharacterRemovedFromEncounter(RuleSet.GetObject(), Character);
+		RuleSet->OnCharacterRemovedFromEncounter(Character);
 	}
 }
 
@@ -324,8 +324,7 @@ void APF2GameModeBase::HandleStartingNewPlayer_Implementation(APlayerController*
 				);
 
 				// Player controller is not compatible with OpenPF2; fallback to just interacting with the pawn.
-				IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnPlayableCharacterStarting(
-					RuleSet.GetObject(),
+				RuleSet->OnPlayableCharacterStarting(
 					PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterInterface>(CharacterIntf)
 				);
 			}
@@ -487,7 +486,7 @@ void APF2GameModeBase::ForceSwitchModeOfPlay(const EPF2ModeOfPlayType NewModeOfP
 		{
 			AActor* OldRuleSetActor = Cast<AActor>(OldRuleSet.GetObject());
 
-			IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnModeOfPlayEnd(OldRuleSet.GetObject(), OldModeOfPlay);
+			OldRuleSet->OnModeOfPlayEnd(OldModeOfPlay);
 
 			if (OldRuleSetActor != nullptr)
 			{
@@ -501,7 +500,7 @@ void APF2GameModeBase::ForceSwitchModeOfPlay(const EPF2ModeOfPlayType NewModeOfP
 
 		if (NewRuleSet.GetInterface() != nullptr)
 		{
-			IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnModeOfPlayStart(NewRuleSet.GetObject(), NewModeOfPlay);
+			NewRuleSet->OnModeOfPlayStart(NewModeOfPlay);
 		}
 	}
 }
