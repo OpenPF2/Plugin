@@ -283,3 +283,11 @@ void APF2EncounterModeOfPlayRuleSetBase::SetActiveCharacter(
 {
 	this->ActiveCharacter = NewActiveCharacter;
 }
+
+void APF2EncounterModeOfPlayRuleSetBase::RemoveAllCharactersFromEncounter() const
+{
+	for (const TScriptInterface<IPF2CharacterInterface>& Character : this->GetAllCharactersInInitiativeOrder())
+	{
+		this->RemoveCharacterFromEncounter(Character);
+	}
+}

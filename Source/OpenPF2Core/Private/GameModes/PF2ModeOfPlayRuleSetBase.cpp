@@ -148,3 +148,24 @@ void APF2ModeOfPlayRuleSetBase::AddAllPlayerControlledCharactersToEncounter() co
 		this->AddCharacterToEncounter(Character);
 	}
 }
+
+void APF2ModeOfPlayRuleSetBase::RemoveCharacterFromEncounter(
+	const TScriptInterface<IPF2CharacterInterface> Character) const
+{
+	AGameModeBase*         GameMode     = this->GetWorld()->GetAuthGameMode();
+	IPF2GameModeInterface* GameModeIntf = Cast<IPF2GameModeInterface>(GameMode);
+
+	if (GameModeIntf == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreEncounters,
+			Error,
+			TEXT("Game mode is not OpenPF2-compatible. Ignoring request to remove character ('%s') from encounter."),
+			*(Character->GetIdForLogs())
+		);
+	}
+	else
+	{
+		GameModeIntf->RemoveCharacterFromEncounter(Character);
+	}
+}

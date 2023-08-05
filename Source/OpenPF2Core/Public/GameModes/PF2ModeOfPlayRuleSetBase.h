@@ -181,4 +181,17 @@ protected:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets")
 	void AddAllPlayerControlledCharactersToEncounter() const;
+
+	/**
+	 * Removes a character from the current encounter, if an encounter is active.
+	 *
+	 * This call will have no effect under the following circumstances:
+	 *	- If there is no active encounter according to game mode rules or the current Mode of Play Rule Set (MoPRS).
+	 *	- If there is an active encounter and no characters are part of the encounter.
+	 *
+	 * @param Character
+	 *	The character being removed from the encounter.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets")
+	void RemoveCharacterFromEncounter(const TScriptInterface<IPF2CharacterInterface> Character) const;
 };

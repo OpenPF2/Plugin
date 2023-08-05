@@ -139,4 +139,10 @@ protected:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Encounters")
 	void SetActiveCharacter(const TScriptInterface<IPF2CharacterInterface>& NewActiveCharacter);
+
+	/**
+	 * Removes all characters from the current encounter.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Encounters")
+	void RemoveAllCharactersFromEncounter() const;
 };
