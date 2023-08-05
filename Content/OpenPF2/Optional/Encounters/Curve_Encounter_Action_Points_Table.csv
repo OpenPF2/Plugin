@@ -1,4 +1,4 @@
-Stat,1
+Stat,Value
 TurnStartActionPoints,3
 TurnStartReactionPoints,1
 ReactionActionPointCost,0
@@ -11,3 +11,4 @@ TwoActionActivityActionPointCost,2
 TwoActionActivityReactionPointCost,0
 ThreeActionActivityActionPointCost,3
 ThreeActionActivityReactionPointCost,0
+RoundDurationSeconds,6
