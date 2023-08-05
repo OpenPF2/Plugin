@@ -5,6 +5,10 @@
 
 #include "GameModes/PF2ModeOfPlayRuleSetBase.h"
 
+#include <Engine/World.h>
+
+#include <GameFramework/GameModeBase.h>
+
 #include "Commands/PF2CharacterCommandInterface.h"
 #include "Commands/PF2CommandQueueInterface.h"
 
