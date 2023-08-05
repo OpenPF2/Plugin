@@ -62,4 +62,27 @@ protected:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets")
 	TArray<TScriptInterface<IPF2CharacterInterface>> GetPlayerControlledCharacters() const;
+
+	/**
+	 * Adds a character to the current encounter, if an encounter is active.
+	 *
+	 * This call will have no effect under the following circumstances:
+	 *	- If there is no active encounter according to game mode rules or the current Mode of Play Rule Set (MoPRS).
+	 *	- If there is an active encounter and the given character is already part of the encounter.
+	 *
+	 * @param Character
+	 *	The character being added to the encounter.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets")
+	void AddCharacterToEncounter(const TScriptInterface<IPF2CharacterInterface> Character) const;
+
+	/**
+	 * Adds all characters controlled by players to the current encounter, if an encounter is active.
+	 *
+	 * This call will have no effect under the following circumstances:
+	 *	- If there is no active encounter according to game mode rules or the current Mode of Play Rule Set (MoPRS).
+	 *	- If there is an active encounter and all player-controlled characters are already part of the encounter.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets")
+	void AddAllPlayerControlledCharactersToEncounter() const;
 };

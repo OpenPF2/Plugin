@@ -94,3 +94,31 @@ TArray<TScriptInterface<IPF2CharacterInterface>> APF2ModeOfPlayRuleSetBase::GetP
 {
 	return UPF2CharacterLibrary::GetPlayerControlledCharacters(this->GetWorld());
 }
+
+void APF2ModeOfPlayRuleSetBase::AddCharacterToEncounter(const TScriptInterface<IPF2CharacterInterface> Character) const
+{
+	AGameModeBase*         GameMode     = this->GetWorld()->GetAuthGameMode();
+	IPF2GameModeInterface* GameModeIntf = Cast<IPF2GameModeInterface>(GameMode);
+
+	if (GameModeIntf == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreEncounters,
+			Error,
+			TEXT("Game mode is not OpenPF2-compatible. Ignoring request to add character ('%s') to encounter."),
+			*(Character->GetIdForLogs())
+		);
+	}
+	else
+	{
+		GameModeIntf->AddCharacterToEncounter(Character);
+	}
+}
+
+void APF2ModeOfPlayRuleSetBase::AddAllPlayerControlledCharactersToEncounter() const
+{
+	for (const TScriptInterface<IPF2CharacterInterface>& Character : this->GetPlayerControlledCharacters())
+	{
+		this->AddCharacterToEncounter(Character);
+	}
+}
