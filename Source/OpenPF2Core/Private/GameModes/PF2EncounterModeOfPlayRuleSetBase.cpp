@@ -21,6 +21,14 @@ APF2EncounterModeOfPlayRuleSetBase::APF2EncounterModeOfPlayRuleSetBase()
 		this->CreateDefaultSubobject<UPF2CharacterInitiativeQueueComponent>(TEXT("CharacterInitiativeQueue"));
 }
 
+void APF2EncounterModeOfPlayRuleSetBase::OnModeOfPlayEnd(const EPF2ModeOfPlayType ModeOfPlay)
+{
+	Super::OnModeOfPlayEnd(ModeOfPlay);
+
+	// Be sure to cleanly stop any encounter-specific behavior for each character still in the encounter.
+	this->RemoveAllCharactersFromEncounter();
+}
+
 bool APF2EncounterModeOfPlayRuleSetBase::HavePlayableCharacters() const
 {
 	bool Result = false;

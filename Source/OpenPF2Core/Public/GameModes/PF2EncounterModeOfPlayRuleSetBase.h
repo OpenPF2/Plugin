@@ -74,6 +74,11 @@ public:
 	explicit APF2EncounterModeOfPlayRuleSetBase();
 
 	// =================================================================================================================
+	// Public Methods - IPF2ModeOfPlayRuleSetInterface Overrides
+	// =================================================================================================================
+	virtual void OnModeOfPlayEnd(const EPF2ModeOfPlayType ModeOfPlay) override;
+
+	// =================================================================================================================
 	// Public Methods - IPF2EncounterModeOfPlayRuleSetInterface Implementation
 	// =================================================================================================================
 	virtual bool HavePlayableCharacters() const override;
