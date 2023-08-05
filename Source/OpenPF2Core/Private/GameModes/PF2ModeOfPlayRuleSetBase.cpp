@@ -80,7 +80,7 @@ TScriptInterface<IPF2GameModeInterface> APF2ModeOfPlayRuleSetBase::GetGameMode()
 {
 	AGameModeBase* GameMode = this->GetWorld()->GetAuthGameMode();
 
-	check(GameMode);
+	check(GameMode != nullptr);
 
 	return TScriptInterface<IPF2GameModeInterface>(GameMode);
 }
