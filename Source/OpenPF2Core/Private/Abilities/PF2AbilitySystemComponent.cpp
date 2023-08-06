@@ -660,7 +660,7 @@ UActorComponent* UPF2AbilitySystemComponent::ToActorComponent()
 
 FString UPF2AbilitySystemComponent::GetIdForLogs() const
 {
-	return this->GetName();
+	return this->GetFullName();
 }
 
 void UPF2AbilitySystemComponent::OnRep_ActivateAbilities()
