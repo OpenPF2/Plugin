@@ -101,6 +101,7 @@ void APF2EncounterModeOfPlayRuleSetBase::StartTurnForCharacter(
 		*(Character->GetIdForLogs())
 	);
 
+	this->BP_OnCharacterTurnStart(Character);
 	this->SetActiveCharacter(Character);
 
 	if (PlayerController.GetInterface() != nullptr)
@@ -124,6 +125,7 @@ void APF2EncounterModeOfPlayRuleSetBase::EndTurnForCharacter(const TScriptInterf
 		*(Character->GetIdForLogs())
 	);
 
+	this->BP_OnCharacterTurnEnd(Character);
 	this->SetActiveCharacter(TScriptInterface<IPF2CharacterInterface>(nullptr));
 
 	if (PlayerController.GetInterface() != nullptr)

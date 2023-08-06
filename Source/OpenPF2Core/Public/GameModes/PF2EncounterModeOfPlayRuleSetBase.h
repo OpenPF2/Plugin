@@ -123,6 +123,35 @@ public:
 
 protected:
 	// =================================================================================================================
+	// Blueprint Implementable Events
+	// =================================================================================================================
+	/**
+	 * Callback to notify this rule set that a character's turn is starting.
+	 *
+	 * @param Character
+	 *	The character whose turn is starting.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Mode of Play Rule Sets|Encounters",
+		meta=(DisplayName="On Chararacter Turn Start")
+	)
+	void BP_OnCharacterTurnStart(const TScriptInterface<IPF2CharacterInterface>& Character);
+
+	/**
+	 * Callback to notify this rule set that a character's turn is ending.
+	 *
+	 * @param Character
+	 *	The character whose turn is ending.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Mode of Play Rule Sets|Encounters",
+		meta=(DisplayName="On Chararacter Turn End")
+	)
+	void BP_OnCharacterTurnEnd(const TScriptInterface<IPF2CharacterInterface>& Character);
+
+	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
 	/**
