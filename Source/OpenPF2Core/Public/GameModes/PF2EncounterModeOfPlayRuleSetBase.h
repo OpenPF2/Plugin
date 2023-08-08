@@ -55,7 +55,7 @@ protected:
 	/**
 	 * The component of the MoPRS that maintains the list of characters and their initiatives.
 	 */
-	IPF2CharacterInitiativeQueueInterface* CharacterInitiativeQueue;
+	TScriptInterface<IPF2CharacterInitiativeQueueInterface> CharacterInitiativeQueue;
 
 	/**
 	 * The character whose turn it is in the encounter.
@@ -162,7 +162,7 @@ protected:
 	 */
 	FORCEINLINE TScriptInterface<IPF2CharacterInitiativeQueueInterface> GetCharacterInitiativeQueue() const
 	{
-		return PF2InterfaceUtilities::ToScriptInterface(this->CharacterInitiativeQueue);
+		return this->CharacterInitiativeQueue;
 	}
 
 	/**
