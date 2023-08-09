@@ -86,7 +86,9 @@ UPF2AttributeSet::UPF2AttributeSet() :
 	FeAncestryFeatCount(0.0f),
 	FeAncestryFeatLimit(0.0f),
 	EncActionPoints(0.0f),
+	EncMaxActionPoints(0.0f),
 	EncReactionPoints(0.0f),
+	EncMaxReactionPoints(0.0f),
 	TmpDamageIncoming(0.0f)
 {
 }
@@ -161,7 +163,9 @@ void UPF2AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(UPF2AttributeSet, FeAncestryFeatCount);
 	DOREPLIFETIME(UPF2AttributeSet, FeAncestryFeatLimit);
 	DOREPLIFETIME(UPF2AttributeSet, EncActionPoints);
+	DOREPLIFETIME(UPF2AttributeSet, EncMaxActionPoints);
 	DOREPLIFETIME(UPF2AttributeSet, EncReactionPoints);
+	DOREPLIFETIME(UPF2AttributeSet, EncMaxReactionPoints);
 }
 
 void UPF2AttributeSet::OnRep_Experience(const FGameplayAttributeData& OldValue)
@@ -494,9 +498,19 @@ void UPF2AttributeSet::OnRep_EncActionPoints(const FGameplayAttributeData& OldVa
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, EncActionPoints, OldValue);
 }
 
+void UPF2AttributeSet::OnRep_EncMaxActionPoints(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, EncMaxReactionPoints, OldValue);
+}
+
 void UPF2AttributeSet::OnRep_EncReactionPoints(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, EncReactionPoints, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_EncMaxReactionPoints(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, EncMaxReactionPoints, OldValue);
 }
 
 void UPF2AttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)

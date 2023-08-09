@@ -39,7 +39,7 @@ class OPENPF2CORE_API IPF2ModeOfPlayRuleSetInterface : public IInterface
 
 public:
 	// =================================================================================================================
-	// Blueprint Implementable Events
+	// Public Methods
 	// =================================================================================================================
 	/**
 	 * Callback to notify this rule set that the mode of play that invoked it is now active.
@@ -50,12 +50,7 @@ public:
 	 * @param ModeOfPlay
 	 *	The mode of play that is just starting.
 	 */
-	UFUNCTION(
-		BlueprintImplementableEvent,
-		Category="OpenPF2|Mode of Play Rule Sets",
-		meta=(DisplayName="On Mode of Play Start")
-	)
-	void BP_OnModeOfPlayStart(EPF2ModeOfPlayType ModeOfPlay);
+	virtual void OnModeOfPlayStart(const EPF2ModeOfPlayType ModeOfPlay) = 0;
 
 	/**
 	 * Callback to notify this rule set that a playable character has just joined the game.
@@ -67,12 +62,7 @@ public:
 	 * @param Character
 	 *	The character of the player who just connected.
 	 */
-	UFUNCTION(
-		BlueprintImplementableEvent,
-		Category="OpenPF2|Mode of Play Rule Sets",
-		meta=(DisplayName="On Playable Character Starting")
-	)
-	void BP_OnPlayableCharacterStarting(const TScriptInterface<IPF2CharacterInterface>& Character);
+	virtual void OnPlayableCharacterStarting(const TScriptInterface<IPF2CharacterInterface>& Character) = 0;
 
 	/**
 	 * Callback to notify this rule set that a character should be added to the current encounter.
@@ -83,12 +73,7 @@ public:
 	 * @param Character
 	 *	The character being added to the encounter.
 	 */
-	UFUNCTION(
-		BlueprintImplementableEvent,
-		Category="OpenPF2|Mode of Play Rule Sets",
-		meta=(DisplayName="On Character Added to Encounter")
-	)
-	void BP_OnCharacterAddedToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character);
+	virtual void OnCharacterAddedToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) = 0;
 
 	/**
 	 * Callback to notify this rule set that a character should be removed from the current encounter.
@@ -99,12 +84,7 @@ public:
 	 * @param Character
 	 *	The character being removed from the encounter.
 	 */
-	UFUNCTION(
-		BlueprintImplementableEvent,
-		Category="OpenPF2|Mode of Play Rule Sets",
-		meta=(DisplayName="On Character Removed from Encounter")
-	)
-	void BP_OnCharacterRemovedFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character);
+	virtual void OnCharacterRemovedFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) = 0;
 
 	/**
 	 * Callback to notify this rule set to wrap-up prior to a change in mode of play.
@@ -115,16 +95,8 @@ public:
 	 * @param ModeOfPlay
 	 *	The mode of play that is ending.
 	 */
-	UFUNCTION(
-		BlueprintImplementableEvent,
-		Category="OpenPF2|Mode of Play Rule Sets",
-		meta=(DisplayName="On Mode of Play End")
-	)
-	void BP_OnModeOfPlayEnd(EPF2ModeOfPlayType ModeOfPlay);
+	virtual void OnModeOfPlayEnd(const EPF2ModeOfPlayType ModeOfPlay) = 0;
 
-	// =================================================================================================================
-	// Blueprint Functions
-	// =================================================================================================================
 	/**
 	 * Notifies this rule set that a character wishes to perform a command (e.g., use an ability).
 	 *

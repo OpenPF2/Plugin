@@ -700,6 +700,13 @@ public:
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, EncActionPoints)
 
 	/**
+	 * The maximum number of action points a character can have at any time during an encounter.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Encounters", ReplicatedUsing=OnRep_EncMaxActionPoints)
+	FGameplayAttributeData EncMaxActionPoints;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, EncMaxActionPoints)
+
+	/**
 	 * The number of reaction points this character has available in the current encounter.
 	 *
 	 * Reaction points get automatically reset to 1 at the start of this character's next turn.
@@ -712,6 +719,13 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Encounters", ReplicatedUsing=OnRep_EncReactionPoints)
 	FGameplayAttributeData EncReactionPoints;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, EncReactionPoints)
+
+	/**
+	 * The maximum number of reaction points a character can have at any time during an encounter.
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Encounters", ReplicatedUsing=OnRep_EncMaxActionPoints)
+	FGameplayAttributeData EncMaxReactionPoints;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, EncMaxReactionPoints)
 
 	// Transient/Temporary Attributes ----------------------------------------------------------------------------------
 	/**
@@ -938,10 +952,16 @@ public:
 	virtual void OnRep_SpellDifficultyClass(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
+	virtual void OnRep_EncActionPoints(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_EncMaxActionPoints(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
 	virtual void OnRep_EncReactionPoints(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
-	virtual void OnRep_EncActionPoints(const FGameplayAttributeData& OldValue);
+	virtual void OnRep_EncMaxReactionPoints(const FGameplayAttributeData& OldValue);
 
 protected:
 	/**

@@ -117,10 +117,7 @@ void APF2PlayerControllerBase::Native_OnPlayableCharactersStarting(
 
 	for (const TScriptInterface<IPF2CharacterInterface>& ControllableCharacter : ControllableCharacters)
 	{
-		IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnPlayableCharacterStarting(
-			RuleSet.GetObject(),
-			ControllableCharacter
-		);
+		RuleSet->OnPlayableCharacterStarting(ControllableCharacter);
 	}
 }
 

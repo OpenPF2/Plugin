@@ -21,6 +21,14 @@ APF2EncounterModeOfPlayRuleSetBase::APF2EncounterModeOfPlayRuleSetBase()
 		this->CreateDefaultSubobject<UPF2CharacterInitiativeQueueComponent>(TEXT("CharacterInitiativeQueue"));
 }
 
+void APF2EncounterModeOfPlayRuleSetBase::OnModeOfPlayEnd(const EPF2ModeOfPlayType ModeOfPlay)
+{
+	Super::OnModeOfPlayEnd(ModeOfPlay);
+
+	// Be sure to cleanly stop any encounter-specific behavior for each character still in the encounter.
+	this->RemoveAllCharactersFromEncounter();
+}
+
 bool APF2EncounterModeOfPlayRuleSetBase::HavePlayableCharacters() const
 {
 	bool Result = false;
@@ -93,6 +101,7 @@ void APF2EncounterModeOfPlayRuleSetBase::StartTurnForCharacter(
 		*(Character->GetIdForLogs())
 	);
 
+	this->BP_OnCharacterTurnStart(Character);
 	this->SetActiveCharacter(Character);
 
 	if (PlayerController.GetInterface() != nullptr)
@@ -116,6 +125,7 @@ void APF2EncounterModeOfPlayRuleSetBase::EndTurnForCharacter(const TScriptInterf
 		*(Character->GetIdForLogs())
 	);
 
+	this->BP_OnCharacterTurnEnd(Character);
 	this->SetActiveCharacter(TScriptInterface<IPF2CharacterInterface>(nullptr));
 
 	if (PlayerController.GetInterface() != nullptr)
@@ -282,4 +292,12 @@ void APF2EncounterModeOfPlayRuleSetBase::SetActiveCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& NewActiveCharacter)
 {
 	this->ActiveCharacter = NewActiveCharacter;
+}
+
+void APF2EncounterModeOfPlayRuleSetBase::RemoveAllCharactersFromEncounter()
+{
+	for (const TScriptInterface<IPF2CharacterInterface>& Character : this->GetAllCharactersInInitiativeOrder())
+	{
+		this->RemoveCharacterFromEncounter(Character);
+	}
 }

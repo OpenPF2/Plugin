@@ -5,11 +5,41 @@
 
 #include "GameModes/PF2ModeOfPlayRuleSetBase.h"
 
+#include <Engine/World.h>
+
+#include <GameFramework/GameModeBase.h>
+
 #include "Commands/PF2CharacterCommandInterface.h"
 #include "Commands/PF2CommandQueueInterface.h"
 
 #include "Libraries/PF2CharacterCommandLibrary.h"
 #include "Libraries/PF2CharacterLibrary.h"
+
+void APF2ModeOfPlayRuleSetBase::OnModeOfPlayStart(const EPF2ModeOfPlayType ModeOfPlay)
+{
+	this->BP_OnModeOfPlayStart(ModeOfPlay);
+}
+
+void APF2ModeOfPlayRuleSetBase::OnPlayableCharacterStarting(const TScriptInterface<IPF2CharacterInterface>& Character)
+{
+	this->BP_OnPlayableCharacterStarting(Character);
+}
+
+void APF2ModeOfPlayRuleSetBase::OnCharacterAddedToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character)
+{
+	this->BP_OnCharacterAddedToEncounter(Character);
+}
+
+void APF2ModeOfPlayRuleSetBase::OnCharacterRemovedFromEncounter(
+	const TScriptInterface<IPF2CharacterInterface>& Character)
+{
+	this->BP_OnCharacterRemovedFromEncounter(Character);
+}
+
+void APF2ModeOfPlayRuleSetBase::OnModeOfPlayEnd(const EPF2ModeOfPlayType ModeOfPlay)
+{
+	this->BP_OnModeOfPlayEnd(ModeOfPlay);
+}
 
 EPF2CommandExecuteOrQueueResult APF2ModeOfPlayRuleSetBase::AttemptToExecuteOrQueueCommand_Implementation(
 	const TScriptInterface<IPF2CharacterCommandInterface>& Command)
@@ -76,7 +106,7 @@ TScriptInterface<IPF2GameModeInterface> APF2ModeOfPlayRuleSetBase::GetGameMode()
 {
 	AGameModeBase* GameMode = this->GetWorld()->GetAuthGameMode();
 
-	check(GameMode);
+	check(GameMode != nullptr);
 
 	return TScriptInterface<IPF2GameModeInterface>(GameMode);
 }
@@ -89,4 +119,23 @@ TArray<TScriptInterface<IPF2PlayerControllerInterface>> APF2ModeOfPlayRuleSetBas
 TArray<TScriptInterface<IPF2CharacterInterface>> APF2ModeOfPlayRuleSetBase::GetPlayerControlledCharacters() const
 {
 	return UPF2CharacterLibrary::GetPlayerControlledCharacters(this->GetWorld());
+}
+
+void APF2ModeOfPlayRuleSetBase::AddCharacterToEncounter(const TScriptInterface<IPF2CharacterInterface> Character)
+{
+	this->OnCharacterAddedToEncounter(Character);
+}
+
+void APF2ModeOfPlayRuleSetBase::AddAllPlayerControlledCharactersToEncounter()
+{
+	for (const TScriptInterface<IPF2CharacterInterface>& Character : this->GetPlayerControlledCharacters())
+	{
+		this->AddCharacterToEncounter(Character);
+	}
+}
+
+void APF2ModeOfPlayRuleSetBase::RemoveCharacterFromEncounter(
+	const TScriptInterface<IPF2CharacterInterface> Character)
+{
+	this->OnCharacterRemovedFromEncounter(Character);
 }

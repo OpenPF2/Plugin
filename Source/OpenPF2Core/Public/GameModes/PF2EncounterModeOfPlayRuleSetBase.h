@@ -55,7 +55,7 @@ protected:
 	/**
 	 * The component of the MoPRS that maintains the list of characters and their initiatives.
 	 */
-	IPF2CharacterInitiativeQueueInterface* CharacterInitiativeQueue;
+	TScriptInterface<IPF2CharacterInitiativeQueueInterface> CharacterInitiativeQueue;
 
 	/**
 	 * The character whose turn it is in the encounter.
@@ -72,6 +72,11 @@ public:
 	 * Default constructor for APF2EncounterModeOfPlayRuleSetBase.
 	 */
 	explicit APF2EncounterModeOfPlayRuleSetBase();
+
+	// =================================================================================================================
+	// Public Methods - IPF2ModeOfPlayRuleSetInterface Overrides
+	// =================================================================================================================
+	virtual void OnModeOfPlayEnd(const EPF2ModeOfPlayType ModeOfPlay) override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2EncounterModeOfPlayRuleSetInterface Implementation
@@ -118,6 +123,35 @@ public:
 
 protected:
 	// =================================================================================================================
+	// Blueprint Implementable Events
+	// =================================================================================================================
+	/**
+	 * Callback to notify this rule set that a character's turn is starting.
+	 *
+	 * @param Character
+	 *	The character whose turn is starting.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Mode of Play Rule Sets|Encounters",
+		meta=(DisplayName="On Chararacter Turn Start")
+	)
+	void BP_OnCharacterTurnStart(const TScriptInterface<IPF2CharacterInterface>& Character);
+
+	/**
+	 * Callback to notify this rule set that a character's turn is ending.
+	 *
+	 * @param Character
+	 *	The character whose turn is ending.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Mode of Play Rule Sets|Encounters",
+		meta=(DisplayName="On Chararacter Turn End")
+	)
+	void BP_OnCharacterTurnEnd(const TScriptInterface<IPF2CharacterInterface>& Character);
+
+	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
 	/**
@@ -128,7 +162,7 @@ protected:
 	 */
 	FORCEINLINE TScriptInterface<IPF2CharacterInitiativeQueueInterface> GetCharacterInitiativeQueue() const
 	{
-		return PF2InterfaceUtilities::ToScriptInterface(this->CharacterInitiativeQueue);
+		return this->CharacterInitiativeQueue;
 	}
 
 	/**
@@ -139,4 +173,10 @@ protected:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Encounters")
 	void SetActiveCharacter(const TScriptInterface<IPF2CharacterInterface>& NewActiveCharacter);
+
+	/**
+	 * Removes all characters from the current encounter.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets|Encounters")
+	void RemoveAllCharactersFromEncounter();
 };

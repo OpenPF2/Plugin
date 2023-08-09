@@ -15,7 +15,6 @@
 #include "PF2CharacterInterface.h"
 #include "PF2GameStateInterface.h"
 #include "PF2OwnerTrackingInterface.h"
-#include "PF2Party.h"
 #include "PF2PartyInterface.h"
 #include "PF2PlayerStateInterface.h"
 
@@ -204,12 +203,12 @@ void APF2GameModeBase::AddCharacterToEncounter(const TScriptInterface<IPF2Charac
 			LogPf2CoreEncounters,
 			Error,
 			TEXT("No MoPRS is set. Ignoring request to add character ('%s') to encounter."),
-			*(Character->GetCharacterName().ToString())
+			*(Character->GetIdForLogs())
 		);
 	}
 	else
 	{
-		IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnCharacterAddedToEncounter(RuleSet.GetObject(), Character);
+		RuleSet->OnCharacterAddedToEncounter(Character);
 	}
 }
 
@@ -228,7 +227,7 @@ void APF2GameModeBase::RemoveCharacterFromEncounter(const TScriptInterface<IPF2C
 	}
 	else
 	{
-		IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnCharacterRemovedFromEncounter(RuleSet.GetObject(), Character);
+		RuleSet->OnCharacterRemovedFromEncounter(Character);
 	}
 }
 
@@ -324,8 +323,7 @@ void APF2GameModeBase::HandleStartingNewPlayer_Implementation(APlayerController*
 				);
 
 				// Player controller is not compatible with OpenPF2; fallback to just interacting with the pawn.
-				IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnPlayableCharacterStarting(
-					RuleSet.GetObject(),
+				RuleSet->OnPlayableCharacterStarting(
 					PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterInterface>(CharacterIntf)
 				);
 			}
@@ -487,7 +485,7 @@ void APF2GameModeBase::ForceSwitchModeOfPlay(const EPF2ModeOfPlayType NewModeOfP
 		{
 			AActor* OldRuleSetActor = Cast<AActor>(OldRuleSet.GetObject());
 
-			IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnModeOfPlayEnd(OldRuleSet.GetObject(), OldModeOfPlay);
+			OldRuleSet->OnModeOfPlayEnd(OldModeOfPlay);
 
 			if (OldRuleSetActor != nullptr)
 			{
@@ -501,7 +499,7 @@ void APF2GameModeBase::ForceSwitchModeOfPlay(const EPF2ModeOfPlayType NewModeOfP
 
 		if (NewRuleSet.GetInterface() != nullptr)
 		{
-			IPF2ModeOfPlayRuleSetInterface::Execute_BP_OnModeOfPlayStart(NewRuleSet.GetObject(), NewModeOfPlay);
+			NewRuleSet->OnModeOfPlayStart(NewModeOfPlay);
 		}
 	}
 }
