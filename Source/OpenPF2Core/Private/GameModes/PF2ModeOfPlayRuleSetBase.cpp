@@ -121,27 +121,12 @@ TArray<TScriptInterface<IPF2CharacterInterface>> APF2ModeOfPlayRuleSetBase::GetP
 	return UPF2CharacterLibrary::GetPlayerControlledCharacters(this->GetWorld());
 }
 
-void APF2ModeOfPlayRuleSetBase::AddCharacterToEncounter(const TScriptInterface<IPF2CharacterInterface> Character) const
+void APF2ModeOfPlayRuleSetBase::AddCharacterToEncounter(const TScriptInterface<IPF2CharacterInterface> Character)
 {
-	AGameModeBase*         GameMode     = this->GetWorld()->GetAuthGameMode();
-	IPF2GameModeInterface* GameModeIntf = Cast<IPF2GameModeInterface>(GameMode);
-
-	if (GameModeIntf == nullptr)
-	{
-		UE_LOG(
-			LogPf2CoreEncounters,
-			Error,
-			TEXT("Game mode is not OpenPF2-compatible. Ignoring request to add character ('%s') to encounter."),
-			*(Character->GetIdForLogs())
-		);
-	}
-	else
-	{
-		GameModeIntf->AddCharacterToEncounter(Character);
-	}
+	this->OnCharacterAddedToEncounter(Character);
 }
 
-void APF2ModeOfPlayRuleSetBase::AddAllPlayerControlledCharactersToEncounter() const
+void APF2ModeOfPlayRuleSetBase::AddAllPlayerControlledCharactersToEncounter()
 {
 	for (const TScriptInterface<IPF2CharacterInterface>& Character : this->GetPlayerControlledCharacters())
 	{
@@ -150,22 +135,7 @@ void APF2ModeOfPlayRuleSetBase::AddAllPlayerControlledCharactersToEncounter() co
 }
 
 void APF2ModeOfPlayRuleSetBase::RemoveCharacterFromEncounter(
-	const TScriptInterface<IPF2CharacterInterface> Character) const
+	const TScriptInterface<IPF2CharacterInterface> Character)
 {
-	AGameModeBase*         GameMode     = this->GetWorld()->GetAuthGameMode();
-	IPF2GameModeInterface* GameModeIntf = Cast<IPF2GameModeInterface>(GameMode);
-
-	if (GameModeIntf == nullptr)
-	{
-		UE_LOG(
-			LogPf2CoreEncounters,
-			Error,
-			TEXT("Game mode is not OpenPF2-compatible. Ignoring request to remove character ('%s') from encounter."),
-			*(Character->GetIdForLogs())
-		);
-	}
-	else
-	{
-		GameModeIntf->RemoveCharacterFromEncounter(Character);
-	}
+	this->OnCharacterRemovedFromEncounter(Character);
 }

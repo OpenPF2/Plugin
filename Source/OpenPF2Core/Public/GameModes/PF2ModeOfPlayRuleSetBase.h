@@ -170,7 +170,7 @@ protected:
 	 *	The character being added to the encounter.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets")
-	void AddCharacterToEncounter(const TScriptInterface<IPF2CharacterInterface> Character) const;
+	void AddCharacterToEncounter(const TScriptInterface<IPF2CharacterInterface> Character);
 
 	/**
 	 * Adds all characters controlled by players to the current encounter, if an encounter is active.
@@ -180,7 +180,7 @@ protected:
 	 *	- If there is an active encounter and all player-controlled characters are already part of the encounter.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets")
-	void AddAllPlayerControlledCharactersToEncounter() const;
+	void AddAllPlayerControlledCharactersToEncounter();
 
 	/**
 	 * Removes a character from the current encounter, if an encounter is active.
@@ -193,5 +193,5 @@ protected:
 	 *	The character being removed from the encounter.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Mode of Play Rule Sets")
-	void RemoveCharacterFromEncounter(const TScriptInterface<IPF2CharacterInterface> Character) const;
+	void RemoveCharacterFromEncounter(const TScriptInterface<IPF2CharacterInterface> Character);
 };
