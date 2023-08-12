@@ -89,7 +89,10 @@ public:
 	/**
 	 * Gets the last target location or character that the player has chosen through the UI.
 	 *
-	 * This will be a character for a populated location or a point in space for an empty map location.
+	 * - For a populated location: This will be the character populating that location.
+	 * - For an "empty" location: This will be the origin of the empty location.
+	 *
+	 * The typical way for the player to make this selection is via a movement grid.
 	 *
 	 * @return
 	 *	A hit result for the target location that the player has chosen through the UI.
