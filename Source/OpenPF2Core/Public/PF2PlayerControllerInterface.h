@@ -87,19 +87,21 @@ public:
 	virtual TScriptInterface<IPF2CharacterInterface> GetControlledCharacter() const = 0;
 
 	/**
-	 * Gets the last target location that the player has chosen through the UI.
+	 * Gets the last target location or character that the player has chosen through the UI.
+	 *
+	 * This will be a character for a populated location or a point in space for an empty map location.
 	 *
 	 * @return
 	 *	A hit result for the target location that the player has chosen through the UI.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
-	virtual FHitResult GetTargetLocation() const = 0;
+	virtual FHitResult GetTargetSelection() const = 0;
 
 	/**
-	 * Clears the target location that the player has chosen through the UI.
+	 * Clears any target hit that the player has chosen through the UI.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Player Controllers")
-	virtual void ClearTargetLocation() = 0;
+	virtual void ClearTargetSelection() = 0;
 
 	/**
 	 * Gets the player controller that is implementing this interface.

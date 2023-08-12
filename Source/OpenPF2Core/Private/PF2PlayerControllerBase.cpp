@@ -126,14 +126,14 @@ APlayerController* APF2PlayerControllerBase::ToPlayerController()
 	return this;
 }
 
-FHitResult APF2PlayerControllerBase::GetTargetLocation() const
+FHitResult APF2PlayerControllerBase::GetTargetSelection() const
 {
-	return this->BP_GetTargetLocation();
+	return this->BP_GetTargetSelection();
 }
 
-void APF2PlayerControllerBase::ClearTargetLocation()
+void APF2PlayerControllerBase::ClearTargetSelection()
 {
-	this->BP_OnClearTargetLocation();
+	this->BP_OnClearTargetSelection();
 }
 
 void APF2PlayerControllerBase::Native_OnModeOfPlayChanged(const EPF2ModeOfPlayType NewMode)

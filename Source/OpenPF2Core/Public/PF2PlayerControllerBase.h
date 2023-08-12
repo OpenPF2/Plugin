@@ -79,9 +79,9 @@ public:
 
 	virtual APlayerController* ToPlayerController() override;
 
-	virtual FHitResult GetTargetLocation() const override;
+	virtual FHitResult GetTargetSelection() const override;
 
-	virtual void ClearTargetLocation() override;
+	virtual void ClearTargetSelection() override;
 
 	virtual TArray<TScriptInterface<IPF2CharacterInterface>> GetControllableCharacters() const override;
 
@@ -215,7 +215,7 @@ protected:
 		Category="OpenPF2|Player Controllers",
 		meta=(DisplayName="Get Target Location")
 	)
-	FHitResult BP_GetTargetLocation() const;
+	FHitResult BP_GetTargetSelection() const;
 
 	// =================================================================================================================
 	// Blueprint Implementable Events
@@ -314,5 +314,5 @@ protected:
 		Category="OpenPF2|Player Controllers",
 		meta=(DisplayName="On Clear Target Location")
 	)
-	void BP_OnClearTargetLocation();
+	void BP_OnClearTargetSelection();
 };
