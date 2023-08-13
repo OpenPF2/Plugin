@@ -80,7 +80,7 @@ public:
 	 * assailant or the party have been killed or have fled.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game State")
-	virtual EPF2ModeOfPlayType GetModeOfPlay() = 0;
+	virtual EPF2ModeOfPlayType GetModeOfPlay() const = 0;
 
 	/**
 	 * Gets the set of rules that govern how the game behaves in the current play mode.
@@ -89,7 +89,7 @@ public:
 	 *	The current rule set for the current mode of play.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game State")
-	virtual TScriptInterface<IPF2ModeOfPlayRuleSetInterface> GetModeOfPlayRuleSet() = 0;
+	virtual TScriptInterface<IPF2ModeOfPlayRuleSetInterface> GetModeOfPlayRuleSet() const = 0;
 
 	/**
 	 * Sets the current play mode for all characters in the loaded level.

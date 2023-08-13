@@ -80,22 +80,22 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2GameStateInterface Implementation
 	// =================================================================================================================
-	virtual FORCEINLINE int32 GeneratePlayerIndex() override
+	virtual int32 GeneratePlayerIndex() override
 	{
 		return this->NextPlayerIndex++;
 	}
 
-	virtual FORCEINLINE int32 GeneratePartyIndex() override
+	virtual int32 GeneratePartyIndex() override
 	{
 		return this->NextPartyIndex++;
 	}
 
-	virtual FORCEINLINE EPF2ModeOfPlayType GetModeOfPlay() override
+	virtual EPF2ModeOfPlayType GetModeOfPlay() const override
 	{
 		return this->ModeOfPlay;
 	}
 
-	virtual FORCEINLINE TScriptInterface<IPF2ModeOfPlayRuleSetInterface> GetModeOfPlayRuleSet() override
+	virtual TScriptInterface<IPF2ModeOfPlayRuleSetInterface> GetModeOfPlayRuleSet() const override
 	{
 		return this->ModeOfPlayRuleSet;
 	}
