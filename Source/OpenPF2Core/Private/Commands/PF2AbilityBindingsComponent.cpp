@@ -242,7 +242,9 @@ void UPF2AbilityBindingsComponent::ExecuteBoundAbility(const UInputAction*      
 	TScriptInterface<IPF2CharacterInterface>        Character;
 	TScriptInterface<IPF2PlayerControllerInterface> PlayerController;
 	FGameplayAbilitySpecHandle                      FilteredAbilityHandle = AbilitySpecHandle;
-	FGameplayEventData                              FilteredAbilityPayload;
+
+	FGameplayEventData FilteredAbilityPayload =
+		this->BuildPayloadForAbilityActivation(AbilitySpecHandle);
 
 	check(CharacterIntf != nullptr);
 
@@ -318,6 +320,12 @@ void UPF2AbilityBindingsComponent::SetBindingWithoutBroadcast(
 void UPF2AbilityBindingsComponent::DisconnectBindingFromInput(UPF2AbilityInputBinding* Binding) const
 {
 	return Binding->DisconnectFromInput(this->GetInputComponent());
+}
+
+FGameplayEventData UPF2AbilityBindingsComponent::BuildPayloadForAbilityActivation(
+	const FGameplayAbilitySpecHandle AbilitySpecHandle)
+{
+	return FGameplayEventData();
 }
 
 bool UPF2AbilityBindingsComponent::FilterAbilityActivation(

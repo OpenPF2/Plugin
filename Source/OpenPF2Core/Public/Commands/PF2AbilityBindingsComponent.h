@@ -224,6 +224,21 @@ protected:
 	void DisconnectBindingFromInput(UPF2AbilityInputBinding* Binding) const;
 
 	/**
+	 * Builds a payload for an activation of the ability having the specified handle.
+	 *
+	 * This provides an opportunity for sub-classes to inject additional context (e.g., target data, snapshots of
+	 * game context, etc.) about the activation. Since ability activation only happens on the server in OpenPF2, this
+	 * method only gets invoked on the server.
+	 *
+	 * @param AbilitySpecHandle
+	 *	The handle of the ability that is about to be activated or queued.
+	 *
+	 * @return
+	 *	The gameplay event payload to pass to the ability when it is activated.
+	 */
+	 virtual FGameplayEventData BuildPayloadForAbilityActivation(const FGameplayAbilitySpecHandle AbilitySpecHandle);
+
+	/**
 	 * Applies ability execution filters to the activation of a bound ability.
 	 *
 	 * Filters may veto execution of the filter. If a filter does so, the result of this method will be "false".
