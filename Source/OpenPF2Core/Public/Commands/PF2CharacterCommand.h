@@ -84,6 +84,8 @@ public:
 	 *	The character who would be issued the command.
 	 * @param InAbilitySpecHandle
 	 *	The handle of the ability that the command will trigger when it is executed.
+	 * @param InAbilityPayload
+	 *	An optional payload to pass to the ability.
 	 *
 	 * @return
 	 *	The new command.
@@ -91,9 +93,13 @@ public:
 	UFUNCTION(BlueprintPure, Category="OpenPF2|Character Commands", meta=(DisplayName="Create Character Command"))
 	static TScriptInterface<IPF2CharacterCommandInterface> Create(
 		const TScriptInterface<IPF2CharacterInterface> InCharacter,
-		const FGameplayAbilitySpecHandle               InAbilitySpecHandle)
+		const FGameplayAbilitySpecHandle               InAbilitySpecHandle,
+		// ReSharper disable once CppPassValueParameterByConstReference
+		const FGameplayEventData                       InAbilityPayload=FGameplayEventData())
 	{
-		return PF2InterfaceUtilities::ToScriptInterface(Create(InCharacter->ToActor(), InAbilitySpecHandle));
+		return PF2InterfaceUtilities::ToScriptInterface(
+			Create(InCharacter->ToActor(), InAbilitySpecHandle, InAbilityPayload)
+		);
 	}
 
 	/**
