@@ -184,7 +184,7 @@ public:
 	 *
 	 * @param InTags
 	 *	All of the tags that a granted ability must possess in order for it to be returned.
-	 * @param OutMatchFound
+	 * @param bOutMatchFound
 	 *	An output parameter that receives whether an ability spec with the specified tags was found.
 	 * @param bInOnlyAbilitiesThatSatisfyTagRequirements
 	 *	Only return a match for an ability that has its tag requirements satisfied and is not blocked.
@@ -198,7 +198,7 @@ public:
 		const FGameplayTagContainer& InTags,
 
 		UPARAM(DisplayName="Match Found")
-		bool& OutMatchFound,
+		bool& bOutMatchFound,
 
 		UPARAM(DisplayName="Only Abilities that Satisfy Tag Requirements")
 		const bool bInOnlyAbilitiesThatSatisfyTagRequirements = true) const = 0;
@@ -224,7 +224,7 @@ public:
 	 *
 	 * @param InTags
 	 *	All of the tags that a granted ability must possess in order for it to be returned.
-	 * @param OutMatchFound
+	 * @param bOutMatchFound
 	 *	An output parameter that receives whether an ability spec with the specified tags was found.
 	 * @param bInOnlyAbilitiesThatSatisfyTagRequirements
 	 *	Only return a match for an ability that has its tag requirements satisfied and is not blocked.
@@ -238,7 +238,7 @@ public:
 		const FGameplayTagContainer& InTags,
 
 		UPARAM(DisplayName="Match Found")
-		bool& OutMatchFound,
+		bool& bOutMatchFound,
 
 		UPARAM(DisplayName="Only Abilities that Satisfy Tag Requirements")
 		const bool bInOnlyAbilitiesThatSatisfyTagRequirements = true) const = 0;

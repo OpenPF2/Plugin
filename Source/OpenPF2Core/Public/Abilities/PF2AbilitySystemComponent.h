@@ -135,7 +135,7 @@ public:
 		const FGameplayTagContainer& InTags,
 
 		UPARAM(DisplayName="Match Found")
-		bool& OutMatchFound,
+		bool& bOutMatchFound,
 
 		UPARAM(DisplayName="Only Abilities that Satisfy Tag Requirements")
 		const bool bInOnlyAbilitiesThatSatisfyTagRequirements = true
@@ -151,7 +151,7 @@ public:
 		const FGameplayTagContainer& InTags,
 
 		UPARAM(DisplayName="Match Found")
-		bool& OutMatchFound,
+		bool& bOutMatchFound,
 
 		UPARAM(DisplayName="Only Abilities that Satisfy Tag Requirements")
 		const bool bInOnlyAbilitiesThatSatisfyTagRequirements = true

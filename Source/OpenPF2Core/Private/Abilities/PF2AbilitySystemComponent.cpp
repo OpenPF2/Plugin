@@ -189,7 +189,7 @@ TArray<FGameplayAbilitySpec> UPF2AbilitySystemComponent::FindAbilitySpecsByTags(
 
 FGameplayAbilitySpec UPF2AbilitySystemComponent::FindAbilitySpecByTags(
 	const FGameplayTagContainer& InTags,
-	bool&                        OutMatchFound,
+	bool&                        bOutMatchFound,
 	const bool                   bInOnlyAbilitiesThatSatisfyTagRequirements) const
 {
 	FGameplayAbilitySpec         MatchingAbility;
@@ -198,12 +198,12 @@ FGameplayAbilitySpec UPF2AbilitySystemComponent::FindAbilitySpecByTags(
 
 	if (MatchingAbilities.Num() == 0)
 	{
-		OutMatchFound   = false;
+		bOutMatchFound  = false;
 		MatchingAbility = FGameplayAbilitySpec();
 	}
 	else
 	{
-		OutMatchFound   = true;
+		bOutMatchFound  = true;
 		MatchingAbility = MatchingAbilities[0];
 	}
 
@@ -225,14 +225,14 @@ TArray<FGameplayAbilitySpecHandle> UPF2AbilitySystemComponent::FindAbilityHandle
 
 FGameplayAbilitySpecHandle UPF2AbilitySystemComponent::FindAbilityHandleByTags(
 	const FGameplayTagContainer& InTags,
-	bool&                        OutMatchFound,
+	bool&                        bOutMatchFound,
 	const bool                   bInOnlyAbilitiesThatSatisfyTagRequirements) const
 {
 	FGameplayAbilitySpecHandle Handle;
 	const FGameplayAbilitySpec AbilitySpec =
-		this->FindAbilitySpecByTags(InTags, OutMatchFound, bInOnlyAbilitiesThatSatisfyTagRequirements);
+		this->FindAbilitySpecByTags(InTags, bOutMatchFound, bInOnlyAbilitiesThatSatisfyTagRequirements);
 
-	if (OutMatchFound)
+	if (bOutMatchFound)
 	{
 		Handle = AbilitySpec.Handle;
 	}
