@@ -17,6 +17,8 @@
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
+const FName UPF2AbilitySystemComponent::DefaultMovementAbilityTagName = FName(TEXT("GameplayAbility.Type.DefaultMovement"));
+
 UPF2AbilitySystemComponent::UPF2AbilitySystemComponent() : Events(nullptr), bAreAbilitiesAvailable(false)
 {
 	const FString DynamicTagsGeFilename =
@@ -651,6 +653,23 @@ void UPF2AbilitySystemComponent::ApplyAbilityBoost(const EPF2CharacterAbilitySco
 	);
 
 	this->AddPassiveGameplayEffectWithWeight(WeightGroup, BoostEffect);
+}
+
+FGameplayAbilitySpecHandle UPF2AbilitySystemComponent::FindDefaultMovementAbilityHandle(bool& bOutMatchFound) const
+{
+	const FGameplayTag          MovementTag = PF2GameplayAbilityUtilities::GetTag(DefaultMovementAbilityTagName);
+	const FGameplayTagContainer SearchTags  = FGameplayTagContainer(MovementTag);
+
+	return this->FindAbilityHandleByTags(SearchTags, bOutMatchFound, false);
+}
+
+bool UPF2AbilitySystemComponent::HasDefaultMovementAbility() const
+{
+	bool bHaveAbility = false;
+
+	this->FindDefaultMovementAbilityHandle(bHaveAbility);
+
+	return bHaveAbility;
 }
 
 UActorComponent* UPF2AbilitySystemComponent::ToActorComponent()

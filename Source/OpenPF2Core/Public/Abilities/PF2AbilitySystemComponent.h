@@ -30,6 +30,14 @@ class OPENPF2CORE_API UPF2AbilitySystemComponent :
 
 protected:
 	// =================================================================================================================
+	// Protected Constants
+	// =================================================================================================================
+	/**
+	 * The name of the tag that designates an ability the default movement ability.
+	 */
+	static const FName DefaultMovementAbilityTagName;
+
+	// =================================================================================================================
 	// Protected Fields
 	// =================================================================================================================
 	/**
@@ -213,6 +221,10 @@ public:
 	}
 
 	virtual void ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore) override;
+
+	virtual FGameplayAbilitySpecHandle FindDefaultMovementAbilityHandle(bool& bOutMatchFound) const override;
+
+	virtual bool HasDefaultMovementAbility() const override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2ActorComponentInterface Implementation
