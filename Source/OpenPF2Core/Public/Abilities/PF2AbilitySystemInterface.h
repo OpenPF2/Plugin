@@ -138,6 +138,15 @@ public:
 		bool                         bExactMatch = true) const = 0;
 
 	/**
+	 * Gets all of the tags that are active on this ASC as a result of active GEs and Gameplay Cues.
+	 *
+	 * @return
+	 *	A container wrapping the active tags.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
+	virtual FGameplayTagContainer GetActiveGameplayTags() const = 0;
+
+	/**
 	 * Gets whether passively-applied Gameplay Effects are currently active on this ASC.
 	 *
 	 * @return
@@ -453,13 +462,4 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
 	virtual void RemoveAllDynamicTags() = 0;
-
-	/**
-	 * Gets all of the tags that are active on this ASC as a result of active GEs and Gameplay Cues.
-	 *
-	 * @return
-	 *	A container wrapping the active tags.
-	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
-	virtual FGameplayTagContainer GetActiveGameplayTags() const = 0;
 };

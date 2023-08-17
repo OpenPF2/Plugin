@@ -117,6 +117,8 @@ public:
 		const FGameplayTagContainer& Tags,
 		bool bExactMatch = true) const override;
 
+	virtual FGameplayTagContainer GetActiveGameplayTags() const override;
+
 	virtual bool ArePassiveGameplayEffectsActive() const override
 	{
 		return this->ActivatedWeightGroups.Num() != 0;
@@ -192,8 +194,6 @@ public:
 	virtual void RemoveDynamicTags(const FGameplayTagContainer Tags) override;
 
 	virtual void RemoveAllDynamicTags() override;
-
-	virtual FGameplayTagContainer GetActiveGameplayTags() const override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2CharacterAbilitySystemInterface Implementation

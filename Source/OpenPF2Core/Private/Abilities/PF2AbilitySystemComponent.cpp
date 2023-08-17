@@ -150,6 +150,17 @@ TArray<TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilitySystemComponen
 		});
 }
 
+FGameplayTagContainer UPF2AbilitySystemComponent::GetActiveGameplayTags() const
+{
+	FGameplayTagContainer Tags;
+
+	Tags.Reset();
+
+	this->GetOwnedGameplayTags(Tags);
+
+	return Tags;
+}
+
 UAbilitySystemComponent* UPF2AbilitySystemComponent::ToAbilitySystemComponent()
 {
 	return Cast<UAbilitySystemComponent>(this);
@@ -504,17 +515,6 @@ void UPF2AbilitySystemComponent::RemoveAllDynamicTags()
 
 		this->DynamicTags.Reset();
 	});
-}
-
-FGameplayTagContainer UPF2AbilitySystemComponent::GetActiveGameplayTags() const
-{
-	FGameplayTagContainer Tags;
-
-	Tags.Reset();
-
-	this->GetOwnedGameplayTags(Tags);
-
-	return Tags;
 }
 
 TScriptInterface<IPF2CharacterInterface> UPF2AbilitySystemComponent::GetCharacter() const
