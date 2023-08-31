@@ -21,7 +21,6 @@
 
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
-#include "Utilities/PF2MapUtilities.h"
 
 UObject* UPF2AbilityBindingsComponent::GetGenericEventsObject() const
 {
@@ -49,10 +48,13 @@ UPF2AbilityBindingsInterfaceEvents* UPF2AbilityBindingsComponent::GetEvents() co
 
 TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilityBindingsComponent::GetBindingsMap() const
 {
-	UAbilitySystemComponent* Asc = this->GetOwningCharacter()->GetAbilitySystemComponent();
+	UAbilitySystemComponent*         Asc         = this->GetOwningCharacter()->GetAbilitySystemComponent();
+	TArray<UPF2AbilityInputBinding*> AllBindings;
+
+	this->Bindings.GenerateValueArray(AllBindings);
 
 	return PF2ArrayUtilities::Reduce(
-		PF2MapUtilities::GetValues(this->Bindings),
+		AllBindings,
 		TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>>(),
 		[Asc](TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>> ResultMap,
 		      const UPF2AbilityInputBinding*                                      CurrentBinding)
