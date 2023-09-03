@@ -251,7 +251,7 @@ protected:
 	 *	The gameplay ability; or nullptr if the character no longer has an ability that corresponds to the specification
 	 *	of this command.
 	 */
-	FORCEINLINE UGameplayAbility* GetAbility() const;
+	UGameplayAbility* GetAbility() const;
 
 	/**
 	 * Gets the OpenPF2 interface to the CDO of the ability that this command will trigger when it is executed.
