@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -6,6 +6,8 @@
 #pragma once
 
 #include <Engine/Texture2D.h>
+
+#include "PF2CommandQueuePosition.h"
 
 #include "Commands/PF2CommandExecuteImmediatelyResult.h"
 #include "Commands/PF2CommandExecuteOrQueueResult.h"
@@ -74,6 +76,15 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Commands")
 	virtual FText GetCommandDescription() const = 0;
+
+	/**
+	 * Gets the preference for where in a command queue this command should be placed, if this command gets queued.
+	 *
+	 * @return
+	 *	The queue position preference.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Commands")
+	virtual EPF2CommandQueuePosition GetQueuePositionPreference() const = 0;
 
 	/**
 	 * Attempt to execute this command immediately, if possible; queue it for the character, if not possible.

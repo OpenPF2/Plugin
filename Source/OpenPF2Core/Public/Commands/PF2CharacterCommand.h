@@ -10,6 +10,7 @@
 #include "GameplayAbilitySpec.h"
 #include "PF2CharacterCommandInterface.h"
 #include "PF2CharacterInterface.h"
+#include "PF2CommandQueuePosition.h"
 
 #include "Abilities/PF2GameplayAbilityInterface.h"
 
@@ -66,6 +67,15 @@ protected:
 	FGameplayEventData AbilityPayload;
 
 	/**
+	 * The preference for where in a command queue this command should be placed, if this command gets queued.
+	 *
+	 * This is only a preference. The Mode of Play Rule Set (MoPRS) has the ultimate say as to whether this preference
+	 * is honored.
+	 */
+	UPROPERTY(Replicated)
+	EPF2CommandQueuePosition QueuePositionPreference;
+
+	/**
 	 * The cached ability for this command.
 	 *
 	 * This is memoized by APF2CharacterCommand::GetAbility().
@@ -86,7 +96,8 @@ public:
 	 *	The handle of the ability that the command will trigger when it is executed.
 	 * @param InAbilityPayload
 	 *	An optional payload to pass to the ability.
-	 *
+	 * @param InQueuePositionPreference
+	 *	The preference for where in a command queue this command should be placed, if this command gets queued.
 	 * @return
 	 *	The new command.
 	 */
@@ -95,10 +106,11 @@ public:
 		const TScriptInterface<IPF2CharacterInterface> InCharacter,
 		const FGameplayAbilitySpecHandle               InAbilitySpecHandle,
 		// ReSharper disable once CppPassValueParameterByConstReference
-		const FGameplayEventData                       InAbilityPayload=FGameplayEventData())
+		const FGameplayEventData                       InAbilityPayload=FGameplayEventData(),
+		const EPF2CommandQueuePosition                 InQueuePositionPreference=EPF2CommandQueuePosition::EndOfQueue)
 	{
 		return PF2InterfaceUtilities::ToScriptInterface(
-			Create(InCharacter->ToActor(), InAbilitySpecHandle, InAbilityPayload)
+			Create(InCharacter->ToActor(), InAbilitySpecHandle, InAbilityPayload, InQueuePositionPreference)
 		);
 	}
 
@@ -128,15 +140,19 @@ public:
 	 *	The handle of the ability that the command will trigger when it is executed.
 	 * @param AbilityPayload
 	 *	The payload to provide when invoking the ability.
+	 * @param QueuePositionPreference
+	 *	The preference for where in a command queue this command should be placed, if this command gets queued.
 	 *
 	 * @return
 	 *	The new command.
 	 */
-	FORCEINLINE static IPF2CharacterCommandInterface* Create(IPF2CharacterInterface*          Character,
-	                                                         const FGameplayAbilitySpecHandle AbilitySpecHandle,
-	                                                         const FGameplayEventData&        AbilityPayload)
+	FORCEINLINE static IPF2CharacterCommandInterface* Create(
+		IPF2CharacterInterface*          Character,
+		const FGameplayAbilitySpecHandle AbilitySpecHandle,
+		const FGameplayEventData&        AbilityPayload,
+		const EPF2CommandQueuePosition   QueuePositionPreference = EPF2CommandQueuePosition::EndOfQueue)
 	{
-		return Create(Character->ToActor(), AbilitySpecHandle, AbilityPayload);
+		return Create(Character->ToActor(), AbilitySpecHandle, AbilityPayload, QueuePositionPreference);
 	}
 
 	/**
@@ -151,6 +167,8 @@ public:
 	 * @param AbilityPayload
 	 *	The payload to provide when invoking the ability. This can be omitted when invoking abilities that do not accept
 	 *	a payload.
+	 * @param QueuePositionPreference
+	 *	The preference for where in a command queue this command should be placed, if this command gets queued.
 	 *
 	 * @return
 	 *	The new command.
@@ -158,13 +176,17 @@ public:
 	static IPF2CharacterCommandInterface* Create(
 		AActor*                          CharacterActor,
 		const FGameplayAbilitySpecHandle AbilitySpecHandle,
-		const FGameplayEventData&        AbilityPayload = FGameplayEventData());
+		const FGameplayEventData&        AbilityPayload          = FGameplayEventData(),
+		const EPF2CommandQueuePosition   QueuePositionPreference = EPF2CommandQueuePosition::EndOfQueue);
 
 protected:
 	// =================================================================================================================
 	// Protected Constructors
 	// =================================================================================================================
-	explicit APF2CharacterCommand() : TargetCharacter(nullptr)
+	explicit APF2CharacterCommand() :
+		TargetCharacter(nullptr),
+		QueuePositionPreference(EPF2CommandQueuePosition::EndOfQueue),
+		CachedAbility(nullptr)
 	{
 		// Replicate commands to ensure that, when characters are controlled by AI during encounters, both the server
 		// and the client who is issuing the command can observe its details (icon, description, and callback).
@@ -185,6 +207,8 @@ public:
 	virtual FText GetCommandLabel() const override;
 
 	virtual FText GetCommandDescription() const override;
+
+	virtual EPF2CommandQueuePosition GetQueuePositionPreference() const override;
 
 	virtual EPF2CommandExecuteOrQueueResult AttemptExecuteOrQueue() override;
 
@@ -268,7 +292,9 @@ protected:
 	}
 
 	/**
-	 * Sets the ability that this command will execute and the character upon which the ability will be executed.
+	 * Initializes the state of this command to what has been provided and then finishes spawning the command.
+	 *
+	 * This can only be called during spawning and must not be called after the command has already been spawned.
 	 *
 	 * @param InTargetCharacter
 	 *	The character who would be issued this command.
@@ -276,10 +302,13 @@ protected:
 	 *	The handle of the ability that this command will trigger when it is executed.
 	 * @param InAbilityPayload
 	 *	The payload (if applicable) for the ability.
+	 * @param InQueuePositionPreference
+	 *	The preference for where in a command queue this command should be placed, if this command gets queued.
 	 */
-	void SetTargetCharacterAndAbility(AActor*                          InTargetCharacter,
-	                                  const FGameplayAbilitySpecHandle InAbilitySpecHandle,
-	                                  const FGameplayEventData&        InAbilityPayload);
+	void FinalizeConstruction(AActor*                          InTargetCharacter,
+	                          const FGameplayAbilitySpecHandle InAbilitySpecHandle,
+	                          const FGameplayEventData&        InAbilityPayload,
+	                          const EPF2CommandQueuePosition   InQueuePositionPreference);
 
 	/**
 	 * Attempts to cancel this command on the remote server by routing the request through the local player controller.

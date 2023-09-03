@@ -118,6 +118,18 @@ public:
 	virtual void Enqueue(const TScriptInterface<IPF2CharacterCommandInterface>& Command) = 0;
 
 	/**
+	 * Adds a command at the specified position in the queue.
+	 *
+	 * @param Command
+	 *	The command to add to the queue.
+	 * @param Position
+	 *	The position within the queue at which the command will be added.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Queues")
+	virtual void EnqueueAt(const TScriptInterface<IPF2CharacterCommandInterface>& Command,
+	                       const int32                                            Position) = 0;
+
+	/**
 	 * Returns the next command (if there is one) in the queue.
 	 *
 	 * The command is not removed from the queue.

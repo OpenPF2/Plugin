@@ -75,6 +75,32 @@ void UPF2CommandQueueComponent::Enqueue(const TScriptInterface<IPF2CharacterComm
 	}
 }
 
+void UPF2CommandQueueComponent::EnqueueAt(const TScriptInterface<IPF2CharacterCommandInterface>& Command,
+                                          const int32                                            Position)
+{
+	AInfo* CommandActor = Command->ToActor();
+
+	if ((this->SizeLimit != CommandLimitNone) && (this->Queue.Num() == this->SizeLimit))
+	{
+		UE_LOG(
+			LogPf2Core,
+			Verbose,
+			TEXT("Command queue ('%s') is already at maximum capacity ('%d'), so command ('%s') will not be enqueued."),
+			*(this->GetIdForLogs()),
+			this->SizeLimit,
+			*(Command->GetIdForLogs())
+		);
+	}
+	else
+	{
+		checkf(!this->Queue.Contains(CommandActor), TEXT("The same command can only exist in the queue once."));
+		this->Queue.Insert(CommandActor, Position);
+
+		this->Native_OnCommandAdded(Command);
+		this->Native_OnCommandsChanged();
+	}
+}
+
 void UPF2CommandQueueComponent::PeekNext(TScriptInterface<IPF2CharacterCommandInterface>& NextCommand)
 {
 	if (this->Count() != 0)

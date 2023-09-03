@@ -15,6 +15,8 @@
 
 #include "GameModes/PF2CharacterInitiativeQueueComponent.h"
 
+#include "Utilities/PF2EnumUtilities.h"
+
 APF2EncounterModeOfPlayRuleSetBase::APF2EncounterModeOfPlayRuleSetBase()
 {
 	this->CharacterInitiativeQueue =
@@ -183,15 +185,25 @@ void APF2EncounterModeOfPlayRuleSetBase::QueueCommandForCharacter(
 	}
 	else
 	{
+		const EPF2CommandQueuePosition QueuePositionPreference = Command->GetQueuePositionPreference();
+
 		UE_LOG(
 			LogPf2CoreEncounters,
 			VeryVerbose,
-			TEXT("Queuing command ('%s') for character ('%s')."),
+			TEXT("Queuing command ('%s') for character ('%s') at ('%s')."),
 			*(Command->GetIdForLogs()),
-			*(Character->GetIdForLogs())
+			*(Character->GetIdForLogs()),
+			*(PF2EnumUtilities::ToString(QueuePositionPreference))
 		);
 
-		CommandQueue->Enqueue(Command);
+		if (QueuePositionPreference == EPF2CommandQueuePosition::BeginningOfQueue)
+		{
+			CommandQueue->EnqueueAt(Command, 0);
+		}
+		else
+		{
+			CommandQueue->Enqueue(Command);
+		}
 	}
 }
 

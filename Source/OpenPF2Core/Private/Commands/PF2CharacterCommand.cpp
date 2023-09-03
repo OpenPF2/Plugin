@@ -7,6 +7,8 @@
 
 #include <GameFramework/GameModeBase.h>
 
+#include <Kismet/GameplayStatics.h>
+
 #include <Net/UnrealNetwork.h>
 
 #include "PF2PlayerControllerInterface.h"
@@ -22,19 +24,17 @@
 
 IPF2CharacterCommandInterface* APF2CharacterCommand::Create(AActor*                          CharacterActor,
                                                             const FGameplayAbilitySpecHandle AbilitySpecHandle,
-                                                            const FGameplayEventData&        AbilityPayload)
+                                                            const FGameplayEventData&        AbilityPayload,
+                                                            const EPF2CommandQueuePosition   QueuePositionPreference)
 {
-	UWorld*               World           = CharacterActor->GetWorld();
-	FActorSpawnParameters SpawnParameters;
+	UWorld*               World   = CharacterActor->GetWorld();
 	APF2CharacterCommand* Command;
 
 	check(CharacterActor->Implements<UPF2CharacterInterface>());
 
-	SpawnParameters.Owner = CharacterActor;
+	Command = World->SpawnActorDeferred<APF2CharacterCommand>(StaticClass(), FTransform(), CharacterActor);
 
-	Command = World->SpawnActor<APF2CharacterCommand>(StaticClass(), SpawnParameters);
-
-	Command->SetTargetCharacterAndAbility(CharacterActor, AbilitySpecHandle, AbilityPayload);
+	Command->FinalizeConstruction(CharacterActor, AbilitySpecHandle, AbilityPayload, QueuePositionPreference);
 
 	return Command;
 }
@@ -101,6 +101,11 @@ FText APF2CharacterCommand::GetCommandDescription() const
 	}
 
 	return CommandDescription;
+}
+
+EPF2CommandQueuePosition APF2CharacterCommand::GetQueuePositionPreference() const
+{
+	return this->QueuePositionPreference;
 }
 
 EPF2CommandExecuteOrQueueResult APF2CharacterCommand::AttemptExecuteOrQueue()
@@ -191,13 +196,17 @@ EPF2CommandExecuteImmediatelyResult APF2CharacterCommand::AttemptExecuteImmediat
 	return Result;
 }
 
-void APF2CharacterCommand::SetTargetCharacterAndAbility(AActor*                          InTargetCharacter,
-                                                        const FGameplayAbilitySpecHandle InAbilitySpecHandle,
-                                                        const FGameplayEventData&        InAbilityPayload)
+void APF2CharacterCommand::FinalizeConstruction(AActor*                          InTargetCharacter,
+                                                const FGameplayAbilitySpecHandle InAbilitySpecHandle,
+                                                const FGameplayEventData&        InAbilityPayload,
+                                                const EPF2CommandQueuePosition   InQueuePositionPreference)
 {
-	this->TargetCharacter   = InTargetCharacter;
-	this->AbilitySpecHandle = InAbilitySpecHandle;
-	this->AbilityPayload    = InAbilityPayload;
+	this->TargetCharacter         = InTargetCharacter;
+	this->AbilitySpecHandle       = InAbilitySpecHandle;
+	this->AbilityPayload          = InAbilityPayload;
+	this->QueuePositionPreference = InQueuePositionPreference;
+
+	UGameplayStatics::FinishSpawningActor(this, FTransform());
 }
 
 void APF2CharacterCommand::Cancel_WithRemoteServer()
