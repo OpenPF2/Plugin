@@ -13,8 +13,6 @@
 
 #include "Commands/PF2CommandExecuteImmediatelyResult.h"
 
-#include "Utilities/PF2InterfaceUtilities.h"
-
 #include "PF2EncounterModeOfPlayRuleSetBase.generated.h"
 
 // =====================================================================================================================
