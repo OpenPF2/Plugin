@@ -45,5 +45,18 @@ float UPF2AttackStatLibrary::CalculateMaximumRange(const float WeaponRangeIncrem
 
 bool UPF2AttackStatLibrary::IsWithinRange(const float WeaponRangeIncrement, const float Distance)
 {
-	return Distance <= CalculateMaximumRange(WeaponRangeIncrement);
+	const float MaximumRange = CalculateMaximumRange(WeaponRangeIncrement);
+	const bool  bInRange     = Distance <= MaximumRange;
+
+	UE_LOG(
+		LogPf2CoreAbilities,
+		VeryVerbose,
+		TEXT("IsWithinRange(%f,%f): %s (Max Range = %f)"),
+		WeaponRangeIncrement,
+		Distance,
+		bInRange ? TEXT("true") : TEXT("false"),
+		MaximumRange
+	);
+
+	return bInRange;
 }
