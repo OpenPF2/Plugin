@@ -103,11 +103,18 @@ public:
 	 */
 	UFUNCTION(BlueprintPure, Category="OpenPF2|Character Commands", meta=(DisplayName="Create Character Command"))
 	static TScriptInterface<IPF2CharacterCommandInterface> Create(
+		UPARAM(DisplayName="Character")
 		const TScriptInterface<IPF2CharacterInterface> InCharacter,
-		const FGameplayAbilitySpecHandle               InAbilitySpecHandle,
+
+		UPARAM(DisplayName="Ability Spec Handle")
+		const FGameplayAbilitySpecHandle InAbilitySpecHandle,
+
+		UPARAM(DisplayName="Ability Payload")
 		// ReSharper disable once CppPassValueParameterByConstReference
-		const FGameplayEventData                       InAbilityPayload=FGameplayEventData(),
-		const EPF2CommandQueuePosition                 InQueuePositionPreference=EPF2CommandQueuePosition::EndOfQueue)
+		const FGameplayEventData InAbilityPayload=FGameplayEventData(),
+
+		UPARAM(DisplayName="Queue Position Preference")
+		const EPF2CommandQueuePosition InQueuePositionPreference=EPF2CommandQueuePosition::EndOfQueue)
 	{
 		return PF2InterfaceUtilities::ToScriptInterface(
 			Create(InCharacter->ToActor(), InAbilitySpecHandle, InAbilityPayload, InQueuePositionPreference)
