@@ -92,6 +92,11 @@ FGameplayAbilitySpecHandle UPF2GameplayAbilityBase::ToGameplayAbilitySpecHandleF
 	return this->ToGameplayAbilitySpecForCharacter(Character, bOutSpecHandleFound).Handle;
 }
 
+FGameplayAbilitySpecHandle UPF2GameplayAbilityBase::GetSpecHandleOfCurrentActivation() const
+{
+	return this->GetCurrentAbilitySpecHandle();
+}
+
 TScriptInterface<IPF2CharacterInterface> UPF2GameplayAbilityBase::GetOwningCharacterFromActorInfo() const
 {
 	TScriptInterface<IPF2CharacterInterface> Result;
