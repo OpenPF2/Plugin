@@ -196,13 +196,30 @@ void APF2EncounterModeOfPlayRuleSetBase::QueueCommandForCharacter(
 			*(PF2EnumUtilities::ToString(QueuePositionPreference))
 		);
 
-		if (QueuePositionPreference == EPF2CommandQueuePosition::BeginningOfQueue)
+		switch (QueuePositionPreference)
 		{
-			CommandQueue->EnqueueAt(Command, 0);
-		}
-		else
-		{
-			CommandQueue->Enqueue(Command);
+			case EPF2CommandQueuePosition::BeginningOfQueue:
+				CommandQueue->EnqueueAt(Command, 0);
+				break;
+
+			case EPF2CommandQueuePosition::NextAfterBeginningOfQueue:
+				if (CommandQueue->Count() > 0)
+				{
+					// At least one command is queued, so place the new command right after the first command in the
+					// queue.
+					CommandQueue->EnqueueAt(Command, 1);
+				}
+				else
+				{
+					// Nothing is queued so make this command the next command executed.
+					CommandQueue->EnqueueAt(Command, 0);
+				}
+				break;
+
+			case EPF2CommandQueuePosition::EndOfQueue:
+				// Intentional fall-through.
+			default:
+				CommandQueue->Enqueue(Command);
 		}
 	}
 }

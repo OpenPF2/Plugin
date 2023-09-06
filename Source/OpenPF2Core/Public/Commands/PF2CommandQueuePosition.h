@@ -19,6 +19,11 @@ enum class EPF2CommandQueuePosition : uint8
 	BeginningOfQueue,
 
 	/**
+	 * Queue immediately after the command that is first in the queue (if any).
+	 */
+	NextAfterBeginningOfQueue,
+
+	/**
 	 * Queue at the very end of the queue (this is typically the most common).
 	 */
 	EndOfQueue
