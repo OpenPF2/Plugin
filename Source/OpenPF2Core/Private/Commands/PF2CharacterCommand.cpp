@@ -141,7 +141,7 @@ EPF2CommandExecuteOrQueueResult APF2CharacterCommand::AttemptExecuteOrQueue()
 	}
 	else
 	{
-		TScriptInterface<IPF2CharacterCommandInterface> CommandIntf =
+		const TScriptInterface<IPF2CharacterCommandInterface> CommandIntf =
 			PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(this);
 
 		Result = PF2GameMode->AttemptToExecuteOrQueueCommand(CommandIntf);
@@ -249,7 +249,7 @@ void APF2CharacterCommand::Cancel_WithLocalServer()
 	}
 	else
 	{
-		TScriptInterface<IPF2CharacterCommandInterface> CommandIntf =
+		const TScriptInterface<IPF2CharacterCommandInterface> CommandIntf =
 			PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(this);
 
 		GameModeIntf->AttemptToCancelCommand(CommandIntf);

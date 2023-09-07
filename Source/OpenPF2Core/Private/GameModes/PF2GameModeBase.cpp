@@ -232,7 +232,7 @@ void APF2GameModeBase::RemoveCharacterFromEncounter(const TScriptInterface<IPF2C
 }
 
 EPF2CommandExecuteOrQueueResult APF2GameModeBase::AttemptToExecuteOrQueueCommand(
-	TScriptInterface<IPF2CharacterCommandInterface>& Command)
+	const TScriptInterface<IPF2CharacterCommandInterface>& Command)
 {
 	EPF2CommandExecuteOrQueueResult                        Result;
 	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
@@ -257,7 +257,7 @@ EPF2CommandExecuteOrQueueResult APF2GameModeBase::AttemptToExecuteOrQueueCommand
 	return Result;
 }
 
-void APF2GameModeBase::AttemptToCancelCommand(TScriptInterface<IPF2CharacterCommandInterface>& Command)
+void APF2GameModeBase::AttemptToCancelCommand(const TScriptInterface<IPF2CharacterCommandInterface>& Command)
 {
 	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
 

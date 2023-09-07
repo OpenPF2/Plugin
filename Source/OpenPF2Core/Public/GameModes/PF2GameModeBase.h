@@ -82,9 +82,9 @@ public:
 	virtual void RemoveCharacterFromEncounter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
 
 	virtual EPF2CommandExecuteOrQueueResult AttemptToExecuteOrQueueCommand(
-		TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
+		const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
-	virtual void AttemptToCancelCommand(TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
+	virtual void AttemptToCancelCommand(const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
 protected:
 	// =================================================================================================================

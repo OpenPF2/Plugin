@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -188,7 +188,7 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Mode")
 	virtual EPF2CommandExecuteOrQueueResult AttemptToExecuteOrQueueCommand(
-		TScriptInterface<IPF2CharacterCommandInterface>& Command) = 0;
+		const TScriptInterface<IPF2CharacterCommandInterface>& Command) = 0;
 
 	/**
 	 * Notifies game rules and/or the Mode of Play Rule Set (MoPRS) that a character wishes to cancel a command.
@@ -202,5 +202,5 @@ public:
 	 *	The command to cancel.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Mode")
-	virtual void AttemptToCancelCommand(TScriptInterface<IPF2CharacterCommandInterface>& Command) = 0;
+	virtual void AttemptToCancelCommand(const TScriptInterface<IPF2CharacterCommandInterface>& Command) = 0;
 };
