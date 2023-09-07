@@ -36,7 +36,7 @@ protected:
 	/**
 	 * The amount of additional penalty to add to ranged attack rolls for each additional increment of the weapon range.
 	 */
-	static constexpr float RangePenaltyIncrement = -2.0f;
+	static constexpr float RangePenaltyPerIncrement = -2.0f;
 
 	/**
 	 * The maximum range penalty a ranged weapon can have while still having a chance to hit a target.
@@ -44,7 +44,7 @@ protected:
 	 * We subtract 1.0 because the range penalty starts at 0 for all distances less than the range increment of the
 	 * weapon.
 	 */
-	static constexpr float MaxRangePenalty = (MaxRangeIncrement - 1.0f) * RangePenaltyIncrement;
+	static constexpr float MaxRangePenalty = (MaxRangeIncrement - 1.0f) * RangePenaltyPerIncrement;
 
 public:
 	/**
@@ -63,16 +63,22 @@ public:
 	 * weapon or thrown weapon up to six range increments away, but the farther away you are, the harder it is to hit
 	 * your target."
 	 *
-	 * @param WeaponRangeIncrement
-	 *	The range increment of the ranged or thrown weapon.
-	 * @param Distance
-	 *	The distance to the target.
+	 * @param WeaponRangeIncrementCentimeters
+	 *	The range increment (in centimeters) of the ranged or thrown weapon. This is the distance up to which a ranged
+	 *	weapon works "normally"
+	 * @param DistanceCentimeters
+	 *	The distance (in centimeters) to the target.
 	 *
 	 * @return
 	 *	The range increment penalty for the given range.
 	 */
 	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
-	static float CalculateRangePenalty(const float WeaponRangeIncrement, const float Distance);
+	static float CalculateRangePenalty(
+		UPARAM(DisplayName="Weapon Range Increment (cm)")
+		const float WeaponRangeIncrementCentimeters,
+
+		UPARAM(DisplayName="Distance (cm)")
+		const float DistanceCentimeters);
 
 	/**
 	 * Calculates the maximum range of a weapon that has the given range increment.
@@ -90,14 +96,17 @@ public:
 	 * weapon or thrown weapon up to six range increments away, but the farther away you are, the harder it is to hit
 	 * your target."
 	 *
-	 * @param WeaponRangeIncrement
-	 *	The range increment of the ranged or thrown weapon.
+	 * @param WeaponRangeIncrementCentimeters
+	 *	The range increment (in centimeters) of the ranged or thrown weapon. This is the distance up to which a ranged
+	 *	weapon works "normally"
 	 *
 	 * @return
-	 *	The maximum range of a weapon with the given range increment.
+	 *	The maximum range (in centimeters) of a weapon with the given range increment.
 	 */
 	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
-	static float CalculateMaximumRange(const float WeaponRangeIncrement);
+	static float CalculateMaximumRange(
+		UPARAM(DisplayName="Weapon Range Increment (cm)")
+		const float WeaponRangeIncrementCentimeters);
 
 	/**
 	 * Determines if the specified distance is within range of the weapon having the given range increment.
@@ -115,14 +124,19 @@ public:
 	 * weapon or thrown weapon up to six range increments away, but the farther away you are, the harder it is to hit
 	 * your target."
 	 *
-	 * @param WeaponRangeIncrement
+	 * @param WeaponRangeIncrementCentimeters
 	 *	The range increment of the ranged or thrown weapon.
-	 * @param Distance
+	 * @param DistanceCentimeters
 	 *	The distance to the target.
 	 *
 	 * @return
 	 *	Whether the specified distance is within range of the weapon.
 	 */
 	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
-	static bool IsWithinRange(const float WeaponRangeIncrement, const float Distance);
+	static bool IsWithinRange(
+		UPARAM(DisplayName="Weapon Range Increment (cm)")
+		const float WeaponRangeIncrementCentimeters,
+
+		UPARAM(DisplayName="Distance (cm)")
+		const float DistanceCentimeters);
 };

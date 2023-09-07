@@ -12,7 +12,8 @@
 
 #include "Libraries/PF2AttackStatLibrary.h"
 
-float UPF2AttackStatLibrary::CalculateRangePenalty(const float WeaponRangeIncrement, const float Distance)
+float UPF2AttackStatLibrary::CalculateRangePenalty(const float WeaponRangeIncrementCentimeters,
+                                                   const float DistanceCentimeters)
 {
 	// From the Pathfinder 2E Core Rulebook, page 279, "Range":
 	// "Ranged and thrown weapons have a range increment. Attacks with these weapons work normally up to that distance.
@@ -26,8 +27,10 @@ float UPF2AttackStatLibrary::CalculateRangePenalty(const float WeaponRangeIncrem
 	// you take a –2 penalty for each additional increment beyond the first. You can attempt to attack with a ranged
 	// weapon or thrown weapon up to six range increments away, but the farther away you are, the harder it is to hit
 	// your target."
-	float Penalty =
-		FMath::Max(0, FMath::FloorToFloat((Distance - 1.0f) / WeaponRangeIncrement)) * RangePenaltyIncrement;
+	const float RangeIncrement =
+		FMath::Max(0, FMath::FloorToFloat((DistanceCentimeters - 1.0f) / WeaponRangeIncrementCentimeters));
+
+	float Penalty = RangeIncrement * RangePenaltyPerIncrement;
 
 	// These are both negative values, so "less than" is equivalent to "greater than" for positive values.
 	if (Penalty < MaxRangePenalty)
@@ -38,22 +41,22 @@ float UPF2AttackStatLibrary::CalculateRangePenalty(const float WeaponRangeIncrem
 	return Penalty;
 }
 
-float UPF2AttackStatLibrary::CalculateMaximumRange(const float WeaponRangeIncrement)
+float UPF2AttackStatLibrary::CalculateMaximumRange(const float WeaponRangeIncrementCentimeters)
 {
-	return WeaponRangeIncrement * MaxRangeIncrement;
+	return WeaponRangeIncrementCentimeters * MaxRangeIncrement;
 }
 
-bool UPF2AttackStatLibrary::IsWithinRange(const float WeaponRangeIncrement, const float Distance)
+bool UPF2AttackStatLibrary::IsWithinRange(const float WeaponRangeIncrementCentimeters, const float DistanceCentimeters)
 {
-	const float MaximumRange = CalculateMaximumRange(WeaponRangeIncrement);
-	const bool  bInRange     = Distance <= MaximumRange;
+	const float MaximumRange = CalculateMaximumRange(WeaponRangeIncrementCentimeters);
+	const bool  bInRange     = (DistanceCentimeters <= MaximumRange);
 
 	UE_LOG(
 		LogPf2CoreAbilities,
 		VeryVerbose,
 		TEXT("IsWithinRange(%f,%f): %s (Max Range = %f)"),
-		WeaponRangeIncrement,
-		Distance,
+		WeaponRangeIncrementCentimeters,
+		DistanceCentimeters,
 		bInRange ? TEXT("true") : TEXT("false"),
 		MaximumRange
 	);
