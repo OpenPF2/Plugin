@@ -191,6 +191,21 @@ public:
 		const TScriptInterface<IPF2CharacterCommandInterface>& Command) = 0;
 
 	/**
+	 * Notifies game rules and/or the Mode of Play Rule Set (MoPRS) that a character wishes to queue a command.
+	 *
+	 * If the current mode is structured (e.g., Encounter mode), then the command will be placed into a queue of
+	 * commands for the character -- preserving the order that the commands were queued -- and the command will be
+	 * executed when it is the character's turn (e.g., according to initiative order). On the other hand, if the current
+	 * Mode of Play allows characters to perform commands immediately, the command will be ignored and will not be
+	 * queued.
+	 *
+	 * @param Command
+	 *	The command being queued.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Game Mode")
+	virtual bool AttemptToQueueCommand(const TScriptInterface<IPF2CharacterCommandInterface>& Command) = 0;
+
+	/**
 	 * Notifies game rules and/or the Mode of Play Rule Set (MoPRS) that a character wishes to cancel a command.
 	 *
 	 * If the current mode is structured (e.g., Encounter mode), then the command will be removed from the queue of

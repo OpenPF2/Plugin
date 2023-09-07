@@ -257,6 +257,30 @@ EPF2CommandExecuteOrQueueResult APF2GameModeBase::AttemptToExecuteOrQueueCommand
 	return Result;
 }
 
+bool APF2GameModeBase::AttemptToQueueCommand(const TScriptInterface<IPF2CharacterCommandInterface>& Command)
+{
+	bool                                                   bWasQueued;
+	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet    = this->GetModeOfPlayRuleSet();
+
+	if (RuleSet.GetInterface() == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreEncounters,
+			Error,
+			TEXT("No MoPRS is set. Dropping command ('%s') without queuing."),
+			*(Command->GetCommandLabel().ToString())
+		);
+
+		bWasQueued = false;
+	}
+	else
+	{
+		bWasQueued = IPF2ModeOfPlayRuleSetInterface::Execute_AttemptToQueueCommand(RuleSet.GetObject(), Command);
+	}
+
+	return bWasQueued;
+}
+
 void APF2GameModeBase::AttemptToCancelCommand(const TScriptInterface<IPF2CharacterCommandInterface>& Command)
 {
 	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();

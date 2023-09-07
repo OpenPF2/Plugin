@@ -115,6 +115,23 @@ public:
 		const TScriptInterface<IPF2CharacterCommandInterface>& Command);
 
 	/**
+	 * Notifies this rule set that a character wishes to queue a command without trying to execute it first.
+	 *
+	 * This gives the rule set control over when the command should be performed (e.g., to enforce initiative order).
+	 * The command may not get executed if the encounter ends before it has been activated. In such a situation, the
+	 * command will be cancelled instead.
+	 *
+	 * @param Command
+	 *	The command that is being queued.
+	 *
+	 * @return
+	 *	- true if the command was able to be queued.
+	 *	- false if the command could not be queued.
+	 */
+	UFUNCTION(BlueprintNativeEvent, Category="OpenPF2|Mode of Play Rule Sets")
+	bool AttemptToQueueCommand(const TScriptInterface<IPF2CharacterCommandInterface>& Command);
+
+	/**
 	 * Notifies this rule set that a character wishes to cancel a command.
 	 *
 	 * This gives the rule set control over if/when a command should be cancelled. The command may not get cancelled if

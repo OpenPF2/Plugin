@@ -112,6 +112,18 @@ public:
 	virtual EPF2CommandExecuteImmediatelyResult AttemptExecuteImmediately() = 0;
 
 	/**
+	 * Attempt to queue this command without trying to execute it first, if possible; do nothing, if not possible.
+	 *
+	 * This method only has an effect on the server. If it is called on a client, the result will be false.
+	 *
+	 * @return
+	 *	- true if the command was able to be queued.
+	 *	- false if the command could not be queued.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Commands")
+	virtual bool AttemptQueue() = 0;
+
+	/**
 	 * Request to cancel this command.
 	 *
 	 * The actual choice of whether the command is cancelled is deferred to the game mode and active Mode of Play Rule

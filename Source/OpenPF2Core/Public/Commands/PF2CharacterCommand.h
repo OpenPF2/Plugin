@@ -221,6 +221,8 @@ public:
 
 	virtual EPF2CommandExecuteImmediatelyResult AttemptExecuteImmediately() override;
 
+	virtual bool AttemptQueue() override;
+
 	virtual void AttemptCancel() override;
 
 	virtual AInfo* ToActor() override;

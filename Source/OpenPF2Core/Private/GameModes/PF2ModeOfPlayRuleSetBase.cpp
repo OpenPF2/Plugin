@@ -52,6 +52,13 @@ EPF2CommandExecuteOrQueueResult APF2ModeOfPlayRuleSetBase::AttemptToExecuteOrQue
 	return Result;
 }
 
+bool APF2ModeOfPlayRuleSetBase::AttemptToQueueCommand_Implementation(
+	const TScriptInterface<IPF2CharacterCommandInterface>& Command)
+{
+	// By default there is no queue, so we drop the command.
+	return false;
+}
+
 void APF2ModeOfPlayRuleSetBase::AttemptToCancelCommand_Implementation(
 	const TScriptInterface<IPF2CharacterCommandInterface>& Command)
 {

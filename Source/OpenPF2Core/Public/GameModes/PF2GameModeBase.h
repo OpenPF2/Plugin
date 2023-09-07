@@ -84,6 +84,8 @@ public:
 	virtual EPF2CommandExecuteOrQueueResult AttemptToExecuteOrQueueCommand(
 		const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
+	virtual bool AttemptToQueueCommand(const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
+
 	virtual void AttemptToCancelCommand(const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
 protected:
