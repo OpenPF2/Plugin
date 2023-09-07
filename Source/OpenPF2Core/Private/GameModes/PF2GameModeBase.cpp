@@ -339,7 +339,7 @@ void APF2GameModeBase::HandleStartingNewPlayer_Implementation(APlayerController*
 TScriptInterface<IPF2ModeOfPlayRuleSetInterface> APF2GameModeBase::GetModeOfPlayRuleSet()
 {
 	TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet;
-	IPF2GameStateInterface*                          Pf2GameState = this->GetGameState<IPF2GameStateInterface>();
+	const IPF2GameStateInterface*                    Pf2GameState = this->GetGameState<IPF2GameStateInterface>();
 
 	if (Pf2GameState == nullptr)
 	{
