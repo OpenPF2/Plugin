@@ -121,7 +121,7 @@ public:
 	 *	- false if the command could not be queued.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Commands")
-	virtual bool AttemptQueue() = 0;
+	virtual UPARAM(DisplayName="Was Queued") bool AttemptQueue() = 0;
 
 	/**
 	 * Request to cancel this command.
