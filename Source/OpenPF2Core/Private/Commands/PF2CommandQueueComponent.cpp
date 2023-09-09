@@ -221,7 +221,7 @@ EPF2CommandExecuteImmediatelyResult UPF2CommandQueueComponent::PopAndExecuteNext
 		else
 		{
 			// Now it's safe to drop the command.
-			this->DropNext();
+			this->Remove(NextCommand);
 		}
 	}
 
