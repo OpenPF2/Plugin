@@ -68,6 +68,15 @@ void UPF2CommandQueueComponent::Enqueue(const TScriptInterface<IPF2CharacterComm
 	else
 	{
 		checkf(!this->Queue.Contains(CommandActor), TEXT("The same command can only exist in the queue once."));
+
+		UE_LOG(
+			LogPf2Core,
+			VeryVerbose,
+			TEXT("Queueing command ('%s') at end of command queue ('%s')."),
+			*(Command->GetIdForLogs()),
+			*(this->GetIdForLogs())
+		);
+
 		this->Queue.Add(CommandActor);
 
 		this->Native_OnCommandAdded(Command);
@@ -94,6 +103,16 @@ void UPF2CommandQueueComponent::EnqueueAt(const TScriptInterface<IPF2CharacterCo
 	else
 	{
 		checkf(!this->Queue.Contains(CommandActor), TEXT("The same command can only exist in the queue once."));
+
+		UE_LOG(
+			LogPf2Core,
+			VeryVerbose,
+			TEXT("Queueing command ('%s') at position '%d' in command queue ('%s')."),
+			*(Command->GetIdForLogs()),
+			Position,
+			*(this->GetIdForLogs())
+		);
+
 		this->Queue.Insert(CommandActor, Position);
 
 		this->Native_OnCommandAdded(Command);
