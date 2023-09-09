@@ -290,7 +290,7 @@ FString UPF2CommandQueueComponent::GetIdForLogs() const
 
 void UPF2CommandQueueComponent::OnRep_Queue(const TArray<AInfo*>& OldQueue)
 {
-	UPF2CommandQueueInterfaceEvents* InterfaceEvents = this->GetEvents();
+	const UPF2CommandQueueInterfaceEvents* InterfaceEvents = this->GetEvents();
 
 	// Skip unnecessary overhead if we have no listeners. This is only safe because our Native_ callbacks don't do
 	// anything other than notify listeners.
@@ -319,7 +319,7 @@ void UPF2CommandQueueComponent::OnRep_Queue(const TArray<AInfo*>& OldQueue)
 
 void UPF2CommandQueueComponent::Native_OnCommandsChanged()
 {
-	FPF2CommandQueueChangedDelegate& OnCommandsChanged = this->GetEvents()->OnCommandsChanged;
+	const FPF2CommandQueueChangedDelegate& OnCommandsChanged = this->GetEvents()->OnCommandsChanged;
 
 	// Skip unnecessary overhead if we have no listeners.
 	if (OnCommandsChanged.IsBound())
@@ -366,7 +366,7 @@ void UPF2CommandQueueComponent::Native_OnCommandsChanged()
 void UPF2CommandQueueComponent::Native_OnCommandAdded(
 	const TScriptInterface<IPF2CharacterCommandInterface>& CommandAdded)
 {
-	FPF2CommandAddedToOrRemovedFromQueueDelegate& OnCommandAdded = this->GetEvents()->OnCommandAdded;
+	const FPF2CommandAddedToOrRemovedFromQueueDelegate& OnCommandAdded = this->GetEvents()->OnCommandAdded;
 
 	UE_LOG(
 		LogPf2CoreAbilities,
@@ -386,7 +386,7 @@ void UPF2CommandQueueComponent::Native_OnCommandAdded(
 void UPF2CommandQueueComponent::Native_OnCommandRemoved(
 	const TScriptInterface<IPF2CharacterCommandInterface>& CommandRemoved)
 {
-	FPF2CommandAddedToOrRemovedFromQueueDelegate& OnCommandRemoved = this->GetEvents()->OnCommandRemoved;
+	const FPF2CommandAddedToOrRemovedFromQueueDelegate& OnCommandRemoved = this->GetEvents()->OnCommandRemoved;
 
 	UE_LOG(
 		LogPf2CoreAbilities,
