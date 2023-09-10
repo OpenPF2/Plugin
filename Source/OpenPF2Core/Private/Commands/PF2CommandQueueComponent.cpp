@@ -57,7 +57,7 @@ void UPF2CommandQueueComponent::Enqueue(const TScriptInterface<IPF2CharacterComm
 	if ((this->SizeLimit != CommandLimitNone) && (this->Queue.Num() == this->SizeLimit))
 	{
 		UE_LOG(
-			LogPf2Core,
+			LogPf2CoreAbilities,
 			Verbose,
 			TEXT("Command queue ('%s') is already at maximum capacity ('%d'), so command ('%s') will not be enqueued."),
 			*(this->GetIdForLogs()),
@@ -70,7 +70,7 @@ void UPF2CommandQueueComponent::Enqueue(const TScriptInterface<IPF2CharacterComm
 		checkf(!this->Queue.Contains(CommandActor), TEXT("The same command can only exist in the queue once."));
 
 		UE_LOG(
-			LogPf2Core,
+			LogPf2CoreAbilities,
 			VeryVerbose,
 			TEXT("Queueing command ('%s') at end of command queue ('%s')."),
 			*(Command->GetIdForLogs()),
@@ -92,7 +92,7 @@ void UPF2CommandQueueComponent::EnqueueAt(const TScriptInterface<IPF2CharacterCo
 	if ((this->SizeLimit != CommandLimitNone) && (this->Queue.Num() == this->SizeLimit))
 	{
 		UE_LOG(
-			LogPf2Core,
+			LogPf2CoreAbilities,
 			Verbose,
 			TEXT("Command queue ('%s') is already at maximum capacity ('%d'), so command ('%s') will not be enqueued."),
 			*(this->GetIdForLogs()),
@@ -105,7 +105,7 @@ void UPF2CommandQueueComponent::EnqueueAt(const TScriptInterface<IPF2CharacterCo
 		checkf(!this->Queue.Contains(CommandActor), TEXT("The same command can only exist in the queue once."));
 
 		UE_LOG(
-			LogPf2Core,
+			LogPf2CoreAbilities,
 			VeryVerbose,
 			TEXT("Queueing command ('%s') at position '%d' in command queue ('%s')."),
 			*(Command->GetIdForLogs()),
@@ -137,7 +137,7 @@ void UPF2CommandQueueComponent::PopNext(TScriptInterface<IPF2CharacterCommandInt
 		this->PeekNext(NextCommand);
 
 		UE_LOG(
-			LogPf2Core,
+			LogPf2CoreAbilities,
 			VeryVerbose,
 			TEXT("Popping command ('%s') from command queue ('%s')."),
 			*(NextCommand->GetIdForLogs()),
@@ -160,7 +160,7 @@ void UPF2CommandQueueComponent::DropNext()
 		this->PeekNext(NextCommand);
 
 		UE_LOG(
-			LogPf2Core,
+			LogPf2CoreAbilities,
 			VeryVerbose,
 			TEXT("Removing command ('%s') from command queue ('%s')."),
 			*(NextCommand->GetIdForLogs()),
@@ -186,7 +186,7 @@ EPF2CommandExecuteImmediatelyResult UPF2CommandQueueComponent::PopAndExecuteNext
 	if (NextCommand.GetInterface() == nullptr)
 	{
 		UE_LOG(
-			LogPf2Core,
+			LogPf2CoreAbilities,
 			VeryVerbose,
 			TEXT("No actions are currently queued for command queue ('%s')."),
 			*(this->GetIdForLogs())
@@ -199,7 +199,7 @@ EPF2CommandExecuteImmediatelyResult UPF2CommandQueueComponent::PopAndExecuteNext
 		IPF2CharacterCommandInterface* NextCommandIntf = PF2InterfaceUtilities::FromScriptInterface(NextCommand);
 
 		UE_LOG(
-			LogPf2Core,
+			LogPf2CoreAbilities,
 			VeryVerbose,
 			TEXT("Attempt to execute next command ('%s') in command queue ('%s')."),
 			*(NextCommandIntf->GetIdForLogs()),
@@ -211,7 +211,7 @@ EPF2CommandExecuteImmediatelyResult UPF2CommandQueueComponent::PopAndExecuteNext
 		if (Result == EPF2CommandExecuteImmediatelyResult::Blocked)
 		{
 			UE_LOG(
-				LogPf2Core,
+				LogPf2CoreAbilities,
 				VeryVerbose,
 				TEXT("Next command ('%s') in command queue ('%s') was blocked and will not be removed from the queue."),
 				*(NextCommandIntf->GetIdForLogs()),
