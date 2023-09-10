@@ -51,6 +51,7 @@ void FPF2AttributeSetSpec::Define()
 			TestEqual(TEXT("ClassDifficultyClass"),   AttributeSet->GetClassDifficultyClass(),    0.0f);
 			TestEqual(TEXT("Speed"),                  AttributeSet->GetSpeed(),                   1.0f);
 			TestEqual(TEXT("MaxSpeed"),               AttributeSet->GetMaxSpeed(),                1.0f);
+			TestEqual(TEXT("Reach"),                  AttributeSet->GetReach(),                 150.0f);
 			TestEqual(TEXT("ArmorClass"),             AttributeSet->GetArmorClass(),             10.0f);
 			TestEqual(TEXT("StFortitudeModifier"),    AttributeSet->GetStFortitudeModifier(),     0.0f);
 			TestEqual(TEXT("StReflexModifier"),       AttributeSet->GetStReflexModifier(),        0.0f);

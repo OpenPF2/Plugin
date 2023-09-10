@@ -47,7 +47,6 @@ public:
 	// =================================================================================================================
 	// Attributes - Stats Shared by Both PCs and NPCs
 	// =================================================================================================================
-
 	// Experience ------------------------------------------------------------------------------------------------------
 	/**
 	 * Experience Points (XP) track the knowledge a character has earned from facing beasts and traps.
@@ -239,6 +238,19 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Speed", ReplicatedUsing = OnRep_MaxSpeed)
 	FGameplayAttributeData MaxSpeed;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, MaxSpeed)
+
+	// Reach -----------------------------------------------------------------------------------------------------------
+	/**
+	 * The distance (in centimeters) you can physically reach with your body or a weapon.
+	 *
+	 * From the Pathfinder 2E Core Rulebook, page 455, "Range and Reach":
+	 * "Reach is how far you can physically reach with your body or a weapon. Melee Strikes rely on reach. Your reach
+	 * also creates an area around your space where other creatures could trigger your reactions. Your reach is
+	 * typically 5 feet [1.5 meters], but weapons with the reach trait can extend this."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Reach", ReplicatedUsing = OnRep_Reach)
+	FGameplayAttributeData Reach;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, Reach)
 
 	// Armor Class -----------------------------------------------------------------------------------------------------
 	/**
@@ -809,6 +821,9 @@ public:
 
 	UFUNCTION()
 	virtual void OnRep_MaxSpeed(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_Reach(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
 	virtual void OnRep_ArmorClass(const FGameplayAttributeData& OldValue);
