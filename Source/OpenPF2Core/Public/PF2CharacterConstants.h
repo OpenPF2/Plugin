@@ -1,4 +1,4 @@
-// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -116,7 +116,7 @@ namespace PF2CharacterConstants
 	 *
 	 * TODO: Consider whether we want to move this list into a Blueprint UPROPERTY, so that it's not hard-coded.
 	 */
-	static const TMap<FString, FName> GeCoreCharacterBlueprintPaths = {
+	static const TMultiMap<FString, FName> GeCoreCharacterBlueprintPaths = {
 		// Initialize base stats.
 		{BlueprintSubfolderRoot,                   TEXT("GE_ApplyBaseCharacterStats")     },
 		{BlueprintSubfolderRoot,                   TEXT("GE_GrantCharacterBaseAbilities") },
