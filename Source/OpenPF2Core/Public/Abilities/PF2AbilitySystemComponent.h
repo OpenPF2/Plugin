@@ -34,8 +34,17 @@ protected:
 	// =================================================================================================================
 	/**
 	 * The name of the tag that designates an ability the default movement ability.
+	 *
+	 * This ability is used to move a character to a location, such as within range of another actor/character.
 	 */
 	static const FName DefaultMovementAbilityTagName;
+
+	/**
+	 * The name of the tag that designates an ability the default "orient" ability.
+	 *
+	 * This ability is used to rotate a character to face another actor/character.
+	 */
+	static const FName DefaultOrientAbilityTagName;
 
 	// =================================================================================================================
 	// Protected Fields
@@ -222,9 +231,13 @@ public:
 
 	virtual void ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore) override;
 
+	virtual bool HasDefaultMovementAbility() const override;
+
 	virtual FGameplayAbilitySpecHandle FindDefaultMovementAbilityHandle(bool& bOutMatchFound) const override;
 
-	virtual bool HasDefaultMovementAbility() const override;
+	virtual bool HasDefaultOrientAbility() const override;
+
+	virtual FGameplayAbilitySpecHandle FindDefaultOrientAbilityHandle(bool& bOutMatchFound) const override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2ActorComponentInterface Implementation

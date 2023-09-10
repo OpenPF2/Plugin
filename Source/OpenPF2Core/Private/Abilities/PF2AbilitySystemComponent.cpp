@@ -18,6 +18,7 @@
 #include "Utilities/PF2LogUtilities.h"
 
 const FName UPF2AbilitySystemComponent::DefaultMovementAbilityTagName = FName(TEXT("GameplayAbility.Type.DefaultMovement"));
+const FName UPF2AbilitySystemComponent::DefaultOrientAbilityTagName   = FName(TEXT("GameplayAbility.Type.DefaultOrient"));
 
 UPF2AbilitySystemComponent::UPF2AbilitySystemComponent() : Events(nullptr), bAreAbilitiesAvailable(false)
 {
@@ -655,6 +656,15 @@ void UPF2AbilitySystemComponent::ApplyAbilityBoost(const EPF2CharacterAbilitySco
 	this->AddPassiveGameplayEffectWithWeight(WeightGroup, BoostEffect);
 }
 
+bool UPF2AbilitySystemComponent::HasDefaultMovementAbility() const
+{
+	bool bHaveAbility = false;
+
+	this->FindDefaultMovementAbilityHandle(bHaveAbility);
+
+	return bHaveAbility;
+}
+
 FGameplayAbilitySpecHandle UPF2AbilitySystemComponent::FindDefaultMovementAbilityHandle(bool& bOutMatchFound) const
 {
 	const FGameplayTag          MovementTag = PF2GameplayAbilityUtilities::GetTag(DefaultMovementAbilityTagName);
@@ -663,13 +673,21 @@ FGameplayAbilitySpecHandle UPF2AbilitySystemComponent::FindDefaultMovementAbilit
 	return this->FindAbilityHandleByTags(SearchTags, bOutMatchFound, false);
 }
 
-bool UPF2AbilitySystemComponent::HasDefaultMovementAbility() const
+bool UPF2AbilitySystemComponent::HasDefaultOrientAbility() const
 {
 	bool bHaveAbility = false;
 
-	this->FindDefaultMovementAbilityHandle(bHaveAbility);
+	this->FindDefaultOrientAbilityHandle(bHaveAbility);
 
 	return bHaveAbility;
+}
+
+FGameplayAbilitySpecHandle UPF2AbilitySystemComponent::FindDefaultOrientAbilityHandle(bool& bOutMatchFound) const
+{
+	const FGameplayTag          MovementTag = PF2GameplayAbilityUtilities::GetTag(DefaultOrientAbilityTagName);
+	const FGameplayTagContainer SearchTags  = FGameplayTagContainer(MovementTag);
+
+	return this->FindAbilityHandleByTags(SearchTags, bOutMatchFound, false);
 }
 
 UActorComponent* UPF2AbilitySystemComponent::ToActorComponent()
