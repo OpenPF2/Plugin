@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -15,23 +15,6 @@
 #include "Abilities/PF2CharacterAbilitySystemInterface.h"
 #include "Calculations/PF2TemlCalculation.h"
 #include "Libraries/PF2DiceLibrary.h"
-
-void UPF2WeaponBase::ActivateAbility(
-	const FGameplayAbilitySpecHandle     Handle,
-	const FGameplayAbilityActorInfo*     ActorInfo,
-	const FGameplayAbilityActivationInfo ActivationInfo,
-	const FGameplayEventData*            TriggerEventData)
-{
-	if (CommitAbility(Handle, ActorInfo, ActivationInfo))
-	{
-		const IPF2CharacterAbilitySystemInterface* CharacterAsc =
-			PF2GameplayAbilityUtilities::GetCharacterAbilitySystemComponent(ActorInfo);
-
-		// TODO: Implement
-
-		EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
-	}
-}
 
 float UPF2WeaponBase::GetAbilityModifierValue(const IPF2CharacterAbilitySystemInterface* CharacterAsc,
                                               const EPF2CharacterAbilityScoreType        AbilityScoreType)
