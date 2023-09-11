@@ -89,35 +89,38 @@ void UPF2CommandQueueComponent::EnqueueAt(const TScriptInterface<IPF2CharacterCo
 {
 	AInfo* CommandActor = Command->ToActor();
 
+	checkf(!this->Queue.Contains(CommandActor), TEXT("The same command can only exist in the queue once."));
+
+	UE_LOG(
+		LogPf2CoreAbilities,
+		VeryVerbose,
+		TEXT("Queueing command ('%s') at position '%d' in command queue ('%s')."),
+		*(Command->GetIdForLogs()),
+		Position,
+		*(this->GetIdForLogs())
+	);
+
+	// Insert the new command before enforcing limits (in case we are inserting this new command at the end of the
+	// queue).
+	this->Queue.Insert(CommandActor, Position);
+
+	// Now, if necessary, drop the last command.
 	if ((this->SizeLimit != CommandLimitNone) && (this->Queue.Num() == this->SizeLimit))
 	{
+		AInfo* RemovedElement = this->Queue.Pop();
+
 		UE_LOG(
 			LogPf2CoreAbilities,
 			Verbose,
-			TEXT("Command queue ('%s') is already at maximum capacity ('%d'), so command ('%s') will not be enqueued."),
+			TEXT("Command queue ('%s') is already at maximum capacity ('%d'), so the last command in the queue ('%s') was dropped."),
 			*(this->GetIdForLogs()),
 			this->SizeLimit,
-			*(Command->GetIdForLogs())
+			*(IPF2LogIdentifiableInterface::GetIdForLogs(RemovedElement))
 		);
 	}
-	else
-	{
-		checkf(!this->Queue.Contains(CommandActor), TEXT("The same command can only exist in the queue once."));
 
-		UE_LOG(
-			LogPf2CoreAbilities,
-			VeryVerbose,
-			TEXT("Queueing command ('%s') at position '%d' in command queue ('%s')."),
-			*(Command->GetIdForLogs()),
-			Position,
-			*(this->GetIdForLogs())
-		);
-
-		this->Queue.Insert(CommandActor, Position);
-
-		this->Native_OnCommandAdded(Command);
-		this->Native_OnCommandsChanged();
-	}
+	this->Native_OnCommandAdded(Command);
+	this->Native_OnCommandsChanged();
 }
 
 void UPF2CommandQueueComponent::PeekNext(TScriptInterface<IPF2CharacterCommandInterface>& NextCommand)
