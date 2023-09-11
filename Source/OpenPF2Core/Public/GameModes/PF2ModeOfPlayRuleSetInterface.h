@@ -104,6 +104,13 @@ public:
 	 * The command may not get executed if the encounter ends before it has been activated. In such a situation, the
 	 * command will be cancelled instead.
 	 *
+	 * If the current mode is structured (e.g., Encounter mode), then the command should be placed into a queue of
+	 * commands for the character -- preserving the order that the commands were queued -- and the command should be
+	 * executed when it is the character's turn (e.g., according to initiative order). On the other hand, if the current
+	 * Mode of Play allows characters to perform commands immediately, the command may not be queued and might instead
+	 * be given the opportunity to run before this call returns. Alternatively, the command may be dropped without being
+	 * executed if the character's queue has a size limit and the queue is currently full.
+	 *
 	 * @param Command
 	 *	The command that is being queued.
 	 *
@@ -120,6 +127,13 @@ public:
 	 * This gives the rule set control over when the command should be performed (e.g., to enforce initiative order).
 	 * The command may not get executed if the encounter ends before it has been activated. In such a situation, the
 	 * command will be cancelled instead.
+	 *
+	 * If the current mode is structured (e.g., Encounter mode), then the command should be placed into a queue of
+	 * commands for the character -- preserving the order that the commands were queued -- and the command should be
+	 * executed when it is the character's turn (e.g., according to initiative order). On the other hand, if the current
+	 * Mode of Play allows characters to perform commands immediately, the command should be ignored and might not be
+	 * queued. Alternatively, the command may be dropped if the character's queue has a size limit and the queue is
+	 * currently full.
 	 *
 	 * @param Command
 	 *	The command that is being queued.

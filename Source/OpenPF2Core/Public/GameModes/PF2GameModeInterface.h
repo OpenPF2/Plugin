@@ -174,11 +174,12 @@ public:
 	/**
 	 * Notifies game rules and/or the Mode of Play Rule Set (MoPRS) that a character wishes to perform a command.
 	 *
-	 * If the current mode is structured (e.g., Encounter mode), then the command will be placed into a queue of
-	 * commands for the character -- preserving the order that the commands were queued -- and the command will be
+	 * If the current mode is structured (e.g., Encounter mode), then the command should be placed into a queue of
+	 * commands for the character -- preserving the order that the commands were queued -- and the command should be
 	 * executed when it is the character's turn (e.g., according to initiative order). On the other hand, if the current
-	 * Mode of Play allows characters to perform commands immediately, the command will not be queued and will instead
-	 * be given the opportunity to run before this call returns.
+	 * Mode of Play allows characters to perform commands immediately, the command may not be queued and might instead
+	 * be given the opportunity to run before this call returns. Alternatively, the command may be dropped without being
+	 * executed if the character's queue has a size limit and the queue is currently full.
 	 *
 	 * @param Command
 	 *	The command being queued.
@@ -193,11 +194,12 @@ public:
 	/**
 	 * Notifies game rules and/or the Mode of Play Rule Set (MoPRS) that a character wishes to queue a command.
 	 *
-	 * If the current mode is structured (e.g., Encounter mode), then the command will be placed into a queue of
-	 * commands for the character -- preserving the order that the commands were queued -- and the command will be
+	 * If the current mode is structured (e.g., Encounter mode), then the command should be placed into a queue of
+	 * commands for the character -- preserving the order that the commands were queued -- and the command should be
 	 * executed when it is the character's turn (e.g., according to initiative order). On the other hand, if the current
-	 * Mode of Play allows characters to perform commands immediately, the command will be ignored and will not be
-	 * queued.
+	 * Mode of Play allows characters to perform commands immediately, the command should be ignored and might not be
+	 * queued. Alternatively, the command may be dropped if the character's queue has a size limit and the queue is
+	 * currently full.
 	 *
 	 * @param Command
 	 *	The command being queued.

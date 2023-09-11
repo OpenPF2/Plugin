@@ -111,8 +111,10 @@ public:
 	/**
 	 * Adds a command to the end of the queue.
 	 *
+	 * If the queue has a size limit and the queue is full, the command will not be enqueued.
+	 *
 	 * @param Command
-	 *	The command to add to the queue.
+	 *	The command to attempt to add to the queue.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Queues")
 	virtual void Enqueue(const TScriptInterface<IPF2CharacterCommandInterface>& Command) = 0;
@@ -120,10 +122,18 @@ public:
 	/**
 	 * Adds a command at the specified position in the queue.
 	 *
+	 * The Position cannot be negative, but may be equal to the size of the queue (even zero). If equal to the size of
+	 * the queue, the queue will grow to accommodate the additional item.
+	 *
+	 * If the queue has a size limit and the queue is full, the command will be enqueued and then the last command in
+	 * the queue will be dropped to ensure that the queue does not grow beyond the limit. This means that if the command
+	 * being enqueued is placed at the end of a full queue, it will get dropped immediately after it has been enqueued.
+	 *
 	 * @param Command
-	 *	The command to add to the queue.
+	 *	The command to attempt to add to the queue.
 	 * @param Position
-	 *	The position within the queue at which the command will be added.
+	 *	The position at which the command will be added within the queue. This cannot be negative and must be no larger
+	 *	than the size of the queue.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Command Queues")
 	virtual void EnqueueAt(const TScriptInterface<IPF2CharacterCommandInterface>& Command,

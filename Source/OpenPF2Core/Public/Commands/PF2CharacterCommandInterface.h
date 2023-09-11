@@ -116,6 +116,14 @@ public:
 	 *
 	 * This method only has an effect on the server. If it is called on a client, the result will be false.
 	 *
+	 * Whether this command actually gets queued, and where within the active character's queue this command gets
+	 * queued, is subject to the Mode of Play Rule Set (MoPRS), which ultimately has the final say:
+	 * - If the MoPRS is not enforcing queueing of commands, this command may get dropped.
+	 * - If the MoPRS is enforcing queueing:
+	 *   - This command may get queued at the end of the active character's queue even if this command has a preference
+	 *     for a different place in the queue.
+	 *   - This command may get dropped if the active character's queue has a size limit and the queue is full.
+	 *
 	 * @return
 	 *	- true if the command was able to be queued.
 	 *	- false if the command could not be queued.
