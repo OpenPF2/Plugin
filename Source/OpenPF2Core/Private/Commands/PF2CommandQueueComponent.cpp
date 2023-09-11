@@ -89,6 +89,33 @@ void UPF2CommandQueueComponent::EnqueueAt(const TScriptInterface<IPF2CharacterCo
 {
 	AInfo* CommandActor = Command->ToActor();
 
+	if (Position < 0)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("Cannot queue command ('%s') in command queue ('%s'): Position ('%d') cannot be negative."),
+			*(Command->GetIdForLogs()),
+			*(this->GetIdForLogs()),
+			Position
+		);
+		return;
+	}
+
+	if (Position > this->Queue.Num())
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("Cannot queue command ('%s') in command queue ('%s'): Position ('%d') cannot be greater than queue size ('%d')."),
+			*(Command->GetIdForLogs()),
+			*(this->GetIdForLogs()),
+			Position,
+			this->Queue.Num()
+		);
+		return;
+	}
+
 	checkf(!this->Queue.Contains(CommandActor), TEXT("The same command can only exist in the queue once."));
 
 	UE_LOG(
