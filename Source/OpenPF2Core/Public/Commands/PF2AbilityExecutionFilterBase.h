@@ -47,6 +47,9 @@ protected:
 	/**
 	 * Gets a reference to the world that contains the character who is activating the ability.
 	 *
+	 * @param ExecutionContext
+	 *	The current execution context for executing the filter.
+	 *
 	 * @return
 	 *	The world containing the character on which the ability is being activated.
 	 */
@@ -55,6 +58,9 @@ protected:
 
 	/**
 	 * Gets a reference to the current game state.
+	 *
+	 * @param ExecutionContext
+	 *	The current execution context for executing the filter.
 	 *
 	 * @return
 	 *	The state of the game.

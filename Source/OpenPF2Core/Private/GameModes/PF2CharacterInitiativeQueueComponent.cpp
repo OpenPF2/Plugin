@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -12,7 +12,6 @@
 
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
-#include "Utilities/PF2MapUtilities.h"
 
 bool UPF2CharacterInitiativeQueueComponent::IsEmpty()
 {
@@ -154,14 +153,16 @@ TArray<TScriptInterface<IPF2CharacterInterface>> UPF2CharacterInitiativeQueueCom
 
 void UPF2CharacterInitiativeQueueComponent::RebuildCharacterSequence()
 {
+	TArray<int32>                   Initiatives;
 	TArray<IPF2CharacterInterface*> NewCharacterSequence;
 
 	const TArray<IPF2CharacterInterface*> PlayableCharacters =
 		PF2InterfaceUtilities::FromScriptInterfaces<IPF2CharacterInterface>(this->GetPlayerControlledCharacters());
 
 	this->CharactersByInitiatives.KeyStableSort(TGreater<int32>());
+	this->CharactersByInitiatives.GenerateKeyArray(Initiatives);
 
-	for (const int32 Initiative : PF2MapUtilities::GetKeys(this->CharactersByInitiatives))
+	for (const int32 Initiative : Initiatives)
 	{
 		TArray<IPF2CharacterInterface*> CharactersForInitiative;
 

@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -37,7 +37,7 @@ namespace PF2GameplayAbilityUtilities
 	 * @return
 	 *	The desired tag.
 	 */
-	FORCEINLINE OPENPF2CORE_API FGameplayTag GetTag(const FName TagName)
+	FORCEINLINE OPENPF2CORE_API FGameplayTag GetTag(const FName& TagName)
 	{
 		return FGameplayTag::RequestGameplayTag(TagName);
 	}
@@ -53,7 +53,7 @@ namespace PF2GameplayAbilityUtilities
 	 * @return
 	 *	The desired tag.
 	 */
-	FORCEINLINE OPENPF2CORE_API FGameplayTag GetTag(const FString TagName)
+	FORCEINLINE OPENPF2CORE_API FGameplayTag GetTag(const FString& TagName)
 	{
 		return GetTag(FName(TagName));
 	}
@@ -89,7 +89,7 @@ namespace PF2GameplayAbilityUtilities
 	 *	- TRUE if given a tag prefix, and there is a tag present in the tag list that starts with that prefix.
 	 *	- FALSE, otherwise.
 	 */
-	FORCEINLINE OPENPF2CORE_API bool HasTag(const FGameplayTagContainer* Tags, const FString TagNameOrPrefix)
+	FORCEINLINE OPENPF2CORE_API bool HasTag(const FGameplayTagContainer* Tags, const FString& TagNameOrPrefix)
 	{
 		return Tags->HasTag(GetTag(TagNameOrPrefix));
 	}

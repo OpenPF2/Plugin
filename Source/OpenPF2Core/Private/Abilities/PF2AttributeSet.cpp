@@ -38,6 +38,7 @@ UPF2AttributeSet::UPF2AttributeSet() :
 	ClassDifficultyClass(0.0f),
 	Speed(1.0f),
 	MaxSpeed(1.0f),
+	Reach(150.0f),
 	ArmorClass(10.0f),
 	StFortitudeModifier(0.0f),
 	StReflexModifier(0.0f),
@@ -115,6 +116,7 @@ void UPF2AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(UPF2AttributeSet, ClassDifficultyClass);
 	DOREPLIFETIME(UPF2AttributeSet, Speed);
 	DOREPLIFETIME(UPF2AttributeSet, MaxSpeed);
+	DOREPLIFETIME(UPF2AttributeSet, Reach);
 	DOREPLIFETIME(UPF2AttributeSet, ArmorClass);
 	DOREPLIFETIME(UPF2AttributeSet, StFortitudeModifier);
 	DOREPLIFETIME(UPF2AttributeSet, StReflexModifier);
@@ -256,6 +258,11 @@ void UPF2AttributeSet::OnRep_Speed(const FGameplayAttributeData& OldValue)
 void UPF2AttributeSet::OnRep_MaxSpeed(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, MaxSpeed, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_Reach(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, Reach, OldValue);
 }
 
 void UPF2AttributeSet::OnRep_ArmorClass(const FGameplayAttributeData& OldValue)

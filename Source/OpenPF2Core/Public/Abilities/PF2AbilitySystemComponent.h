@@ -30,6 +30,23 @@ class OPENPF2CORE_API UPF2AbilitySystemComponent :
 
 protected:
 	// =================================================================================================================
+	// Protected Constants
+	// =================================================================================================================
+	/**
+	 * The name of the tag that designates an ability the default movement ability.
+	 *
+	 * This ability is used to move a character to a location, such as within range of another actor/character.
+	 */
+	static const FName DefaultMovementAbilityTagName;
+
+	/**
+	 * The name of the tag that designates an ability the default "orient" ability.
+	 *
+	 * This ability is used to rotate a character to face another actor/character.
+	 */
+	static const FName DefaultOrientAbilityTagName;
+
+	// =================================================================================================================
 	// Protected Fields
 	// =================================================================================================================
 	/**
@@ -117,6 +134,8 @@ public:
 		const FGameplayTagContainer& Tags,
 		bool bExactMatch = true) const override;
 
+	virtual FGameplayTagContainer GetActiveGameplayTags() const override;
+
 	virtual bool ArePassiveGameplayEffectsActive() const override
 	{
 		return this->ActivatedWeightGroups.Num() != 0;
@@ -133,7 +152,7 @@ public:
 		const FGameplayTagContainer& InTags,
 
 		UPARAM(DisplayName="Match Found")
-		bool& OutMatchFound,
+		bool& bOutMatchFound,
 
 		UPARAM(DisplayName="Only Abilities that Satisfy Tag Requirements")
 		const bool bInOnlyAbilitiesThatSatisfyTagRequirements = true
@@ -149,7 +168,7 @@ public:
 		const FGameplayTagContainer& InTags,
 
 		UPARAM(DisplayName="Match Found")
-		bool& OutMatchFound,
+		bool& bOutMatchFound,
 
 		UPARAM(DisplayName="Only Abilities that Satisfy Tag Requirements")
 		const bool bInOnlyAbilitiesThatSatisfyTagRequirements = true
@@ -193,8 +212,6 @@ public:
 
 	virtual void RemoveAllDynamicTags() override;
 
-	virtual FGameplayTagContainer GetActiveGameplayTags() const override;
-
 	// =================================================================================================================
 	// Public Methods - IPF2CharacterAbilitySystemInterface Implementation
 	// =================================================================================================================
@@ -213,6 +230,14 @@ public:
 	}
 
 	virtual void ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore) override;
+
+	virtual bool HasDefaultMovementAbility() const override;
+
+	virtual FGameplayAbilitySpecHandle FindDefaultMovementAbilityHandle(bool& bOutMatchFound) const override;
+
+	virtual bool HasDefaultOrientAbility() const override;
+
+	virtual FGameplayAbilitySpecHandle FindDefaultOrientAbilityHandle(bool& bOutMatchFound) const override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2ActorComponentInterface Implementation

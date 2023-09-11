@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -6,6 +6,8 @@
 #pragma once
 
 #include <Engine/Texture2D.h>
+
+#include "PF2CommandQueuePosition.h"
 
 #include "Commands/PF2CommandExecuteImmediatelyResult.h"
 #include "Commands/PF2CommandExecuteOrQueueResult.h"
@@ -76,6 +78,15 @@ public:
 	virtual FText GetCommandDescription() const = 0;
 
 	/**
+	 * Gets the preference for where in a command queue this command should be placed, if this command gets queued.
+	 *
+	 * @return
+	 *	The queue position preference.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Commands")
+	virtual EPF2CommandQueuePosition GetQueuePositionPreference() const = 0;
+
+	/**
 	 * Attempt to execute this command immediately, if possible; queue it for the character, if not possible.
 	 *
 	 * This method only has an effect on the server. If it is called on a client, the result will be
@@ -99,6 +110,26 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Commands")
 	virtual EPF2CommandExecuteImmediatelyResult AttemptExecuteImmediately() = 0;
+
+	/**
+	 * Attempt to queue this command without trying to execute it first, if possible; do nothing, if not possible.
+	 *
+	 * This method only has an effect on the server. If it is called on a client, the result will be false.
+	 *
+	 * Whether this command actually gets queued, and where within the active character's queue this command gets
+	 * queued, is subject to the Mode of Play Rule Set (MoPRS), which ultimately has the final say:
+	 * - If the MoPRS is not enforcing queueing of commands, this command may get dropped.
+	 * - If the MoPRS is enforcing queueing:
+	 *   - This command may get queued at the end of the active character's queue even if this command has a preference
+	 *     for a different place in the queue.
+	 *   - This command may get dropped if the active character's queue has a size limit and the queue is full.
+	 *
+	 * @return
+	 *	- true if the command was able to be queued.
+	 *	- false if the command could not be queued.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Character Commands")
+	virtual UPARAM(DisplayName="Was Queued") bool AttemptQueue() = 0;
 
 	/**
 	 * Request to cancel this command.

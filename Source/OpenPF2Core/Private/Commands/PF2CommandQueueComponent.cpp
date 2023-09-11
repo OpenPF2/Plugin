@@ -57,7 +57,7 @@ void UPF2CommandQueueComponent::Enqueue(const TScriptInterface<IPF2CharacterComm
 	if ((this->SizeLimit != CommandLimitNone) && (this->Queue.Num() == this->SizeLimit))
 	{
 		UE_LOG(
-			LogPf2Core,
+			LogPf2CoreAbilities,
 			Verbose,
 			TEXT("Command queue ('%s') is already at maximum capacity ('%d'), so command ('%s') will not be enqueued."),
 			*(this->GetIdForLogs()),
@@ -68,11 +68,86 @@ void UPF2CommandQueueComponent::Enqueue(const TScriptInterface<IPF2CharacterComm
 	else
 	{
 		checkf(!this->Queue.Contains(CommandActor), TEXT("The same command can only exist in the queue once."));
+
+		UE_LOG(
+			LogPf2CoreAbilities,
+			VeryVerbose,
+			TEXT("Queueing command ('%s') at end of command queue ('%s')."),
+			*(Command->GetIdForLogs()),
+			*(this->GetIdForLogs())
+		);
+
 		this->Queue.Add(CommandActor);
 
 		this->Native_OnCommandAdded(Command);
 		this->Native_OnCommandsChanged();
 	}
+}
+
+void UPF2CommandQueueComponent::EnqueueAt(const TScriptInterface<IPF2CharacterCommandInterface>& Command,
+                                          const int32                                            Position)
+{
+	AInfo* CommandActor = Command->ToActor();
+
+	if (Position < 0)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("Cannot queue command ('%s') in command queue ('%s'): Position ('%d') cannot be negative."),
+			*(Command->GetIdForLogs()),
+			*(this->GetIdForLogs()),
+			Position
+		);
+		return;
+	}
+
+	if (Position > this->Queue.Num())
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("Cannot queue command ('%s') in command queue ('%s'): Position ('%d') cannot be greater than queue size ('%d')."),
+			*(Command->GetIdForLogs()),
+			*(this->GetIdForLogs()),
+			Position,
+			this->Queue.Num()
+		);
+		return;
+	}
+
+	checkf(!this->Queue.Contains(CommandActor), TEXT("The same command can only exist in the queue once."));
+
+	UE_LOG(
+		LogPf2CoreAbilities,
+		VeryVerbose,
+		TEXT("Queueing command ('%s') at position '%d' in command queue ('%s')."),
+		*(Command->GetIdForLogs()),
+		Position,
+		*(this->GetIdForLogs())
+	);
+
+	// Insert the new command before enforcing limits (in case we are inserting this new command at the end of the
+	// queue).
+	this->Queue.Insert(CommandActor, Position);
+
+	// Now, if necessary, drop the last command.
+	if ((this->SizeLimit != CommandLimitNone) && (this->Queue.Num() == this->SizeLimit))
+	{
+		AInfo* RemovedElement = this->Queue.Pop(false);
+
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Verbose,
+			TEXT("Command queue ('%s') is already at maximum capacity ('%d'), so the last command in the queue ('%s') was dropped."),
+			*(this->GetIdForLogs()),
+			this->SizeLimit,
+			*(IPF2LogIdentifiableInterface::GetIdForLogs(RemovedElement))
+		);
+	}
+
+	this->Native_OnCommandAdded(Command);
+	this->Native_OnCommandsChanged();
 }
 
 void UPF2CommandQueueComponent::PeekNext(TScriptInterface<IPF2CharacterCommandInterface>& NextCommand)
@@ -92,14 +167,14 @@ void UPF2CommandQueueComponent::PopNext(TScriptInterface<IPF2CharacterCommandInt
 		this->PeekNext(NextCommand);
 
 		UE_LOG(
-			LogPf2Core,
+			LogPf2CoreAbilities,
 			VeryVerbose,
 			TEXT("Popping command ('%s') from command queue ('%s')."),
 			*(NextCommand->GetIdForLogs()),
 			*(this->GetIdForLogs())
 		);
 
-		this->Queue.RemoveAt(0);
+		this->Queue.RemoveAt(0, 1, false);
 
 		this->Native_OnCommandRemoved(NextCommand);
 		this->Native_OnCommandsChanged();
@@ -115,14 +190,14 @@ void UPF2CommandQueueComponent::DropNext()
 		this->PeekNext(NextCommand);
 
 		UE_LOG(
-			LogPf2Core,
+			LogPf2CoreAbilities,
 			VeryVerbose,
 			TEXT("Removing command ('%s') from command queue ('%s')."),
 			*(NextCommand->GetIdForLogs()),
 			*(this->GetIdForLogs())
 		);
 
-		this->Queue.RemoveAt(0);
+		this->Queue.RemoveAt(0, 1, false);
 
 		this->Native_OnCommandRemoved(NextCommand);
 		this->Native_OnCommandsChanged();
@@ -141,7 +216,7 @@ EPF2CommandExecuteImmediatelyResult UPF2CommandQueueComponent::PopAndExecuteNext
 	if (NextCommand.GetInterface() == nullptr)
 	{
 		UE_LOG(
-			LogPf2Core,
+			LogPf2CoreAbilities,
 			VeryVerbose,
 			TEXT("No actions are currently queued for command queue ('%s')."),
 			*(this->GetIdForLogs())
@@ -154,7 +229,7 @@ EPF2CommandExecuteImmediatelyResult UPF2CommandQueueComponent::PopAndExecuteNext
 		IPF2CharacterCommandInterface* NextCommandIntf = PF2InterfaceUtilities::FromScriptInterface(NextCommand);
 
 		UE_LOG(
-			LogPf2Core,
+			LogPf2CoreAbilities,
 			VeryVerbose,
 			TEXT("Attempt to execute next command ('%s') in command queue ('%s')."),
 			*(NextCommandIntf->GetIdForLogs()),
@@ -166,7 +241,7 @@ EPF2CommandExecuteImmediatelyResult UPF2CommandQueueComponent::PopAndExecuteNext
 		if (Result == EPF2CommandExecuteImmediatelyResult::Blocked)
 		{
 			UE_LOG(
-				LogPf2Core,
+				LogPf2CoreAbilities,
 				VeryVerbose,
 				TEXT("Next command ('%s') in command queue ('%s') was blocked and will not be removed from the queue."),
 				*(NextCommandIntf->GetIdForLogs()),
@@ -176,7 +251,7 @@ EPF2CommandExecuteImmediatelyResult UPF2CommandQueueComponent::PopAndExecuteNext
 		else
 		{
 			// Now it's safe to drop the command.
-			this->DropNext();
+			this->Remove(NextCommand);
 		}
 	}
 
@@ -205,7 +280,7 @@ int UPF2CommandQueueComponent::Count()
 
 void UPF2CommandQueueComponent::Clear()
 {
-	this->Queue.Empty();
+	this->Queue.Empty(this->SizeLimit);
 	this->Native_OnCommandsChanged();
 }
 
@@ -245,7 +320,7 @@ FString UPF2CommandQueueComponent::GetIdForLogs() const
 
 void UPF2CommandQueueComponent::OnRep_Queue(const TArray<AInfo*>& OldQueue)
 {
-	UPF2CommandQueueInterfaceEvents* InterfaceEvents = this->GetEvents();
+	const UPF2CommandQueueInterfaceEvents* InterfaceEvents = this->GetEvents();
 
 	// Skip unnecessary overhead if we have no listeners. This is only safe because our Native_ callbacks don't do
 	// anything other than notify listeners.
@@ -274,7 +349,7 @@ void UPF2CommandQueueComponent::OnRep_Queue(const TArray<AInfo*>& OldQueue)
 
 void UPF2CommandQueueComponent::Native_OnCommandsChanged()
 {
-	FPF2CommandQueueChangedDelegate& OnCommandsChanged = this->GetEvents()->OnCommandsChanged;
+	const FPF2CommandQueueChangedDelegate& OnCommandsChanged = this->GetEvents()->OnCommandsChanged;
 
 	// Skip unnecessary overhead if we have no listeners.
 	if (OnCommandsChanged.IsBound())
@@ -321,7 +396,7 @@ void UPF2CommandQueueComponent::Native_OnCommandsChanged()
 void UPF2CommandQueueComponent::Native_OnCommandAdded(
 	const TScriptInterface<IPF2CharacterCommandInterface>& CommandAdded)
 {
-	FPF2CommandAddedToOrRemovedFromQueueDelegate& OnCommandAdded = this->GetEvents()->OnCommandAdded;
+	const FPF2CommandAddedToOrRemovedFromQueueDelegate& OnCommandAdded = this->GetEvents()->OnCommandAdded;
 
 	UE_LOG(
 		LogPf2CoreAbilities,
@@ -341,7 +416,7 @@ void UPF2CommandQueueComponent::Native_OnCommandAdded(
 void UPF2CommandQueueComponent::Native_OnCommandRemoved(
 	const TScriptInterface<IPF2CharacterCommandInterface>& CommandRemoved)
 {
-	FPF2CommandAddedToOrRemovedFromQueueDelegate& OnCommandRemoved = this->GetEvents()->OnCommandRemoved;
+	const FPF2CommandAddedToOrRemovedFromQueueDelegate& OnCommandRemoved = this->GetEvents()->OnCommandRemoved;
 
 	UE_LOG(
 		LogPf2CoreAbilities,

@@ -38,7 +38,7 @@ OPENPF2CORE_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2CoreInitiative, Log, VeryVerbo
 OPENPF2CORE_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2CoreStats, Log, VeryVerbose);
 
 /**
- * Log category for logging character abilities and stats (very verbose).
+ * Log category for logging input from a player.
  */
 OPENPF2CORE_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2CoreInput, Log, VeryVerbose);
 

@@ -95,6 +95,9 @@ public:
 
 	virtual void Enqueue(const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
+	virtual void EnqueueAt(const TScriptInterface<IPF2CharacterCommandInterface>& Command,
+	                       const int32                                            Position) override;
+
 	virtual void PeekNext(TScriptInterface<IPF2CharacterCommandInterface>& NextCommand) override;
 
 	virtual void PopNext(TScriptInterface<IPF2CharacterCommandInterface>& NextCommand) override;

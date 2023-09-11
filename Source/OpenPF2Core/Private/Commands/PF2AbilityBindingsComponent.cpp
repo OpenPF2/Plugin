@@ -21,7 +21,6 @@
 
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
-#include "Utilities/PF2MapUtilities.h"
 
 UObject* UPF2AbilityBindingsComponent::GetGenericEventsObject() const
 {
@@ -49,10 +48,13 @@ UPF2AbilityBindingsInterfaceEvents* UPF2AbilityBindingsComponent::GetEvents() co
 
 TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilityBindingsComponent::GetBindingsMap() const
 {
-	UAbilitySystemComponent* Asc = this->GetOwningCharacter()->GetAbilitySystemComponent();
+	UAbilitySystemComponent*         Asc         = this->GetOwningCharacter()->GetAbilitySystemComponent();
+	TArray<UPF2AbilityInputBinding*> AllBindings;
+
+	this->Bindings.GenerateValueArray(AllBindings);
 
 	return PF2ArrayUtilities::Reduce(
-		PF2MapUtilities::GetValues(this->Bindings),
+		AllBindings,
 		TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>>(),
 		[Asc](TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>> ResultMap,
 		      const UPF2AbilityInputBinding*                                      CurrentBinding)
@@ -242,7 +244,9 @@ void UPF2AbilityBindingsComponent::ExecuteBoundAbility(const UInputAction*      
 	TScriptInterface<IPF2CharacterInterface>        Character;
 	TScriptInterface<IPF2PlayerControllerInterface> PlayerController;
 	FGameplayAbilitySpecHandle                      FilteredAbilityHandle = AbilitySpecHandle;
-	FGameplayEventData                              FilteredAbilityPayload;
+
+	FGameplayEventData FilteredAbilityPayload =
+		this->BuildPayloadForAbilityActivation(AbilitySpecHandle);
 
 	check(CharacterIntf != nullptr);
 
@@ -318,6 +322,12 @@ void UPF2AbilityBindingsComponent::SetBindingWithoutBroadcast(
 void UPF2AbilityBindingsComponent::DisconnectBindingFromInput(UPF2AbilityInputBinding* Binding) const
 {
 	return Binding->DisconnectFromInput(this->GetInputComponent());
+}
+
+FGameplayEventData UPF2AbilityBindingsComponent::BuildPayloadForAbilityActivation(
+	const FGameplayAbilitySpecHandle AbilitySpecHandle)
+{
+	return FGameplayEventData();
 }
 
 bool UPF2AbilityBindingsComponent::FilterAbilityActivation(

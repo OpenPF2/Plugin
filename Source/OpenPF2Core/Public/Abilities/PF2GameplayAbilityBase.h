@@ -88,6 +88,15 @@ protected:
 	// Protected Methods
 	// =================================================================================================================
 	/**
+	 * Gets the handle of the ability specification for the current activation.
+	 *
+	 * @return
+	 *	The handle of the active ability.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
+	FGameplayAbilitySpecHandle GetSpecHandleOfCurrentActivation() const;
+
+	/**
 	 * Gets the OpenPF2-compatible character to which this ability has been granted.
 	 *
 	 * May be null if this ability has been instantiated but not yet been granted to a character.

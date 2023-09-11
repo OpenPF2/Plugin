@@ -15,6 +15,8 @@
 
 #include "GameModes/PF2CharacterInitiativeQueueComponent.h"
 
+#include "Utilities/PF2EnumUtilities.h"
+
 APF2EncounterModeOfPlayRuleSetBase::APF2EncounterModeOfPlayRuleSetBase()
 {
 	this->CharacterInitiativeQueue =
@@ -183,15 +185,42 @@ void APF2EncounterModeOfPlayRuleSetBase::QueueCommandForCharacter(
 	}
 	else
 	{
+		const EPF2CommandQueuePosition QueuePositionPreference = Command->GetQueuePositionPreference();
+
 		UE_LOG(
 			LogPf2CoreEncounters,
 			VeryVerbose,
-			TEXT("Queuing command ('%s') for character ('%s')."),
+			TEXT("Queuing command ('%s') for character ('%s') at ('%s')."),
 			*(Command->GetIdForLogs()),
-			*(Character->GetIdForLogs())
+			*(Character->GetIdForLogs()),
+			*(PF2EnumUtilities::ToString(QueuePositionPreference))
 		);
 
-		CommandQueue->Enqueue(Command);
+		switch (QueuePositionPreference)
+		{
+			case EPF2CommandQueuePosition::BeginningOfQueue:
+				CommandQueue->EnqueueAt(Command, 0);
+				break;
+
+			case EPF2CommandQueuePosition::NextAfterBeginningOfQueue:
+				if (CommandQueue->Count() > 0)
+				{
+					// At least one command is queued, so place the new command right after the first command in the
+					// queue.
+					CommandQueue->EnqueueAt(Command, 1);
+				}
+				else
+				{
+					// Nothing is queued so make this command the next command executed.
+					CommandQueue->EnqueueAt(Command, 0);
+				}
+				break;
+
+			case EPF2CommandQueuePosition::EndOfQueue:
+				// Intentional fall-through.
+			default:
+				CommandQueue->Enqueue(Command);
+		}
 	}
 }
 

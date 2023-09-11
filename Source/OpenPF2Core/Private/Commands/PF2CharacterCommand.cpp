@@ -7,6 +7,8 @@
 
 #include <GameFramework/GameModeBase.h>
 
+#include <Kismet/GameplayStatics.h>
+
 #include <Net/UnrealNetwork.h>
 
 #include "PF2PlayerControllerInterface.h"
@@ -22,19 +24,17 @@
 
 IPF2CharacterCommandInterface* APF2CharacterCommand::Create(AActor*                          CharacterActor,
                                                             const FGameplayAbilitySpecHandle AbilitySpecHandle,
-                                                            const FGameplayEventData&        AbilityPayload)
+                                                            const FGameplayEventData&        AbilityPayload,
+                                                            const EPF2CommandQueuePosition   QueuePositionPreference)
 {
-	UWorld*               World           = CharacterActor->GetWorld();
-	FActorSpawnParameters SpawnParameters;
+	UWorld*               World   = CharacterActor->GetWorld();
 	APF2CharacterCommand* Command;
 
 	check(CharacterActor->Implements<UPF2CharacterInterface>());
 
-	SpawnParameters.Owner = CharacterActor;
+	Command = World->SpawnActorDeferred<APF2CharacterCommand>(StaticClass(), FTransform(), CharacterActor);
 
-	Command = World->SpawnActor<APF2CharacterCommand>(StaticClass(), SpawnParameters);
-
-	Command->SetTargetCharacterAndAbility(CharacterActor, AbilitySpecHandle, AbilityPayload);
+	Command->FinalizeConstruction(CharacterActor, AbilitySpecHandle, AbilityPayload, QueuePositionPreference);
 
 	return Command;
 }
@@ -103,6 +103,11 @@ FText APF2CharacterCommand::GetCommandDescription() const
 	return CommandDescription;
 }
 
+EPF2CommandQueuePosition APF2CharacterCommand::GetQueuePositionPreference() const
+{
+	return this->QueuePositionPreference;
+}
+
 EPF2CommandExecuteOrQueueResult APF2CharacterCommand::AttemptExecuteOrQueue()
 {
 	EPF2CommandExecuteOrQueueResult Result      = EPF2CommandExecuteOrQueueResult::None;
@@ -136,7 +141,7 @@ EPF2CommandExecuteOrQueueResult APF2CharacterCommand::AttemptExecuteOrQueue()
 	}
 	else
 	{
-		TScriptInterface<IPF2CharacterCommandInterface> CommandIntf =
+		const TScriptInterface<IPF2CharacterCommandInterface> CommandIntf =
 			PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(this);
 
 		Result = PF2GameMode->AttemptToExecuteOrQueueCommand(CommandIntf);
@@ -191,13 +196,68 @@ EPF2CommandExecuteImmediatelyResult APF2CharacterCommand::AttemptExecuteImmediat
 	return Result;
 }
 
-void APF2CharacterCommand::SetTargetCharacterAndAbility(AActor*                          InTargetCharacter,
-                                                        const FGameplayAbilitySpecHandle InAbilitySpecHandle,
-                                                        const FGameplayEventData&        InAbilityPayload)
+bool APF2CharacterCommand::AttemptQueue()
 {
-	this->TargetCharacter   = InTargetCharacter;
-	this->AbilitySpecHandle = InAbilitySpecHandle;
-	this->AbilityPayload    = InAbilityPayload;
+	bool                   bWasQueued = false;
+	const UWorld* const    World      = this->GetWorld();
+	IPF2GameModeInterface* PF2GameMode;
+
+	UE_LOG(
+		LogPf2CoreAbilities,
+		VeryVerbose,
+		TEXT("[%s] AttemptQueue() called on command ('%s')."),
+		*(PF2LogUtilities::GetHostNetId(World)),
+		*(this->GetIdForLogs())
+	);
+
+	check(World);
+
+	PF2GameMode = Cast<IPF2GameModeInterface>(World->GetAuthGameMode());
+
+	if (PF2GameMode == nullptr)
+	{
+		// TODO: If we have an actual need for this use case, we could probably support it by routing the invocation
+		// through the local player controller. The reason this isn't supported at the moment is because character
+		// commands have to be spawned on the server to have any effect, so we create them and invoke them there, and
+		// therefore don't (yet) have a need to invoke them locally.
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("[%s] AttemptQueue() can only be called on the server."),
+			*(PF2LogUtilities::GetHostNetId(World))
+		);
+	}
+	else
+	{
+		const TScriptInterface<IPF2CharacterCommandInterface> CommandIntf =
+			PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(this);
+
+		bWasQueued = PF2GameMode->AttemptToQueueCommand(CommandIntf);
+	}
+
+	UE_LOG(
+		LogPf2CoreAbilities,
+		VeryVerbose,
+		TEXT("[%s] AttemptQueue() result for command ('%s'): %s."),
+		*(PF2LogUtilities::GetHostNetId(World)),
+		*(this->GetIdForLogs()),
+		bWasQueued ? TEXT("true") : TEXT("false")
+	);
+
+	return bWasQueued;
+}
+
+void APF2CharacterCommand::FinalizeConstruction(AActor*                          InTargetCharacter,
+                                                const FGameplayAbilitySpecHandle InAbilitySpecHandle,
+                                                const FGameplayEventData&        InAbilityPayload,
+                                                const EPF2CommandQueuePosition   InQueuePositionPreference)
+{
+	this->TargetCharacter         = InTargetCharacter;
+	this->AbilitySpecHandle       = InAbilitySpecHandle;
+	this->AbilityPayload          = InAbilityPayload;
+	this->QueuePositionPreference = InQueuePositionPreference;
+
+	UGameplayStatics::FinishSpawningActor(this, FTransform());
 }
 
 void APF2CharacterCommand::Cancel_WithRemoteServer()
@@ -240,7 +300,7 @@ void APF2CharacterCommand::Cancel_WithLocalServer()
 	}
 	else
 	{
-		TScriptInterface<IPF2CharacterCommandInterface> CommandIntf =
+		const TScriptInterface<IPF2CharacterCommandInterface> CommandIntf =
 			PF2InterfaceUtilities::ToScriptInterface<IPF2CharacterCommandInterface>(this);
 
 		GameModeIntf->AttemptToCancelCommand(CommandIntf);

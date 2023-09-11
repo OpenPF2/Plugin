@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -14,7 +14,6 @@
 
 #include "PF2MonetaryValue.h"
 
-#include "Abilities/GameplayAbility.h"
 #include "Abilities/PF2CharacterAbilityScoreType.h"
 #include "Abilities/PF2CharacterAttributeStatics.h"
 #include "Abilities/Weapons/PF2WeaponInterface.h"
@@ -40,7 +39,7 @@ enum class EPF2WeaponHandsRequirement : uint8
  */
 UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API UPF2WeaponBase : public UGameplayAbility, public IPF2WeaponInterface
+class OPENPF2CORE_API UPF2WeaponBase : public UObject, public IPF2WeaponInterface
 {
 	GENERATED_BODY()
 
@@ -169,15 +168,14 @@ protected:
 	FGameplayTagContainer Traits;
 
 public:
-	UPF2WeaponBase(): DamageDie("1d6")
+	explicit UPF2WeaponBase() :
+		AttackAbilityModifierType(EPF2CharacterAbilityScoreType::AbStrength),
+		DamageAbilityModifierType(EPF2CharacterAbilityScoreType::AbStrength),
+		DamageDie("1d6"),
+		Bulk(0),
+		Hands(EPF2WeaponHandsRequirement::One)
 	{
 	}
-
-	virtual void ActivateAbility(
-		const FGameplayAbilitySpecHandle     Handle,
-		const FGameplayAbilityActorInfo*     ActorInfo,
-		const FGameplayAbilityActivationInfo ActivationInfo,
-		const FGameplayEventData*            TriggerEventData) override;
 
 protected:
 	/**

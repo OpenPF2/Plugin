@@ -63,7 +63,7 @@ void UPF2AbilityTask_AcquireTargetFromPlayerController::Activate()
 		}
 		else
 		{
-			const FHitResult TargetLocation = PlayerController->GetTargetLocation();
+			const FHitResult TargetLocation = PlayerController->GetTargetSelection();
 
 			this->NotifyListenersAboutTarget(
 				MakeTargetData(TargetLocation),

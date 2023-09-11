@@ -232,7 +232,7 @@ void APF2GameModeBase::RemoveCharacterFromEncounter(const TScriptInterface<IPF2C
 }
 
 EPF2CommandExecuteOrQueueResult APF2GameModeBase::AttemptToExecuteOrQueueCommand(
-	TScriptInterface<IPF2CharacterCommandInterface>& Command)
+	const TScriptInterface<IPF2CharacterCommandInterface>& Command)
 {
 	EPF2CommandExecuteOrQueueResult                        Result;
 	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
@@ -257,7 +257,31 @@ EPF2CommandExecuteOrQueueResult APF2GameModeBase::AttemptToExecuteOrQueueCommand
 	return Result;
 }
 
-void APF2GameModeBase::AttemptToCancelCommand(TScriptInterface<IPF2CharacterCommandInterface>& Command)
+bool APF2GameModeBase::AttemptToQueueCommand(const TScriptInterface<IPF2CharacterCommandInterface>& Command)
+{
+	bool                                                   bWasQueued;
+	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet    = this->GetModeOfPlayRuleSet();
+
+	if (RuleSet.GetInterface() == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreEncounters,
+			Error,
+			TEXT("No MoPRS is set. Dropping command ('%s') without queuing."),
+			*(Command->GetCommandLabel().ToString())
+		);
+
+		bWasQueued = false;
+	}
+	else
+	{
+		bWasQueued = IPF2ModeOfPlayRuleSetInterface::Execute_AttemptToQueueCommand(RuleSet.GetObject(), Command);
+	}
+
+	return bWasQueued;
+}
+
+void APF2GameModeBase::AttemptToCancelCommand(const TScriptInterface<IPF2CharacterCommandInterface>& Command)
 {
 	const TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet = this->GetModeOfPlayRuleSet();
 
@@ -339,7 +363,7 @@ void APF2GameModeBase::HandleStartingNewPlayer_Implementation(APlayerController*
 TScriptInterface<IPF2ModeOfPlayRuleSetInterface> APF2GameModeBase::GetModeOfPlayRuleSet()
 {
 	TScriptInterface<IPF2ModeOfPlayRuleSetInterface> RuleSet;
-	IPF2GameStateInterface*                          Pf2GameState = this->GetGameState<IPF2GameStateInterface>();
+	const IPF2GameStateInterface*                    Pf2GameState = this->GetGameState<IPF2GameStateInterface>();
 
 	if (Pf2GameState == nullptr)
 	{

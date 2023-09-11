@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -109,4 +109,66 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Character Ability System")
     virtual void ApplyAbilityBoost(const EPF2CharacterAbilityScoreType TargetAbilityScore) = 0;
+
+	/**
+	 * Determines if this ASC has a default movement ability.
+	 *
+	 * This ability is used to move a character to a location, such as within range of another actor/character.
+	 *
+	 * @return
+	 *	- true if this ASC has a granted ability having the "GameplayAbility.Type.DefaultMovement" tag.
+	 *	- false if this ASC does not have any granted ability with the default movement tag.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Character Ability System")
+	virtual bool HasDefaultMovementAbility() const = 0;
+
+	/**
+	 * Attempts to locate and return an ability granted to this ASC that has the default movement tag.
+	 *
+	 * This ability is used to move a character to a location, such as within range of another actor/character.
+	 *
+	 * If this ASC has multiple abilities with the "GameplayAbility.Type.DefaultMovement" tag, the first encountered
+	 * ability will be returned.
+	 *
+	 * @param bOutMatchFound
+	 *	An output parameter that receives whether at least one default movement ability was found.
+	 *
+	 * @return
+	 *	The handle of the default movement ability, if one was found.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Character Ability System")
+	virtual FGameplayAbilitySpecHandle FindDefaultMovementAbilityHandle(
+		UPARAM(DisplayName="Match Found")
+		bool& bOutMatchFound) const = 0;
+
+	/**
+	 * Determines if this ASC has a default orient ability.
+	 *
+	 * This ability is used to rotate a character to face another actor/character.
+	 *
+	 * @return
+	 *	- true if this ASC has a granted ability having the "GameplayAbility.Type.DefaultOrient" tag.
+	 *	- false if this ASC does not have any granted ability with the default orient tag.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Character Ability System")
+	virtual bool HasDefaultOrientAbility() const = 0;
+
+	/**
+	 * Attempts to locate and return an ability granted to this ASC that has the default "orient" tag.
+	 *
+	 * This ability is used to rotate a character to face another actor/character.
+	 *
+	 * If this ASC has multiple abilities with the "GameplayAbility.Type.DefaultOrient" tag, the first encountered
+	 * ability will be returned.
+	 *
+	 * @param bOutMatchFound
+	 *	An output parameter that receives whether at least one default orient ability was found.
+	 *
+	 * @return
+	 *	The handle of the default orient ability, if one was found.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Character Ability System")
+	virtual FGameplayAbilitySpecHandle FindDefaultOrientAbilityHandle(
+		UPARAM(DisplayName="Match Found")
+		bool& bOutMatchFound) const = 0;
 };

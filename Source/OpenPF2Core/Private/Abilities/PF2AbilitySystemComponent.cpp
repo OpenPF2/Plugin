@@ -17,6 +17,9 @@
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
+const FName UPF2AbilitySystemComponent::DefaultMovementAbilityTagName = FName(TEXT("GameplayAbility.Type.DefaultMovement"));
+const FName UPF2AbilitySystemComponent::DefaultOrientAbilityTagName   = FName(TEXT("GameplayAbility.Type.DefaultOrient"));
+
 UPF2AbilitySystemComponent::UPF2AbilitySystemComponent() : Events(nullptr), bAreAbilitiesAvailable(false)
 {
 	const FString DynamicTagsGeFilename =
@@ -150,6 +153,17 @@ TArray<TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilitySystemComponen
 		});
 }
 
+FGameplayTagContainer UPF2AbilitySystemComponent::GetActiveGameplayTags() const
+{
+	FGameplayTagContainer Tags;
+
+	Tags.Reset();
+
+	this->GetOwnedGameplayTags(Tags);
+
+	return Tags;
+}
+
 UAbilitySystemComponent* UPF2AbilitySystemComponent::ToAbilitySystemComponent()
 {
 	return Cast<UAbilitySystemComponent>(this);
@@ -178,7 +192,7 @@ TArray<FGameplayAbilitySpec> UPF2AbilitySystemComponent::FindAbilitySpecsByTags(
 
 FGameplayAbilitySpec UPF2AbilitySystemComponent::FindAbilitySpecByTags(
 	const FGameplayTagContainer& InTags,
-	bool&                        OutMatchFound,
+	bool&                        bOutMatchFound,
 	const bool                   bInOnlyAbilitiesThatSatisfyTagRequirements) const
 {
 	FGameplayAbilitySpec         MatchingAbility;
@@ -187,12 +201,12 @@ FGameplayAbilitySpec UPF2AbilitySystemComponent::FindAbilitySpecByTags(
 
 	if (MatchingAbilities.Num() == 0)
 	{
-		OutMatchFound   = false;
+		bOutMatchFound  = false;
 		MatchingAbility = FGameplayAbilitySpec();
 	}
 	else
 	{
-		OutMatchFound   = true;
+		bOutMatchFound  = true;
 		MatchingAbility = MatchingAbilities[0];
 	}
 
@@ -214,14 +228,14 @@ TArray<FGameplayAbilitySpecHandle> UPF2AbilitySystemComponent::FindAbilityHandle
 
 FGameplayAbilitySpecHandle UPF2AbilitySystemComponent::FindAbilityHandleByTags(
 	const FGameplayTagContainer& InTags,
-	bool&                        OutMatchFound,
+	bool&                        bOutMatchFound,
 	const bool                   bInOnlyAbilitiesThatSatisfyTagRequirements) const
 {
 	FGameplayAbilitySpecHandle Handle;
 	const FGameplayAbilitySpec AbilitySpec =
-		this->FindAbilitySpecByTags(InTags, OutMatchFound, bInOnlyAbilitiesThatSatisfyTagRequirements);
+		this->FindAbilitySpecByTags(InTags, bOutMatchFound, bInOnlyAbilitiesThatSatisfyTagRequirements);
 
-	if (OutMatchFound)
+	if (bOutMatchFound)
 	{
 		Handle = AbilitySpec.Handle;
 	}
@@ -506,17 +520,6 @@ void UPF2AbilitySystemComponent::RemoveAllDynamicTags()
 	});
 }
 
-FGameplayTagContainer UPF2AbilitySystemComponent::GetActiveGameplayTags() const
-{
-	FGameplayTagContainer Tags;
-
-	Tags.Reset();
-
-	this->GetOwnedGameplayTags(Tags);
-
-	return Tags;
-}
-
 TScriptInterface<IPF2CharacterInterface> UPF2AbilitySystemComponent::GetCharacter() const
 {
 	IPF2CharacterInterface* OwningCharacter = Cast<IPF2CharacterInterface>(this->GetOwnerActor());
@@ -651,6 +654,40 @@ void UPF2AbilitySystemComponent::ApplyAbilityBoost(const EPF2CharacterAbilitySco
 	);
 
 	this->AddPassiveGameplayEffectWithWeight(WeightGroup, BoostEffect);
+}
+
+bool UPF2AbilitySystemComponent::HasDefaultMovementAbility() const
+{
+	bool bHaveAbility = false;
+
+	this->FindDefaultMovementAbilityHandle(bHaveAbility);
+
+	return bHaveAbility;
+}
+
+FGameplayAbilitySpecHandle UPF2AbilitySystemComponent::FindDefaultMovementAbilityHandle(bool& bOutMatchFound) const
+{
+	const FGameplayTag          MovementTag = PF2GameplayAbilityUtilities::GetTag(DefaultMovementAbilityTagName);
+	const FGameplayTagContainer SearchTags  = FGameplayTagContainer(MovementTag);
+
+	return this->FindAbilityHandleByTags(SearchTags, bOutMatchFound, false);
+}
+
+bool UPF2AbilitySystemComponent::HasDefaultOrientAbility() const
+{
+	bool bHaveAbility = false;
+
+	this->FindDefaultOrientAbilityHandle(bHaveAbility);
+
+	return bHaveAbility;
+}
+
+FGameplayAbilitySpecHandle UPF2AbilitySystemComponent::FindDefaultOrientAbilityHandle(bool& bOutMatchFound) const
+{
+	const FGameplayTag          MovementTag = PF2GameplayAbilityUtilities::GetTag(DefaultOrientAbilityTagName);
+	const FGameplayTagContainer SearchTags  = FGameplayTagContainer(MovementTag);
+
+	return this->FindAbilityHandleByTags(SearchTags, bOutMatchFound, false);
 }
 
 UActorComponent* UPF2AbilitySystemComponent::ToActorComponent()

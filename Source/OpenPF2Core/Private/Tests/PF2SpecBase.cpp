@@ -20,6 +20,7 @@ FAttributeCapture FPF2SpecBase::CaptureAttributes(const UPF2AttributeSet* Attrib
 		{ TEXT("ClassDifficultyClass"), const_cast<FGameplayAttributeData *>(&AttributeSet->ClassDifficultyClass) },
 		{ TEXT("Speed"),                const_cast<FGameplayAttributeData *>(&AttributeSet->Speed)                },
 		{ TEXT("MaxSpeed"),             const_cast<FGameplayAttributeData *>(&AttributeSet->MaxSpeed)             },
+		{ TEXT("Reach"),                const_cast<FGameplayAttributeData *>(&AttributeSet->Reach)                },
 		{ TEXT("ArmorClass"),           const_cast<FGameplayAttributeData *>(&AttributeSet->ArmorClass)           },
 		{ TEXT("HitPoints"),            const_cast<FGameplayAttributeData *>(&AttributeSet->HitPoints)            },
 		{ TEXT("MaxHitPoints"),         const_cast<FGameplayAttributeData *>(&AttributeSet->MaxHitPoints)         },
