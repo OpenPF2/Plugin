@@ -17,7 +17,7 @@
 #include "PF2AttackStatLibrary.generated.h"
 
 /**
- * Function library for standard OpenPF2 attack statistic calculations.
+ * Function library for standard OpenPF2 attack statistic and distance calculations.
  */
 UCLASS()
 class UPF2AttackStatLibrary final : public UBlueprintFunctionLibrary
@@ -25,6 +25,16 @@ class UPF2AttackStatLibrary final : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 protected:
+	/**
+	 * The default maximum distance (in centimeters) at which movement to a location is considered acceptable.
+	 *
+	 * For example, if Character A is moving into range of Character B to make a melee attack on Character B, and the
+	 * reach of Character A is 1.5 meters (the standard distance for reach in OpenPF2), then Character A and Character B
+	 * must be no further than 3.5 meters away from each other (reach + acceptance radius => 1.5 meters + 2.0 meters)
+	 * for the attack to proceed.
+	 */
+	static constexpr float DefaultMovementAcceptanceRadiusCentimeters = 2.0f;
+
 	/**
 	 * The maximum multiple of the range of a ranged weapon within which the weapon still has a chance to hit a target.
 	 *
@@ -47,6 +57,18 @@ protected:
 	static constexpr float MaxRangePenalty = (MaxRangeIncrement - 1.0f) * RangePenaltyPerIncrement;
 
 public:
+	/**
+	 * Gets the default maximum distance (in centimeters) at which movement to a location is considered acceptable.
+	 *
+	 * @return
+	 *	The default acceptance radius, in centimeters.
+	 */
+	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
+	static UPARAM(DisplayName="Acceptance radius (cm)") FORCEINLINE float GetDefaultMovementAcceptanceRadius()
+	{
+		return DefaultMovementAcceptanceRadiusCentimeters;
+	}
+
 	/**
 	 * Calculates the penalty at the specified distance from a target for a weapon that has the given range increment.
 	 *
