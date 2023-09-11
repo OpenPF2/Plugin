@@ -168,7 +168,12 @@ protected:
 	FGameplayTagContainer Traits;
 
 public:
-	UPF2WeaponBase(): DamageDie("1d6")
+	explicit UPF2WeaponBase() :
+		AttackAbilityModifierType(EPF2CharacterAbilityScoreType::AbStrength),
+		DamageAbilityModifierType(EPF2CharacterAbilityScoreType::AbStrength),
+		DamageDie("1d6"),
+		Bulk(0),
+		Hands(EPF2WeaponHandsRequirement::One)
 	{
 	}
 
