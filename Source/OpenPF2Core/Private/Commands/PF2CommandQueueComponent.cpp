@@ -107,7 +107,7 @@ void UPF2CommandQueueComponent::EnqueueAt(const TScriptInterface<IPF2CharacterCo
 	// Now, if necessary, drop the last command.
 	if ((this->SizeLimit != CommandLimitNone) && (this->Queue.Num() == this->SizeLimit))
 	{
-		AInfo* RemovedElement = this->Queue.Pop();
+		AInfo* RemovedElement = this->Queue.Pop(false);
 
 		UE_LOG(
 			LogPf2CoreAbilities,
@@ -147,7 +147,7 @@ void UPF2CommandQueueComponent::PopNext(TScriptInterface<IPF2CharacterCommandInt
 			*(this->GetIdForLogs())
 		);
 
-		this->Queue.RemoveAt(0);
+		this->Queue.RemoveAt(0, 1, false);
 
 		this->Native_OnCommandRemoved(NextCommand);
 		this->Native_OnCommandsChanged();
@@ -170,7 +170,7 @@ void UPF2CommandQueueComponent::DropNext()
 			*(this->GetIdForLogs())
 		);
 
-		this->Queue.RemoveAt(0);
+		this->Queue.RemoveAt(0, 1, false);
 
 		this->Native_OnCommandRemoved(NextCommand);
 		this->Native_OnCommandsChanged();
@@ -253,7 +253,7 @@ int UPF2CommandQueueComponent::Count()
 
 void UPF2CommandQueueComponent::Clear()
 {
-	this->Queue.Empty();
+	this->Queue.Empty(this->SizeLimit);
 	this->Native_OnCommandsChanged();
 }
 
