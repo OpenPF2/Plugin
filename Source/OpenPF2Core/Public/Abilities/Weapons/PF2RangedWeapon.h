@@ -49,7 +49,7 @@ protected:
 	 * ratio of 1.5/5. For example, if a weapon has a range of 60 feet, then its range in OpenPF2 is:
 	 * 60 feet * 1.5 meters/5 feet = 18 meters.
 	 */
-	UPROPERTY(EditAnywhere, Category="Ranged Weapon Statistics")
+	UPROPERTY(EditAnywhere, Category="OpenPF2 - Ranged Weapon Statistics")
 	int32 Range;
 
 	/**
@@ -69,14 +69,14 @@ protected:
 	 *   - If an item takes 2 or more actions to reload, they must be performed together as an activity.
 	 *   - The special value of "-1" corresponds to the drawn ("—") value from the Pathfinder 2E Core Rulebook.
 	 */
-	UPROPERTY(EditAnywhere, Category="Ranged Weapon Statistics")
+	UPROPERTY(EditAnywhere, Category="OpenPF2 - Ranged Weapon Statistics")
 	int32 ReloadActionsRequired;
 
 	/**
 	 * The standard type of ammo this weapon comes loaded with.
 	 */
-	UPROPERTY(EditAnywhere, Category="Ammunition")
-	TSubclassOf<UPF2RangedWeaponAmmoBase> StandardAmmunitionType;
+	UPROPERTY(EditAnywhere, Category="OpenPF2 - Ammunition")
+	TSubclassOf<UPF2RangedWeaponAmmo> StandardAmmunitionType;
 
 	/**
 	 * The standard number of ammo units this weapon comes loaded with.
@@ -87,18 +87,18 @@ protected:
 	 * statistics vary by weapon, ammunition entries list only the name, quantity, Price, and Bulk. Using ammunition
 	 * destroys it."
 	 */
-	UPROPERTY(EditAnywhere, Category="Ammunition")
+	UPROPERTY(EditAnywhere, Category="OpenPF2 - Ammunition")
 	int32 StandardAmmunitionCount;
 
 	/**
 	 * The type of ammo currently loaded into this ranged weapon.
 	 */
-	UPROPERTY(EditAnywhere, Category="Ammunition")
-	TSubclassOf<UPF2RangedWeaponAmmoBase> LoadedAmmunitionType;
+	UPROPERTY(EditAnywhere, Category="OpenPF2 - Ammunition")
+	TSubclassOf<UPF2RangedWeaponAmmo> LoadedAmmunitionType;
 
 	/**
 	 * The number of ammo units this weapon currently has loaded.
 	 */
-	UPROPERTY(EditAnywhere, Category="Ammunition")
+	UPROPERTY(EditAnywhere, Category="OpenPF2 - Ammunition")
 	int32 LoadedAmmunitionCount;
 };

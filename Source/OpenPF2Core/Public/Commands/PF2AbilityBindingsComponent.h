@@ -59,7 +59,7 @@ public:
 	 */
 	UPROPERTY(
 		EditDefaultsOnly,
-		Category="OpenPF2 Command Bindings",
+		Category="OpenPF2 - Command Bindings",
 		meta=(TitleProperty=InputAction)
 	)
 	TArray<FPF2InputActionMapping> DefaultAbilityMappings;
@@ -80,7 +80,7 @@ public:
 		EditDefaultsOnly,
 		meta=(MustImplement="/Script/OpenPF2Core.PF2AbilityExecutionFilterInterface"),
 		DisplayName="Ability Execution Filters",
-		Category="OpenPF2 Command Bindings"
+		Category="OpenPF2 - Command Bindings"
 	)
 	TArray<TSubclassOf<UObject>> Filters;
 

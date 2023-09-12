@@ -46,13 +46,13 @@ protected:
 	/**
 	 * The player-readable name of this party.
 	 */
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Replicated, Category="OpenPF2 Party")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Replicated, Category="OpenPF2 - Party")
 	FText PartyName;
 
 	/**
 	 * The index of this party.
 	 */
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Replicated, Category="OpenPF2 Party")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Replicated, Category="OpenPF2 - Party")
 	int32 PartyIndex;
 
 	/**

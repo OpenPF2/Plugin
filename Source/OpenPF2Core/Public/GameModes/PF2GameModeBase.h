@@ -46,7 +46,7 @@ protected:
 	/**
 	 * Map from Modes of Play to the Rule Set to use for each mode.
 	 */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="OpenPF2 Game Modes")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="OpenPF2 - Game Modes")
 	TMap<EPF2ModeOfPlayType, TSubclassOf<APF2ModeOfPlayRuleSetBase>> ModeRuleSets;
 
 public:

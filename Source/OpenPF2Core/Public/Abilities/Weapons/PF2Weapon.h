@@ -52,7 +52,7 @@ protected:
 	/**
 	 * The human-friendly name for this weapon.
 	 */
-	UPROPERTY(EditAnywhere, Category="Weapon Statistics")
+	UPROPERTY(EditAnywhere, Category="OpenPF2 - Weapon Statistics")
 	FText Name;
 
 	/**
@@ -70,25 +70,25 @@ protected:
 	 *	- Any character without the "Gnome Weapon Familiarity" feat who is proficient with martial weapons, since the
 	 *	  proficiency grants them a "WeaponProficiency.Category.Martial.*" gameplay tag.
 	 */
-	UPROPERTY(EditDefaultsOnly, meta=(Categories="WeaponProficiency"), Category="Weapon Statistics")
+	UPROPERTY(EditDefaultsOnly, meta=(Categories="WeaponProficiency"), Category="OpenPF2 - Weapon Statistics")
 	FGameplayTagContainer ProficiencyTagPrefixes;
 
 	/**
 	 * The type of ability modifier from the character's ASC that is added to *attack* rolls with this weapon.
 	 */
-	UPROPERTY(EditDefaultsOnly, Category="Weapon Statistics")
+	UPROPERTY(EditDefaultsOnly, Category="OpenPF2 - Weapon Statistics")
 	EPF2CharacterAbilityScoreType AttackAbilityModifierType;
 
 	/**
 	 * The type of ability modifier from the character's ASC that is added to *damage* rolls with this weapon.
 	 */
-	UPROPERTY(EditDefaultsOnly, Category="Weapon Statistics")
+	UPROPERTY(EditDefaultsOnly, Category="OpenPF2 - Weapon Statistics")
 	EPF2CharacterAbilityScoreType DamageAbilityModifierType;
 
 	/**
 	 * The value or price of this item.
 	 */
-	UPROPERTY(EditDefaultsOnly, Category="Weapon Statistics")
+	UPROPERTY(EditDefaultsOnly, Category="OpenPF2 - Weapon Statistics")
 	FPF2MonetaryValue Value;
 
 	/**
@@ -96,13 +96,13 @@ protected:
 	 *
 	 * For example, "1d4" or "1d6".
 	 */
-	UPROPERTY(EditDefaultsOnly, Category="Weapon Statistics")
+	UPROPERTY(EditDefaultsOnly, Category="OpenPF2 - Weapon Statistics")
 	FName DamageDie;
 
 	/**
 	 * The type of damage this weapon does.
 	 */
-	UPROPERTY(EditDefaultsOnly, meta=(Categories="DamageType"), Category="Weapon Statistics")
+	UPROPERTY(EditDefaultsOnly, meta=(Categories="DamageType"), Category="OpenPF2 - Weapon Statistics")
 	FGameplayTag DamageType;
 
 	/**
@@ -130,7 +130,7 @@ protected:
 	 *	- "0.01" corresponds to "negligible" (—) bulk.
 	 *	- "0.10" corresponds to "light" (L) bulk.
 	 */
-	UPROPERTY(EditDefaultsOnly, meta=(ClampMin=0), Category="Weapon Statistics")
+	UPROPERTY(EditDefaultsOnly, meta=(ClampMin=0), Category="OpenPF2 - Weapon Statistics")
 	float Bulk;
 
 	/**
@@ -148,7 +148,7 @@ protected:
 	 * you to wield a weapon in two hands. You meet this requirement while holding the weapon in two hands, even if it
 	 * doesn't require two hands or have the two-hand trait."
 	 */
-	UPROPERTY(EditDefaultsOnly, meta=(ClampMin=1), Category="Weapon Statistics")
+	UPROPERTY(EditDefaultsOnly, meta=(ClampMin=1), Category="OpenPF2 - Weapon Statistics")
 	EPF2WeaponHandsRequirement Hands;
 
 	/**
@@ -159,7 +159,7 @@ protected:
 	 * weapon does on a critical hit if you have access to that weapon or unarmed attack's critical specialization
 	 * effects..."
 	 */
-	UPROPERTY(EditDefaultsOnly, meta=(Categories="WeaponGroup"), Category="Weapon Statistics")
+	UPROPERTY(EditDefaultsOnly, meta=(Categories="WeaponGroup"), Category="OpenPF2 - Weapon Statistics")
 	FGameplayTag Group;
 
 	/**
@@ -169,7 +169,7 @@ protected:
 	 * "[Traits are keywords] that [convey] information about a rules element. Often a trait indicates how other rules
 	 * interact with an ability, creature, item, or other rules element with that trait."
 	 */
-	UPROPERTY(EditDefaultsOnly, meta=(Categories="Trait.Weapon"), Category="Weapon Statistics")
+	UPROPERTY(EditDefaultsOnly, meta=(Categories="Trait.Weapon"), Category="OpenPF2 - Weapon Statistics")
 	FGameplayTagContainer Traits;
 
 public:

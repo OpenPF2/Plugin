@@ -41,19 +41,19 @@ protected:
 	/**
 	 * The icon to represent this ability, for whenever it is displayed to players/users.
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="OpenPF2 Appearance")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="OpenPF2 - Appearance")
 	UTexture2D* Icon;
 
 	/**
 	 * The name of this ability, for whenever it is displayed to players/users.
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="OpenPF2 Appearance")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="OpenPF2 - Appearance")
 	FText Label;
 
 	/**
 	 * The description of this ability, for whenever it is displayed to players/users.
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="OpenPF2 Appearance")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="OpenPF2 - Appearance")
 	FText Description;
 
 public:

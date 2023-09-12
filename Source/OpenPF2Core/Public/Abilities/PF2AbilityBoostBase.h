@@ -45,7 +45,7 @@ protected:
 	/**
 	 * The description of this boost, as shown to the player when they are being asked to make a selection.
 	 */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Description")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="OpenPF2 - Description")
 	FText Description;
 
 	/**
@@ -54,7 +54,7 @@ protected:
 	 * Each element represents a single rule option for an ability score boost. Each can either be a free ability boost;
 	 * or the option to choose between one or more ability options.
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Ability Boost Options")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="OpenPF2 - Ability Boost Options")
 	TArray<FPF2AbilityBoostRuleOption> BoostRuleOptions;
 
 public:

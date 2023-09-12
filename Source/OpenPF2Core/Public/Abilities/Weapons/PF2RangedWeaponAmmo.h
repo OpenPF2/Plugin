@@ -34,13 +34,13 @@ protected:
 	/**
 	 * The human-friendly name for this ammo.
 	 */
-	UPROPERTY(EditAnywhere, Category="Ammo Statistics")
+	UPROPERTY(EditAnywhere, Category="OpenPF2 - Ammo Statistics")
 	FText Name;
 
 	/**
 	 * The value or price of this ammo.
 	 */
-	UPROPERTY(EditDefaultsOnly, Category="Ammo Statistics")
+	UPROPERTY(EditDefaultsOnly, Category="OpenPF2 - Ammo Statistics")
 	FPF2MonetaryValue Value;
 
 	/**
@@ -68,6 +68,6 @@ protected:
 	 *	- "0.01" corresponds to "negligible" (—) bulk.
 	 *	- "0.10" corresponds to "light" (L) bulk.
 	 */
-	UPROPERTY(EditDefaultsOnly, meta=(ClampMin=0), Category="Ammo Statistics")
+	UPROPERTY(EditDefaultsOnly, meta=(ClampMin=0), Category="OpenPF2 - Ammo Statistics")
 	float Bulk;
 };

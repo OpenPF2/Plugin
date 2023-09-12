@@ -189,19 +189,19 @@ protected:
 	 * For playable characters, this may come from the player themselves unless the story dictates that the character
 	 * has a specific name because it is important for the plot.
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Character")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="OpenPF2 - Character")
 	FText CharacterName;
 
 	/**
 	 * The visual portrait of this character, to represent them in the UI to players/users.
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Character")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="OpenPF2 - Character")
 	UTexture2D* CharacterPortrait;
 
 	/**
 	 * The current level of this character.
 	 */
-	UPROPERTY(EditAnywhere, Replicated, meta=(ClampMin=1), Category="Character")
+	UPROPERTY(EditAnywhere, Replicated, meta=(ClampMin=1), Category="OpenPF2 - Character")
 	int32 CharacterLevel;
 
 	/**
@@ -219,7 +219,7 @@ protected:
 	 * change it later. A heritage is not the same as a culture or ethnicity, though some cultures or ethnicities might
 	 * have more or fewer members from a particular heritage."
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Character")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="OpenPF2 - Character")
 	TSubclassOf<UPF2AncestryAndHeritageGameplayEffectBase> AncestryAndHeritage;
 
 	/**
@@ -229,7 +229,7 @@ protected:
 	 * "Backgrounds ... describe training or environments your character experienced before becoming an adventurer. Your
 	 * character’s background provides ability boosts, skill training, and a skill feat."
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Character")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="OpenPF2 - Character")
 	TSubclassOf<UPF2BackgroundGameplayEffectBase> Background;
 
 	/**
@@ -243,7 +243,7 @@ protected:
 	 * combat-oriented character, a stealthy character, and someone with command over magic—so you may wish to discuss
 	 * options with your group before deciding."
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Character")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="OpenPF2 - Character")
 	TSubclassOf<UPF2ClassGameplayEffectBase> Class;
 
 	/**
@@ -260,7 +260,7 @@ protected:
 	 * alignment is a complicated subject, and even acts that might be considered good can be used for nefarious
 	 * purposes, and vice versa."
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(Categories="CreatureAlignment"), Category="Character")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(Categories="CreatureAlignment"), Category="OpenPF2 - Character")
 	FGameplayTag Alignment;
 
 	/**
@@ -268,13 +268,13 @@ protected:
 	 *
 	 * Languages granted by ancestry do not need to be duplicated here.
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(Categories="Language"), Category="Character")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(Categories="Language"), Category="OpenPF2 - Character")
 	FGameplayTagContainer AdditionalLanguages;
 
 	/**
 	 * The name(s) of lore sub-categories that this character is knowledgeable about.
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Skills")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="OpenPF2 - Skills")
 	TArray<FString> LoreNames;
 
 	/**
@@ -284,7 +284,7 @@ protected:
 	 * skill, you only need to select "Skill.Survival.Master", and do not need to also select the lower proficiency tags
 	 * of "Skill.Survival.Trained" and "Skill.Survival.Untrained".
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(Categories="Skill"), Category="Skills")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(Categories="Skill"), Category="OpenPF2 - Skills")
 	FGameplayTagContainer AdditionalSkillProficiencies;
 
 	/**
@@ -298,7 +298,7 @@ protected:
 	 * Core GEs that initialize base character stats are evaluated before these additional GEs, while Core GEs that
 	 * depend on ability scores (e.g. ability modifier calculation) are evaluated after these additional GEs.
 	 */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Character")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="OpenPF2 - Character")
 	TArray<TSubclassOf<UGameplayEffect>> AdditionalPassiveGameplayEffects;
 
 	/**
@@ -308,7 +308,7 @@ protected:
 	 * heritage, or skills. You should only grant custom abilities here that are needed for story or special character
 	 * interactions; otherwise, abilities should only be granted through the aforementioned, more standard means.
 	 */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Character")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="OpenPF2 - Character")
 	TArray<TSubclassOf<UGameplayAbility>> AdditionalGameplayAbilities;
 
 	/**
@@ -346,7 +346,7 @@ protected:
 	 * applied to any ability score of your choice. However, when you gain multiple ability boosts at the same time,
 	 * you must apply each one to a different score."
 	 */
-	UPROPERTY(EditAnywhere, Category="Ability Boosts")
+	UPROPERTY(EditAnywhere, Category="OpenPF2 - Ability Boosts")
 	TArray<FPF2CharacterAbilityBoostSelection> AbilityBoostSelections;
 
 	/**
