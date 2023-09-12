@@ -10,14 +10,14 @@
 // file other than the material designated as Open Game Content may be reproduced in any form without written
 // permission.
 
-#include "Abilities/Weapons/PF2WeaponBase.h"
+#include "Abilities/Weapons/PF2Weapon.h"
 
 #include "Abilities/PF2CharacterAbilitySystemInterface.h"
 #include "Calculations/PF2TemlCalculation.h"
 #include "Libraries/PF2DiceLibrary.h"
 
-float UPF2WeaponBase::GetAbilityModifierValue(const IPF2CharacterAbilitySystemInterface* CharacterAsc,
-                                              const EPF2CharacterAbilityScoreType        AbilityScoreType)
+float UPF2Weapon::GetAbilityModifierValue(const IPF2CharacterAbilitySystemInterface* CharacterAsc,
+                                          const EPF2CharacterAbilityScoreType        AbilityScoreType)
 {
 	const TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> AbilityScoreValues =
 		CharacterAsc->GetAbilityScoreValues();
@@ -25,7 +25,7 @@ float UPF2WeaponBase::GetAbilityModifierValue(const IPF2CharacterAbilitySystemIn
 	return AbilityScoreValues[AbilityScoreType].ModifierValue;
 }
 
-float UPF2WeaponBase::CalculateAttackRoll(const IPF2CharacterAbilitySystemInterface* CharacterAsc)
+float UPF2Weapon::CalculateAttackRoll(const IPF2CharacterAbilitySystemInterface* CharacterAsc)
 {
 	const int32                 CharacterLevel = CharacterAsc->GetCharacterLevel();
 	const FGameplayTagContainer CharacterTags  = CharacterAsc->GetActiveGameplayTags();
@@ -52,7 +52,7 @@ float UPF2WeaponBase::CalculateAttackRoll(const IPF2CharacterAbilitySystemInterf
 	return RollResult + AttackAbilityModifier + WeaponProficiencyBonus;
 }
 
-float UPF2WeaponBase::CalculateDamageRoll(const IPF2CharacterAbilitySystemInterface* CharacterAsc)
+float UPF2Weapon::CalculateDamageRoll(const IPF2CharacterAbilitySystemInterface* CharacterAsc)
 {
 	const int32 RollResult            = UPF2DiceLibrary::RollStringSum(this->DamageDie);
 	const float DamageAbilityModifier = GetAbilityModifierValue(CharacterAsc, this->DamageAbilityModifierType);

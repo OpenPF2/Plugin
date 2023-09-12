@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -12,20 +12,23 @@
 
 #pragma once
 
-#include "Abilities/Weapons/PF2RangedWeaponAmmoBase.h"
-#include "Abilities/Weapons/PF2WeaponBase.h"
+#include "Abilities/Weapons/PF2RangedWeaponAmmo.h"
+#include "Abilities/Weapons/PF2Weapon.h"
 
-#include "PF2RangedWeaponBase.generated.h"
+#include "PF2RangedWeapon.generated.h"
 
 /**
- * Base class for weapons that a character can use to attack another character from a distance.
+ * Primary data class for weapons that a character can use to attack another character from a distance.
  *
  * This is the top-most C++ base class for ranged weapons, but there are several Blueprint sub-classes of this class
  * that offer functionality that tends to be a more complete fit for your own ranged weapon implementations.
+ *
+ * (Though this is an abstract base class, it does not have the "Base" suffix in its name because the asset manager uses
+ * the name of the first native parent class as the asset type).
  */
 UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API UPF2RangedWeaponBase : public UPF2WeaponBase
+class OPENPF2CORE_API UPF2RangedWeapon : public UPF2Weapon
 {
 	GENERATED_BODY()
 

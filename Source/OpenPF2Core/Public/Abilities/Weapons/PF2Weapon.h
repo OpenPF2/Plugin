@@ -12,13 +12,15 @@
 
 #pragma once
 
+#include <Engine/DataAsset.h>
+
 #include "PF2MonetaryValue.h"
 
 #include "Abilities/PF2CharacterAbilityScoreType.h"
 #include "Abilities/PF2CharacterAttributeStatics.h"
 #include "Abilities/Weapons/PF2WeaponInterface.h"
 
-#include "PF2WeaponBase.generated.h"
+#include "PF2Weapon.generated.h"
 
 /**
  * Enumerated type for the number of hands a character has to have free in order to hold a weapon.
@@ -32,14 +34,17 @@ enum class EPF2WeaponHandsRequirement : uint8
 };
 
 /**
- * Base class for weapons a character can equip.
+ * Primary data class for weapons a character can equip.
  *
  * This is the top-most C++ base class for weapons, but there are several Blueprint sub-classes of this class that offer
- * functionality that tends to be a more complete fit for your own weapon implementations.
+ * functionality that tends to be a more complete fit for your own weapon implementation.
+ *
+ * (Though this is an abstract base class, it does not have the "Base" suffix in its name because the asset manager uses
+ * the name of the first native parent class as the asset type).
  */
 UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API UPF2WeaponBase : public UObject, public IPF2WeaponInterface
+class OPENPF2CORE_API UPF2Weapon : public UPrimaryDataAsset, public IPF2WeaponInterface
 {
 	GENERATED_BODY()
 
@@ -168,7 +173,7 @@ protected:
 	FGameplayTagContainer Traits;
 
 public:
-	explicit UPF2WeaponBase() :
+	explicit UPF2Weapon() :
 		AttackAbilityModifierType(EPF2CharacterAbilityScoreType::AbStrength),
 		DamageAbilityModifierType(EPF2CharacterAbilityScoreType::AbStrength),
 		DamageDie("1d6"),
