@@ -50,7 +50,7 @@ protected:
 	 * 60 feet * 1.5 meters/5 feet = 18 meters.
 	 */
 	UPROPERTY(EditAnywhere, Category="OpenPF2 - Ranged Weapon Statistics")
-	int32 Range;
+	int32 RangeIncrement;
 
 	/**
 	 * The number of interactions required to reload this ranged weapon.
