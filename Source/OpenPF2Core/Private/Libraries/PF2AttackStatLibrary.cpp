@@ -12,6 +12,51 @@
 
 #include "Libraries/PF2AttackStatLibrary.h"
 
+#include "Calculations/PF2TemlCalculation.h"
+
+#include "Libraries/PF2DiceLibrary.h"
+
+float UPF2AttackStatLibrary::CalculateAttackRoll(const int32                  CharacterLevel,
+                                                 const FGameplayTagContainer& CharacterTags,
+                                                 const float                  AttackAbilityModifier,
+                                                 const FGameplayTagContainer& ProficiencyTagPrefixes)
+{
+	// "When making an attack roll, determine the result by rolling 1d20 and adding your attack modifier for the weapon
+	// or unarmed attack you’re using."
+	//
+	// Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Attack Rolls".
+	const int32 RollResult = UPF2DiceLibrary::RollSum(1, 20);
+
+	float WeaponProficiencyBonus = 0;
+
+	for (const FGameplayTag& ProficiencyTagPrefix : ProficiencyTagPrefixes)
+	{
+		const FPF2TemlCalculation* Calculation =
+			new FPF2TemlCalculation(ProficiencyTagPrefix, &CharacterTags, CharacterLevel);
+
+		WeaponProficiencyBonus = FMath::Max(WeaponProficiencyBonus, Calculation->GetValue());
+	}
+
+	// Melee attack modifier = Strength modifier (or optionally Dexterity for a finesse weapon) + proficiency bonus +
+	// other bonuses + penalties
+	//
+	// Ranged attack modifier = Dexterity modifier + proficiency bonus + other bonuses + penalties
+	//
+	// Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Attack Rolls".
+	return RollResult + AttackAbilityModifier + WeaponProficiencyBonus;
+}
+
+float UPF2AttackStatLibrary::CalculateDamageRoll(const FName DamageDie, const float DamageAbilityModifier)
+{
+	const int32 RollResult = UPF2DiceLibrary::RollStringSum(DamageDie);
+
+	// Melee damage roll  = damage die of weapon or unarmed attack + Strength modifier + bonuses + penalties
+	// Ranged damage roll = damage die of weapon + Strength modifier for thrown weapons + bonuses + penalties
+	//
+	// Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Damage Rolls".
+	return RollResult + DamageAbilityModifier;
+}
+
 float UPF2AttackStatLibrary::CalculateRangePenalty(const float WeaponRangeIncrementCentimeters,
                                                    const float DistanceCentimeters)
 {

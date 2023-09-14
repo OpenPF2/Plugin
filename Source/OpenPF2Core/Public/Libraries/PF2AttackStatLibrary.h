@@ -12,6 +12,8 @@
 
 #pragma once
 
+#include <GameplayTagContainer.h>
+
 #include <Kismet/BlueprintFunctionLibrary.h>
 
 #include "PF2AttackStatLibrary.generated.h"
@@ -68,6 +70,62 @@ public:
 	{
 		return DefaultMovementAcceptanceRadiusCentimeters;
 	}
+
+	/**
+	 * Calculates the attack roll, which determines if an attack was successful (it hit its target).
+	 *
+	 * "When making an attack roll, determine the result by rolling 1d20 and adding your attack modifier for the weapon
+	 * or unarmed attack you’re using. Modifiers for melee and ranged attacks are calculated differently.
+	 *
+	 * Melee attack modifier = Strength modifier (or optionally Dexterity for a finesse weapon) + proficiency bonus +
+	 * other bonuses + penalties
+	 * Ranged attack modifier = Dexterity modifier + proficiency bonus + other bonuses + penalties
+	 *
+	 * Bonuses, and penalties apply to these rolls just like with other types of checks. Weapons with potency runes add
+	 * an item bonus to your attack rolls."
+	 *
+	 * Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Attack Rolls".
+	 *
+	 * @param CharacterLevel
+	 *	The level of the character.
+	 * @param CharacterTags
+	 *	The tags applied to the character.
+	 * @param AttackAbilityModifier
+	 *	The type of ability modifier from the character that is added to *attack* rolls with the type of weapon being
+	 *	used:
+	 *	- For melee:
+	 *	  - Regular weapons: "Strength" modifier.
+	 *	  - Finesse weapons: "Dexterity" modifier.
+	 *	- For ranged: the dexterity modifier.
+	 * @param ProficiencyTagPrefixes
+	 *	The root/parent tag of each set of tags that represent a character's TEML proficiencies with the weapon.
+	 */
+	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
+	static float CalculateAttackRoll(const int32                  CharacterLevel,
+	                                 const FGameplayTagContainer& CharacterTags,
+	                                 const float                  AttackAbilityModifier,
+	                                 const FGameplayTagContainer& ProficiencyTagPrefixes);
+
+	/**
+	 * Calculates the damage roll, which determines how much of an effect an attack has on the target.
+	 *
+	 * "When the result of your attack roll with a weapon or unarmed attack equals or exceeds your target’s AC, you hit
+	 * your target! Roll the weapon or unarmed attack’s damage die and add the relevant modifiers, bonuses, and
+	 * penalties to determine the amount of damage you deal. Calculate a damage roll as follows.
+	 *
+	 * Melee damage roll  = damage die of weapon or unarmed attack + Strength modifier + bonuses + penalties
+	 * Ranged damage roll = damage die of weapon + Strength modifier for thrown weapons + bonuses + penalties"
+	 *
+	 * Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Damage Rolls".
+	 *
+	 * @param DamageDie
+	 *	The damage die of weapon or unarmed attack.
+	 * @param DamageAbilityModifier
+	 *	The modifier for the type of damage (e.g., Strength modifier or Strength modifier for thrown weapons).
+	 */
+	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
+	static float CalculateDamageRoll(const FName DamageDie,
+	                                 const float DamageAbilityModifier);
 
 	/**
 	 * Calculates the penalty at the specified distance from a target for a weapon that has the given range increment.
