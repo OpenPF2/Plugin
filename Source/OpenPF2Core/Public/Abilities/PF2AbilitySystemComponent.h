@@ -40,11 +40,11 @@ protected:
 	static const FName DefaultMovementAbilityTagName;
 
 	/**
-	 * The name of the tag that designates an ability the default "orient" ability.
+	 * The name of the tag that designates an ability the default "face target" ability.
 	 *
 	 * This ability is used to rotate a character to face another actor/character.
 	 */
-	static const FName DefaultOrientAbilityTagName;
+	static const FName DefaultFaceTargetAbilityTagName;
 
 	// =================================================================================================================
 	// Protected Fields
@@ -235,9 +235,9 @@ public:
 
 	virtual FGameplayAbilitySpecHandle FindDefaultMovementAbilityHandle(bool& bOutMatchFound) const override;
 
-	virtual bool HasDefaultOrientAbility() const override;
+	virtual bool HasDefaultFaceTargetAbility() const override;
 
-	virtual FGameplayAbilitySpecHandle FindDefaultOrientAbilityHandle(bool& bOutMatchFound) const override;
+	virtual FGameplayAbilitySpecHandle FindDefaultFaceTargetAbilityHandle(bool& bOutMatchFound) const override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2ActorComponentInterface Implementation

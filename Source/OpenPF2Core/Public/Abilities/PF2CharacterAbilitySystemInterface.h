@@ -142,33 +142,33 @@ public:
 		bool& bOutMatchFound) const = 0;
 
 	/**
-	 * Determines if this ASC has a default orient ability.
+	 * Determines if this ASC has a default "face target" ability.
 	 *
 	 * This ability is used to rotate a character to face another actor/character.
 	 *
 	 * @return
-	 *	- true if this ASC has a granted ability having the "GameplayAbility.Type.DefaultOrient" tag.
-	 *	- false if this ASC does not have any granted ability with the default orient tag.
+	 *	- true if this ASC has a granted ability having the "GameplayAbility.Type.DefaultFaceTarget" tag.
+	 *	- false if this ASC does not have any granted ability with the default "face target" tag.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Character Ability System")
-	virtual bool HasDefaultOrientAbility() const = 0;
+	virtual bool HasDefaultFaceTargetAbility() const = 0;
 
 	/**
-	 * Attempts to locate and return an ability granted to this ASC that has the default "orient" tag.
+	 * Attempts to locate and return an ability granted to this ASC that has the default "face target" tag.
 	 *
 	 * This ability is used to rotate a character to face another actor/character.
 	 *
-	 * If this ASC has multiple abilities with the "GameplayAbility.Type.DefaultOrient" tag, the first encountered
+	 * If this ASC has multiple abilities with the "GameplayAbility.Type.DefaultFaceTarget" tag, the first encountered
 	 * ability will be returned.
 	 *
 	 * @param bOutMatchFound
-	 *	An output parameter that receives whether at least one default orient ability was found.
+	 *	An output parameter that receives whether at least one default "face target" ability was found.
 	 *
 	 * @return
-	 *	The handle of the default orient ability, if one was found.
+	 *	The handle of the default "face target" ability, if one was found.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Character Ability System")
-	virtual FGameplayAbilitySpecHandle FindDefaultOrientAbilityHandle(
+	virtual FGameplayAbilitySpecHandle FindDefaultFaceTargetAbilityHandle(
 		UPARAM(DisplayName="Match Found")
 		bool& bOutMatchFound) const = 0;
 };

@@ -17,8 +17,8 @@
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
-const FName UPF2AbilitySystemComponent::DefaultMovementAbilityTagName = FName(TEXT("GameplayAbility.Type.DefaultMovement"));
-const FName UPF2AbilitySystemComponent::DefaultOrientAbilityTagName   = FName(TEXT("GameplayAbility.Type.DefaultOrient"));
+const FName UPF2AbilitySystemComponent::DefaultMovementAbilityTagName   = FName(TEXT("GameplayAbility.Type.DefaultMovement"));
+const FName UPF2AbilitySystemComponent::DefaultFaceTargetAbilityTagName = FName(TEXT("GameplayAbility.Type.DefaultFaceTarget"));
 
 UPF2AbilitySystemComponent::UPF2AbilitySystemComponent() : Events(nullptr), bAreAbilitiesAvailable(false)
 {
@@ -673,19 +673,19 @@ FGameplayAbilitySpecHandle UPF2AbilitySystemComponent::FindDefaultMovementAbilit
 	return this->FindAbilityHandleByTags(SearchTags, bOutMatchFound, false);
 }
 
-bool UPF2AbilitySystemComponent::HasDefaultOrientAbility() const
+bool UPF2AbilitySystemComponent::HasDefaultFaceTargetAbility() const
 {
 	bool bHaveAbility = false;
 
-	this->FindDefaultOrientAbilityHandle(bHaveAbility);
+	this->FindDefaultFaceTargetAbilityHandle(bHaveAbility);
 
 	return bHaveAbility;
 }
 
-FGameplayAbilitySpecHandle UPF2AbilitySystemComponent::FindDefaultOrientAbilityHandle(bool& bOutMatchFound) const
+FGameplayAbilitySpecHandle UPF2AbilitySystemComponent::FindDefaultFaceTargetAbilityHandle(bool& bOutMatchFound) const
 {
-	const FGameplayTag          MovementTag = PF2GameplayAbilityUtilities::GetTag(DefaultOrientAbilityTagName);
-	const FGameplayTagContainer SearchTags  = FGameplayTagContainer(MovementTag);
+	const FGameplayTag          FacingTag  = PF2GameplayAbilityUtilities::GetTag(DefaultFaceTargetAbilityTagName);
+	const FGameplayTagContainer SearchTags = FGameplayTagContainer(FacingTag);
 
 	return this->FindAbilityHandleByTags(SearchTags, bOutMatchFound, false);
 }
