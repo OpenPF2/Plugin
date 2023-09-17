@@ -294,7 +294,7 @@ void UPF2CharacterQueueComponent::Native_OnCharactersChanged()
 		}
 
 		UE_LOG(
-			LogPf2CoreAbilities,
+			LogPf2Core,
 			VeryVerbose,
 			TEXT("[%s] Character queue changed ('%s') - %d elements."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
