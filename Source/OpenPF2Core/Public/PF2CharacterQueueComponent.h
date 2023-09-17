@@ -168,7 +168,7 @@ protected:
 	 *	The previous array of characters in the queue.
 	 */
 	UFUNCTION()
-	void OnRep_CharacterQueue(const TArray<AActor*> OldCharacters);
+	void OnRep_CharacterQueue(const TArray<AActor*>& OldCharacters);
 
 	/**
 	 * Notifies this component that which character is active has been replicated.

@@ -235,7 +235,7 @@ void UPF2CharacterQueueComponent::UpdateControlledCharacter()
 	}
 }
 
-void UPF2CharacterQueueComponent::OnRep_CharacterQueue(const TArray<AActor*> OldCharacters)
+void UPF2CharacterQueueComponent::OnRep_CharacterQueue(const TArray<AActor*>& OldCharacters)
 {
 	TArray<IPF2CharacterInterface*> RemovedCharacters,
 	                                AddedCharacters;
