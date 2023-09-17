@@ -5,12 +5,14 @@
 
 #pragma once
 
-#include <UObject/Interface.h>
+#include <Engine/DataAsset.h>
+
+#include "Utilities/PF2LogIdentifiableInterface.h"
 
 #include "PF2ItemInterface.generated.h"
 
-UINTERFACE()
-class UPF2ItemInterface : public UInterface
+UINTERFACE(NotBlueprintable)
+class UPF2ItemInterface : public UPF2LogIdentifiableInterface
 {
     GENERATED_BODY()
 };
@@ -18,7 +20,26 @@ class UPF2ItemInterface : public UInterface
 /**
  * An interface for OpenPF2-compatible items that characters can carry in inventory.
  */
-class OPENPF2CORE_API IPF2ItemInterface
+class OPENPF2CORE_API IPF2ItemInterface : public IPF2LogIdentifiableInterface
 {
     GENERATED_BODY()
+
+public:
+    /**
+	 * Gets the type-name pair representing the primary asset ID for this item.
+     *
+     * @return
+     *	The primary asset ID of this item.
+     */
+    UFUNCTION(BlueprintCallable, Category="OpenPF2|Items")
+	virtual FPrimaryAssetId GetPrimaryAssetId() = 0;
+
+	/**
+	 * Gets the data asset that is implementing this interface.
+	 *
+	 * @return
+	 *	This item, as a data asset.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items")
+	virtual UDataAsset* ToDataAsset() = 0;
 };

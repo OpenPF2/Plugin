@@ -23,4 +23,16 @@ UCLASS(Abstract)
 class OPENPF2CORE_API UPF2Item : public UPrimaryDataAsset, public IPF2ItemInterface
 {
 	GENERATED_BODY()
+
+public:
+	// =================================================================================================================
+	// Public Methods - IPF2ItemInterface Implementation
+	// =================================================================================================================
+	virtual FPrimaryAssetId GetPrimaryAssetId() override;
+	virtual UDataAsset* ToDataAsset() override;
+
+	// =================================================================================================================
+	// Public Methods - IPF2LogIdentifiableInterface Implementation
+	// =================================================================================================================
+	virtual FString GetIdForLogs() const override;
 };
