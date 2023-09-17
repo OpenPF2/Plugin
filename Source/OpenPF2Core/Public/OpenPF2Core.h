@@ -33,6 +33,11 @@ OPENPF2CORE_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2CoreEncounters, Log, VeryVerbo
 OPENPF2CORE_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2CoreInitiative, Log, VeryVerbose);
 
 /**
+ * Log category for inventory management logic evaluated by OpenPF2.
+ */
+OPENPF2CORE_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2CoreInventory, Log, VeryVerbose);
+
+/**
  * Log category for logging character abilities and stats (very verbose).
  */
 OPENPF2CORE_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2CoreStats, Log, VeryVerbose);
