@@ -12,13 +12,12 @@
 
 #pragma once
 
-#include <Engine/DataAsset.h>
-
 #include "PF2MonetaryValue.h"
 
 #include "Abilities/PF2CharacterAbilityScoreType.h"
 #include "Abilities/PF2CharacterAttributeStatics.h"
 
+#include "Items/PF2Item.h"
 #include "Items/Weapons/PF2WeaponInterface.h"
 
 #include "PF2Weapon.generated.h"
@@ -41,11 +40,11 @@ enum class EPF2WeaponHandsRequirement : uint8
  * functionality that tends to be a more complete fit for your own weapon implementation.
  *
  * (Though this is an abstract base class, it does not have the "Base" suffix in its name because the asset manager uses
- * the name of the first native parent class as the asset type).
+ * the name of the closest native parent class as the asset type).
  */
 UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API UPF2Weapon : public UPrimaryDataAsset, public IPF2WeaponInterface
+class OPENPF2CORE_API UPF2Weapon : public UPF2Item, public IPF2WeaponInterface
 {
 	GENERATED_BODY()
 

@@ -16,7 +16,7 @@
  * offer functionality that tends to be a more complete fit for your own melee weapon implementations.
  *
  * (Though this is an abstract base class, it does not have the "Base" suffix in its name because the asset manager uses
- * the name of the first native parent class as the asset type).
+ * the name of the closest native parent class as the asset type).
  */
 UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal

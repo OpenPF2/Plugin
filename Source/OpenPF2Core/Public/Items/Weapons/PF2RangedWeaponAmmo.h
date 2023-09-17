@@ -12,9 +12,9 @@
 
 #pragma once
 
-#include <Engine/DataAsset.h>
-
 #include "PF2MonetaryValue.h"
+
+#include "Items/PF2Item.h"
 
 #include "PF2RangedWeaponAmmo.generated.h"
 
@@ -22,11 +22,11 @@
  * Primary data class for ammo used by ranged weapons.
  *
  * (Though this is an abstract base class, it does not have the "Base" suffix in its name because the asset manager uses
- * the name of the first native parent class as the asset type).
+ * the name of the closest native parent class as the asset type).
  */
 UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API UPF2RangedWeaponAmmo : public UPrimaryDataAsset
+class OPENPF2CORE_API UPF2RangedWeaponAmmo : public UPF2Item
 {
 	GENERATED_BODY()
 
