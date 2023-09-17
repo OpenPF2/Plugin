@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "Abilities/Weapons/PF2Weapon.h"
+#include "Items/Weapons/PF2Weapon.h"
 
 #include "PF2MeleeWeapon.generated.h"
 

@@ -18,7 +18,8 @@
 
 #include "Abilities/PF2CharacterAbilityScoreType.h"
 #include "Abilities/PF2CharacterAttributeStatics.h"
-#include "Abilities/Weapons/PF2WeaponInterface.h"
+
+#include "Items/Weapons/PF2WeaponInterface.h"
 
 #include "PF2Weapon.generated.h"
 
