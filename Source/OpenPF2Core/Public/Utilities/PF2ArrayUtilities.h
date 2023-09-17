@@ -65,6 +65,8 @@ namespace PF2ArrayUtilities
 	{
 		TArray<Out> Result;
 
+		Result.Reserve(Elements.Num());
+
 		for (const In& Element : Elements)
 		{
 			const Out MappingOutput = Callable(Element);
