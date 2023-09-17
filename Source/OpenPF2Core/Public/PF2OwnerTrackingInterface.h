@@ -118,7 +118,7 @@ public:
 	 * @return
 	 *	The events object for this interface.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability System")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Actors|Owner Tracking")
 	virtual UPF2OwnerTrackingInterfaceEvents* GetEvents() const = 0;
 
 	/**
