@@ -76,15 +76,15 @@ namespace PF2ArrayUtilities
 	}
 
 	/**
-	 * Collapses all of the values of an array to a single value by use of a transformation function.
+	 * Collapses all of the values of an array to a single value, by use of a transformation function.
 	 *
 	 * The transformation function receives a pair of values -- the "previous value" and the "current value". The
 	 * transformation function is invoked once for each value in the original array. For the first value of the array,
 	 * the "previous value" is the starting value supplied to this function, and the "current value" is the first value
-	 * in the original array. For each subsequent call, the "previous value" is the result that was returned during the
-	 * previous call of the transformation function.
+	 * of the input array. For each subsequent call, the "previous value" is the result that was returned by the
+	 * previous call to the transformation function and the value is the subsequent value of the input array.
 	 *
-	 * The original array is not modified.
+	 * The input array is not modified.
 	 *
 	 * @tparam In
 	 *	The type of elements in the input array.
@@ -116,10 +116,62 @@ namespace PF2ArrayUtilities
 
 		for (const In& CurrentValue : Elements)
 		{
-			PreviousValue = Callable(PreviousValue, CurrentValue);
+			const Out& ConstPreviousValue = PreviousValue;
+
+			PreviousValue = Callable(ConstPreviousValue, CurrentValue);
 		}
 
 		return PreviousValue;
+	}
+
+	/**
+	 * Collapses all of the values of an array to a new array by use of a transformation function.
+	 *
+	 * This is similar to Reduce but is optimized around array results, in two key ways:
+	 *   1. This method pre-allocates the result array, sizing it to have a slack size equal to the source array.
+	 *   2. To avoid unnecessary copying, the result array is passed as a reference to each iteration and this array is
+	 *      expected to be modified in place.
+	 *
+	 * The transformation function receives a pair of values -- the "result array" and the "current value". The
+	 * transformation function is invoked once for each value in the original array. For the first value of the array,
+	 * an empty array is supplied as the "result array", and the first value of the input array becomes the
+	 * "current value". For each subsequent call, the "result array" is the array of results after the previous call to
+	 * the transformation function and the value is the subsequent value of the input array.
+	 *
+	 * The input array is not modified.
+	 *
+	 * @tparam In
+	 *	The type of elements in the input array.
+	 * @tparam Out
+	 *	The type of elements in the output array.
+	 * @tparam Func
+	 *	The type of the lambda function to invoke on the result array and each element of the input array, applying a
+	 *	transformation on the element and then updating the result array as appropriate.
+	 *
+	 * @param Elements
+	 *	The array of values to reduce.
+	 * @param Callable
+	 *	The transformation function/lambda invoked to combine each element with the result of flattening/reducing the
+	 *	previous element. This function is expected to take in the following two parameters:
+	 *	  - PreviousValues: Which is an array of items matching the "Out" type. This should be modified in place.
+	 *	  - CurrentValue: Which must match the "In" type.
+	 *
+	 * @return
+	 *	The result of reducing the values of the array to a new array.
+	 */
+	template <typename Out, typename In, typename Func>
+	TArray<Out> ReduceToArray(const TArray<In> Elements, const Func Callable)
+	{
+		TArray<Out> ResultArray = TArray<Out>();
+
+		ResultArray.Reserve(Elements.Num());
+
+		for (const In& CurrentValue : Elements)
+		{
+			Callable(ResultArray, CurrentValue);
+		}
+
+		return ResultArray;
 	}
 
 	/**

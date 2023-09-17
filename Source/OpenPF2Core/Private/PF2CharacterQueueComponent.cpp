@@ -157,18 +157,15 @@ TScriptInterface<IPF2CharacterInterface> UPF2CharacterQueueComponent::NextCharac
 
 TArray<TScriptInterface<IPF2CharacterInterface>> UPF2CharacterQueueComponent::ToArray() const
 {
-	return PF2ArrayUtilities::Reduce<TArray<TScriptInterface<IPF2CharacterInterface>>>(
+	return PF2ArrayUtilities::ReduceToArray<TScriptInterface<IPF2CharacterInterface>>(
 		this->Queue,
-		TArray<TScriptInterface<IPF2CharacterInterface>>(),
-		[](TArray<TScriptInterface<IPF2CharacterInterface>> Characters,
+		[](TArray<TScriptInterface<IPF2CharacterInterface>>& Characters,
 		   const TWeakInterfacePtr<IPF2CharacterInterface>& CurrentCharacter)
 		{
 			if (CurrentCharacter.IsValid())
 			{
 				Characters.Add(PF2InterfaceUtilities::ToScriptInterface(CurrentCharacter.Get()));
 			}
-
-			return Characters;
 		});
 }
 

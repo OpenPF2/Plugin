@@ -105,11 +105,10 @@ TScriptInterface<IPF2GameplayAbilityInterface> UPF2AbilitySystemComponent::GetAb
 
 TArray<TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilitySystemComponent::GetAbilities() const
 {
-	return PF2ArrayUtilities::Reduce(
+	return PF2ArrayUtilities::ReduceToArray<TScriptInterface<IPF2GameplayAbilityInterface>>(
 		this->GetActivatableAbilities(),
-		TArray<TScriptInterface<IPF2GameplayAbilityInterface>>(),
 		[this](
-			TArray<TScriptInterface<IPF2GameplayAbilityInterface>> Abilities,
+			TArray<TScriptInterface<IPF2GameplayAbilityInterface>>& Abilities,
 			const FGameplayAbilitySpec& CurrentAbilitySpec)
 		{
 			const TScriptInterface<IPF2GameplayAbilityInterface> AbilityIntf =
@@ -119,8 +118,6 @@ TArray<TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilitySystemComponen
 			{
 				Abilities.Add(AbilityIntf);
 			}
-
-			return Abilities;
 		});
 }
 
@@ -128,11 +125,10 @@ TArray<TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilitySystemComponen
 	const FGameplayTagContainer& Tags,
 	bool bExactMatch) const
 {
-	return PF2ArrayUtilities::Reduce(
+	return PF2ArrayUtilities::ReduceToArray<TScriptInterface<IPF2GameplayAbilityInterface>>(
 		this->GetActivatableAbilities(),
-		TArray<TScriptInterface<IPF2GameplayAbilityInterface>>(),
 		[this, &Tags, bExactMatch](
-			TArray<TScriptInterface<IPF2GameplayAbilityInterface>> Abilities,
+			TArray<TScriptInterface<IPF2GameplayAbilityInterface>>& Abilities,
 			const FGameplayAbilitySpec& CurrentAbilitySpec)
 		{
 			const TScriptInterface<IPF2GameplayAbilityInterface> AbilityIntf =
@@ -148,8 +144,6 @@ TArray<TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilitySystemComponen
 					Abilities.Add(AbilityIntf);
 				}
 			}
-
-			return Abilities;
 		});
 }
 

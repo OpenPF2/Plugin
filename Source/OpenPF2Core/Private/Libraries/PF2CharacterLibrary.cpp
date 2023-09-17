@@ -39,15 +39,12 @@ TArray<TScriptInterface<IPF2CharacterInterface>> UPF2CharacterLibrary::GetPlayer
 	const UWorld* const World)
 {
 	// ReSharper disable once CppRedundantQualifier
-	return PF2ArrayUtilities::Reduce<TArray<TScriptInterface<IPF2CharacterInterface>>>(
+	return PF2ArrayUtilities::ReduceToArray<TScriptInterface<IPF2CharacterInterface>>(
 		UPF2CharacterLibrary::GetPlayerControllers(World),
-		TArray<TScriptInterface<IPF2CharacterInterface>>(),
-		[](TArray<TScriptInterface<IPF2CharacterInterface>>      Characters,
+		[](TArray<TScriptInterface<IPF2CharacterInterface>>&     Characters,
 		   const TScriptInterface<IPF2PlayerControllerInterface> PlayerController)
 		{
 			Characters.Append(PlayerController->GetControllableCharacters());
-
-			return Characters;
 		}
 	);
 }

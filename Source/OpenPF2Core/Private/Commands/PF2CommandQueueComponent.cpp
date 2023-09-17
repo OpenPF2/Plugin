@@ -286,18 +286,15 @@ void UPF2CommandQueueComponent::Clear()
 
 TArray<TScriptInterface<IPF2CharacterCommandInterface>> UPF2CommandQueueComponent::ToArray() const
 {
-	return PF2ArrayUtilities::Reduce<TArray<TScriptInterface<IPF2CharacterCommandInterface>>>(
+	return PF2ArrayUtilities::ReduceToArray<TScriptInterface<IPF2CharacterCommandInterface>>(
 		this->Queue,
-		TArray<TScriptInterface<IPF2CharacterCommandInterface>>(),
-		[](TArray<TScriptInterface<IPF2CharacterCommandInterface>> Commands,
-		   const TWeakInterfacePtr<IPF2CharacterCommandInterface>& CurrentCommand)
+		[](TArray<TScriptInterface<IPF2CharacterCommandInterface>>& Commands,
+		   const TWeakInterfacePtr<IPF2CharacterCommandInterface>&  CurrentCommand)
 		{
 			if (CurrentCommand.IsValid())
 			{
 				Commands.Add(PF2InterfaceUtilities::ToScriptInterface(CurrentCommand.Get()));
 			}
-
-			return Commands;
 		});
 }
 
