@@ -93,7 +93,7 @@ public:
 		const EPF2LogVerbosityLevel                          Verbosity = VeryVerbose);
 
 	/**
-	 * Logs to the category for character-initiative-management logic evaluated by OpenPF2, usually during encounters.
+	 * Logs to the category for character-initiative management logic evaluated by OpenPF2, usually during encounters.
 	 *
 	 * @param Text
 	 *	The text to log.
