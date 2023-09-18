@@ -270,18 +270,6 @@ UActorComponent* UPF2AbilityBindingsComponent::ToActorComponent()
 	return this;
 }
 
-FString UPF2AbilityBindingsComponent::GetIdForLogs() const
-{
-	// ReSharper disable CppRedundantParentheses
-	return FString::Format(
-		TEXT("{0}.{1}"),
-		{
-			*(GetNameSafe(this->GetOwner())),
-			*(this->GetName())
-		}
-	);
-}
-
 IPF2CharacterInterface* UPF2AbilityBindingsComponent::GetOwningCharacter() const
 {
 	AActor*                 OwningActor;

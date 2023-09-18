@@ -174,18 +174,6 @@ UActorComponent* UPF2CharacterQueueComponent::ToActorComponent()
 	return this;
 }
 
-FString UPF2CharacterQueueComponent::GetIdForLogs() const
-{
-	// ReSharper disable CppRedundantParentheses
-	return FString::Format(
-		TEXT("{0}.{1}"),
-		{
-			*(GetNameSafe(this->GetOwner())),
-			*(this->GetName())
-		}
-	);
-}
-
 void UPF2CharacterQueueComponent::SetControlledCharacterIndex(const uint8 NewControlledCharacterIndex)
 {
 	check(NewControlledCharacterIndex < this->Count());

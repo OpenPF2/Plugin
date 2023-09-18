@@ -303,18 +303,6 @@ UActorComponent* UPF2CommandQueueComponent::ToActorComponent()
 	return this;
 }
 
-FString UPF2CommandQueueComponent::GetIdForLogs() const
-{
-	// ReSharper disable CppRedundantParentheses
-	return FString::Format(
-		TEXT("{0}.{1}"),
-		{
-			*(GetNameSafe(this->GetOwner())),
-			*(this->GetName())
-		}
-	);
-}
-
 void UPF2CommandQueueComponent::OnRep_Queue(const TArray<AInfo*>& OldQueue)
 {
 	const UPF2CommandQueueInterfaceEvents* InterfaceEvents = this->GetEvents();

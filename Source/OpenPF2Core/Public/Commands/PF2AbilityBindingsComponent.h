@@ -11,6 +11,7 @@
 
 #include "PF2AbilityBindingsInterface.h"
 #include "PF2AbilityInputBinding.h"
+#include "PF2ActorComponentBase.h"
 #include "PF2CharacterInterface.h"
 #include "PF2EventEmitterInterface.h"
 
@@ -40,7 +41,7 @@ class UPF2AbilityExecutionFilterBase;
 UCLASS(ClassGroup="OpenPF2-Characters", meta=(BlueprintSpawnableComponent))
 // ReSharper disable once CppClassCanBeFinal
 class OPENPF2CORE_API UPF2AbilityBindingsComponent :
-	public UActorComponent,
+	public UPF2ActorComponentBase,
 	public IPF2EventEmitterInterface,
 	public IPF2AbilityBindingsInterface
 {
@@ -156,7 +157,10 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
-	virtual FString GetIdForLogs() const override;
+	virtual FString GetIdForLogs() const override
+	{
+		return Super::GetIdForLogs();
+	}
 
 protected:
 	// =================================================================================================================

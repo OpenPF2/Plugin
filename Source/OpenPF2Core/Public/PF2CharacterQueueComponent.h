@@ -7,6 +7,7 @@
 
 #include <Components/ActorComponent.h>
 
+#include "PF2ActorComponentBase.h"
 #include "PF2CharacterQueueInterface.h"
 #include "PF2EventEmitterInterface.h"
 
@@ -29,7 +30,7 @@ class IPF2PlayerControllerInterface;
  */
 UCLASS(ClassGroup="OpenPF2-PlayerControllers", meta=(BlueprintSpawnableComponent))
 class OPENPF2CORE_API UPF2CharacterQueueComponent final :
-	public UActorComponent,
+	public UPF2ActorComponentBase,
 	public IPF2EventEmitterInterface,
 	public IPF2CharacterQueueInterface
 {
@@ -121,7 +122,10 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
-	virtual FString GetIdForLogs() const override;
+	virtual FString GetIdForLogs() const override
+	{
+		return Super::GetIdForLogs();
+	}
 
 protected:
 	// =================================================================================================================

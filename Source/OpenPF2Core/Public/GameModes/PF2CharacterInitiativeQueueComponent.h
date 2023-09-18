@@ -14,6 +14,7 @@
 
 #include <Components/ActorComponent.h>
 
+#include "PF2ActorComponentBase.h"
 #include "PF2CharacterInitiativeQueueInterface.h"
 
 #include "PF2CharacterInitiativeQueueComponent.generated.h"
@@ -29,7 +30,7 @@ class IPF2PlayerControllerInterface;
 // =====================================================================================================================
 UCLASS(ClassGroup="OpenPF2-ModeOfPlayRuleSets", meta=(BlueprintSpawnableComponent))
 class OPENPF2CORE_API UPF2CharacterInitiativeQueueComponent final :
-	public UActorComponent,
+	public UPF2ActorComponentBase,
 	public IPF2CharacterInitiativeQueueInterface
 {
 	GENERATED_BODY()
@@ -108,7 +109,10 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
-	virtual FString GetIdForLogs() const override;
+	virtual FString GetIdForLogs() const override
+	{
+		return Super::GetIdForLogs();
+	}
 
 protected:
 	// =================================================================================================================

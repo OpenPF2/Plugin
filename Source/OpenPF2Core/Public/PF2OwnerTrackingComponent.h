@@ -13,6 +13,7 @@
 #include <GameFramework/Controller.h>
 #include <GameFramework/Info.h>
 
+#include "PF2ActorComponentBase.h"
 #include "PF2EventEmitterInterface.h"
 #include "PF2OwnerTrackingInterface.h"
 
@@ -30,7 +31,7 @@ class IPF2PlayerStateInterface;
 UCLASS(ClassGroup="OpenPF2-Characters", meta=(BlueprintSpawnableComponent))
 // ReSharper disable once CppClassCanBeFinal
 class OPENPF2CORE_API UPF2OwnerTrackingComponent :
-	public UActorComponent,
+	public UPF2ActorComponentBase,
 	public IPF2EventEmitterInterface,
 	public IPF2OwnerTrackingInterface
 {
@@ -117,7 +118,10 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
-	virtual FString GetIdForLogs() const override;
+	virtual FString GetIdForLogs() const override
+	{
+		return Super::GetIdForLogs();
+	}
 
 protected:
 	// =================================================================================================================

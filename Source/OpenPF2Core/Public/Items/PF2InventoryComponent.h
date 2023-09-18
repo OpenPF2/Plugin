@@ -12,6 +12,7 @@
 
 #include <Engine/AssetManager.h>
 
+#include "PF2ActorComponentBase.h"
 #include "PF2EventEmitterInterface.h"
 #include "PF2InventoryInterface.h"
 #include "PF2ItemInterface.h"
@@ -29,7 +30,7 @@
 UCLASS(ClassGroup="OpenPF2-Characters", meta=(BlueprintSpawnableComponent))
 // ReSharper disable once CppClassCanBeFinal
 class OPENPF2CORE_API UPF2InventoryComponent :
-	public UActorComponent,
+	public UPF2ActorComponentBase,
 	public IPF2EventEmitterInterface,
 	public IPF2InventoryInterface
 {
@@ -99,7 +100,10 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
-	virtual FString GetIdForLogs() const override;
+	virtual FString GetIdForLogs() const override
+	{
+		return Super::GetIdForLogs();
+	}
 
 protected:
 	// =================================================================================================================

@@ -136,11 +136,6 @@ UActorComponent* UPF2CharacterInitiativeQueueComponent::ToActorComponent()
 	return this;
 }
 
-FString UPF2CharacterInitiativeQueueComponent::GetIdForLogs() const
-{
-	return this->GetName();
-}
-
 TArray<TScriptInterface<IPF2PlayerControllerInterface>> UPF2CharacterInitiativeQueueComponent::GetPlayerControllers() const
 {
 	return UPF2CharacterLibrary::GetPlayerControllers(this->GetWorld());

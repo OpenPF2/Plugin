@@ -91,33 +91,6 @@ UActorComponent* UPF2InventoryComponent::ToActorComponent()
 	return this;
 }
 
-FString UPF2InventoryComponent::GetIdForLogs() const
-{
-	FString                             OwnerName;
-	AActor*                             OwningActor = this->GetOwner();
-	const IPF2LogIdentifiableInterface* OwnerLogId  = Cast<IPF2LogIdentifiableInterface>(OwningActor);
-
-	if (OwnerLogId == nullptr)
-	{
-		// Fallback to vanilla UE if we're not in something that implements IPF2LogIdentifiableInterface
-		OwnerName = GetNameSafe(OwningActor);
-	}
-	else
-	{
-		// Use the preferred log ID of the containing actor.
-		OwnerName = OwnerLogId->GetIdForLogs();
-	}
-
-	// ReSharper disable CppRedundantParentheses
-	return FString::Format(
-		TEXT("{0}.{1}"),
-		{
-			*(OwnerName),
-			*(this->GetName())
-		}
-	);
-}
-
 UAssetManager* UPF2InventoryComponent::GetAssetManager()
 {
 	UAssetManager* AssetManager = UAssetManager::GetIfValid();
