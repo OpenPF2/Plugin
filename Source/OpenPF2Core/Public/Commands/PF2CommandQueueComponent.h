@@ -67,7 +67,7 @@ protected:
 	 * Once the queue reaches this size, no additional commands will be accepted until at least one command already in
 	 * the queue has been executed or removed.
 	 */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="OpenPF2 - Command Queue")
 	uint8 SizeLimit;
 
 public:

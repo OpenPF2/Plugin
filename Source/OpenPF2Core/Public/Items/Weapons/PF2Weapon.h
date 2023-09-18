@@ -42,7 +42,7 @@ enum class EPF2WeaponHandsRequirement : uint8
  * (Though this is an abstract base class, it does not have the "Base" suffix in its name because the asset manager uses
  * the name of the closest native parent class as the asset type).
  */
-UCLASS(Abstract)
+UCLASS(Abstract, BlueprintType)
 // ReSharper disable once CppClassCanBeFinal
 class OPENPF2CORE_API UPF2Weapon : public UPF2Item, public IPF2WeaponInterface
 {

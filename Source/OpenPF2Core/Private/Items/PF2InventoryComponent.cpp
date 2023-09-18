@@ -165,7 +165,7 @@ void UPF2InventoryComponent::Native_OnInventoryChanged()
 
 	if (InventoryChangedDelegate.IsBound())
 	{
-		TArray<TScriptInterface<IPF2ItemInterface>> NewItems;
+		TArray<TScriptInterface<IPF2ItemInterface>> InventoryItems;
 
 		for (IPF2ItemInterface* Item : this->InventoryItemsLoaded)
 		{
@@ -173,7 +173,7 @@ void UPF2InventoryComponent::Native_OnInventoryChanged()
 			// replicate entries in this->InventoryItems as NULL.
 			if (Item != nullptr)
 			{
-				NewItems.Add(PF2InterfaceUtilities::ToScriptInterface(Item));
+				InventoryItems.Add(PF2InterfaceUtilities::ToScriptInterface(Item));
 			}
 		}
 
@@ -183,7 +183,7 @@ void UPF2InventoryComponent::Native_OnInventoryChanged()
 			TEXT("[%s] Character inventory changed ('%s') - %d elements."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 			*(this->GetIdForLogs()),
-			NewItems.Num()
+			InventoryItems.Num()
 		);
 
 		InventoryChangedDelegate.Broadcast(this);
