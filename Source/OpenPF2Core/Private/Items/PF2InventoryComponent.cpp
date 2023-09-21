@@ -186,7 +186,7 @@ void UPF2InventoryComponent::Native_OnInventoryChanged()
 			NewItems.Num()
 		);
 
-		InventoryChangedDelegate.Broadcast(this, NewItems);
+		InventoryChangedDelegate.Broadcast(this);
 	}
 	else
 	{

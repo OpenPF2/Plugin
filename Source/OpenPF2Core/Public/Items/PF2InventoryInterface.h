@@ -24,15 +24,10 @@ class IPF2ItemInterface;
  *
  * @param InventoryComponent
  *	The component broadcasting this event.
- * @param Character
- *	The character whose inventory is changing.
- * @param InventoryItems
- *	The contents of the inventory.
  */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 	FPF2InventoryComponentInventoryChangedDelegate,
-	const TScriptInterface<IPF2InventoryInterface>&,    InventoryComponent,
-	const TArray<TScriptInterface<IPF2ItemInterface>>&, InventoryItems
+	const TScriptInterface<IPF2InventoryInterface>&, InventoryComponent
 );
 
 /**
