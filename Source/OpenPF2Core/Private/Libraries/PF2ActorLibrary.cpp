@@ -12,7 +12,8 @@
 #include <Templates/SubclassOf.h>
 
 TScriptInterface<IInterface> UPF2ActorLibrary::GetComponentByInterface(const AActor*                 Actor,
-                                                                       const TSubclassOf<UInterface> Interface)
+                                                                       const TSubclassOf<UInterface> Interface,
+                                                                       bool&                         bWasFound)
 {
 	TScriptInterface<IInterface>   Result;
 	const TArray<UActorComponent*> Components = Actor->GetComponentsByInterface(Interface);
@@ -23,9 +24,12 @@ TScriptInterface<IInterface> UPF2ActorLibrary::GetComponentByInterface(const AAc
 		*(Interface->GetName())
 	);
 
+	bWasFound = false;
+
 	for (UActorComponent* Component : Components)
 	{
-		Result = Component;
+		bWasFound = true;
+		Result    = Component;
 		break;
 	}
 

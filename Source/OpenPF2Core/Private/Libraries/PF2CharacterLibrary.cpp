@@ -50,7 +50,9 @@ TArray<TScriptInterface<IPF2CharacterInterface>> UPF2CharacterLibrary::GetPlayer
 }
 
 TScriptInterface<IInterface> UPF2CharacterLibrary::GetComponentByInterface(
-	const TScriptInterface<IPF2CharacterInterface>& Character, const TSubclassOf<UInterface> Interface)
+	const TScriptInterface<IPF2CharacterInterface>& Character,
+	const TSubclassOf<UInterface>                   Interface,
+	bool&                                           bWasFound)
 {
-	return UPF2ActorLibrary::GetComponentByInterface(Character->ToActor(), Interface);
+	return UPF2ActorLibrary::GetComponentByInterface(Character->ToActor(), Interface, bWasFound);
 }
