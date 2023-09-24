@@ -68,7 +68,7 @@ namespace PF2SetUtilities
 	 * @param Elements
 	 *	The set of values to reduce.
 	 * @param StartingValue
-	 *	The value passed-in to the Callable along side the first value of the set. If the set is empty, this will be the
+	 *	The value passed in to the Callable along side the first value of the set. If the set is empty, this will be the
 	 *	value returned.
 	 * @param Callable
 	 *	The transformation function/lambda invoked to combine each element with the result of flattening/reducing the

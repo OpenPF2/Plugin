@@ -61,7 +61,7 @@ TArray<int32> UPF2DiceLibrary::Roll(const int32 RollCount, const int32 DieSize)
 		if (DieSize == 0)
 		{
 			// Edge case: Unlikely to happen, but just in case, we need to make sure that rolling a zero-sided die does
-			// not return 1. Could happen if the die size is passed-in dynamically.
+			// not return 1. Could happen if the die size is passed in dynamically.
 			Roll = 0;
 		}
 		else

@@ -90,7 +90,7 @@ public:
 
 protected:
 	/**
-	 * Gets which boosts were selected and passed-in to a GA activation.
+	 * Gets which boosts were selected and passed in to a GA activation.
 	 *
 	 * @return
 	 *	The choice(s) for ability boosts. The value of each element is the chosen ability and the key is the rule option
