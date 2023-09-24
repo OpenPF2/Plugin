@@ -31,10 +31,9 @@ float UPF2AttackStatLibrary::CalculateAttackRoll(const int32                  Ch
 
 	for (const FGameplayTag& ProficiencyTagPrefix : ProficiencyTagPrefixes)
 	{
-		const FPF2TemlCalculation* Calculation =
-			new FPF2TemlCalculation(ProficiencyTagPrefix, &CharacterTags, CharacterLevel);
+		FPF2TemlCalculation Calculation(ProficiencyTagPrefix, &CharacterTags, CharacterLevel);
 
-		WeaponProficiencyBonus = FMath::Max(WeaponProficiencyBonus, Calculation->GetValue());
+		WeaponProficiencyBonus = FMath::Max(WeaponProficiencyBonus, Calculation.GetValue());
 	}
 
 	// Melee attack modifier = Strength modifier (or optionally Dexterity for a finesse weapon) + proficiency bonus +
