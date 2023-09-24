@@ -43,21 +43,21 @@ EDataValidationResult UPF2EquipableItemSlot::IsDataValid(TArray<FText>& Validati
 		}
 	}
 
-	// Validate the linked slot.
+	// Validate the linked slots.
 	{
-		if (this->LinkedSlot == this->GetClass())
+		for (const auto& LinkedSlot : this->LinkedSlots)
 		{
-			Result = EDataValidationResult::Invalid;
+			if (LinkedSlot == this->GetClass())
+			{
+				Result = EDataValidationResult::Invalid;
 
-			ValidationErrors.Add(
-				FText::Format(
-					LOCTEXT(
-						"SelfReferentialLinkedSlot",
-						"{0}: The type of a linked slot must be different than the type of the slot that is referencing it."
-					),
-					FText::FromString(this->GetName())
-				)
-			);
+				ValidationErrors.Add(
+					FText::Format(
+						LOCTEXT("SelfReferentialLinkedSlot", "{0}: A slot cannot have itself as a linked slot."),
+						FText::FromString(this->GetName())
+					)
+				);
+			}
 		}
 	}
 

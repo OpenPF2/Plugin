@@ -42,4 +42,18 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items")
 	virtual UDataAsset* ToDataAsset() = 0;
+
+    /**
+     * Indicates when this item, when equipped or un-equipped, affects all slots linked with the target slot.
+     *
+     * For example, a two-handed weapon should affect both the left and right hand when equipped or un-equipped, whereas
+     * a single-handed weapon should only affect the left or right hand (depending upon which has been target).
+     *
+     * @return
+     *	- true if this weapon affects both the target slot and all the slots its linked to when the item is being
+     *	  equipped or unequipped.
+	 *	- false if this weapon only affects the target slot when it is being equipped or unequipped.
+     */
+    UFUNCTION(BlueprintCallable, Category="OpenPF2|Items")
+	virtual bool ShouldBeEquippedInAllLinkedSlots() = 0;
 };

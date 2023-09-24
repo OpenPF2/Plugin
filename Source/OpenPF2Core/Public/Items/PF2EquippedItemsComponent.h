@@ -89,6 +89,24 @@ class OPENPF2CORE_API UPF2EquippedItemsComponent :
 
 protected:
 	// =================================================================================================================
+	// Protected Static Methods
+	// =================================================================================================================
+	/**
+	 * Gets all the slots that are affected when the provided item is equipped or unequipped in the specified slot.
+	 *
+	 * @param Slot
+	 *	The slot being affected.
+	 * @param Item
+	 *	The item being equipped or unequipped into the slot.
+	 *
+	 * @return
+	 *	A list of slots that should be affected by the item.
+	 */
+	static TArray<const UPF2EquipableItemSlot*> GetTargetSlotsForSlotAndItem(
+		const UPF2EquipableItemSlot*               Slot,
+		const TScriptInterface<IPF2ItemInterface>& Item);
+
+	// =================================================================================================================
 	// Protected Fields
 	// =================================================================================================================
 	/**
@@ -189,6 +207,15 @@ protected:
 	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
+
+	/**
+	 * Removes the item (if any) that's in the specified slot, without affected linked slots.
+	 *
+	 * @param Slot
+	 *	The slot to affect.
+	 */
+	virtual void UnequipItemInSpecificSlot(const UPF2EquipableItemSlot* Slot);
+
 	#if WITH_EDITOR
 	/**
 	 * Validates that the SupportedSlots property contains valid data from the editor.

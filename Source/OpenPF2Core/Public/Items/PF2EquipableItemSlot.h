@@ -62,13 +62,13 @@ protected:
 	TSoftClassPtr<UDataAsset> ItemType;
 
 	/**
-	 * The optional item slot to which this slot is linked (if any).
+	 * The optional item slot(s) (if any) to which this slot is linked.
 	 *
 	 * For example, humanoid characters can carry a two-handed weapon using both their left and right hands, so the
 	 * two slots are linked to accommodate this use case.
 	 */
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="OpenPF2 - Equippable Item Slot")
-	TSubclassOf<UPF2EquipableItemSlot> LinkedSlot;
+	TArray<TSubclassOf<UPF2EquipableItemSlot>> LinkedSlots;
 
 public:
 	// =================================================================================================================
@@ -124,18 +124,18 @@ public:
 	}
 
 	/**
-	 * Gets the optional item slot to which this slot is linked (if any).
+	 * Gets the optional item slot(s) to which this slot is linked (if any).
 	 *
 	 * For example, humanoid characters can carry a two-handed weapon using both their left and right hands, so the
 	 * two slots are linked to accommodate this use case.
 	 *
 	 * @return
-	 *	The linked slot, if any.
+	 *	The linked slot(s), if any.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Item Slots")
-	FORCEINLINE TSubclassOf<UPF2EquipableItemSlot> GetLinkedSlot() const
+	FORCEINLINE TArray<TSubclassOf<UPF2EquipableItemSlot>> GetLinkedSlots() const
 	{
-		return this->LinkedSlot;
+		return this->LinkedSlots;
 	}
 
 	/**

@@ -24,12 +24,23 @@ class OPENPF2CORE_API UPF2Item : public UPrimaryDataAsset, public IPF2ItemInterf
 {
 	GENERATED_BODY()
 
+protected:
+	// =================================================================================================================
+	// Protected Fields
+	// =================================================================================================================
+	/**
+	 * Whether equipping or unequipping this item affects all linked slots or just the target slot.
+	 */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="OpenPF2 - Item")
+	bool bShouldBeEquippedInAllLinkedSlots;
+
 public:
 	// =================================================================================================================
 	// Public Methods - IPF2ItemInterface Implementation
 	// =================================================================================================================
 	virtual FPrimaryAssetId GetPrimaryAssetId() override;
 	virtual UDataAsset* ToDataAsset() override;
+	virtual bool ShouldBeEquippedInAllLinkedSlots() override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation

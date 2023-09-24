@@ -13,6 +13,32 @@
 
 #define LOCTEXT_NAMESPACE "PF2EquipableItemSlot"
 
+TArray<const UPF2EquipableItemSlot*> UPF2EquippedItemsComponent::GetTargetSlotsForSlotAndItem(
+	const UPF2EquipableItemSlot*               Slot,
+	const TScriptInterface<IPF2ItemInterface>& Item)
+{
+	TArray<const UPF2EquipableItemSlot*>              TargetSlots;
+	const TArray<TSubclassOf<UPF2EquipableItemSlot>>& LinkedSlots = Slot->GetLinkedSlots();
+
+	TargetSlots.Reserve(1 + LinkedSlots.Num());
+	TargetSlots.Add(Slot);
+
+	if (Item->ShouldBeEquippedInAllLinkedSlots() && !LinkedSlots.IsEmpty())
+	{
+		TargetSlots.Append(
+			PF2ArrayUtilities::Map<UPF2EquipableItemSlot*>(
+				LinkedSlots,
+				[](const TSubclassOf<UPF2EquipableItemSlot> SlotType)
+				{
+					return SlotType.GetDefaultObject();
+				}
+			)
+		);
+	}
+
+	return TargetSlots;
+}
+
 UPF2EquippedItemsComponent::UPF2EquippedItemsComponent() : Events(nullptr)
 {
 }
@@ -110,7 +136,8 @@ void UPF2EquippedItemsComponent::GetAllEquippedItemsOfType(const TSubclassOf<UDa
 	{
 		if (CurrentItemType->IsChildOf(ItemType.Get()))
 		{
-			Items.Add(CurrentItemType.GetDefaultObject());
+			// Add unique in case this is a two-handed item equipped in both hands.
+			Items.AddUnique(CurrentItemType.GetDefaultObject());
 		}
 	}
 }
@@ -135,18 +162,50 @@ void UPF2EquippedItemsComponent::GetAllSlotsThatAcceptType(const TSubclassOf<UDa
 void UPF2EquippedItemsComponent::EquipItemInSlot(const UPF2EquipableItemSlot*               Slot,
                                                  const TScriptInterface<IPF2ItemInterface>& Item)
 {
-	const FPF2EquippedItem EquippedItem(Slot->GetClass(), Item.GetObject()->GetClass());
+	TArray<const UPF2EquipableItemSlot*> TargetSlots = GetTargetSlotsForSlotAndItem(Slot, Item);
 
-	// Unequip any existing item in the slot.
-	this->UnequipItemInSlot(Slot);
-	this->EquippedItems.Add(EquippedItem);
+	for (const auto& CurrentSlot : TargetSlots)
+	{
+		const FPF2EquippedItem EquippedItem(CurrentSlot->GetClass(), Item.GetObject()->GetClass());
 
-	this->Native_OnItemUnequipped(Slot, Item);
+		// Unequip any existing item in the slot.
+		this->UnequipItemInSpecificSlot(CurrentSlot);
+		this->EquippedItems.Add(EquippedItem);
+
+		this->Native_OnItemEquipped(CurrentSlot, Item);
+	}
 }
 
 void UPF2EquippedItemsComponent::UnequipItemInSlot(const UPF2EquipableItemSlot* Slot)
 {
+	// Create a copy of the equipped items before we modify them.
+	const TArray<FPF2EquippedItem> OriginalEquippedItems = this->EquippedItems;
 
+	for (auto EquippedItemIt = OriginalEquippedItems.CreateConstIterator(); EquippedItemIt; ++EquippedItemIt)
+	{
+		const auto& [CurrentSlotType, CurrentItemType] = *EquippedItemIt;
+
+		if (CurrentSlotType == Slot->GetClass())
+		{
+			const UPF2EquipableItemSlot* CurrentSlot = Cast<UPF2EquipableItemSlot>(CurrentItemType.GetDefaultObject());
+
+			// Update both the target slot and any linked slots, if the item is multi-slot and the slot has linked
+			// slots.
+			for (const auto& TargetSlot : GetTargetSlotsForSlotAndItem(CurrentSlot, CurrentItemType))
+			{
+				this->UnequipItemInSpecificSlot(TargetSlot);
+			}
+		}
+	}
+}
+
+UActorComponent* UPF2EquippedItemsComponent::ToActorComponent()
+{
+	return this;
+}
+
+void UPF2EquippedItemsComponent::UnequipItemInSpecificSlot(const UPF2EquipableItemSlot* Slot)
+{
 	for (auto EquippedItemIt = this->EquippedItems.CreateConstIterator(); EquippedItemIt; ++EquippedItemIt)
 	{
 		const auto& [CurrentSlotType, CurrentItemType] = *EquippedItemIt;
@@ -157,15 +216,10 @@ void UPF2EquippedItemsComponent::UnequipItemInSlot(const UPF2EquipableItemSlot* 
 			// as soon as we have done the removal.
 			this->EquippedItems.RemoveAt(EquippedItemIt.GetIndex());
 
-			this->Native_OnItemUnequipped(CurrentSlotType.GetDefaultObject(), CurrentItemType);
+			this->Native_OnItemUnequipped(CurrentSlotType.GetDefaultObject(), CurrentItemType.GetDefaultObject());
 			break;
 		}
 	}
-}
-
-UActorComponent* UPF2EquippedItemsComponent::ToActorComponent()
-{
-	return this;
 }
 
 EDataValidationResult UPF2EquippedItemsComponent::ValidateSlots(TArray<FText>& ValidationErrors)

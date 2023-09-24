@@ -15,6 +15,11 @@ UDataAsset* UPF2Item::ToDataAsset()
 	return this;
 }
 
+bool UPF2Item::ShouldBeEquippedInAllLinkedSlots()
+{
+	return this->bShouldBeEquippedInAllLinkedSlots;
+}
+
 FString UPF2Item::GetIdForLogs() const
 {
 	return this->GetFullName();
