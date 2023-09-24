@@ -167,6 +167,8 @@ public:
 	 *
 	 * The given actor must implement IPF2CharacterInterface.
 	 *
+	 * This method is necessary because actors cannot be passed parameters through a constructor at spawn time.
+	 *
 	 * @param CharacterActor
 	 *	The character (as an actor) who would be issued the command.
 	 * @param AbilitySpecHandle
