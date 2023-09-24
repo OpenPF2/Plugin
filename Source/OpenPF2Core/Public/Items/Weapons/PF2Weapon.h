@@ -221,6 +221,11 @@ protected:
 	 */
 	virtual float CalculateAttackRoll(const IPF2CharacterAbilitySystemInterface* CharacterAsc);
 
+	// =================================================================================================================
+	// Public Methods - IPF2WeaponInterface Implementation
+	// =================================================================================================================
+	virtual APF2DamageCauseWrapper* ToDamageCauser() override;
+
 	/**
 	 * Calculates the damage roll, which determines how much of an effect an attack has on the target.
 	 *

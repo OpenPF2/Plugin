@@ -9,6 +9,14 @@
 
 #include "PF2WeaponInterface.generated.h"
 
+// =====================================================================================================================
+// Forward Declarations (to minimize header dependencies)
+// =====================================================================================================================
+class APF2DamageCauseWrapper;
+
+// =====================================================================================================================
+// Normal Declarations
+// =====================================================================================================================
 UINTERFACE()
 class UPF2WeaponInterface : public UInterface
 {
@@ -21,4 +29,15 @@ class UPF2WeaponInterface : public UInterface
 class OPENPF2CORE_API IPF2WeaponInterface
 {
     GENERATED_BODY()
+
+public:
+    /**
+     * Converts this weapon into an actor that can represent a "damage causer" for replication.
+     *
+     * @return
+     *	This instance, wrapped as a damage causer.
+     */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
+    virtual APF2DamageCauseWrapper* ToDamageCauser() = 0;
+
 };

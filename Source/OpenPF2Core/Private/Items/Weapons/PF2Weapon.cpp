@@ -5,9 +5,16 @@
 
 #include "Items/Weapons/PF2Weapon.h"
 
+#include "PF2DamageCauseWrapper.h"
+
 #include "Abilities/PF2CharacterAbilitySystemInterface.h"
 
 #include "Libraries/PF2AttackStatLibrary.h"
+
+APF2DamageCauseWrapper* UPF2Weapon::ToDamageCauser()
+{
+	return APF2DamageCauseWrapper::Create(this->GetWorld(), this);
+}
 
 float UPF2Weapon::GetAbilityModifierValue(const IPF2CharacterAbilitySystemInterface* CharacterAsc,
                                           const EPF2CharacterAbilityScoreType        AbilityScoreType)
