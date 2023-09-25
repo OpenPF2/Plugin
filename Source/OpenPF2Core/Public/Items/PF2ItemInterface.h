@@ -11,7 +11,7 @@
 
 #include "PF2ItemInterface.generated.h"
 
-UINTERFACE(NotBlueprintable)
+UINTERFACE(BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2ItemInterface : public UPF2LogIdentifiableInterface
 {
     GENERATED_BODY()

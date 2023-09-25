@@ -24,7 +24,7 @@ class APF2DamageCauseWrapper;
 // =====================================================================================================================
 // Normal Declarations
 // =====================================================================================================================
-UINTERFACE()
+UINTERFACE(BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2WeaponInterface : public UInterface
 {
     GENERATED_BODY()
