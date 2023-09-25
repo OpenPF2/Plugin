@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <Engine/DataAsset.h>
+
 #include <GameFramework/PlayerState.h>
 
 #include <Kismet/BlueprintFunctionLibrary.h>
@@ -14,12 +16,15 @@
 // =====================================================================================================================
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
+class APF2DamageCauseWrapper;
 class IPF2AbilitySystemInterface;
 class IPF2ActorComponentInterface;
 class IPF2CharacterInterface;
+class IPF2ItemInterface;
 class IPF2LogIdentifiableInterface;
 class IPF2PlayerControllerInterface;
 class IPF2PlayerStateInterface;
+class IPF2WeaponInterface;
 class UAbilitySystemComponent;
 
 // =====================================================================================================================
@@ -185,4 +190,36 @@ public:
 	static UActorComponent* Conv_ActorComponentIntfToActorComponent(
 		const TScriptInterface<IPF2ActorComponentInterface>& ActorComponent
 	);
+
+	/**
+	 * Converts an actor component interface to a standard actor component.
+	 *
+	 * @param Item
+	 *	The item interface instance to convert.
+	 *
+	 * @return
+	 *	The resulting data asset.
+	 */
+	UFUNCTION(
+		BlueprintPure,
+		meta=(DisplayName = "To Data Asset", CompactNodeTitle = "->", BlueprintAutocast),
+		Category="OpenPF2|Conversions"
+	)
+	static UDataAsset* Conv_ItemIntfToDataAsset(const TScriptInterface<IPF2ItemInterface>& Item);
+
+	/**
+	 * Converts a weapon into being wrapped as a damage causer wrapper.
+	 *
+	 * @param Weapon
+	 *	The weapon interface instance to convert.
+	 *
+	 * @return
+	 *	The resulting damage causer actor.
+	 */
+	UFUNCTION(
+		BlueprintPure,
+		meta=(DisplayName = "To Weapon Causer", CompactNodeTitle = "->", BlueprintAutocast),
+		Category="OpenPF2|Conversions"
+	)
+	static APF2DamageCauseWrapper* Conv_WeaponIntfToDamageCauser(const TScriptInterface<IPF2WeaponInterface>& Weapon);
 };

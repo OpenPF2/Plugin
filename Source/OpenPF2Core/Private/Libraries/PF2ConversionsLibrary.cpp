@@ -15,6 +15,9 @@
 
 #include "Abilities/PF2AbilitySystemInterface.h"
 
+#include "Items/PF2ItemInterface.h"
+#include "Items/Weapons/PF2WeaponInterface.h"
+
 FString UPF2ConversionsLibrary::Conv_LogIdentifiableIntfToString(
 	const TScriptInterface<IPF2LogIdentifiableInterface> Object)
 {
@@ -136,5 +139,34 @@ UActorComponent* UPF2ConversionsLibrary::Conv_ActorComponentIntfToActorComponent
 	else
 	{
 		return ActorComponent->ToActorComponent();
+	}
+}
+
+UDataAsset* UPF2ConversionsLibrary::Conv_ItemIntfToDataAsset(const TScriptInterface<IPF2ItemInterface>& Item)
+{
+	if (Item.GetInterface() == nullptr)
+	{
+		// This is neither an assertion error nor a logged error because Blueprints might use this conversion before a
+		// call to "Is valid?" or something that can accept a nullptr.
+		return nullptr;
+	}
+	else
+	{
+		return Item->ToDataAsset();
+	}
+}
+
+APF2DamageCauseWrapper* UPF2ConversionsLibrary::Conv_WeaponIntfToDamageCauser(
+	const TScriptInterface<IPF2WeaponInterface>& Weapon)
+{
+	if (Weapon.GetInterface() == nullptr)
+	{
+		// This is neither an assertion error nor a logged error because Blueprints might use this conversion before a
+		// call to "Is valid?" or something that can accept a nullptr.
+		return nullptr;
+	}
+	else
+	{
+		return Weapon->ToDamageCauser();
 	}
 }
