@@ -11,9 +11,9 @@
 
 #include "Libraries/PF2AttackStatLibrary.h"
 
-APF2EffectCauseWrapper* UPF2Weapon::ToEffectCauser()
+APF2EffectCauseWrapper* UPF2Weapon::ToEffectCauser(AActor* OwningActor)
 {
-	return APF2EffectCauseWrapper::Create(this->GetWorld(), this);
+	return APF2EffectCauseWrapper::Create(OwningActor, this);
 }
 
 float UPF2Weapon::CalculateAttackRoll(const TScriptInterface<IPF2CharacterAbilitySystemInterface>& CharacterAsc)

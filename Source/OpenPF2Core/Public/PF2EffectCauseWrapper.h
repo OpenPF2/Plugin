@@ -53,16 +53,16 @@ public:
 	 * The given weapon instance must be a data asset that implements IPF2WeaponInterface.
 	 *
 	 * This method is necessary because actors cannot be passed parameters through a constructor at spawn time.
-	 *
-	 * @param World
-	 *	The world into which the new instance will be spawned.
+     *
+     * @param OwningActor
+     *	The actor who owns or possesses this weapon.
 	 * @param Weapon
 	 *	The weapon that the new instance will wrap.
 	 *
 	 * @return
 	 *	The new damage cause wrapper.
 	 */
-	static APF2EffectCauseWrapper* Create(UWorld* World, IPF2WeaponInterface* Weapon);
+	static APF2EffectCauseWrapper* Create(AActor* OwningActor, IPF2WeaponInterface* Weapon);
 
 	// =================================================================================================================
 	// Public Constructors

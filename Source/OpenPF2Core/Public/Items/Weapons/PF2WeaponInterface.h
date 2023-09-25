@@ -43,11 +43,16 @@ public:
     /**
      * Converts this weapon into an actor that can represent a "effect causer" for replication.
      *
+     * The causer is linked to the lifetime of the given owning actor.
+     *
+     * @param OwningActor
+     *	The actor who owns or possesses this weapon.
+     *
      * @return
      *	This instance, wrapped as a effect causer.
      */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
-    virtual APF2EffectCauseWrapper* ToEffectCauser() = 0;
+    virtual APF2EffectCauseWrapper* ToEffectCauser(AActor* OwningActor) = 0;
 
 	/**
 	 * Calculates the attack roll, which determines if an attack was successful (it hit its target).

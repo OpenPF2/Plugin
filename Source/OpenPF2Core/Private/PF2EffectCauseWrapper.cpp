@@ -9,9 +9,12 @@
 
 #include <Net/UnrealNetwork.h>
 
-APF2EffectCauseWrapper* APF2EffectCauseWrapper::Create(UWorld* World, IPF2WeaponInterface* Weapon)
+APF2EffectCauseWrapper* APF2EffectCauseWrapper::Create(AActor* OwningActor, IPF2WeaponInterface* Weapon)
 {
-	APF2EffectCauseWrapper* NewInstance = World->SpawnActorDeferred<APF2EffectCauseWrapper>(StaticClass(), FTransform());
+	UWorld* World = OwningActor->GetWorld();
+
+	APF2EffectCauseWrapper* NewInstance =
+		World->SpawnActorDeferred<APF2EffectCauseWrapper>(StaticClass(), FTransform(), OwningActor);
 
 	NewInstance->FinalizeConstruction(Weapon);
 

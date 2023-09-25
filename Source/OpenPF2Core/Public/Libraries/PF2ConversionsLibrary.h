@@ -24,7 +24,6 @@ class IPF2ItemInterface;
 class IPF2LogIdentifiableInterface;
 class IPF2PlayerControllerInterface;
 class IPF2PlayerStateInterface;
-class IPF2WeaponInterface;
 class UAbilitySystemComponent;
 
 // =====================================================================================================================
@@ -206,20 +205,4 @@ public:
 		Category="OpenPF2|Conversions"
 	)
 	static UDataAsset* Conv_ItemIntfToDataAsset(const TScriptInterface<IPF2ItemInterface>& Item);
-
-	/**
-	 * Converts a weapon into being wrapped as an effect cause wrapper.
-	 *
-	 * @param Weapon
-	 *	The weapon interface instance to convert.
-	 *
-	 * @return
-	 *	The resulting effect cause actor.
-	 */
-	UFUNCTION(
-		BlueprintPure,
-		meta=(DisplayName = "To Weapon Causer", CompactNodeTitle = "->", BlueprintAutocast),
-		Category="OpenPF2|Conversions"
-	)
-	static APF2EffectCauseWrapper* Conv_WeaponIntfToEffectCauser(const TScriptInterface<IPF2WeaponInterface>& Weapon);
 };

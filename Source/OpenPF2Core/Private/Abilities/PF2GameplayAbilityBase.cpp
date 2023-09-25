@@ -132,7 +132,7 @@ FGameplayEffectSpecHandle UPF2GameplayAbilityBase::MakeOutgoingGameplayEffectSpe
 		this->CurrentSpecHandle,
 		this->CurrentActorInfo,
 		GameplayEffectClass,
-		Weapon->ToEffectCauser(),
+		Weapon->ToEffectCauser(this->CurrentActorInfo->OwnerActor.Get()),
 		Level
 	);
 }
