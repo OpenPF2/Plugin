@@ -193,6 +193,12 @@ protected:
 	FGameplayTagContainer Traits;
 
 public:
+	// =================================================================================================================
+	// Public Constructors
+	// =================================================================================================================
+	/**
+	 * Default constructor.
+	 */
 	explicit UPF2Weapon() :
 		AttackAbilityModifierType(EPF2CharacterAbilityScoreType::AbStrength),
 		DamageAbilityModifierType(EPF2CharacterAbilityScoreType::AbStrength),
