@@ -156,7 +156,7 @@ UDataAsset* UPF2ConversionsLibrary::Conv_ItemIntfToDataAsset(const TScriptInterf
 	}
 }
 
-APF2DamageCauseWrapper* UPF2ConversionsLibrary::Conv_WeaponIntfToDamageCauser(
+APF2EffectCauseWrapper* UPF2ConversionsLibrary::Conv_WeaponIntfToEffectCauser(
 	const TScriptInterface<IPF2WeaponInterface>& Weapon)
 {
 	if (Weapon.GetInterface() == nullptr)
@@ -167,6 +167,6 @@ APF2DamageCauseWrapper* UPF2ConversionsLibrary::Conv_WeaponIntfToDamageCauser(
 	}
 	else
 	{
-		return Weapon->ToDamageCauser();
+		return Weapon->ToEffectCauser();
 	}
 }

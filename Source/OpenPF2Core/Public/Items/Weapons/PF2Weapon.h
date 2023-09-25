@@ -211,7 +211,7 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2WeaponInterface Implementation
 	// =================================================================================================================
-	virtual APF2DamageCauseWrapper* ToDamageCauser() override;
+	virtual APF2EffectCauseWrapper* ToEffectCauser() override;
 
 	virtual float CalculateAttackRoll(
 		const TScriptInterface<IPF2CharacterAbilitySystemInterface>& CharacterAsc) override;

@@ -12,21 +12,21 @@
 
 #include "Items/Weapons/PF2WeaponInterface.h"
 
-#include "PF2DamageCauseWrapper.generated.h"
+#include "PF2EffectCauseWrapper.generated.h"
 
 // =====================================================================================================================
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
-class APF2DamageCauseWrapper;
+class APF2EffectCauseWrapper;
 
 // =====================================================================================================================
 // Normal Declarations
 // =====================================================================================================================
 /**
- * An actor to wrap weapons for replication as the "damage causer" of a gameplay effect.
+ * An actor to wrap weapons for replication as the "effect causer" of a gameplay effect.
  */
 UCLASS(BlueprintType)
-class APF2DamageCauseWrapper : public AInfo
+class APF2EffectCauseWrapper : public AInfo
 {
 	GENERATED_BODY()
 
@@ -48,7 +48,7 @@ public:
 	// Public Static Methods
 	// =================================================================================================================
 	/**
-	 * Creates a new APF2DamageCauseWrapper for the given weapon.
+	 * Creates a new APF2EffectCauseWrapper for the given weapon.
 	 *
 	 * The given weapon instance must be a data asset that implements IPF2WeaponInterface.
 	 *
@@ -62,7 +62,7 @@ public:
 	 * @return
 	 *	The new damage cause wrapper.
 	 */
-	static APF2DamageCauseWrapper* Create(UWorld* World, IPF2WeaponInterface* Weapon);
+	static APF2EffectCauseWrapper* Create(UWorld* World, IPF2WeaponInterface* Weapon);
 
 	// =================================================================================================================
 	// Public Constructors
@@ -70,7 +70,7 @@ public:
 	/**
 	 * Default constructor.
 	 */
-	explicit APF2DamageCauseWrapper(): Weapon(nullptr)
+	explicit APF2EffectCauseWrapper(): Weapon(nullptr)
 	{
 	}
 
@@ -88,7 +88,7 @@ public:
 	 * @return
 	 *	The weapon instance.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Damage Causers")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Effect Causers")
 	FORCEINLINE TScriptInterface<IPF2WeaponInterface> GetWeapon()
 	{
 		return TScriptInterface<IPF2WeaponInterface>(this->Weapon);

@@ -5,15 +5,15 @@
 
 #include "Items/Weapons/PF2Weapon.h"
 
-#include "PF2DamageCauseWrapper.h"
+#include "PF2EffectCauseWrapper.h"
 
 #include "Abilities/PF2CharacterAbilitySystemInterface.h"
 
 #include "Libraries/PF2AttackStatLibrary.h"
 
-APF2DamageCauseWrapper* UPF2Weapon::ToDamageCauser()
+APF2EffectCauseWrapper* UPF2Weapon::ToEffectCauser()
 {
-	return APF2DamageCauseWrapper::Create(this->GetWorld(), this);
+	return APF2EffectCauseWrapper::Create(this->GetWorld(), this);
 }
 
 float UPF2Weapon::CalculateAttackRoll(const TScriptInterface<IPF2CharacterAbilitySystemInterface>& CharacterAsc)

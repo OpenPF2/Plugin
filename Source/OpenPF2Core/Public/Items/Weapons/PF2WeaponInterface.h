@@ -21,7 +21,7 @@
 // =====================================================================================================================
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
-class APF2DamageCauseWrapper;
+class APF2EffectCauseWrapper;
 
 // =====================================================================================================================
 // Normal Declarations
@@ -41,13 +41,13 @@ class OPENPF2CORE_API IPF2WeaponInterface : public IPF2ItemInterface
 
 public:
     /**
-     * Converts this weapon into an actor that can represent a "damage causer" for replication.
+     * Converts this weapon into an actor that can represent a "effect causer" for replication.
      *
      * @return
-     *	This instance, wrapped as a damage causer.
+     *	This instance, wrapped as a effect causer.
      */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
-    virtual APF2DamageCauseWrapper* ToDamageCauser() = 0;
+    virtual APF2EffectCauseWrapper* ToEffectCauser() = 0;
 
 	/**
 	 * Calculates the attack roll, which determines if an attack was successful (it hit its target).

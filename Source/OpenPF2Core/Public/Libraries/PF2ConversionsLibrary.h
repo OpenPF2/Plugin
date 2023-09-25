@@ -16,7 +16,7 @@
 // =====================================================================================================================
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
-class APF2DamageCauseWrapper;
+class APF2EffectCauseWrapper;
 class IPF2AbilitySystemInterface;
 class IPF2ActorComponentInterface;
 class IPF2CharacterInterface;
@@ -208,18 +208,18 @@ public:
 	static UDataAsset* Conv_ItemIntfToDataAsset(const TScriptInterface<IPF2ItemInterface>& Item);
 
 	/**
-	 * Converts a weapon into being wrapped as a damage causer wrapper.
+	 * Converts a weapon into being wrapped as an effect cause wrapper.
 	 *
 	 * @param Weapon
 	 *	The weapon interface instance to convert.
 	 *
 	 * @return
-	 *	The resulting damage causer actor.
+	 *	The resulting effect cause actor.
 	 */
 	UFUNCTION(
 		BlueprintPure,
 		meta=(DisplayName = "To Weapon Causer", CompactNodeTitle = "->", BlueprintAutocast),
 		Category="OpenPF2|Conversions"
 	)
-	static APF2DamageCauseWrapper* Conv_WeaponIntfToDamageCauser(const TScriptInterface<IPF2WeaponInterface>& Weapon);
+	static APF2EffectCauseWrapper* Conv_WeaponIntfToEffectCauser(const TScriptInterface<IPF2WeaponInterface>& Weapon);
 };
