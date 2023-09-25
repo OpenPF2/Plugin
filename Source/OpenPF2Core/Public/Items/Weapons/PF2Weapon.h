@@ -202,50 +202,27 @@ public:
 	{
 	}
 
-protected:
-	/**
-	 * Calculates the attack roll, which determines if an attack was successful (it hit its target).
-	 *
-	 * "When making an attack roll, determine the result by rolling 1d20 and adding your attack modifier for the weapon
-	 * or unarmed attack you’re using. Modifiers for melee and ranged attacks are calculated differently.
-	 *
-	 * Melee attack modifier = Strength modifier (or optionally Dexterity for a finesse weapon) + proficiency bonus +
-	 * other bonuses + penalties
-	 *
-	 * Ranged attack modifier = Dexterity modifier + proficiency bonus + other bonuses + penalties
-	 *
-	 * Bonuses, and penalties apply to these rolls just like with other types of checks. Weapons with potency runes add
-	 * an item bonus to your attack rolls."
-	 *
-	 * Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Attack Rolls".
-	 */
-	virtual float CalculateAttackRoll(const IPF2CharacterAbilitySystemInterface* CharacterAsc);
-
 	// =================================================================================================================
 	// Public Methods - IPF2WeaponInterface Implementation
 	// =================================================================================================================
 	virtual APF2DamageCauseWrapper* ToDamageCauser() override;
 
-	/**
-	 * Calculates the damage roll, which determines how much of an effect an attack has on the target.
-	 *
-	 * "When the result of your attack roll with a weapon or unarmed attack equals or exceeds your target’s AC, you hit
-	 * your target! Roll the weapon or unarmed attack’s damage die and add the relevant modifiers, bonuses, and
-	 * penalties to determine the amount of damage you deal. Calculate a damage roll as follows.
-	 *
-	 * Melee damage roll = damage die of weapon or unarmed attack + Strength modifier + bonuses + penalties
-	 *
-	 * Ranged damage roll = damage die of weapon + Strength modifier for thrown weapons + bonuses + penalties"
-	 *
-	 * Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Damage Rolls".
-	 */
-	virtual float CalculateDamageRoll(const IPF2CharacterAbilitySystemInterface* CharacterAsc);
+	virtual float CalculateAttackRoll(
+		const TScriptInterface<IPF2CharacterAbilitySystemInterface>& CharacterAsc) override;
 
+	virtual float CalculateDamageRoll(
+		const TScriptInterface<IPF2CharacterAbilitySystemInterface>& CharacterAsc) override;
+
+
+protected:
+	// =================================================================================================================
+	// Protected Methods
+	// =================================================================================================================
 	/**
 	 * Gets the value of the specified ability.
 	 *
 	 * TODO: Re-work this to be a GE so we don't have to worry about snapshot timing and other GEs.
 	 */
-	static float GetAbilityModifierValue(const IPF2CharacterAbilitySystemInterface* CharacterAsc,
-	                                     const EPF2CharacterAbilityScoreType        AbilityScoreType);
+	static float GetAbilityModifierValue(const TScriptInterface<IPF2CharacterAbilitySystemInterface>& CharacterAsc,
+	                                     const EPF2CharacterAbilityScoreType                          AbilityScoreType);
 };

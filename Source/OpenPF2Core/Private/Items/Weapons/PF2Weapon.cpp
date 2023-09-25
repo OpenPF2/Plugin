@@ -16,16 +16,7 @@ APF2DamageCauseWrapper* UPF2Weapon::ToDamageCauser()
 	return APF2DamageCauseWrapper::Create(this->GetWorld(), this);
 }
 
-float UPF2Weapon::GetAbilityModifierValue(const IPF2CharacterAbilitySystemInterface* CharacterAsc,
-                                          const EPF2CharacterAbilityScoreType        AbilityScoreType)
-{
-	const TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> AbilityScoreValues =
-		CharacterAsc->GetAbilityScoreValues();
-
-	return AbilityScoreValues[AbilityScoreType].ModifierValue;
-}
-
-float UPF2Weapon::CalculateAttackRoll(const IPF2CharacterAbilitySystemInterface* CharacterAsc)
+float UPF2Weapon::CalculateAttackRoll(const TScriptInterface<IPF2CharacterAbilitySystemInterface>& CharacterAsc)
 {
 	const int32                 CharacterLevel = CharacterAsc->GetCharacterLevel();
 	const FGameplayTagContainer CharacterTags  = CharacterAsc->GetActiveGameplayTags();
@@ -40,7 +31,7 @@ float UPF2Weapon::CalculateAttackRoll(const IPF2CharacterAbilitySystemInterface*
 	);
 }
 
-float UPF2Weapon::CalculateDamageRoll(const IPF2CharacterAbilitySystemInterface* CharacterAsc)
+float UPF2Weapon::CalculateDamageRoll(const TScriptInterface<IPF2CharacterAbilitySystemInterface>& CharacterAsc)
 {
 	const float DamageAbilityModifier = this->GetAbilityModifierValue(CharacterAsc, this->DamageAbilityModifierType);
 
@@ -48,4 +39,12 @@ float UPF2Weapon::CalculateDamageRoll(const IPF2CharacterAbilitySystemInterface*
 		this->DamageDie,
 		DamageAbilityModifier
 	);
+}
+float UPF2Weapon::GetAbilityModifierValue(const TScriptInterface<IPF2CharacterAbilitySystemInterface>& CharacterAsc,
+                                          const EPF2CharacterAbilityScoreType                          AbilityScoreType)
+{
+	const TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> AbilityScoreValues =
+		CharacterAsc->GetAbilityScoreValues();
+
+	return AbilityScoreValues[AbilityScoreType].ModifierValue;
 }
