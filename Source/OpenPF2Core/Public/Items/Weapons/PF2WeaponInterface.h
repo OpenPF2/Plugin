@@ -14,6 +14,8 @@
 
 #include <UObject/Interface.h>
 
+#include "Items/PF2ItemInterface.h"
+
 #include "PF2WeaponInterface.generated.h"
 
 // =====================================================================================================================
@@ -33,7 +35,7 @@ class UPF2WeaponInterface : public UInterface
 /**
  * An interface for OpenPF2-compatible Weapons.
  */
-class OPENPF2CORE_API IPF2WeaponInterface
+class OPENPF2CORE_API IPF2WeaponInterface : public IPF2ItemInterface
 {
     GENERATED_BODY()
 

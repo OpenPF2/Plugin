@@ -213,6 +213,17 @@ public:
 	virtual float CalculateDamageRoll(
 		const TScriptInterface<IPF2CharacterAbilitySystemInterface>& CharacterAsc) override;
 
+	// =================================================================================================================
+	// Public Methods - IPF2ItemInterface Implementation
+	// =================================================================================================================
+	virtual FPrimaryAssetId GetPrimaryAssetId() override;
+	virtual UDataAsset* ToDataAsset() override;
+	virtual bool ShouldBeEquippedInAllLinkedSlots() override;
+
+	// =================================================================================================================
+	// Public Methods - IPF2LogIdentifiableInterface Implementation
+	// =================================================================================================================
+	virtual FString GetIdForLogs() const override;
 
 protected:
 	// =================================================================================================================

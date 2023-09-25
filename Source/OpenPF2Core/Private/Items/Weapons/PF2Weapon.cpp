@@ -40,6 +40,27 @@ float UPF2Weapon::CalculateDamageRoll(const TScriptInterface<IPF2CharacterAbilit
 		DamageAbilityModifier
 	);
 }
+
+FPrimaryAssetId UPF2Weapon::GetPrimaryAssetId()
+{
+	return Super::GetPrimaryAssetId();
+}
+
+UDataAsset* UPF2Weapon::ToDataAsset()
+{
+	return Super::ToDataAsset();
+}
+
+bool UPF2Weapon::ShouldBeEquippedInAllLinkedSlots()
+{
+	return Super::ShouldBeEquippedInAllLinkedSlots();
+}
+
+FString UPF2Weapon::GetIdForLogs() const
+{
+	return Super::GetIdForLogs();
+}
+
 float UPF2Weapon::GetAbilityModifierValue(const TScriptInterface<IPF2CharacterAbilitySystemInterface>& CharacterAsc,
                                           const EPF2CharacterAbilityScoreType                          AbilityScoreType)
 {
