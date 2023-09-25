@@ -5,7 +5,12 @@
 
 #include "Abilities/PF2GameplayAbilityBase.h"
 
+#include <AbilitySystemGlobals.h>
+
 #include "PF2CharacterInterface.h"
+#include "PF2EffectCauseWrapper.h"
+
+#include "Items/Weapons/PF2WeaponInterface.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
 
@@ -113,4 +118,101 @@ TScriptInterface<IPF2CharacterInterface> UPF2GameplayAbilityBase::GetOwningChara
 	}
 
 	return Result;
+}
+
+FGameplayEffectSpecHandle UPF2GameplayAbilityBase::MakeOutgoingGameplayEffectSpecForWeapon(
+	const TSubclassOf<UGameplayEffect>          GameplayEffectClass,
+	const TScriptInterface<IPF2WeaponInterface> Weapon,
+	const float                                 Level) const
+{
+	check(this->CurrentActorInfo != nullptr);
+	check(this->CurrentActorInfo->AbilitySystemComponent.IsValid());
+
+	return this->MakeOutgoingGameplayEffectSpecForCauser(
+		this->CurrentSpecHandle,
+		this->CurrentActorInfo,
+		GameplayEffectClass,
+		Weapon->ToEffectCauser(),
+		Level
+	);
+}
+
+FGameplayEffectSpecHandle UPF2GameplayAbilityBase::MakeOutgoingGameplayEffectSpecForCauser(
+	const TSubclassOf<UGameplayEffect> GameplayEffectClass,
+	AActor*                            EffectCauser,
+	const float                        Level) const
+{
+	check(this->CurrentActorInfo != nullptr);
+	check(this->CurrentActorInfo->AbilitySystemComponent.IsValid());
+
+	return this->MakeOutgoingGameplayEffectSpecForCauser(
+		this->CurrentSpecHandle,
+		this->CurrentActorInfo,
+		GameplayEffectClass,
+		EffectCauser,
+		Level
+	);
+}
+
+FGameplayEffectSpecHandle UPF2GameplayAbilityBase::MakeOutgoingGameplayEffectSpecForCauser(
+	const FGameplayAbilitySpecHandle   AbilityHandle,
+	const FGameplayAbilityActorInfo*   AbilityOwnerInfo,
+	const TSubclassOf<UGameplayEffect> GameplayEffectClass,
+	AActor*                            EffectCauser,
+	const float                        Level) const
+{
+	check(AbilityOwnerInfo != nullptr);
+
+	UAbilitySystemComponent* const SourceAsc = AbilityOwnerInfo->AbilitySystemComponent.Get();
+
+	const FGameplayEffectContextHandle EffectContext =
+		this->MakeEffectContextForCauser(AbilityHandle, AbilityOwnerInfo, EffectCauser);
+
+	FGameplayEffectSpecHandle EffectHandle = SourceAsc->MakeOutgoingSpec(GameplayEffectClass, Level, EffectContext);
+
+	if (EffectHandle.IsValid())
+	{
+		FGameplayAbilitySpec* AbilitySpec = SourceAsc->FindAbilitySpecFromHandle(AbilityHandle);
+
+		this->ApplyAbilityTagsToGameplayEffectSpec(*EffectHandle.Data.Get(), AbilitySpec);
+
+		// Copy over set by caller magnitudes
+		if (AbilitySpec != nullptr)
+		{
+			EffectHandle.Data->SetByCallerTagMagnitudes = AbilitySpec->SetByCallerTagMagnitudes;
+		}
+
+	}
+
+	return EffectHandle;
+}
+
+FGameplayEffectContextHandle UPF2GameplayAbilityBase::MakeEffectContextForCauser(
+	const FGameplayAbilitySpecHandle AbilityHandle,
+	const FGameplayAbilityActorInfo* AbilityOwnerInfo,
+	AActor*                          EffectCauser) const
+{
+	check(AbilityOwnerInfo != nullptr);
+
+	FGameplayEffectContextHandle Context =
+		FGameplayEffectContextHandle(UAbilitySystemGlobals::Get().AllocGameplayEffectContext());
+
+	// Use the character who activated the ability as the instigator, while using a caller-supplied effect causer.
+	Context.AddInstigator(AbilityOwnerInfo->OwnerActor.Get(), EffectCauser);
+
+	// Add in the ability tracking here.
+	Context.SetAbility(this);
+
+	// Pass along the source ability object to the effect, as long as it is available.
+	{
+		const FGameplayAbilitySpec* AbilitySpec =
+			AbilityOwnerInfo->AbilitySystemComponent->FindAbilitySpecFromHandle(AbilityHandle);
+
+		if (AbilitySpec != nullptr)
+		{
+			Context.AddSourceObject(AbilitySpec->SourceObject.Get());
+		}
+	}
+
+	return Context;
 }
