@@ -735,7 +735,7 @@ public:
 	/**
 	 * The maximum number of reaction points a character can have at any time during an encounter.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Encounters", ReplicatedUsing=OnRep_EncMaxActionPoints)
+	UPROPERTY(BlueprintReadOnly, Category = "Encounters", ReplicatedUsing=OnRep_EncMaxReactionPoints)
 	FGameplayAttributeData EncMaxReactionPoints;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, EncMaxReactionPoints)
 

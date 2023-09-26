@@ -507,7 +507,7 @@ void UPF2AttributeSet::OnRep_EncActionPoints(const FGameplayAttributeData& OldVa
 
 void UPF2AttributeSet::OnRep_EncMaxActionPoints(const FGameplayAttributeData& OldValue)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, EncMaxReactionPoints, OldValue);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, EncMaxActionPoints, OldValue);
 }
 
 void UPF2AttributeSet::OnRep_EncReactionPoints(const FGameplayAttributeData& OldValue)
