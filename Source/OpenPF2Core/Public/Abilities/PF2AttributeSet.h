@@ -246,7 +246,7 @@ public:
 	 * From the Pathfinder 2E Core Rulebook, page 455, "Range and Reach":
 	 * "Reach is how far you can physically reach with your body or a weapon. Melee Strikes rely on reach. Your reach
 	 * also creates an area around your space where other creatures could trigger your reactions. Your reach is
-	 * typically 5 feet [1.5 meters], but weapons with the reach trait can extend this."
+	 * typically [1.5 meters], but weapons with the reach trait can extend this."
 	 */
 	UPROPERTY(BlueprintReadOnly, Category = "Reach", ReplicatedUsing = OnRep_Reach)
 	FGameplayAttributeData Reach;
