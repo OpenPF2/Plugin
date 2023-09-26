@@ -739,6 +739,43 @@ public:
 	FGameplayAttributeData EncMaxReactionPoints;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, EncMaxReactionPoints)
 
+	/**
+	 * The current multiple attack penalty applied to this character.
+	 *
+	 * This should be either zero or a negative value.
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 446, "Multiple Attack Penalty":
+	 * "The more attacks you make beyond your first in a single turn, the less accurate you become, represented by the
+	 * multiple attack penalty. The second time you use an attack action during your turn, you take a –5 penalty to your
+	 * attack roll. The third time you attack, and on any subsequent attacks, you take a –10 penalty to your attack
+	 * roll. Every check that has the attack trait counts toward your multiple attack penalty, including Strikes, spell
+	 * attack rolls, certain skill actions like Shove, and many others. Some weapons and abilities reduce multiple
+	 * attack penalties, such as agile weapons, which reduce these penalties to –4 on the second attack or –8 on further
+	 * attacks."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Encounters", ReplicatedUsing=OnRep_EncMultipleAttackPenalty)
+	FGameplayAttributeData EncMultipleAttackPenalty;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, EncMultipleAttackPenalty)
+
+	/**
+	 * The maximum multiple attack penalty that can be applied to this character.
+	 *
+	 * This should be a negative value that is greater (in magnitude) than zero. For example, -10, -8, etc. This value
+	 * clamps how negative the multiple attack penalty stat can get during a single encounter turn.
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 446, "Multiple Attack Penalty":
+	 * "The more attacks you make beyond your first in a single turn, the less accurate you become, represented by the
+	 * multiple attack penalty. The second time you use an attack action during your turn, you take a –5 penalty to your
+	 * attack roll. The third time you attack, and on any subsequent attacks, you take a –10 penalty to your attack
+	 * roll. Every check that has the attack trait counts toward your multiple attack penalty, including Strikes, spell
+	 * attack rolls, certain skill actions like Shove, and many others. Some weapons and abilities reduce multiple
+	 * attack penalties, such as agile weapons, which reduce these penalties to –4 on the second attack or –8 on further
+	 * attacks."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Encounters", ReplicatedUsing=OnRep_EncMaxMultipleAttackPenalty)
+	FGameplayAttributeData EncMaxMultipleAttackPenalty;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, EncMaxMultipleAttackPenalty)
+
 	// Transient/Temporary Attributes ----------------------------------------------------------------------------------
 	/**
 	 * A temporary attribute for tracking damage that the owner of this set is receiving from an instant damage GE.
@@ -978,6 +1015,12 @@ public:
 	UFUNCTION()
 	virtual void OnRep_EncMaxReactionPoints(const FGameplayAttributeData& OldValue);
 
+	UFUNCTION()
+	virtual void OnRep_EncMultipleAttackPenalty(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_EncMaxMultipleAttackPenalty(const FGameplayAttributeData& OldValue);
+
 protected:
 	/**
 	 * Notifies this ASC that the incoming damage attribute has been changed (typically by a Gameplay Effect).
@@ -994,10 +1037,10 @@ protected:
 	 * @param EventTags
 	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to damage.
 	 */
-	void Native_OnDamageIncomingChanged(IPF2CharacterInterface*            TargetCharacter,
-	                                    const FGameplayEffectContextHandle Context,
-	                                    const float                        ValueDelta,
-	                                    const FGameplayTagContainer*       EventTags);
+	void Native_OnDamageIncomingChanged(IPF2CharacterInterface*             TargetCharacter,
+	                                    const FGameplayEffectContextHandle& Context,
+	                                    const float                         ValueDelta,
+	                                    const FGameplayTagContainer*        EventTags);
 
 	/**
 	 * Notifies this ASC that the hit points attribute has been changed (typically by a Gameplay Effect).
@@ -1014,10 +1057,10 @@ protected:
 	 * @param EventTags
 	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to hit points.
 	 */
-	void Native_OnHitPointsChanged(IPF2CharacterInterface*            TargetCharacter,
-	                               const FGameplayEffectContextHandle Context,
-	                               const float                        ValueDelta,
-	                               const FGameplayTagContainer*       EventTags);
+	void Native_OnHitPointsChanged(IPF2CharacterInterface*             TargetCharacter,
+	                               const FGameplayEffectContextHandle& Context,
+	                               const float                         ValueDelta,
+	                               const FGameplayTagContainer*        EventTags);
 
 	/**
 	 * Notifies this ASC that the speed attribute has been changed (typically by a Gameplay Effect).
@@ -1034,9 +1077,30 @@ protected:
 	 * @param EventTags
 	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to speed.
 	 */
-	void Native_OnSpeedChanged(IPF2CharacterInterface*            TargetCharacter,
-	                           const FGameplayEffectContextHandle Context,
-	                           const float                        ValueDelta,
-	                           const FGameplayTagContainer*       EventTags);
+	void Native_OnSpeedChanged(IPF2CharacterInterface*             TargetCharacter,
+	                           const FGameplayEffectContextHandle& Context,
+	                           const float                         ValueDelta,
+	                           const FGameplayTagContainer*        EventTags);
+
+	/**
+	 * Notifies this ASC that the multiple attack penalty attribute has been changed (typically by a Gameplay Effect).
+	 *
+	 * This is called after the change has already occurred. This clamps the value to the allowed range.
+	 *
+	 * @param TargetCharacter
+	 *	The character receiving the multiple attack penalty change. This is usually the same as the character who owns
+	 *	this ASC.
+	 * @param Context
+	 *	Wrapper around the context of the Gameplay Effect activation.
+	 * @param ValueDelta
+	 *	The amount of the change.
+	 * @param EventTags
+	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to multiple attack penalty.
+	 */
+	void Native_OnEncMultipleAttackPenaltyChanged(const IPF2CharacterInterface*       TargetCharacter,
+	                                              const FGameplayEffectContextHandle& Context,
+	                                              float                               ValueDelta,
+	                                              const FGameplayTagContainer*        EventTags);
+
 
 };

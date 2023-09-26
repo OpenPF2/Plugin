@@ -168,6 +168,8 @@ void UPF2AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	DOREPLIFETIME(UPF2AttributeSet, EncMaxActionPoints);
 	DOREPLIFETIME(UPF2AttributeSet, EncReactionPoints);
 	DOREPLIFETIME(UPF2AttributeSet, EncMaxReactionPoints);
+	DOREPLIFETIME(UPF2AttributeSet, EncMultipleAttackPenalty);
+	DOREPLIFETIME(UPF2AttributeSet, EncMaxMultipleAttackPenalty);
 }
 
 void UPF2AttributeSet::OnRep_Experience(const FGameplayAttributeData& OldValue)
@@ -520,6 +522,16 @@ void UPF2AttributeSet::OnRep_EncMaxReactionPoints(const FGameplayAttributeData& 
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, EncMaxReactionPoints, OldValue);
 }
 
+void UPF2AttributeSet::OnRep_EncMultipleAttackPenalty(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, EncMultipleAttackPenalty, OldValue);
+}
+
+void UPF2AttributeSet::OnRep_EncMaxMultipleAttackPenalty(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2AttributeSet, EncMaxMultipleAttackPenalty, OldValue);
+}
+
 void UPF2AttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
 {
 	Super::PreAttributeChange(Attribute, NewValue);
@@ -553,12 +565,16 @@ void UPF2AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 	{
 		this->Native_OnSpeedChanged(TargetCharacter, Context, ValueDelta, EventTags);
 	}
+	else if (Data.EvaluatedData.Attribute == this->GetEncMultipleAttackPenaltyAttribute())
+	{
+		this->Native_OnEncMultipleAttackPenaltyChanged(TargetCharacter, Context, ValueDelta, EventTags);
+	}
 }
 
-void UPF2AttributeSet::Native_OnDamageIncomingChanged(IPF2CharacterInterface*            TargetCharacter,
-                                                      const FGameplayEffectContextHandle Context,
-                                                      const float                        ValueDelta,
-                                                      const FGameplayTagContainer*       EventTags)
+void UPF2AttributeSet::Native_OnDamageIncomingChanged(IPF2CharacterInterface*             TargetCharacter,
+                                                      const FGameplayEffectContextHandle& Context,
+                                                      const float                         ValueDelta,
+                                                      const FGameplayTagContainer*        EventTags)
 {
 	const float LocalDamage      = this->GetTmpDamageIncoming();
 	const float CurrentHitPoints = this->GetHitPoints();
@@ -613,10 +629,10 @@ void UPF2AttributeSet::Native_OnDamageIncomingChanged(IPF2CharacterInterface*   
 	}
 }
 
-void UPF2AttributeSet::Native_OnHitPointsChanged(IPF2CharacterInterface*            TargetCharacter,
-                                                 const FGameplayEffectContextHandle Context,
-                                                 const float                        ValueDelta,
-                                                 const FGameplayTagContainer*       EventTags)
+void UPF2AttributeSet::Native_OnHitPointsChanged(IPF2CharacterInterface*             TargetCharacter,
+                                                 const FGameplayEffectContextHandle& Context,
+                                                 const float                         ValueDelta,
+                                                 const FGameplayTagContainer*        EventTags)
 {
 	const float RawHitPoints     = this->GetHitPoints();
 	const float ClampedHitPoints = FMath::Clamp(RawHitPoints, 0.0f, this->GetMaxHitPoints());
@@ -653,10 +669,10 @@ void UPF2AttributeSet::Native_OnHitPointsChanged(IPF2CharacterInterface*        
 	}
 }
 
-void UPF2AttributeSet::Native_OnSpeedChanged(IPF2CharacterInterface*            TargetCharacter,
-                                             const FGameplayEffectContextHandle Context,
-                                             const float                        ValueDelta,
-                                             const FGameplayTagContainer*       EventTags)
+void UPF2AttributeSet::Native_OnSpeedChanged(IPF2CharacterInterface*             TargetCharacter,
+                                             const FGameplayEffectContextHandle& Context,
+                                             const float                         ValueDelta,
+                                             const FGameplayTagContainer*        EventTags)
 {
 	const float RawSpeed     = this->GetSpeed();
 	const float ClampedSpeed = FMath::Clamp(RawSpeed, 0.0f, this->GetMaxSpeed());
@@ -690,5 +706,40 @@ void UPF2AttributeSet::Native_OnSpeedChanged(IPF2CharacterInterface*            
 		{
 			TargetCharacter->Native_OnSpeedChanged(ValueDelta, ClampedSpeed, EventTags);
 		}
+	}
+}
+
+void UPF2AttributeSet::Native_OnEncMultipleAttackPenaltyChanged(const IPF2CharacterInterface*       TargetCharacter,
+                                                                const FGameplayEffectContextHandle& Context,
+                                                                const float                         ValueDelta,
+                                                                const FGameplayTagContainer*        EventTags)
+{
+	const float RawPenalty     = this->GetEncMultipleAttackPenalty();
+	const float ClampedPenalty = FMath::Clamp(RawPenalty, this->GetEncMaxMultipleAttackPenalty(), 0.0f);
+
+	if (RawPenalty != ClampedPenalty)
+	{
+		this->SetEncMultipleAttackPenalty(ClampedPenalty);
+	}
+
+	if (ValueDelta == 0)
+	{
+		UE_LOG(
+			LogPf2CoreStats,
+			VeryVerbose,
+			TEXT("[%s] Stat. update (Multiple Attack Penalty): No change ('%f')."),
+			*(TargetCharacter->GetIdForLogs()),
+			ClampedPenalty
+		);
+	}
+	else
+	{
+		UE_LOG(
+			LogPf2CoreStats,
+			VeryVerbose,
+			TEXT("[%s] Stat. update (Multiple Attack Penalty): Changed to '%f'."),
+			*(TargetCharacter->GetIdForLogs()),
+			ClampedPenalty
+		);
 	}
 }
