@@ -555,25 +555,24 @@ void UPF2AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 
 	if (Data.EvaluatedData.Attribute == this->GetTmpDamageIncomingAttribute())
 	{
-		this->Native_OnDamageIncomingChanged(TargetCharacter, Context, ValueDelta, EventTags);
+		this->Native_OnDamageIncomingChanged(TargetCharacter, Context, EventTags);
 	}
 	else if (Data.EvaluatedData.Attribute == this->GetHitPointsAttribute())
 	{
-		this->Native_OnHitPointsChanged(TargetCharacter, Context, ValueDelta, EventTags);
+		this->Native_OnHitPointsChanged(TargetCharacter, ValueDelta, EventTags);
 	}
 	else if (Data.EvaluatedData.Attribute == this->GetSpeedAttribute())
 	{
-		this->Native_OnSpeedChanged(TargetCharacter, Context, ValueDelta, EventTags);
+		this->Native_OnSpeedChanged(TargetCharacter, ValueDelta, EventTags);
 	}
 	else if (Data.EvaluatedData.Attribute == this->GetEncMultipleAttackPenaltyAttribute())
 	{
-		this->Native_OnEncMultipleAttackPenaltyChanged(TargetCharacter, Context, ValueDelta, EventTags);
+		this->Native_OnEncMultipleAttackPenaltyChanged(TargetCharacter, ValueDelta);
 	}
 }
 
 void UPF2AttributeSet::Native_OnDamageIncomingChanged(IPF2CharacterInterface*             TargetCharacter,
                                                       const FGameplayEffectContextHandle& Context,
-                                                      const float                         ValueDelta,
                                                       const FGameplayTagContainer*        EventTags)
 {
 	const float LocalDamage      = this->GetTmpDamageIncoming();
@@ -625,14 +624,13 @@ void UPF2AttributeSet::Native_OnDamageIncomingChanged(IPF2CharacterInterface*   
 
 		// We don't clamp hit points here; it gets clamped by Native_OnHitPointsChanged().
 		this->SetHitPoints(CurrentHitPoints - LocalDamage);
-		this->Native_OnHitPointsChanged(TargetCharacter, Context, -LocalDamage, EventTags);
+		this->Native_OnHitPointsChanged(TargetCharacter, -LocalDamage, EventTags);
 	}
 }
 
-void UPF2AttributeSet::Native_OnHitPointsChanged(IPF2CharacterInterface*             TargetCharacter,
-                                                 const FGameplayEffectContextHandle& Context,
-                                                 const float                         ValueDelta,
-                                                 const FGameplayTagContainer*        EventTags)
+void UPF2AttributeSet::Native_OnHitPointsChanged(IPF2CharacterInterface*      TargetCharacter,
+                                                 const float                  ValueDelta,
+                                                 const FGameplayTagContainer* EventTags)
 {
 	const float RawHitPoints     = this->GetHitPoints();
 	const float ClampedHitPoints = FMath::Clamp(RawHitPoints, 0.0f, this->GetMaxHitPoints());
@@ -669,10 +667,9 @@ void UPF2AttributeSet::Native_OnHitPointsChanged(IPF2CharacterInterface*        
 	}
 }
 
-void UPF2AttributeSet::Native_OnSpeedChanged(IPF2CharacterInterface*             TargetCharacter,
-                                             const FGameplayEffectContextHandle& Context,
-                                             const float                         ValueDelta,
-                                             const FGameplayTagContainer*        EventTags)
+void UPF2AttributeSet::Native_OnSpeedChanged(IPF2CharacterInterface*      TargetCharacter,
+                                             const float                  ValueDelta,
+                                             const FGameplayTagContainer* EventTags)
 {
 	const float RawSpeed     = this->GetSpeed();
 	const float ClampedSpeed = FMath::Clamp(RawSpeed, 0.0f, this->GetMaxSpeed());
@@ -709,10 +706,8 @@ void UPF2AttributeSet::Native_OnSpeedChanged(IPF2CharacterInterface*            
 	}
 }
 
-void UPF2AttributeSet::Native_OnEncMultipleAttackPenaltyChanged(const IPF2CharacterInterface*       TargetCharacter,
-                                                                const FGameplayEffectContextHandle& Context,
-                                                                const float                         ValueDelta,
-                                                                const FGameplayTagContainer*        EventTags)
+void UPF2AttributeSet::Native_OnEncMultipleAttackPenaltyChanged(const IPF2CharacterInterface* TargetCharacter,
+                                                                const float                   ValueDelta)
 {
 	const float RawPenalty     = this->GetEncMultipleAttackPenalty();
 	const float ClampedPenalty = FMath::Clamp(RawPenalty, this->GetEncMaxMultipleAttackPenalty(), 0.0f);

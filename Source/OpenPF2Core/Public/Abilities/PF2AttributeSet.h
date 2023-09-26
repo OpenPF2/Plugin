@@ -1032,14 +1032,11 @@ protected:
 	 *	The character receiving the damage. This is usually the same as the character who owns this ASC.
 	 * @param Context
 	 *	Wrapper around the context of the Gameplay Effect activation.
-	 * @param ValueDelta
-	 *	The amount of the change.
 	 * @param EventTags
 	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to damage.
 	 */
 	void Native_OnDamageIncomingChanged(IPF2CharacterInterface*             TargetCharacter,
 	                                    const FGameplayEffectContextHandle& Context,
-	                                    const float                         ValueDelta,
 	                                    const FGameplayTagContainer*        EventTags);
 
 	/**
@@ -1050,17 +1047,14 @@ protected:
 	 *
 	 * @param TargetCharacter
 	 *	The character receiving the hit point change. This is usually the same as the character who owns this ASC.
-	 * @param Context
-	 *	Wrapper around the context of the Gameplay Effect activation.
 	 * @param ValueDelta
 	 *	The amount of the change.
 	 * @param EventTags
 	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to hit points.
 	 */
-	void Native_OnHitPointsChanged(IPF2CharacterInterface*             TargetCharacter,
-	                               const FGameplayEffectContextHandle& Context,
-	                               const float                         ValueDelta,
-	                               const FGameplayTagContainer*        EventTags);
+	void Native_OnHitPointsChanged(IPF2CharacterInterface*      TargetCharacter,
+	                               const float                  ValueDelta,
+	                               const FGameplayTagContainer* EventTags);
 
 	/**
 	 * Notifies this ASC that the speed attribute has been changed (typically by a Gameplay Effect).
@@ -1070,17 +1064,14 @@ protected:
 	 *
 	 * @param TargetCharacter
 	 *	The character receiving the speed change. This is usually the same as the character who owns this ASC.
-	 * @param Context
-	 *	Wrapper around the context of the Gameplay Effect activation.
 	 * @param ValueDelta
 	 *	The amount of the change.
 	 * @param EventTags
 	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to speed.
 	 */
-	void Native_OnSpeedChanged(IPF2CharacterInterface*             TargetCharacter,
-	                           const FGameplayEffectContextHandle& Context,
-	                           const float                         ValueDelta,
-	                           const FGameplayTagContainer*        EventTags);
+	void Native_OnSpeedChanged(IPF2CharacterInterface*      TargetCharacter,
+	                           const float                  ValueDelta,
+	                           const FGameplayTagContainer* EventTags);
 
 	/**
 	 * Notifies this ASC that the multiple attack penalty attribute has been changed (typically by a Gameplay Effect).
@@ -1090,17 +1081,11 @@ protected:
 	 * @param TargetCharacter
 	 *	The character receiving the multiple attack penalty change. This is usually the same as the character who owns
 	 *	this ASC.
-	 * @param Context
-	 *	Wrapper around the context of the Gameplay Effect activation.
 	 * @param ValueDelta
 	 *	The amount of the change.
-	 * @param EventTags
-	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to multiple attack penalty.
 	 */
-	void Native_OnEncMultipleAttackPenaltyChanged(const IPF2CharacterInterface*       TargetCharacter,
-	                                              const FGameplayEffectContextHandle& Context,
-	                                              float                               ValueDelta,
-	                                              const FGameplayTagContainer*        EventTags);
+	void Native_OnEncMultipleAttackPenaltyChanged(const IPF2CharacterInterface* TargetCharacter,
+	                                              const float                   ValueDelta);
 
 
 };
