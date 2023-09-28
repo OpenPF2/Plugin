@@ -138,7 +138,7 @@ public:
 	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetCaptureByAttribute(
 		const FGameplayAttribute& Attribute) const
 	{
-		return this->GetCaptureByName(Attribute.GetName());
+		return this->GetCaptureByAttributeName(Attribute.GetName());
 	}
 
 	/**
@@ -151,7 +151,7 @@ public:
 	 *	Either the desired capture definition; or nullptr if the given attribute name doesn't correspond to a character
 	 *	ability.
 	 */
-	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetCaptureByName(const FString& Name) const
+	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetCaptureByAttributeName(const FString& Name) const
 	{
 		if (this->CaptureDefinitions.Contains(Name))
 		{
