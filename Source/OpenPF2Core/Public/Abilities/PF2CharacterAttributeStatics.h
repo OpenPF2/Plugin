@@ -9,6 +9,8 @@
 
 #include "Abilities/PF2AttributeSet.h"
 
+#include "Utilities/PF2ArrayUtilities.h"
+
 #define DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(S, P, T, B) \
 { \
 	DEFINE_ATTRIBUTE_CAPTUREDEF(S, P, T, B) \
@@ -124,6 +126,20 @@ public:
 	{
 		return this->AbilityModifierNames;
 	}
+
+	/**
+	 * Gets capture definitions for all character ability score values.
+	 */
+	FORCEINLINE TArray<FGameplayEffectAttributeCaptureDefinition> GetAbilityScoreCaptures() const
+	{
+		return PF2ArrayUtilities::Map<FGameplayEffectAttributeCaptureDefinition>(
+			this->GetAbilityNames(),
+			[this](const FString& AbilityScoreAttributeName)
+			{
+				return *(this->GetCaptureByAttributeName(AbilityScoreAttributeName));
+			}
+		);
+	};
 
 	/**
 	 * Gets a capture definition for the given character attribute.
