@@ -1,4 +1,4 @@
-// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -39,12 +39,12 @@ protected:
 	 * The tag for the parameter that is used to pass a dynamic damage amount into the calculation.
 	 *
 	 * The parameter is typically read from a set-by-caller tag-based value so that GAs can populate damage dynamically,
-	 * unless the GE is expected to hard-code a specific amount of damage or reading it from a data table.
+	 * unless the GE is expected to hard-code a specific amount of damage or read it from a data table.
 	 */
 	FGameplayTag DamageParameterTag;
 
 	/**
-	 * The tag that is used to pass a dynamic damage amount into the calculation.
+	 * The tag that is used to pass a dynamic resistance amount into the calculation.
 	 *
 	 * The parameter should be provided via an attribute-based modifier that reads it from the appropriate resistance
 	 * attribute of the character's attribute set (e.g., typically an attribute having a name that starts with "Rst",
