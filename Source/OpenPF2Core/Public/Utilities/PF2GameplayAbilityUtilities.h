@@ -103,7 +103,7 @@ namespace PF2GameplayAbilityUtilities
 	 * @return
 	 *	The capture definition for the specified attribute.
 	 */
-	OPENPF2CORE_API FGameplayEffectAttributeCaptureDefinition BuildSourceCaptureFor(const FGameplayAttribute Attribute);
+	OPENPF2CORE_API FGameplayEffectAttributeCaptureDefinition BuildSourceCaptureFor(const FGameplayAttribute& Attribute);
 
 	/**
 	 * Gets the name of the default weight group into which the given GE should be placed.

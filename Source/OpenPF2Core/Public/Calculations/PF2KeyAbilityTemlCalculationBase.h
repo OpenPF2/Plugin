@@ -54,9 +54,9 @@ public:
 	 *	this is 0.
 	 */
 	explicit UPF2KeyAbilityTemlCalculationBase(
-		const FString StatGameplayTagPrefix,
-		const FString KeyAbilityGameplayTagPrefix,
-		const float   BaseValue = 0.0f);
+		const FString& StatGameplayTagPrefix,
+		const FString& KeyAbilityGameplayTagPrefix,
+		const float    BaseValue = 0.0f);
 
 	// =================================================================================================================
 	// Public Methods
@@ -128,7 +128,7 @@ protected:
 	 * @param Attribute
 	 *	The definition of the attribute to capture.
 	 */
-	void DefineKeyAbilityCapture(const FString KeyAbilityTagName, const FGameplayAttribute Attribute);
+	void DefineKeyAbilityCapture(const FString& KeyAbilityTagName, const FGameplayAttribute& Attribute);
 
 	/**
 	 * Calculates the Key Ability modifier for the character.

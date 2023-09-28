@@ -19,7 +19,7 @@
  */
 namespace PF2GameplayAbilityUtilities
 {
-	FGameplayEffectAttributeCaptureDefinition BuildSourceCaptureFor(const FGameplayAttribute Attribute)
+	FGameplayEffectAttributeCaptureDefinition BuildSourceCaptureFor(const FGameplayAttribute& Attribute)
 	{
 		FGameplayEffectAttributeCaptureDefinition CaptureDefinition;
 
@@ -114,7 +114,7 @@ namespace PF2GameplayAbilityUtilities
 	IPF2CharacterInterface* GetEffectInstigator(const UAbilitySystemComponent* SourceAsc, AActor* DamageSource)
 	{
 		IPF2CharacterInterface* Instigator;
-		AController*            SourceController = SourceAsc->AbilityActorInfo->PlayerController.Get();
+		const AController*      SourceController = SourceAsc->AbilityActorInfo->PlayerController.Get();
 
 		if ((SourceController == nullptr) && (DamageSource != nullptr))
 		{

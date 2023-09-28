@@ -26,9 +26,9 @@ UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase() :
 }
 
 UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase(
-	const FString StatGameplayTagPrefix,
-	const FString KeyAbilityGameplayTagPrefix,
-	const float   BaseValue) :
+	const FString& StatGameplayTagPrefix,
+	const FString& KeyAbilityGameplayTagPrefix,
+	const float    BaseValue) :
 	StatGameplayTagPrefix(StatGameplayTagPrefix),
 	BaseValue(BaseValue)
 {
@@ -64,8 +64,8 @@ UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase(
 }
 
 void UPF2KeyAbilityTemlCalculationBase::DefineKeyAbilityCapture(
-	const FString            KeyAbilityTagName,
-	const FGameplayAttribute Attribute)
+	const FString&            KeyAbilityTagName,
+	const FGameplayAttribute& Attribute)
 {
 	const FGameplayEffectAttributeCaptureDefinition CaptureDefinition =
 		PF2GameplayAbilityUtilities::BuildSourceCaptureFor(Attribute);

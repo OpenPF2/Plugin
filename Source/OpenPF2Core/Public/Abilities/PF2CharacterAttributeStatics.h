@@ -109,7 +109,7 @@ public:
 	 * @return
 	 *	The name of each ability attribute.
 	 */
-	FORCEINLINE TArray<FString> GetAbilityNames() const
+	FORCEINLINE const TArray<FString>& GetAbilityNames() const
 	{
 		return this->AbilityNames;
 	}
@@ -120,7 +120,7 @@ public:
 	 * @return
 	 *	The name of each ability modifier attribute.
 	 */
-	FORCEINLINE TArray<FString> GetAbilityModifierNames() const
+	FORCEINLINE const TArray<FString>& GetAbilityModifierNames() const
 	{
 		return this->AbilityModifierNames;
 	}
@@ -136,7 +136,7 @@ public:
 	 *	ability.
 	 */
 	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetCaptureByAttribute(
-		const FGameplayAttribute Attribute) const
+		const FGameplayAttribute& Attribute) const
 	{
 		return this->GetCaptureByName(Attribute.GetName());
 	}
@@ -151,7 +151,7 @@ public:
 	 *	Either the desired capture definition; or nullptr if the given attribute name doesn't correspond to a character
 	 *	ability.
 	 */
-	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetCaptureByName(const FString Name) const
+	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetCaptureByName(const FString& Name) const
 	{
 		if (this->CaptureDefinitions.Contains(Name))
 		{
