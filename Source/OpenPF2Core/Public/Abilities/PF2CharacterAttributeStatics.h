@@ -9,8 +9,6 @@
 
 #include "Abilities/PF2AttributeSet.h"
 
-#include "Utilities/PF2ArrayUtilities.h"
-
 #define DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(S, P, T, B) \
 { \
 	DEFINE_ATTRIBUTE_CAPTUREDEF(S, P, T, B) \
@@ -38,6 +36,25 @@
 class OPENPF2CORE_API FPF2CharacterAttributeStatics final
 {
 public:
+	// =================================================================================================================
+	// Public Static Methods
+	// =================================================================================================================
+	/**
+	 * Gets an instance of this container.
+	 *
+	 * @return
+	 *	A reference to the capture definition container.
+	 */
+	FORCEINLINE static const FPF2CharacterAttributeStatics& GetInstance()
+	{
+		static FPF2CharacterAttributeStatics AttributeStatics;
+
+		return AttributeStatics;
+	}
+
+	// =================================================================================================================
+	// Attribute Capture Definitions
+	// =================================================================================================================
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AbBoostCount);
 
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AbCharisma);
@@ -84,102 +101,10 @@ public:
 
 	DECLARE_ATTRIBUTE_CAPTUREDEF(TmpDamageIncoming);
 
-	/**
-	 * Gets an instance of this container.
-	 *
-	 * @return
-	 *	A reference to the capture definition container.
-	 */
-	FORCEINLINE static const FPF2CharacterAttributeStatics& GetInstance()
-	{
-		static FPF2CharacterAttributeStatics AttributeStatics;
-
-		return AttributeStatics;
-	}
-
-	/**
-	 * Gets all of the character capture definitions.
-	 *
-	 * @return
-	 *	An array of all the capture definitions for character attributes.
-	 */
-	TArray<FGameplayEffectAttributeCaptureDefinition> GetCaptureDefinitions() const;
-
-	/**
-	 * Gets the names of all character ability attributes.
-	 *
-	 * @return
-	 *	The name of each ability attribute.
-	 */
-	FORCEINLINE const TArray<FString>& GetAbilityNames() const
-	{
-		return this->AbilityNames;
-	}
-
-	/**
-	 * Gets the names of all ability-modifier-related attributes.
-	 *
-	 * @return
-	 *	The name of each ability modifier attribute.
-	 */
-	FORCEINLINE const TArray<FString>& GetAbilityModifierNames() const
-	{
-		return this->AbilityModifierNames;
-	}
-
-	/**
-	 * Gets capture definitions for all character ability score values.
-	 */
-	FORCEINLINE TArray<FGameplayEffectAttributeCaptureDefinition> GetAbilityScoreCaptures() const
-	{
-		return PF2ArrayUtilities::Map<FGameplayEffectAttributeCaptureDefinition>(
-			this->GetAbilityNames(),
-			[this](const FString& AbilityScoreAttributeName)
-			{
-				return *(this->GetCaptureByAttributeName(AbilityScoreAttributeName));
-			}
-		);
-	};
-
-	/**
-	 * Gets a capture definition for the given character attribute.
-	 *
-	 * @param Attribute
-	 *	The attribute for which a capture definition is desired.
-	 *
-	 * @return
-	 *	Either the desired capture definition; or nullptr if the given attribute doesn't correspond to a character
-	 *	ability.
-	 */
-	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetCaptureByAttribute(
-		const FGameplayAttribute& Attribute) const
-	{
-		return this->GetCaptureByAttributeName(Attribute.GetName());
-	}
-
-	/**
-	 * Gets a capture definition for the specified character attribute.
-	 *
-	 * @param Name
-	 *	The name of the attribute for which a capture definition is desired.
-	 *
-	 * @return
-	 *	Either the desired capture definition; or nullptr if the given attribute name doesn't correspond to a character
-	 *	ability.
-	 */
-	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetCaptureByAttributeName(const FString& Name) const
-	{
-		if (this->CaptureDefinitions.Contains(Name))
-		{
-			return &(this->CaptureDefinitions[Name]);
-		}
-		else
-		{
-			return nullptr;
-		}
-	}
-
 private:
+	// =================================================================================================================
+	// Private Fields
+	// =================================================================================================================
 	/**
 	 * A map of all capture definitions, keyed by property name.
 	 */
@@ -195,6 +120,9 @@ private:
 	 */
 	TArray<FString> AbilityModifierNames;
 
+	// =================================================================================================================
+	// Private Constructors
+	// =================================================================================================================
 	/**
 	 * Constructor for FPF2CharacterAttributeStatics.
 	 */
@@ -242,4 +170,81 @@ private:
 
 		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, TmpDamageIncoming, Target, false);
 	}
+
+public:
+	// =================================================================================================================
+	// Public Methods
+	// =================================================================================================================
+	/**
+	 * Gets all of the character capture definitions.
+	 *
+	 * @return
+	 *	An array of all the capture definitions for character attributes.
+	 */
+	TArray<FGameplayEffectAttributeCaptureDefinition> GetCaptureDefinitions() const;
+
+	/**
+	 * Gets the names of all character ability attributes.
+	 *
+	 * @return
+	 *	The name of each ability attribute.
+	 */
+	FORCEINLINE const TArray<FString>& GetAbilityNames() const
+	{
+		return this->AbilityNames;
+	}
+
+	/**
+	 * Gets the names of all ability-modifier-related attributes.
+	 *
+	 * @return
+	 *	The name of each ability modifier attribute.
+	 */
+	FORCEINLINE const TArray<FString>& GetAbilityModifierNames() const
+	{
+		return this->AbilityModifierNames;
+	}
+
+	/**
+	 * Gets a capture definition for the given character attribute.
+	 *
+	 * @param Attribute
+	 *	The attribute for which a capture definition is desired.
+	 *
+	 * @return
+	 *	Either the desired capture definition; or nullptr if the given attribute doesn't correspond to a character
+	 *	ability.
+	 */
+	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetCaptureByAttribute(
+		const FGameplayAttribute& Attribute) const
+	{
+		return this->GetCaptureByAttributeName(Attribute.GetName());
+	}
+
+	/**
+	 * Gets a capture definition for the specified character attribute.
+	 *
+	 * @param Name
+	 *	The name of the attribute for which a capture definition is desired.
+	 *
+	 * @return
+	 *	Either the desired capture definition; or nullptr if the given attribute name doesn't correspond to a character
+	 *	ability.
+	 */
+	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetCaptureByAttributeName(const FString& Name) const
+	{
+		if (this->CaptureDefinitions.Contains(Name))
+		{
+			return &(this->CaptureDefinitions[Name]);
+		}
+		else
+		{
+			return nullptr;
+		}
+	}
+
+	/**
+	 * Gets capture definitions for all character ability score values.
+	 */
+	TArray<FGameplayEffectAttributeCaptureDefinition> GetAbilityScoreCaptures() const;
 };

@@ -4,7 +4,10 @@
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "Abilities/PF2CharacterAttributeStatics.h"
+
 #include "GameplayEffectTypes.h"
+
+#include "Utilities/PF2ArrayUtilities.h"
 
 FORCEINLINE TArray<FGameplayEffectAttributeCaptureDefinition> FPF2CharacterAttributeStatics::GetCaptureDefinitions() const
 {
@@ -16,4 +19,15 @@ FORCEINLINE TArray<FGameplayEffectAttributeCaptureDefinition> FPF2CharacterAttri
 	}
 
 	return Result;
+}
+
+TArray<FGameplayEffectAttributeCaptureDefinition> FPF2CharacterAttributeStatics::GetAbilityScoreCaptures() const
+{
+	return PF2ArrayUtilities::Map<FGameplayEffectAttributeCaptureDefinition>(
+		this->GetAbilityNames(),
+		[this](const FString& AbilityScoreAttributeName)
+		{
+			return *(this->GetCaptureByAttributeName(AbilityScoreAttributeName));
+		}
+	);
 }
