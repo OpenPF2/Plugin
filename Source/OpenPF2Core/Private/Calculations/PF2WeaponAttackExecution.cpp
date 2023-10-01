@@ -10,7 +10,7 @@
 // file other than the material designated as Open Game Content may be reproduced in any form without written
 // permission.
 
-#include "Calculations/PF2WeaponDamageExecution.h"
+#include "Calculations/PF2WeaponAttackExecution.h"
 
 #include "PF2CharacterInterface.h"
 
@@ -22,7 +22,7 @@
 
 #include "Libraries/PF2AttackStatLibrary.h"
 
-void UPF2WeaponDamageExecution::AttemptAttack(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
+void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
                                               const IPF2WeaponInterface*                      Weapon,
                                               const IPF2CharacterAbilitySystemInterface*      SourceAsc,
                                               const IPF2CharacterAbilitySystemInterface*      TargetAsc)
@@ -72,7 +72,7 @@ void UPF2WeaponDamageExecution::AttemptAttack(const FGameplayEffectCustomExecuti
 	}
 }
 
-float UPF2WeaponDamageExecution::CalculateAttackRoll(
+float UPF2WeaponAttackExecution::CalculateAttackRoll(
 	const FGameplayEffectCustomExecutionParameters& ExecutionParams,
 	const FAggregatorEvaluateParameters&            EvaluationParameters,
 	const IPF2WeaponInterface*                      Weapon,
@@ -103,7 +103,7 @@ float UPF2WeaponDamageExecution::CalculateAttackRoll(
 	);
 }
 
-float UPF2WeaponDamageExecution::GetTargetArmorClass(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
+float UPF2WeaponAttackExecution::GetTargetArmorClass(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
                                                      const FAggregatorEvaluateParameters& CaptureParameters)
 {
 	float                                      TargetArmorClass = 0.0f;
@@ -118,7 +118,7 @@ float UPF2WeaponDamageExecution::GetTargetArmorClass(const FGameplayEffectCustom
 	return TargetArmorClass;
 }
 
-UPF2WeaponDamageExecution::UPF2WeaponDamageExecution()
+UPF2WeaponAttackExecution::UPF2WeaponAttackExecution()
 {
 	const FPF2SourceCharacterAttributeStatics& SourceStatics = FPF2SourceCharacterAttributeStatics::GetInstance();
 	const FPF2TargetCharacterAttributeStatics& TargetStatics = FPF2TargetCharacterAttributeStatics::GetInstance();
@@ -131,7 +131,7 @@ UPF2WeaponDamageExecution::UPF2WeaponDamageExecution()
 	this->RelevantAttributesToCapture.Add(TargetStatics.ArmorClassDef);
 }
 
-void UPF2WeaponDamageExecution::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
+void UPF2WeaponAttackExecution::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
                                                        FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
 {
 	const FGameplayEffectSpec& Spec         = ExecutionParams.GetOwningSpec();

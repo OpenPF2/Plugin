@@ -18,14 +18,14 @@
 
 #include "Items/Weapons/PF2WeaponInterface.h"
 
-#include "PF2WeaponDamageExecution.generated.h"
+#include "PF2WeaponAttackExecution.generated.h"
 
 /**
  * Gameplay effect execution calculation for determining if a weapon attack is successful and applying resulting damage.
  */
 UCLASS()
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API UPF2WeaponDamageExecution : public UGameplayEffectExecutionCalculation
+class OPENPF2CORE_API UPF2WeaponAttackExecution : public UGameplayEffectExecutionCalculation
 {
 	GENERATED_BODY()
 
@@ -118,7 +118,7 @@ public:
 	/**
 	 * Default constructor.
 	 */
-	UPF2WeaponDamageExecution();
+	UPF2WeaponAttackExecution();
 
 	// =================================================================================================================
 	// Public Methods - UGameplayEffectExecutionCalculation Implementation
