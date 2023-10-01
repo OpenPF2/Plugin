@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -13,13 +13,13 @@
 #include "Calculations/PF2ArmorClassCalculation.h"
 
 #include "OpenPF2Core.h"
-#include "Abilities/PF2CharacterAttributeStatics.h"
+#include "Abilities/PF2TargetCharacterAttributeStatics.h"
 #include "Abilities/PF2AttributeSet.h"
 #include "Calculations/PF2TemlCalculation.h"
 #include "Utilities/PF2GameplayAbilityUtilities.h"
 
 UPF2ArmorClassCalculation::UPF2ArmorClassCalculation() :
-	DexterityModifierCaptureDefinition(FPF2CharacterAttributeStatics::GetInstance().AbDexterityModifierDef)
+	DexterityModifierCaptureDefinition(FPF2TargetCharacterAttributeStatics::GetInstance().AbDexterityModifierDef)
 {
 	this->RelevantAttributesToCapture.Add(this->DexterityModifierCaptureDefinition);
 }

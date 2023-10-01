@@ -1,15 +1,15 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-#include "Abilities/PF2CharacterAttributeStatics.h"
+#include "Abilities/PF2CharacterAttributeStaticsBase.h"
 
 #include "GameplayEffectTypes.h"
 
 #include "Utilities/PF2ArrayUtilities.h"
 
-FORCEINLINE TArray<FGameplayEffectAttributeCaptureDefinition> FPF2CharacterAttributeStatics::GetCaptureDefinitions() const
+FORCEINLINE TArray<FGameplayEffectAttributeCaptureDefinition> FPF2CharacterAttributeStaticsBase::GetCaptureDefinitions() const
 {
 	TArray<FGameplayEffectAttributeCaptureDefinition> Result;
 
@@ -21,7 +21,7 @@ FORCEINLINE TArray<FGameplayEffectAttributeCaptureDefinition> FPF2CharacterAttri
 	return Result;
 }
 
-TArray<FGameplayEffectAttributeCaptureDefinition> FPF2CharacterAttributeStatics::GetAbilityScoreCaptures() const
+TArray<FGameplayEffectAttributeCaptureDefinition> FPF2CharacterAttributeStaticsBase::GetAbilityScoreCaptures() const
 {
 	return PF2ArrayUtilities::Map<FGameplayEffectAttributeCaptureDefinition>(
 		this->GetAbilityNames(),

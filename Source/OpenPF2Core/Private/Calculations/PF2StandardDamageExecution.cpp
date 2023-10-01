@@ -12,7 +12,7 @@
 
 #include "Calculations/PF2StandardDamageExecution.h"
 
-#include "Abilities/PF2CharacterAttributeStatics.h"
+#include "Abilities/PF2TargetCharacterAttributeStatics.h"
 #include "Utilities/PF2GameplayAbilityUtilities.h"
 
 UPF2StandardDamageExecution::UPF2StandardDamageExecution() :
@@ -68,7 +68,7 @@ void UPF2StandardDamageExecution::Execute_Implementation(
 	{
 		OutExecutionOutput.AddOutputModifier(
 			FGameplayModifierEvaluatedData(
-				FPF2CharacterAttributeStatics::GetInstance().TmpDamageIncomingProperty,
+				FPF2TargetCharacterAttributeStatics::GetInstance().TmpDamageIncomingProperty,
 				EGameplayModOp::Additive,
 				DamageDone
 			)

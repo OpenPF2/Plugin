@@ -31,30 +31,14 @@
 }
 
 /**
- * Singleton container for OpenPF2 character attribute capture definitions.
+ * Base class for singleton containers of OpenPF2 character attribute capture definitions.
  *
- * This centralizes all static capture definitions for OpenPF2 attributes instead of there being multiple, smaller
- * "Statics" definitions like those preferred by Epic's sample projects.
+ * These centralize static capture definitions for OpenPF2 attributes instead of there being multiple, smaller "Statics"
+ * definitions like those preferred by Epic's sample projects.
  */
-class OPENPF2CORE_API FPF2CharacterAttributeStatics final
+class OPENPF2CORE_API FPF2CharacterAttributeStaticsBase
 {
 public:
-	// =================================================================================================================
-	// Public Static Methods
-	// =================================================================================================================
-	/**
-	 * Gets an instance of this container.
-	 *
-	 * @return
-	 *	A reference to the capture definition container.
-	 */
-	FORCEINLINE static const FPF2CharacterAttributeStatics& GetInstance()
-	{
-		static FPF2CharacterAttributeStatics AttributeStatics;
-
-		return AttributeStatics;
-	}
-
 	// =================================================================================================================
 	// Attribute Capture Definitions
 	// =================================================================================================================
@@ -104,9 +88,9 @@ public:
 
 	DECLARE_ATTRIBUTE_CAPTUREDEF(TmpDamageIncoming);
 
-private:
+protected:
 	// =================================================================================================================
-	// Private Fields
+	// Protected Fields
 	// =================================================================================================================
 	/**
 	 * A map of all capture definitions, keyed by property name.
@@ -122,57 +106,6 @@ private:
 	 * The names of all ability-modifier-related attributes.
 	 */
 	TArray<FString> AbilityModifierNames;
-
-	// =================================================================================================================
-	// Private Constructors
-	// =================================================================================================================
-	/**
-	 * Constructor for FPF2CharacterAttributeStatics.
-	 */
-	FPF2CharacterAttributeStatics()
-	{
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, AbBoostCount, Target, false);
-
-		DEFINE_PF2_ABILITY_SCORE_CAPTUREDEF(UPF2AttributeSet, AbCharisma, Target, false);
-		DEFINE_PF2_ABILITY_SCORE_CAPTUREDEF(UPF2AttributeSet, AbConstitution, Target, false);
-		DEFINE_PF2_ABILITY_SCORE_CAPTUREDEF(UPF2AttributeSet, AbDexterity, Target, false);
-		DEFINE_PF2_ABILITY_SCORE_CAPTUREDEF(UPF2AttributeSet, AbIntelligence, Target, false);
-		DEFINE_PF2_ABILITY_SCORE_CAPTUREDEF(UPF2AttributeSet, AbStrength, Target, false);
-		DEFINE_PF2_ABILITY_SCORE_CAPTUREDEF(UPF2AttributeSet, AbWisdom, Target, false);
-
-		DEFINE_PF2_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbCharismaModifier, Target, false);
-		DEFINE_PF2_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbConstitutionModifier, Target, false);
-		DEFINE_PF2_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbDexterityModifier, Target, false);
-		DEFINE_PF2_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbIntelligenceModifier, Target, false);
-		DEFINE_PF2_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbStrengthModifier, Target, false);
-		DEFINE_PF2_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbWisdomModifier, Target, false);
-
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, HitPoints, Target, false);
-
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPhysicalBludgeoning, Target, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPhysicalPiercing, Target, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPhysicalSlashing, Target, false);
-
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstEnergyAcid, Target, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstEnergyCold, Target, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstEnergyFire, Target, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstEnergySonic, Target, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstEnergyPositive, Target, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstEnergyNegative, Target, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstEnergyForce, Target, false);
-
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstAlignmentChaotic, Target, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstAlignmentEvil, Target, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstAlignmentGood, Target, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstAlignmentLawful, Target, false);
-
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstMental, Target, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPoison, Target, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstBleed, Target, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPrecision, Target, false);
-
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, TmpDamageIncoming, Target, false);
-	}
 
 public:
 	// =================================================================================================================
@@ -206,22 +139,6 @@ public:
 	FORCEINLINE const TArray<FString>& GetAbilityModifierNames() const
 	{
 		return this->AbilityModifierNames;
-	}
-
-	/**
-	 * Gets the capture definition for the given character ability score type.
-	 *
-	 * @param AbilityScoreType
-	*	The ability score for which an attribute capture is desired.
-	 *
-	 * @return
-	 *	Either the desired capture definition; or nullptr if the character is using an ASC that does not provide an
-	 *	attribute the corresponds to the specified ability score.
-	 */
-	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetCaptureByAbilityScoreType(
-		const EPF2CharacterAbilityScoreType AbilityScoreType) const
-	{
-		return this->GetCaptureByAttributeName(PF2EnumUtilities::ToString(AbilityScoreType));
 	}
 
 	/**
@@ -263,7 +180,67 @@ public:
 	}
 
 	/**
+	 * Gets the capture definition for the given character ability score type.
+	 *
+	 * @param AbilityScoreType
+	 *	The ability score for which an attribute capture is desired.
+	 *
+	 * @return
+	 *	Either the desired capture definition; or nullptr if the character is using an ASC that does not provide an
+	 *	attribute the corresponds to the specified ability score.
+	 */
+	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetCaptureByAbilityScoreType(
+		const EPF2CharacterAbilityScoreType AbilityScoreType) const
+	{
+		return this->GetCaptureByAttributeName(PF2EnumUtilities::ToString(AbilityScoreType));
+	}
+
+	/**
 	 * Gets capture definitions for all character ability score values.
 	 */
 	TArray<FGameplayEffectAttributeCaptureDefinition> GetAbilityScoreCaptures() const;
+
+protected:
+	// =================================================================================================================
+	// Protected Constructors
+	// =================================================================================================================
+	/**
+	 * Protected constructor to prevent instantiation outside of the singleton factory method.
+	 */
+	FPF2CharacterAttributeStaticsBase() :
+		AbBoostCountProperty(nullptr),
+		AbCharismaProperty(nullptr),
+		AbCharismaModifierProperty(nullptr),
+		AbConstitutionProperty(nullptr),
+		AbConstitutionModifierProperty(nullptr),
+		AbDexterityProperty(nullptr),
+		AbDexterityModifierProperty(nullptr),
+		AbIntelligenceProperty(nullptr),
+		AbIntelligenceModifierProperty(nullptr),
+		AbStrengthProperty(nullptr),
+		AbStrengthModifierProperty(nullptr),
+		AbWisdomProperty(nullptr),
+		AbWisdomModifierProperty(nullptr),
+		HitPointsProperty(nullptr),
+		RstPhysicalBludgeoningProperty(nullptr),
+		RstPhysicalPiercingProperty(nullptr),
+		RstPhysicalSlashingProperty(nullptr),
+		RstEnergyAcidProperty(nullptr),
+		RstEnergyColdProperty(nullptr),
+		RstEnergyFireProperty(nullptr),
+		RstEnergySonicProperty(nullptr),
+		RstEnergyPositiveProperty(nullptr),
+		RstEnergyNegativeProperty(nullptr),
+		RstEnergyForceProperty(nullptr),
+		RstAlignmentChaoticProperty(nullptr),
+		RstAlignmentEvilProperty(nullptr),
+		RstAlignmentGoodProperty(nullptr),
+		RstAlignmentLawfulProperty(nullptr),
+		RstMentalProperty(nullptr),
+		RstPoisonProperty(nullptr),
+		RstBleedProperty(nullptr),
+		RstPrecisionProperty(nullptr),
+		TmpDamageIncomingProperty(nullptr)
+	{
+	}
 };
