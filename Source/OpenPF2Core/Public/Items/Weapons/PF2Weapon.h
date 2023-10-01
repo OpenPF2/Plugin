@@ -58,8 +58,9 @@ protected:
 	/**
 	 * The root/parent tag of each set of tags that represent a character's TEML proficiencies with this weapon.
 	 *
-	 * Most weapons will typically define only one root tag here. However, ancestry-specific weapons that are affected
-	 * by a weapon familiarity feat will define at least two. The highest-granted proficiency wins.
+	 * A character that possesses a tag underneath one such root tag has a proficiency with the weapon. Most weapons
+	 * will typically define only one root tag here. However, ancestry-specific weapons that are affected by a weapon
+	 * familiarity feat will define at least two. The highest-granted proficiency wins.
 	 *
 	 * For example, a gnome martial weapon would have root gameplay tags of both "WeaponProficiency.Category.Martial"
 	 * and "WeaponProficiency.Category.MartialGnome". This would allow a character to have proficiency with the weapon
