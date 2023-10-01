@@ -5,40 +5,61 @@
 
 #include "Items/Weapons/PF2Weapon.h"
 
+#include <GameplayEffectExecutionCalculation.h>
+
 #include "PF2EffectCauseWrapper.h"
 
 #include "Abilities/PF2CharacterAbilitySystemInterface.h"
-
-#include "Libraries/PF2AttackStatLibrary.h"
 
 APF2EffectCauseWrapper* UPF2Weapon::ToEffectCauser(AActor* OwningActor)
 {
 	return APF2EffectCauseWrapper::Create(OwningActor, this);
 }
 
-float UPF2Weapon::CalculateAttackRoll(const TScriptInterface<IPF2CharacterAbilitySystemInterface>& CharacterAsc)
+FGameplayTagContainer UPF2Weapon::GetProficiencyTagPrefixes() const
 {
-	const int32                 CharacterLevel = CharacterAsc->GetCharacterLevel();
-	const FGameplayTagContainer CharacterTags  = CharacterAsc->GetActiveGameplayTags();
-
-	const float AttackAbilityModifier = this->GetAbilityModifierValue(CharacterAsc, this->AttackAbilityModifierType);
-
-	return UPF2AttackStatLibrary::CalculateAttackRoll(
-		CharacterLevel,
-		CharacterTags,
-		AttackAbilityModifier,
-		this->ProficiencyTagPrefixes
-	);
+	return this->ProficiencyTagPrefixes;
 }
 
-float UPF2Weapon::CalculateDamageRoll(const TScriptInterface<IPF2CharacterAbilitySystemInterface>& CharacterAsc)
+EPF2CharacterAbilityScoreType UPF2Weapon::GetAttackAbilityModifierType() const
 {
-	const float DamageAbilityModifier = this->GetAbilityModifierValue(CharacterAsc, this->DamageAbilityModifierType);
+	return this->AttackAbilityModifierType;
+}
 
-	return UPF2AttackStatLibrary::CalculateDamageRoll(
-		this->DamageDie,
-		DamageAbilityModifier
-	);
+EPF2CharacterAbilityScoreType UPF2Weapon::GetDamageAbilityModifierType() const
+{
+	return this->DamageAbilityModifierType;
+}
+
+float UPF2Weapon::CalculateDamageRoll(const FGameplayEffectCustomExecutionParameters& ExecutionParams) const
+{
+	UAbilitySystemComponent* SourceAsc = ExecutionParams.GetSourceAbilitySystemComponent();
+
+	if (const IPF2CharacterAbilitySystemInterface* CharacterAsc = Cast<IPF2CharacterAbilitySystemInterface>(SourceAsc);
+		CharacterAsc == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("Cannot determine damage roll because source ASC is not compatible with OpenPF2.")
+		);
+
+		return 0.0f;
+	}
+	else
+	{
+		// const float DamageAbilityModifier =
+		// 	this->GetAbilityModifierValue(
+		// 		PF2InterfaceUtilities::ToScriptInterface(CharacterAsc),
+		// 		this->DamageAbilityModifierType
+		// 	);
+		//
+		// return UPF2AttackStatLibrary::CalculateDamageRoll(
+		// 	this->DamageDie,
+		// 	DamageAbilityModifier
+		// );
+		return 0.0f;
+	}
 }
 
 FPrimaryAssetId UPF2Weapon::GetPrimaryAssetId()
@@ -61,11 +82,9 @@ FString UPF2Weapon::GetIdForLogs() const
 	return Super::GetIdForLogs();
 }
 
-float UPF2Weapon::GetAbilityModifierValue(const TScriptInterface<IPF2CharacterAbilitySystemInterface>& CharacterAsc,
-                                          const EPF2CharacterAbilityScoreType                          AbilityScoreType)
+float UPF2Weapon::GetAbilityModifierValue(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
+                                          const EPF2CharacterAbilityScoreType             AbilityScoreType)
 {
-	const TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> AbilityScoreValues =
-		CharacterAsc->GetAbilityScoreValues();
-
-	return AbilityScoreValues[AbilityScoreType].ModifierValue;
+	// ExecutionParams.AttemptCalculateCapturedAttributeMagnitude();
+	return 0.0f;
 }

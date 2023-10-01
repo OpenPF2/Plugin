@@ -15,7 +15,6 @@
 #include "PF2MonetaryValue.h"
 
 #include "Abilities/PF2CharacterAbilityScoreType.h"
-#include "Abilities/PF2CharacterAttributeStatics.h"
 
 #include "Items/PF2Item.h"
 #include "Items/Weapons/PF2WeaponInterface.h"
@@ -49,6 +48,9 @@ class OPENPF2CORE_API UPF2Weapon : public UPF2Item, public IPF2WeaponInterface
 	GENERATED_BODY()
 
 protected:
+	// =================================================================================================================
+	// Protected Fields
+	// =================================================================================================================
 	/**
 	 * The human-friendly name for this weapon.
 	 */
@@ -212,13 +214,10 @@ public:
 	// =================================================================================================================
 	// Public Methods - IPF2WeaponInterface Implementation
 	// =================================================================================================================
+	virtual FGameplayTagContainer GetProficiencyTagPrefixes() const override;
+	virtual EPF2CharacterAbilityScoreType GetAttackAbilityModifierType() const override;
+	virtual EPF2CharacterAbilityScoreType GetDamageAbilityModifierType() const override;
 	virtual APF2EffectCauseWrapper* ToEffectCauser(AActor* OwningActor) override;
-
-	virtual float CalculateAttackRoll(
-		const TScriptInterface<IPF2CharacterAbilitySystemInterface>& CharacterAsc) override;
-
-	virtual float CalculateDamageRoll(
-		const TScriptInterface<IPF2CharacterAbilitySystemInterface>& CharacterAsc) override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2ItemInterface Implementation
@@ -237,10 +236,13 @@ protected:
 	// Protected Methods
 	// =================================================================================================================
 	/**
-	 * Gets the value of the specified ability.
+	 * Gets the captured value of the specified ability score.
 	 *
-	 * TODO: Re-work this to be a GE so we don't have to worry about snapshot timing and other GEs.
+	 * @param ExecutionParams
+	 *	The context of the gameplay effect calculation for which an ability score is desired.
+	 * @param AbilityScoreType
+	 *	The type of ability score for which a captured value is desired.
 	 */
-	static float GetAbilityModifierValue(const TScriptInterface<IPF2CharacterAbilitySystemInterface>& CharacterAsc,
-	                                     const EPF2CharacterAbilityScoreType                          AbilityScoreType);
+	static float GetAbilityModifierValue(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
+	                                     const EPF2CharacterAbilityScoreType             AbilityScoreType);
 };

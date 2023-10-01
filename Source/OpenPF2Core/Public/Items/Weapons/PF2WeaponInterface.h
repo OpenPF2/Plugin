@@ -14,6 +14,7 @@
 
 #include <UObject/Interface.h>
 
+#include "Abilities/PF2CharacterAbilityScoreType.h"
 #include "Items/PF2ItemInterface.h"
 
 #include "PF2WeaponInterface.generated.h"
@@ -22,6 +23,8 @@
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class APF2EffectCauseWrapper;
+struct FGameplayTagContainer;
+struct FGameplayEffectCustomExecutionParameters;
 
 // =====================================================================================================================
 // Normal Declarations
@@ -40,6 +43,72 @@ class OPENPF2CORE_API IPF2WeaponInterface : public IPF2ItemInterface
     GENERATED_BODY()
 
 public:
+	// =================================================================================================================
+	// Public Static Methods
+	// =================================================================================================================
+    /**
+     * Unpacks an effect causer that could be either a PF2WeaponInterface object or Effect Cause Wrapper into a weapon.
+     *
+     * Most of the time, callers are going to be providing an instance of APF2EffectCauseWrapper to this method, but it
+     * has been written to accept PF2WeaponInterface objects as well so that callers can call this method whenever they
+     * receive a weapon in a GE execution, without having to be concerned about what type of object they have received
+     * in the GE execution context. If an object that is neither an APF2EffectCauseWrapper nor PF2WeaponInterface is
+     * provided, or this method is provided with nullptr, the result is nullptr.
+     *
+     * @param Object
+     *	The weapon or wrapped weapon object to unwrap/convert into being a weapon.
+     *
+     * @return
+     *	- If given an instance of APF2EffectCauseWrapper: The weapon the instance is wrapping.
+     *	- If given an instance of PF2WeaponInterface: The same instance that was passed in.
+     *	- If given an instance of any other object: nullptr.
+     *	- If given nullptr: nullptr.
+     */
+	static TScriptInterface<IPF2WeaponInterface> EffectCauserToWeapon(UObject* Object);
+
+	// =================================================================================================================
+	// Public Methods
+	// =================================================================================================================
+	/**
+	 * Gets the root/parent tag of each set of tags that represent a character's TEML proficiencies with this weapon.
+	 *
+	 * A character that possesses a tag underneath one such root tag has a proficiency with the weapon. Most weapons
+	 * will typically expose only one root tag here. However, ancestry-specific weapons that are affected by a weapon
+	 * familiarity feat will define at least two. The highest-granted proficiency wins.
+	 *
+	 * For example, a gnome martial weapon would have root gameplay tags of both "WeaponProficiency.Category.Martial"
+	 * and "WeaponProficiency.Category.MartialGnome". This would allow a character to have proficiency with the weapon
+	 * under the following scenarios:
+	 *	- A Gnome with the "Gnome Weapon Familiarity" feat who is proficient with simple weapons, granting them both a
+	 *	  "WeaponProficiency.Category.Simple.*" and "WeaponProficiency.Category.MartialGnome.*" gameplay tag, since the
+	 *	  feat allows gnome martial weapons to be treated as simple weapons.
+	 *	- Any character without the "Gnome Weapon Familiarity" feat who is proficient with martial weapons, since the
+	 *	  proficiency grants them a "WeaponProficiency.Category.Martial.*" gameplay tag.
+	 *
+	 * @return
+	 *	The root of the tag namespace for this weapon.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
+	virtual FGameplayTagContainer GetProficiencyTagPrefixes() const = 0;
+
+	/**
+	 * Gets the type of ability modifier from the character's ASC that is added to *attack* rolls with this weapon.
+	 *
+	 * @return
+	 *	The attack ability modifier for this weapon.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
+	virtual EPF2CharacterAbilityScoreType GetAttackAbilityModifierType() const = 0;
+
+	/**
+	 * Gets the type of ability modifier from the character's ASC that is added to *damage* rolls with this weapon.
+	 *
+	 * @return
+	 *	The damage ability modifier for this weapon.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
+	virtual EPF2CharacterAbilityScoreType GetDamageAbilityModifierType() const = 0;
+
     /**
      * Converts this weapon into an actor that can represent a "effect causer" for replication.
      *
@@ -55,31 +124,6 @@ public:
     virtual APF2EffectCauseWrapper* ToEffectCauser(AActor* OwningActor) = 0;
 
 	/**
-	 * Calculates the attack roll, which determines if an attack was successful (it hit its target).
-	 *
-	 * "When making an attack roll, determine the result by rolling 1d20 and adding your attack modifier for the weapon
-	 * or unarmed attack you’re using. Modifiers for melee and ranged attacks are calculated differently.
-	 *
-	 * Melee attack modifier = Strength modifier (or optionally Dexterity for a finesse weapon) + proficiency bonus +
-	 * other bonuses + penalties
-	 *
-	 * Ranged attack modifier = Dexterity modifier + proficiency bonus + other bonuses + penalties
-	 *
-	 * Bonuses, and penalties apply to these rolls just like with other types of checks. Weapons with potency runes add
-	 * an item bonus to your attack rolls."
-	 *
-	 * Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Attack Rolls".
-	 *
-	 * @param CharacterAsc
-	 *	The character's ability system component.
-	 *
-	 * @return
-	 *	The calculated attack roll for this weapon.
-	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
-	virtual float CalculateAttackRoll(const TScriptInterface<IPF2CharacterAbilitySystemInterface>& CharacterAsc) = 0;
-
-	/**
 	 * Calculates the damage roll, which determines how much of an effect an attack has on the target.
 	 *
 	 * "When the result of your attack roll with a weapon or unarmed attack equals or exceeds your target’s AC, you hit
@@ -92,12 +136,12 @@ public:
 	 *
 	 * Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Damage Rolls".
 	 *
-	 * @param CharacterAsc
-	 *	The character's ability system component.
+	 * @param ExecutionParams
+	 *	The context of the gameplay effect calculation that is being executed.
 	 *
 	 * @return
 	 *	The calculated damage roll for this weapon.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
-	virtual float CalculateDamageRoll(const TScriptInterface<IPF2CharacterAbilitySystemInterface>& CharacterAsc) = 0;
+	virtual float CalculateDamageRoll(const FGameplayEffectCustomExecutionParameters& ExecutionParams) const = 0;
 };
