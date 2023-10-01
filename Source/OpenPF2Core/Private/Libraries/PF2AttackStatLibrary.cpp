@@ -29,6 +29,12 @@ float UPF2AttackStatLibrary::CalculateAttackRoll(const int32                  Ch
 
 	float WeaponProficiencyBonus = 0;
 
+	// "When attempting a check that involves something you have some training in, you will also add your proficiency
+	// bonus. This bonus depends on your proficiency rank [...] if you have multiple bonuses of the same type, you can
+	// use only the highest bonus on a given roll—in other words, they don’t "stack."
+	//
+	// Source: Pathfinder 2E Core Rulebook, Chapter 9, page 444, "Step 1: Roll D20 and Identify The Modifiers, Bonuses,
+	// and Penalties That Apply".
 	for (const FGameplayTag& ProficiencyTagPrefix : ProficiencyTagPrefixes)
 	{
 		FPF2TemlCalculation Calculation(ProficiencyTagPrefix, &CharacterTags, CharacterLevel);
