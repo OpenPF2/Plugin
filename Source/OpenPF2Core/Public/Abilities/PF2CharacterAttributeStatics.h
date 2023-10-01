@@ -6,8 +6,11 @@
 #pragma once
 
 #include "GameplayEffectExecutionCalculation.h"
+#include "PF2CharacterAbilityScoreType.h"
 
 #include "Abilities/PF2AttributeSet.h"
+
+#include "Utilities/PF2EnumUtilities.h"
 
 #define DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(S, P, T, B) \
 { \
@@ -206,7 +209,23 @@ public:
 	}
 
 	/**
-	 * Gets a capture definition for the given character attribute.
+	 * Gets the capture definition for the given character ability score type.
+	 *
+	 * @param AbilityScoreType
+	*	The ability score for which an attribute capture is desired.
+	 *
+	 * @return
+	 *	Either the desired capture definition; or nullptr if the character is using an ASC that does not provide an
+	 *	attribute the corresponds to the specified ability score.
+	 */
+	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetCaptureByAbilityScoreType(
+		const EPF2CharacterAbilityScoreType AbilityScoreType) const
+	{
+		return this->GetCaptureByAttributeName(PF2EnumUtilities::ToString(AbilityScoreType));
+	}
+
+	/**
+	 * Gets the capture definition for the given character attribute.
 	 *
 	 * @param Attribute
 	 *	The attribute for which a capture definition is desired.
