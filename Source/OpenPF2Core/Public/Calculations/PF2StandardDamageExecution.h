@@ -54,12 +54,12 @@ protected:
 
 public:
 	// =================================================================================================================
-	// Constructors
+	// Public Constructors
 	// =================================================================================================================
 	UPF2StandardDamageExecution();
 
 	// =================================================================================================================
-	// UGameplayEffectExecutionCalculation Implementation
+	// Public Methods - UGameplayEffectExecutionCalculation Implementation
 	// =================================================================================================================
 	virtual void Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
 										OUT FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const override;
