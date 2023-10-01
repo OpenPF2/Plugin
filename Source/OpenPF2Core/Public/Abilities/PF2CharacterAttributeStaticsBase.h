@@ -62,6 +62,7 @@ public:
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AbWisdom);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(AbWisdomModifier);
 
+	DECLARE_ATTRIBUTE_CAPTUREDEF(ArmorClass);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(HitPoints);
 
 	DECLARE_ATTRIBUTE_CAPTUREDEF(RstPhysicalBludgeoning);
@@ -221,6 +222,7 @@ protected:
 		AbStrengthModifierProperty(nullptr),
 		AbWisdomProperty(nullptr),
 		AbWisdomModifierProperty(nullptr),
+		ArmorClassProperty(nullptr),
 		HitPointsProperty(nullptr),
 		RstPhysicalBludgeoningProperty(nullptr),
 		RstPhysicalPiercingProperty(nullptr),
