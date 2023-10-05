@@ -16,6 +16,8 @@
 
 #include <Kismet/BlueprintFunctionLibrary.h>
 
+#include "Calculations/PF2CheckResult.h"
+
 #include "PF2AttackStatLibrary.generated.h"
 
 /**
@@ -105,6 +107,44 @@ public:
 	                                 const FGameplayTagContainer& CharacterTags,
 	                                 const float                  AttackAbilityModifier,
 	                                 const FGameplayTagContainer& ProficiencyTagPrefixes);
+
+	/**
+	 * Determines if the specified check result is a success or critical success.
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 445, "Step 3: Compare the Result to the DC":
+	 * "[...] if your result is equal to or greater than the DC, you succeed!"
+	 *
+	 * @param CheckResult
+	 *	The result to check.
+	 *
+	 * @return
+	 *	- true if the result represents a successful outcome (success or critical success).
+	 *	- false if the result represents a failed outcome (failure or a critical failure/fumble).
+	 */
+	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
+	static FORCEINLINE bool IsSuccess(const EPF2CheckResult CheckResult)
+	{
+		return ((CheckResult == EPF2CheckResult::Success) || (CheckResult == EPF2CheckResult::CriticalSuccess));
+	}
+
+	/**
+	 * Determines if the specified check result is a failure or critical failure.
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 445, "Step 3: Compare the Result to the DC":
+	 * "If [you] roll anything less than the DC, you fail."
+	 *
+	 * @param CheckResult
+	 *	The result to check.
+	 *
+	 * @return
+	 *	- true if the result represents a failed outcome (failure or a critical failure/fumble).
+	 *	- false if the result represents a successful outcome (success or critical success).
+	 */
+	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
+	static FORCEINLINE bool IsFailure(const EPF2CheckResult CheckResult)
+	{
+		return ((CheckResult == EPF2CheckResult::Failure) || (CheckResult == EPF2CheckResult::CriticalFailure));
+	}
 
 	/**
 	 * Calculates the damage roll, which determines how much of an effect an attack has on the target.
