@@ -87,6 +87,8 @@ public:
 	DECLARE_ATTRIBUTE_CAPTUREDEF(RstBleed);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(RstPrecision);
 
+	DECLARE_ATTRIBUTE_CAPTUREDEF(EncMultipleAttackPenalty);
+
 	DECLARE_ATTRIBUTE_CAPTUREDEF(TmpDamageIncoming);
 
 protected:
@@ -242,6 +244,7 @@ protected:
 		RstPoisonProperty(nullptr),
 		RstBleedProperty(nullptr),
 		RstPrecisionProperty(nullptr),
+		EncMultipleAttackPenaltyProperty(nullptr),
 		TmpDamageIncomingProperty(nullptr)
 	{
 	}

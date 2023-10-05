@@ -80,6 +80,8 @@ private:
 		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstBleed, Source, false);
 		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPrecision, Source, false);
 
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, EncMultipleAttackPenalty, Source, false);
+
 		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, TmpDamageIncoming, Source, false);
 	}
 };
