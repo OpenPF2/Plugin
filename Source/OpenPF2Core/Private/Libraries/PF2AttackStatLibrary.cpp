@@ -19,6 +19,7 @@
 float UPF2AttackStatLibrary::CalculateAttackRoll(const int32                  CharacterLevel,
                                                  const FGameplayTagContainer& CharacterTags,
                                                  const float                  AttackAbilityModifier,
+                                                 const float                  MultipleAttackPenalty,
                                                  const FGameplayTagContainer& ProficiencyTagPrefixes)
 {
 	// "When making an attack roll, determine the result by rolling 1d20 and adding your attack modifier for the weapon
@@ -28,6 +29,16 @@ float UPF2AttackStatLibrary::CalculateAttackRoll(const int32                  Ch
 	const int32 RollResult = UPF2DiceLibrary::RollSum(1, 20);
 
 	float WeaponProficiencyBonus = 0;
+
+	if (MultipleAttackPenalty > 0)
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("CalculateAttackRoll(): The Multiple Attack Penalty should be negative or zero (was given '%f')."),
+			MultipleAttackPenalty
+		);
+	}
 
 	// "When attempting a check that involves something you have some training in, you will also add your proficiency
 	// bonus. This bonus depends on your proficiency rank [...] if you have multiple bonuses of the same type, you can
@@ -48,7 +59,7 @@ float UPF2AttackStatLibrary::CalculateAttackRoll(const int32                  Ch
 	// Ranged attack modifier = Dexterity modifier + proficiency bonus + other bonuses + penalties
 	//
 	// Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Attack Rolls".
-	return RollResult + AttackAbilityModifier + WeaponProficiencyBonus;
+	return RollResult + AttackAbilityModifier + WeaponProficiencyBonus + MultipleAttackPenalty;
 }
 
 float UPF2AttackStatLibrary::CalculateDamageRoll(const FName DamageDie, const float DamageAbilityModifier)

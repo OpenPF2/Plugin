@@ -84,7 +84,8 @@ float UPF2WeaponAttackExecution::CalculateAttackRoll(
 	const FGameplayTagContainer         CharacterTags          = SourceAsc->GetActiveGameplayTags();
 	const EPF2CharacterAbilityScoreType AttackScoreType        = Weapon->GetAttackAbilityModifierType();
 	const FGameplayTagContainer         ProficiencyTagPrefixes = Weapon->GetProficiencyTagPrefixes();
-	float                               AttackAbilityModifier  = 0.0f;
+	float                               AttackAbilityModifier  = 0.0f,
+	                                    MultipleAttackPenalty  = 0.0f;
 
 	const FGameplayEffectAttributeCaptureDefinition* AbilityScoreCapture =
 		SourceStatics.GetCaptureByAbilityScoreType(AttackScoreType);
@@ -95,10 +96,17 @@ float UPF2WeaponAttackExecution::CalculateAttackRoll(
 		AttackAbilityModifier
 	);
 
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(
+		SourceStatics.EncMultipleAttackPenaltyDef,
+		EvaluationParameters,
+		MultipleAttackPenalty
+	);
+
 	return UPF2AttackStatLibrary::CalculateAttackRoll(
 		CharacterLevel,
 		CharacterTags,
 		AttackAbilityModifier,
+		MultipleAttackPenalty,
 		ProficiencyTagPrefixes
 	);
 }
@@ -123,11 +131,18 @@ UPF2WeaponAttackExecution::UPF2WeaponAttackExecution()
 	const FPF2SourceCharacterAttributeStatics& SourceStatics = FPF2SourceCharacterAttributeStatics::GetInstance();
 	const FPF2TargetCharacterAttributeStatics& TargetStatics = FPF2TargetCharacterAttributeStatics::GetInstance();
 
+	// Capture all ability attributes, since attacks in OpenPF2 could theoretically be based on any ability score stat
+	// even though the Core Rulebook only anticipates attacks that use Strength (for regular melee attacks) or Dexterity
+	// (for ranged attacks and melee finesse attacks).
 	for (const FGameplayEffectAttributeCaptureDefinition& Capture : SourceStatics.GetAbilityScoreCaptures())
 	{
 		this->RelevantAttributesToCapture.Add(Capture);
 	}
 
+	// The multiple attack penalty grows with each additional attack taken during the same turn.
+	this->RelevantAttributesToCapture.Add(SourceStatics.EncMultipleAttackPenaltyDef);
+
+	// The target Armor Class (AC) is needed for attack checks, to see if the target was hit at all.
 	this->RelevantAttributesToCapture.Add(TargetStatics.ArmorClassDef);
 }
 

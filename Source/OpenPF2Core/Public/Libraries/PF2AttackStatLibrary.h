@@ -93,12 +93,13 @@ public:
 	 * @param CharacterTags
 	 *	The tags applied to the character.
 	 * @param AttackAbilityModifier
-	 *	The type of ability modifier from the character that is added to *attack* rolls with the type of weapon being
-	 *	used:
+	 *	The value of the character ability modifier to add to *attack* rolls, based on the type of weapon being used:
 	 *	- For melee:
-	 *	  - Regular weapons: "Strength" modifier.
-	 *	  - Finesse weapons: "Dexterity" modifier.
-	 *	- For ranged: the dexterity modifier.
+	 *	  - Regular weapons: the value of the "Strength" modifier.
+	 *	  - Finesse weapons: the value of the "Dexterity" modifier.
+	 *	- For ranged: the value of the the "Dexterity" modifier.
+	 * @param MultipleAttackPenalty
+	 *	The penalty to apply for attempting multiple attacks during the same turn. This should be a negative number.
 	 * @param ProficiencyTagPrefixes
 	 *	The root/parent tag of each set of tags that represent a character's TEML proficiencies with the weapon.
 	 */
@@ -106,6 +107,7 @@ public:
 	static float CalculateAttackRoll(const int32                  CharacterLevel,
 	                                 const FGameplayTagContainer& CharacterTags,
 	                                 const float                  AttackAbilityModifier,
+	                                 const float                  MultipleAttackPenalty,
 	                                 const FGameplayTagContainer& ProficiencyTagPrefixes);
 
 	/**
