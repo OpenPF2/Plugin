@@ -237,6 +237,9 @@ public:
 
 	/**
 	 * Gets capture definitions for all character ability score values.
+	 *
+	 * @return
+	 *	Capture definitions for all character ability scores.
 	 */
 	TArray<FGameplayEffectAttributeCaptureDefinition> GetAllAbilityScoreCaptures() const;
 
