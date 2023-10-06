@@ -111,6 +111,45 @@ public:
 	                                 const FGameplayTagContainer& ProficiencyTagPrefixes);
 
 	/**
+	 * Upgrades a check result to one degree of success better, up to a maximum of "critical success".
+	 *
+	 * @param CheckResult
+	 *	The check result to upgrade.
+	 *
+	 * @return
+	 *	Either:
+	 *	  - If CheckResult is not EPF2CheckResult::CriticalSuccess: The next-highest check result value.
+	 *	  - If CheckResult is EPF2CheckResult::CriticalSuccess: No change (EPF2CheckResult::CriticalSuccess).
+	 */
+	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
+	static FORCEINLINE EPF2CheckResult IncreaseDegreeOfSuccess(const EPF2CheckResult CheckResult)
+	{
+		const int32 MaxCheckResult   = static_cast<int32>(EPF2CheckResult::CriticalSuccess),
+		            CheckResultValue = FMath::Min(static_cast<int32>(CheckResult) + 1, MaxCheckResult);
+
+		return static_cast<EPF2CheckResult>(CheckResultValue);
+	}
+
+	/**
+	 * Downgrades a check result to one degree of success worse, down to a minimum of "critical failure".
+	 *
+	 * @param CheckResult
+	 *	The check result to upgrade.
+	 *
+	 * @return
+	 *	Either:
+	 *	  - If CheckResult is not EPF2CheckResult::CriticalFailure: The next-lowest check result value.
+	 *	  - If CheckResult is EPF2CheckResult::CriticalFailure: No change (EPF2CheckResult::CriticalFailure).
+	 */
+	static FORCEINLINE EPF2CheckResult DecreaseDegreeOfSuccess(const EPF2CheckResult CheckResult)
+	{
+		const int32 MinCheckResult   = static_cast<int32>(EPF2CheckResult::CriticalFailure),
+					CheckResultValue = FMath::Max(static_cast<int32>(CheckResult) - 1, MinCheckResult);
+
+		return static_cast<EPF2CheckResult>(CheckResultValue);
+	}
+
+	/**
 	 * Determines if the specified check result is a success or critical success.
 	 *
 	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 445, "Step 3: Compare the Result to the DC":

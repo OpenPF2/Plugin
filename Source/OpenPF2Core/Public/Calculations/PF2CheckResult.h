@@ -12,7 +12,7 @@
 
 #pragma once
 
-#include <UObject/ObjectMacros.h>
+#include "PF2CheckResult.generated.h"
 
 /**
  * An enumeration of the different outcomes from attempting a check or attack roll.
@@ -33,7 +33,7 @@
  * If you rolled a 20 on the die (a “natural 20”), your result is one degree of success better than it would be by
  * numbers alone. If you roll a 1 on the d20 (a “natural 1”), your result is one degree worse."
  */
-UENUM()
+UENUM(BlueprintType)
 enum class EPF2CheckResult : uint8
 {
 	/**
@@ -42,21 +42,12 @@ enum class EPF2CheckResult : uint8
 	None,
 
 	/**
-	 * The check result met or exceeded the DC by 10 or more.
+	 * The check result was equal to or lower than the DC by 10 or more.
 	 *
 	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 445, "Step 4: Determine the Degree of Success and Effect":
-	 * "You critically succeed at a check when the check’s result meets or exceeds the DC by 10 or more. If the check is
-	 * an attack roll, this is sometimes called a critical hit."
+	* "[...] if you fail a check by 10 or more, that’s a critical failure"
 	 */
-	CriticalSuccess,
-
-	/**
-	 * The check result exceeded the DC.
-	 *
-	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 445, "Step 3: Compare the Result to the DC":
-	 * "[...] if your result is equal to or greater than the DC, you succeed!"
-	 */
-	Success,
+	CriticalFailure,
 
 	/**
 	 * The check result did not exceed the DC.
@@ -67,10 +58,19 @@ enum class EPF2CheckResult : uint8
 	Failure,
 
 	/**
-	 * The check result was equal to or lower than the DC by 10 or more.
+	 * The check result exceeded the DC.
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 445, "Step 3: Compare the Result to the DC":
+	 * "[...] if your result is equal to or greater than the DC, you succeed!"
+	 */
+	Success,
+
+	/**
+	 * The check result met or exceeded the DC by 10 or more.
 	 *
 	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 445, "Step 4: Determine the Degree of Success and Effect":
-	* "[...] if you fail a check by 10 or more, that’s a critical failure"
+	 * "You critically succeed at a check when the check’s result meets or exceeds the DC by 10 or more. If the check is
+	 * an attack roll, this is sometimes called a critical hit."
 	 */
-	CriticalFailure,
+	CriticalSuccess,
 };
