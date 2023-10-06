@@ -13,10 +13,7 @@ FORCEINLINE TArray<FGameplayEffectAttributeCaptureDefinition> FPF2CharacterAttri
 {
 	TArray<FGameplayEffectAttributeCaptureDefinition> Result;
 
-	for (auto& Elem : this->CaptureDefinitions)
-	{
-		Result.Add(Elem.Value);
-	}
+	this->CaptureDefinitions.GenerateValueArray(Result);
 
 	return Result;
 }
