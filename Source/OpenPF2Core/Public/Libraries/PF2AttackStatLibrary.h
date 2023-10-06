@@ -88,6 +88,8 @@ public:
 	 *
 	 * Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Attack Rolls".
 	 *
+	 * @see EPF2CheckResult
+	 *
 	 * @param CharacterLevel
 	 *	The level of the character.
 	 * @param CharacterTags
@@ -102,13 +104,32 @@ public:
 	 *	The penalty to apply for attempting multiple attacks during the same turn. This should be a negative number.
 	 * @param ProficiencyTagPrefixes
 	 *	The root/parent tag of each set of tags that represent a character's TEML proficiencies with the weapon.
+	 * @param TargetArmorClass
+	 *	The armor class of the attack target. This represents the difficulty class to check against the attack roll.
 	 */
 	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
-	static float CalculateAttackRoll(const int32                  CharacterLevel,
-	                                 const FGameplayTagContainer& CharacterTags,
-	                                 const float                  AttackAbilityModifier,
-	                                 const float                  MultipleAttackPenalty,
-	                                 const FGameplayTagContainer& ProficiencyTagPrefixes);
+	static EPF2CheckResult PerformAttackRoll(const int32                  CharacterLevel,
+	                                         const FGameplayTagContainer& CharacterTags,
+	                                         const float                  AttackAbilityModifier,
+	                                         const float                  MultipleAttackPenalty,
+	                                         const FGameplayTagContainer& ProficiencyTagPrefixes,
+	                                         const float                  TargetArmorClass);
+
+	/**
+	 * Performs a check of a value against a Difficulty Class (DC).
+	 *
+	 * @see EPF2CheckResult
+	 *
+	 * @param Value
+	 *	The value to check.
+	 * @param DifficultyClass
+	 *	The difficulty class to check the value against.
+	 *
+	 * @return
+	 *	The result of the check.
+	 */
+	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
+	static EPF2CheckResult CheckAgainstDifficultyClass(const float Value, const float DifficultyClass);
 
 	/**
 	 * Upgrades a check result to one degree of success better, up to a maximum of "critical success".

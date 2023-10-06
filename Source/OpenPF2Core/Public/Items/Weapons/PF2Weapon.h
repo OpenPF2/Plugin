@@ -231,19 +231,4 @@ public:
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
 	virtual FString GetIdForLogs() const override;
-
-protected:
-	// =================================================================================================================
-	// Protected Methods
-	// =================================================================================================================
-	/**
-	 * Gets the captured value of the specified ability score.
-	 *
-	 * @param ExecutionParams
-	 *	The context of the gameplay effect calculation for which an ability score is desired.
-	 * @param AbilityScoreType
-	 *	The type of ability score for which a captured value is desired.
-	 */
-	static float GetAbilityModifierValue(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
-	                                     const EPF2CharacterAbilityScoreType             AbilityScoreType);
 };

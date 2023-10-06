@@ -36,37 +36,6 @@ FName UPF2Weapon::GetDamageDie() const
 	return this->DamageDie;
 }
 
-float UPF2Weapon::CalculateDamageRoll(const FGameplayEffectCustomExecutionParameters& ExecutionParams) const
-{
-	UAbilitySystemComponent* SourceAsc = ExecutionParams.GetSourceAbilitySystemComponent();
-
-	if (const IPF2CharacterAbilitySystemInterface* CharacterAsc = Cast<IPF2CharacterAbilitySystemInterface>(SourceAsc);
-		CharacterAsc == nullptr)
-	{
-		UE_LOG(
-			LogPf2CoreAbilities,
-			Error,
-			TEXT("Cannot determine damage roll because source ASC is not compatible with OpenPF2.")
-		);
-
-		return 0.0f;
-	}
-	else
-	{
-		// const float DamageAbilityModifier =
-		// 	this->GetAbilityModifierValue(
-		// 		PF2InterfaceUtilities::ToScriptInterface(CharacterAsc),
-		// 		this->DamageAbilityModifierType
-		// 	);
-		//
-		// return UPF2AttackStatLibrary::CalculateDamageRoll(
-		// 	this->DamageDie,
-		// 	DamageAbilityModifier
-		// );
-		return 0.0f;
-	}
-}
-
 FPrimaryAssetId UPF2Weapon::GetPrimaryAssetId()
 {
 	return Super::GetPrimaryAssetId();
@@ -85,11 +54,4 @@ bool UPF2Weapon::ShouldBeEquippedInAllLinkedSlots()
 FString UPF2Weapon::GetIdForLogs() const
 {
 	return Super::GetIdForLogs();
-}
-
-float UPF2Weapon::GetAbilityModifierValue(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
-                                          const EPF2CharacterAbilityScoreType             AbilityScoreType)
-{
-	// ExecutionParams.AttemptCalculateCapturedAttributeMagnitude();
-	return 0.0f;
 }

@@ -25,67 +25,79 @@
 void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
                                               const IPF2WeaponInterface*                      Weapon,
                                               const IPF2CharacterAbilitySystemInterface*      SourceAsc,
-                                              const IPF2CharacterAbilitySystemInterface*      TargetAsc)
+                                              const IPF2CharacterAbilitySystemInterface*      TargetAsc,
+                                              FGameplayEffectCustomExecutionOutput&           OutExecutionOutput)
 {
 	const FGameplayEffectSpec     OwningSpec            = ExecutionParams.GetOwningSpec();
 	const FGameplayTagContainer * SourceTags            = OwningSpec.CapturedSourceTags.GetAggregatedTags(),
 	                            * TargetTags            = OwningSpec.CapturedTargetTags.GetAggregatedTags();
 	FAggregatorEvaluateParameters EvaluationParameters;
-	float                         AttackRoll,
-	                              TargetAc;
+	float                         TargetAc;
+	EPF2CheckResult               AttackRollResult;
+
+	UE_LOG(
+		LogPf2CoreAbilities,
+		Verbose,
+		TEXT("Character ('%s') attempting attack with weapon ('%s') against character ('%s')."),
+		*(SourceAsc->GetCharacter()->GetIdForLogs()),
+		*(Weapon->GetIdForLogs()),
+		*(TargetAsc->GetCharacter()->GetIdForLogs())
+	);
 
 	EvaluationParameters.SourceTags = SourceTags;
 	EvaluationParameters.TargetTags = TargetTags;
 
-	AttackRoll = CalculateAttackRoll(ExecutionParams, EvaluationParameters, Weapon, SourceAsc);
-	TargetAc   = GetTargetArmorClass(ExecutionParams, EvaluationParameters);
+	TargetAc         = GetTargetArmorClass(ExecutionParams, EvaluationParameters);
+	AttackRollResult = PerformAttackRoll(ExecutionParams, EvaluationParameters, Weapon, SourceAsc, TargetAc);
 
-	// "When the result of your attack roll with a weapon or unarmed attack equals or exceeds your target’s AC,
-	// you hit your target!"
+	// "When the result of your attack roll with a weapon or unarmed attack equals or exceeds your target’s AC, you hit
+	// your target!"
 	//
 	// Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Damage Rolls".
-	if (AttackRoll >= TargetAc)
+	if (UPF2AttackStatLibrary::IsSuccess(AttackRollResult))
 	{
-		UE_LOG(
-			LogPf2CoreAbilities,
-			Verbose,
-			TEXT("Attack of character ('%s') against character ('%s') with weapon ('%s'): %f vs AC %f - HIT."),
-			*(SourceAsc->GetCharacter()->GetIdForLogs()),
-			*(TargetAsc->GetCharacter()->GetIdForLogs()),
-			*(Weapon->GetIdForLogs()),
-			AttackRoll,
-			TargetAc
-		);
-	}
-	else
-	{
-		UE_LOG(
-			LogPf2CoreAbilities,
-			Verbose,
-			TEXT("Attack of character ('%s') against character ('%s') with weapon ('%s'): %f vs AC %f - MISS."),
-			*(SourceAsc->GetCharacter()->GetIdForLogs()),
-			*(TargetAsc->GetCharacter()->GetIdForLogs()),
-			*(Weapon->GetIdForLogs()),
-			AttackRoll,
-			TargetAc
+		const float DamageRoll = CalculateDamageRoll(ExecutionParams, EvaluationParameters, Weapon);
+		float       DamageAmount;
+
+		// "When you make an attack and succeed with a natural 20 (the number on the die is 20), or if the result of
+		// your attack exceeds the target’s AC by 10, you achieve a critical success (also known as a critical hit)."
+		//
+		// Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Critical Hits".
+		if (AttackRollResult == EPF2CheckResult::CriticalSuccess)
+		{
+			DamageAmount = DamageRoll * 2;
+		}
+		else
+		{
+			DamageAmount = DamageRoll;
+		}
+
+		OutExecutionOutput.AddOutputModifier(
+			FGameplayModifierEvaluatedData(
+				FPF2TargetCharacterAttributeStatics::GetInstance().TmpDamageIncomingProperty,
+				EGameplayModOp::Additive,
+				DamageAmount
+			)
 		);
 	}
 }
 
-float UPF2WeaponAttackExecution::CalculateAttackRoll(
+EPF2CheckResult UPF2WeaponAttackExecution::PerformAttackRoll(
 	const FGameplayEffectCustomExecutionParameters& ExecutionParams,
 	const FAggregatorEvaluateParameters&            EvaluationParameters,
 	const IPF2WeaponInterface*                      Weapon,
-	const IPF2CharacterAbilitySystemInterface*      SourceAsc)
+	const IPF2CharacterAbilitySystemInterface*      SourceAsc,
+	const float                                     TargetArmorClass)
 {
-	const FPF2SourceCharacterAttributeStatics& SourceStatics = FPF2SourceCharacterAttributeStatics::GetInstance();
-
+	EPF2CheckResult                     Result;
 	const int32                         CharacterLevel         = SourceAsc->GetCharacterLevel();
 	const FGameplayTagContainer         CharacterTags          = SourceAsc->GetActiveGameplayTags();
 	const EPF2CharacterAbilityScoreType AttackScoreType        = Weapon->GetAttackAbilityModifierType();
 	const FGameplayTagContainer         ProficiencyTagPrefixes = Weapon->GetProficiencyTagPrefixes();
 	float                               AttackAbilityModifier  = 0.0f,
 	                                    MultipleAttackPenalty  = 0.0f;
+
+	const FPF2SourceCharacterAttributeStatics& SourceStatics = FPF2SourceCharacterAttributeStatics::GetInstance();
 
 	const FGameplayEffectAttributeCaptureDefinition* AbilityScoreCapture =
 		SourceStatics.GetCaptureByAbilityScoreType(AttackScoreType);
@@ -102,24 +114,53 @@ float UPF2WeaponAttackExecution::CalculateAttackRoll(
 		MultipleAttackPenalty
 	);
 
-	return UPF2AttackStatLibrary::CalculateAttackRoll(
+	Result = UPF2AttackStatLibrary::PerformAttackRoll(
 		CharacterLevel,
 		CharacterTags,
 		AttackAbilityModifier,
 		MultipleAttackPenalty,
-		ProficiencyTagPrefixes
+		ProficiencyTagPrefixes,
+		TargetArmorClass
+	);
+
+	return Result;
+}
+
+float UPF2WeaponAttackExecution::CalculateDamageRoll(
+	const FGameplayEffectCustomExecutionParameters& ExecutionParams,
+	const FAggregatorEvaluateParameters&            EvaluationParameters,
+	const IPF2WeaponInterface*                      Weapon)
+{
+	const FPF2SourceCharacterAttributeStatics& SourceStatics = FPF2SourceCharacterAttributeStatics::GetInstance();
+
+	const FName                         DamageDie             = Weapon->GetDamageDie();
+	const EPF2CharacterAbilityScoreType DamageScoreType       = Weapon->GetDamageAbilityModifierType();
+	float                               DamageAbilityModifier = 0.0f;
+
+	const FGameplayEffectAttributeCaptureDefinition* AbilityScoreCapture =
+		SourceStatics.GetCaptureByAbilityScoreType(DamageScoreType);
+
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(
+		*AbilityScoreCapture,
+		EvaluationParameters,
+		DamageAbilityModifier
+	);
+
+	return UPF2AttackStatLibrary::CalculateDamageRoll(
+		DamageDie,
+		DamageAbilityModifier
 	);
 }
 
 float UPF2WeaponAttackExecution::GetTargetArmorClass(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
-                                                     const FAggregatorEvaluateParameters& CaptureParameters)
+                                                     const FAggregatorEvaluateParameters& EvaluationParameters)
 {
 	float                                      TargetArmorClass = 0.0f;
 	const FPF2TargetCharacterAttributeStatics& TargetStatics    = FPF2TargetCharacterAttributeStatics::GetInstance();
 
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(
 		TargetStatics.ArmorClassDef,
-		CaptureParameters,
+		EvaluationParameters,
 		TargetArmorClass
 	);
 
@@ -190,7 +231,13 @@ void UPF2WeaponAttackExecution::Execute_Implementation(const FGameplayEffectCust
 		}
 		else
 		{
-			AttemptAttack(ExecutionParams, Weapon.GetInterface(), SourceCharacterAsc, TargetCharacterAsc);
+			AttemptAttack(
+				ExecutionParams,
+				Weapon.GetInterface(),
+				SourceCharacterAsc,
+				TargetCharacterAsc,
+				OutExecutionOutput
+			);
 		}
 	}
 }

@@ -16,26 +16,32 @@
 
 #include "Libraries/PF2DiceLibrary.h"
 
-float UPF2AttackStatLibrary::CalculateAttackRoll(const int32                  CharacterLevel,
-                                                 const FGameplayTagContainer& CharacterTags,
-                                                 const float                  AttackAbilityModifier,
-                                                 const float                  MultipleAttackPenalty,
-                                                 const FGameplayTagContainer& ProficiencyTagPrefixes)
+#include "Utilities/PF2EnumUtilities.h"
+
+EPF2CheckResult UPF2AttackStatLibrary::PerformAttackRoll(const int32                  CharacterLevel,
+                                                         const FGameplayTagContainer& CharacterTags,
+                                                         const float                  AttackAbilityModifier,
+                                                         const float                  MultipleAttackPenalty,
+                                                         const FGameplayTagContainer& ProficiencyTagPrefixes,
+                                                         const float                  TargetArmorClass)
 {
+	EPF2CheckResult Result;
+
 	// "When making an attack roll, determine the result by rolling 1d20 and adding your attack modifier for the weapon
 	// or unarmed attack you’re using."
 	//
 	// Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Attack Rolls".
-	const int32 RollResult = UPF2DiceLibrary::RollSum(1, 20);
-
-	float WeaponProficiencyBonus = 0;
+	const int32 DiceRoll               = UPF2DiceLibrary::RollSum(1, 20);
+	const bool  bIsNatural20           = (DiceRoll == 20);
+	float       WeaponProficiencyBonus = 0,
+	            AttackRoll;
 
 	if (MultipleAttackPenalty > 0)
 	{
 		UE_LOG(
 			LogPf2CoreAbilities,
 			Error,
-			TEXT("CalculateAttackRoll(): The Multiple Attack Penalty should be negative or zero (was given '%f')."),
+			TEXT("PerformAttackRoll(): The Multiple Attack Penalty should be negative or zero (was given '%f')."),
 			MultipleAttackPenalty
 		);
 	}
@@ -59,7 +65,31 @@ float UPF2AttackStatLibrary::CalculateAttackRoll(const int32                  Ch
 	// Ranged attack modifier = Dexterity modifier + proficiency bonus + other bonuses + penalties
 	//
 	// Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Attack Rolls".
-	return RollResult + AttackAbilityModifier + WeaponProficiencyBonus + MultipleAttackPenalty;
+	AttackRoll = DiceRoll + AttackAbilityModifier + WeaponProficiencyBonus + MultipleAttackPenalty;
+	Result     = CheckAgainstDifficultyClass(AttackRoll, TargetArmorClass);
+
+	// If you rolled a 20 on the die (a “natural 20”), your result is one degree of success better than it would be by
+	// numbers alone."
+	if (bIsNatural20 && (Result != EPF2CheckResult::CriticalSuccess))
+	{
+		Result = IncreaseDegreeOfSuccess(Result);
+	}
+
+	UE_LOG(
+		LogPf2CoreAbilities,
+		VeryVerbose,
+		TEXT("Dice roll (%d%s) + AttackAbilityModifier (%f) + WeaponProficiencyBonus (%f) + MultipleAttackPenalty (%f) = %f vs AC %f: %s."),
+		DiceRoll,
+		bIsNatural20 ? TEXT(" [CRIT]") : TEXT(""),
+		AttackAbilityModifier,
+		WeaponProficiencyBonus,
+		MultipleAttackPenalty,
+		AttackRoll,
+		TargetArmorClass,
+		*(PF2EnumUtilities::ToString(Result))
+	);
+
+	return Result;
 }
 
 float UPF2AttackStatLibrary::CalculateDamageRoll(const FName DamageDie, const float DamageAbilityModifier)
@@ -123,4 +153,28 @@ bool UPF2AttackStatLibrary::IsWithinRange(const float WeaponRangeIncrementCentim
 	);
 
 	return bInRange;
+}
+
+EPF2CheckResult UPF2AttackStatLibrary::CheckAgainstDifficultyClass(const float Value, const float DifficultyClass)
+{
+	EPF2CheckResult Result;
+
+	if (Value >= DifficultyClass + 10.0f)
+	{
+		Result = EPF2CheckResult::CriticalSuccess;
+	}
+	else if (Value >= DifficultyClass)
+	{
+		Result = EPF2CheckResult::Success;
+	}
+	else if (Value <= DifficultyClass - 10.0f)
+	{
+		Result = EPF2CheckResult::CriticalFailure;
+	}
+	else
+	{
+		Result = EPF2CheckResult::Failure;
+	}
+
+	return Result;
 }

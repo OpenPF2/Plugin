@@ -131,26 +131,4 @@ public:
      */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
     virtual APF2EffectCauseWrapper* ToEffectCauser(AActor* OwningActor) = 0;
-
-	/**
-	 * Calculates the damage roll, which determines how much of an effect an attack has on the target.
-	 *
-	 * "When the result of your attack roll with a weapon or unarmed attack equals or exceeds your target’s AC, you hit
-	 * your target! Roll the weapon or unarmed attack’s damage die and add the relevant modifiers, bonuses, and
-	 * penalties to determine the amount of damage you deal. Calculate a damage roll as follows.
-	 *
-	 * Melee damage roll = damage die of weapon or unarmed attack + Strength modifier + bonuses + penalties
-	 *
-	 * Ranged damage roll = damage die of weapon + Strength modifier for thrown weapons + bonuses + penalties"
-	 *
-	 * Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Damage Rolls".
-	 *
-	 * @param ExecutionParams
-	 *	The context of the gameplay effect calculation that is being executed.
-	 *
-	 * @return
-	 *	The calculated damage roll for this weapon.
-	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
-	virtual float CalculateDamageRoll(const FGameplayEffectCustomExecutionParameters& ExecutionParams) const = 0;
 };
