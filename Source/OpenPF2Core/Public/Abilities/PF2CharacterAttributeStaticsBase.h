@@ -93,6 +93,36 @@ public:
 
 protected:
 	// =================================================================================================================
+	// Protected Constants
+	// =================================================================================================================
+	/**
+	 * Name of the tag that is used to pass a dynamic resistance amount into the calculation.
+	 */
+	const TMap<FName, FName> DamageTypeToResistanceAttributeMap = {
+		{ "DamageType.Physical.Bludgeoning", "RstPhysicalBludgeoning" },
+		{ "DamageType.Physical.Piercing",    "RstPhysicalPiercing"    },
+		{ "DamageType.Physical.Slashing",    "RstPhysicalSlashing"    },
+
+		{ "DamageType.Energy.Acid",          "RstEnergyAcid"          },
+		{ "DamageType.Energy.Cold",          "RstEnergyCold"          },
+		{ "DamageType.Energy.Fire",          "RstEnergyFire"          },
+		{ "DamageType.Energy.Sonic",         "RstEnergySonic"         },
+		{ "DamageType.Energy.Positive",      "RstEnergyPositive"      },
+		{ "DamageType.Energy.Negative",      "RstEnergyNegative"      },
+		{ "DamageType.Energy.Force",         "RstEnergyForce"         },
+
+		{ "DamageType.Alignment.Chaotic",    "RstAlignmentChaotic"    },
+		{ "DamageType.Alignment.Evil",       "RstAlignmentEvil"       },
+		{ "DamageType.Alignment.Good",       "RstAlignmentGood"       },
+		{ "DamageType.Alignment.Lawful",     "RstAlignmentLawful"     },
+
+		{ "DamageType.Mental",               "RstMental"              },
+		{ "DamageType.Poison",               "RstPoison"              },
+		{ "DamageType.Bleed",                "RstBleed"               },
+		{ "DamageType.Precision",            "RstPrecision"           },
+	};
+
+	// =================================================================================================================
 	// Protected Fields
 	// =================================================================================================================
 	/**
@@ -210,6 +240,35 @@ public:
 	 */
 	TArray<FGameplayEffectAttributeCaptureDefinition> GetAllAbilityScoreCaptures() const;
 
+	/**
+	 * Gets the resistance attribute capture definition for the damage type that has the given tag.
+	 *
+	 * @param DamageType
+	 *	The damage tag for which a resistance capture definition is desired.
+	 *
+	 * @return
+	 *	Either the desired capture definition; or nullptr if the character is using an ASC that does not provide a
+	 *	resistance attribute that corresponds to the specified damage type.
+	 */
+	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetResistanceCaptureForDamageType(
+		const FGameplayTag& DamageType) const
+	{
+		return this->GetResistanceCaptureForDamageType(DamageType.GetTagName());
+	}
+
+	/**
+	 * Gets the resistance attribute capture definition for the damage type that has the given tag name.
+	 *
+	 * @param DamageTypeName
+	 *	The name of the damage tag for which a resistance capture definition is desired.
+	 *
+	 * @return
+	 *	Either the desired capture definition; or nullptr if the character is using an ASC that does not provide a
+	 *	resistance attribute that corresponds to the specified damage type.
+	 */
+	const FGameplayEffectAttributeCaptureDefinition* GetResistanceCaptureForDamageType(
+		const FName& DamageTypeName) const;
+
 protected:
 	// =================================================================================================================
 	// Protected Constructors
@@ -254,5 +313,28 @@ protected:
 		EncMultipleAttackPenaltyProperty(nullptr),
 		TmpDamageIncomingProperty(nullptr)
 	{
+#if !(UE_BUILD_SHIPPING || UE_BUILD_TEST)
+		TArray<FName> Keys;
+
+		this->DamageTypeToResistanceAttributeMap.GetKeys(Keys);
+
+		// Validate that all tag names are valid.
+		for (FName CurrentTagName : Keys)
+		{
+			// Rather than crashing the game/engine, we soften this to a log error so that a game designer can still
+			// correct the error by possibly loading/defining tags.
+			FGameplayTag Tag = FGameplayTag::RequestGameplayTag(CurrentTagName, false);
+
+			if (!Tag.IsValid())
+			{
+				UE_LOG(
+					LogPf2CoreStats,
+					Error,
+					TEXT("The damage type tag '%s' is missing."),
+					*(CurrentTagName.ToString())
+				);
+			}
+		}
+#endif
 	}
 };

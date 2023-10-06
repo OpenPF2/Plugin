@@ -31,3 +31,27 @@ TArray<FGameplayEffectAttributeCaptureDefinition> FPF2CharacterAttributeStaticsB
 		}
 	);
 }
+
+const FGameplayEffectAttributeCaptureDefinition* FPF2CharacterAttributeStaticsBase::GetResistanceCaptureForDamageType(
+	const FName& DamageTypeName) const
+{
+	const FGameplayEffectAttributeCaptureDefinition* Result = nullptr;
+
+	if (this->DamageTypeToResistanceAttributeMap.Contains(DamageTypeName))
+	{
+		const FName ResistanceAttributeName = this->DamageTypeToResistanceAttributeMap[DamageTypeName];
+
+		Result = this->GetCaptureByAttributeName(ResistanceAttributeName.ToString());
+	}
+	else
+	{
+		UE_LOG(
+			LogPf2CoreStats,
+			Error,
+			TEXT("No resistance attribute corresponds to damage type '%s'."),
+			*(DamageTypeName.ToString())
+		);
+	}
+
+	return Result;
+}
