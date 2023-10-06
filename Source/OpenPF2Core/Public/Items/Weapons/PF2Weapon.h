@@ -217,6 +217,7 @@ public:
 	virtual FGameplayTagContainer GetProficiencyTagPrefixes() const override;
 	virtual EPF2CharacterAbilityScoreType GetAttackAbilityModifierType() const override;
 	virtual EPF2CharacterAbilityScoreType GetDamageAbilityModifierType() const override;
+	virtual FName GetDamageDie() const override;
 	virtual APF2EffectCauseWrapper* ToEffectCauser(AActor* OwningActor) override;
 
 	// =================================================================================================================

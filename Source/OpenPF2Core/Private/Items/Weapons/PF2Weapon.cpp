@@ -31,6 +31,11 @@ EPF2CharacterAbilityScoreType UPF2Weapon::GetDamageAbilityModifierType() const
 	return this->DamageAbilityModifierType;
 }
 
+FName UPF2Weapon::GetDamageDie() const
+{
+	return this->DamageDie;
+}
+
 float UPF2Weapon::CalculateDamageRoll(const FGameplayEffectCustomExecutionParameters& ExecutionParams) const
 {
 	UAbilitySystemComponent* SourceAsc = ExecutionParams.GetSourceAbilitySystemComponent();

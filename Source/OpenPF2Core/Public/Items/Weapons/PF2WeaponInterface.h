@@ -110,6 +110,15 @@ public:
 	virtual EPF2CharacterAbilityScoreType GetDamageAbilityModifierType() const = 0;
 
     /**
+     * Gets the roll expression for the die/dice used to calculate damage from a hit with this weapon.
+     *
+     * @return
+     *	The damage die. For example, "1d4" or "1d6".
+     */
+    UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
+	virtual FName GetDamageDie() const = 0;
+
+    /**
      * Converts this weapon into an actor that can represent a "effect causer" for replication.
      *
      * The causer is linked to the lifetime of the given owning actor.
