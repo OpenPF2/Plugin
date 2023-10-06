@@ -269,6 +269,14 @@ public:
 	const FGameplayEffectAttributeCaptureDefinition* GetResistanceCaptureForDamageType(
 		const FName& DamageTypeName) const;
 
+	/**
+	 * Gets capture definitions for all damage resistances.
+	 *
+	 * @return
+	 *	Capture definitions for all damage resistance scores.
+	 */
+	TArray<FGameplayEffectAttributeCaptureDefinition> GetAllResistanceCaptures();
+
 protected:
 	// =================================================================================================================
 	// Protected Constructors

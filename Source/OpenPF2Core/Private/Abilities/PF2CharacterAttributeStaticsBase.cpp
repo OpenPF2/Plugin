@@ -55,3 +55,23 @@ const FGameplayEffectAttributeCaptureDefinition* FPF2CharacterAttributeStaticsBa
 
 	return Result;
 }
+
+TArray<FGameplayEffectAttributeCaptureDefinition> FPF2CharacterAttributeStaticsBase::GetAllResistanceCaptures()
+{
+	TArray<FGameplayEffectAttributeCaptureDefinition> Result;
+	TArray<FName>                                     ResistanceAttributeNames;
+
+	this->DamageTypeToResistanceAttributeMap.GenerateValueArray(ResistanceAttributeNames);
+
+	Result.Reserve(ResistanceAttributeNames.Num());
+
+	for (const FName& ResistanceAttributeName : ResistanceAttributeNames)
+	{
+		FGameplayEffectAttributeCaptureDefinition& ResistanceCapture =
+			this->CaptureDefinitions[ResistanceAttributeName.ToString()];
+
+		Result.Add(ResistanceCapture);
+	}
+
+	return Result;
+}
