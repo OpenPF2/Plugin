@@ -178,6 +178,13 @@ public:
 		}
 		else
 		{
+			UE_LOG(
+				LogPf2CoreStats,
+				Error,
+				TEXT("No attribute capture corresponds to attribute name '%s'."),
+				*Name
+			);
+
 			return nullptr;
 		}
 	}
