@@ -21,7 +21,7 @@ FORCEINLINE TArray<FGameplayEffectAttributeCaptureDefinition> FPF2CharacterAttri
 	return Result;
 }
 
-TArray<FGameplayEffectAttributeCaptureDefinition> FPF2CharacterAttributeStaticsBase::GetAbilityScoreCaptures() const
+TArray<FGameplayEffectAttributeCaptureDefinition> FPF2CharacterAttributeStaticsBase::GetAllAbilityScoreCaptures() const
 {
 	return PF2ArrayUtilities::Map<FGameplayEffectAttributeCaptureDefinition>(
 		this->GetAbilityNames(),

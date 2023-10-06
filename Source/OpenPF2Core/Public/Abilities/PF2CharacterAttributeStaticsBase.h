@@ -201,7 +201,7 @@ public:
 	/**
 	 * Gets capture definitions for all character ability score values.
 	 */
-	TArray<FGameplayEffectAttributeCaptureDefinition> GetAbilityScoreCaptures() const;
+	TArray<FGameplayEffectAttributeCaptureDefinition> GetAllAbilityScoreCaptures() const;
 
 protected:
 	// =================================================================================================================

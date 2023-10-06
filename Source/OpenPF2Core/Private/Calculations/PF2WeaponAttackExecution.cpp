@@ -175,7 +175,7 @@ UPF2WeaponAttackExecution::UPF2WeaponAttackExecution()
 	// Capture all ability attributes, since attacks in OpenPF2 could theoretically be based on any ability score stat
 	// even though the Core Rulebook only anticipates attacks that use Strength (for regular melee attacks) or Dexterity
 	// (for ranged attacks and melee finesse attacks).
-	for (const FGameplayEffectAttributeCaptureDefinition& Capture : SourceStatics.GetAbilityScoreCaptures())
+	for (const FGameplayEffectAttributeCaptureDefinition& Capture : SourceStatics.GetAllAbilityScoreCaptures())
 	{
 		this->RelevantAttributesToCapture.Add(Capture);
 	}
