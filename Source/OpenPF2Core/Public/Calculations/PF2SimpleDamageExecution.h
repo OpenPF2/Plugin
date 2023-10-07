@@ -7,14 +7,18 @@
 
 #include <GameplayEffectExecutionCalculation.h>
 
-#include "PF2StandardDamageExecution.generated.h"
+#include "PF2SimpleDamageExecution.generated.h"
 
 /**
- * Damage execution calculation for applying damage and resistance logic according to standard OpenPF2 rules.
+ * Gameplay effect execution calculation that applies a fixed amount of damage to a target, factoring in resistance.
+ *
+ * The amount of damage to inflict and the amount of resistance that the target has to that type of damage are passed-in
+ * via "Transient Aggregators" (a.k.a., "Temporary Variables" in the Editor UI). The damage is typically a
+ * "set by caller" input to the GE while the resistance value is sourced from a resistance attribute on the target.
  */
 UCLASS()
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API UPF2StandardDamageExecution : public UGameplayEffectExecutionCalculation
+class OPENPF2CORE_API UPF2SimpleDamageExecution : public UGameplayEffectExecutionCalculation
 {
 	GENERATED_BODY()
 
@@ -56,7 +60,7 @@ public:
 	// =================================================================================================================
 	// Public Constructors
 	// =================================================================================================================
-	UPF2StandardDamageExecution();
+	UPF2SimpleDamageExecution();
 
 	// =================================================================================================================
 	// Public Methods - UGameplayEffectExecutionCalculation Implementation
