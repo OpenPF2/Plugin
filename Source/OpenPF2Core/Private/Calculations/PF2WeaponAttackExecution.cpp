@@ -56,8 +56,9 @@ void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecuti
 	// Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Damage Rolls".
 	if (UPF2AttackStatLibrary::IsSuccess(AttackRollResult))
 	{
-		const float DamageRoll = CalculateDamageRoll(ExecutionParams, EvaluationParameters, Weapon);
-		float       DamageAmount;
+		const float DamageRoll = CalculateDamageRoll(ExecutionParams, EvaluationParameters, Weapon),
+		            Resistance = GetTargetResistanceToWeaponDamage(ExecutionParams, EvaluationParameters, Weapon);
+		float DamageAmount;
 
 		// "When you make an attack and succeed with a natural 20 (the number on the die is 20), or if the result of
 		// your attack exceeds the target’s AC by 10, you achieve a critical success (also known as a critical hit)."
@@ -71,6 +72,14 @@ void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecuti
 		{
 			DamageAmount = DamageRoll;
 		}
+
+		// Apply resistance to reduce damage, but don't allow resistance to make damage negative (i.e., damage can never
+		// heal, but it can become ineffectual).
+		//
+		// From the Pathfinder 2E Core Rulebook, page 453, "Resistance":
+		// "If you have resistance to a type of damage, each time you take that type of damage, you reduce the amount of
+		// damage you take by the listed amount (to a minimum of 0 damage)."
+		DamageAmount = FMath::Max(0.0f, DamageAmount - Resistance);
 
 		OutExecutionOutput.AddOutputModifier(
 			FGameplayModifierEvaluatedData(
@@ -167,24 +176,51 @@ float UPF2WeaponAttackExecution::GetTargetArmorClass(const FGameplayEffectCustom
 	return TargetArmorClass;
 }
 
+float UPF2WeaponAttackExecution::GetTargetResistanceToWeaponDamage(
+	const FGameplayEffectCustomExecutionParameters& ExecutionParams,
+	const FAggregatorEvaluateParameters&            EvaluationParameters,
+	const IPF2WeaponInterface*                      Weapon)
+{
+	float                                      TargetResistance = 0.0f;
+	const FPF2TargetCharacterAttributeStatics& TargetStatics    = FPF2TargetCharacterAttributeStatics::GetInstance();
+	const FGameplayTag                         DamageType       = Weapon->GetDamageType();
+
+	const FGameplayEffectAttributeCaptureDefinition* ResistanceCapture =
+		TargetStatics.GetResistanceCaptureForDamageType(DamageType);
+
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(
+		*ResistanceCapture,
+		EvaluationParameters,
+		TargetResistance
+	);
+
+	return TargetResistance;
+}
+
 UPF2WeaponAttackExecution::UPF2WeaponAttackExecution()
 {
 	const FPF2SourceCharacterAttributeStatics& SourceStatics = FPF2SourceCharacterAttributeStatics::GetInstance();
 	const FPF2TargetCharacterAttributeStatics& TargetStatics = FPF2TargetCharacterAttributeStatics::GetInstance();
 
-	// Capture all ability attributes, since attacks in OpenPF2 could theoretically be based on any ability score stat
-	// even though the Core Rulebook only anticipates attacks that use Strength (for regular melee attacks) or Dexterity
-	// (for ranged attacks and melee finesse attacks).
+	// Capture all ability score attributes, since attacks in OpenPF2 could theoretically be based on any ability score
+	// stat even though the Core Rulebook only anticipates attacks that use Strength (for regular melee attacks) or
+	// Dexterity (for ranged attacks and melee finesse attacks).
 	for (const FGameplayEffectAttributeCaptureDefinition* Capture : SourceStatics.GetAllAbilityScoreCaptures())
 	{
 		this->RelevantAttributesToCapture.Add(*Capture);
 	}
 
-	// The multiple attack penalty grows with each additional attack taken during the same turn.
+	// Capture the multiple attack penalty, which grows with each additional attack taken during the same turn.
 	this->RelevantAttributesToCapture.Add(SourceStatics.EncMultipleAttackPenaltyDef);
 
-	// The target Armor Class (AC) is needed for attack checks, to see if the target was hit at all.
+	// Capture the target Armor Class (AC) for checks against attack rolls, to see if the target was hit at all.
 	this->RelevantAttributesToCapture.Add(TargetStatics.ArmorClassDef);
+
+	// Capture all damage resistances that the target has so that final damage can be reduced appropriately.
+	for (const FGameplayEffectAttributeCaptureDefinition* Capture : TargetStatics.GetAllResistanceCaptures())
+	{
+		this->RelevantAttributesToCapture.Add(*Capture);
+	}
 }
 
 void UPF2WeaponAttackExecution::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams,

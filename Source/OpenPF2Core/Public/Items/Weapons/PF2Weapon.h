@@ -218,6 +218,7 @@ public:
 	virtual EPF2CharacterAbilityScoreType GetAttackAbilityModifierType() const override;
 	virtual EPF2CharacterAbilityScoreType GetDamageAbilityModifierType() const override;
 	virtual FName GetDamageDie() const override;
+	virtual FGameplayTag GetDamageType() const override;
 	virtual APF2EffectCauseWrapper* ToEffectCauser(AActor* OwningActor) override;
 
 	// =================================================================================================================

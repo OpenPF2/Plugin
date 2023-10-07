@@ -36,6 +36,11 @@ FName UPF2Weapon::GetDamageDie() const
 	return this->DamageDie;
 }
 
+FGameplayTag UPF2Weapon::GetDamageType() const
+{
+	return this->DamageType;
+}
+
 FPrimaryAssetId UPF2Weapon::GetPrimaryAssetId()
 {
 	return Super::GetPrimaryAssetId();

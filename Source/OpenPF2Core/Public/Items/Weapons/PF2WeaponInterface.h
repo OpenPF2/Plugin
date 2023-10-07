@@ -12,6 +12,8 @@
 
 #pragma once
 
+#include <GameplayTagContainer.h>
+
 #include <UObject/Interface.h>
 
 #include "Abilities/PF2CharacterAbilityScoreType.h"
@@ -117,6 +119,18 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
 	virtual FName GetDamageDie() const = 0;
+
+    /**
+     * Gets the primary type of damage that this weapon inflicts.
+     *
+     * Runes and other causes of damage that are associated with the weapon are handled via separate GEs on the weapon
+     * or by conditional GEs triggered by the GE that is applying the primary weapon damage.
+     *
+     * @return
+     *	The primary damage type.
+     */
+    UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
+	virtual FGameplayTag GetDamageType() const = 0;
 
     /**
      * Converts this weapon into an actor that can represent a "effect causer" for replication.
