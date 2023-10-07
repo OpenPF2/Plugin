@@ -9,22 +9,22 @@
 
 #include "Utilities/PF2ArrayUtilities.h"
 
-FORCEINLINE TArray<FGameplayEffectAttributeCaptureDefinition> FPF2CharacterAttributeStaticsBase::GetCaptureDefinitions() const
+FORCEINLINE TArray<const FGameplayEffectAttributeCaptureDefinition*> FPF2CharacterAttributeStaticsBase::GetCaptureDefinitions() const
 {
-	TArray<FGameplayEffectAttributeCaptureDefinition> Result;
+	TArray<const FGameplayEffectAttributeCaptureDefinition*> Result;
 
 	this->CaptureDefinitions.GenerateValueArray(Result);
 
 	return Result;
 }
 
-TArray<FGameplayEffectAttributeCaptureDefinition> FPF2CharacterAttributeStaticsBase::GetAllAbilityScoreCaptures() const
+TArray<const FGameplayEffectAttributeCaptureDefinition*> FPF2CharacterAttributeStaticsBase::GetAllAbilityScoreCaptures() const
 {
-	return PF2ArrayUtilities::Map<FGameplayEffectAttributeCaptureDefinition>(
+	return PF2ArrayUtilities::Map<const FGameplayEffectAttributeCaptureDefinition*>(
 		this->GetAbilityNames(),
 		[this](const FString& AbilityScoreAttributeName)
 		{
-			return *(this->GetCaptureByAttributeName(AbilityScoreAttributeName));
+			return this->GetCaptureByAttributeName(AbilityScoreAttributeName);
 		}
 	);
 }
@@ -53,22 +53,20 @@ const FGameplayEffectAttributeCaptureDefinition* FPF2CharacterAttributeStaticsBa
 	return Result;
 }
 
-TArray<FGameplayEffectAttributeCaptureDefinition> FPF2CharacterAttributeStaticsBase::GetAllResistanceCaptures()
+TArray<const FGameplayEffectAttributeCaptureDefinition*> FPF2CharacterAttributeStaticsBase::GetAllResistanceCaptures()
 {
-	TArray<FGameplayEffectAttributeCaptureDefinition> Result;
-	TArray<FName>                                     ResistanceAttributeNames;
+	TArray<FName> ResistanceAttributeNames;
 
 	this->DamageTypeToResistanceAttributeMap.GenerateValueArray(ResistanceAttributeNames);
 
-	Result.Reserve(ResistanceAttributeNames.Num());
+	return PF2ArrayUtilities::ReduceToArray<const FGameplayEffectAttributeCaptureDefinition*>(
+		ResistanceAttributeNames,
+		[this](TArray<const FGameplayEffectAttributeCaptureDefinition*> Captures, const FName& ResistanceAttributeName)
+		{
+			const FGameplayEffectAttributeCaptureDefinition* ResistanceCapture =
+				this->CaptureDefinitions[ResistanceAttributeName.ToString()];
 
-	for (const FName& ResistanceAttributeName : ResistanceAttributeNames)
-	{
-		FGameplayEffectAttributeCaptureDefinition& ResistanceCapture =
-			this->CaptureDefinitions[ResistanceAttributeName.ToString()];
-
-		Result.Add(ResistanceCapture);
-	}
-
-	return Result;
+			Captures.Add(ResistanceCapture);
+		}
+	);
 }

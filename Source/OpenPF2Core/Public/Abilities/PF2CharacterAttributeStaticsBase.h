@@ -15,7 +15,7 @@
 #define DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(S, P, T, B) \
 { \
 	DEFINE_ATTRIBUTE_CAPTUREDEF(S, P, T, B) \
-	this->CaptureDefinitions.Add(P##Property->GetName(), P##Def); \
+	this->CaptureDefinitions.Add(P##Property->GetName(), &P##Def); \
 }
 
 #define DEFINE_PF2_ABILITY_SCORE_CAPTUREDEF(S, P, T, B) \
@@ -128,7 +128,7 @@ protected:
 	/**
 	 * A map of all capture definitions, keyed by property name.
 	 */
-	TMap<FString, FGameplayEffectAttributeCaptureDefinition> CaptureDefinitions;
+	TMap<FString, const FGameplayEffectAttributeCaptureDefinition*> CaptureDefinitions;
 
 	/**
 	 * The names of all ability-related attributes.
@@ -150,7 +150,7 @@ public:
 	 * @return
 	 *	An array of all the capture definitions for character attributes.
 	 */
-	TArray<FGameplayEffectAttributeCaptureDefinition> GetCaptureDefinitions() const;
+	TArray<const FGameplayEffectAttributeCaptureDefinition*> GetCaptureDefinitions() const;
 
 	/**
 	 * Gets the names of all character ability attributes.
@@ -204,7 +204,7 @@ public:
 	{
 		if (this->CaptureDefinitions.Contains(Name))
 		{
-			return &(this->CaptureDefinitions[Name]);
+			return this->CaptureDefinitions[Name];
 		}
 		else
 		{
@@ -241,7 +241,7 @@ public:
 	 * @return
 	 *	Capture definitions for all character ability scores.
 	 */
-	TArray<FGameplayEffectAttributeCaptureDefinition> GetAllAbilityScoreCaptures() const;
+	TArray<const FGameplayEffectAttributeCaptureDefinition*> GetAllAbilityScoreCaptures() const;
 
 	/**
 	 * Gets the resistance attribute capture definition for the damage type that has the given tag.
@@ -278,7 +278,7 @@ public:
 	 * @return
 	 *	Capture definitions for all damage resistance scores.
 	 */
-	TArray<FGameplayEffectAttributeCaptureDefinition> GetAllResistanceCaptures();
+	TArray<const FGameplayEffectAttributeCaptureDefinition*> GetAllResistanceCaptures();
 
 protected:
 	// =================================================================================================================
@@ -330,7 +330,7 @@ protected:
 		this->DamageTypeToResistanceAttributeMap.GetKeys(Keys);
 
 		// Validate that all tag names are valid.
-		for (FName CurrentTagName : Keys)
+		for (const FName& CurrentTagName : Keys)
 		{
 			// Rather than crashing the game/engine, we soften this to a log error so that a game designer can still
 			// correct the error by possibly loading/defining tags.
