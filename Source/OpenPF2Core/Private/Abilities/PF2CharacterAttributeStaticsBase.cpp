@@ -53,7 +53,7 @@ const FGameplayEffectAttributeCaptureDefinition* FPF2CharacterAttributeStaticsBa
 	return Result;
 }
 
-TArray<const FGameplayEffectAttributeCaptureDefinition*> FPF2CharacterAttributeStaticsBase::GetAllResistanceCaptures()
+TArray<const FGameplayEffectAttributeCaptureDefinition*> FPF2CharacterAttributeStaticsBase::GetAllResistanceCaptures() const
 {
 	TArray<FName> ResistanceAttributeNames;
 

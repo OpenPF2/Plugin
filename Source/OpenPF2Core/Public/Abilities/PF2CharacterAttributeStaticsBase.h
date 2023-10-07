@@ -278,7 +278,7 @@ public:
 	 * @return
 	 *	Capture definitions for all damage resistance scores.
 	 */
-	TArray<const FGameplayEffectAttributeCaptureDefinition*> GetAllResistanceCaptures();
+	TArray<const FGameplayEffectAttributeCaptureDefinition*> GetAllResistanceCaptures() const;
 
 protected:
 	// =================================================================================================================
