@@ -122,6 +122,45 @@ protected:
 		const FPF2GameplayEffectContainer& Container) const;
 
 	/**
+	 * Processes a gameplay effect (GE) container into a gameplay effect container spec with the given weapon as source.
+	 *
+	 * @param Container
+	 *	The GE container to process.
+	 * @param Weapon
+	 *	The weapon to make the source of all GEs in the resulting spec.
+	 * @param Level
+	 *
+	 * @return
+	 *	The GE container spec created from the GE container.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
+	FPF2GameplayEffectContainerSpec MakeEffectContainerSpecFromContainerAndWeapon(
+		const FPF2GameplayEffectContainer&          Container,
+		const TScriptInterface<IPF2WeaponInterface> Weapon,
+		const float                                 Level = 1.0f) const;
+
+	/**
+	 * Processes a gameplay effect (GE) container into a gameplay effect container spec with the given effect causer.
+	 *
+	 * @param Container
+	 *	The GE container to process.
+	 * @param EffectCauser
+	 *	The physical actor that is the source of all the effects (e.g., the source of damage), such as a sword or
+	 *	projectile. If the effect/damage is being done by bare fists or physical contact rather than a weapon, this
+	 *	could be the same actor as the instigator.
+	 * @param Level
+	 *	The level of the ability (for abilities that increase in damage/effect as they are upgraded, etc.)
+	 *
+	 * @return
+	 *	The GE container spec created from the GE container.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
+	FPF2GameplayEffectContainerSpec MakeEffectContainerSpecFromContainerAndCauser(
+		const FPF2GameplayEffectContainer& Container,
+		AActor*                            EffectCauser,
+		const float                        Level = 1.0f) const;
+
+	/**
 	 * Applies a gameplay effect (GE) container spec to its targets.
 	 *
 	 * @param ContainerSpec
@@ -140,7 +179,7 @@ protected:
 	 * @param GameplayEffectClass
 	 *	The type of gameplay effect for which a spec is desired.
 	 * @param Weapon
-	 *	The weapon that actually caused the damage.
+	 *	The weapon that actually caused this effect (e.g., did damage), such as a sword or projectile.
 	 * @param Level
 	 *	The level of the attack (for weapons that increase in damage as they are upgraded, etc.)
 	 */
@@ -154,8 +193,8 @@ protected:
 	 * Creates an outgoing gameplay effect spec that has a custom effect causer.
 	 *
 	 * This is similar to MakeOutgoingGameplayEffectSpec() except that the effect causer can be set rather than it being
-	 * set equal to the "avatar actor" which, in many games, is identical to the "owner actor" that is used as the
-	 * instigator, the actor/character who owns the Ability System Component (ASC).
+	 * set to the "avatar actor" which, in many games, is identical to the "owner actor" that is used as the instigator,
+	 * which is the actor/character who owns the Ability System Component (ASC).
 	 *
 	 * @param GameplayEffectClass
 	 *	The type of gameplay effect for which a spec is desired.

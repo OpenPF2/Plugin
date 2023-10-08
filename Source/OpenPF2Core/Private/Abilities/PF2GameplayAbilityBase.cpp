@@ -144,6 +144,56 @@ FPF2GameplayEffectContainerSpec UPF2GameplayAbilityBase::MakeEffectContainerSpec
 	return Result;
 }
 
+FPF2GameplayEffectContainerSpec UPF2GameplayAbilityBase::MakeEffectContainerSpecFromContainerAndWeapon(
+	const FPF2GameplayEffectContainer&          Container,
+	const TScriptInterface<IPF2WeaponInterface> Weapon,
+	const float                                 Level) const
+{
+	FPF2GameplayEffectContainerSpec                Result;
+	const TScriptInterface<IPF2CharacterInterface> Character = this->GetOwningCharacterFromActorInfo();
+
+	if (Character != nullptr)
+	{
+		const UAbilitySystemComponent* OwningAsc = Character->GetAbilitySystemComponent();
+
+		if (OwningAsc != nullptr)
+		{
+			for (const TSubclassOf<UGameplayEffect>& EffectClass : Container.GameplayEffectsToApply)
+			{
+				Result.AddGameplayEffectSpec(this->MakeOutgoingGameplayEffectSpecForWeapon(EffectClass, Weapon, Level));
+			}
+		}
+	}
+
+	return Result;
+}
+
+FPF2GameplayEffectContainerSpec UPF2GameplayAbilityBase::MakeEffectContainerSpecFromContainerAndCauser(
+	const FPF2GameplayEffectContainer& Container,
+	AActor*                            EffectCauser,
+	const float                        Level) const
+{
+	FPF2GameplayEffectContainerSpec                Result;
+	const TScriptInterface<IPF2CharacterInterface> Character = this->GetOwningCharacterFromActorInfo();
+
+	if (Character != nullptr)
+	{
+		const UAbilitySystemComponent* OwningAsc = Character->GetAbilitySystemComponent();
+
+		if (OwningAsc != nullptr)
+		{
+			for (const TSubclassOf<UGameplayEffect>& EffectClass : Container.GameplayEffectsToApply)
+			{
+				Result.AddGameplayEffectSpec(
+					this->MakeOutgoingGameplayEffectSpecForCauser(EffectClass, EffectCauser, Level)
+				);
+			}
+		}
+	}
+
+	return Result;
+}
+
 TArray<FActiveGameplayEffectHandle> UPF2GameplayAbilityBase::ApplyEffectContainerSpec(
 	const FPF2GameplayEffectContainerSpec& ContainerSpec)
 {
