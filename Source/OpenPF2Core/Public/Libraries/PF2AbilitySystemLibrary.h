@@ -7,10 +7,16 @@
 
 #include <Kismet/BlueprintFunctionLibrary.h>
 
+#include "PF2GameplayEffectContainerSpec.h"
 #include "PF2PlayerControllerInterface.h"
 #include "PF2TargetSelectionType.h"
 
 #include "PF2AbilitySystemLibrary.generated.h"
+
+// =====================================================================================================================
+// Forward Declarations (to minimize header dependencies)
+// =====================================================================================================================
+struct FPF2GameplayEffectContainerSpec;
 
 // =====================================================================================================================
 // Normal Declarations
@@ -53,4 +59,68 @@ public:
 	UFUNCTION(BlueprintPure, Category="OpenPF2|Gameplay Abilities|Target Data")
 	static EPF2TargetSelectionType GetTargetSelectionType(const FGameplayAbilityTargetDataHandle& TargetDataHandle,
 	                                                      const int32                             Index);
+
+	/**
+	 * Gets whether the specified Gameplay Effect (GE) container currently has any gameplay effects to apply.
+	 *
+	 * @param ContainerSpec
+	 *	The gameplay effect container specification to check.
+	 *
+	 * @return
+	 *	- true if the container has at least one GE spec.
+	 *	- false if the container has no GE specs.
+	 */
+	UFUNCTION(BlueprintPure, Category="OpenPF2|Gameplay Effects")
+	static FORCEINLINE bool DoesEffectContainerSpecHaveEffects(const FPF2GameplayEffectContainerSpec& ContainerSpec)
+	{
+		return ContainerSpec.HasEffects();
+	}
+
+	/**
+	 * Gets whether the specified Gameplay Effect (GE) container currently has any targets (either hits or actors).
+	 *
+	 * @param ContainerSpec
+	 *	The gameplay effect container specification to check.
+	 *
+	 * @return
+	 *	- true if the container has at least one target.
+	 *	- false if the container has no targets.
+	 */
+	UFUNCTION(BlueprintPure, Category="OpenPF2|Gameplay Effects")
+	static FORCEINLINE bool DoesEffectContainerSpecHaveTargets(const FPF2GameplayEffectContainerSpec& ContainerSpec)
+	{
+		return ContainerSpec.HasTargets();
+	}
+
+	/**
+	 * Returns a copy of the specified Gameplay Effect (GE) container spec with the given hits added as targets.
+	 *
+	 * @param ContainerSpec
+	 *	The original gameplay effect container specification from which to start from.
+	 * @param HitResults
+	 *	The list of hit results to add as targets of this container.
+	 *
+	 * @return
+	 *	The modified GE container spec.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Effects")
+	static FPF2GameplayEffectContainerSpec AddHitTargetsToEffectContainerSpec(
+		const FPF2GameplayEffectContainerSpec& ContainerSpec,
+		const TArray<FHitResult>&              HitResults);
+
+	/**
+	 * Returns a copy of the specified Gameplay Effect (GE) container spec with the given actors added as targets.
+	 *
+	 * @param ContainerSpec
+	 *	The original gameplay effect container specification from which to start from.
+	 * @param TargetActors
+	 *	The list of actors to add as targets of the container.
+	 *
+	 * @return
+	 *	The modified GE container spec.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Effects")
+	static FPF2GameplayEffectContainerSpec AddActorTargetsToEffectContainerSpec(
+		const FPF2GameplayEffectContainerSpec& ContainerSpec,
+		const TArray<AActor*>&                 TargetActors);
 };

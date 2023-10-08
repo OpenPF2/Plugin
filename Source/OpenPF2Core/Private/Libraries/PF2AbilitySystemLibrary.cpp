@@ -6,6 +6,7 @@
 #include "Libraries/PF2AbilitySystemLibrary.h"
 
 #include "PF2CharacterInterface.h"
+#include "PF2GameplayEffectContainerSpec.h"
 
 FGameplayAbilityTargetDataHandle UPF2AbilitySystemLibrary::CreateAbilityTargetDataFromPlayerControllerTargetSelection(
 	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController)
@@ -74,4 +75,26 @@ EPF2TargetSelectionType UPF2AbilitySystemLibrary::GetTargetSelectionType(
 	}
 
 	return Result;
+}
+
+FPF2GameplayEffectContainerSpec UPF2AbilitySystemLibrary::AddHitTargetsToEffectContainerSpec(
+	const FPF2GameplayEffectContainerSpec& ContainerSpec,
+	const TArray<FHitResult>& HitResults)
+{
+	FPF2GameplayEffectContainerSpec NewSpec = ContainerSpec;
+
+	NewSpec.AddHitTargets(HitResults);
+
+	return NewSpec;
+}
+
+FPF2GameplayEffectContainerSpec UPF2AbilitySystemLibrary::AddActorTargetsToEffectContainerSpec(
+	const FPF2GameplayEffectContainerSpec& ContainerSpec,
+	const TArray<AActor*>& TargetActors)
+{
+	FPF2GameplayEffectContainerSpec NewSpec = ContainerSpec;
+
+	NewSpec.AddActorTargets(TargetActors);
+
+	return NewSpec;
 }

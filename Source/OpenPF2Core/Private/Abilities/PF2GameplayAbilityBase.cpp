@@ -9,6 +9,8 @@
 
 #include "PF2CharacterInterface.h"
 #include "PF2EffectCauseWrapper.h"
+#include "PF2GameplayEffectContainer.h"
+#include "PF2GameplayEffectContainerSpec.h"
 
 #include "Items/Weapons/PF2WeaponInterface.h"
 
@@ -118,6 +120,41 @@ TScriptInterface<IPF2CharacterInterface> UPF2GameplayAbilityBase::GetOwningChara
 	}
 
 	return Result;
+}
+
+FPF2GameplayEffectContainerSpec UPF2GameplayAbilityBase::MakeEffectContainerSpecFromContainer(
+	const FPF2GameplayEffectContainer& Container) const
+{
+	FPF2GameplayEffectContainerSpec                Result;
+	const TScriptInterface<IPF2CharacterInterface> Character = this->GetOwningCharacterFromActorInfo();
+
+	if (Character != nullptr)
+	{
+		const UAbilitySystemComponent* OwningAsc = Character->GetAbilitySystemComponent();
+
+		if (OwningAsc != nullptr)
+		{
+			for (const TSubclassOf<UGameplayEffect>& EffectClass : Container.GameplayEffectsToApply)
+			{
+				Result.AddGameplayEffectSpec(MakeOutgoingGameplayEffectSpec(EffectClass));
+			}
+		}
+	}
+
+	return Result;
+}
+
+TArray<FActiveGameplayEffectHandle> UPF2GameplayAbilityBase::ApplyEffectContainerSpec(
+	const FPF2GameplayEffectContainerSpec& ContainerSpec)
+{
+	TArray<FActiveGameplayEffectHandle> AppliedEffects;
+
+	for (const FGameplayEffectSpecHandle& SpecHandle : ContainerSpec.GameplayEffectSpecsToApply)
+	{
+		AppliedEffects.Append(this->K2_ApplyGameplayEffectSpecToTarget(SpecHandle, ContainerSpec.TargetData));
+	}
+
+	return AppliedEffects;
 }
 
 FGameplayEffectSpecHandle UPF2GameplayAbilityBase::MakeOutgoingGameplayEffectSpecForWeapon(

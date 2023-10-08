@@ -14,6 +14,9 @@
 // =====================================================================================================================
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
+struct FPF2GameplayEffectContainer;
+struct FPF2GameplayEffectContainerSpec;
+
 class IPF2CharacterInterface;
 class IPF2WeaponInterface;
 class UInputAction;
@@ -106,6 +109,32 @@ protected:
 	TScriptInterface<IPF2CharacterInterface> GetOwningCharacterFromActorInfo() const;
 
 	/**
+	 * Processes a gameplay effect (GE) container into a gameplay effect container spec.
+	 *
+	 * @param Container
+	 *	The GE container to process.
+	 *
+	 * @return
+	 *	The GE container spec created from the GE container.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
+	FPF2GameplayEffectContainerSpec MakeEffectContainerSpecFromContainer(
+		const FPF2GameplayEffectContainer& Container) const;
+
+	/**
+	 * Applies a gameplay effect (GE) container spec to its targets.
+	 *
+	 * @param ContainerSpec
+	 *	The GE container specification.
+	 *
+	 * @return
+	 *	The list of handles for the GEs created and now active on all targets.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
+	TArray<FActiveGameplayEffectHandle> ApplyEffectContainerSpec(
+		const FPF2GameplayEffectContainerSpec& ContainerSpec);
+
+	/**
 	 * Creates an outgoing gameplay effect spec for damage from a weapon.
 	 *
 	 * @param GameplayEffectClass
@@ -188,5 +217,4 @@ protected:
 	FGameplayEffectContextHandle MakeEffectContextForCauser(const FGameplayAbilitySpecHandle AbilityHandle,
 	                                                        const FGameplayAbilityActorInfo* AbilityOwnerInfo,
 	                                                        AActor*                          EffectCauser) const;
-
 };
