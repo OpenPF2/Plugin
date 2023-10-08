@@ -123,4 +123,23 @@ public:
 	static FPF2GameplayEffectContainerSpec AddActorTargetsToEffectContainerSpec(
 		const FPF2GameplayEffectContainerSpec& ContainerSpec,
 		const TArray<AActor*>&                 TargetActors);
+
+	/**
+	 * Returns a copy of the specified Gameplay Effect (GE) container spec with the given generic targets added.
+	 *
+	 * This is useful for adding existing generic targets to a container, such as from context passed into activation of
+	 * a gameplay ability.
+	 *
+	 * @param ContainerSpec
+	 *	The original gameplay effect container specification from which to start from.
+	 * @param ExistingTargetDataHandle
+	 *	A handle to existing targets to which GEs in the container will be applied.
+	 *
+	 * @return
+	 *	The modified GE container spec.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Effects")
+	static FPF2GameplayEffectContainerSpec AppendTargetsToEffectContainerSpec(
+		const FPF2GameplayEffectContainerSpec&  ContainerSpec,
+		const FGameplayAbilityTargetDataHandle& ExistingTargetDataHandle);
 };

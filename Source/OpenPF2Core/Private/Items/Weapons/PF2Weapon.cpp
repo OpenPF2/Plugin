@@ -41,6 +41,11 @@ FGameplayTag UPF2Weapon::GetDamageType() const
 	return this->DamageType;
 }
 
+FPF2GameplayEffectContainer UPF2Weapon::GetGameplayEffects() const
+{
+	return this->GameplayEffects;
+}
+
 FPrimaryAssetId UPF2Weapon::GetPrimaryAssetId()
 {
 	return Super::GetPrimaryAssetId();

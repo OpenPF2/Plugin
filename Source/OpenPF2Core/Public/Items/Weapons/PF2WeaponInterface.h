@@ -16,6 +16,8 @@
 
 #include <UObject/Interface.h>
 
+#include "PF2GameplayEffectContainer.h"
+
 #include "Abilities/PF2CharacterAbilityScoreType.h"
 #include "Items/PF2ItemInterface.h"
 
@@ -25,6 +27,7 @@
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class APF2EffectCauseWrapper;
+
 struct FGameplayTagContainer;
 struct FGameplayEffectCustomExecutionParameters;
 
@@ -131,6 +134,15 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
 	virtual FGameplayTag GetDamageType() const = 0;
+
+    /**
+     * Gets the gameplay effects that attacks with this weapon apply to targets.
+     *
+     * @return
+     *	A container for the gameplay effects to apply to targets that are attacked with this weapon.
+     */
+    UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
+	virtual FPF2GameplayEffectContainer GetGameplayEffects() const = 0;
 
     /**
      * Converts this weapon into an actor that can represent a "effect causer" for replication.

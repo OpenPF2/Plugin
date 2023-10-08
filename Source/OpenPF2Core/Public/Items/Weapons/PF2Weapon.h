@@ -195,6 +195,12 @@ protected:
 	)
 	FGameplayTagContainer Traits;
 
+	/**
+	 * The gameplay effects that attacks with this weapon apply to targets.
+	 */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="OpenPF2 - Weapons")
+	FPF2GameplayEffectContainer GameplayEffects;
+
 public:
 	// =================================================================================================================
 	// Public Constructors
@@ -219,6 +225,7 @@ public:
 	virtual EPF2CharacterAbilityScoreType GetDamageAbilityModifierType() const override;
 	virtual FName GetDamageDie() const override;
 	virtual FGameplayTag GetDamageType() const override;
+	virtual FPF2GameplayEffectContainer GetGameplayEffects() const override;
 	virtual APF2EffectCauseWrapper* ToEffectCauser(AActor* OwningActor) override;
 
 	// =================================================================================================================

@@ -99,18 +99,34 @@ struct FPF2GameplayEffectContainerSpec
 	}
 
 	/**
-	 * Adds one or more hit-result-based targets to this container.
+	 * Adds one or more hit-result-based targets to which GEs in this container will be applied.
 	 *
 	 * @param HitResults
-	 *	The list of hit results to add as targets of this container.
+	 *	The list of hit results to add as targets.
 	 */
 	void AddHitTargets(const TArray<FHitResult>& HitResults);
 
 	/**
-	 * Adds one or more actor targets to this container.
+	 * Adds one or more actor targets to which GEs in this container will be applied.
 	 *
 	 * @param TargetActors
-	 *	The list of actors to add as targets of this container.
+	 *	The list of actors to add as targets.
 	 */
 	void AddActorTargets(const TArray<AActor*>& TargetActors);
+
+	/**
+	 * Adds existing generic target data to this container, such as from context passed into GA activation.
+	 *
+	 * @param ExistingTargetData
+	 *	An existing target to which GEs in this container will be applied.
+	 */
+	void AddTargetData(FGameplayAbilityTargetData* ExistingTargetData);
+
+	/**
+	 * Adds existing generic targets to this container, such as from context passed into GA activation.
+	 *
+	 * @param ExistingTargetDataHandle
+	 *	A handle to existing targets to which GEs in this container will be applied.
+	 */
+	void AppendTargets(const FGameplayAbilityTargetDataHandle& ExistingTargetDataHandle);
 };

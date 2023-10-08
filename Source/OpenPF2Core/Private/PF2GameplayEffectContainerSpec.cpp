@@ -29,3 +29,13 @@ void FPF2GameplayEffectContainerSpec::AddActorTargets(const TArray<AActor*>& Tar
 		TargetData.Add(NewData);
 	}
 }
+
+void FPF2GameplayEffectContainerSpec::AddTargetData(FGameplayAbilityTargetData* ExistingTargetData)
+{
+	this->TargetData.Add(ExistingTargetData);
+}
+
+void FPF2GameplayEffectContainerSpec::AppendTargets(const FGameplayAbilityTargetDataHandle& ExistingTargetDataHandle)
+{
+	this->TargetData.Append(ExistingTargetDataHandle);
+}

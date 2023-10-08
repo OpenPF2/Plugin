@@ -98,3 +98,14 @@ FPF2GameplayEffectContainerSpec UPF2AbilitySystemLibrary::AddActorTargetsToEffec
 
 	return NewSpec;
 }
+
+FPF2GameplayEffectContainerSpec UPF2AbilitySystemLibrary::AppendTargetsToEffectContainerSpec(
+	const FPF2GameplayEffectContainerSpec&  ContainerSpec,
+	const FGameplayAbilityTargetDataHandle& ExistingTargetDataHandle)
+{
+	FPF2GameplayEffectContainerSpec NewSpec = ContainerSpec;
+
+	NewSpec.AppendTargets(ExistingTargetDataHandle);
+
+	return NewSpec;
+}
