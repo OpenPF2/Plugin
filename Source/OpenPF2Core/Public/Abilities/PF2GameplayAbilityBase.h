@@ -169,9 +169,9 @@ protected:
 	 * @return
 	 *	The list of handles for the GEs created and now active on all targets.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
+	UFUNCTION(BlueprintCallable, BlueprintPure=false, Category="OpenPF2|Gameplay Abilities")
 	TArray<FActiveGameplayEffectHandle> ApplyEffectContainerSpec(
-		const FPF2GameplayEffectContainerSpec& ContainerSpec);
+		const FPF2GameplayEffectContainerSpec& ContainerSpec) const;
 
 	/**
 	 * Creates an outgoing gameplay effect spec for damage from a weapon.
