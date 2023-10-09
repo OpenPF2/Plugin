@@ -247,12 +247,29 @@ FGameplayEffectSpecHandle UPF2GameplayAbilityBase::MakeOutgoingGameplayEffectSpe
 
 		this->ApplyAbilityTagsToGameplayEffectSpec(*EffectHandle.Data.Get(), AbilitySpec);
 
-		// Copy over set by caller magnitudes
-		if (AbilitySpec != nullptr)
+		if (AbilitySpec == nullptr)
 		{
+			UE_LOG(
+				LogPf2CoreAbilities,
+				Error,
+				TEXT("Gameplay ability specification not found for handle ('%s')."),
+				*(AbilityHandle.ToString())
+			);
+		}
+		else
+		{
+			// Copy over set by caller magnitudes.
 			EffectHandle.Data->SetByCallerTagMagnitudes = AbilitySpec->SetByCallerTagMagnitudes;
 		}
-
+	}
+	else
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("Failed to obtain handle for gameplay effect ('%s')."),
+			*(GameplayEffectClass->GetName())
+		);
 	}
 
 	return EffectHandle;
@@ -279,7 +296,16 @@ FGameplayEffectContextHandle UPF2GameplayAbilityBase::MakeEffectContextForCauser
 		const FGameplayAbilitySpec* AbilitySpec =
 			AbilityOwnerInfo->AbilitySystemComponent->FindAbilitySpecFromHandle(AbilityHandle);
 
-		if (AbilitySpec != nullptr)
+		if (AbilitySpec == nullptr)
+		{
+			UE_LOG(
+				LogPf2CoreAbilities,
+				Error,
+				TEXT("Gameplay ability specification not found for handle ('%s')."),
+				*(AbilityHandle.ToString())
+			);
+		}
+		else
 		{
 			Context.AddSourceObject(AbilitySpec->SourceObject.Get());
 		}
