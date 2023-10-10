@@ -56,9 +56,11 @@ void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecuti
 	// Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Damage Rolls".
 	if (UPF2AttackStatLibrary::IsSuccess(AttackRollResult))
 	{
-		const float DamageRoll = CalculateDamageRoll(ExecutionParams, EvaluationParameters, Weapon),
-		            Resistance = GetTargetResistanceToWeaponDamage(ExecutionParams, EvaluationParameters, Weapon);
-		float DamageAmount;
+		const float DamageRoll       = CalculateDamageRoll(ExecutionParams, EvaluationParameters, Weapon),
+		            Resistance       = GetTargetResistanceToWeaponDamage(ExecutionParams, EvaluationParameters, Weapon);
+		float       DamageMultiplier,
+		            DamageAmount,
+		            ClampedDamageAmount;
 
 		// "When you make an attack and succeed with a natural 20 (the number on the die is 20), or if the result of
 		// your attack exceeds the target’s AC by 10, you achieve a critical success (also known as a critical hit)."
@@ -66,12 +68,14 @@ void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecuti
 		// Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Critical Hits".
 		if (AttackRollResult == EPF2CheckResult::CriticalSuccess)
 		{
-			DamageAmount = DamageRoll * 2;
+			DamageMultiplier = 2.0f;
 		}
 		else
 		{
-			DamageAmount = DamageRoll;
+			DamageMultiplier = 1.0f;
 		}
+
+		DamageAmount = DamageRoll * DamageMultiplier;
 
 		// Apply resistance to reduce damage, but don't allow resistance to make damage negative (i.e., damage can never
 		// heal, but it can become ineffectual).
@@ -79,13 +83,24 @@ void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecuti
 		// From the Pathfinder 2E Core Rulebook, page 453, "Resistance":
 		// "If you have resistance to a type of damage, each time you take that type of damage, you reduce the amount of
 		// damage you take by the listed amount (to a minimum of 0 damage)."
-		DamageAmount = FMath::Max(0.0f, DamageAmount - Resistance);
+		ClampedDamageAmount = FMath::Max(0.0f, DamageAmount - Resistance);
+
+		UE_LOG(
+			LogPf2CoreAbilities,
+			VeryVerbose,
+			TEXT("Damage Roll (%f) * Damage Multiplier (%f) - Resistance (%s - %f) = %f (CLAMPED >= 0)."),
+			DamageRoll,
+			DamageMultiplier,
+			*(Weapon->GetDamageType().ToString()),
+			Resistance,
+			ClampedDamageAmount
+		);
 
 		OutExecutionOutput.AddOutputModifier(
 			FGameplayModifierEvaluatedData(
 				FPF2TargetCharacterAttributeStatics::GetInstance().TmpDamageIncomingProperty,
 				EGameplayModOp::Additive,
-				DamageAmount
+				ClampedDamageAmount
 			)
 		);
 	}

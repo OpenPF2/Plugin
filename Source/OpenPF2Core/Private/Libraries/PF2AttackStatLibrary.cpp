@@ -78,7 +78,7 @@ EPF2CheckResult UPF2AttackStatLibrary::PerformAttackRoll(const int32            
 	UE_LOG(
 		LogPf2CoreAbilities,
 		VeryVerbose,
-		TEXT("Dice roll (%d%s) + AttackAbilityModifier (%f) + WeaponProficiencyBonus (%f) + MultipleAttackPenalty (%f) = %f vs AC %f: %s."),
+		TEXT("Attack Roll (%d%s) + Attack Ability Modifier (%f) + Weapon Proficiency Bonus (%f) + Multiple Attack Penalty (%f) = %f vs. AC %f: %s."),
 		DiceRoll,
 		bIsNatural20 ? TEXT(" [CRIT]") : TEXT(""),
 		AttackAbilityModifier,
@@ -94,13 +94,26 @@ EPF2CheckResult UPF2AttackStatLibrary::PerformAttackRoll(const int32            
 
 float UPF2AttackStatLibrary::CalculateDamageRoll(const FName DamageDie, const float DamageAbilityModifier)
 {
-	const int32 RollResult = UPF2DiceLibrary::RollStringSum(DamageDie);
+	float       DamageRoll;
+	const int32 DamageDieRoll = UPF2DiceLibrary::RollStringSum(DamageDie);
 
 	// Melee damage roll  = damage die of weapon or unarmed attack + Strength modifier + bonuses + penalties
 	// Ranged damage roll = damage die of weapon + Strength modifier for thrown weapons + bonuses + penalties
 	//
 	// Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Damage Rolls".
-	return RollResult + DamageAbilityModifier;
+	DamageRoll = DamageDieRoll + DamageAbilityModifier;
+
+	UE_LOG(
+		LogPf2CoreAbilities,
+		VeryVerbose,
+		TEXT("Damage Die Roll (%s => %d) + Damage Ability Modifier (%f) = %f."),
+		*(DamageDie.ToString()),
+		DamageDieRoll,
+		DamageAbilityModifier,
+		DamageRoll
+	);
+
+	return DamageRoll;
 }
 
 float UPF2AttackStatLibrary::CalculateRangePenalty(const float WeaponRangeIncrementCentimeters,

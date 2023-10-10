@@ -64,6 +64,16 @@ void UPF2SimpleDamageExecution::Execute_Implementation(
 	// damage you take by the listed amount (to a minimum of 0 damage)."
 	DamageDone = FMath::Max(0.0f, IncomingDamage - Resistance);
 
+	UE_LOG(
+		LogPf2CoreAbilities,
+		VeryVerbose,
+		TEXT("Damage (%s - %f) - Resistance (%f) = %f (CLAMPED >= 0)."),
+		*(Spec.Def.GetName()),
+		IncomingDamage,
+		Resistance,
+		DamageDone
+	);
+
 	if (DamageDone > 0.0f)
 	{
 		OutExecutionOutput.AddOutputModifier(
