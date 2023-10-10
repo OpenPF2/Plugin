@@ -39,7 +39,12 @@ UPF2AbilityTask_PlayMontageAndWaitForEvent* UPF2AbilityTask_PlayMontageAndWaitFo
 }
 
 UPF2AbilityTask_PlayMontageAndWaitForEvent::UPF2AbilityTask_PlayMontageAndWaitForEvent(
-	const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer), Rate(1.0f), bStopWhenAbilityEnds(true)
+	const FObjectInitializer& ObjectInitializer) :
+		Super(ObjectInitializer),
+		MontageToPlay(nullptr),
+		Rate(1.0f),
+		AnimRootMotionTranslationScale(0),
+		bStopWhenAbilityEnds(true)
 {
 }
 
@@ -237,7 +242,7 @@ bool UPF2AbilityTask_PlayMontageAndWaitForEvent::StopPlayingMontage() const
 		return false;
 	}
 
-	UAnimInstance* AnimInstance = ActorInfo->GetAnimInstance();
+	const UAnimInstance* AnimInstance = ActorInfo->GetAnimInstance();
 
 	if (AnimInstance == nullptr)
 	{
@@ -248,24 +253,21 @@ bool UPF2AbilityTask_PlayMontageAndWaitForEvent::StopPlayingMontage() const
 
 	// Check if the montage is still playing
 	// The ability would have been interrupted, in which case we should automatically stop the montage
-	if ((Asc != nullptr) && this->HasAbility())
+	if ((Asc != nullptr) && this->HasAbility() && (Asc->GetAnimatingAbility() == this->Ability) &&
+		(Asc->GetCurrentMontage() == this->MontageToPlay))
 	{
-		if ((Asc->GetAnimatingAbility() == this->Ability) &&
-			(Asc->GetCurrentMontage() == this->MontageToPlay))
+		// Unbind delegates so they don't get called as well
+		FAnimMontageInstance* MontageInstance = AnimInstance->GetActiveInstanceForMontage(this->MontageToPlay);
+
+		if (MontageInstance != nullptr)
 		{
-			// Unbind delegates so they don't get called as well
-			FAnimMontageInstance* MontageInstance = AnimInstance->GetActiveInstanceForMontage(this->MontageToPlay);
-
-			if (MontageInstance != nullptr)
-			{
-				MontageInstance->OnMontageBlendingOutStarted.Unbind();
-				MontageInstance->OnMontageEnded.Unbind();
-			}
-
-			Asc->CurrentMontageStop();
-
-			return true;
+			MontageInstance->OnMontageBlendingOutStarted.Unbind();
+			MontageInstance->OnMontageEnded.Unbind();
 		}
+
+		Asc->CurrentMontageStop();
+
+		return true;
 	}
 
 	return false;
@@ -284,19 +286,18 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::Native_OnGameplayEvent(const FG
 	}
 }
 
+// ReSharper disable once CppParameterMayBeConstPtrOrRef
 void UPF2AbilityTask_PlayMontageAndWaitForEvent::Native_OnMontageEnded(UAnimMontage* Montage, const bool bInterrupted)
 {
-	if (!bInterrupted && (Montage == this->MontageToPlay))
+	if (!bInterrupted && (Montage == this->MontageToPlay) && this->ShouldBroadcastAbilityTaskDelegates())
 	{
-		if (this->ShouldBroadcastAbilityTaskDelegates())
-		{
-			this->OnCompleted.Broadcast(FGameplayTag(), FGameplayEventData());
-		}
+		this->OnCompleted.Broadcast(FGameplayTag(), FGameplayEventData());
 	}
 
 	this->EndTask();
 }
 
+// ReSharper disable once CppParameterMayBeConstPtrOrRef
 void UPF2AbilityTask_PlayMontageAndWaitForEvent::Native_OnMontageBlendingOut(UAnimMontage* Montage,
                                                                              const bool    bInterrupted) const
 {
@@ -331,23 +332,17 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::Native_OnMontageBlendingOut(UAn
 			this->OnInterrupted.Broadcast(FGameplayTag(), FGameplayEventData());
 		}
 	}
-	else
+	else if (this->ShouldBroadcastAbilityTaskDelegates())
 	{
-		if (this->ShouldBroadcastAbilityTaskDelegates())
-		{
-			this->OnBlendOut.Broadcast(FGameplayTag(), FGameplayEventData());
-		}
+		this->OnBlendOut.Broadcast(FGameplayTag(), FGameplayEventData());
 	}
 }
 
 void UPF2AbilityTask_PlayMontageAndWaitForEvent::Native_OnAbilityCancelled() const
 {
-	if (this->StopPlayingMontage())
+	// Let the BP handle the interrupt as well
+	if (this->StopPlayingMontage() && this->ShouldBroadcastAbilityTaskDelegates())
 	{
-		// Let the BP handle the interrupt as well
-		if (this->ShouldBroadcastAbilityTaskDelegates())
-		{
-			this->OnCancelled.Broadcast(FGameplayTag(), FGameplayEventData());
-		}
+		this->OnCancelled.Broadcast(FGameplayTag(), FGameplayEventData());
 	}
 }

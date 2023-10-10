@@ -25,7 +25,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
 );
 
 /**
- * A task to combine both the PlayMontageAndWait and WaitForEvent tasks into one.
+ * A task that combines both the PlayMontageAndWait and WaitForEvent tasks into one.
  *
  * This allows the same montage to trigger one of any number of tag-based events (for example, as part of a complex
  * combat or action sequence where multiple types of damage are possible).
