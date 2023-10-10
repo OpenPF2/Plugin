@@ -227,12 +227,28 @@ public:
 	 *
 	 * @return
 	 *	Either the desired capture definition; or nullptr if the character is using an ASC that does not provide an
-	 *	attribute the corresponds to the specified ability score.
+	 *	attribute that corresponds to the specified ability score.
 	 */
 	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetCaptureByAbilityScoreType(
 		const EPF2CharacterAbilityScoreType AbilityScoreType) const
 	{
 		return this->GetCaptureByAttributeName(PF2EnumUtilities::ToString(AbilityScoreType));
+	}
+
+	/**
+	 * Gets the capture definition for the modifier of the given character ability score type.
+	 *
+	 * @param AbilityScoreType
+	 *	The ability score for which a modifier attribute capture is desired.
+	 *
+	 * @return
+	 *	Either the desired modifier capture definition; or nullptr if the character is using an ASC that does not
+	 *	provide a modifier attribute that corresponds to the specified ability score.
+	 */
+	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetModifierCaptureByAbilityScoreType(
+		const EPF2CharacterAbilityScoreType AbilityScoreType) const
+	{
+		return this->GetCaptureByAttributeName(PF2EnumUtilities::ToString(AbilityScoreType) + "Modifier");
 	}
 
 	/**

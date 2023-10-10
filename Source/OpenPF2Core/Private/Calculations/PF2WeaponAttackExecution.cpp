@@ -124,7 +124,7 @@ EPF2CheckResult UPF2WeaponAttackExecution::PerformAttackRoll(
 	const FPF2SourceCharacterAttributeStatics& SourceStatics = FPF2SourceCharacterAttributeStatics::GetInstance();
 
 	const FGameplayEffectAttributeCaptureDefinition* AbilityScoreCapture =
-		SourceStatics.GetCaptureByAbilityScoreType(AttackScoreType);
+		SourceStatics.GetModifierCaptureByAbilityScoreType(AttackScoreType);
 
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(
 		*AbilityScoreCapture,
@@ -162,7 +162,7 @@ float UPF2WeaponAttackExecution::CalculateDamageRoll(
 	float                               DamageAbilityModifier = 0.0f;
 
 	const FGameplayEffectAttributeCaptureDefinition* AbilityScoreCapture =
-		SourceStatics.GetCaptureByAbilityScoreType(DamageScoreType);
+		SourceStatics.GetModifierCaptureByAbilityScoreType(DamageScoreType);
 
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(
 		*AbilityScoreCapture,
