@@ -19,6 +19,7 @@
 #include "PF2GameplayEffectContainer.h"
 
 #include "Abilities/PF2CharacterAbilityScoreType.h"
+
 #include "Items/PF2ItemInterface.h"
 
 #include "PF2WeaponInterface.generated.h"
@@ -27,12 +28,14 @@
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class APF2EffectCauseWrapper;
+class IPF2CharacterAbilitySystemInterface;
 
 struct FGameplayTagContainer;
 struct FGameplayEffectCustomExecutionParameters;
+struct FPF2GameplayEffectContainerSpec;
 
 // =====================================================================================================================
-// Normal Declarations
+// Normal Declarations - Types
 // =====================================================================================================================
 UINTERFACE(BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2WeaponInterface : public UInterface
@@ -157,4 +160,27 @@ public:
      */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
     virtual APF2EffectCauseWrapper* ToEffectCauser(AActor* OwningActor) = 0;
+
+	/**
+	 * Notify this weapon that a gameplay effects (GE) container spec. has been generated from it.
+	 *
+	 * This is an opportunity for the weapon to dynamically generate additional gameplay effect specifications and/or to
+	 * populate set-by-caller temporary variables for additional damage effects (e.g., from runes).
+	 *
+	 * @param SourceAbilitySystemComponent
+	 *	The source ASC for the GEs (i.e., the character performing the attack).
+	 * @param ActivatedAbility
+	 *	The handle of the active ability (the ability that has generated the GE container spec).
+	 * @param AbilityOwnerInfo
+	 *	Information about the actor who activated the gameplay ability.
+	 * @param ContainerSpec
+	 *	A reference to the GE container specification that was generated. The weapon may modify this specification in
+	 *	place.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
+    virtual void OnGameplayEffectsContainerSpecGenerated(
+	    const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
+	    const FGameplayAbilitySpecHandle&                            ActivatedAbility,
+	    const FGameplayAbilityActorInfo&                             AbilityOwnerInfo,
+	    FPF2GameplayEffectContainerSpec&                             ContainerSpec) = 0;
 };

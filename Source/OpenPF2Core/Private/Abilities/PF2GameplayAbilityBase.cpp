@@ -14,6 +14,8 @@
 
 #include "Items/Weapons/PF2WeaponInterface.h"
 
+#include "Libraries/PF2AbilitySystemLibrary.h"
+
 #include "Utilities/PF2InterfaceUtilities.h"
 
 FString UPF2GameplayAbilityBase::GetIdForLogs() const
@@ -140,11 +142,34 @@ FPF2GameplayEffectContainerSpec UPF2GameplayAbilityBase::MakeEffectContainerSpec
 	const TScriptInterface<IPF2WeaponInterface> Weapon,
 	const float                                 Level) const
 {
-	FPF2GameplayEffectContainerSpec Result;
+	FPF2GameplayEffectContainerSpec                Result;
+	const TScriptInterface<IPF2CharacterInterface> Character = this->GetOwningCharacterFromActorInfo();
 
-	for (const TSubclassOf<UGameplayEffect>& EffectClass : Container.GameplayEffectsToApply)
+	if (Character == nullptr)
 	{
-		Result.AddGameplayEffectSpec(this->MakeOutgoingGameplayEffectSpecForWeapon(EffectClass, Weapon, Level));
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("The owner of this gameplay ability ('%s') is not an OpenPF2-compatible character."),
+			*(this->GetIdForLogs())
+		);
+	}
+	else
+	{
+		check(this->CurrentSpecHandle.IsValid());
+		check(this->CurrentActorInfo != nullptr);
+
+		for (const TSubclassOf<UGameplayEffect>& EffectClass : Container.GameplayEffectsToApply)
+		{
+			Result.AddGameplayEffectSpec(this->MakeOutgoingGameplayEffectSpecForWeapon(EffectClass, Weapon, Level));
+		}
+
+		Weapon->OnGameplayEffectsContainerSpecGenerated(
+			Character->GetCharacterAbilitySystemComponent(),
+			this->CurrentSpecHandle,
+			*(this->CurrentActorInfo),
+			Result
+		);
 	}
 
 	return Result;

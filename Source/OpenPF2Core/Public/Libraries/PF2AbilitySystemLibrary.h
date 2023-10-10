@@ -166,6 +166,22 @@ public:
 	}
 
 	/**
+	 * Returns a copy of the specified Gameplay Effect (GE) container spec with the given gameplay effect added.
+	 *
+	 * @param ContainerSpec
+	 *	The original gameplay effect container specification from which to start from.
+	 * @param GameplayEffectSpec
+	 *	The specification handle to add.
+	 *
+	 * @return
+	 *	The modified GE container spec.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Effects")
+	static FPF2GameplayEffectContainerSpec AddGameplayEffectSpecToEffectContainerSpec(
+		const FPF2GameplayEffectContainerSpec& ContainerSpec,
+		const FGameplayEffectSpecHandle&       GameplayEffectSpec);
+
+	/**
 	 * Returns a copy of the specified Gameplay Effect (GE) container spec with the given hits added as targets.
 	 *
 	 * @param ContainerSpec

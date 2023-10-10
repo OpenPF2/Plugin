@@ -228,6 +228,12 @@ public:
 	virtual FPF2GameplayEffectContainer GetGameplayEffects() const override;
 	virtual APF2EffectCauseWrapper* ToEffectCauser(AActor* OwningActor) override;
 
+	virtual void OnGameplayEffectsContainerSpecGenerated(
+		const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
+		const FGameplayAbilitySpecHandle&                            ActivatedAbility,
+		const FGameplayAbilityActorInfo&                             AbilityOwnerInfo,
+		FPF2GameplayEffectContainerSpec&                             ContainerSpec) override;
+
 	// =================================================================================================================
 	// Public Methods - IPF2ItemInterface Implementation
 	// =================================================================================================================
@@ -239,4 +245,32 @@ public:
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================
 	virtual FString GetIdForLogs() const override;
+
+protected:
+	// =================================================================================================================
+	// Protected Methods
+	// =================================================================================================================
+	/**
+	 * Notify this weapon that a gameplay effects (GE) container spec. has been generated from it.
+	 *
+	 * This is an opportunity for the weapon to dynamically generate additional gameplay effect specifications and/or to
+	 * populate set-by-caller temporary variables for additional damage effects (e.g., from runes).
+	 * @param SourceAbilitySystemComponent
+	 *	The source ASC for the GEs (i.e., the character performing the attack).
+	 * @param ActivatedAbility
+	 *	The handle of the active ability (the ability that has generated the GE container spec).
+	 * @param AbilityOwnerInfo
+	 *	Information about the actor who activated the gameplay ability.
+	 * @param ContainerSpec
+	 *	The GE container specification that was generated.
+	 * @param ModifiedContainerSpec [out]
+	 *	The modified GE container specification.
+	 */
+	UFUNCTION(BlueprintNativeEvent, DisplayName="On Gameplay Effects Container Spec Generated")
+	void BP_OnGameplayEffectsContainerSpecGenerated(
+		const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
+		const FGameplayAbilitySpecHandle&                            ActivatedAbility,
+		const FGameplayAbilityActorInfo&                             AbilityOwnerInfo,
+		const FPF2GameplayEffectContainerSpec&                       ContainerSpec,
+		FPF2GameplayEffectContainerSpec&                             ModifiedContainerSpec);
 };

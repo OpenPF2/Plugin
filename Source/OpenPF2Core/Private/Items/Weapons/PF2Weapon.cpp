@@ -8,12 +8,28 @@
 #include <GameplayEffectExecutionCalculation.h>
 
 #include "PF2EffectCauseWrapper.h"
+#include "PF2GameplayEffectContainerSpec.h"
 
 #include "Abilities/PF2CharacterAbilitySystemInterface.h"
 
 APF2EffectCauseWrapper* UPF2Weapon::ToEffectCauser(AActor* OwningActor)
 {
 	return APF2EffectCauseWrapper::Create(OwningActor, this);
+}
+
+void UPF2Weapon::OnGameplayEffectsContainerSpecGenerated(
+	const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
+	const FGameplayAbilitySpecHandle&                            ActivatedAbility,
+	const FGameplayAbilityActorInfo&                             AbilityOwnerInfo,
+	FPF2GameplayEffectContainerSpec&                             ContainerSpec)
+{
+	this->BP_OnGameplayEffectsContainerSpecGenerated(
+		SourceAbilitySystemComponent,
+		ActivatedAbility,
+		AbilityOwnerInfo,
+		ContainerSpec,
+		ContainerSpec
+	);
 }
 
 FGameplayTagContainer UPF2Weapon::GetProficiencyTagPrefixes() const
@@ -64,4 +80,15 @@ bool UPF2Weapon::ShouldBeEquippedInAllLinkedSlots()
 FString UPF2Weapon::GetIdForLogs() const
 {
 	return Super::GetIdForLogs();
+}
+
+void UPF2Weapon::BP_OnGameplayEffectsContainerSpecGenerated_Implementation(
+	const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
+	const FGameplayAbilitySpecHandle&                            ActivatedAbility,
+	const FGameplayAbilityActorInfo&                             AbilityOwnerInfo,
+	const FPF2GameplayEffectContainerSpec&                       ContainerSpec,
+	FPF2GameplayEffectContainerSpec&                             ModifiedContainerSpec)
+{
+	// Default implementation: just return what was passed in, as is.
+	ModifiedContainerSpec = ContainerSpec;
 }
