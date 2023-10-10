@@ -5,8 +5,115 @@
 
 #include "Libraries/PF2AbilitySystemLibrary.h"
 
+#include <AbilitySystemGlobals.h>
+
 #include "PF2CharacterInterface.h"
+#include "PF2EffectCauseWrapper.h"
 #include "PF2GameplayEffectContainerSpec.h"
+
+#include "Items/Weapons/PF2WeaponInterface.h"
+
+FGameplayEffectSpecHandle UPF2AbilitySystemLibrary::MakeOutgoingGameplayEffectSpecForWeapon(
+	const FGameplayAbilitySpecHandle&            AbilityHandle,
+	const FGameplayAbilityActorInfo&             AbilityOwnerInfo,
+	const TSubclassOf<UGameplayEffect>           GameplayEffectClass,
+	const TScriptInterface<IPF2WeaponInterface>& Weapon,
+	const float                                  Level)
+{
+	return MakeOutgoingGameplayEffectSpecForCauser(
+		AbilityHandle,
+		AbilityOwnerInfo,
+		GameplayEffectClass,
+		Weapon->ToEffectCauser(AbilityOwnerInfo.OwnerActor.Get()),
+		Level
+	);
+}
+
+FGameplayEffectSpecHandle UPF2AbilitySystemLibrary::MakeOutgoingGameplayEffectSpecForCauser(
+	const FGameplayAbilitySpecHandle&  AbilityHandle,
+	const FGameplayAbilityActorInfo&   AbilityOwnerInfo,
+	const TSubclassOf<UGameplayEffect> GameplayEffectClass,
+	AActor*                            EffectCauser,
+	const float                        Level)
+{
+	UAbilitySystemComponent* const SourceAsc = AbilityOwnerInfo.AbilitySystemComponent.Get();
+
+	const FGameplayEffectContextHandle EffectContext =
+		MakeEffectContextForCauser(AbilityHandle, AbilityOwnerInfo, EffectCauser);
+
+	FGameplayEffectSpecHandle EffectHandle = SourceAsc->MakeOutgoingSpec(GameplayEffectClass, Level, EffectContext);
+
+	if (EffectHandle.IsValid())
+	{
+		FGameplayAbilitySpec* AbilitySpec = SourceAsc->FindAbilitySpecFromHandle(AbilityHandle);
+
+		if (AbilitySpec == nullptr)
+		{
+			UE_LOG(
+				LogPf2CoreAbilities,
+				Error,
+				TEXT("Gameplay ability specification not found for handle ('%s')."),
+				*(AbilityHandle.ToString())
+			);
+		}
+		else
+		{
+			AbilitySpec->Ability->ApplyAbilityTagsToGameplayEffectSpec(*EffectHandle.Data.Get(), AbilitySpec);
+
+			// Copy over set by caller magnitudes.
+			EffectHandle.Data->SetByCallerTagMagnitudes = AbilitySpec->SetByCallerTagMagnitudes;
+		}
+	}
+	else
+	{
+		UE_LOG(
+			LogPf2CoreAbilities,
+			Error,
+			TEXT("Failed to obtain handle for gameplay effect ('%s')."),
+			*(GameplayEffectClass->GetName())
+		);
+	}
+
+	return EffectHandle;
+}
+
+FGameplayEffectContextHandle UPF2AbilitySystemLibrary::MakeEffectContextForCauser(
+	const FGameplayAbilitySpecHandle& AbilityHandle,
+	const FGameplayAbilityActorInfo&  AbilityOwnerInfo,
+	AActor*                           EffectCauser)
+{
+	FGameplayEffectContextHandle Context =
+		FGameplayEffectContextHandle(UAbilitySystemGlobals::Get().AllocGameplayEffectContext());
+
+	// Use the character who activated the ability as the instigator, while using a caller-supplied effect causer.
+	Context.AddInstigator(AbilityOwnerInfo.OwnerActor.Get(), EffectCauser);
+
+	// Pass along the source ability object to the effect, as long as it is available.
+	{
+		const FGameplayAbilitySpec* AbilitySpec =
+			AbilityOwnerInfo.AbilitySystemComponent->FindAbilitySpecFromHandle(AbilityHandle);
+
+		if (AbilitySpec == nullptr)
+		{
+			UE_LOG(
+				LogPf2CoreAbilities,
+				Error,
+				TEXT("Gameplay ability specification not found for handle ('%s')."),
+				*(AbilityHandle.ToString())
+			);
+		}
+		else
+		{
+			// Track which ability is initiating the GE.
+			Context.SetAbility(AbilitySpec->Ability);
+
+			// Copy the ability source over to the GE.
+			Context.AddSourceObject(AbilitySpec->SourceObject.Get());
+		}
+	}
+
+	return Context;
+}
 
 FGameplayAbilityTargetDataHandle UPF2AbilitySystemLibrary::CreateAbilityTargetDataFromPlayerControllerTargetSelection(
 	const TScriptInterface<IPF2PlayerControllerInterface> PlayerController)
@@ -75,6 +182,17 @@ EPF2TargetSelectionType UPF2AbilitySystemLibrary::GetTargetSelectionType(
 	}
 
 	return Result;
+}
+
+FPF2GameplayEffectContainerSpec UPF2AbilitySystemLibrary::AddGameplayEffectSpecToEffectContainerSpec(
+	const FPF2GameplayEffectContainerSpec& ContainerSpec,
+	const FGameplayEffectSpecHandle& GameplayEffectSpec)
+{
+	FPF2GameplayEffectContainerSpec NewSpec = ContainerSpec;
+
+	NewSpec.GameplayEffectSpecsToApply.Add(GameplayEffectSpec);
+
+	return NewSpec;
 }
 
 FPF2GameplayEffectContainerSpec UPF2AbilitySystemLibrary::AddHitTargetsToEffectContainerSpec(
