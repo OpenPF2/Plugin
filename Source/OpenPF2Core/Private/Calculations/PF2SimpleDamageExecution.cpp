@@ -65,9 +65,9 @@ void UPF2SimpleDamageExecution::Execute_Implementation(
 	DamageDone = FMath::Max(0.0f, IncomingDamage - Resistance);
 
 	UE_LOG(
-		LogPf2CoreAbilities,
+		LogPf2CoreStats,
 		VeryVerbose,
-		TEXT("Damage (%s - %f) - Resistance (%f) = %f (CLAMPED >= 0)."),
+		TEXT("Damage (%s: %f) - Resistance (%f) = %f (CLAMPED >= 0)."),
 		*(Spec.Def.GetName()),
 		IncomingDamage,
 		Resistance,

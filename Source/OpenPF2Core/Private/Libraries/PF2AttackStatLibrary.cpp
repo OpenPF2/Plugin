@@ -39,7 +39,7 @@ EPF2CheckResult UPF2AttackStatLibrary::PerformAttackRoll(const int32            
 	if (MultipleAttackPenalty > 0)
 	{
 		UE_LOG(
-			LogPf2CoreAbilities,
+			LogPf2CoreStats,
 			Error,
 			TEXT("PerformAttackRoll(): The Multiple Attack Penalty should be negative or zero (was given '%f')."),
 			MultipleAttackPenalty
@@ -76,7 +76,7 @@ EPF2CheckResult UPF2AttackStatLibrary::PerformAttackRoll(const int32            
 	}
 
 	UE_LOG(
-		LogPf2CoreAbilities,
+		LogPf2CoreStats,
 		VeryVerbose,
 		TEXT("Attack Roll (%d%s) + Attack Ability Modifier (%f) + Weapon Proficiency Bonus (%f) + Multiple Attack Penalty (%f) = %f vs. AC %f: %s."),
 		DiceRoll,
@@ -104,9 +104,9 @@ float UPF2AttackStatLibrary::CalculateDamageRoll(const FName DamageDie, const fl
 	DamageRoll = DamageDieRoll + DamageAbilityModifier;
 
 	UE_LOG(
-		LogPf2CoreAbilities,
+		LogPf2CoreStats,
 		VeryVerbose,
-		TEXT("Damage Die Roll (%s => %d) + Damage Ability Modifier (%f) = %f."),
+		TEXT("Damage Die Roll (%s: %d) + Damage Ability Modifier (%f) = %f."),
 		*(DamageDie.ToString()),
 		DamageDieRoll,
 		DamageAbilityModifier,

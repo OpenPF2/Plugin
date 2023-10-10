@@ -86,9 +86,9 @@ void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecuti
 		ClampedDamageAmount = FMath::Max(0.0f, DamageAmount - Resistance);
 
 		UE_LOG(
-			LogPf2CoreAbilities,
+			LogPf2CoreStats,
 			VeryVerbose,
-			TEXT("Damage Roll (%f) * Damage Multiplier (%f) - Resistance (%s - %f) = %f (CLAMPED >= 0)."),
+			TEXT("Damage Roll (%f) * Damage Multiplier (%f) - Resistance (%s: %f) = %f (CLAMPED >= 0)."),
 			DamageRoll,
 			DamageMultiplier,
 			*(Weapon->GetDamageType().ToString()),
