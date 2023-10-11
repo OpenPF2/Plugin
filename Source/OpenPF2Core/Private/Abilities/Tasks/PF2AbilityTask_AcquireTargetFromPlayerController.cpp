@@ -29,6 +29,16 @@ UPF2AbilityTask_AcquireTargetFromPlayerController* UPF2AbilityTask_AcquireTarget
 	return Task;
 }
 
+void UPF2AbilityTask_AcquireTargetFromPlayerController::ExternalCancel()
+{
+	if (this->TaskState != EGameplayTaskState::Finished)
+	{
+		this->Native_OnAbilityCancelled();
+	}
+
+	Super::ExternalCancel();
+}
+
 void UPF2AbilityTask_AcquireTargetFromPlayerController::Activate()
 {
 	Super::Activate();
@@ -65,6 +75,7 @@ void UPF2AbilityTask_AcquireTargetFromPlayerController::Activate()
 		{
 			const FHitResult TargetLocation = PlayerController->GetTargetSelection();
 
+			// FIXME: Move tag name into constant.
 			this->NotifyListenersAboutTarget(
 				MakeTargetData(TargetLocation),
 				PF2GameplayAbilityUtilities::GetTag(
@@ -77,16 +88,6 @@ void UPF2AbilityTask_AcquireTargetFromPlayerController::Activate()
 	{
 		this->WaitForTargetFromClient();
 	}
-}
-
-void UPF2AbilityTask_AcquireTargetFromPlayerController::ExternalCancel()
-{
-	if (this->TaskState != EGameplayTaskState::Finished)
-	{
-		this->Native_OnAbilityCancelled();
-	}
-
-	Super::ExternalCancel();
 }
 
 void UPF2AbilityTask_AcquireTargetFromPlayerController::WaitForTargetFromClient()
@@ -124,9 +125,11 @@ void UPF2AbilityTask_AcquireTargetFromPlayerController::NotifyListenersAboutTarg
 {
 	if (this->ShouldBroadcastAbilityTaskDelegates())
 	{
+		// FIXME: Move tag name into constant.
 		const FGameplayTag ReceivedCharacterTag =
 			PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.Event.TargetReceived.Character"));
 
+		// FIXME: Move tag name into constant.
 		const FGameplayTag ReceivedLocationTag =
 			PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.Event.TargetReceived.Location"));
 

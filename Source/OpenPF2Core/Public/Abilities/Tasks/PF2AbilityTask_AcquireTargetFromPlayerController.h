@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -77,21 +77,6 @@ public:
 
 protected:
 	// =================================================================================================================
-	// Protected Fields
-	// =================================================================================================================
-	/**
-	 * The type of selection(s) the task will allow.
-	 */
-	EPF2AbilityAllowedTargetSelectionType AllowedTargetType;
-
-	/**
-	 * For character selections: The tags that a character must have for it to be a valid selection.
-	 *
-	 * Can be a nullptr or empty container if any character can be selected.
-	 */
-	FGameplayTagContainer RequiredTargetCharacterTags;
-
-	// =================================================================================================================
 	// Delegates/Execution Pins
 	// =================================================================================================================
 	/**
@@ -118,12 +103,33 @@ protected:
 	UPROPERTY(BlueprintAssignable)
 	FWaitTargetDataDelegate OnCancelled;
 
+private:
+	// =================================================================================================================
+	// Private Fields
+	// =================================================================================================================
+	/**
+	 * The type of selection(s) the task will allow.
+	 */
+	EPF2AbilityAllowedTargetSelectionType AllowedTargetType;
+
+	/**
+	 * For character selections: The tags that a character must have for it to be a valid selection.
+	 *
+	 * Can be a nullptr or empty container if any character can be selected.
+	 */
+	FGameplayTagContainer RequiredTargetCharacterTags;
+
 public:
 	// =================================================================================================================
 	// Public Methods - UAbilityTask Overrides
 	// =================================================================================================================
-	virtual void Activate() override;
 	virtual void ExternalCancel() override;
+
+protected:
+	// =================================================================================================================
+	// Protected Methods - UAbilityTask Overrides
+	// =================================================================================================================
+	virtual void Activate() override;
 
 private:
 	// =================================================================================================================

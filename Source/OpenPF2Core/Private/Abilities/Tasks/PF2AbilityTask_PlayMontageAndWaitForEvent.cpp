@@ -48,6 +48,47 @@ UPF2AbilityTask_PlayMontageAndWaitForEvent::UPF2AbilityTask_PlayMontageAndWaitFo
 {
 }
 
+void UPF2AbilityTask_PlayMontageAndWaitForEvent::ExternalCancel()
+{
+	check(this->AbilitySystemComponent.IsValid());
+
+	this->Native_OnAbilityCancelled();
+
+	Super::ExternalCancel();
+}
+
+FString UPF2AbilityTask_PlayMontageAndWaitForEvent::GetDebugString() const
+{
+	const UAnimMontage* PlayingMontage = nullptr;
+
+	if (this->HasAbility())
+	{
+		const FGameplayAbilityActorInfo* ActorInfo    = Ability->GetCurrentActorInfo();
+		const UAnimInstance*             AnimInstance = ActorInfo->GetAnimInstance();
+
+		if (AnimInstance != nullptr)
+		{
+			if (AnimInstance->Montage_IsActive(this->MontageToPlay))
+			{
+				PlayingMontage = this->MontageToPlay;
+			}
+			else
+			{
+				PlayingMontage = AnimInstance->GetCurrentActiveMontage();
+			}
+		}
+	}
+
+	FString DebugString =
+		FString::Printf(
+			TEXT("PlayMontageAndWaitForEvent. MontageToPlay: %s  (Currently Playing): %s"),
+			*GetNameSafe(this->MontageToPlay),
+			*GetNameSafe(PlayingMontage)
+		);
+
+	return DebugString;
+}
+
 void UPF2AbilityTask_PlayMontageAndWaitForEvent::Activate()
 {
 	if (this->Ability == nullptr)
@@ -158,15 +199,6 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::Activate()
 	this->SetWaitingOnAvatar();
 }
 
-void UPF2AbilityTask_PlayMontageAndWaitForEvent::ExternalCancel()
-{
-	check(this->AbilitySystemComponent.IsValid());
-
-	this->Native_OnAbilityCancelled();
-
-	Super::ExternalCancel();
-}
-
 void UPF2AbilityTask_PlayMontageAndWaitForEvent::OnDestroy(const bool bAbilityEnded)
 {
 	// Note: Clearing montage end delegate isn't necessary since its not a multicast and will be cleared when the next
@@ -192,45 +224,6 @@ void UPF2AbilityTask_PlayMontageAndWaitForEvent::OnDestroy(const bool bAbilityEn
 	}
 
 	Super::OnDestroy(bAbilityEnded);
-}
-
-FString UPF2AbilityTask_PlayMontageAndWaitForEvent::GetDebugString() const
-{
-	const UAnimMontage* PlayingMontage = nullptr;
-
-	if (this->HasAbility())
-	{
-		const FGameplayAbilityActorInfo* ActorInfo    = Ability->GetCurrentActorInfo();
-		const UAnimInstance*             AnimInstance = ActorInfo->GetAnimInstance();
-
-		if (AnimInstance != nullptr)
-		{
-			if (AnimInstance->Montage_IsActive(this->MontageToPlay))
-			{
-				PlayingMontage = this->MontageToPlay;
-			}
-			else
-			{
-				PlayingMontage = AnimInstance->GetCurrentActiveMontage();
-			}
-		}
-	}
-
-	FString DebugString =
-		FString::Printf(
-			TEXT("PlayMontageAndWaitForEvent. MontageToPlay: %s  (Currently Playing): %s"),
-			*GetNameSafe(this->MontageToPlay),
-			*GetNameSafe(PlayingMontage)
-		);
-
-	return DebugString;
-}
-
-UAbilitySystemComponent* UPF2AbilityTask_PlayMontageAndWaitForEvent::GetTargetAsc() const
-{
-	check(this->AbilitySystemComponent.IsValid());
-
-	return this->AbilitySystemComponent.Get();
 }
 
 bool UPF2AbilityTask_PlayMontageAndWaitForEvent::StopPlayingMontage() const

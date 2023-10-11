@@ -30,6 +30,9 @@ class OPENPF2CORE_API UPF2AbilityTaskBase : public UAbilityTask
 	GENERATED_BODY()
 
 protected:
+	// =================================================================================================================
+	// Protected Methods
+	// =================================================================================================================
 	/**
 	 * Gets whether this ability task has a valid ability.
 	 *
