@@ -789,19 +789,19 @@ public:
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, TmpDamageIncoming)
 
 	// =================================================================================================================
-	// Constructors
+	// Public Constructors
 	// =================================================================================================================
 	explicit UPF2AttributeSet();
 
 	// =================================================================================================================
-	// UAttributeSet Callbacks
+	// Public Methods - UAttributeSet Overrides
 	// =================================================================================================================
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
 	// =================================================================================================================
-	// Attribute Replication Callbacks
+	// Public Methods - Replication Callbacks
 	// =================================================================================================================
 	// These exist to make sure that the ability system internal representations are synchronized properly during
 	// replication.
@@ -1022,6 +1022,9 @@ public:
 	virtual void OnRep_EncMaxMultipleAttackPenalty(const FGameplayAttributeData& OldValue);
 
 protected:
+	// =================================================================================================================
+	// Protected Native Event Callbacks
+	// =================================================================================================================
 	/**
 	 * Notifies this ASC that the incoming damage attribute has been changed (typically by a Gameplay Effect).
 	 *
