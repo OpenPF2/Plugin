@@ -11,7 +11,7 @@ public class OpenPF2EditorSupport : ModuleRules
 	public OpenPF2EditorSupport(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_2;
+		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
 
 		PrivatePCHHeaderFile = "Public/OpenPF2EditorSupport.h";
 
