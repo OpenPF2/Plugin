@@ -63,7 +63,7 @@ END_DEFINE_PF_SPEC(FPF2SavingThrowModifierCalculationSpec)
 
 void FPF2SavingThrowModifierCalculationSpec::Define()
 {
-	BeforeEach([=]()
+	BeforeEach([=, this]()
 	{
 		this->SetupWorld();
 		this->SetupPawn();
@@ -71,13 +71,13 @@ void FPF2SavingThrowModifierCalculationSpec::Define()
 		this->BeginPlay();
 	});
 
-	AfterEach([=]()
+	AfterEach([=, this]()
 	{
 		this->DestroyPawn();
 		this->DestroyWorld();
 	});
 
-	Describe("Fortitude Saving Throws", [=]
+	Describe("Fortitude Saving Throws", [=, this]
 	{
 		const FString AbModFriendlyName              = TEXT("Constitution");
 		const FString AbModAttributeName             = TEXT("AbConstitutionModifier");
@@ -92,7 +92,7 @@ void FPF2SavingThrowModifierCalculationSpec::Define()
 		);
 	});
 
-	Describe("Reflex Saving Throws", [=]
+	Describe("Reflex Saving Throws", [=, this]
 	{
 		const FString AbModFriendlyName              = TEXT("Dexterity");
 		const FString AbModAttributeName             = TEXT("AbDexterityModifier");
@@ -107,7 +107,7 @@ void FPF2SavingThrowModifierCalculationSpec::Define()
 		);
 	});
 
-	Describe("Will Saving Throws", [=]
+	Describe("Will Saving Throws", [=, this]
 	{
 		const FString AbModFriendlyName              = TEXT("Wisdom");
 		const FString AbModAttributeName             = TEXT("AbWisdomModifier");
@@ -138,16 +138,16 @@ void FPF2SavingThrowModifierCalculationSpec::VerifySavingThrowModifier(const FSt
 		const float                AbModScore     = AbilityValues.Key;
 		const TMap<FString, float> TrainingScores = AbilityValues.Value;
 
-		Describe(FString::Format(TEXT("when the character has a '{0}' modifier of '{1}'"), {AbModFriendlyName, FString::FormatAsNumber(AbModScore)}), [=]()
+		Describe(FString::Format(TEXT("when the character has a '{0}' modifier of '{1}'"), {AbModFriendlyName, FString::FormatAsNumber(AbModScore)}), [=, this]()
 		{
 			for (const auto ProficiencyValues : TrainingScores)
 			{
 				const FString ProficiencyLevel  = ProficiencyValues.Key;
 				const float   ExpectedSavingMod = ProficiencyValues.Value;
 
-				Describe(FString::Format(TEXT("when the character is '{0}' in '{1}' saving throws"), {ProficiencyLevel, SavingModAttributeFriendlyName}), [=]()
+				Describe(FString::Format(TEXT("when the character is '{0}' in '{1}' saving throws"), {ProficiencyLevel, SavingModAttributeFriendlyName}), [=, this]()
 				{
-					It(FString::Format(TEXT("calculates a '{0}' saving throw of '{1}'"), {SavingModAttributeFriendlyName, FString::FormatAsNumber(ExpectedSavingMod)}), [=]()
+					It(FString::Format(TEXT("calculates a '{0}' saving throw of '{1}'"), {SavingModAttributeFriendlyName, FString::FormatAsNumber(ExpectedSavingMod)}), [=, this]()
 					{
 						this->VerifySavingThrowModifier(
 							AbModAttributeName,

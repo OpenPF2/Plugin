@@ -30,7 +30,7 @@ END_DEFINE_PF_SPEC(FKeyAbilityBoostSpec)
 
 void FKeyAbilityBoostSpec::Define()
 {
-	BeforeEach([=]()
+	BeforeEach([=, this]()
 	{
 		this->SetupWorld();
 		this->SetupPawn();
@@ -38,7 +38,7 @@ void FKeyAbilityBoostSpec::Define()
 		this->BeginPlay();
 	});
 
-	AfterEach([=]()
+	AfterEach([=, this]()
 	{
 		this->DestroyPawn();
 		this->DestroyWorld();
@@ -49,9 +49,9 @@ void FKeyAbilityBoostSpec::Define()
 		const FString KeyAbilityName          = KeyAbility.Key;
 		const FString KeyAbilityAttributeName = KeyAbility.Value;
 
-		Describe(FString::Format(TEXT("when the character's key ability is '{0}'"), {KeyAbilityName}), [=]()
+		Describe(FString::Format(TEXT("when the character's key ability is '{0}'"), {KeyAbilityName}), [=, this]()
 		{
-			BeforeEach([=]()
+			BeforeEach([=, this]()
 			{
 				const UPF2AttributeSet* AttributeSet         = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
 				FAttributeCapture       Attributes           = CaptureAbilityAttributes(AttributeSet);
@@ -71,7 +71,7 @@ void FKeyAbilityBoostSpec::Define()
 				this->ApplyGameEffect(*KeyAbilityAttribute, 15.0f, EffectBP);
 			});
 
-			It(FString::Format(TEXT("boosts '{0}'"), {KeyAbilityName}), [=]()
+			It(FString::Format(TEXT("boosts '{0}'"), {KeyAbilityName}), [=, this]()
 			{
 				const UPF2AttributeSet*       AttributeSet        = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
 				FAttributeCapture             Attributes          = CaptureAbilityAttributes(AttributeSet);
@@ -90,7 +90,7 @@ void FKeyAbilityBoostSpec::Define()
 				);
 			});
 
-			It(TEXT("does not boost any other abilities"), [=]()
+			It(TEXT("does not boost any other abilities"), [=, this]()
 			{
 				const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
 				FAttributeCapture       Attributes   = CaptureAbilityAttributes(AttributeSet);

@@ -53,7 +53,7 @@ END_DEFINE_PF_SPEC(FPF2AncestryFeatCapCalculationSpec)
 
 void FPF2AncestryFeatCapCalculationSpec::Define()
 {
-	BeforeEach([=]()
+	BeforeEach([=, this]()
 	{
 		this->SetupWorld();
 		this->SetupPawn();
@@ -61,7 +61,7 @@ void FPF2AncestryFeatCapCalculationSpec::Define()
 		this->BeginPlay();
 	});
 
-	AfterEach([=]()
+	AfterEach([=, this]()
 	{
 		this->DestroyPawn();
 		this->DestroyWorld();
@@ -72,9 +72,9 @@ void FPF2AncestryFeatCapCalculationSpec::Define()
 		const float CharacterLevel    = LevelFeatLimit.Key,
 		            ExpectedFeatLimit = LevelFeatLimit.Value;
 
-		Describe(FString::Format(TEXT("when character Level is '{0}'"), {FString::FormatAsNumber(CharacterLevel)}), [=]()
+		Describe(FString::Format(TEXT("when character Level is '{0}'"), {FString::FormatAsNumber(CharacterLevel)}), [=, this]()
 		{
-			It(FString::Format(TEXT("returns an Ancestry Feat Cap of '{0}'"), {FString::FormatAsNumber(ExpectedFeatLimit)}), [=]()
+			It(FString::Format(TEXT("returns an Ancestry Feat Cap of '{0}'"), {FString::FormatAsNumber(ExpectedFeatLimit)}), [=, this]()
 			{
 				const UPF2AttributeSet*             AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
 				FAttributeCapture                   Attributes   = CaptureAttributes(AttributeSet);

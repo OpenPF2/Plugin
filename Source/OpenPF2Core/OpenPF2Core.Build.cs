@@ -10,7 +10,7 @@ public class OpenPF2Core : ModuleRules
 	public OpenPF2Core(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_2;
+		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
 
 		PrivatePCHHeaderFile = "Public/OpenPF2Core.h";
 

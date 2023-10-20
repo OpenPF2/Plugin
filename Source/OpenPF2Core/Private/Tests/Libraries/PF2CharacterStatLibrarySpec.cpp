@@ -14,7 +14,7 @@ END_DEFINE_PF_SPEC(FPF2CharacterStatLibrarySpec)
 
 void FPF2CharacterStatLibrarySpec::Define()
 {
-	Describe(TEXT("CalculateAbilityModifier"), [=]
+	Describe(TEXT("CalculateAbilityModifier"), [=, this]
 	{
 		struct FAbilityModifierTestTuple
 		{
@@ -38,9 +38,9 @@ void FPF2CharacterStatLibrarySpec::Define()
 			const float AbilityScoreValue = CurrentTestParameters.AbilityScoreValue,
 			            ExpectedModifier  = CurrentTestParameters.ExpectedModifier;
 
-			Describe(FString::Format(TEXT("when the ability score value is '{0}'"), {FString::FormatAsNumber(AbilityScoreValue)}), [=]
+			Describe(FString::Format(TEXT("when the ability score value is '{0}'"), {FString::FormatAsNumber(AbilityScoreValue)}), [=, this]
 			{
-				It(FString::Format(TEXT("returns '{0}'"), {FString::FormatAsNumber(ExpectedModifier)}), [=]
+				It(FString::Format(TEXT("returns '{0}'"), {FString::FormatAsNumber(ExpectedModifier)}), [=, this]
 				{
 					TestEqual(
 						TEXT("Result"),
@@ -52,7 +52,7 @@ void FPF2CharacterStatLibrarySpec::Define()
 		}
 	});
 
-	Describe(TEXT("CalculateAbilityBoostAmount"), [=]
+	Describe(TEXT("CalculateAbilityBoostAmount"), [=, this]
 	{
 		struct FAbilityBoostTestTuple
 		{
@@ -75,9 +75,9 @@ void FPF2CharacterStatLibrarySpec::Define()
 			            BoostCount           = CurrentTestParameters.BoostCount,
 			            ExpectedBoostAmount  = CurrentTestParameters.ExpectedBoostAmount;
 
-			Describe(FString::Format(TEXT("when the starting ability score is '{0}' and the boost count is '{1}'"), {FString::FormatAsNumber(StartingAbilityScore), FString::FormatAsNumber(BoostCount)}), [=]
+			Describe(FString::Format(TEXT("when the starting ability score is '{0}' and the boost count is '{1}'"), {FString::FormatAsNumber(StartingAbilityScore), FString::FormatAsNumber(BoostCount)}), [=, this]
 			{
-				It(FString::Format(TEXT("returns '{0}'"), {FString::FormatAsNumber(ExpectedBoostAmount)}), [=]
+				It(FString::Format(TEXT("returns '{0}'"), {FString::FormatAsNumber(ExpectedBoostAmount)}), [=, this]
 				{
 					TestEqual(
 						TEXT("Result"),
@@ -89,7 +89,7 @@ void FPF2CharacterStatLibrarySpec::Define()
 		}
 	});
 
-	Describe(TEXT("CalculateAncestryFeatCap"), [=]
+	Describe(TEXT("CalculateAncestryFeatCap"), [=, this]
 	{
 		struct FFeatCapTestTuple
 		{
@@ -115,9 +115,9 @@ void FPF2CharacterStatLibrarySpec::Define()
 			const float CharacterLevel  = CurrentTestParameters.CharacterLevel,
 			            ExpectedFeatCap = CurrentTestParameters.ExpectedFeatCap;
 
-			Describe(FString::Format(TEXT("when the character level is '{0}'"), {FString::FormatAsNumber(CharacterLevel)}), [=]
+			Describe(FString::Format(TEXT("when the character level is '{0}'"), {FString::FormatAsNumber(CharacterLevel)}), [=, this]
 			{
-				It(FString::Format(TEXT("returns '{0}'"), {FString::FormatAsNumber(ExpectedFeatCap)}), [=]
+				It(FString::Format(TEXT("returns '{0}'"), {FString::FormatAsNumber(ExpectedFeatCap)}), [=, this]
 				{
 					TestEqual(
 						TEXT("Result"),

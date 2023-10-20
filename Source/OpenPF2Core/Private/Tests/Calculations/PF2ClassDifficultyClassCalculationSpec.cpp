@@ -37,7 +37,7 @@ END_DEFINE_PF_SPEC(FPF2ClassDifficultyClassCalculationSpec)
 
 void FPF2ClassDifficultyClassCalculationSpec::Define()
 {
-	BeforeEach([=]()
+	BeforeEach([=, this]()
 	{
 		this->SetupWorld();
 		this->SetupPawn();
@@ -45,7 +45,7 @@ void FPF2ClassDifficultyClassCalculationSpec::Define()
 		this->BeginPlay();
 	});
 
-	BeforeEach([=]()
+	BeforeEach([=, this]()
 	{
 		const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
 		FAttributeCapture       Attributes   = CaptureAbilityModifierAttributes(AttributeSet);
@@ -59,7 +59,7 @@ void FPF2ClassDifficultyClassCalculationSpec::Define()
 		}
 	});
 
-	AfterEach([=]()
+	AfterEach([=, this]()
 	{
 		this->DestroyPawn();
 		this->DestroyWorld();
@@ -70,9 +70,9 @@ void FPF2ClassDifficultyClassCalculationSpec::Define()
 		const FString KeyAbilityName      = KeyAbility.Key,
 		              KeyAbilityAttribute = KeyAbility.Value;
 
-		Describe(FString::Format(TEXT("when the character's Key Ability is '{0}'"), {KeyAbilityName}), [=]
+		Describe(FString::Format(TEXT("when the character's Key Ability is '{0}'"), {KeyAbilityName}), [=, this]
 		{
-			BeforeEach([=]()
+			BeforeEach([=, this]()
 			{
 				this->ApplyUnreplicatedTag(FString::Format(TEXT("KeyAbility.{0}"), {KeyAbilityName}));
 			});
@@ -82,9 +82,9 @@ void FPF2ClassDifficultyClassCalculationSpec::Define()
 				const FString BoostedAbilityName      = BoostedAbility.Key,
 				              BoostedAbilityAttribute = BoostedAbility.Value;
 
-				Describe(FString::Format(TEXT("when the '{0}' Ability Modifier is '5'"), {BoostedAbilityName}), [=]
+				Describe(FString::Format(TEXT("when the '{0}' Ability Modifier is '5'"), {BoostedAbilityName}), [=, this]
 				{
-					BeforeEach([=]()
+					BeforeEach([=, this]()
 					{
 						const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
 						FAttributeCapture       Attributes   = CaptureAbilityModifierAttributes(AttributeSet);
@@ -97,11 +97,11 @@ void FPF2ClassDifficultyClassCalculationSpec::Define()
 						const FString ProficiencyLevel = Proficiency.Key;
 						const float   ProficiencyValue = Proficiency.Value;
 
-						Describe(FString::Format(TEXT("when the character is '{0}' in Class DC"), {ProficiencyLevel}), [=]()
+						Describe(FString::Format(TEXT("when the character is '{0}' in Class DC"), {ProficiencyLevel}), [=, this]()
 						{
 							float ExpectedClassDcMod;
 
-							BeforeEach([=]()
+							BeforeEach([=, this]()
 							{
 								this->ApplyUnreplicatedTag(FString::Format(TEXT("ClassDc.{0}"), {ProficiencyLevel}));
 							});
@@ -115,7 +115,7 @@ void FPF2ClassDifficultyClassCalculationSpec::Define()
 								ExpectedClassDcMod = 10.0f + 0.0f + ProficiencyValue;
 							}
 
-							It(FString::Format(TEXT("calculates a Class DC Modifier of '{0}'"), {FString::FormatAsNumber(ExpectedClassDcMod)}), [=]()
+							It(FString::Format(TEXT("calculates a Class DC Modifier of '{0}'"), {FString::FormatAsNumber(ExpectedClassDcMod)}), [=, this]()
 							{
 								const UPF2AttributeSet*             AttributeSet     = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
 								FAttributeCapture                   Attributes       = CaptureAttributes(AttributeSet);

@@ -70,7 +70,7 @@ void APF2ModeOfPlayRuleSetBase::AttemptToCancelCommand_Implementation(
 		UE_LOG(
 			LogPf2CoreAbilities,
 			Error,
-			TEXT("AttemptToCancelCommand(): Command cannot be null."),
+			TEXT("AttemptToCancelCommand(): Command cannot be null.")
 		);
 
 		return;
