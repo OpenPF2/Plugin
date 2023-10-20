@@ -44,7 +44,7 @@ END_DEFINE_PF_SPEC(FPF2ArmorClassCalculationSpec)
 
 void FPF2ArmorClassCalculationSpec::Define()
 {
-	BeforeEach([=]()
+	BeforeEach([=, this]()
 	{
 		this->SetupWorld();
 		this->SetupPawn();
@@ -52,7 +52,7 @@ void FPF2ArmorClassCalculationSpec::Define()
 		this->BeginPlay();
 	});
 
-	AfterEach([=]()
+	AfterEach([=, this]()
 	{
 		this->DestroyPawn();
 		this->DestroyWorld();
@@ -60,9 +60,9 @@ void FPF2ArmorClassCalculationSpec::Define()
 
 	for (auto& DexterityMod : this->DexterityModInputs)
 	{
-		Describe(FString::Format(TEXT("when Dexterity Modifier is '{0}'"), {FString::FormatAsNumber(DexterityMod)}), [=]()
+		Describe(FString::Format(TEXT("when Dexterity Modifier is '{0}'"), {FString::FormatAsNumber(DexterityMod)}), [=, this]()
 		{
-			BeforeEach([=]()
+			BeforeEach([=, this]()
 			{
 				const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
 				FAttributeCapture       Attributes   = CaptureAbilityModifierAttributes(AttributeSet);
@@ -72,9 +72,9 @@ void FPF2ArmorClassCalculationSpec::Define()
 
 			for (auto& ArmorClassEquipped : this->ArmorClasses)
 			{
-				Describe(FString::Format(TEXT("when character's equipped Armor Class is '{0}'"), {ArmorClassEquipped}), [=]()
+				Describe(FString::Format(TEXT("when character's equipped Armor Class is '{0}'"), {ArmorClassEquipped}), [=, this]()
 				{
-					BeforeEach([=]()
+					BeforeEach([=, this]()
 					{
 						this->ApplyUnreplicatedTag(FString::Format(TEXT("Armor.Equipped.{0}"), {ArmorClassEquipped}));
 					});
@@ -86,11 +86,11 @@ void FPF2ArmorClassCalculationSpec::Define()
 							const FString ProficiencyLevel = Proficiency.Key;
 							const float   ProficiencyValue = Proficiency.Value;
 
-							Describe(FString::Format(TEXT("when the character is '{0}' in '{1}' Armor"), {ProficiencyLevel, ArmorClassProficient}), [=]()
+							Describe(FString::Format(TEXT("when the character is '{0}' in '{1}' Armor"), {ProficiencyLevel, ArmorClassProficient}), [=, this]()
 							{
 								float ExpectedAcMod;
 
-								BeforeEach([=]()
+								BeforeEach([=, this]()
 								{
 									this->ApplyUnreplicatedTag(
 										FString::Format(
@@ -109,7 +109,7 @@ void FPF2ArmorClassCalculationSpec::Define()
 									ExpectedAcMod = 10 + DexterityMod;
 								}
 
-								It(FString::Format(TEXT("calculates an Armor Class modifier of '{0}'"), {FString::FormatAsNumber(ExpectedAcMod)}), [=]()
+								It(FString::Format(TEXT("calculates an Armor Class modifier of '{0}'"), {FString::FormatAsNumber(ExpectedAcMod)}), [=, this]()
 								{
 									const UPF2AttributeSet*             AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
 									FAttributeCapture                   Attributes   = CaptureAttributes(AttributeSet);

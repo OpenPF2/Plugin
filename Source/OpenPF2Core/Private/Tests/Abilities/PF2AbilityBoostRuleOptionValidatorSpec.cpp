@@ -17,13 +17,13 @@ END_DEFINE_SPEC(FPF2AbilityBoostRuleOptionValidatorSpec)
 
 void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 {
-	Describe(TEXT("when there are no rule options"), [=]()
+	Describe(TEXT("when there are no rule options"), [=, this]()
 	{
 		const TArray<FPF2AbilityBoostRuleOption> RuleOptions = {};
 
-		Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+		Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 		{
-			It(TEXT("returns `false` for all abilities"), [=]()
+			It(TEXT("returns `false` for all abilities"), [=, this]()
 			{
 				UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -39,9 +39,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("GetRemainingBoostCount()"), [=]()
+		Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 		{
-			It(TEXT("returns 0"), [=]()
+			It(TEXT("returns 0"), [=, this]()
 			{
 				UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -51,9 +51,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("GetRemainingOptions()"), [=]()
+		Describe(TEXT("GetRemainingOptions()"), [=, this]()
 		{
-			It(TEXT("returns an empty array"), [=]()
+			It(TEXT("returns an empty array"), [=, this]()
 			{
 				UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -63,9 +63,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("HasRemainingBoosts()"), [=]()
+		Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 		{
-			It(TEXT("returns false"), [=]()
+			It(TEXT("returns false"), [=, this]()
 			{
 				UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -76,19 +76,19 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 		});
 	});
 
-	Describe(TEXT("when there is only a free ability boost rule option"), [=]()
+	Describe(TEXT("when there is only a free ability boost rule option"), [=, this]()
 	{
 		const TArray<FPF2AbilityBoostRuleOption> RuleOptions = {
 			FPF2AbilityBoostRuleOption(true),
 		};
 
-		Describe(TEXT("before any ability boosts have been applied"), [=]()
+		Describe(TEXT("before any ability boosts have been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `true` for all abilities"), [=]()
+				It(TEXT("returns `true` for all abilities"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -112,9 +112,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 1"), [=]()
+				It(TEXT("returns 1"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -129,9 +129,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns all ability score types"), [=]()
+				It(TEXT("returns all ability score types"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -159,9 +159,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns true"), [=]()
+				It(TEXT("returns true"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -177,15 +177,15 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after an ability boost has been applied"), [=]()
+		Describe(TEXT("after an ability boost has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbDexterity,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `false` for all abilities"), [=]()
+				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -206,9 +206,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 0"), [=]()
+				It(TEXT("returns 0"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -223,9 +223,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns an empty array"), [=]()
+				It(TEXT("returns an empty array"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -240,9 +240,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns false"), [=]()
+				It(TEXT("returns false"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -259,20 +259,20 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 		});
 	});
 
-	Describe(TEXT("when there are two free ability boost rule options"), [=]()
+	Describe(TEXT("when there are two free ability boost rule options"), [=, this]()
 	{
 		const TArray<FPF2AbilityBoostRuleOption> RuleOptions = {
 			FPF2AbilityBoostRuleOption(true),
 			FPF2AbilityBoostRuleOption(true),
 		};
 
-		Describe(TEXT("before any ability boosts have been applied"), [=]()
+		Describe(TEXT("before any ability boosts have been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `true` for all abilities"), [=]()
+				It(TEXT("returns `true` for all abilities"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -296,9 +296,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 2"), [=]()
+				It(TEXT("returns 2"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -313,9 +313,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns all ability score types"), [=]()
+				It(TEXT("returns all ability score types"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -343,9 +343,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns true"), [=]()
+				It(TEXT("returns true"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -361,15 +361,15 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after one ability boost has been applied"), [=]()
+		Describe(TEXT("after one ability boost has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbStrength,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `true` for all abilities except the one that was applied"), [=]()
+				It(TEXT("returns `true` for all abilities except the one that was applied"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -412,9 +412,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 1"), [=]()
+				It(TEXT("returns 1"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -429,9 +429,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns all ability score types except the one that was applied"), [=]()
+				It(TEXT("returns all ability score types except the one that was applied"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -477,9 +477,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns true"), [=]()
+				It(TEXT("returns true"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -495,16 +495,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after two ability boosts have been applied"), [=]()
+		Describe(TEXT("after two ability boosts have been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbStrength,
 				EPF2CharacterAbilityScoreType::AbDexterity,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `false` for all abilities"), [=]()
+				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -525,9 +525,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 0"), [=]()
+				It(TEXT("returns 0"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -542,9 +542,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns an empty array"), [=]()
+				It(TEXT("returns an empty array"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -559,9 +559,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns false"), [=]()
+				It(TEXT("returns false"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -578,7 +578,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 		});
 	});
 
-	Describe(TEXT("when there is only a rule option of Strength or Dexterity"), [=]()
+	Describe(TEXT("when there is only a rule option of Strength or Dexterity"), [=, this]()
 	{
 		const TArray<FPF2AbilityBoostRuleOption> RuleOptions = {
 			FPF2AbilityBoostRuleOption({
@@ -587,13 +587,13 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			}),
 		};
 
-		Describe(TEXT("before any ability boosts have been applied"), [=]()
+		Describe(TEXT("before any ability boosts have been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `true` only for Strength and Dexterity"), [=]()
+				It(TEXT("returns `true` only for Strength and Dexterity"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -631,9 +631,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 1"), [=]()
+				It(TEXT("returns 1"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -643,9 +643,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns only Strength and Dexterity"), [=]()
+				It(TEXT("returns only Strength and Dexterity"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -676,9 +676,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns true"), [=]()
+				It(TEXT("returns true"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -694,15 +694,15 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after an ability boost has been applied"), [=]()
+		Describe(TEXT("after an ability boost has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbDexterity,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `false` for all abilities"), [=]()
+				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -723,9 +723,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 0"), [=]()
+				It(TEXT("returns 0"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -740,9 +740,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns an empty array"), [=]()
+				It(TEXT("returns an empty array"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -757,9 +757,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns false"), [=]()
+				It(TEXT("returns false"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -776,7 +776,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 		});
 	});
 
-	Describe(TEXT("when there are 2 rule options: one free ability boost; one Strength or Dexterity"), [=]()
+	Describe(TEXT("when there are 2 rule options: one free ability boost; one Strength or Dexterity"), [=, this]()
 	{
 		const TArray<FPF2AbilityBoostRuleOption> RuleOptions = {
 			// 1. Free ability boost.
@@ -789,13 +789,13 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			}),
 		};
 
-		Describe(TEXT("before any ability boosts have been applied"), [=]()
+		Describe(TEXT("before any ability boosts have been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `true` for all abilities"), [=]()
+				It(TEXT("returns `true` for all abilities"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -819,9 +819,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 2"), [=]()
+				It(TEXT("returns 2"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -836,9 +836,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns all ability score types"), [=]()
+				It(TEXT("returns all ability score types"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -866,9 +866,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns true"), [=]()
+				It(TEXT("returns true"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -884,15 +884,15 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after a boost to 'Strength' has been applied"), [=]()
+		Describe(TEXT("after a boost to 'Strength' has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbStrength,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `true` for all abilities except 'Strength'"), [=]()
+				It(TEXT("returns `true` for all abilities except 'Strength'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -935,9 +935,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 1"), [=]()
+				It(TEXT("returns 1"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -952,9 +952,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns all abilities except 'Strength'"), [=]()
+				It(TEXT("returns all abilities except 'Strength'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1000,9 +1000,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns true"), [=]()
+				It(TEXT("returns true"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1018,16 +1018,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after a boost to 'Strength' and 'Constitution' has been applied"), [=]()
+		Describe(TEXT("after a boost to 'Strength' and 'Constitution' has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbStrength,
 				EPF2CharacterAbilityScoreType::AbConstitution,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `false` for all abilities"), [=]()
+				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1051,9 +1051,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 0"), [=]()
+				It(TEXT("returns 0"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1068,9 +1068,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns an empty array"), [=]()
+				It(TEXT("returns an empty array"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1085,9 +1085,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns false"), [=]()
+				It(TEXT("returns false"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1103,16 +1103,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after a boost to 'Strength' and 'Dexterity' has been applied"), [=]()
+		Describe(TEXT("after a boost to 'Strength' and 'Dexterity' has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbStrength,
 				EPF2CharacterAbilityScoreType::AbDexterity,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `false` for all abilities"), [=]()
+				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1136,9 +1136,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 0"), [=]()
+				It(TEXT("returns 0"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1153,9 +1153,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns an empty array"), [=]()
+				It(TEXT("returns an empty array"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1170,9 +1170,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns false"), [=]()
+				It(TEXT("returns false"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1188,15 +1188,15 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after a boost to 'Intelligence' has been applied"), [=]()
+		Describe(TEXT("after a boost to 'Intelligence' has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbIntelligence,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `true` for only 'Strength' and 'Dexterity"), [=]()
+				It(TEXT("returns `true` for only 'Strength' and 'Dexterity"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1239,9 +1239,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 1"), [=]()
+				It(TEXT("returns 1"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1256,9 +1256,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns only 'Strength' and 'Dexterity'"), [=]()
+				It(TEXT("returns only 'Strength' and 'Dexterity'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1289,9 +1289,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns true"), [=]()
+				It(TEXT("returns true"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1307,16 +1307,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after a boost to 'Intelligence' and 'Strength' has been applied"), [=]()
+		Describe(TEXT("after a boost to 'Intelligence' and 'Strength' has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbIntelligence,
 				EPF2CharacterAbilityScoreType::AbStrength,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `false` for all abilities"), [=]()
+				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1340,9 +1340,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 0"), [=]()
+				It(TEXT("returns 0"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1357,9 +1357,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns an empty array"), [=]()
+				It(TEXT("returns an empty array"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1374,9 +1374,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns false"), [=]()
+				It(TEXT("returns false"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1393,7 +1393,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 		});
 	});
 
-	Describe(TEXT("when there are 2 rule options: one Strength or Dexterity; one free ability boost"), [=]()
+	Describe(TEXT("when there are 2 rule options: one Strength or Dexterity; one free ability boost"), [=, this]()
 	{
 		const TArray<FPF2AbilityBoostRuleOption> RuleOptions = {
 			// 1. Strength or Dexterity.
@@ -1406,13 +1406,13 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			FPF2AbilityBoostRuleOption(true),
 		};
 
-		Describe(TEXT("before any ability boosts have been applied"), [=]()
+		Describe(TEXT("before any ability boosts have been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `true` for all abilities"), [=]()
+				It(TEXT("returns `true` for all abilities"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1436,9 +1436,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 2"), [=]()
+				It(TEXT("returns 2"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1453,9 +1453,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns all ability score types"), [=]()
+				It(TEXT("returns all ability score types"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1483,9 +1483,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns true"), [=]()
+				It(TEXT("returns true"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1501,15 +1501,15 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after a boost to 'Strength' has been applied"), [=]()
+		Describe(TEXT("after a boost to 'Strength' has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbStrength,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `true` for all abilities except 'Strength'"), [=]()
+				It(TEXT("returns `true` for all abilities except 'Strength'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1552,9 +1552,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 1"), [=]()
+				It(TEXT("returns 1"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1569,9 +1569,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns all abilities except 'Strength'"), [=]()
+				It(TEXT("returns all abilities except 'Strength'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1617,9 +1617,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns true"), [=]()
+				It(TEXT("returns true"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1635,16 +1635,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after a boost to 'Strength' and 'Constitution' has been applied"), [=]()
+		Describe(TEXT("after a boost to 'Strength' and 'Constitution' has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbStrength,
 				EPF2CharacterAbilityScoreType::AbConstitution,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `false` for all abilities"), [=]()
+				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1668,9 +1668,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 0"), [=]()
+				It(TEXT("returns 0"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1685,9 +1685,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns an empty array"), [=]()
+				It(TEXT("returns an empty array"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1702,9 +1702,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns false"), [=]()
+				It(TEXT("returns false"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1720,16 +1720,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after a boost to 'Strength' and 'Dexterity' has been applied"), [=]()
+		Describe(TEXT("after a boost to 'Strength' and 'Dexterity' has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbStrength,
 				EPF2CharacterAbilityScoreType::AbDexterity,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `false` for all abilities"), [=]()
+				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1753,9 +1753,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 0"), [=]()
+				It(TEXT("returns 0"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1770,9 +1770,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns an empty array"), [=]()
+				It(TEXT("returns an empty array"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1787,9 +1787,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns false"), [=]()
+				It(TEXT("returns false"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1805,15 +1805,15 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after a boost to 'Intelligence' has been applied"), [=]()
+		Describe(TEXT("after a boost to 'Intelligence' has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbIntelligence,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `true` for only 'Strength' and 'Dexterity"), [=]()
+				It(TEXT("returns `true` for only 'Strength' and 'Dexterity"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1856,9 +1856,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 1"), [=]()
+				It(TEXT("returns 1"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1873,9 +1873,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns only 'Strength' and 'Dexterity'"), [=]()
+				It(TEXT("returns only 'Strength' and 'Dexterity'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1906,9 +1906,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns true"), [=]()
+				It(TEXT("returns true"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1924,16 +1924,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after a boost to 'Intelligence' and 'Strength' has been applied"), [=]()
+		Describe(TEXT("after a boost to 'Intelligence' and 'Strength' has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbIntelligence,
 				EPF2CharacterAbilityScoreType::AbStrength,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `false` for all abilities"), [=]()
+				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1957,9 +1957,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 0"), [=]()
+				It(TEXT("returns 0"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1974,9 +1974,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns an empty array"), [=]()
+				It(TEXT("returns an empty array"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -1991,9 +1991,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns false"), [=]()
+				It(TEXT("returns false"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2010,7 +2010,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 		});
 	});
 
-	Describe(TEXT("when there are 2 rule options: one Strength or Dexterity; one Dexterity or Constitution"), [=]()
+	Describe(TEXT("when there are 2 rule options: one Strength or Dexterity; one Dexterity or Constitution"), [=, this]()
 	{
 		const TArray<FPF2AbilityBoostRuleOption> RuleOptions = {
 			// 1. Strength or Dexterity.
@@ -2026,13 +2026,13 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			}),
 		};
 
-		Describe(TEXT("before any ability boosts have been applied"), [=]()
+		Describe(TEXT("before any ability boosts have been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `true` for 'Strength', 'Dexterity', and 'Constitution'"), [=]()
+				It(TEXT("returns `true` for 'Strength', 'Dexterity', and 'Constitution'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2075,9 +2075,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 2"), [=]()
+				It(TEXT("returns 2"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2092,9 +2092,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns only 'Strength', 'Dexterity', and 'Constitution'"), [=]()
+				It(TEXT("returns only 'Strength', 'Dexterity', and 'Constitution'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2126,9 +2126,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns true"), [=]()
+				It(TEXT("returns true"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2144,15 +2144,15 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after a boost to 'Strength' has been applied"), [=]()
+		Describe(TEXT("after a boost to 'Strength' has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbStrength,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `true` for 'Dexterity' and 'Constitution'"), [=]()
+				It(TEXT("returns `true` for 'Dexterity' and 'Constitution'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2195,9 +2195,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 1"), [=]()
+				It(TEXT("returns 1"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2212,9 +2212,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns only 'Dexterity' and 'Constitution'"), [=]()
+				It(TEXT("returns only 'Dexterity' and 'Constitution'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2245,9 +2245,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns true"), [=]()
+				It(TEXT("returns true"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2263,15 +2263,15 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after a boost to 'Dexterity' has been applied"), [=]()
+		Describe(TEXT("after a boost to 'Dexterity' has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbDexterity,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `true` for 'Constitution' and 'Strength'"), [=]()
+				It(TEXT("returns `true` for 'Constitution' and 'Strength'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2314,9 +2314,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 1"), [=]()
+				It(TEXT("returns 1"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2331,9 +2331,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns only 'Constitution' and 'Strength'"), [=]()
+				It(TEXT("returns only 'Constitution' and 'Strength'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2364,9 +2364,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns true"), [=]()
+				It(TEXT("returns true"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2382,16 +2382,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after a boost to 'Strength' and 'Constitution' has been applied"), [=]()
+		Describe(TEXT("after a boost to 'Strength' and 'Constitution' has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbStrength,
 				EPF2CharacterAbilityScoreType::AbConstitution,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `false` for all abilities"), [=]()
+				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2412,9 +2412,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 0"), [=]()
+				It(TEXT("returns 0"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2429,9 +2429,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns an empty array"), [=]()
+				It(TEXT("returns an empty array"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2446,9 +2446,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns false"), [=]()
+				It(TEXT("returns false"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2464,16 +2464,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after a boost to 'Strength' and 'Dexterity' has been applied"), [=]()
+		Describe(TEXT("after a boost to 'Strength' and 'Dexterity' has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbStrength,
 				EPF2CharacterAbilityScoreType::AbDexterity,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `false` for all abilities"), [=]()
+				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2494,9 +2494,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 0"), [=]()
+				It(TEXT("returns 0"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2511,9 +2511,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns an empty array"), [=]()
+				It(TEXT("returns an empty array"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2528,9 +2528,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns false"), [=]()
+				It(TEXT("returns false"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2547,7 +2547,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 		});
 	});
 
-	Describe(TEXT("when there are 3 rule options: one free ability boost; one Strength or Dexterity; one Dexterity or Constitution"), [=]()
+	Describe(TEXT("when there are 3 rule options: one free ability boost; one Strength or Dexterity; one Dexterity or Constitution"), [=, this]()
 	{
 		const TArray<FPF2AbilityBoostRuleOption> RuleOptions = {
 			// 1. Free ability boost.
@@ -2566,13 +2566,13 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			}),
 		};
 
-		Describe(TEXT("before any ability boosts have been applied"), [=]()
+		Describe(TEXT("before any ability boosts have been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `true` for all abilities"), [=]()
+				It(TEXT("returns `true` for all abilities"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2596,9 +2596,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 3"), [=]()
+				It(TEXT("returns 3"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2613,9 +2613,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns all ability score types"), [=]()
+				It(TEXT("returns all ability score types"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2643,9 +2643,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns true"), [=]()
+				It(TEXT("returns true"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2661,15 +2661,15 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after a boost to 'Strength' has been applied"), [=]()
+		Describe(TEXT("after a boost to 'Strength' has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbStrength,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `true` for all abilities except 'Strength'"), [=]()
+				It(TEXT("returns `true` for all abilities except 'Strength'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2712,9 +2712,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 2"), [=]()
+				It(TEXT("returns 2"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2729,9 +2729,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns all abilities except 'Strength'"), [=]()
+				It(TEXT("returns all abilities except 'Strength'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2777,9 +2777,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns true"), [=]()
+				It(TEXT("returns true"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2795,15 +2795,15 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after a boost to 'Constitution' has been applied"), [=]()
+		Describe(TEXT("after a boost to 'Constitution' has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbConstitution,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `true` for all abilities except 'Constitution'"), [=]()
+				It(TEXT("returns `true` for all abilities except 'Constitution'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2846,9 +2846,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 2"), [=]()
+				It(TEXT("returns 2"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2863,9 +2863,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns all abilities except 'Constitution'"), [=]()
+				It(TEXT("returns all abilities except 'Constitution'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2911,9 +2911,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns true"), [=]()
+				It(TEXT("returns true"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2929,16 +2929,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after a boost to 'Strength' and 'Constitution' has been applied"), [=]()
+		Describe(TEXT("after a boost to 'Strength' and 'Constitution' has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbStrength,
 				EPF2CharacterAbilityScoreType::AbConstitution,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `true` for all abilities except 'Strength' and 'Constitution'"), [=]()
+				It(TEXT("returns `true` for all abilities except 'Strength' and 'Constitution'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2981,9 +2981,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 1"), [=]()
+				It(TEXT("returns 1"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -2998,9 +2998,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns all abilities except 'Strength' and 'Constitution'"), [=]()
+				It(TEXT("returns all abilities except 'Strength' and 'Constitution'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -3041,9 +3041,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns true"), [=]()
+				It(TEXT("returns true"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -3059,16 +3059,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after a boost to 'Strength' and 'Dexterity' has been applied"), [=]()
+		Describe(TEXT("after a boost to 'Strength' and 'Dexterity' has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbStrength,
 				EPF2CharacterAbilityScoreType::AbDexterity,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `true` for all abilities except 'Strength' and 'Dexterity'"), [=]()
+				It(TEXT("returns `true` for all abilities except 'Strength' and 'Dexterity'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -3111,9 +3111,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 1"), [=]()
+				It(TEXT("returns 1"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -3128,9 +3128,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns all abilities except 'Strength' and 'Dexterity'"), [=]()
+				It(TEXT("returns all abilities except 'Strength' and 'Dexterity'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -3171,9 +3171,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns true"), [=]()
+				It(TEXT("returns true"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -3189,16 +3189,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after a boost to 'Intelligence' and 'Constitution' has been applied"), [=]()
+		Describe(TEXT("after a boost to 'Intelligence' and 'Constitution' has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbIntelligence,
 				EPF2CharacterAbilityScoreType::AbConstitution,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `true` only for 'Strength' and 'Dexterity'"), [=]()
+				It(TEXT("returns `true` only for 'Strength' and 'Dexterity'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -3241,9 +3241,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 1"), [=]()
+				It(TEXT("returns 1"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -3258,9 +3258,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns only 'Strength' and 'Dexterity'"), [=]()
+				It(TEXT("returns only 'Strength' and 'Dexterity'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -3291,9 +3291,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns true"), [=]()
+				It(TEXT("returns true"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -3309,16 +3309,16 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after a boost to 'Intelligence' and 'Dexterity' has been applied"), [=]()
+		Describe(TEXT("after a boost to 'Intelligence' and 'Dexterity' has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbIntelligence,
 				EPF2CharacterAbilityScoreType::AbDexterity,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `true` for only 'Strength' and 'Constitution'"), [=]()
+				It(TEXT("returns `true` for only 'Strength' and 'Constitution'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -3361,9 +3361,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 1"), [=]()
+				It(TEXT("returns 1"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -3378,9 +3378,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns only 'Strength' and 'Constitution'"), [=]()
+				It(TEXT("returns only 'Strength' and 'Constitution'"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -3411,9 +3411,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns true"), [=]()
+				It(TEXT("returns true"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -3429,7 +3429,7 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 			});
 		});
 
-		Describe(TEXT("after a boost to 'Intelligence', 'Dexterity', and 'Constitution' has been applied"), [=]()
+		Describe(TEXT("after a boost to 'Intelligence', 'Dexterity', and 'Constitution' has been applied"), [=, this]()
 		{
 			const TArray<EPF2CharacterAbilityScoreType> AbilityBoostsToApply = {
 				EPF2CharacterAbilityScoreType::AbIntelligence,
@@ -3437,9 +3437,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				EPF2CharacterAbilityScoreType::AbConstitution,
 			};
 
-			Describe(TEXT("CanApplyAbilityBoost()"), [=]()
+			Describe(TEXT("CanApplyAbilityBoost()"), [=, this]()
 			{
-				It(TEXT("returns `false` for all abilities"), [=]()
+				It(TEXT("returns `false` for all abilities"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -3460,9 +3460,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingBoostCount()"), [=]()
+			Describe(TEXT("GetRemainingBoostCount()"), [=, this]()
 			{
-				It(TEXT("returns 0"), [=]()
+				It(TEXT("returns 0"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -3477,9 +3477,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("GetRemainingOptions()"), [=]()
+			Describe(TEXT("GetRemainingOptions()"), [=, this]()
 			{
-				It(TEXT("returns an empty array"), [=]()
+				It(TEXT("returns an empty array"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 
@@ -3494,9 +3494,9 @@ void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
 				});
 			});
 
-			Describe(TEXT("HasRemainingBoosts()"), [=]()
+			Describe(TEXT("HasRemainingBoosts()"), [=, this]()
 			{
-				It(TEXT("returns false"), [=]()
+				It(TEXT("returns false"), [=, this]()
 				{
 					UPF2AbilityBoostRuleOptionValidator* Validator = NewObject<UPF2AbilityBoostRuleOptionValidator>();
 

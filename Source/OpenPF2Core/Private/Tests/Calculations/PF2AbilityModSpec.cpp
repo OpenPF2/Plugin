@@ -55,21 +55,21 @@ END_DEFINE_PF_SPEC(FPF2AbilityModSpec)
 
 void FPF2AbilityModSpec::Define()
 {
-	Describe("Blueprint Loading for Ability Mod MMCs", [=]()
+	Describe("Blueprint Loading for Ability Mod MMCs", [=, this]()
 	{
-		BeforeEach([=]()
+		BeforeEach([=, this]()
 		{
 			this->LoadMMCs();
 		});
 
-		AfterEach([=]()
+		AfterEach([=, this]()
 		{
 			this->AbModMMCs.Empty();
 		});
 
 		for (const auto& BlueprintName : this->AbModMmcNames)
 		{
-			It(BlueprintName + " should load", [=]()
+			It(BlueprintName + " should load", [=, this]()
 			{
 				const TSubclassOf<UPF2AbilityModifierCalculationBase>& MmcBlueprint = this->AbModMMCs[BlueprintName];
 
@@ -78,21 +78,21 @@ void FPF2AbilityModSpec::Define()
 		}
 	});
 
-	Describe("Blueprint Loading for Ability Mod GEs", [=]()
+	Describe("Blueprint Loading for Ability Mod GEs", [=, this]()
 	{
-		BeforeEach([=]()
+		BeforeEach([=, this]()
 		{
 			this->LoadGEs();
 		});
 
-		AfterEach([=]()
+		AfterEach([=, this]()
 		{
 			this->AbModGEs.Empty();
 		});
 
 		for (const auto& BlueprintName : this->AbModGeNames)
 		{
-			It(BlueprintName + " should load", [=]()
+			It(BlueprintName + " should load", [=, this]()
 			{
 				const TSubclassOf<UGameplayEffect>& EffectBP = this->AbModGEs[BlueprintName];
 
@@ -101,9 +101,9 @@ void FPF2AbilityModSpec::Define()
 		}
 	});
 
-	Describe("Effects of Modifiers", [=]()
+	Describe("Effects of Modifiers", [=, this]()
 	{
-		BeforeEach([=]()
+		BeforeEach([=, this]()
 		{
 			this->SetupWorld();
 			this->SetupPawn();
@@ -114,7 +114,7 @@ void FPF2AbilityModSpec::Define()
 			this->BeginPlay();
 		});
 
-		AfterEach([=]()
+		AfterEach([=, this]()
 		{
 			this->DestroyPawn();
 			this->DestroyWorld();
@@ -123,14 +123,14 @@ void FPF2AbilityModSpec::Define()
 			this->AbModMappings.Empty();
 		});
 
-		Describe("Charisma Modifier", [=]()
+		Describe("Charisma Modifier", [=, this]()
 		{
 			const FString TargetAbilityAttributeName  = TEXT("AbCharisma");
 			const FString TargetModifierAttributeName = TEXT("AbCharismaModifier");
 
-			Describe("when GE is applied", [=]()
+			Describe("when GE is applied", [=, this]()
 			{
-				It("calculates a modifier based on the current ability score", [=]()
+				It("calculates a modifier based on the current ability score", [=, this]()
 				{
 					for (const auto ValuePair : this->AbModMappings)
 					{
@@ -150,29 +150,29 @@ void FPF2AbilityModSpec::Define()
 					}
 				});
 
-				It("applies the calculation only to the associated modifier attribute", [=]()
+				It("applies the calculation only to the associated modifier attribute", [=, this]()
 				{
 					this->VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 
-			Describe("when GE is removed after being applied", [=]()
+			Describe("when GE is removed after being applied", [=, this]()
 			{
-				It("resets the modifier", [=]()
+				It("resets the modifier", [=, this]()
 				{
 					this->VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 		});
 
-		Describe("Constitution Modifier", [=]()
+		Describe("Constitution Modifier", [=, this]()
 		{
 			const FString TargetAbilityAttributeName  = TEXT("AbConstitution");
 			const FString TargetModifierAttributeName = TEXT("AbConstitutionModifier");
 
-			Describe("when GE is applied", [=]()
+			Describe("when GE is applied", [=, this]()
 			{
-				It("calculates a modifier based on the current ability score", [=]()
+				It("calculates a modifier based on the current ability score", [=, this]()
 				{
 					for (const auto ValuePair : this->AbModMappings)
 					{
@@ -192,29 +192,29 @@ void FPF2AbilityModSpec::Define()
 					}
 				});
 
-				It("applies the calculation only to the associated modifier attribute", [=]()
+				It("applies the calculation only to the associated modifier attribute", [=, this]()
 				{
 					this->VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 
-			Describe("when GE is removed after being applied", [=]()
+			Describe("when GE is removed after being applied", [=, this]()
 			{
-				It("resets the modifier", [=]()
+				It("resets the modifier", [=, this]()
 				{
 					this->VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 		});
 
-		Describe("Dexterity Modifier", [=]()
+		Describe("Dexterity Modifier", [=, this]()
 		{
 			const FString TargetAbilityAttributeName  = TEXT("AbDexterity");
 			const FString TargetModifierAttributeName = TEXT("AbDexterityModifier");
 
-			Describe("when GE is applied", [=]()
+			Describe("when GE is applied", [=, this]()
 			{
-				It("calculates a modifier based on the current ability score", [=]()
+				It("calculates a modifier based on the current ability score", [=, this]()
 				{
 					for (const auto ValuePair : this->AbModMappings)
 					{
@@ -234,29 +234,29 @@ void FPF2AbilityModSpec::Define()
 					}
 				});
 
-				It("applies the calculation only to the associated modifier attribute", [=]()
+				It("applies the calculation only to the associated modifier attribute", [=, this]()
 				{
 					this->VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 
-			Describe("when GE is removed after being applied", [=]()
+			Describe("when GE is removed after being applied", [=, this]()
 			{
-				It("resets the modifier", [=]()
+				It("resets the modifier", [=, this]()
 				{
 					this->VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 		});
 
-		Describe("Intelligence Modifier", [=]()
+		Describe("Intelligence Modifier", [=, this]()
 		{
 			const FString TargetAbilityAttributeName  = TEXT("AbIntelligence");
 			const FString TargetModifierAttributeName = TEXT("AbIntelligenceModifier");
 
-			Describe("when GE is applied", [=]()
+			Describe("when GE is applied", [=, this]()
 			{
-				It("calculates a modifier based on the current ability score", [=]()
+				It("calculates a modifier based on the current ability score", [=, this]()
 				{
 					for (const auto ValuePair : this->AbModMappings)
 					{
@@ -276,29 +276,29 @@ void FPF2AbilityModSpec::Define()
 					}
 				});
 
-				It("applies the calculation only to the associated modifier attribute", [=]()
+				It("applies the calculation only to the associated modifier attribute", [=, this]()
 				{
 					this->VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 
-			Describe("when GE is removed after being applied", [=]()
+			Describe("when GE is removed after being applied", [=, this]()
 			{
-				It("resets the modifier", [=]()
+				It("resets the modifier", [=, this]()
 				{
 					this->VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 		});
 
-		Describe("Strength Modifier", [=]()
+		Describe("Strength Modifier", [=, this]()
 		{
 			const FString TargetAbilityAttributeName  = TEXT("AbStrength");
 			const FString TargetModifierAttributeName = TEXT("AbStrengthModifier");
 
-			Describe("when GE is applied", [=]()
+			Describe("when GE is applied", [=, this]()
 			{
-				It("calculates a modifier based on the current ability score", [=]()
+				It("calculates a modifier based on the current ability score", [=, this]()
 				{
 					for (const auto ValuePair : this->AbModMappings)
 					{
@@ -318,29 +318,29 @@ void FPF2AbilityModSpec::Define()
 					}
 				});
 
-				It("applies the calculation only to the associated modifier attribute", [=]()
+				It("applies the calculation only to the associated modifier attribute", [=, this]()
 				{
 					this->VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 
-			Describe("when GE is removed after being applied", [=]()
+			Describe("when GE is removed after being applied", [=, this]()
 			{
-				It("resets the modifier", [=]()
+				It("resets the modifier", [=, this]()
 				{
 					this->VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 		});
 
-		Describe("Wisdom Modifier", [=]()
+		Describe("Wisdom Modifier", [=, this]()
 		{
 			const FString TargetAbilityAttributeName  = TEXT("AbWisdom");
 			const FString TargetModifierAttributeName = TEXT("AbWisdomModifier");
 
-			Describe("when GE is applied", [=]()
+			Describe("when GE is applied", [=, this]()
 			{
-				It("calculates a modifier based on the current ability score", [=]()
+				It("calculates a modifier based on the current ability score", [=, this]()
 				{
 					for (const auto ValuePair : this->AbModMappings)
 					{
@@ -360,15 +360,15 @@ void FPF2AbilityModSpec::Define()
 					}
 				});
 
-				It("applies the calculation only to the associated modifier attribute", [=]()
+				It("applies the calculation only to the associated modifier attribute", [=, this]()
 				{
 					this->VerifyCorrectAbilityAffected(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});
 			});
 
-			Describe("when GE is removed after being applied", [=]()
+			Describe("when GE is removed after being applied", [=, this]()
 			{
-				It("resets the modifier", [=]()
+				It("resets the modifier", [=, this]()
 				{
 					this->VerifyModifierRemoved(TargetAbilityAttributeName, TargetModifierAttributeName);
 				});

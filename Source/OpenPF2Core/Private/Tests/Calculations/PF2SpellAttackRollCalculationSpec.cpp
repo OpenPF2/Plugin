@@ -41,7 +41,7 @@ END_DEFINE_PF_SPEC(FPF2SpellAttackRollCalculationsSpec)
 
 void FPF2SpellAttackRollCalculationsSpec::Define()
 {
-	BeforeEach([=]()
+	BeforeEach([=, this]()
 	{
 		this->SetupWorld();
 		this->SetupPawn();
@@ -49,7 +49,7 @@ void FPF2SpellAttackRollCalculationsSpec::Define()
 		this->BeginPlay();
 	});
 
-	BeforeEach([=]()
+	BeforeEach([=, this]()
 	{
 		const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
 		FAttributeCapture       Attributes   = CaptureAbilityModifierAttributes(AttributeSet);
@@ -63,7 +63,7 @@ void FPF2SpellAttackRollCalculationsSpec::Define()
 		}
 	});
 
-	AfterEach([=]()
+	AfterEach([=, this]()
 	{
 		this->DestroyPawn();
 		this->DestroyWorld();
@@ -74,9 +74,9 @@ void FPF2SpellAttackRollCalculationsSpec::Define()
 		const FString SpellAbilityName      = SpellAbility.Key,
 		              SpellAbilityAttribute = SpellAbility.Value;
 
-		Describe(FString::Format(TEXT("when the character's Spellcasting Ability is '{0}'"), {SpellAbilityName}), [=]
+		Describe(FString::Format(TEXT("when the character's Spellcasting Ability is '{0}'"), {SpellAbilityName}), [=, this]
 		{
-			BeforeEach([=]()
+			BeforeEach([=, this]()
 			{
 				this->ApplyUnreplicatedTag(FString::Format(TEXT("SpellcastingAbility.{0}"), {SpellAbilityName}));
 			});
@@ -86,9 +86,9 @@ void FPF2SpellAttackRollCalculationsSpec::Define()
 				const FString BoostedAbilityName      = BoostedAbility.Key,
 				              BoostedAbilityAttribute = BoostedAbility.Value;
 
-				Describe(FString::Format(TEXT("when the '{0}' Ability Modifier is '5'"), {BoostedAbilityName}), [=]
+				Describe(FString::Format(TEXT("when the '{0}' Ability Modifier is '5'"), {BoostedAbilityName}), [=, this]
 				{
-					BeforeEach([=]()
+					BeforeEach([=, this]()
 					{
 						const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
 						FAttributeCapture       Attributes   = CaptureAbilityModifierAttributes(AttributeSet);
@@ -101,11 +101,11 @@ void FPF2SpellAttackRollCalculationsSpec::Define()
 						const FString ProficiencyLevel = Proficiency.Key;
 						const float   ProficiencyValue = Proficiency.Value;
 
-						Describe(FString::Format(TEXT("when the character is '{0}' in Spell Attack Roll"), {ProficiencyLevel}), [=]()
+						Describe(FString::Format(TEXT("when the character is '{0}' in Spell Attack Roll"), {ProficiencyLevel}), [=, this]()
 						{
 							float ExpectedSpellAttackRollMod;
 
-							BeforeEach([=]()
+							BeforeEach([=, this]()
 							{
 								this->ApplyUnreplicatedTag(FString::Format(TEXT("SpellAttack.{0}"), {ProficiencyLevel}));
 							});
@@ -119,7 +119,7 @@ void FPF2SpellAttackRollCalculationsSpec::Define()
 								ExpectedSpellAttackRollMod = 0.0f + ProficiencyValue;
 							}
 
-							It(FString::Format(TEXT("calculates a Spell Attack Roll Modifier of '{0}'"), {FString::FormatAsNumber(ExpectedSpellAttackRollMod)}), [=]()
+							It(FString::Format(TEXT("calculates a Spell Attack Roll Modifier of '{0}'"), {FString::FormatAsNumber(ExpectedSpellAttackRollMod)}), [=, this]()
 							{
 								const UPF2AttributeSet*             AttributeSet             = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
 								FAttributeCapture                   Attributes               = CaptureSpellAttributes(AttributeSet);

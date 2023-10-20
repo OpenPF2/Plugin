@@ -53,21 +53,21 @@ END_DEFINE_PF_SPEC(FPF2AbilityBoostSpec)
 
 void FPF2AbilityBoostSpec::Define()
 {
-	Describe("Blueprint Loading for Ability Boost MMCs", [=]()
+	Describe("Blueprint Loading for Ability Boost MMCs", [=, this]()
 	{
-		BeforeEach([=]()
+		BeforeEach([=, this]()
 		{
 			this->LoadMMCs();
 		});
 
-		AfterEach([=]()
+		AfterEach([=, this]()
 		{
 			this->BoostMMCs.Empty();
 		});
 
 		for (const auto& BlueprintName : this->BoostMmcNames)
 		{
-			It(BlueprintName + " should load", [=]()
+			It(BlueprintName + " should load", [=, this]()
 			{
 				const TSubclassOf<UPF2AbilityBoostCalculationBase>& MmcBlueprint = this->BoostMMCs[BlueprintName];
 
@@ -76,21 +76,21 @@ void FPF2AbilityBoostSpec::Define()
 		}
 	});
 
-	Describe("Blueprint Loading for Ability Boost GEs", [=]()
+	Describe("Blueprint Loading for Ability Boost GEs", [=, this]()
 	{
-		BeforeEach([=]()
+		BeforeEach([=, this]()
 		{
 			this->LoadGEs();
 		});
 
-		AfterEach([=]()
+		AfterEach([=, this]()
 		{
 			this->BoostGEs.Empty();
 		});
 
 		for (const auto& BlueprintName : this->BoostGeNames)
 		{
-			It(BlueprintName + " should load", [=]()
+			It(BlueprintName + " should load", [=, this]()
 			{
 				const TSubclassOf<UGameplayEffect>& EffectBP = this->BoostGEs[BlueprintName];
 
@@ -99,9 +99,9 @@ void FPF2AbilityBoostSpec::Define()
 		}
 	});
 
-	Describe("Effects of Boosts", [=]()
+	Describe("Effects of Boosts", [=, this]()
 	{
-		BeforeEach([=]()
+		BeforeEach([=, this]()
 		{
 			this->SetupWorld();
 			this->SetupPawn();
@@ -111,7 +111,7 @@ void FPF2AbilityBoostSpec::Define()
 			this->BeginPlay();
 		});
 
-		AfterEach([=]()
+		AfterEach([=, this]()
 		{
 			this->DestroyPawn();
 			this->DestroyWorld();
@@ -119,618 +119,618 @@ void FPF2AbilityBoostSpec::Define()
 			this->BoostGEs.Empty();
 		});
 
-		Describe("Charisma Boost", [=]()
+		Describe("Charisma Boost", [=, this]()
 		{
 			const FString EffectName    = TEXT("GE_BoostAbCharisma");
 			const FString AttributeName = TEXT("AbCharisma");
 
-			Describe("when stat is below 18", [=]()
+			Describe("when stat is below 18", [=, this]()
 			{
 				constexpr float StartingValue          = 10;
 				constexpr float ExpectedValueWithBoost = 12;
 
-				Describe("when GE is applied", [=]()
+				Describe("when GE is applied", [=, this]()
 				{
-					It("applies a boost of +2 to the current value", [=]()
+					It("applies a boost of +2 to the current value", [=, this]()
 					{
 						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
-					It("does not boost any other attributes", [=]()
+					It("does not boost any other attributes", [=, this]()
 					{
 						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
-				Describe("when GE is removed after being applied", [=]()
+				Describe("when GE is removed after being applied", [=, this]()
 				{
-					It("removes a boost of +2", [=]()
+					It("removes a boost of +2", [=, this]()
 					{
 						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
 
-			Describe("when stat is 18", [=]()
+			Describe("when stat is 18", [=, this]()
 			{
 				constexpr float StartingValue          = 18;
 				constexpr float ExpectedValueWithBoost = 19;
 
-				Describe("when GE is applied", [=]()
+				Describe("when GE is applied", [=, this]()
 				{
-					It("applies a boost of +1 to the current value", [=]()
+					It("applies a boost of +1 to the current value", [=, this]()
 					{
 						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
-					It("does not boost any other attributes", [=]()
+					It("does not boost any other attributes", [=, this]()
 					{
 						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
-				Describe("when GE is removed after being applied", [=]()
+				Describe("when GE is removed after being applied", [=, this]()
 				{
-					It("removes a boost of +1", [=]()
+					It("removes a boost of +1", [=, this]()
 					{
 						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
 
-			Describe("when stat is > 18", [=]()
+			Describe("when stat is > 18", [=, this]()
 			{
 				constexpr float StartingValue          = 19;
 				constexpr float ExpectedValueWithBoost = 20;
 
-				Describe("when GE is applied", [=]()
+				Describe("when GE is applied", [=, this]()
 				{
-					It("applies a boost of +1 to the current value", [=]()
+					It("applies a boost of +1 to the current value", [=, this]()
 					{
 						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
-					It("does not boost any other attributes", [=]()
+					It("does not boost any other attributes", [=, this]()
 					{
 						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
-				Describe("when GE is removed after being applied", [=]()
+				Describe("when GE is removed after being applied", [=, this]()
 				{
-					It("removes a boost of +1", [=]()
+					It("removes a boost of +1", [=, this]()
 					{
 						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
 
-			Describe("when GE is applied once", [=]()
+			Describe("when GE is applied once", [=, this]()
 			{
-				It("increments the boost counter by 1", [=]()
+				It("increments the boost counter by 1", [=, this]()
 				{
 					this->VerifyBoostCounter(EffectName, AttributeName, 1);
 				});
 			});
 
-			Describe("when GE is applied twice", [=]()
+			Describe("when GE is applied twice", [=, this]()
 			{
-				It("increments the boost counter by 2", [=]()
+				It("increments the boost counter by 2", [=, this]()
 				{
 					this->VerifyBoostCounter(EffectName, AttributeName, 2);
 				});
 			});
 		});
 
-		Describe("Constitution Boost", [=]()
+		Describe("Constitution Boost", [=, this]()
 		{
 			const FString EffectName    = TEXT("GE_BoostAbConstitution");
 			const FString AttributeName = TEXT("AbConstitution");
 
-			Describe("when stat is below 18", [=]()
+			Describe("when stat is below 18", [=, this]()
 			{
 				constexpr float StartingValue          = 10;
 				constexpr float ExpectedValueWithBoost = 12;
 
-				Describe("when GE is applied", [=]()
+				Describe("when GE is applied", [=, this]()
 				{
-					It("applies a boost of +2 to the current value", [=]()
+					It("applies a boost of +2 to the current value", [=, this]()
 					{
 						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
-					It("does not boost any other attributes", [=]()
+					It("does not boost any other attributes", [=, this]()
 					{
 						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
-				Describe("when GE is removed after being applied", [=]()
+				Describe("when GE is removed after being applied", [=, this]()
 				{
-					It("removes a boost of +2", [=]()
+					It("removes a boost of +2", [=, this]()
 					{
 						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
 
-			Describe("when stat is 18", [=]()
+			Describe("when stat is 18", [=, this]()
 			{
 				constexpr float StartingValue          = 18;
 				constexpr float ExpectedValueWithBoost = 19;
 
-				Describe("when GE is applied", [=]()
+				Describe("when GE is applied", [=, this]()
 				{
-					It("applies a boost of +1 to the current value", [=]()
+					It("applies a boost of +1 to the current value", [=, this]()
 					{
 						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
-					It("does not boost any other attributes", [=]()
+					It("does not boost any other attributes", [=, this]()
 					{
 						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
-				Describe("when GE is removed after being applied", [=]()
+				Describe("when GE is removed after being applied", [=, this]()
 				{
-					It("removes a boost of +1", [=]()
+					It("removes a boost of +1", [=, this]()
 					{
 						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
 
-			Describe("when stat is > 18", [=]()
+			Describe("when stat is > 18", [=, this]()
 			{
 				constexpr float StartingValue          = 19;
 				constexpr float ExpectedValueWithBoost = 20;
 
-				Describe("when GE is applied", [=]()
+				Describe("when GE is applied", [=, this]()
 				{
-					It("applies a boost of +1 to the current value", [=]()
+					It("applies a boost of +1 to the current value", [=, this]()
 					{
 						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
-					It("does not boost any other attributes", [=]()
+					It("does not boost any other attributes", [=, this]()
 					{
 						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
-				Describe("when GE is removed after being applied", [=]()
+				Describe("when GE is removed after being applied", [=, this]()
 				{
-					It("removes a boost of +1", [=]()
+					It("removes a boost of +1", [=, this]()
 					{
 						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
 
-			Describe("when GE is applied once", [=]()
+			Describe("when GE is applied once", [=, this]()
 			{
-				It("increments the boost counter by 1", [=]()
+				It("increments the boost counter by 1", [=, this]()
 				{
 					this->VerifyBoostCounter(EffectName, AttributeName, 1);
 				});
 			});
 
-			Describe("when GE is applied twice", [=]()
+			Describe("when GE is applied twice", [=, this]()
 			{
-				It("increments the boost counter by 2", [=]()
+				It("increments the boost counter by 2", [=, this]()
 				{
 					this->VerifyBoostCounter(EffectName, AttributeName, 2);
 				});
 			});
 		});
 
-		Describe("Dexterity Boost", [=]()
+		Describe("Dexterity Boost", [=, this]()
 		{
 			const FString EffectName    = TEXT("GE_BoostAbDexterity");
 			const FString AttributeName = TEXT("AbDexterity");
 
-			Describe("when stat is below 18", [=]()
+			Describe("when stat is below 18", [=, this]()
 			{
 				constexpr float StartingValue          = 10;
 				constexpr float ExpectedValueWithBoost = 12;
 
-				Describe("when GE is applied", [=]()
+				Describe("when GE is applied", [=, this]()
 				{
-					It("applies a boost of +2 to the current value", [=]()
+					It("applies a boost of +2 to the current value", [=, this]()
 					{
 						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
-					It("does not boost any other attributes", [=]()
+					It("does not boost any other attributes", [=, this]()
 					{
 						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
-				Describe("when GE is removed after being applied", [=]()
+				Describe("when GE is removed after being applied", [=, this]()
 				{
-					It("removes a boost of +2", [=]()
+					It("removes a boost of +2", [=, this]()
 					{
 						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
 
-			Describe("when stat is 18", [=]()
+			Describe("when stat is 18", [=, this]()
 			{
 				constexpr float StartingValue          = 18;
 				constexpr float ExpectedValueWithBoost = 19;
 
-				Describe("when GE is applied", [=]()
+				Describe("when GE is applied", [=, this]()
 				{
-					It("applies a boost of +1 to the current value", [=]()
+					It("applies a boost of +1 to the current value", [=, this]()
 					{
 						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
-					It("does not boost any other attributes", [=]()
+					It("does not boost any other attributes", [=, this]()
 					{
 						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
-				Describe("when GE is removed after being applied", [=]()
+				Describe("when GE is removed after being applied", [=, this]()
 				{
-					It("removes a boost of +1", [=]()
+					It("removes a boost of +1", [=, this]()
 					{
 						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
 
-			Describe("when stat is > 18", [=]()
+			Describe("when stat is > 18", [=, this]()
 			{
 				constexpr float StartingValue          = 19;
 				constexpr float ExpectedValueWithBoost = 20;
 
-				Describe("when GE is applied", [=]()
+				Describe("when GE is applied", [=, this]()
 				{
-					It("applies a boost of +1 to the current value", [=]()
+					It("applies a boost of +1 to the current value", [=, this]()
 					{
 						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
-					It("does not boost any other attributes", [=]()
+					It("does not boost any other attributes", [=, this]()
 					{
 						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
-				Describe("when GE is removed after being applied", [=]()
+				Describe("when GE is removed after being applied", [=, this]()
 				{
-					It("removes a boost of +1", [=]()
+					It("removes a boost of +1", [=, this]()
 					{
 						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
 
-			Describe("when GE is applied once", [=]()
+			Describe("when GE is applied once", [=, this]()
 			{
-				It("increments the boost counter by 1", [=]()
+				It("increments the boost counter by 1", [=, this]()
 				{
 					this->VerifyBoostCounter(EffectName, AttributeName, 1);
 				});
 			});
 
-			Describe("when GE is applied twice", [=]()
+			Describe("when GE is applied twice", [=, this]()
 			{
-				It("increments the boost counter by 2", [=]()
+				It("increments the boost counter by 2", [=, this]()
 				{
 					this->VerifyBoostCounter(EffectName, AttributeName, 2);
 				});
 			});
 		});
 
-		Describe("Intelligence Boost", [=]()
+		Describe("Intelligence Boost", [=, this]()
 		{
 			const FString EffectName    = TEXT("GE_BoostAbIntelligence");
 			const FString AttributeName = TEXT("AbIntelligence");
 
-			Describe("when stat is below 18", [=]()
+			Describe("when stat is below 18", [=, this]()
 			{
 				constexpr float StartingValue          = 10;
 				constexpr float ExpectedValueWithBoost = 12;
 
-				Describe("when GE is applied", [=]()
+				Describe("when GE is applied", [=, this]()
 				{
-					It("applies a boost of +2 to the current value", [=]()
+					It("applies a boost of +2 to the current value", [=, this]()
 					{
 						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
-					It("does not boost any other attributes", [=]()
+					It("does not boost any other attributes", [=, this]()
 					{
 						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
-				Describe("when GE is removed after being applied", [=]()
+				Describe("when GE is removed after being applied", [=, this]()
 				{
-					It("removes a boost of +2", [=]()
+					It("removes a boost of +2", [=, this]()
 					{
 						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
 
-			Describe("when stat is 18", [=]()
+			Describe("when stat is 18", [=, this]()
 			{
 				constexpr float StartingValue          = 18;
 				constexpr float ExpectedValueWithBoost = 19;
 
-				Describe("when GE is applied", [=]()
+				Describe("when GE is applied", [=, this]()
 				{
-					It("applies a boost of +1 to the current value", [=]()
+					It("applies a boost of +1 to the current value", [=, this]()
 					{
 						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
-					It("does not boost any other attributes", [=]()
+					It("does not boost any other attributes", [=, this]()
 					{
 						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
-				Describe("when GE is removed after being applied", [=]()
+				Describe("when GE is removed after being applied", [=, this]()
 				{
-					It("removes a boost of +1", [=]()
+					It("removes a boost of +1", [=, this]()
 					{
 						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
 
-			Describe("when stat is > 18", [=]()
+			Describe("when stat is > 18", [=, this]()
 			{
 				constexpr float StartingValue          = 19;
 				constexpr float ExpectedValueWithBoost = 20;
 
-				Describe("when GE is applied", [=]()
+				Describe("when GE is applied", [=, this]()
 				{
-					It("applies a boost of +1 to the current value", [=]()
+					It("applies a boost of +1 to the current value", [=, this]()
 					{
 						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
-					It("does not boost any other attributes", [=]()
+					It("does not boost any other attributes", [=, this]()
 					{
 						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
-				Describe("when GE is removed after being applied", [=]()
+				Describe("when GE is removed after being applied", [=, this]()
 				{
-					It("removes a boost of +1", [=]()
+					It("removes a boost of +1", [=, this]()
 					{
 						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
 
-			Describe("when GE is applied once", [=]()
+			Describe("when GE is applied once", [=, this]()
 			{
-				It("increments the boost counter by 1", [=]()
+				It("increments the boost counter by 1", [=, this]()
 				{
 					this->VerifyBoostCounter(EffectName, AttributeName, 1);
 				});
 			});
 
-			Describe("when GE is applied twice", [=]()
+			Describe("when GE is applied twice", [=, this]()
 			{
-				It("increments the boost counter by 2", [=]()
+				It("increments the boost counter by 2", [=, this]()
 				{
 					this->VerifyBoostCounter(EffectName, AttributeName, 2);
 				});
 			});
 		});
 
-		Describe("Strength Boost", [=]()
+		Describe("Strength Boost", [=, this]()
 		{
 			const FString EffectName    = TEXT("GE_BoostAbStrength");
 			const FString AttributeName = TEXT("AbStrength");
 
-			Describe("when stat is below 18", [=]()
+			Describe("when stat is below 18", [=, this]()
 			{
 				constexpr float StartingValue          = 10;
 				constexpr float ExpectedValueWithBoost = 12;
 
-				Describe("when GE is applied", [=]()
+				Describe("when GE is applied", [=, this]()
 				{
-					It("applies a boost of +2 to the current value", [=]()
+					It("applies a boost of +2 to the current value", [=, this]()
 					{
 						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
-					It("does not boost any other attributes", [=]()
+					It("does not boost any other attributes", [=, this]()
 					{
 						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
-				Describe("when GE is removed after being applied", [=]()
+				Describe("when GE is removed after being applied", [=, this]()
 				{
-					It("removes a boost of +2", [=]()
+					It("removes a boost of +2", [=, this]()
 					{
 						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
 
-			Describe("when stat is 18", [=]()
+			Describe("when stat is 18", [=, this]()
 			{
 				constexpr float StartingValue          = 18;
 				constexpr float ExpectedValueWithBoost = 19;
 
-				Describe("when GE is applied", [=]()
+				Describe("when GE is applied", [=, this]()
 				{
-					It("applies a boost of +1 to the current value", [=]()
+					It("applies a boost of +1 to the current value", [=, this]()
 					{
 						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
-					It("does not boost any other attributes", [=]()
+					It("does not boost any other attributes", [=, this]()
 					{
 						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
-				Describe("when GE is removed after being applied", [=]()
+				Describe("when GE is removed after being applied", [=, this]()
 				{
-					It("removes a boost of +1", [=]()
+					It("removes a boost of +1", [=, this]()
 					{
 						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
 
-			Describe("when stat is > 18", [=]()
+			Describe("when stat is > 18", [=, this]()
 			{
 				constexpr float StartingValue          = 19;
 				constexpr float ExpectedValueWithBoost = 20;
 
-				Describe("when GE is applied", [=]()
+				Describe("when GE is applied", [=, this]()
 				{
-					It("applies a boost of +1 to the current value", [=]()
+					It("applies a boost of +1 to the current value", [=, this]()
 					{
 						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
-					It("does not boost any other attributes", [=]()
+					It("does not boost any other attributes", [=, this]()
 					{
 						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
-				Describe("when GE is removed after being applied", [=]()
+				Describe("when GE is removed after being applied", [=, this]()
 				{
-					It("removes a boost of +1", [=]()
+					It("removes a boost of +1", [=, this]()
 					{
 						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
 
-			Describe("when GE is applied once", [=]()
+			Describe("when GE is applied once", [=, this]()
 			{
-				It("increments the boost counter by 1", [=]()
+				It("increments the boost counter by 1", [=, this]()
 				{
 					this->VerifyBoostCounter(EffectName, AttributeName, 1);
 				});
 			});
 
-			Describe("when GE is applied twice", [=]()
+			Describe("when GE is applied twice", [=, this]()
 			{
-				It("increments the boost counter by 2", [=]()
+				It("increments the boost counter by 2", [=, this]()
 				{
 					this->VerifyBoostCounter(EffectName, AttributeName, 2);
 				});
 			});
 		});
 
-		Describe("Wisdom Boost", [=]()
+		Describe("Wisdom Boost", [=, this]()
 		{
 			const FString EffectName    = TEXT("GE_BoostAbWisdom");
 			const FString AttributeName = TEXT("AbWisdom");
 
-			Describe("when stat is below 18", [=]()
+			Describe("when stat is below 18", [=, this]()
 			{
 				constexpr float StartingValue          = 10;
 				constexpr float ExpectedValueWithBoost = 12;
 
-				Describe("when GE is applied", [=]()
+				Describe("when GE is applied", [=, this]()
 				{
-					It("applies a boost of +2 to the current value", [=]()
+					It("applies a boost of +2 to the current value", [=, this]()
 					{
 						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
-					It("does not boost any other attributes", [=]()
+					It("does not boost any other attributes", [=, this]()
 					{
 						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
-				Describe("when GE is removed after being applied", [=]()
+				Describe("when GE is removed after being applied", [=, this]()
 				{
-					It("removes a boost of +2", [=]()
+					It("removes a boost of +2", [=, this]()
 					{
 						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
 
-			Describe("when stat is 18", [=]()
+			Describe("when stat is 18", [=, this]()
 			{
 				constexpr float StartingValue          = 18;
 				constexpr float ExpectedValueWithBoost = 19;
 
-				Describe("when GE is applied", [=]()
+				Describe("when GE is applied", [=, this]()
 				{
-					It("applies a boost of +1 to the current value", [=]()
+					It("applies a boost of +1 to the current value", [=, this]()
 					{
 						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
-					It("does not boost any other attributes", [=]()
+					It("does not boost any other attributes", [=, this]()
 					{
 						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
-				Describe("when GE is removed after being applied", [=]()
+				Describe("when GE is removed after being applied", [=, this]()
 				{
-					It("removes a boost of +1", [=]()
+					It("removes a boost of +1", [=, this]()
 					{
 						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
 
-			Describe("when stat is > 18", [=]()
+			Describe("when stat is > 18", [=, this]()
 			{
 				constexpr float StartingValue          = 19;
 				constexpr float ExpectedValueWithBoost = 20;
 
-				Describe("when GE is applied", [=]()
+				Describe("when GE is applied", [=, this]()
 				{
-					It("applies a boost of +1 to the current value", [=]()
+					It("applies a boost of +1 to the current value", [=, this]()
 					{
 						this->VerifyBoostApplied(EffectName, AttributeName, StartingValue, ExpectedValueWithBoost);
 					});
 
-					It("does not boost any other attributes", [=]()
+					It("does not boost any other attributes", [=, this]()
 					{
 						this->VerifyOtherBoostsUnaffected(EffectName, AttributeName);
 					});
 				});
 
-				Describe("when GE is removed after being applied", [=]()
+				Describe("when GE is removed after being applied", [=, this]()
 				{
-					It("removes a boost of +1", [=]()
+					It("removes a boost of +1", [=, this]()
 					{
 						this->VerifyBoostRemoved(EffectName, AttributeName, StartingValue);
 					});
 				});
 			});
 
-			Describe("when GE is applied once", [=]()
+			Describe("when GE is applied once", [=, this]()
 			{
-				It("increments the boost counter by 1", [=]()
+				It("increments the boost counter by 1", [=, this]()
 				{
 					this->VerifyBoostCounter(EffectName, AttributeName, 1);
 				});
 			});
 
-			Describe("when GE is applied twice", [=]()
+			Describe("when GE is applied twice", [=, this]()
 			{
-				It("increments the boost counter by 2", [=]()
+				It("increments the boost counter by 2", [=, this]()
 				{
 					this->VerifyBoostCounter(EffectName, AttributeName, 2);
 				});
