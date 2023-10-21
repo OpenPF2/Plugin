@@ -16,7 +16,7 @@
 
 #include <Kismet/BlueprintFunctionLibrary.h>
 
-#include "Calculations/PF2CheckResult.h"
+#include "Calculations/PF2DegreeOfSuccess.h"
 
 #include "PF2AttackStatLibrary.generated.h"
 
@@ -88,7 +88,7 @@ public:
 	 *
 	 * Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Attack Rolls".
 	 *
-	 * @see EPF2CheckResult
+	 * @see EPF2DegreeOfSuccess
 	 *
 	 * @param CharacterLevel
 	 *	The level of the character.
@@ -108,17 +108,17 @@ public:
 	 *	The armor class of the attack target. This represents the difficulty class to check against the attack roll.
 	 */
 	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
-	static EPF2CheckResult PerformAttackRoll(const int32                  CharacterLevel,
-	                                         const FGameplayTagContainer& CharacterTags,
-	                                         const float                  AttackAbilityModifier,
-	                                         const float                  MultipleAttackPenalty,
-	                                         const FGameplayTagContainer& ProficiencyTagPrefixes,
-	                                         const float                  TargetArmorClass);
+	static EPF2DegreeOfSuccess PerformAttackRoll(const int32                  CharacterLevel,
+	                                             const FGameplayTagContainer& CharacterTags,
+	                                             const float                  AttackAbilityModifier,
+	                                             const float                  MultipleAttackPenalty,
+	                                             const FGameplayTagContainer& ProficiencyTagPrefixes,
+	                                             const float                  TargetArmorClass);
 
 	/**
 	 * Performs a check of a value against a Difficulty Class (DC).
 	 *
-	 * @see EPF2CheckResult
+	 * @see EPF2DegreeOfSuccess
 	 *
 	 * @param Value
 	 *	The value to check.
@@ -129,7 +129,7 @@ public:
 	 *	The result of the check.
 	 */
 	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
-	static EPF2CheckResult CheckAgainstDifficultyClass(const float Value, const float DifficultyClass);
+	static EPF2DegreeOfSuccess CheckAgainstDifficultyClass(const float Value, const float DifficultyClass);
 
 	/**
 	 * Upgrades a check result to one degree of success better, up to a maximum of "critical success".
@@ -139,16 +139,16 @@ public:
 	 *
 	 * @return
 	 *	Either:
-	 *	  - If CheckResult is not EPF2CheckResult::CriticalSuccess: The next-highest check result value.
-	 *	  - If CheckResult is EPF2CheckResult::CriticalSuccess: No change (EPF2CheckResult::CriticalSuccess).
+	 *	  - If CheckResult is not EPF2DegreeOfSuccess::CriticalSuccess: The next-highest check result value.
+	 *	  - If CheckResult is EPF2DegreeOfSuccess::CriticalSuccess: No change (EPF2DegreeOfSuccess::CriticalSuccess).
 	 */
 	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
-	static FORCEINLINE EPF2CheckResult IncreaseDegreeOfSuccess(const EPF2CheckResult CheckResult)
+	static FORCEINLINE EPF2DegreeOfSuccess IncreaseDegreeOfSuccess(const EPF2DegreeOfSuccess CheckResult)
 	{
-		const int32 MaxCheckResult   = static_cast<int32>(EPF2CheckResult::CriticalSuccess),
+		const int32 MaxCheckResult   = static_cast<int32>(EPF2DegreeOfSuccess::CriticalSuccess),
 		            CheckResultValue = FMath::Min(static_cast<int32>(CheckResult) + 1, MaxCheckResult);
 
-		return static_cast<EPF2CheckResult>(CheckResultValue);
+		return static_cast<EPF2DegreeOfSuccess>(CheckResultValue);
 	}
 
 	/**
@@ -159,15 +159,15 @@ public:
 	 *
 	 * @return
 	 *	Either:
-	 *	  - If CheckResult is not EPF2CheckResult::CriticalFailure: The next-lowest check result value.
-	 *	  - If CheckResult is EPF2CheckResult::CriticalFailure: No change (EPF2CheckResult::CriticalFailure).
+	 *	  - If CheckResult is not EPF2DegreeOfSuccess::CriticalFailure: The next-lowest check result value.
+	 *	  - If CheckResult is EPF2DegreeOfSuccess::CriticalFailure: No change (EPF2DegreeOfSuccess::CriticalFailure).
 	 */
-	static FORCEINLINE EPF2CheckResult DecreaseDegreeOfSuccess(const EPF2CheckResult CheckResult)
+	static FORCEINLINE EPF2DegreeOfSuccess DecreaseDegreeOfSuccess(const EPF2DegreeOfSuccess CheckResult)
 	{
-		const int32 MinCheckResult   = static_cast<int32>(EPF2CheckResult::CriticalFailure),
+		const int32 MinCheckResult   = static_cast<int32>(EPF2DegreeOfSuccess::CriticalFailure),
 					CheckResultValue = FMath::Max(static_cast<int32>(CheckResult) - 1, MinCheckResult);
 
-		return static_cast<EPF2CheckResult>(CheckResultValue);
+		return static_cast<EPF2DegreeOfSuccess>(CheckResultValue);
 	}
 
 	/**
@@ -184,9 +184,9 @@ public:
 	 *	- false if the result represents a failed outcome (failure or a critical failure/fumble).
 	 */
 	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
-	static FORCEINLINE bool IsSuccess(const EPF2CheckResult CheckResult)
+	static FORCEINLINE bool IsSuccess(const EPF2DegreeOfSuccess CheckResult)
 	{
-		return ((CheckResult == EPF2CheckResult::Success) || (CheckResult == EPF2CheckResult::CriticalSuccess));
+		return ((CheckResult == EPF2DegreeOfSuccess::Success) || (CheckResult == EPF2DegreeOfSuccess::CriticalSuccess));
 	}
 
 	/**
@@ -203,9 +203,9 @@ public:
 	 *	- false if the result represents a successful outcome (success or critical success).
 	 */
 	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
-	static FORCEINLINE bool IsFailure(const EPF2CheckResult CheckResult)
+	static FORCEINLINE bool IsFailure(const EPF2DegreeOfSuccess CheckResult)
 	{
-		return ((CheckResult == EPF2CheckResult::Failure) || (CheckResult == EPF2CheckResult::CriticalFailure));
+		return ((CheckResult == EPF2DegreeOfSuccess::Failure) || (CheckResult == EPF2DegreeOfSuccess::CriticalFailure));
 	}
 
 	/**

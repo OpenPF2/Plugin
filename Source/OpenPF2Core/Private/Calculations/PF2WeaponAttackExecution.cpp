@@ -33,7 +33,7 @@ void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecuti
 	                            * TargetTags            = OwningSpec.CapturedTargetTags.GetAggregatedTags();
 	FAggregatorEvaluateParameters EvaluationParameters;
 	float                         TargetAc;
-	EPF2CheckResult               AttackRollResult;
+	EPF2DegreeOfSuccess           AttackRollResult;
 
 	UE_LOG(
 		LogPf2CoreAbilities,
@@ -66,7 +66,7 @@ void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecuti
 		// your attack exceeds the target’s AC by 10, you achieve a critical success (also known as a critical hit)."
 		//
 		// Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Critical Hits".
-		if (AttackRollResult == EPF2CheckResult::CriticalSuccess)
+		if (AttackRollResult == EPF2DegreeOfSuccess::CriticalSuccess)
 		{
 			DamageMultiplier = 2.0f;
 		}
@@ -106,14 +106,14 @@ void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecuti
 	}
 }
 
-EPF2CheckResult UPF2WeaponAttackExecution::PerformAttackRoll(
+EPF2DegreeOfSuccess UPF2WeaponAttackExecution::PerformAttackRoll(
 	const FGameplayEffectCustomExecutionParameters& ExecutionParams,
 	const FAggregatorEvaluateParameters&            EvaluationParameters,
 	const IPF2WeaponInterface*                      Weapon,
 	const IPF2CharacterAbilitySystemInterface*      SourceAsc,
 	const float                                     TargetArmorClass)
 {
-	EPF2CheckResult                     Result;
+	EPF2DegreeOfSuccess                 Result;
 	const int32                         CharacterLevel         = SourceAsc->GetCharacterLevel();
 	const FGameplayTagContainer         CharacterTags          = SourceAsc->GetActiveGameplayTags();
 	const EPF2CharacterAbilityScoreType AttackScoreType        = Weapon->GetAttackAbilityModifierType();

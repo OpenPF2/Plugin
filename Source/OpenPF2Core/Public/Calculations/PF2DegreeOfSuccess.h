@@ -12,10 +12,10 @@
 
 #pragma once
 
-#include "PF2CheckResult.generated.h"
+#include "PF2DegreeOfSuccess.generated.h"
 
 /**
- * An enumeration of the different outcomes from attempting a check or attack roll.
+ * An enumeration of the degrees of success/outcomes possible after performing a check or attack roll.
  *
  * From the Pathfinder 2E Core Rulebook, Chapter 9, page 445, "Step 3: Compare the Result to the DC":
  * "[...] if your result is equal to or greater than the DC, you succeed! If your roll anything less than the DC,
@@ -34,7 +34,7 @@
  * numbers alone. If you roll a 1 on the d20 (a “natural 1”), your result is one degree worse."
  */
 UENUM(BlueprintType)
-enum class EPF2CheckResult : uint8
+enum class EPF2DegreeOfSuccess : uint8
 {
 	/**
 	 * No result could be calculated (typically for error cases).

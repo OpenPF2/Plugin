@@ -18,14 +18,14 @@
 
 #include "Utilities/PF2EnumUtilities.h"
 
-EPF2CheckResult UPF2AttackStatLibrary::PerformAttackRoll(const int32                  CharacterLevel,
-                                                         const FGameplayTagContainer& CharacterTags,
-                                                         const float                  AttackAbilityModifier,
-                                                         const float                  MultipleAttackPenalty,
-                                                         const FGameplayTagContainer& ProficiencyTagPrefixes,
-                                                         const float                  TargetArmorClass)
+EPF2DegreeOfSuccess UPF2AttackStatLibrary::PerformAttackRoll(const int32                  CharacterLevel,
+                                                             const FGameplayTagContainer& CharacterTags,
+                                                             const float                  AttackAbilityModifier,
+                                                             const float                  MultipleAttackPenalty,
+                                                             const FGameplayTagContainer& ProficiencyTagPrefixes,
+                                                             const float                  TargetArmorClass)
 {
-	EPF2CheckResult Result;
+	EPF2DegreeOfSuccess Result;
 
 	// "When making an attack roll, determine the result by rolling 1d20 and adding your attack modifier for the weapon
 	// or unarmed attack you’re using."
@@ -70,7 +70,7 @@ EPF2CheckResult UPF2AttackStatLibrary::PerformAttackRoll(const int32            
 
 	// If you rolled a 20 on the die (a “natural 20”), your result is one degree of success better than it would be by
 	// numbers alone."
-	if (bIsNatural20 && (Result != EPF2CheckResult::CriticalSuccess))
+	if (bIsNatural20 && (Result != EPF2DegreeOfSuccess::CriticalSuccess))
 	{
 		Result = IncreaseDegreeOfSuccess(Result);
 	}
@@ -168,25 +168,25 @@ bool UPF2AttackStatLibrary::IsWithinRange(const float WeaponRangeIncrementCentim
 	return bInRange;
 }
 
-EPF2CheckResult UPF2AttackStatLibrary::CheckAgainstDifficultyClass(const float Value, const float DifficultyClass)
+EPF2DegreeOfSuccess UPF2AttackStatLibrary::CheckAgainstDifficultyClass(const float Value, const float DifficultyClass)
 {
-	EPF2CheckResult Result;
+	EPF2DegreeOfSuccess Result;
 
 	if (Value >= DifficultyClass + 10.0f)
 	{
-		Result = EPF2CheckResult::CriticalSuccess;
+		Result = EPF2DegreeOfSuccess::CriticalSuccess;
 	}
 	else if (Value >= DifficultyClass)
 	{
-		Result = EPF2CheckResult::Success;
+		Result = EPF2DegreeOfSuccess::Success;
 	}
 	else if (Value <= DifficultyClass - 10.0f)
 	{
-		Result = EPF2CheckResult::CriticalFailure;
+		Result = EPF2DegreeOfSuccess::CriticalFailure;
 	}
 	else
 	{
-		Result = EPF2CheckResult::Failure;
+		Result = EPF2DegreeOfSuccess::Failure;
 	}
 
 	return Result;

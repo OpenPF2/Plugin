@@ -14,7 +14,7 @@
 
 #include <GameplayEffectExecutionCalculation.h>
 
-#include "PF2CheckResult.h"
+#include "PF2DegreeOfSuccess.h"
 
 #include "Abilities/PF2CharacterAbilitySystemInterface.h"
 
@@ -114,7 +114,7 @@ protected:
 	 * @return
 	 *	The outcome of the attack roll for the weapon.
 	 */
-	static EPF2CheckResult PerformAttackRoll(
+	static EPF2DegreeOfSuccess PerformAttackRoll(
 		const FGameplayEffectCustomExecutionParameters& ExecutionParams,
 		const FAggregatorEvaluateParameters&            EvaluationParameters,
 		const IPF2WeaponInterface*                      Weapon,
