@@ -89,8 +89,6 @@ public:
 
 	DECLARE_ATTRIBUTE_CAPTUREDEF(EncMultipleAttackPenalty);
 
-	DECLARE_ATTRIBUTE_CAPTUREDEF(TmpDamageIncoming);
-
 protected:
 	// =================================================================================================================
 	// Protected Constants
@@ -337,8 +335,7 @@ protected:
 		RstPoisonProperty(nullptr),
 		RstBleedProperty(nullptr),
 		RstPrecisionProperty(nullptr),
-		EncMultipleAttackPenaltyProperty(nullptr),
-		TmpDamageIncomingProperty(nullptr)
+		EncMultipleAttackPenaltyProperty(nullptr)
 	{
 #if !(UE_BUILD_SHIPPING || UE_BUILD_TEST)
 		TArray<FName> Keys;

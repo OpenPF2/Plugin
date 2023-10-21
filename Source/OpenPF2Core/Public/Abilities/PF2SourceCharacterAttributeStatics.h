@@ -81,7 +81,5 @@ private:
 		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPrecision, Source, true);
 
 		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, EncMultipleAttackPenalty, Source, true);
-
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, TmpDamageIncoming, Source, false);
 	}
 };

@@ -15,6 +15,11 @@ class OPENPF2CORE_API FPF2TargetCharacterAttributeStatics final : public FPF2Cha
 {
 public:
 	// =================================================================================================================
+	// Attribute Capture Definitions
+	// =================================================================================================================
+	DECLARE_ATTRIBUTE_CAPTUREDEF(TmpDamageIncoming);
+
+	// =================================================================================================================
 	// Public Static Methods
 	// =================================================================================================================
 	/**
@@ -37,7 +42,7 @@ private:
 	/**
 	 * Constructor for FPF2TargetCharacterAttributeStatics.
 	 */
-	FPF2TargetCharacterAttributeStatics()
+	FPF2TargetCharacterAttributeStatics() : TmpDamageIncomingProperty(nullptr)
 	{
 		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, AbBoostCount, Target, false);
 
