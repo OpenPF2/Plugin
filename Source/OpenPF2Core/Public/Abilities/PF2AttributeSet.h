@@ -36,7 +36,7 @@ class IPF2CharacterInterface;
 // Normal Declarations
 // =====================================================================================================================
 /**
- * This holds all of the attributes used by abilities, it instantiates a copy of this on every character.
+ * This holds all of the attributes used by abilities. A copy of this is instantiated on every character.
  */
 UCLASS()
 class OPENPF2CORE_API UPF2AttributeSet : public UAttributeSet
