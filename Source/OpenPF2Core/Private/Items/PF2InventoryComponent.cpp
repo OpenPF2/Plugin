@@ -93,7 +93,7 @@ UActorComponent* UPF2InventoryComponent::ToActorComponent()
 
 UAssetManager* UPF2InventoryComponent::GetAssetManager()
 {
-	UAssetManager* AssetManager = UAssetManager::GetIfValid();
+	UAssetManager* AssetManager = UAssetManager::GetIfInitialized();
 
 	if (AssetManager == nullptr)
 	{
