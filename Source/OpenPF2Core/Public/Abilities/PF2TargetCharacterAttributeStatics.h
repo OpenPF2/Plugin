@@ -18,6 +18,7 @@ public:
 	// Attribute Capture Definitions
 	// =================================================================================================================
 	DECLARE_ATTRIBUTE_CAPTUREDEF(TmpDamageIncoming);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(TmpDegreeOfSuccess);
 
 	// =================================================================================================================
 	// Public Static Methods
@@ -42,7 +43,7 @@ private:
 	/**
 	 * Constructor for FPF2TargetCharacterAttributeStatics.
 	 */
-	FPF2TargetCharacterAttributeStatics() : TmpDamageIncomingProperty(nullptr)
+	FPF2TargetCharacterAttributeStatics() : TmpDamageIncomingProperty(nullptr), TmpDegreeOfSuccessProperty(nullptr)
 	{
 		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, AbBoostCount, Target, false);
 
@@ -86,5 +87,6 @@ private:
 		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPrecision, Target, false);
 
 		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, TmpDamageIncoming, Target, false);
+		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, TmpDegreeOfSuccess, Target, false);
 	}
 };

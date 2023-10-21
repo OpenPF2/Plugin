@@ -788,6 +788,16 @@ public:
 	FGameplayAttributeData TmpDamageIncoming;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, TmpDamageIncoming)
 
+	/**
+	 * A temporary attribute for tracking the result of damage rolls against the owner of this set.
+	 *
+	 * This value exists only on the server; it is not replicated. At the end of execution for a damage GE, this is
+	 * reset. It exists only so that other effects can react accordingly to the outcome
+	 */
+	UPROPERTY(BlueprintReadOnly, Category = "Temporary Attributes")
+	FGameplayAttributeData TmpDegreeOfSuccess;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, TmpDegreeOfSuccess)
+
 	// =================================================================================================================
 	// Public Constructors
 	// =================================================================================================================
@@ -1041,6 +1051,23 @@ protected:
 	void Native_OnDamageIncomingChanged(IPF2CharacterInterface*             TargetCharacter,
 	                                    const FGameplayEffectContextHandle& Context,
 	                                    const FGameplayTagContainer*        EventTags);
+
+	/**
+	 * Notifies this ASC that the incoming damage degree of success has been changed (typically by a Gameplay Effect).
+	 *
+	 * This is called after the change has already occurred. This resets the value to zero, since it is only relevant
+	 * during damage effect calculations.
+	 *
+	 * @param TargetCharacter
+	 *	The character receiving the damage. This is usually the same as the character who owns this ASC.
+	 * @param Context
+	 *	Wrapper around the context of the Gameplay Effect activation.
+	 * @param EventTags
+	 *	Tags passed along with the Gameplay Event as metadata about the cause of the damage.
+	 */
+	void Native_OnDegreeOfSuccessChanged(IPF2CharacterInterface*             TargetCharacter,
+	                                     const FGameplayEffectContextHandle& Context,
+	                                     const FGameplayTagContainer*        EventTags);
 
 	/**
 	 * Notifies this ASC that the hit points attribute has been changed (typically by a Gameplay Effect).

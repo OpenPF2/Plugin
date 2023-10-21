@@ -62,6 +62,8 @@ void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecuti
 		            DamageAmount,
 		            ClampedDamageAmount;
 
+		const FPF2TargetCharacterAttributeStatics TargetCaptures = FPF2TargetCharacterAttributeStatics::GetInstance();
+
 		// "When you make an attack and succeed with a natural 20 (the number on the die is 20), or if the result of
 		// your attack exceeds the target’s AC by 10, you achieve a critical success (also known as a critical hit)."
 		//
@@ -96,11 +98,21 @@ void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecuti
 			ClampedDamageAmount
 		);
 
+		OutExecutionOutput.MarkConditionalGameplayEffectsToTrigger();
+
 		OutExecutionOutput.AddOutputModifier(
 			FGameplayModifierEvaluatedData(
-				FPF2TargetCharacterAttributeStatics::GetInstance().TmpDamageIncomingProperty,
+				TargetCaptures.TmpDamageIncomingProperty,
 				EGameplayModOp::Additive,
 				ClampedDamageAmount
+			)
+		);
+
+		OutExecutionOutput.AddOutputModifier(
+			FGameplayModifierEvaluatedData(
+				TargetCaptures.TmpDegreeOfSuccessProperty,
+				EGameplayModOp::Override,
+				UPF2AttackStatLibrary::DegreeOfSuccessStatFromEnum(AttackRollResult)
 			)
 		);
 	}
