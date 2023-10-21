@@ -6,12 +6,35 @@
 #pragma once
 
 /**
- * Utility logic for working with Enums.
+ * Utility logic for working with static enums.
  */
 namespace PF2EnumUtilities
 {
 	/**
+	 * Convert the value of an enum to a name.
+	 *
+	 * @tparam E The enum type.
+	 *
+	 * @param EnumValue
+	 *	The enumerated type value to convert to a name.
+	 *
+	 * @return
+	 *	The key/name that corresponds to the value in the enumerated type.
+	 */
+	template<typename E>
+	OPENPF2CORE_API FName ToName(const E EnumValue)
+	{
+		const FName Name = StaticEnum<E>()->GetNameByValue(static_cast<__underlying_type(E)>(EnumValue));
+
+		check(Name.IsValid());
+
+		return Name;
+	}
+
+	/**
 	 * Convert the value of an enum to a string.
+	 *
+	 * @tparam E The enum type.
 	 *
 	 * @param EnumValue
 	 *	The enumerated type value to convert to a string.
@@ -19,10 +42,10 @@ namespace PF2EnumUtilities
 	 * @return
 	 *	The key/name that corresponds to the value in the enumerated type.
 	 */
-	template<typename T>
-	OPENPF2CORE_API FString ToString(const T EnumValue)
+	template<typename E>
+	OPENPF2CORE_API FString ToString(const E EnumValue)
 	{
-		FString Name = StaticEnum<T>()->GetNameStringByValue(static_cast<__underlying_type(T)>(EnumValue));
+		FString Name = StaticEnum<E>()->GetNameStringByValue(static_cast<__underlying_type(E)>(EnumValue));
 
 		check(Name.Len() != 0);
 
