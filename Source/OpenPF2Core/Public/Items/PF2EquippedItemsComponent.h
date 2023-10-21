@@ -159,7 +159,7 @@ public:
 	// Public Methods - UObject Overrides
 	// =================================================================================================================
 #if WITH_EDITOR
-	virtual EDataValidationResult IsDataValid(TArray<FText>& ValidationErrors) override;
+	virtual EDataValidationResult IsDataValid(FDataValidationContext& Context) const override;
 #endif
 	// =================================================================================================================
 	// Public Methods - UActorComponent Overrides
@@ -220,13 +220,13 @@ protected:
 	/**
 	 * Validates that the SupportedSlots property contains valid data from the editor.
 	 *
-	 * @param [out] ValidationErrors
-	 *	A reference to the array that validation error messaging should be added.
+	 * @param [out] Context
+	 *	A reference to warnings and errors arising from validation.
 	 *
 	 * @return
 	 *	Whether the slots are valid.
 	 */
-	EDataValidationResult ValidateSlots(TArray<FText>& ValidationErrors);
+	EDataValidationResult ValidateSlots(FDataValidationContext& Context) const;
 
 	/**
 	 * Validates that the EquippedItems property contains valid data from the editor.
@@ -237,13 +237,13 @@ protected:
 	 * 2. The same slot is referenced no more than once (e.g., the owning character doesn't have two pieces of armor
 	 *    equipped in the same armor slot).
 	 *
-	 * @param [out] ValidationErrors
-	 *	A reference to the array that validation error messaging should be added.
+	 * @param [out] Context
+	 *	A reference to warnings and errors arising from validation.
 	 *
 	 * @return
 	 *	Whether the equipped items are valid.
 	 */
-	EDataValidationResult ValidateEquippedItems(TArray<FText>& ValidationErrors);
+	EDataValidationResult ValidateEquippedItems(FDataValidationContext& Context) const;
 	#endif
 
 	// =================================================================================================================

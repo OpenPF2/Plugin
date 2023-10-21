@@ -5,6 +5,8 @@
 
 #include "Items/PF2EquippedItemsComponent.h"
 
+#include <Misc/DataValidation.h>
+
 #include "Items/PF2EquipableItemSlot.h"
 
 #include "Utilities/PF2ArrayUtilities.h"
@@ -43,13 +45,13 @@ UPF2EquippedItemsComponent::UPF2EquippedItemsComponent() : Events(nullptr)
 {
 }
 
-EDataValidationResult UPF2EquippedItemsComponent::IsDataValid(TArray<FText>& ValidationErrors)
+EDataValidationResult UPF2EquippedItemsComponent::IsDataValid(FDataValidationContext& Context) const
 {
 	EDataValidationResult Result =
-		CombineDataValidationResults(Super::IsDataValid(ValidationErrors), EDataValidationResult::Valid);
+		CombineDataValidationResults(Super::IsDataValid(Context), EDataValidationResult::Valid);
 
-	Result = CombineDataValidationResults(Result, ValidateSlots(ValidationErrors));
-	Result = CombineDataValidationResults(Result, ValidateEquippedItems(ValidationErrors));
+	Result = CombineDataValidationResults(Result, ValidateSlots(Context));
+	Result = CombineDataValidationResults(Result, ValidateEquippedItems(Context));
 
 	return Result;
 }
@@ -222,7 +224,7 @@ void UPF2EquippedItemsComponent::UnequipItemInSpecificSlot(const UPF2EquipableIt
 	}
 }
 
-EDataValidationResult UPF2EquippedItemsComponent::ValidateSlots(TArray<FText>& ValidationErrors)
+EDataValidationResult UPF2EquippedItemsComponent::ValidateSlots(FDataValidationContext& Context) const
 {
 	EDataValidationResult                      Result = EDataValidationResult::Valid;
 	TArray<TSubclassOf<UPF2EquipableItemSlot>> UsedSlots;
@@ -233,7 +235,7 @@ EDataValidationResult UPF2EquippedItemsComponent::ValidateSlots(TArray<FText>& V
 		{
 			Result = EDataValidationResult::Invalid;
 
-			ValidationErrors.Add(
+			Context.AddError(
 				FText::Format(
 					LOCTEXT("EmptySlot", "{0}: All slot types must be non-empty."),
 					FText::FromString(this->GetName())
@@ -244,7 +246,7 @@ EDataValidationResult UPF2EquippedItemsComponent::ValidateSlots(TArray<FText>& V
 		{
 			Result = EDataValidationResult::Invalid;
 
-			ValidationErrors.Add(
+			Context.AddError(
 				FText::Format(
 					LOCTEXT("DuplicateSlot", "{0}: Slot '{1}' has been specified multiple times."),
 					FText::FromString(this->GetName()),
@@ -261,7 +263,7 @@ EDataValidationResult UPF2EquippedItemsComponent::ValidateSlots(TArray<FText>& V
 	return Result;
 }
 
-EDataValidationResult UPF2EquippedItemsComponent::ValidateEquippedItems(TArray<FText>& ValidationErrors)
+EDataValidationResult UPF2EquippedItemsComponent::ValidateEquippedItems(FDataValidationContext& Context) const
 {
 	EDataValidationResult                      Result     = EDataValidationResult::Valid;
 	TArray<TSubclassOf<UPF2EquipableItemSlot>> UsedSlots;
@@ -279,7 +281,7 @@ EDataValidationResult UPF2EquippedItemsComponent::ValidateEquippedItems(TArray<F
 			{
 				Result = EDataValidationResult::Invalid;
 
-				ValidationErrors.Add(
+				Context.AddError(
 					FText::Format(
 						LOCTEXT("MultipleItemsInSameSlot", "{0}: Item equipped in index {1} references slot '{2}', which is already populated by a different item."),
 						FText::FromString(this->GetName()),
@@ -306,7 +308,7 @@ EDataValidationResult UPF2EquippedItemsComponent::ValidateEquippedItems(TArray<F
 			{
 				Result = EDataValidationResult::Invalid;
 
-				ValidationErrors.Add(
+				Context.AddError(
 					FText::Format(
 						LOCTEXT("InvalidSlot", "{0}: Slot '{1}' referenced by the item equipped in index {2} is not listed in the 'Slots' property as a supported slot type."),
 						FText::FromString(this->GetName()),
@@ -320,7 +322,7 @@ EDataValidationResult UPF2EquippedItemsComponent::ValidateEquippedItems(TArray<F
 		{
 			Result = EDataValidationResult::Invalid;
 
-			ValidationErrors.Add(
+			Context.AddError(
 				FText::Format(
 					LOCTEXT("EmptyItemSlot", "{0}: All equipped items must specify a slot."),
 					FText::FromString(this->GetName())

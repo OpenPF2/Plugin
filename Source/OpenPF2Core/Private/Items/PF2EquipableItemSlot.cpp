@@ -5,13 +5,15 @@
 
 #include "Items/PF2EquipableItemSlot.h"
 
+#include <Misc/DataValidation.h>
+
 #define LOCTEXT_NAMESPACE "PF2EquipableItemSlot"
 
 #if WITH_EDITOR
-EDataValidationResult UPF2EquipableItemSlot::IsDataValid(TArray<FText>& ValidationErrors)
+EDataValidationResult UPF2EquipableItemSlot::IsDataValid(FDataValidationContext& Context) const
 {
 	EDataValidationResult Result =
-		CombineDataValidationResults(Super::IsDataValid(ValidationErrors), EDataValidationResult::Valid);
+		CombineDataValidationResults(Super::IsDataValid(Context), EDataValidationResult::Valid);
 
 	// Validate the slot name.
 	{
@@ -19,7 +21,7 @@ EDataValidationResult UPF2EquipableItemSlot::IsDataValid(TArray<FText>& Validati
 		{
 			Result = EDataValidationResult::Invalid;
 
-			ValidationErrors.Add(
+			Context.AddError(
 				FText::Format(
 					LOCTEXT("NullSlotName", "{0}: Slot name cannot be an empty string."),
 					FText::FromString(this->GetName())
@@ -34,7 +36,7 @@ EDataValidationResult UPF2EquipableItemSlot::IsDataValid(TArray<FText>& Validati
 		{
 			Result = EDataValidationResult::Invalid;
 
-			ValidationErrors.Add(
+			Context.AddError(
 				FText::Format(
 					LOCTEXT("NullItemType", "{0}: Slot type is required."),
 					FText::FromString(this->GetName())
@@ -51,7 +53,7 @@ EDataValidationResult UPF2EquipableItemSlot::IsDataValid(TArray<FText>& Validati
 			{
 				Result = EDataValidationResult::Invalid;
 
-				ValidationErrors.Add(
+				Context.AddError(
 					FText::Format(
 						LOCTEXT("SelfReferentialLinkedSlot", "{0}: A slot cannot have itself as a linked slot."),
 						FText::FromString(this->GetName())
