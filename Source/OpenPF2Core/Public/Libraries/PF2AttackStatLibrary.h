@@ -209,6 +209,32 @@ public:
 	}
 
 	/**
+	 * Converts a "degree of success" that has been encoded in the value on an ASC attribute set into an enum value.
+	 *
+	 * @param DegreeOfSuccessValue
+	 *	The degree of success value that was encoded as a float. Though a float, all decimal points must be equal to
+	 *	zero (i.e., it must be an integer that is represented in a float), and the integer value of this parameter
+	 *	must be equal to one of the value degree-of-success enum values.
+	 *
+	 * @return
+	 *	The decoded degree of success.
+	 */
+	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
+	static EPF2DegreeOfSuccess DegreeOfSuccessStatToEnum(const float DegreeOfSuccessValue);
+
+	/**
+	 * Converts a "degree of success" enum value into a value for an ASC attribute set.
+	 *
+	 * @param DegreeOfSuccess
+	 *   The degree of success enum value to encode as a float.
+	 *
+	 * @return
+	 *	The encoded degree of success.
+	 */
+	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
+	static float DegreeOfSuccessStatFromEnum(const EPF2DegreeOfSuccess DegreeOfSuccess);
+
+	/**
 	 * Calculates the damage roll, which determines how much of an effect an attack has on the target.
 	 *
 	 * "When the result of your attack roll with a weapon or unarmed attack equals or exceeds your target’s AC, you hit

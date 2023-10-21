@@ -92,6 +92,16 @@ EPF2DegreeOfSuccess UPF2AttackStatLibrary::PerformAttackRoll(const int32        
 	return Result;
 }
 
+EPF2DegreeOfSuccess UPF2AttackStatLibrary::DegreeOfSuccessStatToEnum(const float DegreeOfSuccessValue)
+{
+	return PF2EnumUtilities::EnumValueOf(static_cast<int8>(DegreeOfSuccessValue), EPF2DegreeOfSuccess::None);
+}
+
+float UPF2AttackStatLibrary::DegreeOfSuccessStatFromEnum(const EPF2DegreeOfSuccess DegreeOfSuccess)
+{
+	return static_cast<float>(DegreeOfSuccess);
+}
+
 float UPF2AttackStatLibrary::CalculateDamageRoll(const FName DamageDie, const float DamageAbilityModifier)
 {
 	float       DamageRoll;
