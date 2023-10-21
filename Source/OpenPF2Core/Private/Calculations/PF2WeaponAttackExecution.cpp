@@ -121,10 +121,10 @@ EPF2DegreeOfSuccess UPF2WeaponAttackExecution::PerformAttackRoll(
 	float                               AttackAbilityModifier  = 0.0f,
 	                                    MultipleAttackPenalty  = 0.0f;
 
-	const FPF2SourceCharacterAttributeStatics& SourceStatics = FPF2SourceCharacterAttributeStatics::GetInstance();
+	const FPF2SourceCharacterAttributeStatics& SourceCaptures = FPF2SourceCharacterAttributeStatics::GetInstance();
 
 	const FGameplayEffectAttributeCaptureDefinition* AbilityScoreCapture =
-		SourceStatics.GetModifierCaptureByAbilityScoreType(AttackScoreType);
+		SourceCaptures.GetModifierCaptureByAbilityScoreType(AttackScoreType);
 
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(
 		*AbilityScoreCapture,
@@ -133,7 +133,7 @@ EPF2DegreeOfSuccess UPF2WeaponAttackExecution::PerformAttackRoll(
 	);
 
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(
-		SourceStatics.EncMultipleAttackPenaltyDef,
+		SourceCaptures.EncMultipleAttackPenaltyDef,
 		EvaluationParameters,
 		MultipleAttackPenalty
 	);
