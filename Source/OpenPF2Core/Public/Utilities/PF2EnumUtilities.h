@@ -11,6 +11,33 @@
 namespace PF2EnumUtilities
 {
 	/**
+	 * Attempts to safely convert a numeric value to an enum value, falling back to a default if value is out of range.
+	 *
+	 * @tparam T The underlying type of the enum.
+	 * @tparam E The enum type.
+	 *
+	 * @param UnderlyingValue
+	 *	The value to convert into an enum value.
+	 * @param DefaultValue
+	 *	The default value to return if the provided underlying value does not correspond to an enum value.
+	 *
+	 * @return
+	 *	The enum value.
+	 */
+	template<typename T, typename E>
+	OPENPF2CORE_API E EnumValueOf(const T UnderlyingValue, const E DefaultValue)
+	{
+		E Result = DefaultValue;
+
+		if (StaticEnum<E>()->IsValidEnumValue(UnderlyingValue))
+		{
+			Result = static_cast<E>(UnderlyingValue);
+		}
+
+		return Result;
+	}
+
+	/**
 	 * Convert the value of an enum to a name.
 	 *
 	 * @tparam E The enum type.
