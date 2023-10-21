@@ -541,33 +541,32 @@ void UPF2AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 {
 	Super::PostGameplayEffectExecute(Data);
 
-	const FGameplayEffectContextHandle Context   = Data.EffectSpec.GetContext();
-	const FGameplayTagContainer*       EventTags = Data.EffectSpec.CapturedSourceTags.GetAggregatedTags();
-
-	IPF2CharacterInterface* TargetCharacter = PF2GameplayAbilityUtilities::GetEffectTarget(&Data);
-
-	float ValueDelta = 0;
+	const FGameplayEffectContextHandle Context           = Data.EffectSpec.GetContext();
+	const FGameplayTagContainer*       EventTags         = Data.EffectSpec.CapturedSourceTags.GetAggregatedTags();
+	const FGameplayAttribute           ModifiedAttribute = Data.EvaluatedData.Attribute;
+	IPF2CharacterInterface*            TargetCharacter   = PF2GameplayAbilityUtilities::GetEffectTarget(&Data);
+	float                              ValueDelta        = 0;
 
 	if (Data.EvaluatedData.ModifierOp == EGameplayModOp::Type::Additive)
 	{
 		ValueDelta = Data.EvaluatedData.Magnitude;
 	}
 
-	if (Data.EvaluatedData.Attribute == this->GetTmpDamageIncomingAttribute())
+	if (ModifiedAttribute == this->GetTmpDamageIncomingAttribute())
 	{
 		this->Native_OnDamageIncomingChanged(TargetCharacter, Context, EventTags);
 	}
-	else if (Data.EvaluatedData.Attribute == this->GetHitPointsAttribute())
+	else if (ModifiedAttribute == this->GetHitPointsAttribute())
 	{
 		this->Native_OnHitPointsChanged(TargetCharacter, ValueDelta, EventTags);
 	}
-	else if (Data.EvaluatedData.Attribute == this->GetSpeedAttribute())
+	else if (ModifiedAttribute == this->GetSpeedAttribute())
 	{
 		this->Native_OnSpeedChanged(TargetCharacter, ValueDelta, EventTags);
 	}
-	else if (Data.EvaluatedData.Attribute == this->GetEncMultipleAttackPenaltyAttribute())
+	else if (ModifiedAttribute == this->GetEncMultipleAttackPenaltyAttribute())
 	{
-		this->Native_OnEncMultipleAttackPenaltyChanged(TargetCharacter, ValueDelta);
+		this->Native_OnMultipleAttackPenaltyChanged(TargetCharacter, ValueDelta);
 	}
 }
 
@@ -706,8 +705,8 @@ void UPF2AttributeSet::Native_OnSpeedChanged(IPF2CharacterInterface*      Target
 	}
 }
 
-void UPF2AttributeSet::Native_OnEncMultipleAttackPenaltyChanged(const IPF2CharacterInterface* TargetCharacter,
-                                                                const float                   ValueDelta)
+void UPF2AttributeSet::Native_OnMultipleAttackPenaltyChanged(const IPF2CharacterInterface* TargetCharacter,
+                                                             const float                   ValueDelta)
 {
 	const float RawPenalty     = this->GetEncMultipleAttackPenalty();
 	const float ClampedPenalty = FMath::Clamp(RawPenalty, this->GetEncMaxMultipleAttackPenalty(), 0.0f);

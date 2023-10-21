@@ -1028,8 +1028,8 @@ protected:
 	/**
 	 * Notifies this ASC that the incoming damage attribute has been changed (typically by a Gameplay Effect).
 	 *
-	 * This is called after the change has already occurred. This clamps the value to the allowed range and then
-	 * dispatches appropriate damage notifications to the character.
+	 * This is called after the change has already occurred. This applies damage to the target, resets the incoming
+	 * damage to zero, and then dispatches appropriate damage notifications to the character.
 	 *
 	 * @param TargetCharacter
 	 *	The character receiving the damage. This is usually the same as the character who owns this ASC.
@@ -1087,8 +1087,7 @@ protected:
 	 * @param ValueDelta
 	 *	The amount of the change.
 	 */
-	void Native_OnEncMultipleAttackPenaltyChanged(const IPF2CharacterInterface* TargetCharacter,
-	                                              const float                   ValueDelta);
-
+	void Native_OnMultipleAttackPenaltyChanged(const IPF2CharacterInterface* TargetCharacter,
+	                                           const float                   ValueDelta);
 
 };
