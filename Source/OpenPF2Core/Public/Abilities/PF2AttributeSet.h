@@ -63,7 +63,7 @@ public:
 	 * Normally, when a player character reaches 1,000 XP or more, they level up, reduce their XP by 1,000, and start
 	 * progressing toward the next level."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Experience", ReplicatedUsing=OnRep_Experience)
+	UPROPERTY(BlueprintReadOnly, Category="Experience", ReplicatedUsing=OnRep_Experience)
 	FGameplayAttributeData Experience;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, Experience)
 
@@ -73,7 +73,7 @@ public:
 	 *
 	 * Capped by AbBoostLimit.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbBoostCount)
+	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbBoostCount)
 	FGameplayAttributeData AbBoostCount;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbBoostCount)
 
@@ -83,7 +83,7 @@ public:
 	 * This caps AbBoostCount, but can be a larger number than AbBoostCount if the character is eligible for additional
 	 * ability boosts that the player or story (for NPCs) has not yet applied.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbBoostLimit)
+	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbBoostLimit)
 	FGameplayAttributeData AbBoostLimit;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbBoostLimit)
 
@@ -93,7 +93,7 @@ public:
 	 * Strength is important for characters who engage in hand-to-hand combat. The Strength modifier gets added to melee
 	 * damage rolls and determines how much a character can carry. (Pathfinder 2E Core Rulebook, page 19)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbStrength)
+	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbStrength)
 	FGameplayAttributeData AbStrength;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbStrength)
 
@@ -104,7 +104,7 @@ public:
 	 * damage rolls and determines how much a character can carry.
 	 * (Pathfinder 2E Core Rulebook, page 19)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbStrengthModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbStrengthModifier)
 	FGameplayAttributeData AbStrengthModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbStrengthModifier)
 
@@ -115,7 +115,7 @@ public:
 	 * Dexterity modifier is also added to a character’s AC and Reflex saving throws.
 	 * (Pathfinder 2E Core Rulebook, page 19)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbDexterity)
+	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbDexterity)
 	FGameplayAttributeData AbDexterity;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbDexterity)
 
@@ -126,7 +126,7 @@ public:
 	 * Dexterity modifier is also added to a character’s AC and Reflex saving throws.
 	 * (Pathfinder 2E Core Rulebook, page 19)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbDexterityModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbDexterityModifier)
 	FGameplayAttributeData AbDexterityModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbDexterityModifier)
 
@@ -137,7 +137,7 @@ public:
 	 * Constitution modifier is added to its Hit Points and Fortitude saving throws.
 	 * (Pathfinder 2E Core Rulebook, page 19)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbConstitution)
+	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbConstitution)
 	FGameplayAttributeData AbConstitution;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbConstitution)
 
@@ -148,7 +148,7 @@ public:
 	 * Constitution modifier is added to its Hit Points and Fortitude saving throws.
 	 * (Pathfinder 2E Core Rulebook, page 19)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbConstitutionModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbConstitutionModifier)
 	FGameplayAttributeData AbConstitutionModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbConstitutionModifier)
 
@@ -159,7 +159,7 @@ public:
 	 * become trained in additional skills and the ability to master additional languages.
 	 * (Pathfinder 2E Core Rulebook, page 19)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbIntelligence)
+	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbIntelligence)
 	FGameplayAttributeData AbIntelligence;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbIntelligence)
 
@@ -170,7 +170,7 @@ public:
 	 * become trained in additional skills and the ability to master additional languages.
 	 * (Pathfinder 2E Core Rulebook, page 19)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbIntelligenceModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbIntelligenceModifier)
 	FGameplayAttributeData AbIntelligenceModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbIntelligenceModifier)
 
@@ -180,7 +180,7 @@ public:
 	 * The Wisdom modifier is added to its Perception and Will saving throws.
 	 * (Pathfinder 2E Core Rulebook, page 19)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbWisdom)
+	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbWisdom)
 	FGameplayAttributeData AbWisdom;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbWisdom)
 
@@ -190,7 +190,7 @@ public:
 	 * The Wisdom modifier is added to its Perception and Will saving throws.
 	 * (Pathfinder 2E Core Rulebook, page 19)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbWisdomModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbWisdomModifier)
 	FGameplayAttributeData AbWisdomModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbWisdomModifier)
 
@@ -200,7 +200,7 @@ public:
 	 * A high Charisma score helps a character influence the thoughts and moods of others.
 	 * (Pathfinder 2E Core Rulebook, page 19)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbCharisma)
+	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbCharisma)
 	FGameplayAttributeData AbCharisma;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbCharisma)
 
@@ -210,7 +210,7 @@ public:
 	 * A high Charisma score helps a character influence the thoughts and moods of others.
 	 * (Pathfinder 2E Core Rulebook, page 19)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Ability Scores", ReplicatedUsing=OnRep_AbCharismaModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbCharismaModifier)
 	FGameplayAttributeData AbCharismaModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbCharismaModifier)
 
@@ -220,7 +220,7 @@ public:
 	 *
 	 * This controls how hard or easy certain types of tasks are for this character.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Class DC", ReplicatedUsing=OnRep_ClassDifficultyClass)
+	UPROPERTY(BlueprintReadOnly, Category="Class DC", ReplicatedUsing=OnRep_ClassDifficultyClass)
 	FGameplayAttributeData ClassDifficultyClass;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, ClassDifficultyClass)
 
@@ -228,14 +228,14 @@ public:
 	/**
 	 * How fast this character can move (in centimeters per second).
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Speed", ReplicatedUsing = OnRep_Speed)
+	UPROPERTY(BlueprintReadOnly, Category="Speed", ReplicatedUsing = OnRep_Speed)
 	FGameplayAttributeData Speed;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, Speed)
 
 	/**
 	 * The maximum speed of this character (in centimeters per second).
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Speed", ReplicatedUsing = OnRep_MaxSpeed)
+	UPROPERTY(BlueprintReadOnly, Category="Speed", ReplicatedUsing = OnRep_MaxSpeed)
 	FGameplayAttributeData MaxSpeed;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, MaxSpeed)
 
@@ -248,7 +248,7 @@ public:
 	 * also creates an area around your space where other creatures could trigger your reactions. Your reach is
 	 * typically [1.5 meters], but weapons with the reach trait can extend this."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Reach", ReplicatedUsing = OnRep_Reach)
+	UPROPERTY(BlueprintReadOnly, Category="Reach", ReplicatedUsing = OnRep_Reach)
 	FGameplayAttributeData Reach;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, Reach)
 
@@ -259,7 +259,7 @@ public:
 	 * This serves as the Difficulty Class for hitting a creature with an attack.
 	 * (Pathfinder 2E Core Rulebook, page 12)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Armor Class", ReplicatedUsing = OnRep_ArmorClass)
+	UPROPERTY(BlueprintReadOnly, Category="Armor Class", ReplicatedUsing = OnRep_ArmorClass)
 	FGameplayAttributeData ArmorClass;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, ArmorClass)
 
@@ -268,7 +268,7 @@ public:
 	 * Fortitude saving throws reduce the effects of abilities and afflictions that can debilitate the body.
 	 * (Pathfinder 2E Core Rulebook, page 449)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Saving Throws", ReplicatedUsing = OnRep_StFortitudeModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Saving Throws", ReplicatedUsing = OnRep_StFortitudeModifier)
 	FGameplayAttributeData StFortitudeModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, StFortitudeModifier)
 
@@ -276,7 +276,7 @@ public:
 	 * Reflex saving throws measure how quickly and gracefully a character responds to a situation.
 	 * (Pathfinder 2E Core Rulebook, page 449)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Saving Throws", ReplicatedUsing = OnRep_StReflexModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Saving Throws", ReplicatedUsing = OnRep_StReflexModifier)
 	FGameplayAttributeData StReflexModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, StReflexModifier)
 
@@ -284,7 +284,7 @@ public:
 	 * Will saving throws measure how well a character resists attacks to mind and spirit.
 	 * (Pathfinder 2E Core Rulebook, page 449)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Saving Throws", ReplicatedUsing = OnRep_StWillModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Saving Throws", ReplicatedUsing = OnRep_StWillModifier)
 	FGameplayAttributeData StWillModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, StWillModifier)
 
@@ -302,14 +302,14 @@ public:
 	 *
 	 * Capped by MaxHitPoints.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_HitPoints)
+	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_HitPoints)
 	FGameplayAttributeData HitPoints;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, HitPoints)
 
 	/**
 	 * The maximum number of hit points for this character.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_MaxHitPoints)
+	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_MaxHitPoints)
 	FGameplayAttributeData MaxHitPoints;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, MaxHitPoints)
 
@@ -320,7 +320,7 @@ public:
 	 * "Bludgeoning (B) damage comes from weapons and hazards that deal blunt-force trauma, like a hit from a club or
 	 * being dashed against rocks."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstPhysicalBludgeoning)
+	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstPhysicalBludgeoning)
 	FGameplayAttributeData RstPhysicalBludgeoning;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstPhysicalBludgeoning)
 
@@ -330,7 +330,7 @@ public:
 	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
 	 * "Piercing (P) damage is dealt from stabs and punctures, whether from a dragon's fangs or the thrust of a spear."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstPhysicalPiercing)
+	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstPhysicalPiercing)
 	FGameplayAttributeData RstPhysicalPiercing;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstPhysicalPiercing)
 
@@ -340,7 +340,7 @@ public:
 	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
 	 * "Slashing (S) damage is delivered by a cut, be it the swing of the sword or the blow from a scythe blades trap."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstPhysicalSlashing)
+	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstPhysicalSlashing)
 	FGameplayAttributeData RstPhysicalSlashing;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstPhysicalSlashing)
 
@@ -351,7 +351,7 @@ public:
 	 * "Acid damage can be delivered by gases, liquids, and certain solids that dissolve flesh, and sometimes harder
 	 * materials."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstEnergyAcid)
+	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstEnergyAcid)
 	FGameplayAttributeData RstEnergyAcid;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyAcid)
 
@@ -363,7 +363,7 @@ public:
 	 * discharge of powerful lightning and sparks."
 	 *
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstEnergyCold)
+	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstEnergyCold)
 	FGameplayAttributeData RstEnergyCold;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyCold)
 
@@ -373,7 +373,7 @@ public:
 	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
 	 * "Fire damage burns through heat and combustion."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstEnergyFire)
+	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstEnergyFire)
 	FGameplayAttributeData RstEnergyFire;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyFire)
 
@@ -383,7 +383,7 @@ public:
 	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
 	 * "Sonic damage assaults matter with high-frequency vibration and sound waves."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstEnergySonic)
+	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstEnergySonic)
 	FGameplayAttributeData RstEnergySonic;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergySonic)
 
@@ -393,7 +393,7 @@ public:
 	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
 	 * "Positive damage harms only undead creatures, withering undead bodies and disrupting incorporeal undead."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstEnergyPositive)
+	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstEnergyPositive)
 	FGameplayAttributeData RstEnergyPositive;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyPositive)
 
@@ -403,7 +403,7 @@ public:
 	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
 	 * "Negative damage saps life, damaging only living creatures."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstEnergyNegative)
+	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstEnergyNegative)
 	FGameplayAttributeData RstEnergyNegative;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyNegative)
 
@@ -414,7 +414,7 @@ public:
 	 * "Powerful and pure magical energy can manifest itself as force damage. Few things can resist this type of
 	 * damage—not even incorporeal creatures such as ghosts and wraiths."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstEnergyForce)
+	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstEnergyForce)
 	FGameplayAttributeData RstEnergyForce;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyForce)
 
@@ -424,7 +424,7 @@ public:
 	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
 	 * "Chaotic damage harms only lawful creatures."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstAlignmentChaotic)
+	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstAlignmentChaotic)
 	FGameplayAttributeData RstAlignmentChaotic;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstAlignmentChaotic)
 
@@ -434,7 +434,7 @@ public:
 	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
 	 * "Evil damage harms only good creatures."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstAlignmentEvil)
+	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstAlignmentEvil)
 	FGameplayAttributeData RstAlignmentEvil;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstAlignmentEvil)
 
@@ -444,7 +444,7 @@ public:
 	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
 	 * "Good damage harms only evil creatures."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstAlignmentGood)
+	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstAlignmentGood)
 	FGameplayAttributeData RstAlignmentGood;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstAlignmentGood)
 
@@ -454,7 +454,7 @@ public:
 	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
 	 * "Lawful damage harms only chaotic creatures."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstAlignmentLawful)
+	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstAlignmentLawful)
 	FGameplayAttributeData RstAlignmentLawful;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstAlignmentLawful)
 
@@ -466,7 +466,7 @@ public:
 	 * it does, it deals mental damage. Mindless creatures and those with only programmed or rudimentary intelligence
 	 * are often immune to mental damage and effects."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstMental)
+	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstMental)
 	FGameplayAttributeData RstMental;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstMental)
 
@@ -478,7 +478,7 @@ public:
 	 * inhalation, or injury. In addition to coming from monster attacks, alchemical items, and spells, poison damage is
 	 * often caused by ongoing afflictions, which follow special rules."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstPoison)
+	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstPoison)
 	FGameplayAttributeData RstPoison;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstPoison)
 
@@ -489,7 +489,7 @@ public:
 	 * "This is persistent damage that represents loss of blood. As such, it has no effect on nonliving creatures or
 	 * living creatures that don't need blood to live."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstBleed)
+	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstBleed)
 	FGameplayAttributeData RstBleed;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstBleed)
 
@@ -500,7 +500,7 @@ public:
 	 * "When a character hits with an ability that grants precision damage, the character increase the attack's listed
 	 * damage, using the same damage type, rather than tracking a separate pool of damage."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Hit Points", ReplicatedUsing=OnRep_RstPrecision)
+	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstPrecision)
 	FGameplayAttributeData RstPrecision;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstPrecision)
 
@@ -509,7 +509,7 @@ public:
 	 * Perception measures a character's ability to notice hidden objects or unusual situations and affects initiative.
 	 * (Pathfinder 2E Core Rulebook, page 448)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Perception", ReplicatedUsing = OnRep_PerceptionModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Perception", ReplicatedUsing = OnRep_PerceptionModifier)
 	FGameplayAttributeData PerceptionModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, PerceptionModifier)
 
@@ -518,7 +518,7 @@ public:
 	 * Acrobatics measures a character's ability to perform tasks requiring coordination and grace.
 	 * (Pathfinder 2E Core Rulebook, page 240)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkAcrobaticsModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkAcrobaticsModifier)
 	FGameplayAttributeData SkAcrobaticsModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkAcrobaticsModifier)
 
@@ -526,7 +526,7 @@ public:
 	 * Arcana measures how much a character knows about arcane magic and creatures.
 	 * (Pathfinder 2E Core Rulebook, page 241)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkArcanaModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkArcanaModifier)
 	FGameplayAttributeData SkArcanaModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkArcanaModifier)
 
@@ -534,7 +534,7 @@ public:
 	 * Athletics allows a character to perform deeds of physical prowess.
 	 * (Pathfinder 2E Core Rulebook, page 241)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkAthleticsModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkAthleticsModifier)
 	FGameplayAttributeData SkAthleticsModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkAthleticsModifier)
 
@@ -542,7 +542,7 @@ public:
 	 * Crafting allows a character to create and repair items.
 	 * (Pathfinder 2E Core Rulebook, page 243)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkCraftingModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkCraftingModifier)
 	FGameplayAttributeData SkCraftingModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkCraftingModifier)
 
@@ -550,7 +550,7 @@ public:
 	 * Deception allows a character to trick and mislead others using disguises, lies, and other forms of subterfuge.
 	 * (Pathfinder 2E Core Rulebook, page 245)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkDeceptionModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkDeceptionModifier)
 	FGameplayAttributeData SkDeceptionModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkDeceptionModifier)
 
@@ -558,7 +558,7 @@ public:
 	 * Diplomacy allows a character to influence others through negotiation and flattery.
 	 * (Pathfinder 2E Core Rulebook, page 245)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkDiplomacyModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkDiplomacyModifier)
 	FGameplayAttributeData SkDiplomacyModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkDiplomacyModifier)
 
@@ -566,7 +566,7 @@ public:
 	 * Intimidation allows a character to bend others to their will using threats.
 	 * (Pathfinder 2E Core Rulebook, page 247)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkIntimidationModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkIntimidationModifier)
 	FGameplayAttributeData SkIntimidationModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkIntimidationModifier)
 
@@ -574,7 +574,7 @@ public:
 	 * Lore gives a character specialized information on a narrow topic.
 	 * (Pathfinder 2E Core Rulebook, page 247)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkLore1Modifier)
+	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkLore1Modifier)
 	FGameplayAttributeData SkLore1Modifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkLore1Modifier)
 
@@ -582,7 +582,7 @@ public:
 	 * Lore gives a character specialized information on a narrow topic.
 	 * (Pathfinder 2E Core Rulebook, page 247)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkLore2Modifier)
+	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkLore2Modifier)
 	FGameplayAttributeData SkLore2Modifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkLore2Modifier)
 
@@ -590,7 +590,7 @@ public:
 	 * Medicine allows a character to patch up wounds and help people recover from diseases and poisons.
 	 * (Pathfinder 2E Core Rulebook, page 248)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkMedicineModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkMedicineModifier)
 	FGameplayAttributeData SkMedicineModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkMedicineModifier)
 
@@ -598,7 +598,7 @@ public:
 	 * Nature gives a character knowledge about the natural world, including commanding and training animals and beasts.
 	 * (Pathfinder 2E Core Rulebook, page 249)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkNatureModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkNatureModifier)
 	FGameplayAttributeData SkNatureModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkNatureModifier)
 
@@ -608,7 +608,7 @@ public:
 	 *
 	 * (Pathfinder 2E Core Rulebook, page 249)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkOccultismModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkOccultismModifier)
 	FGameplayAttributeData SkOccultismModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkOccultismModifier)
 
@@ -616,7 +616,7 @@ public:
 	 * Performance gives a character skill impressing crowds by performing live.
 	 * (Pathfinder 2E Core Rulebook, page 250)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkPerformanceModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkPerformanceModifier)
 	FGameplayAttributeData SkPerformanceModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkPerformanceModifier)
 
@@ -624,7 +624,7 @@ public:
 	 * Religion gives a character knowledge of the secrets of deities, dogma, faith, and the realms of divine
 	 * creatures -- both sublime and sinister. (Pathfinder 2E Core Rulebook, page 250)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkReligionModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkReligionModifier)
 	FGameplayAttributeData SkReligionModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkReligionModifier)
 
@@ -632,7 +632,7 @@ public:
 	 * Society gives a character an understanding of the people and systems that make civilization run, including the
 	 * historical events that make societies what they are today. (Pathfinder 2E Core Rulebook, page 250)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkSocietyModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkSocietyModifier)
 	FGameplayAttributeData SkSocietyModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkSocietyModifier)
 
@@ -640,7 +640,7 @@ public:
 	 * Stealth gives a character the ability to avoid detection, slip past foes, hide, and conceal items.
 	 * (Pathfinder 2E Core Rulebook, page 251)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkStealthModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkStealthModifier)
 	FGameplayAttributeData SkStealthModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkStealthModifier)
 
@@ -648,7 +648,7 @@ public:
 	 * Survival gives a character aptitude to live in the wilderness, foraging for food, and building shelter.
 	 * (Pathfinder 2E Core Rulebook, page 252)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkSurvivalModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkSurvivalModifier)
 	FGameplayAttributeData SkSurvivalModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkSurvivalModifier)
 
@@ -656,7 +656,7 @@ public:
 	 * Thievery gives a character training in the particular set of skills favored by thieves and miscreants.
 	 * (Pathfinder 2E Core Rulebook, page 253)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Skills", ReplicatedUsing = OnRep_SkThieveryModifier)
+	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkThieveryModifier)
 	FGameplayAttributeData SkThieveryModifier;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkThieveryModifier)
 
@@ -664,7 +664,7 @@ public:
 	 * A measure of how potent a character's spells are against the defenses of other creatures.
 	 * (Pathfinder 2E Core Rulebook, "Spell Attack Roll and Spell DC", page 298)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Spells", ReplicatedUsing=OnRep_SpellAttackRoll)
+	UPROPERTY(BlueprintReadOnly, Category="Spells", ReplicatedUsing=OnRep_SpellAttackRoll)
 	FGameplayAttributeData SpellAttackRoll;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SpellAttackRoll)
 
@@ -672,7 +672,7 @@ public:
 	 * How hard it is to resist a character's spells with saving throws, or to counteract them.
 	 * (Pathfinder 2E Core Rulebook, page 636)
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Spells", ReplicatedUsing=OnRep_SpellDifficultyClass)
+	UPROPERTY(BlueprintReadOnly, Category="Spells", ReplicatedUsing=OnRep_SpellDifficultyClass)
 	FGameplayAttributeData SpellDifficultyClass;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SpellDifficultyClass)
 
@@ -682,7 +682,7 @@ public:
 	 *
 	 * Capped by FeAncestryFeatLimit.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Feats", ReplicatedUsing=OnRep_FeAncestryFeatCount)
+	UPROPERTY(BlueprintReadOnly, Category="Feats", ReplicatedUsing=OnRep_FeAncestryFeatCount)
 	FGameplayAttributeData FeAncestryFeatCount;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, FeAncestryFeatCount)
 
@@ -692,7 +692,7 @@ public:
 	 * This caps FeAncestryFeatCount, but can be a larger number than FeAncestryFeatCount if the character is eligible
 	 * for additional ancestry feats that the player or story (for NPCs) has not yet applied.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Feats", ReplicatedUsing=OnRep_FeAncestryFeatLimit)
+	UPROPERTY(BlueprintReadOnly, Category="Feats", ReplicatedUsing=OnRep_FeAncestryFeatLimit)
 	FGameplayAttributeData FeAncestryFeatLimit;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, FeAncestryFeatLimit)
 
@@ -707,14 +707,14 @@ public:
 	 * Regain your 3 actions and 1 reaction. If you haven't spent your reaction from your last turn, you lose it—you
 	 * can't "save" actions or reactions from one turn to use during the next turn."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Encounters", ReplicatedUsing=OnRep_EncActionPoints)
+	UPROPERTY(BlueprintReadOnly, Category="Encounters", ReplicatedUsing=OnRep_EncActionPoints)
 	FGameplayAttributeData EncActionPoints;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, EncActionPoints)
 
 	/**
 	 * The maximum number of action points a character can have at any time during an encounter.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Encounters", ReplicatedUsing=OnRep_EncMaxActionPoints)
+	UPROPERTY(BlueprintReadOnly, Category="Encounters", ReplicatedUsing=OnRep_EncMaxActionPoints)
 	FGameplayAttributeData EncMaxActionPoints;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, EncMaxActionPoints)
 
@@ -728,14 +728,14 @@ public:
 	 *
 	 * You can use 1 [...] reaction with a trigger of “Your turn begins” or something similar."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Encounters", ReplicatedUsing=OnRep_EncReactionPoints)
+	UPROPERTY(BlueprintReadOnly, Category="Encounters", ReplicatedUsing=OnRep_EncReactionPoints)
 	FGameplayAttributeData EncReactionPoints;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, EncReactionPoints)
 
 	/**
 	 * The maximum number of reaction points a character can have at any time during an encounter.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Encounters", ReplicatedUsing=OnRep_EncMaxReactionPoints)
+	UPROPERTY(BlueprintReadOnly, Category="Encounters", ReplicatedUsing=OnRep_EncMaxReactionPoints)
 	FGameplayAttributeData EncMaxReactionPoints;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, EncMaxReactionPoints)
 
@@ -753,7 +753,7 @@ public:
 	 * attack penalties, such as agile weapons, which reduce these penalties to –4 on the second attack or –8 on further
 	 * attacks."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Encounters", ReplicatedUsing=OnRep_EncMultipleAttackPenalty)
+	UPROPERTY(BlueprintReadOnly, Category="Encounters", ReplicatedUsing=OnRep_EncMultipleAttackPenalty)
 	FGameplayAttributeData EncMultipleAttackPenalty;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, EncMultipleAttackPenalty)
 
@@ -772,7 +772,7 @@ public:
 	 * attack penalties, such as agile weapons, which reduce these penalties to –4 on the second attack or –8 on further
 	 * attacks."
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Encounters", ReplicatedUsing=OnRep_EncMaxMultipleAttackPenalty)
+	UPROPERTY(BlueprintReadOnly, Category="Encounters", ReplicatedUsing=OnRep_EncMaxMultipleAttackPenalty)
 	FGameplayAttributeData EncMaxMultipleAttackPenalty;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, EncMaxMultipleAttackPenalty)
 
@@ -784,7 +784,7 @@ public:
 	 * into -HitPoints (i.e., it gets subtracted from the character's health). This allows other effects (e.g., passive
 	 * protection effects or armor) to lessen the impact of the damage.
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Temporary Attributes")
+	UPROPERTY(BlueprintReadOnly, Category="Temporary Attributes")
 	FGameplayAttributeData TmpDamageIncoming;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, TmpDamageIncoming)
 
@@ -794,7 +794,7 @@ public:
 	 * This value exists only on the server; it is not replicated. At the end of execution for a damage GE, this is
 	 * reset. It exists only so that other effects can react accordingly to the outcome
 	 */
-	UPROPERTY(BlueprintReadOnly, Category = "Temporary Attributes")
+	UPROPERTY(BlueprintReadOnly, Category="Temporary Attributes")
 	FGameplayAttributeData TmpDegreeOfSuccess;
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, TmpDegreeOfSuccess)
 
