@@ -263,7 +263,7 @@ protected:
 	 *	Information about the actor who activated the gameplay ability.
 	 * @param ContainerSpec
 	 *	The GE container specification that was generated.
-	 * @param ModifiedContainerSpec [out]
+	 * @param [out] ModifiedContainerSpec
 	 *	The modified GE container specification.
 	 */
 	UFUNCTION(BlueprintNativeEvent, DisplayName="On Gameplay Effects Container Spec Generated")

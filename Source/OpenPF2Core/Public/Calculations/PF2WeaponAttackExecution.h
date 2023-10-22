@@ -62,7 +62,7 @@ protected:
 	 *	The Ability System Component of the character attempting the attack.
 	 * @param TargetAsc
 	 *	The Ability System Component of the character receiving the attack.
-	 * @param OutExecutionOutput [out]
+	 * @param [out] OutExecutionOutput
 	 *	A reference to the output of the GE execution. This will receive the amount of damage to the target on a
 	 *	successful hit.
 	 */
