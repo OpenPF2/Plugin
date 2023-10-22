@@ -10,13 +10,17 @@
 #include <GameFramework/CharacterMovementComponent.h>
 
 #include <Net/UnrealNetwork.h>
+
 #include <UObject/ConstructorHelpers.h>
 
 #include "PF2OwnerTrackingComponent.h"
 #include "PF2PlayerStateInterface.h"
 
+#include "Abilities/PF2AttackAttributeSet.h"
 #include "Abilities/PF2GameplayAbilityTargetData_BoostAbility.h"
+
 #include "Commands/PF2CommandQueueComponent.h"
+
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
@@ -24,7 +28,8 @@ APF2CharacterBase::APF2CharacterBase() :
 	APF2CharacterBase(TPF2CharacterComponentFactory<UPF2AbilitySystemComponent,
 	                                                UPF2CommandQueueComponent,
 	                                                UPF2OwnerTrackingComponent,
-	                                                UPF2AttributeSet>())
+	                                                UPF2AttributeSet,
+	                                                UPF2AttackAttributeSet>())
 {
 }
 

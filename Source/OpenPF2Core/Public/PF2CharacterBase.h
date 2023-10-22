@@ -27,6 +27,7 @@
 
 #include "Abilities/PF2AbilityBoostBase.h"
 #include "Abilities/PF2AbilitySystemComponent.h"
+#include "Abilities/PF2AttackAttributeSet.h"
 #include "Abilities/PF2AttributeSet.h"
 #include "Abilities/PF2CharacterAbilityScoreType.h"
 
@@ -41,7 +42,7 @@
 class IPF2CharacterInterface;
 class IPF2CharacterCommandInterface;
 
-template<class AscType, class CommandQueueType, class OwnerTrackerType, class AttributeSetType>
+template<class AscType, class CommandQueueType, class OwnerTrackerType, class AttributeSetType, class AttackAttributeSetType>
 class TPF2CharacterComponentFactory;
 
 // =====================================================================================================================
@@ -142,6 +143,12 @@ protected:
 	 */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UPF2AttributeSet* AttributeSet;
+
+	/**
+	 * The transient attack stats of this character.
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPF2AttackAttributeSet* AttackAttributeSet;
 
 	UPROPERTY()
 	bool bAreAbilitiesInitialized;
@@ -386,12 +393,12 @@ protected:
 	 *	The class type to use for the owner tracking component.
 	 * @tparam AttributeSetType
 	 *	The class type to use for the character attribute set.
+	 * @tparam AttackAttributeSetType
+	 *	The class type to use for the transient attack attribute set.
 	 */
-	template<class AscType, class CommandQueueType, class OwnerTrackerType, class AttributeSetType>
-	explicit APF2CharacterBase(TPF2CharacterComponentFactory<AscType,
-	                                                         CommandQueueType,
-	                                                         OwnerTrackerType,
-	                                                         AttributeSetType> ComponentFactory) :
+	template<class AscType, class CommandQueueType, class OwnerTrackerType, class AttributeSetType, class AttackAttributeSetType>
+	explicit APF2CharacterBase(
+		TPF2CharacterComponentFactory<AscType, CommandQueueType, OwnerTrackerType, AttributeSetType, AttackAttributeSetType> ComponentFactory) :
 		Events(nullptr),
 		bAreAbilitiesInitialized(false),
 		bManagedPassiveEffectsGenerated(false),
@@ -402,6 +409,7 @@ protected:
 		this->CommandQueue           = ComponentFactory.CreateCommandQueue(this);
 		this->OwnerTracker           = ComponentFactory.CreateOwnerTracker(this);
 		this->AttributeSet           = ComponentFactory.CreateAttributeSet(this);
+		this->AttackAttributeSet	 = ComponentFactory.CreateAttackAttributeSet(this);
 
 		for (const TTuple<FString, FName>& EffectInfo : PF2CharacterConstants::GeCoreCharacterBlueprintPaths)
 		{
@@ -738,9 +746,11 @@ protected:
  * @tparam OwnerTrackerType
  *	The class type to use for the owner tracking component.
  * @tparam AttributeSetType
- *	The class type to use for the character attribute set.
+*	The class type to use for the character attribute set.
+ * @tparam AttackAttributeSetType
+ *	The class type to use for the transient attack attribute set.
  */
-template<class AscType, class CommandQueueType, class OwnerTrackerType, class AttributeSetType>
+template<class AscType, class CommandQueueType, class OwnerTrackerType, class AttributeSetType, class AttackAttributeSetType>
 class TPF2CharacterComponentFactory
 {
 public:
@@ -800,7 +810,7 @@ public:
 	}
 
 	/**
-	 * Creates an Attribute Set for a character.
+	 * Creates the primary attribute set for a character.
 	 *
 	 * The attribute set is automatically created as a default sub-object of the character, with the name
 	 * "AttributeSet".
@@ -814,5 +824,22 @@ public:
 	static AttributeSetType* CreateAttributeSet(APF2CharacterBase* Character)
 	{
 		return Character->CreateDefaultSubobject<AttributeSetType>(TEXT("AttributeSet"));
+	}
+
+	/**
+	 * Creates the transient attack attribute set for a character.
+	 *
+	 * The attribute set is automatically created as a default sub-object of the character, with the name
+	 * "AttackAttributeSet".
+	 *
+	 * @param Character
+	 *	The character for which the attribute set will be created.
+	 *
+	 * @return
+	 *	The new attribute set.
+	 */
+	static AttackAttributeSetType* CreateAttackAttributeSet(APF2CharacterBase* Character)
+	{
+		return Character->CreateDefaultSubobject<AttackAttributeSetType>(TEXT("AttackAttributeSet"));
 	}
 };
