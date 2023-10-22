@@ -19,8 +19,39 @@
  * These centralize static capture definitions for OpenPF2 attributes instead of there being multiple, smaller "Statics"
  * definitions like those preferred by Epic's sample projects.
  */
-class OPENPF2CORE_API FPF2CharacterAttributeStaticsBase
+struct OPENPF2CORE_API FPF2CharacterAttributeStaticsBase
 {
+protected:
+	// =================================================================================================================
+	// Protected Constants
+	// =================================================================================================================
+	/**
+	 * Name of the tag that is used to pass a dynamic resistance amount into the calculation.
+	 */
+	inline static const TMap<FName, FName> DamageTypeToResistanceAttributeMap = {
+		{ "DamageType.Physical.Bludgeoning", "RstPhysicalBludgeoning" },
+		{ "DamageType.Physical.Piercing",    "RstPhysicalPiercing"    },
+		{ "DamageType.Physical.Slashing",    "RstPhysicalSlashing"    },
+
+		{ "DamageType.Energy.Acid",          "RstEnergyAcid"          },
+		{ "DamageType.Energy.Cold",          "RstEnergyCold"          },
+		{ "DamageType.Energy.Fire",          "RstEnergyFire"          },
+		{ "DamageType.Energy.Sonic",         "RstEnergySonic"         },
+		{ "DamageType.Energy.Positive",      "RstEnergyPositive"      },
+		{ "DamageType.Energy.Negative",      "RstEnergyNegative"      },
+		{ "DamageType.Energy.Force",         "RstEnergyForce"         },
+
+		{ "DamageType.Alignment.Chaotic",    "RstAlignmentChaotic"    },
+		{ "DamageType.Alignment.Evil",       "RstAlignmentEvil"       },
+		{ "DamageType.Alignment.Good",       "RstAlignmentGood"       },
+		{ "DamageType.Alignment.Lawful",     "RstAlignmentLawful"     },
+
+		{ "DamageType.Mental",               "RstMental"              },
+		{ "DamageType.Poison",               "RstPoison"              },
+		{ "DamageType.Bleed",                "RstBleed"               },
+		{ "DamageType.Precision",            "RstPrecision"           },
+	};
+
 public:
 	// =================================================================================================================
 	// Attribute Capture Definitions
@@ -72,37 +103,6 @@ public:
 
 	DECLARE_ATTRIBUTE_CAPTUREDEF(EncMultipleAttackPenalty);
 
-protected:
-	// =================================================================================================================
-	// Protected Constants
-	// =================================================================================================================
-	/**
-	 * Name of the tag that is used to pass a dynamic resistance amount into the calculation.
-	 */
-	const TMap<FName, FName> DamageTypeToResistanceAttributeMap = {
-		{ "DamageType.Physical.Bludgeoning", "RstPhysicalBludgeoning" },
-		{ "DamageType.Physical.Piercing",    "RstPhysicalPiercing"    },
-		{ "DamageType.Physical.Slashing",    "RstPhysicalSlashing"    },
-
-		{ "DamageType.Energy.Acid",          "RstEnergyAcid"          },
-		{ "DamageType.Energy.Cold",          "RstEnergyCold"          },
-		{ "DamageType.Energy.Fire",          "RstEnergyFire"          },
-		{ "DamageType.Energy.Sonic",         "RstEnergySonic"         },
-		{ "DamageType.Energy.Positive",      "RstEnergyPositive"      },
-		{ "DamageType.Energy.Negative",      "RstEnergyNegative"      },
-		{ "DamageType.Energy.Force",         "RstEnergyForce"         },
-
-		{ "DamageType.Alignment.Chaotic",    "RstAlignmentChaotic"    },
-		{ "DamageType.Alignment.Evil",       "RstAlignmentEvil"       },
-		{ "DamageType.Alignment.Good",       "RstAlignmentGood"       },
-		{ "DamageType.Alignment.Lawful",     "RstAlignmentLawful"     },
-
-		{ "DamageType.Mental",               "RstMental"              },
-		{ "DamageType.Poison",               "RstPoison"              },
-		{ "DamageType.Bleed",                "RstBleed"               },
-		{ "DamageType.Precision",            "RstPrecision"           },
-	};
-
 	// =================================================================================================================
 	// Protected Fields
 	// =================================================================================================================
@@ -121,12 +121,11 @@ protected:
 	 */
 	TArray<FString> AbilityModifierNames;
 
-public:
 	// =================================================================================================================
 	// Public Methods
 	// =================================================================================================================
 	/**
-	 * Gets all of the character capture definitions.
+	 * Gets all attribute capture definitions.
 	 *
 	 * @return
 	 *	An array of all the capture definitions for character attributes.

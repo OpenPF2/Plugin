@@ -11,9 +11,8 @@
 /**
  * Singleton container for OpenPF2 character attribute capture definitions for source actors.
  */
-class OPENPF2CORE_API FPF2SourceCharacterAttributeStatics final : public FPF2CharacterAttributeStaticsBase
+struct OPENPF2CORE_API FPF2SourceCharacterAttributeStatics final : FPF2CharacterAttributeStaticsBase
 {
-public:
 	// =================================================================================================================
 	// Public Static Methods
 	// =================================================================================================================
@@ -37,7 +36,7 @@ private:
 	/**
 	 * Constructor for FPF2SourceCharacterAttributeStatics.
 	 */
-	FPF2SourceCharacterAttributeStatics()
+	explicit FPF2SourceCharacterAttributeStatics()
 	{
 		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, AbBoostCount, Source, true);
 

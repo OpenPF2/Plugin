@@ -11,15 +11,8 @@
 /**
  * Singleton container for OpenPF2 character attribute capture definitions for target actors.
  */
-class OPENPF2CORE_API FPF2TargetCharacterAttributeStatics final : public FPF2CharacterAttributeStaticsBase
+struct OPENPF2CORE_API FPF2TargetCharacterAttributeStatics final : FPF2CharacterAttributeStaticsBase
 {
-public:
-	// =================================================================================================================
-	// Attribute Capture Definitions
-	// =================================================================================================================
-	DECLARE_ATTRIBUTE_CAPTUREDEF(TmpDamageIncoming);
-	DECLARE_ATTRIBUTE_CAPTUREDEF(TmpIncomingAttackDegreeOfSuccess);
-
 	// =================================================================================================================
 	// Public Static Methods
 	// =================================================================================================================
@@ -36,6 +29,12 @@ public:
 		return AttributeStatics;
 	}
 
+	// =================================================================================================================
+	// Attribute Capture Definitions
+	// =================================================================================================================
+	DECLARE_ATTRIBUTE_CAPTUREDEF(TmpDamageIncoming);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(TmpIncomingAttackDegreeOfSuccess);
+
 private:
 	// =================================================================================================================
 	// Private Constructors
@@ -43,7 +42,9 @@ private:
 	/**
 	 * Constructor for FPF2TargetCharacterAttributeStatics.
 	 */
-	FPF2TargetCharacterAttributeStatics() : TmpDamageIncomingProperty(nullptr), TmpIncomingAttackDegreeOfSuccessProperty(nullptr)
+	explicit FPF2TargetCharacterAttributeStatics() :
+		TmpDamageIncomingProperty(nullptr),
+		TmpIncomingAttackDegreeOfSuccessProperty(nullptr)
 	{
 		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, AbBoostCount, Target, false);
 
