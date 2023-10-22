@@ -15,17 +15,9 @@
 #include <AttributeSet.h>
 #include <AbilitySystemComponent.h>
 
-#include "PF2AttributeSet.generated.h"
+#include "Abilities/PF2AttributeSetMacros.h"
 
-// =====================================================================================================================
-// Macros
-// =====================================================================================================================
-// Uses macros from AttributeSet.h
-#define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
-	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
-	GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
-	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
-	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
+#include "PF2AttributeSet.generated.h"
 
 // =====================================================================================================================
 // Forward Declarations (to minimize header dependencies)

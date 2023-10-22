@@ -9,26 +9,9 @@
 #include "PF2CharacterAbilityScoreType.h"
 
 #include "Abilities/PF2AttributeSet.h"
+#include "Abilities/PF2AttributeSetMacros.h"
 
 #include "Utilities/PF2EnumUtilities.h"
-
-#define DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(S, P, T, B) \
-{ \
-	DEFINE_ATTRIBUTE_CAPTUREDEF(S, P, T, B) \
-	this->CaptureDefinitions.Add(P##Property->GetName(), &P##Def); \
-}
-
-#define DEFINE_PF2_ABILITY_SCORE_CAPTUREDEF(S, P, T, B) \
-{ \
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(S, P, T, B) \
-	this->AbilityNames.Add(P##Property->GetName()); \
-}
-
-#define DEFINE_PF2_ABILITY_MODIFIER_CAPTUREDEF(S, P, T, B) \
-{ \
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(S, P, T, B) \
-	this->AbilityModifierNames.Add(P##Property->GetName()); \
-}
 
 /**
  * Base class for singleton containers of OpenPF2 character attribute capture definitions.
