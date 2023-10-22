@@ -59,18 +59,8 @@ public:
 		const float    BaseValue = 0.0f);
 
 	// =================================================================================================================
-	// Public Methods
+	// Public Methods - UGameplayModMagnitudeCalculation Implementation
 	// =================================================================================================================
-	/**
-	 * Calculates this stat based on the Key Attribute captured by the provided GE specification.
-	 *
-	 * @param Spec
-	 *	The Gameplay Effect (GE) specification that provides information about the character attributes for which a
-	 *	calculated stat is desired.
-	 *
-	 * @return
-	 *	The calculated stat value.
-	 */
 	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
 
 protected:

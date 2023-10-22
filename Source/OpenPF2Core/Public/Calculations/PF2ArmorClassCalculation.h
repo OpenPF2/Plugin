@@ -39,20 +39,8 @@ public:
 	explicit UPF2ArmorClassCalculation();
 
 	// =================================================================================================================
-	// Public Methods
+	// Public Methods - UGameplayModMagnitudeCalculation Implementation
 	// =================================================================================================================
-	/**
-	 * Calculates this stat based on the character's Dexterity, equipped armor (if any), and armor ranks.
-	 *
-	 * The type of armor equipped and the proficiency in each armor category are determined by the Gameplay Tags on the
-	 * character.
-	 *
-	 * @param Spec
-	 *	The Gameplay Effect (GE) specification that provides information about the character's attributes and tags.
-	 *
-	 * @return
-	 *	The calculated stat value.
-	 */
 	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
 
 protected:

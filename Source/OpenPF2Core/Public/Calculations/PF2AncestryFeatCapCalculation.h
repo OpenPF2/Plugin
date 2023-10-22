@@ -19,7 +19,7 @@ class OPENPF2CORE_API UPF2AncestryFeatCapCalculation : public UGameplayModMagnit
 
 public:
 	// =================================================================================================================
-	// Public Methods
+	// Public Methods - UGameplayModMagnitudeCalculation Implementation
 	// =================================================================================================================
 	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
 };
