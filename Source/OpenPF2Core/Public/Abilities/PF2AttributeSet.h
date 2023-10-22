@@ -787,8 +787,8 @@ public:
 	 * reset. It exists only so that other effects can react accordingly to the outcome
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Temporary Attributes")
-	FGameplayAttributeData TmpDegreeOfSuccess;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, TmpDegreeOfSuccess)
+	FGameplayAttributeData TmpIncomingAttackDegreeOfSuccess;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, TmpIncomingAttackDegreeOfSuccess)
 
 	// =================================================================================================================
 	// Public Constructors

@@ -556,7 +556,7 @@ void UPF2AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 	{
 		this->Native_OnDamageIncomingChanged(TargetCharacter, Context, EventTags);
 	}
-	else if (ModifiedAttribute == this->GetTmpDegreeOfSuccessAttribute())
+	else if (ModifiedAttribute == this->GetTmpIncomingAttackDegreeOfSuccessAttribute())
 	{
 		this->Native_OnDegreeOfSuccessChanged(TargetCharacter, Context, EventTags);
 	}
@@ -635,7 +635,7 @@ void UPF2AttributeSet::Native_OnDegreeOfSuccessChanged(IPF2CharacterInterface*  
                                                        const FGameplayEffectContextHandle& Context,
                                                        const FGameplayTagContainer*        EventTags)
 {
-	this->SetTmpDegreeOfSuccess(0.0f);
+	this->SetTmpIncomingAttackDegreeOfSuccess(0.0f);
 }
 
 void UPF2AttributeSet::Native_OnHitPointsChanged(IPF2CharacterInterface*      TargetCharacter,

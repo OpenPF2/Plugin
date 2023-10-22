@@ -110,7 +110,7 @@ void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecuti
 
 		OutExecutionOutput.AddOutputModifier(
 			FGameplayModifierEvaluatedData(
-				TargetCaptures.TmpDegreeOfSuccessProperty,
+				TargetCaptures.TmpIncomingAttackDegreeOfSuccessProperty,
 				EGameplayModOp::Override,
 				UPF2AttackStatLibrary::DegreeOfSuccessStatFromEnum(AttackRollResult)
 			)
