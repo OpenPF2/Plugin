@@ -131,7 +131,14 @@ public:
 	 * @return
 	 *	An array of all the capture definitions for character attributes.
 	 */
-	TArray<const FGameplayEffectAttributeCaptureDefinition*> GetCaptureDefinitions() const;
+	FORCEINLINE TArray<const FGameplayEffectAttributeCaptureDefinition*> GetCaptureDefinitions() const
+	{
+		TArray<const FGameplayEffectAttributeCaptureDefinition*> Result;
+
+		this->CaptureDefinitions.GenerateValueArray(Result);
+
+		return Result;
+	}
 
 	/**
 	 * Gets the names of all character ability attributes.

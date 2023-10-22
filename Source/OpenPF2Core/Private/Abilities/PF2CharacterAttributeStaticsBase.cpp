@@ -9,15 +9,6 @@
 
 #include "Utilities/PF2ArrayUtilities.h"
 
-FORCEINLINE TArray<const FGameplayEffectAttributeCaptureDefinition*> FPF2CharacterAttributeStaticsBase::GetCaptureDefinitions() const
-{
-	TArray<const FGameplayEffectAttributeCaptureDefinition*> Result;
-
-	this->CaptureDefinitions.GenerateValueArray(Result);
-
-	return Result;
-}
-
 TArray<const FGameplayEffectAttributeCaptureDefinition*> FPF2CharacterAttributeStaticsBase::GetAllAbilityScoreCaptures() const
 {
 	return PF2ArrayUtilities::Map<const FGameplayEffectAttributeCaptureDefinition*>(
