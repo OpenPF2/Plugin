@@ -33,21 +33,16 @@ int32 UPF2DiceLibrary::RollSum(const int32 RollCount, const int32 DieSize)
 
 TArray<int32> UPF2DiceLibrary::RollString(const FName RollExpression)
 {
-	FRegexMatcher ExpressionMatcher = GetRollExpressionMatcher(RollExpression);
+	TArray<int32> Result;
+	int32         RollCount,
+	              DieSize;
 
-	if (ExpressionMatcher.FindNext())
+	if (ParseRollExpression(RollExpression, RollCount, DieSize))
 	{
-		const FString RollCountString = ExpressionMatcher.GetCaptureGroup(1),
-		              SideCountString = ExpressionMatcher.GetCaptureGroup(2);
-		const int32   RollCount       = FCString::Atoi(*RollCountString),
-		              SideCount       = FCString::Atoi(*SideCountString);
+		Result = Roll(RollCount, DieSize);
+	}
 
-		return Roll(RollCount, SideCount);
-	}
-	else
-	{
-		return {};
-	}
+	return Result;
 }
 
 TArray<int32> UPF2DiceLibrary::Roll(const int32 RollCount, const int32 DieSize)
@@ -75,28 +70,23 @@ TArray<int32> UPF2DiceLibrary::Roll(const int32 RollCount, const int32 DieSize)
 	return Rolls;
 }
 
-FRegexMatcher UPF2DiceLibrary::GetRollExpressionMatcher(const FName RollExpression)
-{
-	return FRegexMatcher(DiceRollPattern, RollExpression.ToString().ToLower());
-}
-
 FName UPF2DiceLibrary::NextSizeString(const FName RollExpression)
 {
 	FName Result;
+	int32 RollCount,
+	      DieSize;
 
-	FRegexMatcher ExpressionMatcher = GetRollExpressionMatcher(RollExpression);
-
-	if (ExpressionMatcher.FindNext())
+	if (ParseRollExpression(RollExpression, RollCount, DieSize))
 	{
-		const FString RollCountString = ExpressionMatcher.GetCaptureGroup(1),
-		              SideCountString = ExpressionMatcher.GetCaptureGroup(2);
-		const int32   SideCount       = FCString::Atoi(*SideCountString),
-		              NextSideCount   = NextSize(SideCount);
+		const int32 NextDieSize = NextSize(DieSize);
 
 		Result = FName(
 			FString::Format(
 				TEXT("{0}d{1}"),
-				{RollCountString, FString::FormatAsNumber(NextSideCount)}
+				{
+					FString::FormatAsNumber(RollCount),
+					FString::FormatAsNumber(NextDieSize)
+				}
 			)
 		);
 	}
@@ -111,4 +101,28 @@ FName UPF2DiceLibrary::NextSizeString(const FName RollExpression)
 int32 UPF2DiceLibrary::NextSize(const int32 DieSize)
 {
 	return DieSize + 2;
+}
+
+bool UPF2DiceLibrary::ParseRollExpression(const FName RollExpression, int32& RollCount, int32& DieSize)
+{
+	bool          bResult;
+	FRegexMatcher ExpressionMatcher = FRegexMatcher(DiceRollPattern, RollExpression.ToString().ToLower());
+
+	if (ExpressionMatcher.FindNext())
+	{
+		const FString RollCountString = ExpressionMatcher.GetCaptureGroup(1),
+		              DieSizeString   = ExpressionMatcher.GetCaptureGroup(2);
+
+		RollCount = FCString::Atoi(*RollCountString);
+		DieSize   = FCString::Atoi(*DieSizeString);
+		bResult   = true;
+	}
+	else
+	{
+		RollCount = 0;
+		DieSize   = 0;
+		bResult   = false;
+	}
+
+	return bResult;
 }

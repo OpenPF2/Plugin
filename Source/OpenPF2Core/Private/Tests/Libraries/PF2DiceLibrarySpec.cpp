@@ -29,6 +29,14 @@ void FPF2DiceLibrarySpec::Define()
 		int MaxRoll;
 	};
 
+	struct FParseRollExpressionTestTuple
+	{
+		FString RollExpression;
+		bool bWasParsed;
+		int RollCount;
+		int DieSize;
+	};
+
 	Describe(TEXT("RollStringSum"), [=, this]
 	{
 		TArray<FDiceRollStringTestTuple> ExpectedRanges =
@@ -42,13 +50,9 @@ void FPF2DiceLibrarySpec::Define()
 			{ "3d5", 1, 15 },
 		};
 
-		for (const auto& TestParameters : ExpectedRanges)
+		for (const auto& [RollExpression, MinRoll, MaxRoll] : ExpectedRanges)
 		{
-			const FString RollString = TestParameters.RollString;
-			const int     MinRoll    = TestParameters.MinRoll,
-			              MaxRoll    = TestParameters.MaxRoll;
-
-			Describe(FString::Format(TEXT("when given '{0}'"), {RollString}), [=, this]
+			Describe(FString::Format(TEXT("when given '{0}'"), {RollExpression}), [=, this]
 			{
 				It(FString::Format(TEXT("returns a number greater than or equal to '{0}' over 10 rolls"), {FString::FormatAsNumber(MinRoll)}), [=, this]
 				{
@@ -56,7 +60,7 @@ void FPF2DiceLibrarySpec::Define()
 
 					for (int RollIndex = 0; RollIndex < 10; ++RollIndex)
 					{
-						const float RollSum = UPF2DiceLibrary::RollStringSum(FName(RollString));
+						const float RollSum = UPF2DiceLibrary::RollStringSum(FName(RollExpression));
 
 						MinRollSeen = FMath::Min(MinRollSeen, RollSum);
 					}
@@ -79,7 +83,7 @@ void FPF2DiceLibrarySpec::Define()
 
 					for (int RollIndex = 0; RollIndex < 10; ++RollIndex)
 					{
-						const float RollSum = UPF2DiceLibrary::RollStringSum(FName(RollString));
+						const float RollSum = UPF2DiceLibrary::RollStringSum(FName(RollExpression));
 
 						MaxRollSeen = FMath::Max(MaxRollSeen, RollSum);
 					}
@@ -110,13 +114,8 @@ void FPF2DiceLibrarySpec::Define()
 			{ 3, 5, 1, 15 },
 		};
 
-		for (const auto& TestParameters : ExpectedRanges)
+		for (const auto& [RollCount, DieSize, MinRoll, MaxRoll] : ExpectedRanges)
 		{
-			const int RollCount = TestParameters.RollCount,
-			          DieSize   = TestParameters.DieSize,
-			          MinRoll   = TestParameters.MinRoll,
-			          MaxRoll   = TestParameters.MaxRoll;
-
 			Describe(FString::Format(TEXT("when given '{0}d{1}'"), {FString::FormatAsNumber(RollCount), FString::FormatAsNumber(DieSize)}), [=, this]
 			{
 				It(FString::Format(TEXT("returns a number greater than or equal to '{0}' over 10 rolls"), {FString::FormatAsNumber(MinRoll)}), [=, this]
@@ -180,12 +179,8 @@ void FPF2DiceLibrarySpec::Define()
 			{ "3d5", 1,  5 },
 		};
 
-		for (const auto& TestParameters : ExpectedRanges)
+		for (const auto& [RollString, MinRoll, MaxRoll] : ExpectedRanges)
 		{
-			const FString RollString = TestParameters.RollString;
-			const int     MinRoll    = TestParameters.MinRoll,
-			              MaxRoll    = TestParameters.MaxRoll;
-
 			Describe(FString::Format(TEXT("when given '{0}'"), {RollString}), [=, this]
 			{
 				It(FString::Format(TEXT("returns a number greater than or equal to '{0}' over 10 rolls"), {FString::FormatAsNumber(MinRoll)}), [=, this]
@@ -351,6 +346,39 @@ void FPF2DiceLibrarySpec::Define()
 						UPF2DiceLibrary::NextSize(DieSize),
 						ExpectedOutput
 					);
+				});
+			});
+		}
+	});
+
+	Describe(TEXT("ParseRollExpression"), [=, this]
+	{
+		TArray<FParseRollExpressionTestTuple> ExpectedValues =
+		{
+			{"1d6",  true,  1, 6},
+			{"1d3",  true,  1, 3},
+			{"8d1",  true,  8, 1},
+			{"8d-1", false, 0, 0},
+			{"BAD",  false, 0, 0},
+		};
+
+		for (const auto& [RollExpression, bExpectedWasParsed, ExpectedRollCount, ExpectedDieSize] : ExpectedValues)
+		{
+			Describe(FString::Format(TEXT("when given '{0}'"), {RollExpression}), [=, this]
+			{
+				It(FString::Format(TEXT("{0} as roll count {1} and dice size {2}"), {bExpectedWasParsed ? "parses" : "fails to parse", FString::FormatAsNumber(ExpectedRollCount), FString::FormatAsNumber(ExpectedDieSize)}), [=, this]
+				{
+					int32 RollCount,
+					      DieSize;
+
+					TestEqual(
+						"Result",
+						UPF2DiceLibrary::ParseRollExpression(*RollExpression, RollCount, DieSize),
+						bExpectedWasParsed
+					);
+
+					TestEqual("RollCount", RollCount, ExpectedRollCount);
+					TestEqual("DieSize", DieSize, ExpectedDieSize);
 				});
 			});
 		}

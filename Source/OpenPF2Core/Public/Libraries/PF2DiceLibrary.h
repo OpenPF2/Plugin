@@ -29,12 +29,18 @@ class OPENPF2CORE_API UPF2DiceLibrary final : public UBlueprintFunctionLibrary {
 	GENERATED_BODY()
 
 protected:
+	// =================================================================================================================
+	// Protected Constants
+	// =================================================================================================================
 	/**
 	 * Regular expression pattern used to parse dice rolling expressions.
 	 */
 	static const FRegexPattern DiceRollPattern;
 
 public:
+	// =================================================================================================================
+	// Public Static Methods
+	// =================================================================================================================
 	/**
 	 * Returns the sum of a dice roll for the given dice roll expression string.
 	 *
@@ -123,13 +129,22 @@ public:
 	static int32 NextSize(const int32 DieSize);
 
 	/**
-	 * Gets a regular expression matcher for the given roll expression.
+	 * Parses the string description of a roll into distinct roll count and die size components.
 	 *
 	 * @param RollExpression
-	 *	The expression to parse/match with a regex.
+	 *	The description of the roll, in "CdS" format, where "C" represents the count or number of dice to roll, and "S"
+	 *	represents the number of sides of each die (the die size). For example, "1d6" represents a single roll of a
+	 *	six-sided die, while "2d4" represents rolling two dice having four sides each.
+	 * @param [out] RollCount
+	 *	A reference to the variable to receive the number of dice to roll.
+	 * @param [out] DieSize
+	 *	A reference to the variable to receive the number of sides of each die.
 	 *
 	 * @return
-	 *	The matcher for parsing the expression.
+	 *	Whether the roll expression could be parsed or not.
 	 */
-	static FRegexMatcher GetRollExpressionMatcher(FName RollExpression);
+	UFUNCTION(BlueprintPure, Category="OpenPF2|Dice")
+	static UPARAM(DisplayName="Was Parsed") bool ParseRollExpression(const FName RollExpression,
+	                                                                 int32&      RollCount,
+	                                                                 int32&      DieSize);
 };
