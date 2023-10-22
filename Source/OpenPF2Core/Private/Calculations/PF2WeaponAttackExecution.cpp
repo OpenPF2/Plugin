@@ -266,7 +266,7 @@ void UPF2WeaponAttackExecution::Execute_Implementation(const FGameplayEffectCust
 		UE_LOG(
 			LogPf2CoreAbilities,
 			Error,
-			TEXT("Cannot calculate attack because no weapon was provided in the effect context. If this was an unarmed attack, the source of the attack must still implement the weapon interface.")
+			TEXT("Cannot calculate attack because no weapon was provided in the effect context. If this is an unarmed attack, the source of the attack must still implement IPF2WeaponInterface.")
 		);
 	}
 	else
