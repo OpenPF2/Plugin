@@ -10,6 +10,7 @@
 
 #include "Abilities/PF2AttributeSet.h"
 #include "Abilities/PF2AttributeSetMacros.h"
+#include "Abilities/PF2AttributeStaticsBase.h"
 
 #include "Utilities/PF2EnumUtilities.h"
 
@@ -19,14 +20,14 @@
  * These centralize static capture definitions for OpenPF2 attributes instead of there being multiple, smaller "Statics"
  * definitions like those preferred by Epic's sample projects.
  */
-struct OPENPF2CORE_API FPF2CharacterAttributeStaticsBase
+struct OPENPF2CORE_API FPF2CharacterAttributeStaticsBase : FPF2AttributeStaticsBase
 {
 protected:
 	// =================================================================================================================
 	// Protected Constants
 	// =================================================================================================================
 	/**
-	 * Name of the tag that is used to pass a dynamic resistance amount into the calculation.
+	 * Map from each damage type tag to the attribute that tracks a character's resistance to that damage type.
 	 */
 	inline static const TMap<FName, FName> DamageTypeToResistanceAttributeMap = {
 		{ "DamageType.Physical.Bludgeoning", "RstPhysicalBludgeoning" },
@@ -107,11 +108,6 @@ public:
 	// Protected Fields
 	// =================================================================================================================
 	/**
-	 * A map of all capture definitions, keyed by property name.
-	 */
-	TMap<FString, const FGameplayEffectAttributeCaptureDefinition*> CaptureDefinitions;
-
-	/**
 	 * The names of all ability-related attributes.
 	 */
 	TArray<FString> AbilityNames;
@@ -124,21 +120,6 @@ public:
 	// =================================================================================================================
 	// Public Methods
 	// =================================================================================================================
-	/**
-	 * Gets all attribute capture definitions.
-	 *
-	 * @return
-	 *	An array of all the capture definitions for character attributes.
-	 */
-	FORCEINLINE TArray<const FGameplayEffectAttributeCaptureDefinition*> GetCaptureDefinitions() const
-	{
-		TArray<const FGameplayEffectAttributeCaptureDefinition*> Result;
-
-		this->CaptureDefinitions.GenerateValueArray(Result);
-
-		return Result;
-	}
-
 	/**
 	 * Gets the names of all character ability attributes.
 	 *
@@ -175,35 +156,6 @@ public:
 		const FGameplayAttribute& Attribute) const
 	{
 		return this->GetCaptureByAttributeName(Attribute.GetName());
-	}
-
-	/**
-	 * Gets a capture definition for the specified character attribute.
-	 *
-	 * @param Name
-	 *	The name of the attribute for which a capture definition is desired.
-	 *
-	 * @return
-	 *	Either the desired capture definition; or nullptr if the given attribute name doesn't correspond to a character
-	 *	ability.
-	 */
-	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetCaptureByAttributeName(const FString& Name) const
-	{
-		if (this->CaptureDefinitions.Contains(Name))
-		{
-			return this->CaptureDefinitions[Name];
-		}
-		else
-		{
-			UE_LOG(
-				LogPf2CoreStats,
-				Error,
-				TEXT("No attribute capture corresponds to attribute name '%s'."),
-				*Name
-			);
-
-			return nullptr;
-		}
 	}
 
 	/**
@@ -290,64 +242,5 @@ protected:
 	/**
 	 * Protected constructor to prevent instantiation outside of the singleton factory method.
 	 */
-	FPF2CharacterAttributeStaticsBase() :
-		AbBoostCountProperty(nullptr),
-		AbCharismaProperty(nullptr),
-		AbCharismaModifierProperty(nullptr),
-		AbConstitutionProperty(nullptr),
-		AbConstitutionModifierProperty(nullptr),
-		AbDexterityProperty(nullptr),
-		AbDexterityModifierProperty(nullptr),
-		AbIntelligenceProperty(nullptr),
-		AbIntelligenceModifierProperty(nullptr),
-		AbStrengthProperty(nullptr),
-		AbStrengthModifierProperty(nullptr),
-		AbWisdomProperty(nullptr),
-		AbWisdomModifierProperty(nullptr),
-		ArmorClassProperty(nullptr),
-		HitPointsProperty(nullptr),
-		RstPhysicalBludgeoningProperty(nullptr),
-		RstPhysicalPiercingProperty(nullptr),
-		RstPhysicalSlashingProperty(nullptr),
-		RstEnergyAcidProperty(nullptr),
-		RstEnergyColdProperty(nullptr),
-		RstEnergyFireProperty(nullptr),
-		RstEnergySonicProperty(nullptr),
-		RstEnergyPositiveProperty(nullptr),
-		RstEnergyNegativeProperty(nullptr),
-		RstEnergyForceProperty(nullptr),
-		RstAlignmentChaoticProperty(nullptr),
-		RstAlignmentEvilProperty(nullptr),
-		RstAlignmentGoodProperty(nullptr),
-		RstAlignmentLawfulProperty(nullptr),
-		RstMentalProperty(nullptr),
-		RstPoisonProperty(nullptr),
-		RstBleedProperty(nullptr),
-		RstPrecisionProperty(nullptr),
-		EncMultipleAttackPenaltyProperty(nullptr)
-	{
-#if !(UE_BUILD_SHIPPING || UE_BUILD_TEST)
-		TArray<FName> Keys;
-
-		this->DamageTypeToResistanceAttributeMap.GetKeys(Keys);
-
-		// Validate that all tag names are valid.
-		for (const FName& CurrentTagName : Keys)
-		{
-			// Rather than crashing the game/engine, we soften this to a log error so that a game designer can still
-			// correct the error by possibly loading/defining tags.
-			FGameplayTag Tag = FGameplayTag::RequestGameplayTag(CurrentTagName, false);
-
-			if (!Tag.IsValid())
-			{
-				UE_LOG(
-					LogPf2CoreStats,
-					Error,
-					TEXT("The damage type tag '%s' is missing."),
-					*(CurrentTagName.ToString())
-				);
-			}
-		}
-#endif
-	}
+	explicit FPF2CharacterAttributeStaticsBase();
 };

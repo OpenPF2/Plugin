@@ -5,13 +5,14 @@
 
 #pragma once
 
-#include "Abilities/PF2AttackAttributeSet.h"
-#include "Abilities/PF2CharacterAttributeStaticsBase.h"
+#include <GameplayEffectExecutionCalculation.h>
+
+#include "Abilities/PF2AttributeStaticsBase.h"
 
 /**
  * Singleton container for transient attack attribute capture definitions.
  */
-struct OPENPF2CORE_API FPF2AttackAttributeStatics
+struct OPENPF2CORE_API FPF2AttackAttributeStatics : FPF2AttributeStaticsBase
 {
 protected:
 	/**
@@ -78,88 +79,10 @@ public:
 
 protected:
 	// =================================================================================================================
-	// Protected Fields
-	// =================================================================================================================
-	/**
-	 * A map of all capture definitions, keyed by property name.
-	 */
-	TMap<FString, const FGameplayEffectAttributeCaptureDefinition*> CaptureDefinitions;
-
-public:
-	// =================================================================================================================
-	// Public Methods
-	// =================================================================================================================
-	/**
-	 * Gets all attribute capture definitions.
-	 *
-	 * @return
-	 *	An array of all the capture definitions for character attributes.
-	 */
-	FORCEINLINE TArray<const FGameplayEffectAttributeCaptureDefinition*> GetCaptureDefinitions() const
-	{
-		TArray<const FGameplayEffectAttributeCaptureDefinition*> Result;
-
-		this->CaptureDefinitions.GenerateValueArray(Result);
-
-		return Result;
-	}
-
-protected:
-	// =================================================================================================================
 	// Protected Constructors
 	// =================================================================================================================
 	/**
 	 * Protected constructor to prevent instantiation outside of the singleton factory method.
 	 */
-	explicit FPF2AttackAttributeStatics() :
-		TmpAttackRollCountProperty(nullptr),
-		TmpAttackRollSizeProperty(nullptr),
-		TmpAttackDegreeOfSuccessProperty(nullptr),
-		TmpDmgRollCountProperty(nullptr),
-		TmpDmgRollSizeProperty(nullptr),
-		TmpDmgTypePhysicalBludgeoningProperty(nullptr),
-		TmpDmgTypePhysicalPiercingProperty(nullptr),
-		TmpDmgTypePhysicalSlashingProperty(nullptr),
-		TmpDmgTypeEnergyAcidProperty(nullptr),
-		TmpDmgTypeEnergyColdProperty(nullptr),
-		TmpDmgTypeEnergyFireProperty(nullptr),
-		TmpDmgTypeEnergySonicProperty(nullptr),
-		TmpDmgTypeEnergyPositiveProperty(nullptr),
-		TmpDmgTypeEnergyNegativeProperty(nullptr),
-		TmpDmgTypeEnergyForceProperty(nullptr),
-		TmpDmgTypeAlignmentChaoticProperty(nullptr),
-		TmpDmgTypeAlignmentEvilProperty(nullptr),
-		TmpDmgTypeAlignmentGoodProperty(nullptr),
-		TmpDmgTypeAlignmentLawfulProperty(nullptr),
-		TmpDmgTypeMentalProperty(nullptr),
-		TmpDmgTypePoisonProperty(nullptr),
-		TmpDmgTypeBleedProperty(nullptr),
-		TmpDmgTypePrecisionProperty(nullptr)
-	{
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpAttackDegreeOfSuccess, Source, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpAttackRollCount, Source, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpAttackRollSize, Source, false);
-
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgRollCount, Source, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgRollSize, Source, false);
-
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypePhysicalBludgeoning, Source, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypePhysicalPiercing, Source, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypePhysicalSlashing, Source, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypeEnergyAcid, Source, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypeEnergyCold, Source, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypeEnergyFire, Source, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypeEnergySonic, Source, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypeEnergyPositive, Source, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypeEnergyNegative, Source, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypeEnergyForce, Source, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypeAlignmentChaotic, Source, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypeAlignmentEvil, Source, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypeAlignmentGood, Source, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypeAlignmentLawful, Source, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypeMental, Source, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypePoison, Source, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypeBleed, Source, false);
-		DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypePrecision, Source, false);
-	}
+	explicit FPF2AttackAttributeStatics();
 };

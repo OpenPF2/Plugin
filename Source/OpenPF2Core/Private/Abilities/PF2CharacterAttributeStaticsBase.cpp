@@ -61,3 +61,64 @@ TArray<const FGameplayEffectAttributeCaptureDefinition*> FPF2CharacterAttributeS
 		}
 	);
 }
+
+FPF2CharacterAttributeStaticsBase::FPF2CharacterAttributeStaticsBase():
+	AbBoostCountProperty(nullptr),
+	AbCharismaProperty(nullptr),
+	AbCharismaModifierProperty(nullptr),
+	AbConstitutionProperty(nullptr),
+	AbConstitutionModifierProperty(nullptr),
+	AbDexterityProperty(nullptr),
+	AbDexterityModifierProperty(nullptr),
+	AbIntelligenceProperty(nullptr),
+	AbIntelligenceModifierProperty(nullptr),
+	AbStrengthProperty(nullptr),
+	AbStrengthModifierProperty(nullptr),
+	AbWisdomProperty(nullptr),
+	AbWisdomModifierProperty(nullptr),
+	ArmorClassProperty(nullptr),
+	HitPointsProperty(nullptr),
+	RstPhysicalBludgeoningProperty(nullptr),
+	RstPhysicalPiercingProperty(nullptr),
+	RstPhysicalSlashingProperty(nullptr),
+	RstEnergyAcidProperty(nullptr),
+	RstEnergyColdProperty(nullptr),
+	RstEnergyFireProperty(nullptr),
+	RstEnergySonicProperty(nullptr),
+	RstEnergyPositiveProperty(nullptr),
+	RstEnergyNegativeProperty(nullptr),
+	RstEnergyForceProperty(nullptr),
+	RstAlignmentChaoticProperty(nullptr),
+	RstAlignmentEvilProperty(nullptr),
+	RstAlignmentGoodProperty(nullptr),
+	RstAlignmentLawfulProperty(nullptr),
+	RstMentalProperty(nullptr),
+	RstPoisonProperty(nullptr),
+	RstBleedProperty(nullptr),
+	RstPrecisionProperty(nullptr),
+	EncMultipleAttackPenaltyProperty(nullptr)
+{
+#if !(UE_BUILD_SHIPPING || UE_BUILD_TEST)
+	TArray<FName> Keys;
+
+	this->DamageTypeToResistanceAttributeMap.GetKeys(Keys);
+
+	// Validate that all tag names are valid.
+	for (const FName& CurrentTagName : Keys)
+	{
+		// Rather than crashing the game/engine, we soften this to a log error so that a game designer can still
+		// correct the error by possibly loading/defining tags.
+		FGameplayTag Tag = FGameplayTag::RequestGameplayTag(CurrentTagName, false);
+
+		if (!Tag.IsValid())
+		{
+			UE_LOG(
+				LogPf2CoreStats,
+				Error,
+				TEXT("The damage type tag '%s' is missing."),
+				*(CurrentTagName.ToString())
+			);
+		}
+	}
+#endif
+}
