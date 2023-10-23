@@ -5,6 +5,30 @@
 
 #include "Abilities/PF2TargetCharacterAttributeStatics.h"
 
+const FGameplayEffectAttributeCaptureDefinition* FPF2TargetCharacterAttributeStatics::GetResistanceCaptureForDamageAttribute(
+	const FName& DamageAttributeName) const
+{
+	const FGameplayEffectAttributeCaptureDefinition* Result = nullptr;
+
+	if (this->DamageAttributeToResistanceAttributeMap.Contains(DamageAttributeName))
+	{
+		const FName ResistanceAttributeName = this->DamageAttributeToResistanceAttributeMap[DamageAttributeName];
+
+		Result = this->GetCaptureByAttributeName(ResistanceAttributeName.ToString());
+	}
+	else
+	{
+		UE_LOG(
+			LogPf2CoreStats,
+			Error,
+			TEXT("No resistance attribute corresponds to damage attribute '%s'."),
+			*(DamageAttributeName.ToString())
+		);
+	}
+
+	return Result;
+}
+
 FPF2TargetCharacterAttributeStatics::FPF2TargetCharacterAttributeStatics():
 	TmpDamageIncomingProperty(nullptr),
 	TmpIncomingAttackDegreeOfSuccessProperty(nullptr)

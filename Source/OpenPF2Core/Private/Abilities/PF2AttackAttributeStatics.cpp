@@ -20,6 +20,30 @@ TArray<const FGameplayEffectAttributeCaptureDefinition*> FPF2AttackAttributeStat
 		});
 }
 
+const FGameplayEffectAttributeCaptureDefinition* FPF2AttackAttributeStatics::GetDamageCaptureForDamageType(
+	const FName& DamageTypeName) const
+{
+	const FGameplayEffectAttributeCaptureDefinition* Result = nullptr;
+
+	if (this->DamageTypeToTransientDamageAttributeMap.Contains(DamageTypeName))
+	{
+		const FName ResistanceAttributeName = this->DamageTypeToTransientDamageAttributeMap[DamageTypeName];
+
+		Result = this->GetCaptureByAttributeName(ResistanceAttributeName.ToString());
+	}
+	else
+	{
+		UE_LOG(
+			LogPf2CoreStats,
+			Error,
+			TEXT("No damage attribute corresponds to damage type '%s'."),
+			*(DamageTypeName.ToString())
+		);
+	}
+
+	return Result;
+}
+
 FPF2AttackAttributeStatics::FPF2AttackAttributeStatics():
 	TmpAttackRollCountProperty(nullptr),
 	TmpAttackRollSizeProperty(nullptr),

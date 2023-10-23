@@ -15,10 +15,40 @@
 struct OPENPF2CORE_API FPF2AttackAttributeStatics : FPF2AttributeStaticsBase
 {
 protected:
+	// =================================================================================================================
+	// Protected Constants
+	// =================================================================================================================
 	/**
 	 * The prefix for all attribute captures that relate to the amount of damage of each type being done.
 	 */
 	inline static const FString Damage_Attribute_Prefix = TEXT("TmpDmgType");
+
+	/**
+	 * Map from each damage type tag to the transient attack attribute for that damage type.
+	 */
+	inline static const TMap<FName, FName> DamageTypeToTransientDamageAttributeMap = {
+		{ "DamageType.Physical.Bludgeoning", "TmpDmgTypePhysicalBludgeoning" },
+		{ "DamageType.Physical.Piercing",    "TmpDmgTypePhysicalPiercing"    },
+		{ "DamageType.Physical.Slashing",    "TmpDmgTypePhysicalSlashing"    },
+
+		{ "DamageType.Energy.Acid",          "TmpDmgTypeEnergyAcid"          },
+		{ "DamageType.Energy.Cold",          "TmpDmgTypeEnergyCold"          },
+		{ "DamageType.Energy.Fire",          "TmpDmgTypeEnergyFire"          },
+		{ "DamageType.Energy.Sonic",         "TmpDmgTypeEnergySonic"         },
+		{ "DamageType.Energy.Positive",      "TmpDmgTypeEnergyPositive"      },
+		{ "DamageType.Energy.Negative",      "TmpDmgTypeEnergyNegative"      },
+		{ "DamageType.Energy.Force",         "TmpDmgTypeEnergyForce"         },
+
+		{ "DamageType.Alignment.Chaotic",    "TmpDmgTypeAlignmentChaotic"    },
+		{ "DamageType.Alignment.Evil",       "TmpDmgTypeAlignmentEvil"       },
+		{ "DamageType.Alignment.Good",       "TmpDmgTypeAlignmentGood"       },
+		{ "DamageType.Alignment.Lawful",     "TmpDmgTypeAlignmentLawful"     },
+
+		{ "DamageType.Mental",               "TmpDmgTypeMental"              },
+		{ "DamageType.Poison",               "TmpDmgTypePoison"              },
+		{ "DamageType.Bleed",                "TmpDmgTypeBleed"               },
+		{ "DamageType.Precision",            "TmpDmgTypePrecision"           },
+	};
 
 public:
 	// =================================================================================================================
@@ -76,6 +106,35 @@ public:
 	 *	The damage-related attributes in this static capture definition.
 	 */
 	TArray<const FGameplayEffectAttributeCaptureDefinition*> GetAllDamageCaptures() const;
+
+	/**
+	 * Gets the transient damage attribute capture definition for the damage type that has the given tag.
+	 *
+	 * @param DamageType
+	 *	The damage tag for which a damage capture definition is desired.
+	 *
+	 * @return
+	 *	Either the desired capture definition; or nullptr if the character is using an ASC that does not provide a
+	 *	transient damage attribute that corresponds to the specified damage type.
+	 */
+	FORCEINLINE const FGameplayEffectAttributeCaptureDefinition* GetDamageCaptureForDamageType(
+		const FGameplayTag& DamageType) const
+	{
+		return this->GetDamageCaptureForDamageType(DamageType.GetTagName());
+	}
+
+	/**
+	 * Gets the transient damage attribute capture definition for the damage type that has the given tag name.
+	 *
+	 * @param DamageTypeName
+	 *	The name of the damage tag for which a damage capture definition is desired.
+	 *
+	 * @return
+	 *	Either the desired capture definition; or nullptr if the character is using an ASC that does not provide a
+	 *	transient damage attribute that corresponds to the specified damage type.
+	 */
+	const FGameplayEffectAttributeCaptureDefinition* GetDamageCaptureForDamageType(
+		const FName& DamageTypeName) const;
 
 protected:
 	// =================================================================================================================
