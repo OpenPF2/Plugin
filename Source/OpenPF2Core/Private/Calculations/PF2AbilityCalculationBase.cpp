@@ -7,6 +7,8 @@
 #include "OpenPF2Core.h"
 #include "Abilities/PF2AttributeSet.h"
 
+#include "Libraries/PF2AbilitySystemLibrary.h"
+
 float UPF2AbilityCalculationBase::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
 {
 	float     Value                  = 0.0f;
@@ -39,15 +41,12 @@ float UPF2AbilityCalculationBase::CalculateBaseMagnitude_Implementation(const FG
 
 float UPF2AbilityCalculationBase::DoCalculation(const FGameplayEffectSpec& Spec) const
 {
-	const FGameplayEffectAttributeCaptureDefinition AbilityAttributeDef  = this->RelevantAttributesToCapture[0];
-	const FGameplayAttribute                        AbilityAttribute     = AbilityAttributeDef.AttributeToCapture;
-	const FGameplayTagContainer                     *SourceTags          = Spec.CapturedSourceTags.GetAggregatedTags(),
-	                                                *TargetTags          = Spec.CapturedTargetTags.GetAggregatedTags();
-	FAggregatorEvaluateParameters                   EvaluationParameters;
-	float                                           AbilityScore = 0.0f;
+	const FGameplayEffectAttributeCaptureDefinition AbilityAttributeDef = this->RelevantAttributesToCapture[0];
+	const FGameplayAttribute                        AbilityAttribute    = AbilityAttributeDef.AttributeToCapture;
+	float                                           AbilityScore        = 0.0f;
 
-	EvaluationParameters.SourceTags = SourceTags;
-	EvaluationParameters.TargetTags = TargetTags;
+	const FAggregatorEvaluateParameters EvaluationParameters =
+		UPF2AbilitySystemLibrary::BuildEvaluationParameters(Spec);
 
 	this->GetCapturedAttributeMagnitude(AbilityAttributeDef, Spec, EvaluationParameters, AbilityScore);
 

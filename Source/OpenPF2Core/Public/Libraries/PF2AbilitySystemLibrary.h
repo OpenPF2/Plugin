@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <GameplayEffectExecutionCalculation.h>
+
 #include <Kismet/BlueprintFunctionLibrary.h>
 
 #include "PF2GameplayEffectContainerSpec.h"
@@ -16,6 +18,7 @@
 // =====================================================================================================================
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
+struct FGameplayEffectCustomExecutionParameters;
 struct FPF2GameplayEffectContainerSpec;
 
 class IPF2WeaponInterface;
@@ -231,4 +234,37 @@ public:
 	static FPF2GameplayEffectContainerSpec AppendTargetsToEffectContainerSpec(
 		const FPF2GameplayEffectContainerSpec&  ContainerSpec,
 		const FGameplayAbilityTargetDataHandle& ExistingTargetDataHandle);
+
+	/**
+	 * Builds a container of aggregator evaluation parameters, including source and target tags.
+	 *
+	 * Aggregator evaluation parameters influence what values are returned for captured attributes. They provide the
+	 * context necessary for the Gameplay Ability System to know which GEs should or should not apply to values.
+	 *
+	 * @param ExecutionParams
+	 *	Parameters passed-in to the execution of the Execution.
+	 *
+	 * @return
+	 *	The aggregator evaluation parameters.
+	 */
+	static FORCEINLINE FAggregatorEvaluateParameters BuildEvaluationParameters(
+		const FGameplayEffectCustomExecutionParameters& ExecutionParams)
+	{
+		return BuildEvaluationParameters(ExecutionParams.GetOwningSpec());
+	}
+
+	/**
+	 * Builds a container of aggregator evaluation parameters, including source and target tags.
+	 *
+	 * Aggregator evaluation parameters influence what values are returned for captured attributes. They provide the
+	 * context necessary for the Gameplay Ability System to know which GEs should or should not apply to values.
+	 *
+	 * @param ActivatingSpec
+	 *	The specification for the gameplay effect instance that is activating the calculation that needs
+	 *	evaluation parameters.
+	 *
+	 * @return
+	 *	The aggregator evaluation parameters.
+	 */
+	static FAggregatorEvaluateParameters BuildEvaluationParameters(const FGameplayEffectSpec& ActivatingSpec);
 };

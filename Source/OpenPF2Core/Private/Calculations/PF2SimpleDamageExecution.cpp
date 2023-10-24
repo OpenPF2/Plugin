@@ -13,6 +13,9 @@
 #include "Calculations/PF2SimpleDamageExecution.h"
 
 #include "Abilities/PF2TargetCharacterAttributeStatics.h"
+
+#include "Libraries/PF2AbilitySystemLibrary.h"
+
 #include "Utilities/PF2GameplayAbilityUtilities.h"
 
 UPF2SimpleDamageExecution::UPF2SimpleDamageExecution() :
@@ -32,18 +35,13 @@ void UPF2SimpleDamageExecution::Execute_Implementation(
 	const FGameplayEffectCustomExecutionParameters& ExecutionParams,
 	OUT FGameplayEffectCustomExecutionOutput&       OutExecutionOutput) const
 {
-	float IncomingDamage = 0.0f,
-	      Resistance     = 0.0f,
-	      DamageDone;
+	const FGameplayEffectSpec& Spec           = ExecutionParams.GetOwningSpec();
+	float                      IncomingDamage = 0.0f,
+	                           Resistance     = 0.0f,
+	                           DamageDone;
 
-	const FGameplayEffectSpec&   Spec       = ExecutionParams.GetOwningSpec();
-	const FGameplayTagContainer* SourceTags = Spec.CapturedSourceTags.GetAggregatedTags();
-	const FGameplayTagContainer* TargetTags = Spec.CapturedTargetTags.GetAggregatedTags();
-
-	FAggregatorEvaluateParameters EvaluationParameters;
-
-	EvaluationParameters.SourceTags = SourceTags;
-	EvaluationParameters.TargetTags = TargetTags;
+	const FAggregatorEvaluateParameters EvaluationParameters =
+		UPF2AbilitySystemLibrary::BuildEvaluationParameters(Spec);
 
 	ExecutionParams.AttemptCalculateTransientAggregatorMagnitude(
 		this->DamageParameterTag,

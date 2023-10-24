@@ -6,6 +6,7 @@
 #include "Libraries/PF2AbilitySystemLibrary.h"
 
 #include <AbilitySystemGlobals.h>
+#include <GameplayEffectExecutionCalculation.h>
 
 #include "PF2CharacterInterface.h"
 #include "PF2EffectCauseWrapper.h"
@@ -226,4 +227,16 @@ FPF2GameplayEffectContainerSpec UPF2AbilitySystemLibrary::AppendTargetsToEffectC
 	NewSpec.AppendTargets(ExistingTargetDataHandle);
 
 	return NewSpec;
+}
+
+FAggregatorEvaluateParameters UPF2AbilitySystemLibrary::BuildEvaluationParameters(const FGameplayEffectSpec& ActivatingSpec)
+{
+	const FGameplayTagContainer * SourceTags           = ActivatingSpec.CapturedSourceTags.GetAggregatedTags(),
+	                            * TargetTags           = ActivatingSpec.CapturedTargetTags.GetAggregatedTags();
+	FAggregatorEvaluateParameters EvaluationParameters;
+
+	EvaluationParameters.SourceTags = SourceTags;
+	EvaluationParameters.TargetTags = TargetTags;
+
+	return EvaluationParameters;
 }

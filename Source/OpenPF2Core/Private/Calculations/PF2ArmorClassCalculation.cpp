@@ -16,6 +16,9 @@
 #include "Abilities/PF2TargetCharacterAttributeStatics.h"
 #include "Abilities/PF2AttributeSet.h"
 #include "Calculations/PF2TemlCalculation.h"
+
+#include "Libraries/PF2AbilitySystemLibrary.h"
+
 #include "Utilities/PF2GameplayAbilityUtilities.h"
 
 UPF2ArmorClassCalculation::UPF2ArmorClassCalculation() :
@@ -52,13 +55,10 @@ float UPF2ArmorClassCalculation::CalculateBaseMagnitude_Implementation(const FGa
 
 FORCEINLINE float UPF2ArmorClassCalculation::GetDexterityModifier(const FGameplayEffectSpec& Spec) const
 {
-	float                         DexterityModifier     = 0.0f;
-	const FGameplayTagContainer   *SourceTags           = Spec.CapturedSourceTags.GetAggregatedTags(),
-	                              *TargetTags           = Spec.CapturedTargetTags.GetAggregatedTags();
-	FAggregatorEvaluateParameters EvaluationParameters;
+	float DexterityModifier = 0.0f;
 
-	EvaluationParameters.SourceTags = SourceTags;
-	EvaluationParameters.TargetTags = TargetTags;
+	const FAggregatorEvaluateParameters EvaluationParameters =
+		UPF2AbilitySystemLibrary::BuildEvaluationParameters(Spec);
 
 	this->GetCapturedAttributeMagnitude(
 		this->DexterityModifierCaptureDefinition,

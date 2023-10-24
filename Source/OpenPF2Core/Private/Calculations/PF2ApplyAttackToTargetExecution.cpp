@@ -15,6 +15,7 @@
 #include "Abilities/PF2AttackAttributeStatics.h"
 #include "Abilities/PF2TargetCharacterAttributeStatics.h"
 
+#include "Libraries/PF2AbilitySystemLibrary.h"
 
 UPF2ApplyAttackToTargetExecution::UPF2ApplyAttackToTargetExecution()
 {
@@ -31,18 +32,14 @@ UPF2ApplyAttackToTargetExecution::UPF2ApplyAttackToTargetExecution()
 
 void UPF2ApplyAttackToTargetExecution::Execute_Implementation(
 	const FGameplayEffectCustomExecutionParameters& ExecutionParams,
-	FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
+	FGameplayEffectCustomExecutionOutput&           OutExecutionOutput) const
 {
-	const FGameplayEffectSpec                 OwningSpec            = ExecutionParams.GetOwningSpec();
-	const FGameplayTagContainer *             SourceTags            = OwningSpec.CapturedSourceTags.GetAggregatedTags(),
-	                            *             TargetTags            = OwningSpec.CapturedTargetTags.GetAggregatedTags();
-	FAggregatorEvaluateParameters             EvaluationParameters;
-	const FPF2AttackAttributeStatics          AttackCaptures        = FPF2AttackAttributeStatics::GetInstance();
-	const FPF2TargetCharacterAttributeStatics TargetCaptures        = FPF2TargetCharacterAttributeStatics::GetInstance();
+	const FPF2AttackAttributeStatics          AttackCaptures       = FPF2AttackAttributeStatics::GetInstance();
+	const FPF2TargetCharacterAttributeStatics TargetCaptures       = FPF2TargetCharacterAttributeStatics::GetInstance();
 	float                                     AttackDegreeOfSuccess;
 
-	EvaluationParameters.SourceTags = SourceTags;
-	EvaluationParameters.TargetTags = TargetTags;
+	const FAggregatorEvaluateParameters EvaluationParameters =
+		UPF2AbilitySystemLibrary::BuildEvaluationParameters(ExecutionParams);
 
 	// Capture: Degree of success from attack roll.
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(

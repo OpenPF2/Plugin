@@ -15,6 +15,9 @@
 #include "OpenPF2Core.h"
 #include "Abilities/PF2AttributeSet.h"
 #include "Calculations/PF2TemlCalculation.h"
+
+#include "Libraries/PF2AbilitySystemLibrary.h"
+
 #include "Utilities/PF2GameplayAbilityUtilities.h"
 
 UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase() :
@@ -119,11 +122,8 @@ float UPF2KeyAbilityTemlCalculationBase::CalculateKeyAbilityModifier(const FGame
 
 	if (KeyAbilityCaptureDefinition.AttributeToCapture.IsValid())
 	{
-		const FGameplayTagContainer*  TargetTags = Spec.CapturedTargetTags.GetAggregatedTags();
-		FAggregatorEvaluateParameters EvaluationParameters;
-
-		EvaluationParameters.SourceTags = SourceTags;
-		EvaluationParameters.TargetTags = TargetTags;
+		const FAggregatorEvaluateParameters EvaluationParameters =
+			UPF2AbilitySystemLibrary::BuildEvaluationParameters(Spec);
 
 		this->GetCapturedAttributeMagnitude(
 			KeyAbilityCaptureDefinition,

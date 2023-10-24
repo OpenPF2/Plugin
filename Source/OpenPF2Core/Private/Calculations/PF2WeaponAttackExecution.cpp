@@ -20,6 +20,7 @@
 
 #include "Items/Weapons/PF2WeaponInterface.h"
 
+#include "Libraries/PF2AbilitySystemLibrary.h"
 #include "Libraries/PF2AttackStatLibrary.h"
 
 void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
@@ -28,12 +29,11 @@ void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecuti
                                               const IPF2CharacterAbilitySystemInterface*      TargetAsc,
                                               FGameplayEffectCustomExecutionOutput&           OutExecutionOutput)
 {
-	const FGameplayEffectSpec     OwningSpec            = ExecutionParams.GetOwningSpec();
-	const FGameplayTagContainer * SourceTags            = OwningSpec.CapturedSourceTags.GetAggregatedTags(),
-	                            * TargetTags            = OwningSpec.CapturedTargetTags.GetAggregatedTags();
-	FAggregatorEvaluateParameters EvaluationParameters;
-	float                         TargetAc;
-	EPF2DegreeOfSuccess           AttackRollResult;
+	float               TargetAc;
+	EPF2DegreeOfSuccess AttackRollResult;
+
+	const FAggregatorEvaluateParameters EvaluationParameters =
+		UPF2AbilitySystemLibrary::BuildEvaluationParameters(ExecutionParams);
 
 	UE_LOG(
 		LogPf2CoreAbilities,
@@ -43,9 +43,6 @@ void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecuti
 		*(Weapon->GetIdForLogs()),
 		*(TargetAsc->GetCharacter()->GetIdForLogs())
 	);
-
-	EvaluationParameters.SourceTags = SourceTags;
-	EvaluationParameters.TargetTags = TargetTags;
 
 	TargetAc         = GetTargetArmorClass(ExecutionParams, EvaluationParameters);
 	AttackRollResult = PerformAttackRoll(ExecutionParams, EvaluationParameters, Weapon, SourceAsc, TargetAc);
