@@ -14,6 +14,7 @@
 
 #include "PF2CharacterInterface.h"
 
+#include "Abilities/PF2AttackAttributeStatics.h"
 #include "Abilities/PF2CharacterAbilitySystemInterface.h"
 #include "Abilities/PF2SourceCharacterAttributeStatics.h"
 #include "Abilities/PF2TargetCharacterAttributeStatics.h"
@@ -29,8 +30,10 @@ void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecuti
                                               const IPF2CharacterAbilitySystemInterface*      TargetAsc,
                                               FGameplayEffectCustomExecutionOutput&           OutExecutionOutput)
 {
-	float               TargetAc;
-	EPF2DegreeOfSuccess AttackRollResult;
+	float                                     TargetAc;
+	EPF2DegreeOfSuccess                       AttackRollResult;
+	const FPF2AttackAttributeStatics          AttackCaptures   = FPF2AttackAttributeStatics::GetInstance();
+	const FPF2TargetCharacterAttributeStatics TargetCaptures   = FPF2TargetCharacterAttributeStatics::GetInstance();
 
 	const FAggregatorEvaluateParameters EvaluationParameters =
 		UPF2AbilitySystemLibrary::BuildEvaluationParameters(ExecutionParams);
@@ -53,13 +56,13 @@ void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecuti
 	// Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Damage Rolls".
 	if (UPF2AttackStatLibrary::IsSuccess(AttackRollResult))
 	{
-		const float DamageRoll       = CalculateDamageRoll(ExecutionParams, EvaluationParameters, Weapon),
-		            Resistance       = GetTargetResistanceToWeaponDamage(ExecutionParams, EvaluationParameters, Weapon);
-		float       DamageMultiplier,
-		            DamageAmount,
-		            ClampedDamageAmount;
+		const FGameplayTag DamageTypeTag    = Weapon->GetDamageType();
+		const float        DamageRoll       = CalculateDamageRoll(ExecutionParams, EvaluationParameters, Weapon);
+		float              DamageMultiplier,
+		                   DamageAmount;
 
-		const FPF2TargetCharacterAttributeStatics TargetCaptures = FPF2TargetCharacterAttributeStatics::GetInstance();
+		const FGameplayEffectAttributeCaptureDefinition* DamageCapture =
+			AttackCaptures.GetDamageCaptureForDamageType(DamageTypeTag);
 
 		// "When you make an attack and succeed with a natural 20 (the number on the die is 20), or if the result of
 		// your attack exceeds the target’s AC by 10, you achieve a critical success (also known as a critical hit)."
@@ -76,43 +79,32 @@ void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecuti
 
 		DamageAmount = DamageRoll * DamageMultiplier;
 
-		// Apply resistance to reduce damage, but don't allow resistance to make damage negative (i.e., damage can never
-		// heal, but it can become ineffectual).
-		//
-		// From the Pathfinder 2E Core Rulebook, page 453, "Resistance":
-		// "If you have resistance to a type of damage, each time you take that type of damage, you reduce the amount of
-		// damage you take by the listed amount (to a minimum of 0 damage)."
-		ClampedDamageAmount = FMath::Max(0.0f, DamageAmount - Resistance);
-
 		UE_LOG(
 			LogPf2CoreStats,
 			VeryVerbose,
-			TEXT("Damage Roll (%f) * Damage Multiplier (%f) - Resistance (%s: %f) = %f (CLAMPED >= 0)."),
+			TEXT("Damage Roll (%f) * Damage Multiplier (%f) = %f (%s)."),
 			DamageRoll,
 			DamageMultiplier,
-			*(Weapon->GetDamageType().ToString()),
-			Resistance,
-			ClampedDamageAmount
+			DamageAmount,
+			*(DamageTypeTag.ToString())
 		);
-
-		OutExecutionOutput.MarkConditionalGameplayEffectsToTrigger();
 
 		OutExecutionOutput.AddOutputModifier(
 			FGameplayModifierEvaluatedData(
-				TargetCaptures.TmpDamageIncomingProperty,
+				DamageCapture->AttributeToCapture,
 				EGameplayModOp::Additive,
-				ClampedDamageAmount
-			)
-		);
-
-		OutExecutionOutput.AddOutputModifier(
-			FGameplayModifierEvaluatedData(
-				TargetCaptures.TmpIncomingAttackDegreeOfSuccessProperty,
-				EGameplayModOp::Override,
-				UPF2AttackStatLibrary::DegreeOfSuccessStatFromEnum(AttackRollResult)
+				DamageAmount
 			)
 		);
 	}
+
+	OutExecutionOutput.AddOutputModifier(
+		FGameplayModifierEvaluatedData(
+			TargetCaptures.TmpIncomingAttackDegreeOfSuccessProperty,
+			EGameplayModOp::Override,
+			UPF2AttackStatLibrary::DegreeOfSuccessStatFromEnum(AttackRollResult)
+		)
+	);
 }
 
 EPF2DegreeOfSuccess UPF2WeaponAttackExecution::PerformAttackRoll(
@@ -200,27 +192,6 @@ float UPF2WeaponAttackExecution::GetTargetArmorClass(const FGameplayEffectCustom
 	return TargetArmorClass;
 }
 
-float UPF2WeaponAttackExecution::GetTargetResistanceToWeaponDamage(
-	const FGameplayEffectCustomExecutionParameters& ExecutionParams,
-	const FAggregatorEvaluateParameters&            EvaluationParameters,
-	const IPF2WeaponInterface*                      Weapon)
-{
-	float                                      TargetResistance = 0.0f;
-	const FPF2TargetCharacterAttributeStatics& TargetStatics    = FPF2TargetCharacterAttributeStatics::GetInstance();
-	const FGameplayTag                         DamageType       = Weapon->GetDamageType();
-
-	const FGameplayEffectAttributeCaptureDefinition* ResistanceCapture =
-		TargetStatics.GetResistanceCaptureForDamageType(DamageType);
-
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(
-		*ResistanceCapture,
-		EvaluationParameters,
-		TargetResistance
-	);
-
-	return TargetResistance;
-}
-
 UPF2WeaponAttackExecution::UPF2WeaponAttackExecution()
 {
 	const FPF2SourceCharacterAttributeStatics& SourceStatics = FPF2SourceCharacterAttributeStatics::GetInstance();
@@ -240,11 +211,6 @@ UPF2WeaponAttackExecution::UPF2WeaponAttackExecution()
 	// Capture the target Armor Class (AC) for checks against attack rolls, to see if the target was hit at all.
 	this->RelevantAttributesToCapture.Add(TargetStatics.ArmorClassDef);
 
-	// Capture all damage resistances that the target has so that final damage can be reduced appropriately.
-	for (const FGameplayEffectAttributeCaptureDefinition* Capture : TargetStatics.GetAllResistanceCaptures())
-	{
-		this->RelevantAttributesToCapture.Add(*Capture);
-	}
 }
 
 void UPF2WeaponAttackExecution::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams,

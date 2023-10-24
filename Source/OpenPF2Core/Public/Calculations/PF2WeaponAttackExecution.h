@@ -164,27 +164,6 @@ protected:
 	static float GetTargetArmorClass(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
 	                                 const FAggregatorEvaluateParameters&            EvaluationParameters);
 
-	/**
-	 * Gets the resistance that the the target of an attack has against the type of damage the given weapon inflicts.
-	 *
-	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 453, "Resistance":
-	 * "If you have resistance to a type of damage, each time you take that type of damage, you reduce the amount of
-	 * damage you take by the listed amount (to a minimum of 0 damage)."
-	 *
-	 * @param ExecutionParams
-	 *	The context of the gameplay effect calculation that is being executed.
-	 * @param EvaluationParameters
-	 *	Context about the source and target to pass in when obtaining captured attribute values.
-	 * @param Weapon
-	 *	The weapon being used for the attack.
-	 *
-	 * @return
-	 *	The resistance that the target has to the type of damage the given weapon inflicts.
-	 */
-	static float GetTargetResistanceToWeaponDamage(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
-	                                               const FAggregatorEvaluateParameters&            EvaluationParameters,
-	                                               const IPF2WeaponInterface*                      Weapon);
-
 public:
 	// =================================================================================================================
 	// Public Constructors
