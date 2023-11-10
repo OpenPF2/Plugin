@@ -139,6 +139,14 @@ EPF2DegreeOfSuccess UPF2WeaponAttackExecution::PerformAttackRoll(
 		MultipleAttackPenalty
 	);
 
+	UE_LOG(
+		LogPf2CoreStats,
+		Verbose,
+		TEXT("Attack ability modifier type for this attack is '%s' (%f)."),
+		*PF2EnumUtilities::ToString(AttackScoreType),
+		AttackAbilityModifier
+	);
+
 	Result = UPF2AttackStatLibrary::PerformAttackRoll(
 		CharacterLevel,
 		CharacterTags,
@@ -168,6 +176,14 @@ float UPF2WeaponAttackExecution::CalculateDamageRoll(
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(
 		*AbilityScoreCapture,
 		EvaluationParameters,
+		DamageAbilityModifier
+	);
+
+	UE_LOG(
+		LogPf2CoreStats,
+		Verbose,
+		TEXT("Damage ability modifier type for this attack is '%s' (%f)."),
+		*PF2EnumUtilities::ToString(DamageScoreType),
 		DamageAbilityModifier
 	);
 
