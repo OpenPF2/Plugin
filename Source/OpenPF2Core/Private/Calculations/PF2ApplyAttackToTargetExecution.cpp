@@ -34,9 +34,9 @@ void UPF2ApplyAttackToTargetExecution::Execute_Implementation(
 	const FGameplayEffectCustomExecutionParameters& ExecutionParams,
 	FGameplayEffectCustomExecutionOutput&           OutExecutionOutput) const
 {
-	const FPF2AttackAttributeStatics          AttackCaptures       = FPF2AttackAttributeStatics::GetInstance();
-	const FPF2TargetCharacterAttributeStatics TargetCaptures       = FPF2TargetCharacterAttributeStatics::GetInstance();
-	float                                     AttackDegreeOfSuccess;
+	const FPF2AttackAttributeStatics          AttackCaptures        = FPF2AttackAttributeStatics::GetInstance();
+	const FPF2TargetCharacterAttributeStatics TargetCaptures        = FPF2TargetCharacterAttributeStatics::GetInstance();
+	float                                     AttackDegreeOfSuccess = 0.0f;
 
 	const FAggregatorEvaluateParameters EvaluationParameters =
 		UPF2AbilitySystemLibrary::BuildEvaluationParameters(ExecutionParams);
@@ -59,10 +59,10 @@ void UPF2ApplyAttackToTargetExecution::Execute_Implementation(
 
 	for (const FGameplayEffectAttributeCaptureDefinition* Capture : AttackCaptures.GetAllDamageCaptures())
 	{
-		FString DamageAttributeName = Capture->AttributeToCapture.AttributeName;
-		float   AmountFromDamageType;
-		float   AmountOfResistanceToDamageType;
-		float   EffectiveDamage;
+		FString DamageAttributeName            = Capture->AttributeToCapture.AttributeName;
+		float   AmountFromDamageType           = 0.0f,
+		        AmountOfResistanceToDamageType = 0.0f,
+		        EffectiveDamage;
 
 		const FGameplayEffectAttributeCaptureDefinition* ResistanceCapture =
 			TargetCaptures.GetResistanceCaptureForDamageAttribute(DamageAttributeName);
