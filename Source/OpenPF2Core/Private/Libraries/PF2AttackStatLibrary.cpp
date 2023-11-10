@@ -182,6 +182,11 @@ EPF2DegreeOfSuccess UPF2AttackStatLibrary::CheckAgainstDifficultyClass(const flo
 {
 	EPF2DegreeOfSuccess Result;
 
+	// "You critically succeed at a check when the check’s result meets or exceeds the DC by 10 or more." The rules for
+	// critical failure [...] are the same [...], but in the other direction: if you fail a check by 10 or more, that’s
+	// a critical failure."
+	//
+	// Source: Pathfinder 2E Core Rulebook, Chapter 9, page 445, "Step 4: Determine the Degree of Success and Effect"
 	if (Value >= DifficultyClass + 10.0f)
 	{
 		Result = EPF2DegreeOfSuccess::CriticalSuccess;
