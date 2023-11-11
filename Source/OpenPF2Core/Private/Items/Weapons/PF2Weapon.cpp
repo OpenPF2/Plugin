@@ -17,13 +17,28 @@ APF2EffectCauseWrapper* UPF2Weapon::ToEffectCauser(AActor* OwningActor)
 	return APF2EffectCauseWrapper::Create(OwningActor, this);
 }
 
-void UPF2Weapon::OnGameplayEffectsContainerSpecGenerated(
+void UPF2Weapon::OnSourceGameplayEffectsContainerSpecGenerated(
 	const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
 	const FGameplayAbilitySpecHandle&                            ActivatedAbility,
 	const FGameplayAbilityActorInfo&                             AbilityOwnerInfo,
 	FPF2GameplayEffectContainerSpec&                             ContainerSpec)
 {
-	this->BP_OnGameplayEffectsContainerSpecGenerated(
+	this->BP_OnSourceGameplayEffectsContainerSpecGenerated(
+		SourceAbilitySystemComponent,
+		ActivatedAbility,
+		AbilityOwnerInfo,
+		ContainerSpec,
+		ContainerSpec
+	);
+}
+
+void UPF2Weapon::OnTargetGameplayEffectsContainerSpecGenerated(
+	const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
+	const FGameplayAbilitySpecHandle&                            ActivatedAbility,
+	const FGameplayAbilityActorInfo&                             AbilityOwnerInfo,
+	FPF2GameplayEffectContainerSpec&                             ContainerSpec)
+{
+	this->BP_OnTargetGameplayEffectsContainerSpecGenerated(
 		SourceAbilitySystemComponent,
 		ActivatedAbility,
 		AbilityOwnerInfo,
@@ -57,9 +72,14 @@ FGameplayTag UPF2Weapon::GetDamageType() const
 	return this->DamageType;
 }
 
-FPF2GameplayEffectContainer UPF2Weapon::GetGameplayEffects() const
+FPF2GameplayEffectContainer UPF2Weapon::GetSourceGameplayEffects() const
 {
-	return this->GameplayEffects;
+	return this->SourceGameplayEffects;
+}
+
+FPF2GameplayEffectContainer UPF2Weapon::GetTargetGameplayEffects() const
+{
+	return this->TargetGameplayEffects;
 }
 
 FPrimaryAssetId UPF2Weapon::GetPrimaryAssetId()
@@ -82,7 +102,18 @@ FString UPF2Weapon::GetIdForLogs() const
 	return Super::GetIdForLogs();
 }
 
-void UPF2Weapon::BP_OnGameplayEffectsContainerSpecGenerated_Implementation(
+void UPF2Weapon::BP_OnSourceGameplayEffectsContainerSpecGenerated_Implementation(
+	const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
+	const FGameplayAbilitySpecHandle&                            ActivatedAbility,
+	const FGameplayAbilityActorInfo&                             AbilityOwnerInfo,
+	const FPF2GameplayEffectContainerSpec&                       ContainerSpec,
+	FPF2GameplayEffectContainerSpec&                             ModifiedContainerSpec)
+{
+	// Default implementation: just return what was passed in, as is.
+	ModifiedContainerSpec = ContainerSpec;
+}
+
+void UPF2Weapon::BP_OnTargetGameplayEffectsContainerSpecGenerated_Implementation(
 	const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
 	const FGameplayAbilitySpecHandle&                            ActivatedAbility,
 	const FGameplayAbilityActorInfo&                             AbilityOwnerInfo,

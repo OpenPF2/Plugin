@@ -137,12 +137,12 @@ FPF2GameplayEffectContainerSpec UPF2GameplayAbilityBase::MakeEffectContainerSpec
 	return Result;
 }
 
-FPF2GameplayEffectContainerSpec UPF2GameplayAbilityBase::MakeEffectContainerSpecFromContainerAndWeapon(
-	const FPF2GameplayEffectContainer&          Container,
+void UPF2GameplayAbilityBase::MakeEffectContainerSpecsFromWeapon(
 	const TScriptInterface<IPF2WeaponInterface> Weapon,
+	FPF2GameplayEffectContainerSpec&            SourceEffectsSpec,
+	FPF2GameplayEffectContainerSpec&            TargetEffectsSpec,
 	const float                                 Level) const
 {
-	FPF2GameplayEffectContainerSpec                Result;
 	const TScriptInterface<IPF2CharacterInterface> Character = this->GetOwningCharacterFromActorInfo();
 
 	if (Character == nullptr)
@@ -156,23 +156,40 @@ FPF2GameplayEffectContainerSpec UPF2GameplayAbilityBase::MakeEffectContainerSpec
 	}
 	else
 	{
+		const FPF2GameplayEffectContainer& SourceEffectsContainer = Weapon->GetSourceGameplayEffects();
+		const FPF2GameplayEffectContainer& TargetEffectsContainer = Weapon->GetTargetGameplayEffects();
+
 		check(this->CurrentSpecHandle.IsValid());
 		check(this->CurrentActorInfo != nullptr);
 
-		for (const TSubclassOf<UGameplayEffect>& EffectClass : Container.GameplayEffectsToApply)
+		for (const TSubclassOf<UGameplayEffect>& EffectClass : SourceEffectsContainer.GameplayEffectsToApply)
 		{
-			Result.AddGameplayEffectSpec(this->MakeOutgoingGameplayEffectSpecForWeapon(EffectClass, Weapon, Level));
+			SourceEffectsSpec.AddGameplayEffectSpec(
+				this->MakeOutgoingGameplayEffectSpecForWeapon(EffectClass, Weapon, Level)
+			);
 		}
 
-		Weapon->OnGameplayEffectsContainerSpecGenerated(
+		Weapon->OnSourceGameplayEffectsContainerSpecGenerated(
 			Character->GetCharacterAbilitySystemComponent(),
 			this->CurrentSpecHandle,
 			*(this->CurrentActorInfo),
-			Result
+			SourceEffectsSpec
+		);
+
+		for (const TSubclassOf<UGameplayEffect>& EffectClass : TargetEffectsContainer.GameplayEffectsToApply)
+		{
+			TargetEffectsSpec.AddGameplayEffectSpec(
+				this->MakeOutgoingGameplayEffectSpecForWeapon(EffectClass, Weapon, Level)
+			);
+		}
+
+		Weapon->OnTargetGameplayEffectsContainerSpecGenerated(
+			Character->GetCharacterAbilitySystemComponent(),
+			this->CurrentSpecHandle,
+			*(this->CurrentActorInfo),
+			TargetEffectsSpec
 		);
 	}
-
-	return Result;
 }
 
 FPF2GameplayEffectContainerSpec UPF2GameplayAbilityBase::MakeEffectContainerSpecFromContainerAndCauser(
@@ -192,15 +209,44 @@ FPF2GameplayEffectContainerSpec UPF2GameplayAbilityBase::MakeEffectContainerSpec
 	return Result;
 }
 
-TArray<FActiveGameplayEffectHandle> UPF2GameplayAbilityBase::ApplyEffectContainerSpec(
+TArray<FActiveGameplayEffectHandle> UPF2GameplayAbilityBase::ApplyEffectContainerSpecToOwner(
 	const FPF2GameplayEffectContainerSpec& ContainerSpec) const
 {
 	TArray<FActiveGameplayEffectHandle> AppliedEffects;
+	TArray<FGameplayEffectSpecHandle>   SpecsToApply   = ContainerSpec.GameplayEffectSpecsToApply;
 
 	check(this->CurrentSpecHandle.IsValid());
 	check(this->CurrentActorInfo != nullptr);
 
-	for (const FGameplayEffectSpecHandle& SpecHandle : ContainerSpec.GameplayEffectSpecsToApply)
+	AppliedEffects.Reserve(SpecsToApply.Num());
+
+	for (const FGameplayEffectSpecHandle& SpecHandle : SpecsToApply)
+	{
+		AppliedEffects.Add(
+			ApplyGameplayEffectSpecToOwner(
+				this->CurrentSpecHandle,
+				this->CurrentActorInfo,
+				this->CurrentActivationInfo,
+				SpecHandle
+			)
+		);
+	}
+
+	return AppliedEffects;
+}
+
+TArray<FActiveGameplayEffectHandle> UPF2GameplayAbilityBase::ApplyEffectContainerSpecToTargets(
+	const FPF2GameplayEffectContainerSpec& ContainerSpec) const
+{
+	TArray<FActiveGameplayEffectHandle> AppliedEffects;
+	TArray<FGameplayEffectSpecHandle>   SpecsToApply   = ContainerSpec.GameplayEffectSpecsToApply;
+
+	check(this->CurrentSpecHandle.IsValid());
+	check(this->CurrentActorInfo != nullptr);
+
+	AppliedEffects.Reserve(SpecsToApply.Num());
+
+	for (const FGameplayEffectSpecHandle& SpecHandle : SpecsToApply)
 	{
 		AppliedEffects.Append(
 			ApplyGameplayEffectSpecToTarget(

@@ -122,21 +122,27 @@ protected:
 		const FPF2GameplayEffectContainer& Container) const;
 
 	/**
-	 * Processes a gameplay effect (GE) container into a gameplay effect container spec with the given weapon as source.
+	 * Processes source and target gameplay effect (GE) containers from a weapon into a gameplay effect container spec.
 	 *
-	 * @param Container
-	 *	The GE container to process.
+	 * This automatically invokes callbacks on the weapon to give it a chance to add any additional GEs that require
+	 * values to be set on "Transient Aggregators" (a.k.a., "Temporary Variables" in the Editor UI).
+	 *
 	 * @param Weapon
-	 *	The weapon to make the source of all GEs in the resulting spec.
+	 *	The weapon for which gameplay effect containers will be processed into a ready-to-execute GE spec.
 	 * @param Level
-	 *
-	 * @return
-	 *	The GE container spec created from the GE container.
+	 *	The character level to pass into each gameplay effect during processing.
+	 * @param [out] SourceEffectsSpec
+	 *	The GE container spec created from the source GE container of the given weapon. This spec is ready to apply to
+	 *	the source ASC of the attack.
+	 * @param [out] TargetEffectsSpec
+	*	The GE container spec created from the target GE containers of the given weapon. This spec is ready to apply to
+	 *	the target ASC of the attack.
 	 */
-	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
-	FPF2GameplayEffectContainerSpec MakeEffectContainerSpecFromContainerAndWeapon(
-		const FPF2GameplayEffectContainer&          Container,
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities", BlueprintPure=false)
+	void MakeEffectContainerSpecsFromWeapon(
 		const TScriptInterface<IPF2WeaponInterface> Weapon,
+		FPF2GameplayEffectContainerSpec&            SourceEffectsSpec,
+		FPF2GameplayEffectContainerSpec&            TargetEffectsSpec,
 		const float                                 Level = 1.0f) const;
 
 	/**
@@ -161,7 +167,20 @@ protected:
 		const float                        Level = 1.0f) const;
 
 	/**
-	 * Applies a gameplay effect (GE) container spec to its targets.
+	 * Applies a gameplay effect (GE) container spec to the source/owning ASC of this ability.
+	 *
+	 * @param ContainerSpec
+	 *	The GE container specification.
+	 *
+	 * @return
+	 *	The list of handles for the GEs created and now active on the source.
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintPure=false, Category="OpenPF2|Gameplay Abilities")
+	TArray<FActiveGameplayEffectHandle> ApplyEffectContainerSpecToOwner(
+		const FPF2GameplayEffectContainerSpec& ContainerSpec) const;
+
+	/**
+	 * Applies a gameplay effect (GE) container spec to all target ASCs of this ability.
 	 *
 	 * @param ContainerSpec
 	 *	The GE container specification.
@@ -170,7 +189,7 @@ protected:
 	 *	The list of handles for the GEs created and now active on all targets.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure=false, Category="OpenPF2|Gameplay Abilities")
-	TArray<FActiveGameplayEffectHandle> ApplyEffectContainerSpec(
+	TArray<FActiveGameplayEffectHandle> ApplyEffectContainerSpecToTargets(
 		const FPF2GameplayEffectContainerSpec& ContainerSpec) const;
 
 	/**

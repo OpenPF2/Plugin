@@ -139,13 +139,29 @@ public:
 	virtual FGameplayTag GetDamageType() const = 0;
 
 	/**
-	 * Gets the gameplay effects that attacks with this weapon apply to targets.
+	 * Gets the gameplay effects that apply to the character using this weapon during an attack.
+	 *
+	 * Gameplay effects in the returned container are typically used to calculate attack rolls, accumulate the amount(s)
+	 * of outgoing damage in transient attack attributes, and apply bonuses and penalties to outgoing damage.
 	 *
 	 * @return
-	 *	A container for the gameplay effects to apply to targets that are attacked with this weapon.
+	 *	A container for the gameplay effects to apply to sources attacking with this weapon.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
-	virtual FPF2GameplayEffectContainer GetGameplayEffects() const = 0;
+	virtual FPF2GameplayEffectContainer GetSourceGameplayEffects() const = 0;
+
+	/**
+	 * Gets the gameplay effects that an attack with this weapon applies to targets.
+	 *
+	 * Gameplay effects in the returned container are typically used to apply outgoing damage amounts that have
+	 * accumulated in transient attack attributes to targets, taking into consideration each target's resistances and
+	 * bonuses.
+	 *
+	 * @return
+	 *	A container for the gameplay effects to apply to targets attacked with this weapon.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
+	virtual FPF2GameplayEffectContainer GetTargetGameplayEffects() const = 0;
 
 	/**
 	 * Converts this weapon into an actor that can represent a "effect causer" for replication.
@@ -162,7 +178,30 @@ public:
 	virtual APF2EffectCauseWrapper* ToEffectCauser(AActor* OwningActor) = 0;
 
 	/**
-	 * Notify this weapon that a gameplay effects (GE) container spec. has been generated from it.
+	 * Notify this weapon that a container spec. for source gameplay effects (GE) has been generated from it.
+	 *
+	 * This is an opportunity for the weapon to dynamically generate additional gameplay effect specifications that
+	 * affect the character making an attack.
+	 *
+	 * @param SourceAbilitySystemComponent
+	 *	The source ASC for the GEs (i.e., the character performing the attack).
+	 * @param ActivatedAbility
+	 *	The handle of the active ability (the ability that has generated the GE container spec).
+	 * @param AbilityOwnerInfo
+	 *	Information about the actor who activated the gameplay ability.
+	 * @param ContainerSpec
+	 *	A reference to the GE container specification that was generated. The weapon may modify this specification in
+	 *	place.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
+	virtual void OnSourceGameplayEffectsContainerSpecGenerated(
+		const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
+		const FGameplayAbilitySpecHandle&                            ActivatedAbility,
+		const FGameplayAbilityActorInfo&                             AbilityOwnerInfo,
+		FPF2GameplayEffectContainerSpec&                             ContainerSpec) = 0;
+
+	/**
+	 * Notify this weapon that a container spec. for target gameplay effects (GE) has been generated from it.
 	 *
 	 * This is an opportunity for the weapon to dynamically generate additional gameplay effect specifications and/or to
 	 * populate set-by-caller temporary variables for additional damage effects (e.g., from runes).
@@ -178,7 +217,7 @@ public:
 	 *	place.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
-	virtual void OnGameplayEffectsContainerSpecGenerated(
+	virtual void OnTargetGameplayEffectsContainerSpecGenerated(
 		const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
 		const FGameplayAbilitySpecHandle&                            ActivatedAbility,
 		const FGameplayAbilityActorInfo&                             AbilityOwnerInfo,

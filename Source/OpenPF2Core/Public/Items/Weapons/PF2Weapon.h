@@ -196,10 +196,22 @@ protected:
 	FGameplayTagContainer Traits;
 
 	/**
-	 * The gameplay effects that attacks with this weapon apply to targets.
+	 * The gameplay effects that attacks with this weapon apply to the attack source.
+	 *
+	 * Gameplay effects in this container are typically used to calculate attack rolls, accumulate the amount(s) of
+	 * outgoing damage in transient attack attributes, and apply bonuses and penalties to outgoing damage.
 	 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="OpenPF2 - Weapons")
-	FPF2GameplayEffectContainer GameplayEffects;
+	FPF2GameplayEffectContainer SourceGameplayEffects;
+
+	/**
+	 * The gameplay effects that attacks with this weapon apply to each attack target.
+	 *
+	 * Gameplay effects in this container are typically used to apply outgoing damage amounts that have accumulated in
+	 * transient attack attributes to targets, taking into consideration each target's resistances and bonuses.
+	 */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="OpenPF2 - Weapons")
+	FPF2GameplayEffectContainer TargetGameplayEffects;
 
 public:
 	// =================================================================================================================
@@ -225,14 +237,21 @@ public:
 	virtual EPF2CharacterAbilityScoreType GetDamageAbilityModifierType() const override;
 	virtual FName GetDamageDie() const override;
 	virtual FGameplayTag GetDamageType() const override;
-	virtual FPF2GameplayEffectContainer GetGameplayEffects() const override;
+	virtual FPF2GameplayEffectContainer GetSourceGameplayEffects() const override;
+	virtual FPF2GameplayEffectContainer GetTargetGameplayEffects() const override;
 	virtual APF2EffectCauseWrapper* ToEffectCauser(AActor* OwningActor) override;
 
-	virtual void OnGameplayEffectsContainerSpecGenerated(
-		const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
-		const FGameplayAbilitySpecHandle&                            ActivatedAbility,
-		const FGameplayAbilityActorInfo&                             AbilityOwnerInfo,
-		FPF2GameplayEffectContainerSpec&                             ContainerSpec) override;
+    virtual void OnSourceGameplayEffectsContainerSpecGenerated(
+	    const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
+	    const FGameplayAbilitySpecHandle&                            ActivatedAbility,
+	    const FGameplayAbilityActorInfo&                             AbilityOwnerInfo,
+	    FPF2GameplayEffectContainerSpec&                             ContainerSpec) override;
+
+    virtual void OnTargetGameplayEffectsContainerSpecGenerated(
+	    const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
+	    const FGameplayAbilitySpecHandle&                            ActivatedAbility,
+	    const FGameplayAbilityActorInfo&                             AbilityOwnerInfo,
+	    FPF2GameplayEffectContainerSpec&                             ContainerSpec) override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2ItemInterface Implementation
@@ -251,10 +270,11 @@ protected:
 	// Protected Methods
 	// =================================================================================================================
 	/**
-	 * Notify this weapon that a gameplay effects (GE) container spec. has been generated from it.
+	 * Notify this weapon that a container spec. for source gameplay effects (GE) has been generated from it.
 	 *
-	 * This is an opportunity for the weapon to dynamically generate additional gameplay effect specifications and/or to
-	 * populate set-by-caller temporary variables for additional damage effects (e.g., from runes).
+	 * This is an opportunity for the weapon to dynamically generate additional gameplay effect specifications that
+	 * affect the character making an attack.
+	 *
 	 * @param SourceAbilitySystemComponent
 	 *	The source ASC for the GEs (i.e., the character performing the attack).
 	 * @param ActivatedAbility
@@ -266,8 +286,33 @@ protected:
 	 * @param [out] ModifiedContainerSpec
 	 *	The modified GE container specification.
 	 */
-	UFUNCTION(BlueprintNativeEvent, DisplayName="On Gameplay Effects Container Spec Generated")
-	void BP_OnGameplayEffectsContainerSpecGenerated(
+	UFUNCTION(BlueprintNativeEvent, DisplayName="On Source Gameplay Effects Container Spec Generated")
+	void BP_OnSourceGameplayEffectsContainerSpecGenerated(
+		const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
+		const FGameplayAbilitySpecHandle&                            ActivatedAbility,
+		const FGameplayAbilityActorInfo&                             AbilityOwnerInfo,
+		const FPF2GameplayEffectContainerSpec&                       ContainerSpec,
+		FPF2GameplayEffectContainerSpec&                             ModifiedContainerSpec);
+
+	/**
+	 * Notify this weapon that a container spec. for target gameplay effects (GE) has been generated from it.
+	 *
+	 * This is an opportunity for the weapon to dynamically generate additional gameplay effect specifications and/or to
+	 * populate set-by-caller temporary variables for additional damage effects (e.g., from runes).
+	 *
+	 * @param SourceAbilitySystemComponent
+	 *	The source ASC for the GEs (i.e., the character performing the attack).
+	 * @param ActivatedAbility
+	 *	The handle of the active ability (the ability that has generated the GE container spec).
+	 * @param AbilityOwnerInfo
+	 *	Information about the actor who activated the gameplay ability.
+	 * @param ContainerSpec
+	 *	The GE container specification that was generated.
+	 * @param [out] ModifiedContainerSpec
+	 *	The modified GE container specification.
+	 */
+	UFUNCTION(BlueprintNativeEvent, DisplayName="On Target Gameplay Effects Container Spec Generated")
+	void BP_OnTargetGameplayEffectsContainerSpecGenerated(
 		const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
 		const FGameplayAbilitySpecHandle&                            ActivatedAbility,
 		const FGameplayAbilityActorInfo&                             AbilityOwnerInfo,

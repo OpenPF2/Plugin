@@ -7,15 +7,24 @@
 
 #include <GameplayEffectExecutionCalculation.h>
 
-#include "PF2ApplyAttackToTargetExecution.generated.h"
+#include "PF2ApplyDamageFromSourceExecution.generated.h"
 
 /**
- * A gameplay effect execution for applying the output of an attack to a target.
+ * A gameplay effect execution to apply damage from a source onto damage targets, factoring in the target's resistances.
  *
- * The output of an attack is represented as transient attack statistics on the attack attribute set.
+ * The damage to be applied should be accumulated on the source in the form of values in transient attack attributes in
+ * the "attack attribute set". Consider this example:
+ *
+ * - Character A is attacking Character B with an attack that does 5 fire damage and 3 cold damage.
+ * - Character B has a +2 resistance to fire damage and a +1 resistance to cold damage.
+ *
+ * In this example, for Character A's attack attribute set, the "TmpDmgTypeEnergyFire" attribute would have a value of
+ * 5 and the "TmpDmgTypeEnergyCold" attribute would have a value of 3. This execution would then read Character B's
+ * resistances to fire and cold damage, calculate a total damage of (5-2) + (3-1) = 5, and then apply that damage to the
+ * target's incoming damage transient attribute.
  */
 UCLASS()
-class OPENPF2CORE_API UPF2ApplyAttackToTargetExecution : public UGameplayEffectExecutionCalculation
+class OPENPF2CORE_API UPF2ApplyDamageFromSourceExecution : public UGameplayEffectExecutionCalculation
 {
 	GENERATED_BODY()
 
@@ -26,7 +35,7 @@ public:
 	/**
 	 * Default constructor.
 	 */
-	explicit UPF2ApplyAttackToTargetExecution();
+	explicit UPF2ApplyDamageFromSourceExecution();
 
 	// =================================================================================================================
 	// Public Methods - UGameplayEffectExecutionCalculation Implementation

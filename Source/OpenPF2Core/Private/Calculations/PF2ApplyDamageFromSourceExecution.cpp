@@ -10,14 +10,14 @@
 // file other than the material designated as Open Game Content may be reproduced in any form without written
 // permission.
 
-#include "Calculations/PF2ApplyAttackToTargetExecution.h"
+#include "Calculations/PF2ApplyDamageFromSourceExecution.h"
 
 #include "Abilities/PF2AttackAttributeStatics.h"
 #include "Abilities/PF2TargetCharacterAttributeStatics.h"
 
 #include "Libraries/PF2AbilitySystemLibrary.h"
 
-UPF2ApplyAttackToTargetExecution::UPF2ApplyAttackToTargetExecution()
+UPF2ApplyDamageFromSourceExecution::UPF2ApplyDamageFromSourceExecution()
 {
 	const FPF2AttackAttributeStatics          AttackCaptures = FPF2AttackAttributeStatics::GetInstance();
 	const FPF2TargetCharacterAttributeStatics TargetCaptures = FPF2TargetCharacterAttributeStatics::GetInstance();
@@ -30,7 +30,7 @@ UPF2ApplyAttackToTargetExecution::UPF2ApplyAttackToTargetExecution()
 	}
 }
 
-void UPF2ApplyAttackToTargetExecution::Execute_Implementation(
+void UPF2ApplyDamageFromSourceExecution::Execute_Implementation(
 	const FGameplayEffectCustomExecutionParameters& ExecutionParams,
 	FGameplayEffectCustomExecutionOutput&           OutExecutionOutput) const
 {

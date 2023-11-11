@@ -10,7 +10,7 @@
 #include "PF2GameplayEffectContainer.generated.h"
 
 /**
- * A container for applying one or more gameplay effects to a target.
+ * A container for applying one or more gameplay effects to the source or target of an attack.
  */
 USTRUCT(BlueprintType)
 struct FPF2GameplayEffectContainer

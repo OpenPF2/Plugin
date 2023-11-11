@@ -20,7 +20,7 @@
 
 #include "Items/Weapons/PF2WeaponInterface.h"
 
-#include "PF2WeaponAttackExecution.generated.h"
+#include "PF2RollWeaponAttackExecution.generated.h"
 
 /**
  * Gameplay effect execution calculation for attempting a weapon attack and calculating appropriate damage amount(s).
@@ -36,13 +36,17 @@
  * attributes on the source.
  *
  * Once all the damage from the current attack has been calculated (including bonuses, penalties, runes, etc.), damage
- * can be inflicted on each target through the PF2ApplyAttackToTargetExecution, which factors in each target's
+ * can be inflicted on each target through the PF2ApplyDamageFromSourceExecution, which factors in each target's
  * resistances to each type of damage being applied and then applies the total resulting damage to the transient
  * incoming damage property on the target.
+ *
+ * Modifiers in the output of an execution can only affect attributes on the GE target, so this execution is designed to
+ * be used only in a GE that is being applied to the SOURCE of an attack (i.e., the GE should be applied to the
+ * character who is attacking, as part of the "Source Gameplay Effects" on the weapon).
  */
 UCLASS()
 // ReSharper disable once CppClassCanBeFinal
-class OPENPF2CORE_API UPF2WeaponAttackExecution : public UGameplayEffectExecutionCalculation
+class OPENPF2CORE_API UPF2RollWeaponAttackExecution : public UGameplayEffectExecutionCalculation
 {
 	GENERATED_BODY()
 
@@ -75,11 +79,15 @@ protected:
 	 *	The Ability System Component of the character attempting the attack.
 	 * @param TargetAscIntf
 	 *	The Ability System Component of the character receiving the attack.
+	 * @param [out] OutExecutionOutput
+	 *	A reference to the output of the execution. Modifiers will be added to this struct to perform updates to
+	 *	transient attack attributes.
 	 */
 	static void AttemptAttack(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
 	                          const IPF2WeaponInterface*                      Weapon,
-	                          IPF2CharacterAbilitySystemInterface*            SourceAscIntf,
-	                          const IPF2CharacterAbilitySystemInterface*      TargetAscIntf);
+	                          const IPF2CharacterAbilitySystemInterface*      SourceAscIntf,
+	                          const IPF2CharacterAbilitySystemInterface*      TargetAscIntf,
+	                          FGameplayEffectCustomExecutionOutput&           OutExecutionOutput);
 
 	/**
 	 * Calculates the attack roll, determining if an attack was successful (it hit its target) as well as its degree.
@@ -123,12 +131,11 @@ protected:
 	 * @return
 	 *	The outcome of the attack roll for the weapon.
 	 */
-	static EPF2DegreeOfSuccess PerformAttackRoll(
-		const FGameplayEffectCustomExecutionParameters& ExecutionParams,
-		const FAggregatorEvaluateParameters&            EvaluationParameters,
-		const IPF2WeaponInterface*                      Weapon,
-		const IPF2CharacterAbilitySystemInterface*      SourceAsc,
-		const float                                     TargetArmorClass);
+	static EPF2DegreeOfSuccess PerformAttackRoll(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
+	                                             const FAggregatorEvaluateParameters&            EvaluationParameters,
+	                                             const IPF2WeaponInterface*                      Weapon,
+	                                             const IPF2CharacterAbilitySystemInterface*      SourceAsc,
+	                                             const float                                     TargetArmorClass);
 
 	/**
 	 * Calculates the damage roll, which determines how much of an effect an attack has on the target.
@@ -180,7 +187,7 @@ public:
 	/**
 	 * Default constructor.
 	 */
-	UPF2WeaponAttackExecution();
+	UPF2RollWeaponAttackExecution();
 
 	// =================================================================================================================
 	// Public Methods - UGameplayEffectExecutionCalculation Implementation
