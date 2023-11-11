@@ -18,18 +18,20 @@ namespace PF2LogUtilities
 			{
 				case NM_Client:
 					// GPlayInEditorID 0 is always the server, so 1 will be first client.
-					NetPrefix = FString::Printf(TEXT("CLNT %d"), GPlayInEditorID);
+					NetPrefix = FString::Printf(TEXT("CLNT %d"), static_cast<int>(GPlayInEditorID));
 					break;
 
 				case NM_DedicatedServer:
 					NetPrefix = FString::Printf(TEXT("DED SRV"));
 					break;
+
 				case NM_ListenServer:
 					NetPrefix = FString::Printf(TEXT("LSTN SRV"));
 					break;
 
 				default:
 				case NM_Standalone:
+					NetPrefix = FString::Printf(TEXT("SA SRV"));
 					break;
 			}
 		}
