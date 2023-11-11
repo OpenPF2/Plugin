@@ -40,7 +40,7 @@ struct FPF2GameplayEffectContainerSpec;
 UINTERFACE(BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
 class UPF2WeaponInterface : public UInterface
 {
-    GENERATED_BODY()
+	GENERATED_BODY()
 };
 
 /**
@@ -48,30 +48,30 @@ class UPF2WeaponInterface : public UInterface
  */
 class OPENPF2CORE_API IPF2WeaponInterface : public IPF2ItemInterface
 {
-    GENERATED_BODY()
+	GENERATED_BODY()
 
 public:
 	// =================================================================================================================
 	// Public Static Methods
 	// =================================================================================================================
-    /**
-     * Unpacks an effect causer that could be either a PF2WeaponInterface object or Effect Cause Wrapper into a weapon.
-     *
-     * Most of the time, callers are going to be providing an instance of APF2EffectCauseWrapper to this method, but it
-     * has been written to accept PF2WeaponInterface objects as well so that callers can call this method whenever they
-     * receive a weapon in a GE execution, without having to be concerned about what type of object they have received
-     * in the GE execution context. If an object that is neither an APF2EffectCauseWrapper nor PF2WeaponInterface is
-     * provided, or this method is provided with nullptr, the result is nullptr.
-     *
-     * @param Object
-     *	The weapon or wrapped weapon object to unwrap/convert into being a weapon.
-     *
-     * @return
-     *	- If given an instance of APF2EffectCauseWrapper: The weapon the instance is wrapping.
-     *	- If given an instance of PF2WeaponInterface: The same instance that was passed in.
-     *	- If given an instance of any other object: nullptr.
-     *	- If given nullptr: nullptr.
-     */
+	/**
+	 * Unpacks an effect causer that could be either a PF2WeaponInterface object or Effect Cause Wrapper into a weapon.
+	 *
+	 * Most of the time, callers are going to be providing an instance of APF2EffectCauseWrapper to this method, but it
+	 * has been written to accept PF2WeaponInterface objects as well so that callers can call this method whenever they
+	 * receive a weapon in a GE execution, without having to be concerned about what type of object they have received
+	 * in the GE execution context. If an object that is neither an APF2EffectCauseWrapper nor PF2WeaponInterface is
+	 * provided, or this method is provided with nullptr, the result is nullptr.
+	 *
+	 * @param Object
+	 *	The weapon or wrapped weapon object to unwrap/convert into being a weapon.
+	 *
+	 * @return
+	 *	- If given an instance of APF2EffectCauseWrapper: The weapon the instance is wrapping.
+	 *	- If given an instance of PF2WeaponInterface: The same instance that was passed in.
+	 *	- If given an instance of any other object: nullptr.
+	 *	- If given nullptr: nullptr.
+	 */
 	static TScriptInterface<IPF2WeaponInterface> EffectCauserToWeapon(UObject* Object);
 
 	// =================================================================================================================
@@ -117,49 +117,49 @@ public:
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
 	virtual EPF2CharacterAbilityScoreType GetDamageAbilityModifierType() const = 0;
 
-    /**
-     * Gets the roll expression for the die/dice used to calculate damage from a hit with this weapon.
-     *
-     * @return
-     *	The damage die. For example, "1d4" or "1d6".
-     */
-    UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
+	/**
+	 * Gets the roll expression for the die/dice used to calculate damage from a hit with this weapon.
+	 *
+	 * @return
+	 *	The damage die. For example, "1d4" or "1d6".
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
 	virtual FName GetDamageDie() const = 0;
 
-    /**
-     * Gets the primary type of damage that this weapon inflicts.
-     *
-     * Runes and other causes of damage that are associated with the weapon are handled via separate GEs on the weapon
-     * or by conditional GEs triggered by the GE that is applying the primary weapon damage.
-     *
-     * @return
-     *	The primary damage type.
-     */
-    UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
+	/**
+	 * Gets the primary type of damage that this weapon inflicts.
+	 *
+	 * Runes and other causes of damage that are associated with the weapon are handled via separate GEs on the weapon
+	 * or by conditional GEs triggered by the GE that is applying the primary weapon damage.
+	 *
+	 * @return
+	 *	The primary damage type.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
 	virtual FGameplayTag GetDamageType() const = 0;
 
-    /**
-     * Gets the gameplay effects that attacks with this weapon apply to targets.
-     *
-     * @return
-     *	A container for the gameplay effects to apply to targets that are attacked with this weapon.
-     */
-    UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
+	/**
+	 * Gets the gameplay effects that attacks with this weapon apply to targets.
+	 *
+	 * @return
+	 *	A container for the gameplay effects to apply to targets that are attacked with this weapon.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
 	virtual FPF2GameplayEffectContainer GetGameplayEffects() const = 0;
 
-    /**
-     * Converts this weapon into an actor that can represent a "effect causer" for replication.
-     *
-     * The causer is linked to the lifetime of the given owning actor.
-     *
-     * @param OwningActor
-     *	The actor who owns or possesses this weapon.
-     *
-     * @return
-     *	This instance, wrapped as a effect causer.
-     */
+	/**
+	 * Converts this weapon into an actor that can represent a "effect causer" for replication.
+	 *
+	 * The causer is linked to the lifetime of the given owning actor.
+	 *
+	 * @param OwningActor
+	 *	The actor who owns or possesses this weapon.
+	 *
+	 * @return
+	 *	This instance, wrapped as a effect causer.
+	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
-    virtual APF2EffectCauseWrapper* ToEffectCauser(AActor* OwningActor) = 0;
+	virtual APF2EffectCauseWrapper* ToEffectCauser(AActor* OwningActor) = 0;
 
 	/**
 	 * Notify this weapon that a gameplay effects (GE) container spec. has been generated from it.
@@ -178,9 +178,9 @@ public:
 	 *	place.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
-    virtual void OnGameplayEffectsContainerSpecGenerated(
-	    const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
-	    const FGameplayAbilitySpecHandle&                            ActivatedAbility,
-	    const FGameplayAbilityActorInfo&                             AbilityOwnerInfo,
-	    FPF2GameplayEffectContainerSpec&                             ContainerSpec) = 0;
+	virtual void OnGameplayEffectsContainerSpecGenerated(
+		const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
+		const FGameplayAbilitySpecHandle&                            ActivatedAbility,
+		const FGameplayAbilityActorInfo&                             AbilityOwnerInfo,
+		FPF2GameplayEffectContainerSpec&                             ContainerSpec) = 0;
 };
