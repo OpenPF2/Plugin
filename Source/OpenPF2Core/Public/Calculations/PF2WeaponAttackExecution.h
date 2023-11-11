@@ -82,7 +82,7 @@ protected:
 	                          const IPF2CharacterAbilitySystemInterface*      TargetAscIntf);
 
 	/**
-	 * Calculates the attack roll, determines if an attack was successful (it hit its target), and its degree.
+	 * Calculates the attack roll, determining if an attack was successful (it hit its target) as well as its degree.
 	 *
 	 * From the Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Attack Rolls":
 	 * "When making an attack roll, determine the result by rolling 1d20 and adding your attack modifier for the weapon
@@ -151,9 +151,9 @@ protected:
 	 * @return
 	 *	The calculated damage roll for the weapon.
 	 */
-	static float CalculateDamageRoll(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
-	                                 const FAggregatorEvaluateParameters&            EvaluationParameters,
-	                                 const IPF2WeaponInterface*                      Weapon);
+	static float PerformDamageRoll(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
+	                               const FAggregatorEvaluateParameters&            EvaluationParameters,
+	                               const IPF2WeaponInterface*                      Weapon);
 
 	/**
 	 * Gets the armor class (AC) value of the target of an attack.

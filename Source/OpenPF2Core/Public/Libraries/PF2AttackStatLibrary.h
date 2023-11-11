@@ -106,6 +106,12 @@ public:
 	 *	The root/parent tag of each set of tags that represent a character's TEML proficiencies with the weapon.
 	 * @param TargetArmorClass
 	 *	The armor class of the attack target. This represents the difficulty class to check against the attack roll.
+	 * @param RollCount
+	 *	An optional override on the number of dice to use in the attack roll. Defaults to 1, according to standard
+	 *	Pathfinder 2e rules.
+	 * @param RollSize
+	 *	An optional override on the size of each die to use in the attack roll. Defaults to 20, according to standard
+	 *	Pathfinder 2e rules.
 	 */
 	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
 	static EPF2DegreeOfSuccess PerformAttackRoll(const int32                  CharacterLevel,
@@ -113,7 +119,9 @@ public:
 	                                             const float                  AttackAbilityModifier,
 	                                             const float                  MultipleAttackPenalty,
 	                                             const FGameplayTagContainer& ProficiencyTagPrefixes,
-	                                             const float                  TargetArmorClass);
+	                                             const float                  TargetArmorClass,
+	                                             const int                    RollCount = 1,
+	                                             const int                    RollSize  = 20);
 
 	/**
 	 * Performs a check of a value against a Difficulty Class (DC).
@@ -247,12 +255,35 @@ public:
 	 * Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Damage Rolls".
 	 *
 	 * @param DamageDie
-	 *	The damage die of weapon or unarmed attack.
+	 *	The damage die of the weapon or unarmed attack.
 	 * @param DamageAbilityModifier
 	 *	The modifier for the type of damage (e.g., Strength modifier or Strength modifier for thrown weapons).
 	 */
 	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
 	static float CalculateDamageRoll(const FName DamageDie,
+	                                 const float DamageAbilityModifier);
+
+	/**
+	 * Calculates the damage roll, which determines how much of an effect an attack has on the target.
+	 *
+	 * "When the result of your attack roll with a weapon or unarmed attack equals or exceeds your target’s AC, you hit
+	 * your target! Roll the weapon or unarmed attack’s damage die and add the relevant modifiers, bonuses, and
+	 * penalties to determine the amount of damage you deal. Calculate a damage roll as follows.
+	 *
+	 * Melee damage roll  = damage die of weapon or unarmed attack + Strength modifier + bonuses + penalties
+	 * Ranged damage roll = damage die of weapon + Strength modifier for thrown weapons + bonuses + penalties"
+	 *
+	 * Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Damage Rolls".
+	 *
+	 * @param RollCount
+	 *	The number of dice to use in the damage roll, as specified by the statistics of the weapon or unarmed attack.
+	 * @param RollSize
+	 *	The size of each die to use in the damage roll, as specified by the statistics of the weapon or unarmed attack.
+	 * @param DamageAbilityModifier
+	 *	The modifier for the type of damage (e.g., Strength modifier or Strength modifier for thrown weapons).
+	 */
+	static float CalculateDamageRoll(const int   RollCount,
+	                                 const int   RollSize,
 	                                 const float DamageAbilityModifier);
 
 	/**

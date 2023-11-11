@@ -29,11 +29,10 @@ void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecuti
                                               IPF2CharacterAbilitySystemInterface*            SourceAscIntf,
                                               const IPF2CharacterAbilitySystemInterface*      TargetAscIntf)
 {
-	UAbilitySystemComponent*                  SourceAsc         = SourceAscIntf->ToAbilitySystemComponent();
-	float                                     TargetAc;
-	EPF2DegreeOfSuccess                       AttackRollResult;
-	const FPF2AttackAttributeStatics          AttackCaptures    = FPF2AttackAttributeStatics::GetInstance();
-	const FPF2TargetCharacterAttributeStatics TargetCaptures    = FPF2TargetCharacterAttributeStatics::GetInstance();
+	UAbilitySystemComponent*          SourceAsc         = SourceAscIntf->ToAbilitySystemComponent();
+	float                             TargetAc;
+	EPF2DegreeOfSuccess               AttackRollResult;
+	const FPF2AttackAttributeStatics& AttackCaptures    = FPF2AttackAttributeStatics::GetInstance();
 
 	const FAggregatorEvaluateParameters EvaluationParameters =
 		UPF2AbilitySystemLibrary::BuildEvaluationParameters(ExecutionParams);
@@ -57,7 +56,7 @@ void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecuti
 	if (UPF2AttackStatLibrary::IsSuccess(AttackRollResult))
 	{
 		const FGameplayTag       DamageTypeTag    = Weapon->GetDamageType();
-		const float              DamageRoll       = CalculateDamageRoll(ExecutionParams, EvaluationParameters, Weapon);
+		const float              DamageRoll       = PerformDamageRoll(ExecutionParams, EvaluationParameters, Weapon);
 		float                    DamageMultiplier,
 		                         DamageAmount;
 
@@ -121,8 +120,11 @@ EPF2DegreeOfSuccess UPF2WeaponAttackExecution::PerformAttackRoll(
 	const EPF2CharacterAbilityScoreType AttackScoreType        = Weapon->GetAttackAbilityModifierType();
 	const FGameplayTagContainer         ProficiencyTagPrefixes = Weapon->GetProficiencyTagPrefixes();
 	float                               AttackAbilityModifier  = 0.0f,
-	                                    MultipleAttackPenalty  = 0.0f;
+	                                    MultipleAttackPenalty  = 0.0f,
+	                                    RollCount              = 0.0f,
+	                                    RollSize               = 0.0f;
 
+	const FPF2AttackAttributeStatics&          AttackCaptures = FPF2AttackAttributeStatics::GetInstance();
 	const FPF2SourceCharacterAttributeStatics& SourceCaptures = FPF2SourceCharacterAttributeStatics::GetInstance();
 
 	const FGameplayEffectAttributeCaptureDefinition* AbilityScoreCapture =
@@ -140,10 +142,24 @@ EPF2DegreeOfSuccess UPF2WeaponAttackExecution::PerformAttackRoll(
 		MultipleAttackPenalty
 	);
 
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(
+		AttackCaptures.TmpAttackRollCountDef,
+		EvaluationParameters,
+		RollCount
+	);
+
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(
+		AttackCaptures.TmpAttackRollSizeDef,
+		EvaluationParameters,
+		RollSize
+	);
+
 	UE_LOG(
 		LogPf2CoreStats,
 		Verbose,
-		TEXT("Attack ability modifier type for this attack is '%s' (%f)."),
+		TEXT("Performing attack roll (%dd%d) using '%s' (%f) as attack ability modifier type."),
+		static_cast<int>(RollCount),
+		static_cast<int>(RollSize),
 		*PF2EnumUtilities::ToString(AttackScoreType),
 		AttackAbilityModifier
 	);
@@ -154,25 +170,29 @@ EPF2DegreeOfSuccess UPF2WeaponAttackExecution::PerformAttackRoll(
 		AttackAbilityModifier,
 		MultipleAttackPenalty,
 		ProficiencyTagPrefixes,
-		TargetArmorClass
+		TargetArmorClass,
+		RollCount,
+		RollSize
 	);
 
 	return Result;
 }
 
-float UPF2WeaponAttackExecution::CalculateDamageRoll(
+float UPF2WeaponAttackExecution::PerformDamageRoll(
 	const FGameplayEffectCustomExecutionParameters& ExecutionParams,
 	const FAggregatorEvaluateParameters&            EvaluationParameters,
 	const IPF2WeaponInterface*                      Weapon)
 {
-	const FPF2SourceCharacterAttributeStatics& SourceStatics = FPF2SourceCharacterAttributeStatics::GetInstance();
+	const FPF2AttackAttributeStatics&          AttackCaptures = FPF2AttackAttributeStatics::GetInstance();
+	const FPF2SourceCharacterAttributeStatics& SourceCaptures = FPF2SourceCharacterAttributeStatics::GetInstance();
 
-	const FName                         DamageDie             = Weapon->GetDamageDie();
 	const EPF2CharacterAbilityScoreType DamageScoreType       = Weapon->GetDamageAbilityModifierType();
-	float                               DamageAbilityModifier = 0.0f;
+	float                               DamageAbilityModifier = 0.0f,
+	                                    RollCount             = 0.0f,
+	                                    RollSize              = 0.0f;
 
 	const FGameplayEffectAttributeCaptureDefinition* AbilityScoreCapture =
-		SourceStatics.GetModifierCaptureByAbilityScoreType(DamageScoreType);
+		SourceCaptures.GetModifierCaptureByAbilityScoreType(DamageScoreType);
 
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(
 		*AbilityScoreCapture,
@@ -180,16 +200,31 @@ float UPF2WeaponAttackExecution::CalculateDamageRoll(
 		DamageAbilityModifier
 	);
 
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(
+		AttackCaptures.TmpDmgRollCountDef,
+		EvaluationParameters,
+		RollCount
+	);
+
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(
+		AttackCaptures.TmpDmgRollSizeDef,
+		EvaluationParameters,
+		RollSize
+	);
+
 	UE_LOG(
 		LogPf2CoreStats,
 		Verbose,
-		TEXT("Damage ability modifier type for this attack is '%s' (%f)."),
+		TEXT("Performing damage roll (%dd%d) using '%s' (%f) as damage ability modifier type."),
+		static_cast<int>(RollCount),
+		static_cast<int>(RollSize),
 		*PF2EnumUtilities::ToString(DamageScoreType),
 		DamageAbilityModifier
 	);
 
 	return UPF2AttackStatLibrary::CalculateDamageRoll(
-		DamageDie,
+		RollCount,
+		RollSize,
 		DamageAbilityModifier
 	);
 }
@@ -198,10 +233,10 @@ float UPF2WeaponAttackExecution::GetTargetArmorClass(const FGameplayEffectCustom
                                                      const FAggregatorEvaluateParameters& EvaluationParameters)
 {
 	float                                      TargetArmorClass = 0.0f;
-	const FPF2TargetCharacterAttributeStatics& TargetStatics    = FPF2TargetCharacterAttributeStatics::GetInstance();
+	const FPF2TargetCharacterAttributeStatics& TargetCaptures   = FPF2TargetCharacterAttributeStatics::GetInstance();
 
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(
-		TargetStatics.ArmorClassDef,
+		TargetCaptures.ArmorClassDef,
 		EvaluationParameters,
 		TargetArmorClass
 	);
@@ -211,23 +246,31 @@ float UPF2WeaponAttackExecution::GetTargetArmorClass(const FGameplayEffectCustom
 
 UPF2WeaponAttackExecution::UPF2WeaponAttackExecution()
 {
-	const FPF2SourceCharacterAttributeStatics& SourceStatics = FPF2SourceCharacterAttributeStatics::GetInstance();
-	const FPF2TargetCharacterAttributeStatics& TargetStatics = FPF2TargetCharacterAttributeStatics::GetInstance();
+	const FPF2AttackAttributeStatics&          AttackCaptures = FPF2AttackAttributeStatics::GetInstance();
+	const FPF2SourceCharacterAttributeStatics& SourceCaptures = FPF2SourceCharacterAttributeStatics::GetInstance();
+	const FPF2TargetCharacterAttributeStatics& TargetCaptures = FPF2TargetCharacterAttributeStatics::GetInstance();
 
 	// Capture all ability score attributes, since attacks in OpenPF2 could theoretically be based on any ability score
 	// stat even though the Core Rulebook only anticipates attacks that use Strength (for regular melee attacks) or
 	// Dexterity (for ranged attacks and melee finesse attacks).
-	for (const FGameplayEffectAttributeCaptureDefinition* Capture : SourceStatics.GetAllAbilityScoreCaptures())
+	for (const FGameplayEffectAttributeCaptureDefinition* Capture : SourceCaptures.GetAllAbilityScoreCaptures())
 	{
 		this->RelevantAttributesToCapture.Add(*Capture);
 	}
 
 	// Capture the multiple attack penalty, which grows with each additional attack taken during the same turn.
-	this->RelevantAttributesToCapture.Add(SourceStatics.EncMultipleAttackPenaltyDef);
+	this->RelevantAttributesToCapture.Add(SourceCaptures.EncMultipleAttackPenaltyDef);
 
 	// Capture the target Armor Class (AC) for checks against attack rolls, to see if the target was hit at all.
-	this->RelevantAttributesToCapture.Add(TargetStatics.ArmorClassDef);
+	this->RelevantAttributesToCapture.Add(TargetCaptures.ArmorClassDef);
 
+	// Capture the attack dice size and count.
+	this->RelevantAttributesToCapture.Add(AttackCaptures.TmpAttackRollCountDef);
+	this->RelevantAttributesToCapture.Add(AttackCaptures.TmpAttackRollSizeDef);
+
+	// Capture the damage dice size and count.
+	this->RelevantAttributesToCapture.Add(AttackCaptures.TmpDmgRollCountDef);
+	this->RelevantAttributesToCapture.Add(AttackCaptures.TmpDmgRollSizeDef);
 }
 
 void UPF2WeaponAttackExecution::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams,

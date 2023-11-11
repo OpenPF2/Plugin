@@ -23,18 +23,15 @@ EPF2DegreeOfSuccess UPF2AttackStatLibrary::PerformAttackRoll(const int32        
                                                              const float                  AttackAbilityModifier,
                                                              const float                  MultipleAttackPenalty,
                                                              const FGameplayTagContainer& ProficiencyTagPrefixes,
-                                                             const float                  TargetArmorClass)
+                                                             const float                  TargetArmorClass,
+                                                             const int                    RollCount,
+                                                             const int                    RollSize)
 {
 	EPF2DegreeOfSuccess Result;
-
-	// "When making an attack roll, determine the result by rolling 1d20 and adding your attack modifier for the weapon
-	// or unarmed attack you’re using."
-	//
-	// Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Attack Rolls".
-	const int32 DiceRoll               = UPF2DiceLibrary::RollSum(1, 20);
-	const bool  bIsNatural20           = (DiceRoll == 20);
-	float       WeaponProficiencyBonus = 0,
-	            AttackRoll;
+	const int32         DiceRoll               = UPF2DiceLibrary::RollSum(RollCount, RollSize);
+	const bool          bIsNatural20           = (DiceRoll == RollSize);
+	float               WeaponProficiencyBonus = 0,
+	                    AttackRoll;
 
 	if (MultipleAttackPenalty > 0)
 	{
@@ -104,8 +101,20 @@ float UPF2AttackStatLibrary::DegreeOfSuccessStatFromEnum(const EPF2DegreeOfSucce
 
 float UPF2AttackStatLibrary::CalculateDamageRoll(const FName DamageDie, const float DamageAbilityModifier)
 {
+	int RollCount = 0,
+	    RollSize  = 0;
+
+	UPF2DiceLibrary::ParseRollExpression(DamageDie, RollCount, RollSize);
+
+	return CalculateDamageRoll(RollCount, RollSize, DamageAbilityModifier);
+}
+
+float UPF2AttackStatLibrary::CalculateDamageRoll(const int RollCount,
+                                                 const int RollSize,
+                                                 const float DamageAbilityModifier)
+{
 	float       DamageRoll;
-	const int32 DamageDieRoll = UPF2DiceLibrary::RollStringSum(DamageDie);
+	const int32 DamageDieRoll = UPF2DiceLibrary::RollSum(RollCount, RollSize);
 
 	// Melee damage roll  = damage die of weapon or unarmed attack + Strength modifier + bonuses + penalties
 	// Ranged damage roll = damage die of weapon + Strength modifier for thrown weapons + bonuses + penalties
@@ -116,8 +125,9 @@ float UPF2AttackStatLibrary::CalculateDamageRoll(const FName DamageDie, const fl
 	UE_LOG(
 		LogPf2CoreStats,
 		VeryVerbose,
-		TEXT("Damage Die Roll (%s: %d) + Damage Ability Modifier (%f) = %f."),
-		*(DamageDie.ToString()),
+		TEXT("Damage Die Roll (%dd%d: %d) + Damage Ability Modifier (%f) = %f."),
+		RollCount,
+		RollSize,
 		DamageDieRoll,
 		DamageAbilityModifier,
 		DamageRoll
