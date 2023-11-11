@@ -25,9 +25,23 @@ protected:
 	// =================================================================================================================
 	// Protected Static Methods
 	// =================================================================================================================
-	static void InitializeAttackStats(FGameplayEffectCustomExecutionOutput& OutExecutionOutput,
-	                                  const int32                           WeaponRollCount,
-	                                  const int32                           WeaponDieSize);
+	/**
+	 * Initializes all transient attack attributes on the source, to prepare for attack calculations.
+	 *
+	 * Attributes related to the attack degree of success and damage amounts are zeroed-out, while the damage roll count
+	 * and damage roll die size are set to the specified values.
+	 *
+	 * @param SourceAsc
+	 *	The Ability System Component of the character attempting the attack.
+	 * @param WeaponRollCount
+	 *	The number of dice to roll for damage with the weapon the source has equipped.
+	 * @param WeaponDieSize
+	 *	The size die to roll for damage with the weapon the source has equipped.
+	 */
+	static void InitializeAttackStats(UAbilitySystemComponent* SourceAsc,
+	                                  const int32              WeaponRollCount,
+	                                  const int32              WeaponDieSize);
+
 public:
 	// =================================================================================================================
 	// Public Methods - UGameplayEffectExecutionCalculation Implementation

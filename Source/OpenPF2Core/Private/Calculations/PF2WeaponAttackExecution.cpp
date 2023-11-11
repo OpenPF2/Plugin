@@ -26,14 +26,14 @@
 
 void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
                                               const IPF2WeaponInterface*                      Weapon,
-                                              const IPF2CharacterAbilitySystemInterface*      SourceAsc,
-                                              const IPF2CharacterAbilitySystemInterface*      TargetAsc,
-                                              FGameplayEffectCustomExecutionOutput&           OutExecutionOutput)
+                                              IPF2CharacterAbilitySystemInterface*            SourceAscIntf,
+                                              const IPF2CharacterAbilitySystemInterface*      TargetAscIntf)
 {
+	UAbilitySystemComponent*                  SourceAsc         = SourceAscIntf->ToAbilitySystemComponent();
 	float                                     TargetAc;
 	EPF2DegreeOfSuccess                       AttackRollResult;
-	const FPF2AttackAttributeStatics          AttackCaptures   = FPF2AttackAttributeStatics::GetInstance();
-	const FPF2TargetCharacterAttributeStatics TargetCaptures   = FPF2TargetCharacterAttributeStatics::GetInstance();
+	const FPF2AttackAttributeStatics          AttackCaptures    = FPF2AttackAttributeStatics::GetInstance();
+	const FPF2TargetCharacterAttributeStatics TargetCaptures    = FPF2TargetCharacterAttributeStatics::GetInstance();
 
 	const FAggregatorEvaluateParameters EvaluationParameters =
 		UPF2AbilitySystemLibrary::BuildEvaluationParameters(ExecutionParams);
@@ -42,13 +42,13 @@ void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecuti
 		LogPf2CoreAbilities,
 		Verbose,
 		TEXT("Character ('%s') attempting attack with weapon ('%s') against character ('%s')."),
-		*(SourceAsc->GetCharacter()->GetIdForLogs()),
+		*(SourceAscIntf->GetCharacter()->GetIdForLogs()),
 		*(Weapon->GetIdForLogs()),
-		*(TargetAsc->GetCharacter()->GetIdForLogs())
+		*(TargetAscIntf->GetCharacter()->GetIdForLogs())
 	);
 
 	TargetAc         = GetTargetArmorClass(ExecutionParams, EvaluationParameters);
-	AttackRollResult = PerformAttackRoll(ExecutionParams, EvaluationParameters, Weapon, SourceAsc, TargetAc);
+	AttackRollResult = PerformAttackRoll(ExecutionParams, EvaluationParameters, Weapon, SourceAscIntf, TargetAc);
 
 	// "When the result of your attack roll with a weapon or unarmed attack equals or exceeds your target’s AC, you hit
 	// your target!"
@@ -56,10 +56,10 @@ void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecuti
 	// Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Damage Rolls".
 	if (UPF2AttackStatLibrary::IsSuccess(AttackRollResult))
 	{
-		const FGameplayTag DamageTypeTag    = Weapon->GetDamageType();
-		const float        DamageRoll       = CalculateDamageRoll(ExecutionParams, EvaluationParameters, Weapon);
-		float              DamageMultiplier,
-		                   DamageAmount;
+		const FGameplayTag       DamageTypeTag    = Weapon->GetDamageType();
+		const float              DamageRoll       = CalculateDamageRoll(ExecutionParams, EvaluationParameters, Weapon);
+		float                    DamageMultiplier,
+		                         DamageAmount;
 
 		const FGameplayEffectAttributeCaptureDefinition* DamageCapture =
 			AttackCaptures.GetDamageCaptureForDamageType(DamageTypeTag);
@@ -89,21 +89,22 @@ void UPF2WeaponAttackExecution::AttemptAttack(const FGameplayEffectCustomExecuti
 			*(DamageTypeTag.ToString())
 		);
 
-		OutExecutionOutput.AddOutputModifier(
-			FGameplayModifierEvaluatedData(
-				DamageCapture->AttributeToCapture,
-				EGameplayModOp::Additive,
-				DamageAmount
-			)
+		// Apply the outgoing damage to the appropriate transient attack stat on the SOURCE. We apply this directly to
+		// the attribute set through the ASC rather than using OutExecutionOutput.AddOutputModifier() because it can
+		// only affect stats on the TARGET (output modifiers do not support specifying which of "source" or "target"
+		// they should be applied to). This approach should be safe because these attributes only exist on the server
+		// and are only relevant during the current attack; they get cleared at the start of the next attack.
+		SourceAsc->ApplyModToAttribute(
+			DamageCapture->AttributeToCapture,
+			EGameplayModOp::Additive,
+			DamageAmount
 		);
 	}
 
-	OutExecutionOutput.AddOutputModifier(
-		FGameplayModifierEvaluatedData(
-			TargetCaptures.TmpIncomingAttackDegreeOfSuccessProperty,
-			EGameplayModOp::Override,
-			UPF2AttackStatLibrary::DegreeOfSuccessStatFromEnum(AttackRollResult)
-		)
+	SourceAsc->ApplyModToAttribute(
+		AttackCaptures.TmpAttackDegreeOfSuccessProperty,
+		EGameplayModOp::Override,
+		UPF2AttackStatLibrary::DegreeOfSuccessStatFromEnum(AttackRollResult)
 	);
 }
 
@@ -250,10 +251,10 @@ void UPF2WeaponAttackExecution::Execute_Implementation(const FGameplayEffectCust
 	}
 	else
 	{
-		const UAbilitySystemComponent             *SourceAsc          = ExecutionParams.GetSourceAbilitySystemComponent(),
+		UAbilitySystemComponent                   *SourceAsc          = ExecutionParams.GetSourceAbilitySystemComponent(),
 		                                          *TargetAsc          = ExecutionParams.GetTargetAbilitySystemComponent();
-		const IPF2CharacterAbilitySystemInterface *SourceCharacterAsc = Cast<IPF2CharacterAbilitySystemInterface>(SourceAsc),
-		                                          *TargetCharacterAsc = Cast<IPF2CharacterAbilitySystemInterface>(TargetAsc);
+		IPF2CharacterAbilitySystemInterface       *SourceCharacterAsc = Cast<IPF2CharacterAbilitySystemInterface>(SourceAsc);
+		const IPF2CharacterAbilitySystemInterface *TargetCharacterAsc = Cast<IPF2CharacterAbilitySystemInterface>(TargetAsc);
 
 		if (SourceCharacterAsc == nullptr)
 		{
@@ -277,8 +278,7 @@ void UPF2WeaponAttackExecution::Execute_Implementation(const FGameplayEffectCust
 				ExecutionParams,
 				Weapon.GetInterface(),
 				SourceCharacterAsc,
-				TargetCharacterAsc,
-				OutExecutionOutput
+				TargetCharacterAsc
 			);
 		}
 	}

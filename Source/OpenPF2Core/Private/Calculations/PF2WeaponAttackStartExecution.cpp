@@ -12,6 +12,8 @@
 
 #include "Calculations/PF2WeaponAttackStartExecution.h"
 
+#include <AbilitySystemComponent.h>
+
 #include "Abilities/PF2AttackAttributeStatics.h"
 
 #include "Items/Weapons/PF2WeaponInterface.h"
@@ -19,39 +21,39 @@
 #include "Libraries/PF2AttackStatLibrary.h"
 #include "Libraries/PF2DiceLibrary.h"
 
-void UPF2WeaponAttackStartExecution::InitializeAttackStats(FGameplayEffectCustomExecutionOutput& OutExecutionOutput,
-                                                           const int32                           WeaponRollCount,
-                                                           const int32                           WeaponDieSize)
+void UPF2WeaponAttackStartExecution::InitializeAttackStats(UAbilitySystemComponent* SourceAsc,
+                                                           const int32              WeaponRollCount,
+                                                           const int32              WeaponDieSize)
 {
 	const FPF2AttackAttributeStatics AttackCaptures = FPF2AttackAttributeStatics::GetInstance();
 
-	// Start out with a 1d20 for attack rolls (TmpAttackRollCount = 1,TmpAttackRollSize = 20).
+	// For all of the stats being initialized, we want modifications to apply to the SOURCE. We apply this directly to
+	// the attribute set through the ASC rather than using OutExecutionOutput.AddOutputModifier() because it can
+	// only affect stats on the TARGET (output modifiers do not support specifying which of "source" or "target"
+	// they should be applied to). This approach should be safe because these attributes only exist on the server
+	// and are only relevant during the current attack; they get cleared at the start of the next attack.
+
+	// Start out with a 1d20 for attack rolls (TmpAttackRollCount = 1, TmpAttackRollSize = 20).
 	//
 	// From the Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Attack Rolls":
 	// "When making an attack roll, determine the result by rolling 1d20 [...]"
-	OutExecutionOutput.AddOutputModifier(
-		FGameplayModifierEvaluatedData(
-			AttackCaptures.TmpAttackRollCountProperty,
-			EGameplayModOp::Override,
-			1.0f
-		)
+	SourceAsc->ApplyModToAttribute(
+		AttackCaptures.TmpAttackRollCountProperty,
+		EGameplayModOp::Override,
+		1.0f
 	);
 
-	OutExecutionOutput.AddOutputModifier(
-		FGameplayModifierEvaluatedData(
-			AttackCaptures.TmpAttackRollSizeProperty,
-			EGameplayModOp::Override,
-			20.0f
-		)
+	SourceAsc->ApplyModToAttribute(
+		AttackCaptures.TmpAttackRollSizeProperty,
+		EGameplayModOp::Override,
+		20.0f
 	);
 
 	// Start with no degree of success value.
-	OutExecutionOutput.AddOutputModifier(
-		FGameplayModifierEvaluatedData(
-			AttackCaptures.TmpAttackDegreeOfSuccessProperty,
-			EGameplayModOp::Override,
-			UPF2AttackStatLibrary::DegreeOfSuccessStatFromEnum(EPF2DegreeOfSuccess::None)
-		)
+	SourceAsc->ApplyModToAttribute(
+		AttackCaptures.TmpAttackDegreeOfSuccessProperty,
+		EGameplayModOp::Override,
+		UPF2AttackStatLibrary::DegreeOfSuccessStatFromEnum(EPF2DegreeOfSuccess::None)
 	);
 
 	// Initialize damage rolls from the weapon statistics.
@@ -61,27 +63,25 @@ void UPF2WeaponAttackStartExecution::InitializeAttackStats(FGameplayEffectCustom
 	// determine how much damage you deal. A damage roll typically uses a number and type of dice determined by
 	// the weapon or unarmed attack used or the spell cast, and it is often enhanced by various modifiers,
 	// bonuses, and penalties."
-	OutExecutionOutput.AddOutputModifier(
-		FGameplayModifierEvaluatedData(
-			AttackCaptures.TmpDmgRollCountProperty,
-			EGameplayModOp::Override,
-			WeaponRollCount
-		)
+	SourceAsc->ApplyModToAttribute(
+		AttackCaptures.TmpDmgRollCountProperty,
+		EGameplayModOp::Override,
+		WeaponRollCount
 	);
 
-	OutExecutionOutput.AddOutputModifier(
-		FGameplayModifierEvaluatedData(
-			AttackCaptures.TmpDmgRollSizeProperty,
-			EGameplayModOp::Override,
-			WeaponDieSize
-		)
+	SourceAsc->ApplyModToAttribute(
+		AttackCaptures.TmpDmgRollSizeProperty,
+		EGameplayModOp::Override,
+		WeaponDieSize
 	);
 
 	// Zero out all other damage attributes.
 	for (const FGameplayEffectAttributeCaptureDefinition* Capture : AttackCaptures.GetAllDamageCaptures())
 	{
-		OutExecutionOutput.AddOutputModifier(
-			FGameplayModifierEvaluatedData(Capture->AttributeToCapture.GetUProperty(), EGameplayModOp::Override, 0.0f)
+		SourceAsc->ApplyModToAttribute(
+			Capture->AttributeToCapture.GetUProperty(),
+			EGameplayModOp::Override,
+			0.0f
 		);
 	}
 }
@@ -114,6 +114,8 @@ void UPF2WeaponAttackStartExecution::Execute_Implementation(
 
 		if (UPF2DiceLibrary::ParseRollExpression(DamageDie, WeaponRollCount, WeaponDieSize))
 		{
+			UAbilitySystemComponent* SourceAsc = ExecutionParams.GetSourceAbilitySystemComponent();
+
 			UE_LOG(
 				LogPf2CoreAbilities,
 				Verbose,
@@ -121,7 +123,7 @@ void UPF2WeaponAttackStartExecution::Execute_Implementation(
 				*(Weapon->GetIdForLogs())
 			);
 
-			InitializeAttackStats(OutExecutionOutput, WeaponRollCount, WeaponDieSize);
+			InitializeAttackStats(SourceAsc, WeaponRollCount, WeaponDieSize);
 		}
 		else
 		{

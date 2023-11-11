@@ -23,11 +23,22 @@
 #include "PF2WeaponAttackExecution.generated.h"
 
 /**
- * Gameplay effect execution calculation for determining if a weapon attack is successful and applying resulting damage.
+ * Gameplay effect execution calculation for attempting a weapon attack and calculating appropriate damage amount(s).
  *
- * This execution only inflicts the primary damage type of the weapon on the target. If there is additional damage that
- * the weapon should inflict (e.g., from a rune), that will need to be handled by a separate GE applied by the weapon,
- * or by conditional GEs triggered by the GE that uses this execution.
+ * After invocation, the degree of success for the attack is available in the
+ * @code TmpAttackDegreeOfSuccessProperty @endcode transient attack attribute, even if the attack was unsuccessful
+ * (i.e., a failure or critical failure).
+ *
+ * This execution does not directly inflict damage on the target. Instead, on a successful attack, this execution
+ * calculates damage and applies it to the transient attack attribute that corresponds to the primary damage type for
+ * the weapon the source has equipped. If there is additional damage that the weapon should inflict (e.g., from a rune),
+ * that can be handled by separate GEs that apply buffs and additional damage to the desired transient attack
+ * attributes on the source.
+ *
+ * Once all the damage from the current attack has been calculated (including bonuses, penalties, runes, etc.), damage
+ * can be inflicted on each target through the PF2ApplyAttackToTargetExecution, which factors in each target's
+ * resistances to each type of damage being applied and then applies the total resulting damage to the transient
+ * incoming damage property on the target.
  */
 UCLASS()
 // ReSharper disable once CppClassCanBeFinal
@@ -43,7 +54,9 @@ protected:
 	 * Attempts an an attack from the source character to the target character.
 	 *
 	 * An attack roll is performed to determine if the attack against the target is successful. If it is successful, a
-	 * damage roll is performed to determine how much damage is inflicted.
+	 * damage roll is performed to determine how much damage is inflicted. The degree of success for the attack roll
+	 * and the amount of damage inflicted are applied to corresponding transient attributes on the attack attribute set
+	 * of the source.
 	 *
 	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 446, "Attack Rolls":
 	 * "When you use a Strike action or make a spell attack, you attempt a check called an attack roll. Attack rolls
@@ -58,19 +71,15 @@ protected:
 	 *	The context of the gameplay effect calculation that is being executed.
 	 * @param Weapon
 	 *	The weapon with which the attack is being attempted.
-	 * @param SourceAsc
+	 * @param SourceAscIntf
 	 *	The Ability System Component of the character attempting the attack.
-	 * @param TargetAsc
+	 * @param TargetAscIntf
 	 *	The Ability System Component of the character receiving the attack.
-	 * @param [out] OutExecutionOutput
-	 *	A reference to the output of the GE execution. This will receive the amount of damage to the target on a
-	 *	successful hit.
 	 */
 	static void AttemptAttack(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
 	                          const IPF2WeaponInterface*                      Weapon,
-	                          const IPF2CharacterAbilitySystemInterface*      SourceAsc,
-	                          const IPF2CharacterAbilitySystemInterface*      TargetAsc,
-	                          FGameplayEffectCustomExecutionOutput&           OutExecutionOutput);
+	                          IPF2CharacterAbilitySystemInterface*            SourceAscIntf,
+	                          const IPF2CharacterAbilitySystemInterface*      TargetAscIntf);
 
 	/**
 	 * Calculates the attack roll, determines if an attack was successful (it hit its target), and its degree.
