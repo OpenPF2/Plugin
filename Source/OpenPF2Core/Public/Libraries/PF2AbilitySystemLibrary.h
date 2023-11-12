@@ -36,6 +36,17 @@ class OPENPF2CORE_API UPF2AbilitySystemLibrary final : public UBlueprintFunction
 
 public:
 	/**
+	 * Obtains the gameplay tags from the source that were captured when a Gameplay Effect specification was created.
+	 *
+	 * @param GameplayEffectSpec
+	 *	The GE spec from which the tags will be obtained.
+	 * @param [out] SourceTags
+	 *	A reference to the container to receive the captured source tags.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
+	static void GetCapturedSourceTags(const FGameplayEffectSpec& GameplayEffectSpec, FGameplayTagContainer& SourceTags);
+
+	/**
 	 * Creates an outgoing gameplay effect spec for damage from a weapon.
 	 *
 	 * @param AbilityHandle

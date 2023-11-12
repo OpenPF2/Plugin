@@ -14,6 +14,12 @@
 
 #include "Items/Weapons/PF2WeaponInterface.h"
 
+void UPF2AbilitySystemLibrary::GetCapturedSourceTags(const FGameplayEffectSpec& GameplayEffectSpec,
+                                                     FGameplayTagContainer&     SourceTags)
+{
+	SourceTags.AppendTags(*GameplayEffectSpec.CapturedSourceTags.GetAggregatedTags());
+}
+
 FGameplayEffectSpecHandle UPF2AbilitySystemLibrary::MakeOutgoingGameplayEffectSpecForWeapon(
 	const FGameplayAbilitySpecHandle&            AbilityHandle,
 	const FGameplayAbilityActorInfo&             AbilityOwnerInfo,
