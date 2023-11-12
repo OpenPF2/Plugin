@@ -1045,23 +1045,6 @@ protected:
 	                                    const FGameplayTagContainer*        EventTags);
 
 	/**
-	 * Notifies this ASC that the incoming damage degree of success has been changed (typically by a Gameplay Effect).
-	 *
-	 * This is called after the change has already occurred. This resets the value to zero, since it is only relevant
-	 * during damage effect calculations.
-	 *
-	 * @param TargetCharacter
-	 *	The character receiving the damage. This is usually the same as the character who owns this ASC.
-	 * @param Context
-	 *	Wrapper around the context of the Gameplay Effect activation.
-	 * @param EventTags
-	 *	Tags passed along with the Gameplay Event as metadata about the cause of the damage.
-	 */
-	void Native_OnDegreeOfSuccessChanged(IPF2CharacterInterface*             TargetCharacter,
-	                                     const FGameplayEffectContextHandle& Context,
-	                                     const FGameplayTagContainer*        EventTags);
-
-	/**
 	 * Notifies this ASC that the hit points attribute has been changed (typically by a Gameplay Effect).
 	 *
 	 * This is called after the change has already occurred. This clamps the value to the allowed range and then
