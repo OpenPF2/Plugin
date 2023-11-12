@@ -781,14 +781,14 @@ public:
 	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, TmpDamageIncoming)
 
 	/**
-	 * A temporary attribute for tracking the result of damage rolls against the owner of this set.
+	 * A temporary attribute for tracking the result of the last damage roll against the owner of this set.
 	 *
-	 * This value exists only on the server; it is not replicated. At the end of execution for a damage GE, this is
-	 * reset. It exists only so that other effects can react accordingly to the outcome
+	 * This value exists only on the server; it is not replicated. It exists only so that other effects can react
+	 * accordingly to the outcome.
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Temporary Attributes")
-	FGameplayAttributeData TmpIncomingAttackDegreeOfSuccess;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, TmpIncomingAttackDegreeOfSuccess)
+	FGameplayAttributeData TmpLastIncomingAttackDegreeOfSuccess;
+	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, TmpLastIncomingAttackDegreeOfSuccess)
 
 	// =================================================================================================================
 	// Public Constructors

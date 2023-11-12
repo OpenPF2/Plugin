@@ -51,7 +51,7 @@ void UPF2ApplyDamageFromSourceExecution::Execute_Implementation(
 	// Apply: Degree of success from attack roll.
 	OutExecutionOutput.AddOutputModifier(
 		FGameplayModifierEvaluatedData(
-			TargetCaptures.TmpIncomingAttackDegreeOfSuccessProperty,
+			TargetCaptures.TmpLastIncomingAttackDegreeOfSuccessProperty,
 			EGameplayModOp::Override,
 			AttackDegreeOfSuccess
 		)

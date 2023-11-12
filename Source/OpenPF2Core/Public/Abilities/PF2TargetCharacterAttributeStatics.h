@@ -64,7 +64,7 @@ public:
 	// Attribute Capture Definitions
 	// =================================================================================================================
 	DECLARE_ATTRIBUTE_CAPTUREDEF(TmpDamageIncoming);
-	DECLARE_ATTRIBUTE_CAPTUREDEF(TmpIncomingAttackDegreeOfSuccess);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(TmpLastIncomingAttackDegreeOfSuccess);
 
 	// =================================================================================================================
 	// Public Methods

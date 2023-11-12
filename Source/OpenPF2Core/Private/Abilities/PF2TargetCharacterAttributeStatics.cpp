@@ -31,7 +31,7 @@ const FGameplayEffectAttributeCaptureDefinition* FPF2TargetCharacterAttributeSta
 
 FPF2TargetCharacterAttributeStatics::FPF2TargetCharacterAttributeStatics():
 	TmpDamageIncomingProperty(nullptr),
-	TmpIncomingAttackDegreeOfSuccessProperty(nullptr)
+	TmpLastIncomingAttackDegreeOfSuccessProperty(nullptr)
 {
 	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, AbBoostCount, Target, false);
 
@@ -75,5 +75,5 @@ FPF2TargetCharacterAttributeStatics::FPF2TargetCharacterAttributeStatics():
 	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPrecision, Target, false);
 
 	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, TmpDamageIncoming, Target, false);
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, TmpIncomingAttackDegreeOfSuccess, Target, false);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, TmpLastIncomingAttackDegreeOfSuccess, Target, false);
 }
