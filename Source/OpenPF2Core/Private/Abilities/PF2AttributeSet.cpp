@@ -639,7 +639,7 @@ void UPF2AttributeSet::Native_OnHitPointsChanged(IPF2CharacterInterface*      Ta
 		this->SetHitPoints(ClampedHitPoints);
 	}
 
-	if (ValueDelta == 0)
+	if (ValueDelta == 0.0f)
 	{
 		UE_LOG(
 			LogPf2CoreStats,
@@ -678,7 +678,7 @@ void UPF2AttributeSet::Native_OnSpeedChanged(IPF2CharacterInterface*      Target
 		this->SetSpeed(ClampedSpeed);
 	}
 
-	if (ValueDelta == 0)
+	if (ValueDelta == 0.0f)
 	{
 		UE_LOG(
 			LogPf2CoreStats,
@@ -716,7 +716,7 @@ void UPF2AttributeSet::Native_OnMultipleAttackPenaltyChanged(const IPF2Character
 		this->SetEncMultipleAttackPenalty(ClampedPenalty);
 	}
 
-	if (ValueDelta == 0)
+	if (ValueDelta == 0.0f)
 	{
 		UE_LOG(
 			LogPf2CoreStats,
