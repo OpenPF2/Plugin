@@ -574,46 +574,52 @@ void UPF2AttributeSet::Native_OnDamageIncomingChanged(IPF2CharacterInterface*   
                                                       const FGameplayEffectContextHandle& Context,
                                                       const FGameplayTagContainer*        EventTags)
 {
-	const float LocalDamage      = this->GetTmpDamageIncoming();
-	const float CurrentHitPoints = this->GetHitPoints();
+	const float LocalDamage = this->GetTmpDamageIncoming();
 
 	if (LocalDamage > 0.0f)
 	{
+		const float CurrentHitPoints = this->GetHitPoints();
+
 		this->SetTmpDamageIncoming(0.0f);
 
-		UE_LOG(
-			LogPf2CoreStats,
-			VeryVerbose,
-			TEXT("[%s] Incoming damage: Pre-damage hit points: '%f', Damage: '%f'"),
-			*(TargetCharacter->GetIdForLogs()),
-			CurrentHitPoints,
-			LocalDamage
-		);
-
-		if (TargetCharacter != nullptr)
+		if (TargetCharacter == nullptr)
 		{
-			const UAbilitySystemComponent* SourceAsc = Context.GetOriginalInstigatorAbilitySystemComponent();
+			UE_LOG(
+				LogPf2CoreStats,
+				Error,
+				TEXT("Cannot apply incoming damage ('%f'): Target character is not compatible with OpenPF2."),
+				CurrentHitPoints
+			);
+		}
+		else
+		{
+			AActor*          InstigatorActor = Context.GetInstigator();
+			const FHitResult HitResult       = UAbilitySystemBlueprintLibrary::EffectContextGetHitResult(Context);
 
-			const FHitResult        HitResult    = UAbilitySystemBlueprintLibrary::EffectContextGetHitResult(Context);
 			IPF2CharacterInterface* Instigator   = nullptr;
 			AActor*                 DamageSource = nullptr;
 
-			const TWeakObjectPtr<AActor> SourceAvatarActor =
-				PF2GameplayAbilityUtilities::GetAvatarActorOfOwner(SourceAsc);
-
-			// Initially, assume that the source actor for damage is the physical damage source actor (e.g., the
-			// physical model of the character who caused damage).
-			if (SourceAvatarActor.IsValid())
+			// Initially, assume that the source actor for damage is the instigator.
+			if (IsValid(InstigatorActor))
 			{
-				DamageSource = SourceAvatarActor.Get();
-				Instigator   = PF2GameplayAbilityUtilities::GetEffectInstigator(SourceAsc, DamageSource);
+				Instigator   = Cast<IPF2CharacterInterface>(InstigatorActor);
+				DamageSource = InstigatorActor;
 			}
 
-			// If we have been given an explicit GE "causer", use that instead of our default.
+			// If we have been given an explicit GE "causer", use that instead of the instigator.
 			if (Context.GetEffectCauser() != nullptr)
 			{
 				DamageSource = Context.GetEffectCauser();
 			}
+
+			UE_LOG(
+				LogPf2CoreStats,
+				VeryVerbose,
+				TEXT("[%s] Incoming damage: Pre-damage hit points: '%f', Damage: '%f'"),
+				*(TargetCharacter->GetIdForLogs()),
+				CurrentHitPoints,
+				LocalDamage
+			);
 
 			TargetCharacter->Native_OnDamageReceived(LocalDamage, Instigator, DamageSource, EventTags, HitResult);
 		}

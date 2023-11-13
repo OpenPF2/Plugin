@@ -175,25 +175,6 @@ namespace PF2GameplayAbilityUtilities
 	OPENPF2CORE_API IPF2CharacterInterface* GetEffectTarget(const FGameplayEffectModCallbackData* Data);
 
 	/**
-	 * Determines which OpenPF2 character (if any) was ultimately the source of a GE activation.
-	 *
-	 * For example, if a target character is injured by an axe, the instigator of the damage GE for the axe is the
-	 * player character who is brandishing the axe. Similarly, if damage was caused by a rocket-propelled grenade (RPG),
-	 * the instigator is the player character who fired the RPG.
-	 *
-	 * @param SourceAsc
-	 *	The Ability System Component that originated the gameplay effect.
-	 * @param SourceAvatarActor
-	 *	The physical model of the actor who initiated the gameplay effect.
-	 *
-	 * @return
-	 *	Either the source avatar actor or the active pawn of the player controller that owns the source ASC.
-	 */
-	OPENPF2CORE_API IPF2CharacterInterface* GetEffectInstigator(
-		const UAbilitySystemComponent* SourceAsc,
-		AActor*                        SourceAvatarActor);
-
-	/**
 	 * Gets the physical actor that represents the character who owns this ASC.
 	 *
 	 * @param Asc

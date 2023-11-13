@@ -111,33 +111,6 @@ namespace PF2GameplayAbilityUtilities
 		return TargetCharacter;
 	}
 
-	IPF2CharacterInterface* GetEffectInstigator(const UAbilitySystemComponent* SourceAsc, AActor* SourceAvatarActor)
-	{
-		IPF2CharacterInterface* Instigator;
-		const AController*      DamageSourceController = SourceAsc->AbilityActorInfo->PlayerController.Get();
-
-		if ((DamageSourceController == nullptr) && (SourceAvatarActor != nullptr))
-		{
-			const APawn* DamageSourcePawn = Cast<APawn>(SourceAvatarActor);
-
-			if (DamageSourcePawn != nullptr)
-			{
-				DamageSourceController = DamageSourcePawn->GetController();
-			}
-		}
-
-		if (DamageSourceController == nullptr)
-		{
-			Instigator = Cast<IPF2CharacterInterface>(SourceAvatarActor);
-		}
-		else
-		{
-			Instigator = Cast<IPF2CharacterInterface>(DamageSourceController->GetPawn());
-		}
-
-		return Instigator;
-	}
-
 	TWeakObjectPtr<AActor> GetAvatarActorOfOwner(const UAbilitySystemComponent* Asc)
 	{
 		TWeakObjectPtr<AActor>                AvatarActor;
