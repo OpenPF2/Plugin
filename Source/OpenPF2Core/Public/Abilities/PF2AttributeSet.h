@@ -1025,6 +1025,19 @@ public:
 
 protected:
 	// =================================================================================================================
+	// Protected Constants
+	// =================================================================================================================
+	/**
+	 * The name of the gameplay tag for events to notify passive condition check GAs about changes in hit points.
+	 */
+	inline static const FName HitPointsChangedEventTagName = TEXT("GameplayAbility.GameplayEvent.HitPointsChanged");
+
+	/**
+	 * The gameplay tag for events to notify passive condition check GAs about changes in hit points.
+	 */
+	FGameplayTag HitPointsChangedEventTag;
+
+	// =================================================================================================================
 	// Protected Native Event Callbacks
 	// =================================================================================================================
 	/**
@@ -1033,15 +1046,15 @@ protected:
 	 * This is called after the change has already occurred. This applies damage to the target, resets the incoming
 	 * damage to zero, and then dispatches appropriate damage notifications to the character.
 	 *
+	 * @param Context
+	 *	Server handle for the context of the Gameplay Effect activation.
 	 * @param TargetCharacter
 	 *	The character receiving the damage. This is usually the same as the character who owns this ASC.
-	 * @param Context
-	 *	Wrapper around the context of the Gameplay Effect activation.
 	 * @param EventTags
 	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to damage.
 	 */
-	void Native_OnDamageIncomingChanged(IPF2CharacterInterface*             TargetCharacter,
-	                                    const FGameplayEffectContextHandle& Context,
+	void Native_OnDamageIncomingChanged(const FGameplayEffectContextHandle& Context,
+	                                    IPF2CharacterInterface*             TargetCharacter,
 	                                    const FGameplayTagContainer*        EventTags);
 
 	/**
@@ -1050,6 +1063,13 @@ protected:
 	 * This is called after the change has already occurred. This clamps the value to the allowed range and then
 	 * dispatches appropriate damage notifications to the character.
 	 *
+	 * @param Context
+	 *	Server handle for the context of the Gameplay Effect activation.
+	 * @param Instigator
+	 *	The character that is ultimately responsible for the damage. This can be null if the damage is caused by the
+	 *	environment.
+	 * @param DamageSource
+	 *	The actor that directly inflicted the damage, such as a weapon or projectile.
 	 * @param TargetCharacter
 	 *	The character receiving the hit point change. This is usually the same as the character who owns this ASC.
 	 * @param ValueDelta
@@ -1057,9 +1077,12 @@ protected:
 	 * @param EventTags
 	 *	Tags passed along with the Gameplay Event as metadata about the cause of the change to hit points.
 	 */
-	void Native_OnHitPointsChanged(IPF2CharacterInterface*      TargetCharacter,
-	                               const float                  ValueDelta,
-	                               const FGameplayTagContainer* EventTags);
+	void Native_OnHitPointsChanged(const FGameplayEffectContextHandle& Context,
+	                               IPF2CharacterInterface*             Instigator,
+	                               AActor*                             DamageSource,
+	                               IPF2CharacterInterface*             TargetCharacter,
+	                               const float                         ValueDelta,
+	                               const FGameplayTagContainer*        EventTags);
 
 	/**
 	 * Notifies this ASC that the speed attribute has been changed (typically by a Gameplay Effect).
