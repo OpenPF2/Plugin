@@ -163,7 +163,7 @@ EPF2DegreeOfSuccess UPF2RollWeaponAttackExecution::PerformAttackRoll(
 		AttackAbilityModifier
 	);
 
-	Result = UPF2AttackStatLibrary::PerformAttackRoll(
+	Result = UPF2AttackStatLibrary::CalculateAttackRoll(
 		CharacterLevel,
 		CharacterTags,
 		AttackAbilityModifier,

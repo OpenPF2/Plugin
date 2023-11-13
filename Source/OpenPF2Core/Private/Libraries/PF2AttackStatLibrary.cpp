@@ -18,14 +18,14 @@
 
 #include "Utilities/PF2EnumUtilities.h"
 
-EPF2DegreeOfSuccess UPF2AttackStatLibrary::PerformAttackRoll(const int32                  CharacterLevel,
-                                                             const FGameplayTagContainer& CharacterTags,
-                                                             const float                  AttackAbilityModifier,
-                                                             const float                  MultipleAttackPenalty,
-                                                             const FGameplayTagContainer& ProficiencyTagPrefixes,
-                                                             const float                  TargetArmorClass,
-                                                             const int                    RollCount,
-                                                             const int                    RollSize)
+EPF2DegreeOfSuccess UPF2AttackStatLibrary::CalculateAttackRoll(const int32                  CharacterLevel,
+                                                               const FGameplayTagContainer& CharacterTags,
+                                                               const float                  AttackAbilityModifier,
+                                                               const float                  MultipleAttackPenalty,
+                                                               const FGameplayTagContainer& ProficiencyTagPrefixes,
+                                                               const float                  TargetArmorClass,
+                                                               const int                    RollCount,
+                                                               const int                    RollSize)
 {
 	EPF2DegreeOfSuccess Result;
 	const int32         DiceRoll               = UPF2DiceLibrary::RollSum(RollCount, RollSize);
@@ -38,7 +38,7 @@ EPF2DegreeOfSuccess UPF2AttackStatLibrary::PerformAttackRoll(const int32        
 		UE_LOG(
 			LogPf2CoreStats,
 			Error,
-			TEXT("PerformAttackRoll(): The Multiple Attack Penalty should be negative or zero (was given '%f')."),
+			TEXT("CalculateAttackRoll(): The Multiple Attack Penalty should be negative or zero (was given '%f')."),
 			MultipleAttackPenalty
 		);
 	}

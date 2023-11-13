@@ -114,14 +114,14 @@ public:
 	 *	Pathfinder 2e rules.
 	 */
 	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
-	static EPF2DegreeOfSuccess PerformAttackRoll(const int32                  CharacterLevel,
-	                                             const FGameplayTagContainer& CharacterTags,
-	                                             const float                  AttackAbilityModifier,
-	                                             const float                  MultipleAttackPenalty,
-	                                             const FGameplayTagContainer& ProficiencyTagPrefixes,
-	                                             const float                  TargetArmorClass,
-	                                             const int                    RollCount = 1,
-	                                             const int                    RollSize  = 20);
+	static EPF2DegreeOfSuccess CalculateAttackRoll(const int32                  CharacterLevel,
+	                                               const FGameplayTagContainer& CharacterTags,
+	                                               const float                  AttackAbilityModifier,
+	                                               const float                  MultipleAttackPenalty,
+	                                               const FGameplayTagContainer& ProficiencyTagPrefixes,
+	                                               const float                  TargetArmorClass,
+	                                               const int                    RollCount = 1,
+	                                               const int                    RollSize  = 20);
 
 	/**
 	 * Performs a check of a value against a Difficulty Class (DC).
