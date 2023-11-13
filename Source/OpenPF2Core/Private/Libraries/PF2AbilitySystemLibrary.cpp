@@ -6,7 +6,6 @@
 #include "Libraries/PF2AbilitySystemLibrary.h"
 
 #include <AbilitySystemGlobals.h>
-#include <GameplayEffectExecutionCalculation.h>
 
 #include "PF2CharacterInterface.h"
 #include "PF2EffectCauseWrapper.h"
@@ -36,17 +35,18 @@ FGameplayEffectSpecHandle UPF2AbilitySystemLibrary::MakeOutgoingGameplayEffectSp
 	);
 }
 
-FGameplayEffectSpecHandle UPF2AbilitySystemLibrary::MakeOutgoingGameplayEffectSpecForCauser(
+FGameplayEffectSpecHandle UPF2AbilitySystemLibrary::MakeOutgoingGameplayEffectSpecForInstigatorAndCauser(
 	const FGameplayAbilitySpecHandle&  AbilityHandle,
 	const FGameplayAbilityActorInfo&   AbilityOwnerInfo,
 	const TSubclassOf<UGameplayEffect> GameplayEffectClass,
+	AActor*                            Instigator,
 	AActor*                            EffectCauser,
 	const float                        Level)
 {
-	UAbilitySystemComponent* const SourceAsc = AbilityOwnerInfo.AbilitySystemComponent.Get();
+	const UAbilitySystemComponent* const SourceAsc = AbilityOwnerInfo.AbilitySystemComponent.Get();
 
 	const FGameplayEffectContextHandle EffectContext =
-		MakeEffectContextForCauser(AbilityHandle, AbilityOwnerInfo, EffectCauser);
+		MakeEffectContextForInstigatorAndCauser(AbilityHandle, AbilityOwnerInfo, Instigator, EffectCauser);
 
 	FGameplayEffectSpecHandle EffectHandle = SourceAsc->MakeOutgoingSpec(GameplayEffectClass, Level, EffectContext);
 
@@ -84,16 +84,16 @@ FGameplayEffectSpecHandle UPF2AbilitySystemLibrary::MakeOutgoingGameplayEffectSp
 	return EffectHandle;
 }
 
-FGameplayEffectContextHandle UPF2AbilitySystemLibrary::MakeEffectContextForCauser(
+FGameplayEffectContextHandle UPF2AbilitySystemLibrary::MakeEffectContextForInstigatorAndCauser(
 	const FGameplayAbilitySpecHandle& AbilityHandle,
 	const FGameplayAbilityActorInfo&  AbilityOwnerInfo,
+	AActor*                           Instigator,
 	AActor*                           EffectCauser)
 {
 	FGameplayEffectContextHandle Context =
 		FGameplayEffectContextHandle(UAbilitySystemGlobals::Get().AllocGameplayEffectContext());
 
-	// Use the character who activated the ability as the instigator, while using a caller-supplied effect causer.
-	Context.AddInstigator(AbilityOwnerInfo.OwnerActor.Get(), EffectCauser);
+	Context.AddInstigator(Instigator, EffectCauser);
 
 	// Pass along the source ability object to the effect, as long as it is available.
 	{

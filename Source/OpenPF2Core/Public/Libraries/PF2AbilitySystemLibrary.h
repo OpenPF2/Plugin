@@ -3,6 +3,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+// ReSharper disable CppUEBlueprintCallableFunctionUnused
 #pragma once
 
 #include <GameplayEffectExecutionCalculation.h>
@@ -87,12 +88,59 @@ public:
 	 *	actor as the instigator.
 	 * @param Level
 	 *	The level of the ability (for abilities that increase in damage/effect as they are upgraded, etc.)
+	 *
+	 * @return
+	 *	The new gameplay effect context.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
-	static FGameplayEffectSpecHandle MakeOutgoingGameplayEffectSpecForCauser(
+	static FORCEINLINE FGameplayEffectSpecHandle MakeOutgoingGameplayEffectSpecForCauser(
 		const FGameplayAbilitySpecHandle&  AbilityHandle,
 		const FGameplayAbilityActorInfo&   AbilityOwnerInfo,
 		const TSubclassOf<UGameplayEffect> GameplayEffectClass,
+		AActor*                            EffectCauser,
+		const float                        Level = 1.0f)
+	{
+		return MakeOutgoingGameplayEffectSpecForInstigatorAndCauser(
+			AbilityHandle,
+			AbilityOwnerInfo,
+			GameplayEffectClass,
+			AbilityOwnerInfo.OwnerActor.Get(),
+			EffectCauser,
+			Level
+		);
+	}
+
+	/**
+	 * Creates an outgoing gameplay effect spec that has a custom instigator and effect causer.
+	 *
+	 * This is similar to MakeOutgoingGameplayEffectSpec() except that the instigator and effect causer can both be set
+	 * rather than them being based on the "avatar actor" which, in many games, is identical to the "owner actor", the
+	 * actor/character who owns the Ability System Component (ASC).
+	 *
+	 * @param AbilityHandle
+	 *	The handle for the current gameplay ability activation, which is generating the outgoing gameplay effect spec.
+	 * @param AbilityOwnerInfo
+	 *	Information about the actor who activated this gameplay ability.
+	 * @param GameplayEffectClass
+	 *	The type of gameplay effect for which a spec is desired.
+	 * @param Instigator
+	 *	The actor who originally initiated this effect (e.g., the actor who performed the attack).
+	 * @param EffectCauser
+	 *	The physical actor that actually caused this effect (e.g., did damage), such as a weapon or projectile. If
+	 *	the effect/damage is being done by bare fists or physical contact rather than a weapon, this could be the same
+	 *	actor as the instigator.
+	 * @param Level
+	 *	The level of the ability (for abilities that increase in damage/effect as they are upgraded, etc.)
+	 *
+	 * @return
+	 *	The new gameplay effect context.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
+	static FGameplayEffectSpecHandle MakeOutgoingGameplayEffectSpecForInstigatorAndCauser(
+		const FGameplayAbilitySpecHandle&  AbilityHandle,
+		const FGameplayAbilityActorInfo&   AbilityOwnerInfo,
+		const TSubclassOf<UGameplayEffect> GameplayEffectClass,
+		AActor*                            Instigator,
 		AActor*                            EffectCauser,
 		const float                        Level = 1.0f);
 
@@ -112,9 +160,42 @@ public:
 	 *	The new gameplay effect context.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
-	static FGameplayEffectContextHandle MakeEffectContextForCauser(
+	static FORCEINLINE FGameplayEffectContextHandle MakeEffectContextForCauser(
 		const FGameplayAbilitySpecHandle& AbilityHandle,
 		const FGameplayAbilityActorInfo&  AbilityOwnerInfo,
+		AActor*                           EffectCauser)
+	{
+		// Use the character who activated the ability as the instigator, while using a caller-supplied effect causer.
+		return MakeEffectContextForInstigatorAndCauser(
+			AbilityHandle,
+			AbilityOwnerInfo,
+			AbilityOwnerInfo.OwnerActor.Get(),
+			EffectCauser
+		);
+	}
+
+	/**
+	 * Builds context for a gameplay effect activation triggered by the specified ability, instigator, and causer.
+	 *
+	 * @param AbilityHandle
+	 *	The handle for the current gameplay ability activation, which is generating the outgoing gameplay effect spec.
+	 * @param AbilityOwnerInfo
+	 *	Information about the actor who activated this gameplay ability.
+	 * @param Instigator
+	 *	The actor who originally initiated this effect (e.g., the actor who performed the attack).
+	 * @param EffectCauser
+	 *	The physical actor that actually inflicted this effect (e.g., did damage), such as a weapon or projectile. If
+	 *	the effect/damage is being done by bare fists or physical contact rather than a weapon, this could be the same
+	 *	actor as the instigator.
+	 *
+	 * @return
+	 *	The new gameplay effect context.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
+	static FGameplayEffectContextHandle MakeEffectContextForInstigatorAndCauser(
+		const FGameplayAbilitySpecHandle& AbilityHandle,
+		const FGameplayAbilityActorInfo&  AbilityOwnerInfo,
+		AActor*                           Instigator,
 		AActor*                           EffectCauser);
 
 	/**
