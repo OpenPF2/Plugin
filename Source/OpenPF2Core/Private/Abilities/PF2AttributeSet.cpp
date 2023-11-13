@@ -602,7 +602,7 @@ void UPF2AttributeSet::Native_OnDamageIncomingChanged(IPF2CharacterInterface*   
 				PF2GameplayAbilityUtilities::GetAvatarActorOfOwner(SourceAsc);
 
 			// Initially, assume that the source actor for damage is the physical damage source actor (e.g., the
-			// physical model of the weapon or projectile, such as the mesh for an axe).
+			// physical model of the character who caused damage).
 			if (SourceAvatarActor.IsValid())
 			{
 				DamageSource = SourceAvatarActor.Get();
@@ -612,9 +612,6 @@ void UPF2AttributeSet::Native_OnDamageIncomingChanged(IPF2CharacterInterface*   
 			// If we have been given an explicit GE "causer", use that instead of our default.
 			if (Context.GetEffectCauser() != nullptr)
 			{
-				// BUGBUG: Shouldn't the damage source be determined before we determine the instigator? The order in
-				//         which we determine the instigator and damage source here matches what the Action RPG sample
-				//         from Epic does, but it doesn't seem 100% correct.
 				DamageSource = Context.GetEffectCauser();
 			}
 
