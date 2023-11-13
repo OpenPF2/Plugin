@@ -595,9 +595,9 @@ void UPF2AttributeSet::Native_OnDamageIncomingChanged(const FGameplayEffectConte
 		{
 			UE_LOG(
 				LogPf2CoreStats,
-				Error,
-				TEXT("Cannot apply incoming damage ('%f'): Target character is not compatible with OpenPF2."),
-				CurrentHitPoints
+				Warning,
+				TEXT("Incoming damage ('%f') is against a target that is not an OpenPF2-compatible character."),
+				LocalDamage
 			);
 		}
 		else
