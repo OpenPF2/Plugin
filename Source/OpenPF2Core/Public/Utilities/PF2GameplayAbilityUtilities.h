@@ -136,7 +136,7 @@ namespace PF2GameplayAbilityUtilities
 	 *	A pointer to the IPF2CharacterAbilitySystemComponentInterface interface of the Ability System Component for the
 	 *	actor described by the given info.
 	 */
-	FORCEINLINE OPENPF2CORE_API IPF2CharacterAbilitySystemInterface* GetCharacterAbilitySystemComponent(
+	OPENPF2CORE_API IPF2CharacterAbilitySystemInterface* GetCharacterAbilitySystemComponent(
 		const FGameplayAbilityActorInfo* ActorInfo);
 
 	/**
@@ -150,8 +150,7 @@ namespace PF2GameplayAbilityUtilities
 	 * @return
 	 *	A pointer to the Ability System Component for the actor described by the given info.
 	 */
-	FORCEINLINE OPENPF2CORE_API UAbilitySystemComponent* GetAbilitySystemComponent(
-		const FGameplayAbilityActorInfo* ActorInfo);
+	OPENPF2CORE_API UAbilitySystemComponent* GetAbilitySystemComponent(const FGameplayAbilityActorInfo* ActorInfo);
 
 	/**
 	 * Gets the OpenPF2 character attribute set of the given actor.
@@ -164,7 +163,7 @@ namespace PF2GameplayAbilityUtilities
 	 * @return
 	 *	A pointer to the OpenPF2 attribute set.
 	 */
-	FORCEINLINE OPENPF2CORE_API const UPF2CharacterAttributeSet* GetCharacterAttributeSet(
+	OPENPF2CORE_API const UPF2CharacterAttributeSet* GetCharacterAttributeSet(
 		const FGameplayAbilityActorInfo* ActorInfo);
 
 	/**

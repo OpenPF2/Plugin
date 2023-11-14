@@ -1,4 +1,4 @@
-// OpenPF2 for UE Game Logic, Copyright 2021-2022, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -8,7 +8,6 @@
 #include <GameplayEffectExtension.h>
 
 #include <GameFramework/Pawn.h>
-#include <GameFramework/PlayerController.h>
 
 #include "PF2CharacterInterface.h"
 
@@ -64,8 +63,7 @@ namespace PF2GameplayAbilityUtilities
 		return WeightGroup;
 	}
 
-	FORCEINLINE IPF2CharacterAbilitySystemInterface* GetCharacterAbilitySystemComponent(
-		const FGameplayAbilityActorInfo* ActorInfo)
+	IPF2CharacterAbilitySystemInterface* GetCharacterAbilitySystemComponent(const FGameplayAbilityActorInfo* ActorInfo)
 	{
 		IPF2CharacterAbilitySystemInterface* CharacterAsc;
 		UAbilitySystemComponent*             AbilitySystemComponent = GetAbilitySystemComponent(ActorInfo);
@@ -76,8 +74,7 @@ namespace PF2GameplayAbilityUtilities
 		return CharacterAsc;
 	}
 
-	FORCEINLINE UAbilitySystemComponent* GetAbilitySystemComponent(
-		const FGameplayAbilityActorInfo* ActorInfo)
+	UAbilitySystemComponent* GetAbilitySystemComponent(const FGameplayAbilityActorInfo* ActorInfo)
 	{
 		UAbilitySystemComponent* AbilitySystemComponent = ActorInfo->AbilitySystemComponent.Get();
 		check(AbilitySystemComponent != nullptr);
@@ -85,8 +82,7 @@ namespace PF2GameplayAbilityUtilities
 		return AbilitySystemComponent;
 	}
 
-	FORCEINLINE const UPF2CharacterAttributeSet* GetCharacterAttributeSet(
-		const FGameplayAbilityActorInfo* ActorInfo)
+	const UPF2CharacterAttributeSet* GetCharacterAttributeSet(const FGameplayAbilityActorInfo* ActorInfo)
 	{
 		const UAbilitySystemComponent*   AbilitySystemComponent = GetAbilitySystemComponent(ActorInfo);
 		const UPF2CharacterAttributeSet* AttributeSet;
