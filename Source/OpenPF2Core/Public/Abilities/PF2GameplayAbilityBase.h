@@ -25,40 +25,15 @@ class UInputAction;
 // Normal Declarations
 // =====================================================================================================================
 /**
- * Abstract base class for OpenPF2-enabled gameplay abilities.
- *
- * GAs that extend from this base class automatically get the ability to expose an icon, label, and description, and
- * support a default automatic binding to input.
+ * Abstract base class for OpenPF2-enabled gameplay abilities, including both passive and interactable abilities.
  */
 UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal
 class UPF2GameplayAbilityBase :
 	public UGameplayAbility,
-	public IPF2InteractableAbilityInterface
+	public IPF2GameplayAbilityInterface
 {
 	GENERATED_BODY()
-
-protected:
-	// =================================================================================================================
-	// Protected Fields
-	// =================================================================================================================
-	/**
-	 * The icon to represent this ability, for whenever it is displayed to players/users.
-	 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="OpenPF2 - Appearance")
-	UTexture2D* Icon;
-
-	/**
-	 * The name of this ability, for whenever it is displayed to players/users.
-	 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="OpenPF2 - Appearance")
-	FText Label;
-
-	/**
-	 * The description of this ability, for whenever it is displayed to players/users.
-	 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="OpenPF2 - Appearance")
-	FText Description;
 
 public:
 	// =================================================================================================================
@@ -67,14 +42,8 @@ public:
 	virtual FString GetIdForLogs() const override;
 
 	// =================================================================================================================
-	// Public Methods - IPF2InteractableAbilityInterface Implementation
+	// Public Methods - IPF2GameplayAbilityInterface Implementation
 	// =================================================================================================================
-	virtual UTexture2D* GetAbilityIcon() const override;
-
-	virtual FText GetAbilityLabel() const override;
-
-	virtual FText GetAbilityDescription() const override;
-
 	virtual UGameplayAbility* ToGameplayAbility() override;
 
 	virtual FGameplayAbilitySpec ToGameplayAbilitySpecForCharacter(

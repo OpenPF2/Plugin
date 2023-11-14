@@ -8,7 +8,6 @@
 #include <AbilitySystemGlobals.h>
 
 #include "PF2CharacterInterface.h"
-#include "PF2EffectCauseWrapper.h"
 #include "PF2GameplayEffectContainer.h"
 #include "PF2GameplayEffectContainerSpec.h"
 
@@ -21,21 +20,6 @@
 FString UPF2GameplayAbilityBase::GetIdForLogs() const
 {
 	return this->GetName();
-}
-
-UTexture2D* UPF2GameplayAbilityBase::GetAbilityIcon() const
-{
-	return this->Icon;
-}
-
-FText UPF2GameplayAbilityBase::GetAbilityLabel() const
-{
-	return this->Label;
-}
-
-FText UPF2GameplayAbilityBase::GetAbilityDescription() const
-{
-	return this->Description;
 }
 
 UGameplayAbility* UPF2GameplayAbilityBase::ToGameplayAbility()

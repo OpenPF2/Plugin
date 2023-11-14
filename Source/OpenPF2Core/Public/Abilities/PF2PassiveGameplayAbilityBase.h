@@ -7,6 +7,7 @@
 
 #include <Abilities/GameplayAbility.h>
 
+#include "PF2GameplayAbilityBase.h"
 #include "PF2PassiveGameplayAbilityBase.generated.h"
 
 // =====================================================================================================================
@@ -19,7 +20,7 @@
  */
 UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal
-class UPF2PassiveGameplayAbilityBase : public UGameplayAbility
+class UPF2PassiveGameplayAbilityBase : public UPF2GameplayAbilityBase
 {
 	GENERATED_BODY()
 
