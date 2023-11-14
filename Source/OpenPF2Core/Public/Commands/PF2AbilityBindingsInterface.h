@@ -17,7 +17,7 @@
 // =====================================================================================================================
 class IPF2AbilityBindingsInterface;
 class IPF2CharacterInterface;
-class IPF2GameplayAbilityInterface;
+class IPF2InteractableAbilityInterface;
 class UEnhancedInputComponent;
 class UInputComponent;
 class UInputAction;
@@ -121,7 +121,7 @@ public:
 	 *	The current bindings between input and commands.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Ability Bindings")
-	virtual TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>> GetBindingsMap() const = 0;
+	virtual TMap<UInputAction*, TScriptInterface<IPF2InteractableAbilityInterface>> GetBindingsMap() const = 0;
 
 	/**
 	 * Binds an ability to a particular input action.

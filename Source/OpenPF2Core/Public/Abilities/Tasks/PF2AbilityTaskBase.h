@@ -14,7 +14,7 @@
 // =====================================================================================================================
 class IPF2AbilitySystemInterface;
 class IPF2CharacterAbilitySystemInterface;
-class IPF2GameplayAbilityInterface;
+class IPF2InteractableAbilityInterface;
 class UAbilitySystemComponent;
 
 // =====================================================================================================================
@@ -66,7 +66,7 @@ protected:
 	 *	script interface wraps nullptr.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
-	TScriptInterface<IPF2GameplayAbilityInterface> GetAbility() const;
+	TScriptInterface<IPF2InteractableAbilityInterface> GetAbility() const;
 
 	/**
 	 * Gets whether this ability task has a valid Ability System Component.

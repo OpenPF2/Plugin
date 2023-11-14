@@ -125,12 +125,12 @@ public:
 	// =================================================================================================================
 	virtual UPF2AbilitySystemInterfaceEvents* GetEvents() const override;
 
-	virtual TScriptInterface<IPF2GameplayAbilityInterface> GetAbilityInstanceFromSpec(
+	virtual TScriptInterface<IPF2InteractableAbilityInterface> GetAbilityInstanceFromSpec(
 		const FGameplayAbilitySpec& AbilitySpec) const override;
 
-	virtual TArray<TScriptInterface<IPF2GameplayAbilityInterface>> GetAbilities() const override;
+	virtual TArray<TScriptInterface<IPF2InteractableAbilityInterface>> GetAbilities() const override;
 
-	virtual TArray<TScriptInterface<IPF2GameplayAbilityInterface>> GetAbilitiesByTags(
+	virtual TArray<TScriptInterface<IPF2InteractableAbilityInterface>> GetAbilitiesByTags(
 		const FGameplayTagContainer& Tags,
 		bool bExactMatch = true) const override;
 

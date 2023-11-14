@@ -10,7 +10,7 @@
 #include "PF2CharacterConstants.h"
 #include "PF2CharacterInterface.h"
 
-#include "Abilities/PF2GameplayAbilityInterface.h"
+#include "Abilities/PF2InteractableAbilityInterface.h"
 
 #include "Utilities/PF2ArrayUtilities.h"
 #include "Utilities/PF2EnumUtilities.h"
@@ -69,12 +69,12 @@ UPF2AbilitySystemInterfaceEvents* UPF2AbilitySystemComponent::GetEvents() const
 	return this->Events;
 }
 
-TScriptInterface<IPF2GameplayAbilityInterface> UPF2AbilitySystemComponent::GetAbilityInstanceFromSpec(
+TScriptInterface<IPF2InteractableAbilityInterface> UPF2AbilitySystemComponent::GetAbilityInstanceFromSpec(
 	const FGameplayAbilitySpec& AbilitySpec) const
 {
-	TScriptInterface<IPF2GameplayAbilityInterface> AbilitySIntf;
-	UGameplayAbility*                              AbilityInstance;
-	IPF2GameplayAbilityInterface*                  AbilityIntf = nullptr;
+	TScriptInterface<IPF2InteractableAbilityInterface> AbilitySIntf;
+	UGameplayAbility*                                  AbilityInstance;
+	IPF2InteractableAbilityInterface*                  AbilityIntf = nullptr;
 
 	// First, look for an instanced ability.
 	AbilityInstance = AbilitySpec.GetPrimaryInstance();
@@ -88,12 +88,12 @@ TScriptInterface<IPF2GameplayAbilityInterface> UPF2AbilitySystemComponent::GetAb
 	// Ensure we don't return an object that's marked for kill.
 	if (IsValid(AbilityInstance))
 	{
-		AbilityIntf = Cast<IPF2GameplayAbilityInterface>(AbilityInstance);
+		AbilityIntf = Cast<IPF2InteractableAbilityInterface>(AbilityInstance);
 	}
 
 	if (AbilityIntf == nullptr)
 	{
-		AbilitySIntf = TScriptInterface<IPF2GameplayAbilityInterface>(nullptr);
+		AbilitySIntf = TScriptInterface<IPF2InteractableAbilityInterface>(nullptr);
 	}
 	else
 	{
@@ -103,15 +103,15 @@ TScriptInterface<IPF2GameplayAbilityInterface> UPF2AbilitySystemComponent::GetAb
 	return AbilitySIntf;
 }
 
-TArray<TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilitySystemComponent::GetAbilities() const
+TArray<TScriptInterface<IPF2InteractableAbilityInterface>> UPF2AbilitySystemComponent::GetAbilities() const
 {
-	return PF2ArrayUtilities::ReduceToArray<TScriptInterface<IPF2GameplayAbilityInterface>>(
+	return PF2ArrayUtilities::ReduceToArray<TScriptInterface<IPF2InteractableAbilityInterface>>(
 		this->GetActivatableAbilities(),
 		[this](
-			TArray<TScriptInterface<IPF2GameplayAbilityInterface>>& Abilities,
-			const FGameplayAbilitySpec& CurrentAbilitySpec)
+			TArray<TScriptInterface<IPF2InteractableAbilityInterface>>& Abilities,
+			const FGameplayAbilitySpec&                                 CurrentAbilitySpec)
 		{
-			const TScriptInterface<IPF2GameplayAbilityInterface> AbilityIntf =
+			const TScriptInterface<IPF2InteractableAbilityInterface> AbilityIntf =
 				this->GetAbilityInstanceFromSpec(CurrentAbilitySpec);
 
 			if (AbilityIntf != nullptr)
@@ -121,17 +121,17 @@ TArray<TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilitySystemComponen
 		});
 }
 
-TArray<TScriptInterface<IPF2GameplayAbilityInterface>> UPF2AbilitySystemComponent::GetAbilitiesByTags(
+TArray<TScriptInterface<IPF2InteractableAbilityInterface>> UPF2AbilitySystemComponent::GetAbilitiesByTags(
 	const FGameplayTagContainer& Tags,
 	bool bExactMatch) const
 {
-	return PF2ArrayUtilities::ReduceToArray<TScriptInterface<IPF2GameplayAbilityInterface>>(
+	return PF2ArrayUtilities::ReduceToArray<TScriptInterface<IPF2InteractableAbilityInterface>>(
 		this->GetActivatableAbilities(),
 		[this, &Tags, bExactMatch](
-			TArray<TScriptInterface<IPF2GameplayAbilityInterface>>& Abilities,
-			const FGameplayAbilitySpec& CurrentAbilitySpec)
+			TArray<TScriptInterface<IPF2InteractableAbilityInterface>>& Abilities,
+			const FGameplayAbilitySpec&                                 CurrentAbilitySpec)
 		{
-			const TScriptInterface<IPF2GameplayAbilityInterface> AbilityIntf =
+			const TScriptInterface<IPF2InteractableAbilityInterface> AbilityIntf =
 				this->GetAbilityInstanceFromSpec(CurrentAbilitySpec);
 
 			if (AbilityIntf != nullptr)

@@ -12,7 +12,7 @@
 #include "PF2CharacterInterface.h"
 #include "PF2CommandQueuePosition.h"
 
-#include "Abilities/PF2GameplayAbilityInterface.h"
+#include "Abilities/PF2InteractableAbilityInterface.h"
 
 #include "Commands/PF2CommandExecuteImmediatelyResult.h"
 #include "Commands/PF2CommandExecuteOrQueueResult.h"
@@ -295,9 +295,9 @@ protected:
 	 *	The gameplay ability, as an OpenPF2 interface; or nullptr if the character no longer has an ability that
 	 *	corresponds to the specification of this command.
 	 */
-	FORCEINLINE IPF2GameplayAbilityInterface* GetAbilityIntf() const
+	FORCEINLINE IPF2InteractableAbilityInterface* GetAbilityIntf() const
 	{
-		IPF2GameplayAbilityInterface* Ability = Cast<IPF2GameplayAbilityInterface>(this->GetAbility());
+		IPF2InteractableAbilityInterface* Ability = Cast<IPF2InteractableAbilityInterface>(this->GetAbility());
 
 		return Ability;
 	}

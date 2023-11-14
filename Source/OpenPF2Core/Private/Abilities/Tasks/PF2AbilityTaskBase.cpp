@@ -7,19 +7,19 @@
 
 #include "Abilities/PF2AbilitySystemInterface.h"
 #include "Abilities/PF2CharacterAbilitySystemInterface.h"
-#include "Abilities/PF2GameplayAbilityInterface.h"
+#include "Abilities/PF2InteractableAbilityInterface.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
 
-TScriptInterface<IPF2GameplayAbilityInterface> UPF2AbilityTaskBase::GetAbility() const
+TScriptInterface<IPF2InteractableAbilityInterface> UPF2AbilityTaskBase::GetAbility() const
 {
-	TScriptInterface<IPF2GameplayAbilityInterface> Result;
+	TScriptInterface<IPF2InteractableAbilityInterface> Result;
 
-	IPF2GameplayAbilityInterface* AbilityIntf = Cast<IPF2GameplayAbilityInterface>(this->GetNativeAbility());
+	IPF2InteractableAbilityInterface* AbilityIntf = Cast<IPF2InteractableAbilityInterface>(this->GetNativeAbility());
 
 	if (AbilityIntf == nullptr)
 	{
-		Result = TScriptInterface<IPF2GameplayAbilityInterface>(nullptr);
+		Result = TScriptInterface<IPF2InteractableAbilityInterface>(nullptr);
 	}
 	else
 	{

@@ -14,7 +14,7 @@
 #include "PF2PlayerControllerInterface.h"
 
 #include "Abilities/PF2AbilitySystemInterface.h"
-#include "Abilities/PF2GameplayAbilityInterface.h"
+#include "Abilities/PF2InteractableAbilityInterface.h"
 
 #include "GameModes/PF2GameModeInterface.h"
 
@@ -58,8 +58,8 @@ TScriptInterface<IPF2CharacterInterface> APF2CharacterCommand::GetTargetCharacte
 
 UTexture2D* APF2CharacterCommand::GetCommandIcon() const
 {
-	UTexture2D*                         CommandIcon = nullptr;
-	const IPF2GameplayAbilityInterface* AbilityIntf = this->GetAbilityIntf();
+	UTexture2D*                             CommandIcon = nullptr;
+	const IPF2InteractableAbilityInterface* AbilityIntf = this->GetAbilityIntf();
 
 	if (AbilityIntf != nullptr)
 	{
@@ -71,8 +71,8 @@ UTexture2D* APF2CharacterCommand::GetCommandIcon() const
 
 FText APF2CharacterCommand::GetCommandLabel() const
 {
-	FText                               CommandLabel;
-	const IPF2GameplayAbilityInterface* AbilityIntf  = this->GetAbilityIntf();
+	FText                                   CommandLabel;
+	const IPF2InteractableAbilityInterface* AbilityIntf = this->GetAbilityIntf();
 
 	if (AbilityIntf == nullptr)
 	{
@@ -88,8 +88,8 @@ FText APF2CharacterCommand::GetCommandLabel() const
 
 FText APF2CharacterCommand::GetCommandDescription() const
 {
-	FText                               CommandDescription;
-	const IPF2GameplayAbilityInterface* AbilityIntf        = this->GetAbilityIntf();
+	FText                                   CommandDescription;
+	const IPF2InteractableAbilityInterface* AbilityIntf = this->GetAbilityIntf();
 
 	if (AbilityIntf == nullptr)
 	{

@@ -21,7 +21,7 @@
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
 class IPF2CharacterInterface;
-class IPF2GameplayAbilityInterface;
+class IPF2InteractableAbilityInterface;
 class IPF2ModeOfPlayRuleSetInterface;
 class IPF2PlayerStateInterface;
 
@@ -158,8 +158,8 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category="OpenPF2|Player Controllers")
 	virtual void Server_ExecuteAbilityAsCharacterCommand(
-		const TScriptInterface<IPF2GameplayAbilityInterface>& Ability,
-		AActor*                                               CharacterActor) = 0;
+		const TScriptInterface<IPF2InteractableAbilityInterface>& Ability,
+		AActor*                                                   CharacterActor) = 0;
 
 	/**
 	 * Builds and executes a command on the server for one of the characters this player controller can control.

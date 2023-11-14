@@ -217,8 +217,8 @@ void APF2PlayerControllerBase::ReleaseCharacter(const TScriptInterface<IPF2Chara
 }
 
 bool APF2PlayerControllerBase::Server_ExecuteAbilityAsCharacterCommand_Validate(
-	const TScriptInterface<IPF2GameplayAbilityInterface>& Ability,
-	AActor*                                               CharacterActor)
+	const TScriptInterface<IPF2InteractableAbilityInterface>& Ability,
+	AActor*                                                   CharacterActor)
 {
 	bool bIsValid = false;
 
@@ -240,8 +240,8 @@ bool APF2PlayerControllerBase::Server_ExecuteAbilityAsCharacterCommand_Validate(
 }
 
 void APF2PlayerControllerBase::Server_ExecuteAbilityAsCharacterCommand_Implementation(
-	const TScriptInterface<IPF2GameplayAbilityInterface>& Ability,
-	AActor*                                               CharacterActor)
+	const TScriptInterface<IPF2InteractableAbilityInterface>& Ability,
+	AActor*                                                   CharacterActor)
 {
 	IPF2CharacterInterface*    TargetCharacterIntf = Cast<IPF2CharacterInterface>(CharacterActor);
 	FGameplayAbilitySpecHandle AbilitySpecHandle;

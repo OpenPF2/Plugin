@@ -7,7 +7,7 @@
 
 #include <Abilities/GameplayAbility.h>
 
-#include "Abilities/PF2GameplayAbilityInterface.h"
+#include "PF2InteractableAbilityInterface.h"
 
 #include "PF2GameplayAbilityBase.generated.h"
 
@@ -34,7 +34,7 @@ UCLASS(Abstract)
 // ReSharper disable once CppClassCanBeFinal
 class UPF2GameplayAbilityBase :
 	public UGameplayAbility,
-	public IPF2GameplayAbilityInterface
+	public IPF2InteractableAbilityInterface
 {
 	GENERATED_BODY()
 
@@ -67,7 +67,7 @@ public:
 	virtual FString GetIdForLogs() const override;
 
 	// =================================================================================================================
-	// Public Methods - IPF2GameplayAbilityInterface Implementation
+	// Public Methods - IPF2InteractableAbilityInterface Implementation
 	// =================================================================================================================
 	virtual UTexture2D* GetAbilityIcon() const override;
 

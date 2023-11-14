@@ -14,7 +14,7 @@
 // =====================================================================================================================
 // Forward Declarations (to minimize header dependencies)
 // =====================================================================================================================
-class IPF2GameplayAbilityInterface;
+class IPF2InteractableAbilityInterface;
 
 // =====================================================================================================================
 // Normal Declarations - Delegates
@@ -98,17 +98,17 @@ public:
 	/**
 	 * Converts an ability specification into an OpenPF2-compatible ability instance.
 	 *
-	 * Only abilities not marked for kill that implement IPF2GameplayAbilityInterface are returned.
+	 * Only abilities not marked for kill that implement IPF2InteractableAbilityInterface are returned.
 	 *
 	 * @param AbilitySpec
 	 *	The gameplay ability specification to convert into an OpenPF2 Gameplay Ability interface instance.
 	 *
 	 * @return
-	 *	Either the gameplay ability as an instance of IPF2GameplayAbilityInterface, or nullptr if: an instance of the
+	 *	Either the gameplay ability as an instance of IPF2InteractableAbilityInterface, or nullptr if: an instance of the
 	 *	ability is not available, the ability is marked pending for kill, or the ability is not OpenPF2-compatible.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Actors|Ability System")
-	virtual TScriptInterface<IPF2GameplayAbilityInterface> GetAbilityInstanceFromSpec(
+	virtual TScriptInterface<IPF2InteractableAbilityInterface> GetAbilityInstanceFromSpec(
 		const FGameplayAbilitySpec& AbilitySpec) const = 0;
 
 	/**
@@ -118,7 +118,7 @@ public:
 	 *	The abilities this character possesses.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Actors|Ability System")
-	virtual TArray<TScriptInterface<IPF2GameplayAbilityInterface>> GetAbilities() const = 0;
+	virtual TArray<TScriptInterface<IPF2InteractableAbilityInterface>> GetAbilities() const = 0;
 
 	/**
 	 * Gets the activatable OpenPF2-compatible abilities having the specified tags and were granted to this character.
@@ -133,7 +133,7 @@ public:
 	 *	The abilities having the specified tags that this character possesses.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Actors|Ability System")
-	virtual TArray<TScriptInterface<IPF2GameplayAbilityInterface>> GetAbilitiesByTags(
+	virtual TArray<TScriptInterface<IPF2InteractableAbilityInterface>> GetAbilitiesByTags(
 		const FGameplayTagContainer& Tags,
 		bool                         bExactMatch = true) const = 0;
 

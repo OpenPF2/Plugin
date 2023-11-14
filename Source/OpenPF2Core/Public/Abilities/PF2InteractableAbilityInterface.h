@@ -7,7 +7,7 @@
 
 #include "Utilities/PF2LogIdentifiableInterface.h"
 
-#include "PF2GameplayAbilityInterface.generated.h"
+#include "PF2InteractableAbilityInterface.generated.h"
 
 // =====================================================================================================================
 // Forward Declarations (to minimize header dependencies)
@@ -20,7 +20,7 @@ class UTexture2D;
 // Normal Declarations
 // =====================================================================================================================
 UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
-class UPF2GameplayAbilityInterface : public UPF2LogIdentifiableInterface
+class UPF2InteractableAbilityInterface : public UPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 };
@@ -28,7 +28,7 @@ class UPF2GameplayAbilityInterface : public UPF2LogIdentifiableInterface
 /**
  * An interface for OpenPF2-compatible Gameplay Abilities.
  */
-class OPENPF2CORE_API IPF2GameplayAbilityInterface : public IPF2LogIdentifiableInterface
+class OPENPF2CORE_API IPF2InteractableAbilityInterface : public IPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 

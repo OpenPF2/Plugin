@@ -132,7 +132,7 @@ public:
 	// =================================================================================================================
 	virtual UPF2AbilityBindingsInterfaceEvents* GetEvents() const override;
 
-	virtual TMap<UInputAction*, TScriptInterface<IPF2GameplayAbilityInterface>> GetBindingsMap() const override;
+	virtual TMap<UInputAction*, TScriptInterface<IPF2InteractableAbilityInterface>> GetBindingsMap() const override;
 
 	virtual void SetBinding(UInputAction* Action, const FGameplayAbilitySpec& AbilitySpec) override;
 
