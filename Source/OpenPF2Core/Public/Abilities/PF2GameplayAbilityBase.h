@@ -162,7 +162,7 @@ protected:
 		const FPF2GameplayEffectContainerSpec& ContainerSpec) const;
 
 	/**
-	 * Creates an outgoing gameplay effect spec for damage from a weapon.
+	 * Creates a gameplay effect spec outgoing from the current ability for damage from a weapon.
 	 *
 	 * @param GameplayEffectClass
 	 *	The type of gameplay effect for which a spec is desired.
@@ -178,7 +178,7 @@ protected:
 		const float                                 Level = 1.0f) const;
 
 	/**
-	 * Creates an outgoing gameplay effect spec that has a custom effect causer.
+	 * Creates a gameplay effect spec outgoing from the current ability that has a custom effect causer.
 	 *
 	 * This is similar to MakeOutgoingGameplayEffectSpec() except that the effect causer can be set rather than it being
 	 * set to the "avatar actor" which, in many games, is identical to the "owner actor" that is used as the instigator,

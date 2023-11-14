@@ -60,6 +60,9 @@ public:
 	 *	The weapon that actually caused this effect (e.g., did damage), such as a sword or projectile.
 	 * @param Level
 	 *	The level of the attack (for weapons that increase in damage as they are upgraded, etc.)
+	 *
+	 * @return
+	 *	The new gameplay effect specification handle.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
 	static FGameplayEffectSpecHandle MakeOutgoingGameplayEffectSpecForWeapon(
@@ -90,7 +93,7 @@ public:
 	 *	The level of the ability (for abilities that increase in damage/effect as they are upgraded, etc.)
 	 *
 	 * @return
-	 *	The new gameplay effect context.
+	 *	The new gameplay effect specification handle.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
 	static FORCEINLINE FGameplayEffectSpecHandle MakeOutgoingGameplayEffectSpecForCauser(
@@ -133,7 +136,7 @@ public:
 	 *	The level of the ability (for abilities that increase in damage/effect as they are upgraded, etc.)
 	 *
 	 * @return
-	 *	The new gameplay effect context.
+	 *	The new gameplay effect specification handle.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
 	static FGameplayEffectSpecHandle MakeOutgoingGameplayEffectSpecForInstigatorAndCauser(
@@ -157,7 +160,7 @@ public:
 	 *	actor as the instigator.
 	 *
 	 * @return
-	 *	The new gameplay effect context.
+	 *	The new gameplay effect context handle.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
 	static FORCEINLINE FGameplayEffectContextHandle MakeEffectContextForCauser(
@@ -189,7 +192,7 @@ public:
 	 *	actor as the instigator.
 	 *
 	 * @return
-	 *	The new gameplay effect context.
+	 *	The new gameplay effect context handle.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
 	static FGameplayEffectContextHandle MakeEffectContextForInstigatorAndCauser(
