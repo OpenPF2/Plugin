@@ -10,7 +10,7 @@
 // file other than the material designated as Open Game Content may be reproduced in any form without written
 // permission.
 
-#include "Abilities/PF2AttributeSet.h"
+#include "Abilities/PF2CharacterAttributeSet.h"
 #include "Calculations/Modifiers/PF2AbilityModifierCalculationBase.h"
 #include "Tests/PF2SpecBase.h"
 
@@ -438,10 +438,10 @@ void FPF2AbilityModSpec::VerifyModifier(const FString TargetAbilityAttributeName
 
 	if (IsValid(EffectBP))
 	{
-		const UPF2AttributeSet* AttributeSet            = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-		FAttributeCapture       Attributes              = CaptureAttributes(AttributeSet);
-		FGameplayAttributeData *TargetAbilityAttribute  = Attributes[TargetAbilityAttributeName],
-		                       *TargetModifierAttribute = Attributes[TargetModifierAttributeName];
+		const UPF2CharacterAttributeSet  *AttributeSet            = this->PawnAbilityComponent->GetSet<UPF2CharacterAttributeSet>();
+		FAttributeCapture                Attributes               = CaptureAttributes(AttributeSet);
+		FGameplayAttributeData           *TargetAbilityAttribute  = Attributes[TargetAbilityAttributeName],
+		                                 *TargetModifierAttribute = Attributes[TargetModifierAttributeName];
 
 		// Sanity check test logic.
 		TestNotEqual("Captured at least one attribute", Attributes.Num(), 0);
@@ -480,10 +480,10 @@ void FPF2AbilityModSpec::VerifyCorrectAbilityAffected(const FString TargetAbilit
 
 	if (IsValid(EffectBP))
 	{
-		const UPF2AttributeSet* AttributeSet           = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-		FAttributeCapture       AbilityAttributes      = CaptureAbilityAttributes(AttributeSet),
-		                        ModifierAttributes     = CaptureAbilityModifierAttributes(AttributeSet);
-		FGameplayAttributeData* TargetAbilityAttribute = AbilityAttributes[TargetAbilityAttributeName];
+		const UPF2CharacterAttributeSet* AttributeSet           = this->PawnAbilityComponent->GetSet<UPF2CharacterAttributeSet>();
+		FAttributeCapture                AbilityAttributes      = CaptureAbilityAttributes(AttributeSet),
+		                                 ModifierAttributes     = CaptureAbilityModifierAttributes(AttributeSet);
+		FGameplayAttributeData*          TargetAbilityAttribute = AbilityAttributes[TargetAbilityAttributeName];
 
 		// Sanity check test logic.
 		TestNotEqual("Captured at least one ability attribute", AbilityAttributes.Num(), 0);
@@ -598,10 +598,10 @@ void FPF2AbilityModSpec::VerifyModifierRemoved(const FString TargetAbilityAttrib
 
 	if (IsValid(EffectBP))
 	{
-		const UPF2AttributeSet*       AttributeSet            = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-		FAttributeCapture             Attributes              = CaptureAttributes(AttributeSet);
-		FGameplayAttributeData*       TargetAbilityAttribute  = Attributes[TargetAbilityAttributeName];
-		const FGameplayAttributeData* TargetModifierAttribute = Attributes[TargetModifierAttributeName];
+		const UPF2CharacterAttributeSet* AttributeSet            = this->PawnAbilityComponent->GetSet<UPF2CharacterAttributeSet>();
+		FAttributeCapture                Attributes              = CaptureAttributes(AttributeSet);
+		FGameplayAttributeData*          TargetAbilityAttribute  = Attributes[TargetAbilityAttributeName];
+		const FGameplayAttributeData*    TargetModifierAttribute = Attributes[TargetModifierAttributeName];
 
 		const FActiveGameplayEffectHandle EffectHandle =
 			this->ApplyGameEffect(*TargetAbilityAttribute, 13.0f, EffectBP);

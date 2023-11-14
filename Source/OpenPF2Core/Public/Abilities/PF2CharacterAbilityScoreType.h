@@ -15,13 +15,13 @@
  * The name of each enum value exactly matches the name of the corresponding character attribute in the GAS attribute
  * set for the character.
  *
- * @see UPF2AttributeSet
+ * @see UPF2CharacterAttributeSet
  */
 UENUM(BlueprintType)
 enum class EPF2CharacterAbilityScoreType : uint8
 {
 	// The key/machine name of each enum value MUST exactly match the name of the corresponding character attribute from
-	// PF2AttributeSet.
+	// PF2CharacterAttributeSet.
 	AbStrength     UMETA(DisplayName = "Strength"),
 	AbDexterity    UMETA(DisplayName = "Dexterity"),
 	AbConstitution UMETA(DisplayName = "Constitution"),

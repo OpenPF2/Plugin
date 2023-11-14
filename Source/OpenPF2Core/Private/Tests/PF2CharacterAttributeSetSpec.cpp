@@ -3,15 +3,15 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-#include "Abilities/PF2AttributeSet.h"
+#include "Abilities/PF2CharacterAttributeSet.h"
 #include "Tests/PF2SpecBase.h"
 
-BEGIN_DEFINE_PF_SPEC(FPF2AttributeSetSpec,
-                     "OpenPF2.AttributeSet",
+BEGIN_DEFINE_PF_SPEC(FPF2CharacterAttributeSetSpec,
+                     "OpenPF2.CharacterAttributeSet",
                      EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
-END_DEFINE_PF_SPEC(FPF2AttributeSetSpec)
+END_DEFINE_PF_SPEC(FPF2CharacterAttributeSetSpec)
 
-void FPF2AttributeSetSpec::Define()
+void FPF2CharacterAttributeSetSpec::Define()
 {
 	BeforeEach([=, this]()
 	{
@@ -27,11 +27,11 @@ void FPF2AttributeSetSpec::Define()
 		this->DestroyWorld();
 	});
 
-	Describe("At UPF2AttributeSet construction time", [this]()
+	Describe("At UPF2CharacterAttributeSet construction time", [this]()
 	{
 		It("has default values for all defined attributes", [this]()
 		{
-			const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
+			const UPF2CharacterAttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2CharacterAttributeSet>();
 
 			TestEqual(TEXT("Experience"),             AttributeSet->GetExperience(),              0.0f);
 			TestEqual(TEXT("AbBoostCount"),           AttributeSet->GetAbBoostCount(),            0.0f);

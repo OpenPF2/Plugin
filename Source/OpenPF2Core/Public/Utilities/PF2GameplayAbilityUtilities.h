@@ -16,7 +16,7 @@
 // =====================================================================================================================
 class IPF2CharacterInterface;
 class IPF2CharacterAbilitySystemInterface;
-class UPF2AttributeSet;
+class UPF2CharacterAttributeSet;
 
 // =====================================================================================================================
 // Normal Declarations
@@ -154,7 +154,7 @@ namespace PF2GameplayAbilityUtilities
 		const FGameplayAbilityActorInfo* ActorInfo);
 
 	/**
-	 * Gets the OpenPF2 attribute set of the given actor.
+	 * Gets the OpenPF2 character attribute set of the given actor.
 	 *
 	 * In development builds, the attribute set is checked to ensure that it is non-null.
 	 *
@@ -164,7 +164,8 @@ namespace PF2GameplayAbilityUtilities
 	 * @return
 	 *	A pointer to the OpenPF2 attribute set.
 	 */
-	FORCEINLINE OPENPF2CORE_API const UPF2AttributeSet* GetAttributeSet(const FGameplayAbilityActorInfo* ActorInfo);
+	FORCEINLINE OPENPF2CORE_API const UPF2CharacterAttributeSet* GetCharacterAttributeSet(
+		const FGameplayAbilityActorInfo* ActorInfo);
 
 	/**
 	 * Determines which OpenPF2 character an activated GE has targeted.

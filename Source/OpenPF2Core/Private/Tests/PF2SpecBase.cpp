@@ -7,10 +7,10 @@
 
 #include <Engine/Engine.h>
 
-#include "Abilities/PF2AttributeSet.h"
+#include "Abilities/PF2CharacterAttributeSet.h"
 #include "Utilities/PF2GameplayAbilityUtilities.h"
 
-FAttributeCapture FPF2SpecBase::CaptureAttributes(const UPF2AttributeSet* AttributeSet)
+FAttributeCapture FPF2SpecBase::CaptureAttributes(const UPF2CharacterAttributeSet* AttributeSet)
 {
 	FAttributeCapture Capture =
 	{
@@ -39,7 +39,7 @@ FAttributeCapture FPF2SpecBase::CaptureAttributes(const UPF2AttributeSet* Attrib
 	return Capture;
 }
 
-FAttributeCapture FPF2SpecBase::CaptureAbilityAttributes(const UPF2AttributeSet* AttributeSet)
+FAttributeCapture FPF2SpecBase::CaptureAbilityAttributes(const UPF2CharacterAttributeSet* AttributeSet)
 {
 	FAttributeCapture Capture =
 	{
@@ -54,7 +54,7 @@ FAttributeCapture FPF2SpecBase::CaptureAbilityAttributes(const UPF2AttributeSet*
 	return Capture;
 }
 
-FAttributeCapture FPF2SpecBase::CaptureAbilityModifierAttributes(const UPF2AttributeSet* AttributeSet)
+FAttributeCapture FPF2SpecBase::CaptureAbilityModifierAttributes(const UPF2CharacterAttributeSet* AttributeSet)
 {
 	FAttributeCapture Capture =
 	{
@@ -68,7 +68,7 @@ FAttributeCapture FPF2SpecBase::CaptureAbilityModifierAttributes(const UPF2Attri
 	return Capture;
 }
 
-FAttributeCapture FPF2SpecBase::CaptureSavingThrowAttributes(const UPF2AttributeSet* AttributeSet)
+FAttributeCapture FPF2SpecBase::CaptureSavingThrowAttributes(const UPF2CharacterAttributeSet* AttributeSet)
 {
 	FAttributeCapture Capture =
 	{
@@ -80,7 +80,7 @@ FAttributeCapture FPF2SpecBase::CaptureSavingThrowAttributes(const UPF2Attribute
 	return Capture;
 }
 
-FAttributeCapture FPF2SpecBase::CaptureSkillModifierAttributes(const UPF2AttributeSet* AttributeSet)
+FAttributeCapture FPF2SpecBase::CaptureSkillModifierAttributes(const UPF2CharacterAttributeSet* AttributeSet)
 {
 	FAttributeCapture Capture =
 	{
@@ -107,7 +107,7 @@ FAttributeCapture FPF2SpecBase::CaptureSkillModifierAttributes(const UPF2Attribu
 	return Capture;
 }
 
-FAttributeCapture FPF2SpecBase::CaptureSpellAttributes(const UPF2AttributeSet* AttributeSet)
+FAttributeCapture FPF2SpecBase::CaptureSpellAttributes(const UPF2CharacterAttributeSet* AttributeSet)
 {
 	FAttributeCapture Capture =
 	{

@@ -28,7 +28,7 @@ APF2CharacterBase::APF2CharacterBase() :
 	APF2CharacterBase(TPF2CharacterComponentFactory<UPF2AbilitySystemComponent,
 	                                                UPF2CommandQueueComponent,
 	                                                UPF2OwnerTrackingComponent,
-	                                                UPF2AttributeSet,
+	                                                UPF2CharacterAttributeSet,
 	                                                UPF2AttackAttributeSet>())
 {
 }

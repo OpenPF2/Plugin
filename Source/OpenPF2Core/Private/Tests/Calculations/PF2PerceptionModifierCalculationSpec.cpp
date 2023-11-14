@@ -3,7 +3,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-#include "Abilities/PF2AttributeSet.h"
+#include "Abilities/PF2CharacterAttributeSet.h"
 #include "Tests/PF2SpecBase.h"
 
 BEGIN_DEFINE_PF_SPEC(FPF2PerceptionModifierCalculationSpec,
@@ -107,11 +107,11 @@ void FPF2PerceptionModifierCalculationSpec::VerifyPerceptionModifier(const float
                                                                      const FString ProficiencyLevel,
                                                                      const float   ExpectedPcpMod)
 {
-	const UPF2AttributeSet*             AttributeSet    = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-	FAttributeCapture                   Attributes      = CaptureAttributes(AttributeSet);
-	FGameplayAttributeData*             AbModAttribute  = Attributes[this->AbModAttributeName];
-	const FGameplayAttributeData*       PcpAttribute    = Attributes[this->PcpModAttributeName];
-	const TSubclassOf<UGameplayEffect>& EffectBP        = this->LoadGE();
+	const UPF2CharacterAttributeSet*    AttributeSet   = this->PawnAbilityComponent->GetSet<UPF2CharacterAttributeSet>();
+	FAttributeCapture                   Attributes     = CaptureAttributes(AttributeSet);
+	FGameplayAttributeData*             AbModAttribute = Attributes[this->AbModAttributeName];
+	const FGameplayAttributeData*       PcpAttribute   = Attributes[this->PcpModAttributeName];
+	const TSubclassOf<UGameplayEffect>& EffectBP       = this->LoadGE();
 
 	this->ApplyUnreplicatedTag(FString::Format(TEXT("Perception.{0}"), {ProficiencyLevel}));
 	this->ApplyGameEffect(*AbModAttribute, AbModScore, EffectBP);

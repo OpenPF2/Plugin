@@ -6,7 +6,7 @@
 #include "Calculations/PF2AbilityBoostCalculationBase.h"
 
 #include "OpenPF2Core.h"
-#include "Abilities/PF2AttributeSet.h"
+#include "Abilities/PF2CharacterAttributeSet.h"
 #include "Libraries/PF2CharacterStatLibrary.h"
 
 float UPF2AbilityBoostCalculationBase::DoCalculation(

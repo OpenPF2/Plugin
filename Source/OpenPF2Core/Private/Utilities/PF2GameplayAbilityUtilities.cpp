@@ -85,13 +85,13 @@ namespace PF2GameplayAbilityUtilities
 		return AbilitySystemComponent;
 	}
 
-	FORCEINLINE const UPF2AttributeSet* GetAttributeSet(
+	FORCEINLINE const UPF2CharacterAttributeSet* GetCharacterAttributeSet(
 		const FGameplayAbilityActorInfo* ActorInfo)
 	{
-		const UAbilitySystemComponent* AbilitySystemComponent = GetAbilitySystemComponent(ActorInfo);
-		const UPF2AttributeSet*        AttributeSet;
+		const UAbilitySystemComponent*   AbilitySystemComponent = GetAbilitySystemComponent(ActorInfo);
+		const UPF2CharacterAttributeSet* AttributeSet;
 
-		AttributeSet = AbilitySystemComponent->GetSet<UPF2AttributeSet>();
+		AttributeSet = AbilitySystemComponent->GetSet<UPF2CharacterAttributeSet>();
 		check(AttributeSet != nullptr);
 
 		return AttributeSet;

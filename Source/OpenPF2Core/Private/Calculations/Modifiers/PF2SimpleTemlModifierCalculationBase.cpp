@@ -13,7 +13,7 @@
 #include "Calculations/Modifiers/PF2SimpleTemlModifierCalculationBase.h"
 
 #include "OpenPF2Core.h"
-#include "Abilities/PF2AttributeSet.h"
+#include "Abilities/PF2CharacterAttributeSet.h"
 #include "Calculations/PF2TemlCalculation.h"
 
 float UPF2SimpleTemlModifierCalculationBase::DoCalculation(

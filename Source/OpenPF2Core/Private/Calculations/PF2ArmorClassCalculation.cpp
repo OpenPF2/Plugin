@@ -14,7 +14,7 @@
 
 #include "OpenPF2Core.h"
 #include "Abilities/PF2TargetCharacterAttributeStatics.h"
-#include "Abilities/PF2AttributeSet.h"
+#include "Abilities/PF2CharacterAttributeSet.h"
 #include "Calculations/PF2TemlCalculation.h"
 
 #include "Libraries/PF2AbilitySystemLibrary.h"

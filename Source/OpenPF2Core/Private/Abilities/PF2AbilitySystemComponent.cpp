@@ -544,8 +544,8 @@ FORCEINLINE int32 UPF2AbilitySystemComponent::GetCharacterLevel() const
 
 TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> UPF2AbilitySystemComponent::GetAbilityScoreValues() const
 {
-	const UPF2AttributeSet* AttributeSet =
-		Cast<UPF2AttributeSet>(this->GetAttributeSubobject(UPF2AttributeSet::StaticClass()));
+	const UPF2CharacterAttributeSet* AttributeSet =
+		Cast<UPF2CharacterAttributeSet>(this->GetAttributeSubobject(UPF2CharacterAttributeSet::StaticClass()));
 
 	const TMap<EPF2CharacterAbilityScoreType, FPF2AttributeModifierSnapshot> Values =
 		{

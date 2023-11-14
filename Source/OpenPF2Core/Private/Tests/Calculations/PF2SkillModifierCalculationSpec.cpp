@@ -3,7 +3,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-#include "Abilities/PF2AttributeSet.h"
+#include "Abilities/PF2CharacterAttributeSet.h"
 #include "Tests/PF2SpecBase.h"
 
 BEGIN_DEFINE_PF_SPEC(FPF2SkillModifierCalculationSpec,
@@ -396,7 +396,7 @@ void FPF2SkillModifierCalculationSpec::VerifySkillModifier(const FString AbModAt
                                                            const FString ProficiencyLevel,
                                                            const float   ExpectedSkillMod)
 {
-	const UPF2AttributeSet*             AttributeSet   = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
+	const UPF2CharacterAttributeSet*    AttributeSet   = this->PawnAbilityComponent->GetSet<UPF2CharacterAttributeSet>();
 	FAttributeCapture                   Attributes     = CaptureAttributes(AttributeSet);
 	FGameplayAttributeData*             AbModAttribute = Attributes[AbModAttributeName];
 	const FGameplayAttributeData*       SkillAttribute = Attributes[SkillModAttributeName];

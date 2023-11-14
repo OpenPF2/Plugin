@@ -8,7 +8,7 @@
 #include "GameplayEffectExecutionCalculation.h"
 #include "PF2CharacterAbilityScoreType.h"
 
-#include "Abilities/PF2AttributeSet.h"
+#include "Abilities/PF2CharacterAttributeSet.h"
 #include "Abilities/PF2AttributeSetMacros.h"
 #include "Abilities/PF2AttributeStaticsBase.h"
 

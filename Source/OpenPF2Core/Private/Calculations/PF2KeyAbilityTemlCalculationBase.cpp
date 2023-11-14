@@ -13,7 +13,7 @@
 #include "Calculations/PF2KeyAbilityTemlCalculationBase.h"
 
 #include "OpenPF2Core.h"
-#include "Abilities/PF2AttributeSet.h"
+#include "Abilities/PF2CharacterAttributeSet.h"
 #include "Calculations/PF2TemlCalculation.h"
 
 #include "Libraries/PF2AbilitySystemLibrary.h"
@@ -37,32 +37,32 @@ UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase(
 {
 	this->DefineKeyAbilityCapture(
 		KeyAbilityGameplayTagPrefix + ".Strength",
-		UPF2AttributeSet::GetAbStrengthModifierAttribute()
+		UPF2CharacterAttributeSet::GetAbStrengthModifierAttribute()
 	);
 
 	this->DefineKeyAbilityCapture(
 		KeyAbilityGameplayTagPrefix + ".Dexterity",
-		UPF2AttributeSet::GetAbDexterityModifierAttribute()
+		UPF2CharacterAttributeSet::GetAbDexterityModifierAttribute()
 	);
 
 	this->DefineKeyAbilityCapture(
 		KeyAbilityGameplayTagPrefix + ".Constitution",
-		UPF2AttributeSet::GetAbConstitutionModifierAttribute()
+		UPF2CharacterAttributeSet::GetAbConstitutionModifierAttribute()
 	);
 
 	this->DefineKeyAbilityCapture(
 		KeyAbilityGameplayTagPrefix + ".Intelligence",
-		UPF2AttributeSet::GetAbIntelligenceModifierAttribute()
+		UPF2CharacterAttributeSet::GetAbIntelligenceModifierAttribute()
 	);
 
 	this->DefineKeyAbilityCapture(
 		KeyAbilityGameplayTagPrefix + ".Wisdom",
-		UPF2AttributeSet::GetAbWisdomModifierAttribute()
+		UPF2CharacterAttributeSet::GetAbWisdomModifierAttribute()
 	);
 
 	this->DefineKeyAbilityCapture(
 		KeyAbilityGameplayTagPrefix + ".Charisma",
-		UPF2AttributeSet::GetAbCharismaModifierAttribute()
+		UPF2CharacterAttributeSet::GetAbCharismaModifierAttribute()
 	);
 }
 

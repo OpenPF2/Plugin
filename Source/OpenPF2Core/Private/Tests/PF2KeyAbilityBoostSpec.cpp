@@ -5,7 +5,7 @@
 
 #include <GameplayEffect.h>
 
-#include "Abilities/PF2AttributeSet.h"
+#include "Abilities/PF2CharacterAttributeSet.h"
 #include "Tests/PF2SpecBase.h"
 
 BEGIN_DEFINE_PF_SPEC(FKeyAbilityBoostSpec,
@@ -53,11 +53,11 @@ void FKeyAbilityBoostSpec::Define()
 		{
 			BeforeEach([=, this]()
 			{
-				const UPF2AttributeSet* AttributeSet         = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-				FAttributeCapture       Attributes           = CaptureAbilityAttributes(AttributeSet);
-				FGameplayAttributeData* KeyAbilityAttribute  = Attributes[KeyAbilityAttributeName];
-				const FString           TagName              = FString::Format(TEXT("KeyAbility.{0}"), {KeyAbilityName});
-				const TSubclassOf<UGameplayEffect>& EffectBP = this->LoadGE();
+				const UPF2CharacterAttributeSet*    AttributeSet         = this->PawnAbilityComponent->GetSet<UPF2CharacterAttributeSet>();
+				FAttributeCapture                   Attributes           = CaptureAbilityAttributes(AttributeSet);
+				FGameplayAttributeData*             KeyAbilityAttribute  = Attributes[KeyAbilityAttributeName];
+				const FString                       TagName              = FString::Format(TEXT("KeyAbility.{0}"), {KeyAbilityName});
+				const TSubclassOf<UGameplayEffect>& EffectBP             = this->LoadGE();
 
 				// Start all attributes from a known value.
 				for (const auto& AttributeCapture : Attributes)
@@ -73,9 +73,9 @@ void FKeyAbilityBoostSpec::Define()
 
 			It(FString::Format(TEXT("boosts '{0}'"), {KeyAbilityName}), [=, this]()
 			{
-				const UPF2AttributeSet*       AttributeSet        = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-				FAttributeCapture             Attributes          = CaptureAbilityAttributes(AttributeSet);
-				const FGameplayAttributeData* KeyAbilityAttribute = Attributes[KeyAbilityAttributeName];
+				const UPF2CharacterAttributeSet* AttributeSet        = this->PawnAbilityComponent->GetSet<UPF2CharacterAttributeSet>();
+				FAttributeCapture                Attributes          = CaptureAbilityAttributes(AttributeSet);
+				const FGameplayAttributeData*    KeyAbilityAttribute = Attributes[KeyAbilityAttributeName];
 
 				TestEqual(
 					FString::Format(TEXT("{0}.BaseValue"), {KeyAbilityName}),
@@ -92,8 +92,8 @@ void FKeyAbilityBoostSpec::Define()
 
 			It(TEXT("does not boost any other abilities"), [=, this]()
 			{
-				const UPF2AttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
-				FAttributeCapture       Attributes   = CaptureAbilityAttributes(AttributeSet);
+				const UPF2CharacterAttributeSet* AttributeSet = this->PawnAbilityComponent->GetSet<UPF2CharacterAttributeSet>();
+				FAttributeCapture                Attributes   = CaptureAbilityAttributes(AttributeSet);
 
 				for (const auto& AttributeCapture : Attributes)
 				{

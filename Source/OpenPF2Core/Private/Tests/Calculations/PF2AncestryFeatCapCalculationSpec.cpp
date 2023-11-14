@@ -10,7 +10,7 @@
 // file other than the material designated as Open Game Content may be reproduced in any form without written
 // permission.
 
-#include "Abilities/PF2AttributeSet.h"
+#include "Abilities/PF2CharacterAttributeSet.h"
 #include "Calculations/Modifiers/PF2AbilityModifierCalculationBase.h"
 #include "Tests/PF2SpecBase.h"
 
@@ -76,7 +76,7 @@ void FPF2AncestryFeatCapCalculationSpec::Define()
 		{
 			It(FString::Format(TEXT("returns an Ancestry Feat Cap of '{0}'"), {FString::FormatAsNumber(ExpectedFeatLimit)}), [=, this]()
 			{
-				const UPF2AttributeSet*             AttributeSet = this->PawnAbilityComponent->GetSet<UPF2AttributeSet>();
+				const UPF2CharacterAttributeSet*    AttributeSet = this->PawnAbilityComponent->GetSet<UPF2CharacterAttributeSet>();
 				FAttributeCapture                   Attributes   = CaptureAttributes(AttributeSet);
 				FGameplayAttributeData*             CapAttribute = Attributes[this->AncestryFeatCapAttributeName];
 				const TSubclassOf<UGameplayEffect>& EffectBP     = this->LoadGE();

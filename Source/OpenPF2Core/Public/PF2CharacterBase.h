@@ -28,7 +28,7 @@
 #include "Abilities/PF2AbilityBoostBase.h"
 #include "Abilities/PF2AbilitySystemComponent.h"
 #include "Abilities/PF2AttackAttributeSet.h"
-#include "Abilities/PF2AttributeSet.h"
+#include "Abilities/PF2CharacterAttributeSet.h"
 #include "Abilities/PF2CharacterAbilityScoreType.h"
 
 #include "Utilities/PF2GameplayAbilityUtilities.h"
@@ -142,7 +142,7 @@ protected:
 	 * The attributes of this character.
 	 */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	UPF2AttributeSet* AttributeSet;
+	UPF2CharacterAttributeSet* AttributeSet;
 
 	/**
 	 * The transient attack stats of this character.

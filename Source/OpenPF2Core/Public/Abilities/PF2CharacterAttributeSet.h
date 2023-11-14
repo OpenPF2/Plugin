@@ -17,7 +17,7 @@
 
 #include "Abilities/PF2AttributeSetMacros.h"
 
-#include "PF2AttributeSet.generated.h"
+#include "PF2CharacterAttributeSet.generated.h"
 
 // =====================================================================================================================
 // Forward Declarations (to minimize header dependencies)
@@ -31,7 +31,7 @@ class IPF2CharacterInterface;
  * This holds all of the attributes used by abilities. A copy of this is instantiated on every character.
  */
 UCLASS()
-class OPENPF2CORE_API UPF2AttributeSet : public UAttributeSet
+class OPENPF2CORE_API UPF2CharacterAttributeSet : public UAttributeSet
 {
 	GENERATED_BODY()
 
@@ -57,7 +57,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Experience", ReplicatedUsing=OnRep_Experience)
 	FGameplayAttributeData Experience;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, Experience)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, Experience)
 
 	// Ability Scores --------------------------------------------------------------------------------------------------
 	/**
@@ -67,7 +67,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbBoostCount)
 	FGameplayAttributeData AbBoostCount;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbBoostCount)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, AbBoostCount)
 
 	/**
 	 * The limit on how many ability boosts this character can apply.
@@ -77,7 +77,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbBoostLimit)
 	FGameplayAttributeData AbBoostLimit;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbBoostLimit)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, AbBoostLimit)
 
 	/**
 	 * Strength measures a character’s physical power.
@@ -87,7 +87,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbStrength)
 	FGameplayAttributeData AbStrength;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbStrength)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, AbStrength)
 
 	/**
 	 * Strength measures a character’s physical power.
@@ -98,7 +98,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbStrengthModifier)
 	FGameplayAttributeData AbStrengthModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbStrengthModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, AbStrengthModifier)
 
 	/**
 	 * Dexterity measures a character’s agility, balance, and reflexes.
@@ -109,7 +109,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbDexterity)
 	FGameplayAttributeData AbDexterity;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbDexterity)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, AbDexterity)
 
 	/**
 	 * Dexterity measures a character’s agility, balance, and reflexes.
@@ -120,7 +120,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbDexterityModifier)
 	FGameplayAttributeData AbDexterityModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbDexterityModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, AbDexterityModifier)
 
 	/**
 	 * Constitution measures a character’s overall health and stamina.
@@ -131,7 +131,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbConstitution)
 	FGameplayAttributeData AbConstitution;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbConstitution)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, AbConstitution)
 
 	/**
 	 * Constitution measures a character’s overall health and stamina.
@@ -142,7 +142,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbConstitutionModifier)
 	FGameplayAttributeData AbConstitutionModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbConstitutionModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, AbConstitutionModifier)
 
 	/**
 	 * Intelligence measures how well a character can learn and reason.
@@ -153,7 +153,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbIntelligence)
 	FGameplayAttributeData AbIntelligence;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbIntelligence)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, AbIntelligence)
 
 	/**
 	 * Intelligence measures how well a character can learn and reason.
@@ -164,7 +164,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbIntelligenceModifier)
 	FGameplayAttributeData AbIntelligenceModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbIntelligenceModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, AbIntelligenceModifier)
 
 	/**
 	 * Wisdom measures a character’s common sense, awareness, and intuition.
@@ -174,7 +174,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbWisdom)
 	FGameplayAttributeData AbWisdom;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbWisdom)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, AbWisdom)
 
 	/**
 	 * Wisdom measures a character’s common sense, awareness, and intuition.
@@ -184,7 +184,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbWisdomModifier)
 	FGameplayAttributeData AbWisdomModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbWisdomModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, AbWisdomModifier)
 
 	/**
 	 * Charisma measures a character’s personal magnetism and strength of personality.
@@ -194,7 +194,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbCharisma)
 	FGameplayAttributeData AbCharisma;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbCharisma)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, AbCharisma)
 
 	/**
 	 * Charisma measures a character’s personal magnetism and strength of personality.
@@ -204,7 +204,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Ability Scores", ReplicatedUsing=OnRep_AbCharismaModifier)
 	FGameplayAttributeData AbCharismaModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, AbCharismaModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, AbCharismaModifier)
 
 	// Class DC --------------------------------------------------------------------------------------------------------
 	/**
@@ -214,7 +214,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Class DC", ReplicatedUsing=OnRep_ClassDifficultyClass)
 	FGameplayAttributeData ClassDifficultyClass;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, ClassDifficultyClass)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, ClassDifficultyClass)
 
 	// Speed -----------------------------------------------------------------------------------------------------------
 	/**
@@ -222,14 +222,14 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Speed", ReplicatedUsing = OnRep_Speed)
 	FGameplayAttributeData Speed;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, Speed)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, Speed)
 
 	/**
 	 * The maximum speed of this character (in centimeters per second).
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Speed", ReplicatedUsing = OnRep_MaxSpeed)
 	FGameplayAttributeData MaxSpeed;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, MaxSpeed)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, MaxSpeed)
 
 	// Reach -----------------------------------------------------------------------------------------------------------
 	/**
@@ -242,7 +242,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Reach", ReplicatedUsing = OnRep_Reach)
 	FGameplayAttributeData Reach;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, Reach)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, Reach)
 
 	// Armor Class -----------------------------------------------------------------------------------------------------
 	/**
@@ -253,7 +253,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Armor Class", ReplicatedUsing = OnRep_ArmorClass)
 	FGameplayAttributeData ArmorClass;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, ArmorClass)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, ArmorClass)
 
 	// Saving Throws ---------------------------------------------------------------------------------------------------
 	/**
@@ -262,7 +262,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Saving Throws", ReplicatedUsing = OnRep_StFortitudeModifier)
 	FGameplayAttributeData StFortitudeModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, StFortitudeModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, StFortitudeModifier)
 
 	/**
 	 * Reflex saving throws measure how quickly and gracefully a character responds to a situation.
@@ -270,7 +270,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Saving Throws", ReplicatedUsing = OnRep_StReflexModifier)
 	FGameplayAttributeData StReflexModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, StReflexModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, StReflexModifier)
 
 	/**
 	 * Will saving throws measure how well a character resists attacks to mind and spirit.
@@ -278,7 +278,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Saving Throws", ReplicatedUsing = OnRep_StWillModifier)
 	FGameplayAttributeData StWillModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, StWillModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, StWillModifier)
 
 	// Hit Points ------------------------------------------------------------------------------------------------------
 	/**
@@ -296,14 +296,14 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_HitPoints)
 	FGameplayAttributeData HitPoints;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, HitPoints)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, HitPoints)
 
 	/**
 	 * The maximum number of hit points for this character.
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_MaxHitPoints)
 	FGameplayAttributeData MaxHitPoints;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, MaxHitPoints)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, MaxHitPoints)
 
 	/**
 	 * The character's resistance to Bludgeoning damage (DamageType.Physical.Bludgeoning).
@@ -314,7 +314,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstPhysicalBludgeoning)
 	FGameplayAttributeData RstPhysicalBludgeoning;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstPhysicalBludgeoning)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, RstPhysicalBludgeoning)
 
 	/**
 	 * The character's resistance to Piercing damage (DamageType.Physical.Piercing).
@@ -324,7 +324,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstPhysicalPiercing)
 	FGameplayAttributeData RstPhysicalPiercing;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstPhysicalPiercing)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, RstPhysicalPiercing)
 
 	/**
 	 * The character's resistance to Slashing damage (DamageType.Physical.Slashing).
@@ -334,7 +334,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstPhysicalSlashing)
 	FGameplayAttributeData RstPhysicalSlashing;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstPhysicalSlashing)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, RstPhysicalSlashing)
 
 	/**
 	 * The character's resistance to Acid damage (DamageType.Energy.Acid).
@@ -345,7 +345,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstEnergyAcid)
 	FGameplayAttributeData RstEnergyAcid;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyAcid)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, RstEnergyAcid)
 
 	/**
 	 * The character's resistance to Cold damage (DamageType.Energy.Cold).
@@ -357,7 +357,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstEnergyCold)
 	FGameplayAttributeData RstEnergyCold;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyCold)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, RstEnergyCold)
 
 	/**
 	 * The character's resistance to Fire damage (DamageType.Energy.Fire).
@@ -367,7 +367,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstEnergyFire)
 	FGameplayAttributeData RstEnergyFire;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyFire)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, RstEnergyFire)
 
 	/**
 	 * The character's resistance to Sonic damage (DamageType.Energy.Sonic).
@@ -377,7 +377,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstEnergySonic)
 	FGameplayAttributeData RstEnergySonic;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergySonic)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, RstEnergySonic)
 
 	/**
 	 * The character's resistance to Positive damage (DamageType.Energy.Positive).
@@ -387,7 +387,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstEnergyPositive)
 	FGameplayAttributeData RstEnergyPositive;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyPositive)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, RstEnergyPositive)
 
 	/**
 	 * The character's resistance to Negative damage (DamageType.Energy.Negative).
@@ -397,7 +397,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstEnergyNegative)
 	FGameplayAttributeData RstEnergyNegative;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyNegative)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, RstEnergyNegative)
 
 	/**
 	 * The character's resistance to Force damage (DamageType.Energy.Force).
@@ -408,7 +408,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstEnergyForce)
 	FGameplayAttributeData RstEnergyForce;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstEnergyForce)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, RstEnergyForce)
 
 	/**
 	 * The character's resistance to Chaotic damage (DamageType.Alignment.Chaotic).
@@ -418,7 +418,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstAlignmentChaotic)
 	FGameplayAttributeData RstAlignmentChaotic;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstAlignmentChaotic)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, RstAlignmentChaotic)
 
 	/**
 	 * The character's resistance to Evil damage (DamageType.Alignment.Evil).
@@ -428,7 +428,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstAlignmentEvil)
 	FGameplayAttributeData RstAlignmentEvil;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstAlignmentEvil)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, RstAlignmentEvil)
 
 	/**
 	 * The character's resistance to Good damage (DamageType.Alignment.Good).
@@ -438,7 +438,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstAlignmentGood)
 	FGameplayAttributeData RstAlignmentGood;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstAlignmentGood)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, RstAlignmentGood)
 
 	/**
 	 * The character's resistance to Lawful damage (DamageType.Alignment.Lawful).
@@ -448,7 +448,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstAlignmentLawful)
 	FGameplayAttributeData RstAlignmentLawful;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstAlignmentLawful)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, RstAlignmentLawful)
 
 	/**
 	 * The character's resistance to Mental damage (DamageType.Mental).
@@ -460,7 +460,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstMental)
 	FGameplayAttributeData RstMental;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstMental)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, RstMental)
 
 	/**
 	 * The character's resistance to Poison damage (DamageType.Poison).
@@ -472,7 +472,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstPoison)
 	FGameplayAttributeData RstPoison;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstPoison)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, RstPoison)
 
 	/**
 	 * The character's resistance to Bleed damage (DamageType.Bleed).
@@ -483,7 +483,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstBleed)
 	FGameplayAttributeData RstBleed;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstBleed)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, RstBleed)
 
 	/**
 	 * The character's resistance to Precision damage (DamageType.Precision).
@@ -494,7 +494,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstPrecision)
 	FGameplayAttributeData RstPrecision;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, RstPrecision)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, RstPrecision)
 
 	// Perception ------------------------------------------------------------------------------------------------------
 	/**
@@ -503,7 +503,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Perception", ReplicatedUsing = OnRep_PerceptionModifier)
 	FGameplayAttributeData PerceptionModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, PerceptionModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, PerceptionModifier)
 
 	// Skills ------------------------------------------------------------------------------------------------------
 	/**
@@ -512,7 +512,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkAcrobaticsModifier)
 	FGameplayAttributeData SkAcrobaticsModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkAcrobaticsModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, SkAcrobaticsModifier)
 
 	/**
 	 * Arcana measures how much a character knows about arcane magic and creatures.
@@ -520,7 +520,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkArcanaModifier)
 	FGameplayAttributeData SkArcanaModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkArcanaModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, SkArcanaModifier)
 
 	/**
 	 * Athletics allows a character to perform deeds of physical prowess.
@@ -528,7 +528,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkAthleticsModifier)
 	FGameplayAttributeData SkAthleticsModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkAthleticsModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, SkAthleticsModifier)
 
 	/**
 	 * Crafting allows a character to create and repair items.
@@ -536,7 +536,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkCraftingModifier)
 	FGameplayAttributeData SkCraftingModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkCraftingModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, SkCraftingModifier)
 
 	/**
 	 * Deception allows a character to trick and mislead others using disguises, lies, and other forms of subterfuge.
@@ -544,7 +544,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkDeceptionModifier)
 	FGameplayAttributeData SkDeceptionModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkDeceptionModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, SkDeceptionModifier)
 
 	/**
 	 * Diplomacy allows a character to influence others through negotiation and flattery.
@@ -552,7 +552,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkDiplomacyModifier)
 	FGameplayAttributeData SkDiplomacyModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkDiplomacyModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, SkDiplomacyModifier)
 
 	/**
 	 * Intimidation allows a character to bend others to their will using threats.
@@ -560,7 +560,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkIntimidationModifier)
 	FGameplayAttributeData SkIntimidationModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkIntimidationModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, SkIntimidationModifier)
 
 	/**
 	 * Lore gives a character specialized information on a narrow topic.
@@ -568,7 +568,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkLore1Modifier)
 	FGameplayAttributeData SkLore1Modifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkLore1Modifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, SkLore1Modifier)
 
 	/**
 	 * Lore gives a character specialized information on a narrow topic.
@@ -576,7 +576,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkLore2Modifier)
 	FGameplayAttributeData SkLore2Modifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkLore2Modifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, SkLore2Modifier)
 
 	/**
 	 * Medicine allows a character to patch up wounds and help people recover from diseases and poisons.
@@ -584,7 +584,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkMedicineModifier)
 	FGameplayAttributeData SkMedicineModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkMedicineModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, SkMedicineModifier)
 
 	/**
 	 * Nature gives a character knowledge about the natural world, including commanding and training animals and beasts.
@@ -592,7 +592,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkNatureModifier)
 	FGameplayAttributeData SkNatureModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkNatureModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, SkNatureModifier)
 
 	/**
 	 * Occultism gives a character knowledge about ancient philosophies, esoteric lore, obscure mysticism, and
@@ -602,7 +602,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkOccultismModifier)
 	FGameplayAttributeData SkOccultismModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkOccultismModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, SkOccultismModifier)
 
 	/**
 	 * Performance gives a character skill impressing crowds by performing live.
@@ -610,7 +610,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkPerformanceModifier)
 	FGameplayAttributeData SkPerformanceModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkPerformanceModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, SkPerformanceModifier)
 
 	/**
 	 * Religion gives a character knowledge of the secrets of deities, dogma, faith, and the realms of divine
@@ -618,7 +618,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkReligionModifier)
 	FGameplayAttributeData SkReligionModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkReligionModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, SkReligionModifier)
 
 	/**
 	 * Society gives a character an understanding of the people and systems that make civilization run, including the
@@ -626,7 +626,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkSocietyModifier)
 	FGameplayAttributeData SkSocietyModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkSocietyModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, SkSocietyModifier)
 
 	/**
 	 * Stealth gives a character the ability to avoid detection, slip past foes, hide, and conceal items.
@@ -634,7 +634,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkStealthModifier)
 	FGameplayAttributeData SkStealthModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkStealthModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, SkStealthModifier)
 
 	/**
 	 * Survival gives a character aptitude to live in the wilderness, foraging for food, and building shelter.
@@ -642,7 +642,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkSurvivalModifier)
 	FGameplayAttributeData SkSurvivalModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkSurvivalModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, SkSurvivalModifier)
 
 	/**
 	 * Thievery gives a character training in the particular set of skills favored by thieves and miscreants.
@@ -650,7 +650,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Skills", ReplicatedUsing = OnRep_SkThieveryModifier)
 	FGameplayAttributeData SkThieveryModifier;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SkThieveryModifier)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, SkThieveryModifier)
 
 	/**
 	 * A measure of how potent a character's spells are against the defenses of other creatures.
@@ -658,7 +658,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Spells", ReplicatedUsing=OnRep_SpellAttackRoll)
 	FGameplayAttributeData SpellAttackRoll;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SpellAttackRoll)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, SpellAttackRoll)
 
 	/**
 	 * How hard it is to resist a character's spells with saving throws, or to counteract them.
@@ -666,7 +666,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Spells", ReplicatedUsing=OnRep_SpellDifficultyClass)
 	FGameplayAttributeData SpellDifficultyClass;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, SpellDifficultyClass)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, SpellDifficultyClass)
 
 	// Feats -----------------------------------------------------------------------------------------------------------
 	/**
@@ -676,7 +676,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Feats", ReplicatedUsing=OnRep_FeAncestryFeatCount)
 	FGameplayAttributeData FeAncestryFeatCount;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, FeAncestryFeatCount)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, FeAncestryFeatCount)
 
 	/**
 	 * The limit on how many ancestry feats this character can apply.
@@ -686,7 +686,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Feats", ReplicatedUsing=OnRep_FeAncestryFeatLimit)
 	FGameplayAttributeData FeAncestryFeatLimit;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, FeAncestryFeatLimit)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, FeAncestryFeatLimit)
 
 	// Encounters ------------------------------------------------------------------------------------------------------
 	/**
@@ -701,14 +701,14 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Encounters", ReplicatedUsing=OnRep_EncActionPoints)
 	FGameplayAttributeData EncActionPoints;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, EncActionPoints)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, EncActionPoints)
 
 	/**
 	 * The maximum number of action points a character can have at any time during an encounter.
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Encounters", ReplicatedUsing=OnRep_EncMaxActionPoints)
 	FGameplayAttributeData EncMaxActionPoints;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, EncMaxActionPoints)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, EncMaxActionPoints)
 
 	/**
 	 * The number of reaction points this character has available in the current encounter.
@@ -722,14 +722,14 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Encounters", ReplicatedUsing=OnRep_EncReactionPoints)
 	FGameplayAttributeData EncReactionPoints;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, EncReactionPoints)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, EncReactionPoints)
 
 	/**
 	 * The maximum number of reaction points a character can have at any time during an encounter.
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Encounters", ReplicatedUsing=OnRep_EncMaxReactionPoints)
 	FGameplayAttributeData EncMaxReactionPoints;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, EncMaxReactionPoints)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, EncMaxReactionPoints)
 
 	/**
 	 * The current multiple attack penalty applied to this character.
@@ -747,7 +747,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Encounters", ReplicatedUsing=OnRep_EncMultipleAttackPenalty)
 	FGameplayAttributeData EncMultipleAttackPenalty;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, EncMultipleAttackPenalty)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, EncMultipleAttackPenalty)
 
 	/**
 	 * The maximum multiple attack penalty that can be applied to this character.
@@ -766,7 +766,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Encounters", ReplicatedUsing=OnRep_EncMaxMultipleAttackPenalty)
 	FGameplayAttributeData EncMaxMultipleAttackPenalty;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, EncMaxMultipleAttackPenalty)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, EncMaxMultipleAttackPenalty)
 
 	// Transient/Temporary Attributes ----------------------------------------------------------------------------------
 	/**
@@ -778,7 +778,7 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Temporary Attributes")
 	FGameplayAttributeData TmpDamageIncoming;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, TmpDamageIncoming)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, TmpDamageIncoming)
 
 	/**
 	 * A temporary attribute for tracking the result of the last damage roll against the owner of this set.
@@ -788,12 +788,12 @@ public:
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Temporary Attributes")
 	FGameplayAttributeData TmpLastIncomingAttackDegreeOfSuccess;
-	ATTRIBUTE_ACCESSORS(UPF2AttributeSet, TmpLastIncomingAttackDegreeOfSuccess)
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, TmpLastIncomingAttackDegreeOfSuccess)
 
 	// =================================================================================================================
 	// Public Constructors
 	// =================================================================================================================
-	explicit UPF2AttributeSet();
+	explicit UPF2CharacterAttributeSet();
 
 	// =================================================================================================================
 	// Public Methods - UAttributeSet Overrides

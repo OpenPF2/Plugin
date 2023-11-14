@@ -6,7 +6,7 @@
 
 #include <Misc/AutomationTest.h>
 
-#include "Abilities/PF2AttributeSet.h"
+#include "Abilities/PF2CharacterAttributeSet.h"
 
 #include "Tests/PF2TestPawn.h"
 
@@ -124,12 +124,12 @@ protected:
 		return ObjectClass.LoadSynchronous();
 	}
 
-	static FAttributeCapture CaptureAttributes(const UPF2AttributeSet* AttributeSet);
-	static FAttributeCapture CaptureAbilityAttributes(const UPF2AttributeSet* AttributeSet);
-	static FAttributeCapture CaptureAbilityModifierAttributes(const UPF2AttributeSet* AttributeSet);
-	static FAttributeCapture CaptureSavingThrowAttributes(const UPF2AttributeSet* AttributeSet);
-	static FAttributeCapture CaptureSkillModifierAttributes(const UPF2AttributeSet* AttributeSet);
-	static FAttributeCapture CaptureSpellAttributes(const UPF2AttributeSet* AttributeSet);
+	static FAttributeCapture CaptureAttributes(const UPF2CharacterAttributeSet* AttributeSet);
+	static FAttributeCapture CaptureAbilityAttributes(const UPF2CharacterAttributeSet* AttributeSet);
+	static FAttributeCapture CaptureAbilityModifierAttributes(const UPF2CharacterAttributeSet* AttributeSet);
+	static FAttributeCapture CaptureSavingThrowAttributes(const UPF2CharacterAttributeSet* AttributeSet);
+	static FAttributeCapture CaptureSkillModifierAttributes(const UPF2CharacterAttributeSet* AttributeSet);
+	static FAttributeCapture CaptureSpellAttributes(const UPF2CharacterAttributeSet* AttributeSet);
 
 	void SetupWorld();
 	void BeginPlay() const;

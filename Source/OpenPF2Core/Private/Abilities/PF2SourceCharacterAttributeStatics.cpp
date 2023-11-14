@@ -7,46 +7,46 @@
 
 FPF2SourceCharacterAttributeStatics::FPF2SourceCharacterAttributeStatics()
 {
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, AbBoostCount, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, AbBoostCount, Source, true);
 
-	DEFINE_PF2_ABILITY_SCORE_CAPTUREDEF(UPF2AttributeSet, AbCharisma, Source, true);
-	DEFINE_PF2_ABILITY_SCORE_CAPTUREDEF(UPF2AttributeSet, AbConstitution, Source, true);
-	DEFINE_PF2_ABILITY_SCORE_CAPTUREDEF(UPF2AttributeSet, AbDexterity, Source, true);
-	DEFINE_PF2_ABILITY_SCORE_CAPTUREDEF(UPF2AttributeSet, AbIntelligence, Source, true);
-	DEFINE_PF2_ABILITY_SCORE_CAPTUREDEF(UPF2AttributeSet, AbStrength, Source, true);
-	DEFINE_PF2_ABILITY_SCORE_CAPTUREDEF(UPF2AttributeSet, AbWisdom, Source, true);
+	DEFINE_PF2_ABILITY_SCORE_CAPTUREDEF(UPF2CharacterAttributeSet, AbCharisma, Source, true);
+	DEFINE_PF2_ABILITY_SCORE_CAPTUREDEF(UPF2CharacterAttributeSet, AbConstitution, Source, true);
+	DEFINE_PF2_ABILITY_SCORE_CAPTUREDEF(UPF2CharacterAttributeSet, AbDexterity, Source, true);
+	DEFINE_PF2_ABILITY_SCORE_CAPTUREDEF(UPF2CharacterAttributeSet, AbIntelligence, Source, true);
+	DEFINE_PF2_ABILITY_SCORE_CAPTUREDEF(UPF2CharacterAttributeSet, AbStrength, Source, true);
+	DEFINE_PF2_ABILITY_SCORE_CAPTUREDEF(UPF2CharacterAttributeSet, AbWisdom, Source, true);
 
-	DEFINE_PF2_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbCharismaModifier, Source, true);
-	DEFINE_PF2_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbConstitutionModifier, Source, true);
-	DEFINE_PF2_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbDexterityModifier, Source, true);
-	DEFINE_PF2_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbIntelligenceModifier, Source, true);
-	DEFINE_PF2_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbStrengthModifier, Source, true);
-	DEFINE_PF2_ABILITY_MODIFIER_CAPTUREDEF(UPF2AttributeSet, AbWisdomModifier, Source, true);
+	DEFINE_PF2_ABILITY_MODIFIER_CAPTUREDEF(UPF2CharacterAttributeSet, AbCharismaModifier, Source, true);
+	DEFINE_PF2_ABILITY_MODIFIER_CAPTUREDEF(UPF2CharacterAttributeSet, AbConstitutionModifier, Source, true);
+	DEFINE_PF2_ABILITY_MODIFIER_CAPTUREDEF(UPF2CharacterAttributeSet, AbDexterityModifier, Source, true);
+	DEFINE_PF2_ABILITY_MODIFIER_CAPTUREDEF(UPF2CharacterAttributeSet, AbIntelligenceModifier, Source, true);
+	DEFINE_PF2_ABILITY_MODIFIER_CAPTUREDEF(UPF2CharacterAttributeSet, AbStrengthModifier, Source, true);
+	DEFINE_PF2_ABILITY_MODIFIER_CAPTUREDEF(UPF2CharacterAttributeSet, AbWisdomModifier, Source, true);
 
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, ArmorClass, Source, true);
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, HitPoints, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, ArmorClass, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, HitPoints, Source, true);
 
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPhysicalBludgeoning, Source, true);
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPhysicalPiercing, Source, true);
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPhysicalSlashing, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstPhysicalBludgeoning, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstPhysicalPiercing, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstPhysicalSlashing, Source, true);
 
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstEnergyAcid, Source, true);
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstEnergyCold, Source, true);
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstEnergyFire, Source, true);
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstEnergySonic, Source, true);
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstEnergyPositive, Source, true);
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstEnergyNegative, Source, true);
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstEnergyForce, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstEnergyAcid, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstEnergyCold, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstEnergyFire, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstEnergySonic, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstEnergyPositive, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstEnergyNegative, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstEnergyForce, Source, true);
 
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstAlignmentChaotic, Source, true);
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstAlignmentEvil, Source, true);
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstAlignmentGood, Source, true);
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstAlignmentLawful, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstAlignmentChaotic, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstAlignmentEvil, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstAlignmentGood, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstAlignmentLawful, Source, true);
 
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstMental, Source, true);
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPoison, Source, true);
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstBleed, Source, true);
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, RstPrecision, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstMental, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstPoison, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstBleed, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstPrecision, Source, true);
 
-	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttributeSet, EncMultipleAttackPenalty, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, EncMultipleAttackPenalty, Source, true);
 }

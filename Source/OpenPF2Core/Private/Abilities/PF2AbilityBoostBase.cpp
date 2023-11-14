@@ -6,7 +6,7 @@
 #include "Abilities/PF2AbilityBoostBase.h"
 
 #include "Abilities/PF2AbilityBoostRuleOptionValidator.h"
-#include "Abilities/PF2AttributeSet.h"
+#include "Abilities/PF2CharacterAttributeSet.h"
 #include "Abilities/PF2CharacterAbilitySystemInterface.h"
 #include "Abilities/PF2GameplayAbilityTargetData_BoostAbility.h"
 
@@ -32,10 +32,10 @@ bool UPF2AbilityBoostBase::CheckCost(
 {
 	if (Super::CheckCost(Handle, ActorInfo, OptionalRelevantTags))
 	{
-		const UPF2AttributeSet* AttributeSet  = PF2GameplayAbilityUtilities::GetAttributeSet(ActorInfo);
-		const float             BoostsToApply = this->BoostRuleOptions.Num(),
-		                        BoostsApplied = AttributeSet->GetAbBoostCount(),
-		                        BoostLimit    = AttributeSet->GetAbBoostLimit();
+		const UPF2CharacterAttributeSet* AttributeSet  = PF2GameplayAbilityUtilities::GetCharacterAttributeSet(ActorInfo);
+		const float                      BoostsToApply = this->BoostRuleOptions.Num(),
+		                                 BoostsApplied = AttributeSet->GetAbBoostCount(),
+		                                 BoostLimit    = AttributeSet->GetAbBoostLimit();
 
 		// We can apply this set of ability boosts if the difference between how many boosts are applied and the boost
 		// limit is large enough to accomodate all of the boost options on this ability.

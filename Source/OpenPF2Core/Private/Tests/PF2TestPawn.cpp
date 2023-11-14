@@ -5,7 +5,7 @@
 
 #include "Tests/PF2TestPawn.h"
 #include <AbilitySystemComponent.h>
-#include "Abilities/PF2AttributeSet.h"
+#include "Abilities/PF2CharacterAttributeSet.h"
 
 FName APF2TestPawn::AbilitySystemComponentName(TEXT("AbilitySystemComponent0"));
 
@@ -21,7 +21,7 @@ void APF2TestPawn::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	this->AbilitySystemComponent->InitStats(UPF2AttributeSet::StaticClass(), nullptr);
+	this->AbilitySystemComponent->InitStats(UPF2CharacterAttributeSet::StaticClass(), nullptr);
 }
 
 UAbilitySystemComponent* APF2TestPawn::GetAbilitySystemComponent() const

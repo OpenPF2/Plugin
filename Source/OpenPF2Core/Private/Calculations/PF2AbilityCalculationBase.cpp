@@ -5,7 +5,7 @@
 
 #include "Calculations/PF2AbilityCalculationBase.h"
 #include "OpenPF2Core.h"
-#include "Abilities/PF2AttributeSet.h"
+#include "Abilities/PF2CharacterAttributeSet.h"
 
 #include "Libraries/PF2AbilitySystemLibrary.h"
 
