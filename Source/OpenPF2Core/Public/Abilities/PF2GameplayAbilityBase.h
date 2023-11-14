@@ -198,4 +198,32 @@ protected:
 		const TSubclassOf<UGameplayEffect> GameplayEffectClass,
 		AActor*                            EffectCauser,
 		const float                        Level = 1.0f) const;
+
+	/**
+	 * Creates a gameplay effect spec outgoing from the current ability that has a custom instigator and effect causer.
+	 *
+	 * This is similar to MakeOutgoingGameplayEffectSpec() except that the instigator and effect causer can both be set
+	 * rather than them being based on the "avatar actor" which, in many games, is identical to the "owner actor", the
+	 * actor/character who owns the Ability System Component (ASC).
+	 *
+	 * @param GameplayEffectClass
+	 *	The type of gameplay effect for which a spec is desired.
+	 * @param Instigator
+	 *	The actor who originally initiated this effect (e.g., the actor who performed the attack).
+	 * @param EffectCauser
+	 *	The physical actor that actually caused this effect (e.g., did damage), such as a weapon or projectile. If
+	 *	the effect/damage is being done by bare fists or physical contact rather than a weapon, this could be the same
+	 *	actor as the instigator.
+	 * @param Level
+	 *	The level of the ability (for abilities that increase in damage/effect as they are upgraded, etc.)
+	 *
+	 * @return
+	 *	The new gameplay effect specification.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
+	FGameplayEffectSpecHandle MakeOutgoingGameplayEffectSpecForInstigatorAndCauser(
+		const TSubclassOf<UGameplayEffect> GameplayEffectClass,
+		AActor*                            Instigator,
+		AActor*                            EffectCauser,
+		const float                        Level = 1.0f) const;
 };

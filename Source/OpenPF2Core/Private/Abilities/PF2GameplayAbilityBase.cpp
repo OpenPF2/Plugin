@@ -279,3 +279,22 @@ FGameplayEffectSpecHandle UPF2GameplayAbilityBase::MakeOutgoingGameplayEffectSpe
 		Level
 	);
 }
+
+FGameplayEffectSpecHandle UPF2GameplayAbilityBase::MakeOutgoingGameplayEffectSpecForInstigatorAndCauser(
+	const TSubclassOf<UGameplayEffect> GameplayEffectClass,
+	AActor* Instigator,
+	AActor* EffectCauser,
+	const float Level) const
+{
+	check(this->CurrentActorInfo != nullptr);
+	check(this->CurrentActorInfo->AbilitySystemComponent.IsValid());
+
+	return UPF2AbilitySystemLibrary::MakeOutgoingGameplayEffectSpecForInstigatorAndCauser(
+		this->CurrentSpecHandle,
+		*(this->CurrentActorInfo),
+		GameplayEffectClass,
+		Instigator,
+		EffectCauser,
+		Level
+	);
+}
