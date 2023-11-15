@@ -35,7 +35,7 @@ private:
 	 * The ability system component of this pawn (manipulated by tests).
 	 */
 	UPROPERTY(Category = AbilitySystem, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class UAbilitySystemComponent* AbilitySystemComponent;
+	UAbilitySystemComponent* AbilitySystemComponent;
 
 public:
 	/**
@@ -49,7 +49,7 @@ public:
 	 * @return
 	 *	The Ability System Component this pawn manages.
 	 */
-	class UAbilitySystemComponent* GetAbilitySystemComponent()
+	UAbilitySystemComponent* GetAbilitySystemComponent()
 	{
 		return this->AbilitySystemComponent;
 	}
