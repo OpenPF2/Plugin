@@ -140,6 +140,10 @@ void FPF2SpecBase::DestroyWorld() const
 	GEngine->DestroyWorldContext(this->World);
 
 	this->World->DestroyWorld(false);
+
+	// Workaround for:
+	// https://forums.unrealengine.com/t/when-running-505-tests-physx-einvalid-operation-pxscene-unlockread-called-without-matching-call-to-pxscene-lockread/488533
+	GEngine->ForceGarbageCollection(true);
 }
 
 void FPF2SpecBase::SetupPawn()
