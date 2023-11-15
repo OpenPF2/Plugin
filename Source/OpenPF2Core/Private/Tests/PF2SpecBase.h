@@ -143,6 +143,6 @@ protected:
 	                                            const TSubclassOf<UGameplayEffect>& EffectBP,
 	                                            const float                         CharacterLevel = 1.0f) const;
 
-	void ApplyUnreplicatedTag(const FString TagName, const float CharacterLevel = 1.0f) const;
-	void RemoveUnreplicatedTag(const FString TagName) const;
+	void ApplyUnreplicatedTag(const FString& TagName, const float CharacterLevel = 1.0f) const;
+	void RemoveUnreplicatedTag(const FString& TagName) const;
 };

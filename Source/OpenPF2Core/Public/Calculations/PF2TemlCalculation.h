@@ -55,7 +55,7 @@ public:
 	 * @param Spec
 	 *	The Gameplay Effect (GE) specification that provides information about the character and their proficiencies.
 	 */
-	explicit FPF2TemlCalculation(const FString TagPrefix, const FGameplayEffectSpec& Spec);
+	explicit FPF2TemlCalculation(const FString& TagPrefix, const FGameplayEffectSpec& Spec);
 
 	/**
 	 * Constructor for FPF2TemlCalculation based on a the given prefix/root tag prefix, tag container, and char. level.

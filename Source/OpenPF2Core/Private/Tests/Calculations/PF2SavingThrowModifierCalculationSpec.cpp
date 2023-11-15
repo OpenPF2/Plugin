@@ -48,17 +48,17 @@ BEGIN_DEFINE_PF_SPEC(FPF2SavingThrowModifierCalculationSpec,
 
 	TSubclassOf<UGameplayEffect> LoadGE() const;
 
-	void VerifySavingThrowModifier(const FString AbModFriendlyName,
-	                               const FString AbModAttributeName,
-	                               const FString SavingModAttributeFriendlyName,
-	                               const FString SavingModAttributeName);
+	void VerifySavingThrowModifier(const FString& AbModFriendlyName,
+	                               const FString& AbModAttributeName,
+	                               const FString& SavingModAttributeFriendlyName,
+	                               const FString& SavingModAttributeName);
 
-	void VerifySavingThrowModifier(const FString AbModAttributeName,
-	                               const float   AbModScore,
-	                               const FString SavingModAttributeFriendlyName,
-	                               const FString SavingModAttributeName,
-	                               const FString ProficiencyLevel,
-	                               const float   ExpectedSavingMod);
+	void VerifySavingThrowModifier(const FString& AbModAttributeName,
+	                               const float    AbModScore,
+	                               const FString& SavingModAttributeFriendlyName,
+	                               const FString& SavingModAttributeName,
+	                               const FString& ProficiencyLevel,
+	                               const float    ExpectedSavingMod);
 END_DEFINE_PF_SPEC(FPF2SavingThrowModifierCalculationSpec)
 
 void FPF2SavingThrowModifierCalculationSpec::Define()
@@ -128,10 +128,10 @@ TSubclassOf<UGameplayEffect> FPF2SavingThrowModifierCalculationSpec::LoadGE() co
 	return LoadBlueprint<UGameplayEffect>(this->BlueprintPath, this->SavingThrowGameEffectCalc);
 }
 
-void FPF2SavingThrowModifierCalculationSpec::VerifySavingThrowModifier(const FString AbModFriendlyName,
-                                                                       const FString AbModAttributeName,
-                                                                       const FString SavingModAttributeFriendlyName,
-                                                                       const FString SavingModAttributeName)
+void FPF2SavingThrowModifierCalculationSpec::VerifySavingThrowModifier(const FString& AbModFriendlyName,
+                                                                       const FString& AbModAttributeName,
+                                                                       const FString& SavingModAttributeFriendlyName,
+                                                                       const FString& SavingModAttributeName)
 {
 	for (const auto AbilityValues : this->ExpectedValues)
 	{
@@ -164,12 +164,12 @@ void FPF2SavingThrowModifierCalculationSpec::VerifySavingThrowModifier(const FSt
 	}
 }
 
-void FPF2SavingThrowModifierCalculationSpec::VerifySavingThrowModifier(const FString AbModAttributeName,
-                                                                       const float   AbModScore,
-                                                                       const FString SavingModAttributeFriendlyName,
-                                                                       const FString SavingModAttributeName,
-                                                                       const FString ProficiencyLevel,
-                                                                       const float   ExpectedSavingMod)
+void FPF2SavingThrowModifierCalculationSpec::VerifySavingThrowModifier(const FString& AbModAttributeName,
+                                                                       const float    AbModScore,
+                                                                       const FString& SavingModAttributeFriendlyName,
+                                                                       const FString& SavingModAttributeName,
+                                                                       const FString& ProficiencyLevel,
+                                                                       const float    ExpectedSavingMod)
 {
 	const UPF2CharacterAttributeSet*    AttributeSet    = this->PawnAbilityComponent->GetSet<UPF2CharacterAttributeSet>();
 	FAttributeCapture                   Attributes      = CaptureAttributes(AttributeSet);

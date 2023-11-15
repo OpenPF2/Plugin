@@ -180,12 +180,12 @@ FActiveGameplayEffectHandle FPF2SpecBase::ApplyGameEffect(FGameplayAttributeData
 	return EffectHandle;
 }
 
-void FPF2SpecBase::ApplyUnreplicatedTag(const FString TagName, const float CharacterLevel) const
+void FPF2SpecBase::ApplyUnreplicatedTag(const FString& TagName, const float CharacterLevel) const
 {
 	this->PawnAbilityComponent->AddLooseGameplayTag(PF2GameplayAbilityUtilities::GetTag(TagName));
 }
 
-void FPF2SpecBase::RemoveUnreplicatedTag(const FString TagName) const
+void FPF2SpecBase::RemoveUnreplicatedTag(const FString& TagName) const
 {
 	this->PawnAbilityComponent->RemoveLooseGameplayTag(PF2GameplayAbilityUtilities::GetTag(TagName));
 }

@@ -25,7 +25,7 @@ struct OPENPF2CORE_API FPF2AbilityBoostRuleOption
 
 	}
 
-	explicit FPF2AbilityBoostRuleOption(const TSet<EPF2CharacterAbilityScoreType> AbilityScoreTypes) :
+	explicit FPF2AbilityBoostRuleOption(const TSet<EPF2CharacterAbilityScoreType>& AbilityScoreTypes) :
 		bIsFreeBoost(false),
 		AbilityScoreTypes(AbilityScoreTypes)
 	{

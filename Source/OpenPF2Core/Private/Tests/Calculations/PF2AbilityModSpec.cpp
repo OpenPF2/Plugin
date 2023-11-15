@@ -41,16 +41,16 @@ BEGIN_DEFINE_PF_SPEC(FPF2AbilityModSpec,
 	void LoadGEs();
 	void LoadAbModMappings();
 
-	void VerifyModifier(const FString TargetAbilityAttributeName,
-	                    const FString TargetModifierAttributeName,
-	                    const float   AbilityValue,
-	                    const float   ExpectedModifier);
+	void VerifyModifier(const FString& TargetAbilityAttributeName,
+	                    const FString& TargetModifierAttributeName,
+	                    const float    AbilityValue,
+	                    const float    ExpectedModifier);
 
-	void VerifyCorrectAbilityAffected(const FString TargetAbilityAttributeName,
-	                                  const FString TargetModifierAttributeName);
+	void VerifyCorrectAbilityAffected(const FString& TargetAbilityAttributeName,
+	                                  const FString& TargetModifierAttributeName);
 
-	void VerifyModifierRemoved(const FString TargetAbilityAttributeName,
-	                           const FString TargetModifierAttributeName);
+	void VerifyModifierRemoved(const FString& TargetAbilityAttributeName,
+	                           const FString& TargetModifierAttributeName);
 END_DEFINE_PF_SPEC(FPF2AbilityModSpec)
 
 void FPF2AbilityModSpec::Define()
@@ -429,10 +429,10 @@ void FPF2AbilityModSpec::LoadAbModMappings()
 	this->AbModMappings.Add(25, 7);
 }
 
-void FPF2AbilityModSpec::VerifyModifier(const FString TargetAbilityAttributeName,
-                                        const FString TargetModifierAttributeName,
-                                        const float   AbilityValue,
-                                        const float   ExpectedModifier)
+void FPF2AbilityModSpec::VerifyModifier(const FString& TargetAbilityAttributeName,
+                                        const FString& TargetModifierAttributeName,
+                                        const float    AbilityValue,
+                                        const float    ExpectedModifier)
 {
 	const TSubclassOf<UGameplayEffect>& EffectBP = this->AbModGEs[this->AbModGameEffectCalc];
 
@@ -473,8 +473,8 @@ void FPF2AbilityModSpec::VerifyModifier(const FString TargetAbilityAttributeName
 	}
 }
 
-void FPF2AbilityModSpec::VerifyCorrectAbilityAffected(const FString TargetAbilityAttributeName,
-                                                      const FString TargetModifierAttributeName)
+void FPF2AbilityModSpec::VerifyCorrectAbilityAffected(const FString& TargetAbilityAttributeName,
+                                                      const FString& TargetModifierAttributeName)
 {
 	const TSubclassOf<UGameplayEffect>& EffectBP = this->AbModGEs[this->AbModGameEffectCalc];
 
@@ -591,8 +591,8 @@ void FPF2AbilityModSpec::VerifyCorrectAbilityAffected(const FString TargetAbilit
 	}
 }
 
-void FPF2AbilityModSpec::VerifyModifierRemoved(const FString TargetAbilityAttributeName,
-                                               const FString TargetModifierAttributeName)
+void FPF2AbilityModSpec::VerifyModifierRemoved(const FString& TargetAbilityAttributeName,
+                                               const FString& TargetModifierAttributeName)
 {
 	const TSubclassOf<UGameplayEffect>& EffectBP = this->AbModGEs[this->AbModGameEffectCalc];
 

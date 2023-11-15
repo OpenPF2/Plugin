@@ -146,7 +146,7 @@ namespace PF2CharacterConstants
 	 * @return
 	 *	The path to the blueprint.
 	 */
-	FORCEINLINE static FString GetBlueprintPath(const FName Name, const FString Subfolder = BlueprintSubfolderRoot)
+	FORCEINLINE static FString GetBlueprintPath(const FName Name, const FString& Subfolder = BlueprintSubfolderRoot)
 	{
 		return FString::Format(TEXT("{0}{1}{2}.{2}_C"), { BlueprintBasePath, Subfolder, Name.ToString() });
 	}

@@ -135,8 +135,8 @@ TArray<TArray<FPF2AbilityBoostRuleOption>> UPF2AbilityBoostRuleOptionValidator::
 }
 
 TArray<TArray<FPF2AbilityBoostRuleOption>> UPF2AbilityBoostRuleOptionValidator::CalculateRulePermutations(
-	const TArray<FPF2AbilityBoostRuleOption> RemainingOptions,
-	const TArray<FPF2AbilityBoostRuleOption> SeenOptions) const
+	const TArray<FPF2AbilityBoostRuleOption>& RemainingOptions,
+	const TArray<FPF2AbilityBoostRuleOption>& SeenOptions) const
 {
 	TArray<TArray<FPF2AbilityBoostRuleOption>> Result;
 	const int32                                RemainingOptionCount = RemainingOptions.Num();

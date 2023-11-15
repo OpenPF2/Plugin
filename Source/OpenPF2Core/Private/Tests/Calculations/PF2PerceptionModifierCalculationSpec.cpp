@@ -53,9 +53,9 @@ BEGIN_DEFINE_PF_SPEC(FPF2PerceptionModifierCalculationSpec,
 
 	TSubclassOf<UGameplayEffect> LoadGE() const;
 
-	void VerifyPerceptionModifier(const float   AbModScore,
-	                              const FString ProficiencyLevel,
-	                              const float   ExpectedPcpMod);
+	void VerifyPerceptionModifier(const float    AbModScore,
+	                              const FString& ProficiencyLevel,
+	                              const float    ExpectedPcpMod);
 END_DEFINE_PF_SPEC(FPF2PerceptionModifierCalculationSpec)
 
 void FPF2PerceptionModifierCalculationSpec::Define()
@@ -103,9 +103,9 @@ TSubclassOf<UGameplayEffect> FPF2PerceptionModifierCalculationSpec::LoadGE() con
 	return LoadBlueprint<UGameplayEffect>(this->BlueprintPath, this->PerceptionGameEffectCalc);
 }
 
-void FPF2PerceptionModifierCalculationSpec::VerifyPerceptionModifier(const float   AbModScore,
-                                                                     const FString ProficiencyLevel,
-                                                                     const float   ExpectedPcpMod)
+void FPF2PerceptionModifierCalculationSpec::VerifyPerceptionModifier(const float    AbModScore,
+                                                                     const FString& ProficiencyLevel,
+                                                                     const float    ExpectedPcpMod)
 {
 	const UPF2CharacterAttributeSet*    AttributeSet   = this->PawnAbilityComponent->GetSet<UPF2CharacterAttributeSet>();
 	FAttributeCapture                   Attributes     = CaptureAttributes(AttributeSet);

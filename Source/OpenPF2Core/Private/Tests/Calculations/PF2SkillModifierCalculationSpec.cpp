@@ -48,17 +48,17 @@ BEGIN_DEFINE_PF_SPEC(FPF2SkillModifierCalculationSpec,
 
 	TSubclassOf<UGameplayEffect> LoadGE() const;
 
-	void VerifySkillModifier(const FString AbModFriendlyName,
-	                         const FString AbModAttributeName,
-	                         const FString SkillModAttributeFriendlyName,
-	                         const FString SkillModAttributeName);
+	void VerifySkillModifier(const FString& AbModFriendlyName,
+	                         const FString& AbModAttributeName,
+	                         const FString& SkillModAttributeFriendlyName,
+	                         const FString& SkillModAttributeName);
 
-	void VerifySkillModifier(const FString AbModAttributeName,
-	                         const float   AbModScore,
-	                         const FString SkillModAttributeFriendlyName,
-	                         const FString SkillModAttributeName,
-	                         const FString ProficiencyLevel,
-	                         const float   ExpectedSkillMod);
+	void VerifySkillModifier(const FString& AbModAttributeName,
+	                         const float    AbModScore,
+	                         const FString& SkillModAttributeFriendlyName,
+	                         const FString& SkillModAttributeName,
+	                         const FString& ProficiencyLevel,
+	                         const float    ExpectedSkillMod);
 END_DEFINE_PF_SPEC(FPF2SkillModifierCalculationSpec)
 
 void FPF2SkillModifierCalculationSpec::Define()
@@ -353,10 +353,10 @@ TSubclassOf<UGameplayEffect> FPF2SkillModifierCalculationSpec::LoadGE() const
 	return LoadBlueprint<UGameplayEffect>(this->BlueprintPath, this->SkillGameEffectCalc);
 }
 
-void FPF2SkillModifierCalculationSpec::VerifySkillModifier(const FString AbModFriendlyName,
-                                                           const FString AbModAttributeName,
-                                                           const FString SkillModAttributeFriendlyName,
-                                                           const FString SkillModAttributeName)
+void FPF2SkillModifierCalculationSpec::VerifySkillModifier(const FString& AbModFriendlyName,
+                                                           const FString& AbModAttributeName,
+                                                           const FString& SkillModAttributeFriendlyName,
+                                                           const FString& SkillModAttributeName)
 {
 	for (const auto AbilityValues : this->ExpectedValues)
 	{
@@ -389,12 +389,12 @@ void FPF2SkillModifierCalculationSpec::VerifySkillModifier(const FString AbModFr
 	}
 }
 
-void FPF2SkillModifierCalculationSpec::VerifySkillModifier(const FString AbModAttributeName,
-                                                           const float   AbModScore,
-                                                           const FString SkillModAttributeFriendlyName,
-                                                           const FString SkillModAttributeName,
-                                                           const FString ProficiencyLevel,
-                                                           const float   ExpectedSkillMod)
+void FPF2SkillModifierCalculationSpec::VerifySkillModifier(const FString& AbModAttributeName,
+                                                           const float    AbModScore,
+                                                           const FString& SkillModAttributeFriendlyName,
+                                                           const FString& SkillModAttributeName,
+                                                           const FString& ProficiencyLevel,
+                                                           const float    ExpectedSkillMod)
 {
 	const UPF2CharacterAttributeSet*    AttributeSet   = this->PawnAbilityComponent->GetSet<UPF2CharacterAttributeSet>();
 	FAttributeCapture                   Attributes     = CaptureAttributes(AttributeSet);

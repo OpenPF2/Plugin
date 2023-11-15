@@ -36,19 +36,19 @@ BEGIN_DEFINE_PF_SPEC(FPF2AbilityBoostSpec,
 	void LoadMMCs();
 	void LoadGEs();
 
-	void VerifyBoostApplied(const FString GameEffectName,
-	                        const FString TargetAttributeName,
-	                        const float   StartingValue,
-	                        const float   ExpectedValueAfterBoost);
+	void VerifyBoostApplied(const FString& GameEffectName,
+	                        const FString& TargetAttributeName,
+	                        const float    StartingValue,
+	                        const float    ExpectedValueAfterBoost);
 
-	void VerifyOtherBoostsUnaffected(const FString GameEffectName,
-	                                 const FString TargetAttributeName);
+	void VerifyOtherBoostsUnaffected(const FString& GameEffectName,
+	                                 const FString& TargetAttributeName);
 
-	void VerifyBoostCounter(FString GameEffectName, FString TargetAttributeName, int NumTimes);
+	void VerifyBoostCounter(const FString& GameEffectName, const FString& TargetAttributeName, int NumTimes);
 
-	void VerifyBoostRemoved(const FString GameEffectName,
-	                        const FString TargetAttributeName,
-	                        const float   StartingValue);
+	void VerifyBoostRemoved(const FString& GameEffectName,
+	                        const FString& TargetAttributeName,
+	                        const float    StartingValue);
 END_DEFINE_PF_SPEC(FPF2AbilityBoostSpec)
 
 void FPF2AbilityBoostSpec::Define()
@@ -761,10 +761,10 @@ void FPF2AbilityBoostSpec::LoadGEs()
 	}
 }
 
-void FPF2AbilityBoostSpec::VerifyBoostApplied(const FString GameEffectName,
-                                              const FString TargetAttributeName,
-                                              const float   StartingValue,
-                                              const float   ExpectedValueAfterBoost)
+void FPF2AbilityBoostSpec::VerifyBoostApplied(const FString& GameEffectName,
+                                              const FString& TargetAttributeName,
+                                              const float    StartingValue,
+                                              const float    ExpectedValueAfterBoost)
 {
 	const TSubclassOf<UGameplayEffect>& EffectBP = this->BoostGEs[GameEffectName];
 
@@ -797,8 +797,8 @@ void FPF2AbilityBoostSpec::VerifyBoostApplied(const FString GameEffectName,
 	}
 }
 
-void FPF2AbilityBoostSpec::VerifyOtherBoostsUnaffected(const FString GameEffectName,
-                                                       const FString TargetAttributeName)
+void FPF2AbilityBoostSpec::VerifyOtherBoostsUnaffected(const FString& GameEffectName,
+                                                       const FString& TargetAttributeName)
 {
 	const TSubclassOf<UGameplayEffect>& EffectBP = this->BoostGEs[GameEffectName];
 
@@ -861,9 +861,9 @@ void FPF2AbilityBoostSpec::VerifyOtherBoostsUnaffected(const FString GameEffectN
 	}
 }
 
-void FPF2AbilityBoostSpec::VerifyBoostCounter(const FString GameEffectName,
-                                              const FString TargetAttributeName,
-                                              const int NumTimes)
+void FPF2AbilityBoostSpec::VerifyBoostCounter(const FString& GameEffectName,
+                                              const FString& TargetAttributeName,
+                                              const int      NumTimes)
 {
 	const TSubclassOf<UGameplayEffect>& EffectBP = this->BoostGEs[GameEffectName];
 
@@ -903,9 +903,9 @@ void FPF2AbilityBoostSpec::VerifyBoostCounter(const FString GameEffectName,
 	}
 }
 
-void FPF2AbilityBoostSpec::VerifyBoostRemoved(const FString GameEffectName,
-                                              const FString TargetAttributeName,
-                                              const float   StartingValue)
+void FPF2AbilityBoostSpec::VerifyBoostRemoved(const FString& GameEffectName,
+                                              const FString& TargetAttributeName,
+                                              const float    StartingValue)
 {
 	const TSubclassOf<UGameplayEffect>& EffectBP = this->BoostGEs[GameEffectName];
 

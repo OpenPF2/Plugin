@@ -159,6 +159,6 @@ protected:
 	 *	The full list of permutation(s) that started with the given SeenOptions.
 	 */
 	TArray<TArray<FPF2AbilityBoostRuleOption>> CalculateRulePermutations(
-		const TArray<FPF2AbilityBoostRuleOption> RemainingOptions,
-		const TArray<FPF2AbilityBoostRuleOption> SeenOptions) const;
+		const TArray<FPF2AbilityBoostRuleOption>& RemainingOptions,
+		const TArray<FPF2AbilityBoostRuleOption>& SeenOptions) const;
 };
