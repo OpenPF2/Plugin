@@ -23,9 +23,9 @@ BEGIN_DEFINE_PF_SPEC(FPF2SpellAttackRollCalculationsSpec,
 		{"Legendary", 9.0f},
 	};
 
-	// The classes in the core rulebook don't have any spellcasting abilities other than Wisdom and Charisma, but
+	// The classes in the core rulebook don't have any spell-casting abilities other than Wisdom and Charisma, but
 	// there's no reason to limit game makers to just those options. Plus, add-on material for OpenPF2 could always
-	// invent a new class that uses something like Intelligence for a character that does complex spellcasting or
+	// invent a new class that uses something like Intelligence for a character that does complex spell casting or
 	// Dexterity for a character who performs physically-dexterous spells.
 	const TMap<FString, FString> AllAbilityModifierAttributes = {
 		{"Charisma",     "AbCharismaModifier"     },
