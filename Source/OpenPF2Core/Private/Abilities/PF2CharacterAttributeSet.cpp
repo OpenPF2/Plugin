@@ -687,7 +687,7 @@ void UPF2CharacterAttributeSet::Native_OnHitPointsChanged(const FGameplayEffectC
 			TargetCharacter->Native_OnHitPointsChanged(ValueDelta, ClampedHitPoints, EventTags);
 		}
 
-		EventPayload.EventMagnitude = ClampedHitPoints;
+		EventPayload.EventMagnitude = ValueDelta;
 		EventPayload.Instigator     = Instigator->ToActor();
 		EventPayload.Target         = TargetCharacter->ToActor();
 		EventPayload.OptionalObject = DamageSource;
