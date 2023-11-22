@@ -1028,14 +1028,58 @@ protected:
 	// Protected Constants
 	// =================================================================================================================
 	/**
+	 * The name of the gameplay tag for events to notify passive condition check GAs about incoming damage.
+	 */
+	inline static const FName DamageReceivedEventTagName = TEXT("GameplayAbility.GameplayEvent.DamageReceived");
+
+	/**
 	 * The name of the gameplay tag for events to notify passive condition check GAs about changes in hit points.
 	 */
 	inline static const FName HitPointsChangedEventTagName = TEXT("GameplayAbility.GameplayEvent.HitPointsChanged");
+
+	// =================================================================================================================
+	// Protected Fields
+	// =================================================================================================================
+	/**
+	 * The gameplay tag for events to notify passive condition check GAs about changes in hit points.
+	 */
+	FGameplayTag DamageReceivedEventTag;
 
 	/**
 	 * The gameplay tag for events to notify passive condition check GAs about changes in hit points.
 	 */
 	FGameplayTag HitPointsChangedEventTag;
+
+	// =================================================================================================================
+	// Protected Methods
+	// =================================================================================================================
+	/**
+	 * Notifies the ASC of the target about a change to an attribute.
+	 *
+	 * This is typically used to enable passive condition check GAs an opportunity to update condition statuses in
+	 * response to changes in stats.
+	 *
+	 * @param EventTag
+	 *	The unique gameplay tag that corresponds to the desired event type.
+	 * @param EventMagnitude
+	 *	The delta for which an event is being communicated (e.g., the amount of damage received or the amount of health
+	 *	lost or gained).
+	 * @param Instigator
+	 *	The character that is ultimately responsible for the damage. This can be null if the damage is caused by the
+	 * @param TargetCharacter
+	 *	The character receiving the hit point change. This is usually the same as the character who owns this ASC.
+	 * @param DamageSource
+	 *	The actor that directly inflicted the damage, such as a weapon or projectile.
+	 * @param Context
+	 *	Additional information about the original gameplay effect being executed that prompted this event to be
+	 *	emitted.
+	 */
+	void EmitGameplayEvent(const FGameplayTag&                 EventTag,
+	                       float                               EventMagnitude,
+	                       IPF2CharacterInterface*             Instigator,
+	                       IPF2CharacterInterface*             TargetCharacter,
+	                       AActor*                             DamageSource,
+	                       const FGameplayEffectContextHandle& Context) const;
 
 	// =================================================================================================================
 	// Protected Native Event Callbacks

@@ -92,8 +92,9 @@ UPF2CharacterAttributeSet::UPF2CharacterAttributeSet() :
 	EncMaxReactionPoints(0.0f),
 	TmpDamageIncoming(0.0f)
 {
-	// Cache the tag to avoid lookup overhead.
-	HitPointsChangedEventTag = PF2GameplayAbilityUtilities::GetTag(HitPointsChangedEventTagName);
+	// Cache the tags to avoid lookup overhead.
+	this->DamageReceivedEventTag   = PF2GameplayAbilityUtilities::GetTag(DamageReceivedEventTagName);
+	this->HitPointsChangedEventTag = PF2GameplayAbilityUtilities::GetTag(HitPointsChangedEventTagName);
 }
 
 void UPF2CharacterAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -577,6 +578,25 @@ void UPF2CharacterAttributeSet::PostGameplayEffectExecute(const FGameplayEffectM
 	}
 }
 
+void UPF2CharacterAttributeSet::EmitGameplayEvent(const FGameplayTag&                 EventTag,
+                                                  const float                         EventMagnitude,
+                                                  IPF2CharacterInterface*             Instigator,
+                                                  IPF2CharacterInterface*             TargetCharacter,
+                                                  AActor*                             DamageSource,
+                                                  const FGameplayEffectContextHandle& Context) const
+{
+	UAbilitySystemComponent* OwningAsc    = this->GetOwningAbilitySystemComponent();
+	FGameplayEventData       EventPayload;
+
+	EventPayload.EventMagnitude = EventMagnitude;
+	EventPayload.Instigator     = Instigator->ToActor();
+	EventPayload.Target         = TargetCharacter->ToActor();
+	EventPayload.OptionalObject = DamageSource;
+	EventPayload.ContextHandle  = Context;
+
+	OwningAsc->HandleGameplayEvent(EventTag, &EventPayload);
+}
+
 void UPF2CharacterAttributeSet::Native_OnDamageIncomingChanged(const FGameplayEffectContextHandle& Context,
                                                                IPF2CharacterInterface*             TargetCharacter,
                                                                const FGameplayTagContainer*        EventTags)
@@ -630,6 +650,16 @@ void UPF2CharacterAttributeSet::Native_OnDamageIncomingChanged(const FGameplayEf
 			TargetCharacter->Native_OnDamageReceived(LocalDamage, Instigator, DamageSource, EventTags, HitResult);
 		}
 
+		// Enable condition check GAs to react to incoming damage.
+		this->EmitGameplayEvent(
+			DamageReceivedEventTag,
+			LocalDamage,
+			Instigator,
+			TargetCharacter,
+			DamageSource,
+			Context
+		);
+
 		// We don't clamp hit points here; it gets clamped by Native_OnHitPointsChanged().
 		this->SetHitPoints(CurrentHitPoints - LocalDamage);
 
@@ -671,9 +701,6 @@ void UPF2CharacterAttributeSet::Native_OnHitPointsChanged(const FGameplayEffectC
 	}
 	else
 	{
-		UAbilitySystemComponent* OwningAsc    = this->GetOwningAbilitySystemComponent();
-		FGameplayEventData       EventPayload;
-
 		UE_LOG(
 			LogPf2CoreStats,
 			VeryVerbose,
@@ -687,14 +714,15 @@ void UPF2CharacterAttributeSet::Native_OnHitPointsChanged(const FGameplayEffectC
 			TargetCharacter->Native_OnHitPointsChanged(ValueDelta, ClampedHitPoints, EventTags);
 		}
 
-		EventPayload.EventMagnitude = ValueDelta;
-		EventPayload.Instigator     = Instigator->ToActor();
-		EventPayload.Target         = TargetCharacter->ToActor();
-		EventPayload.OptionalObject = DamageSource;
-		EventPayload.ContextHandle  = Context;
-
 		// Enable condition check GAs to react to hit points.
-		OwningAsc->HandleGameplayEvent(HitPointsChangedEventTag, &EventPayload);
+		this->EmitGameplayEvent(
+			HitPointsChangedEventTag,
+			ValueDelta,
+			Instigator,
+			TargetCharacter,
+			DamageSource,
+			Context
+		);
 	}
 }
 
