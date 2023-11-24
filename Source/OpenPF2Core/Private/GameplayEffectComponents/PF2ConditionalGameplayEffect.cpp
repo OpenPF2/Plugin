@@ -5,13 +5,22 @@
 
 #include "GameplayEffectComponents/PF2ConditionalGameplayEffect.h"
 
-bool FPF2ConditionalGameplayEffect::CanApply(const FGameplayTagContainer& SourceTags, const float SourceLevel) const
+bool FPF2ConditionalGameplayEffect::CanApply(const float                  EffectLevel,
+                                             const FGameplayTagContainer& SourceTags,
+                                             const FGameplayTagContainer& TargetTags) const
 {
-	const bool bMatchesAllRequired = SourceTags.HasAll(this->RequiredSourceTags),
-	           bHasNoIgnored       = SourceTags.HasAny(this->IgnoredSourceTags),
-	           bSatisfiesQuery     = this->SourceTagQuery.IsEmpty() || this->SourceTagQuery.Matches(SourceTags);
+	const bool bSourceMatchesAllRequired = SourceTags.HasAll(this->SourceRequiredTags),
+	           bTargetMatchesAllRequired = TargetTags.HasAll(this->TargetRequiredTags),
+	           bSourceHasNoIgnored       = !SourceTags.HasAny(this->SourceIgnoredTags),
+	           bTargetHasNoIgnored       = !TargetTags.HasAny(this->TargetIgnoredTags),
+	           bSourceSatisfiesQuery     = this->SourceTagQuery.IsEmpty() || this->SourceTagQuery.Matches(SourceTags),
+	           bTargetSatisfiesQuery     = this->TargetTagQuery.IsEmpty() || this->TargetTagQuery.Matches(TargetTags);
 
-	return bMatchesAllRequired && !bHasNoIgnored && bSatisfiesQuery;
+	return (
+		bSourceMatchesAllRequired && bTargetMatchesAllRequired &&
+		bSourceHasNoIgnored && bTargetHasNoIgnored &&
+		bSourceSatisfiesQuery && bTargetSatisfiesQuery
+	);
 }
 
 FGameplayEffectSpecHandle FPF2ConditionalGameplayEffect::CreateSpec(
@@ -34,8 +43,8 @@ bool FPF2ConditionalGameplayEffect::operator==(const FPF2ConditionalGameplayEffe
 {
 	return (
 		(this->EffectClass == Other.EffectClass) &&
-		(this->RequiredSourceTags == Other.RequiredSourceTags) &&
-		(this->IgnoredSourceTags == Other.IgnoredSourceTags) &&
+		(this->SourceRequiredTags == Other.SourceRequiredTags) &&
+		(this->SourceIgnoredTags == Other.SourceIgnoredTags) &&
 		(this->SourceTagQuery == Other.SourceTagQuery)
 	);
 }
@@ -44,8 +53,8 @@ bool FPF2ConditionalGameplayEffect::operator!=(const FPF2ConditionalGameplayEffe
 {
 	return (
 		(this->EffectClass != Other.EffectClass) ||
-		(this->RequiredSourceTags != Other.RequiredSourceTags) ||
-		(this->IgnoredSourceTags != Other.IgnoredSourceTags) ||
+		(this->SourceRequiredTags != Other.SourceRequiredTags) ||
+		(this->SourceIgnoredTags != Other.SourceIgnoredTags) ||
 		(this->SourceTagQuery != Other.SourceTagQuery)
 	);
 }

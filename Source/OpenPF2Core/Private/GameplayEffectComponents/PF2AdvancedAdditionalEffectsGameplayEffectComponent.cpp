@@ -59,29 +59,30 @@ void UPF2AdvancedAdditionalEffectsGameplayEffectComponent::OnGameplayEffectAppli
 	{
 		const UGameplayEffect* GameplayEffectDef = ConditionalEffect.GetEffectClass().GetDefaultObject();
 
-		if (GameplayEffectDef == nullptr)
+		if (GameplayEffectDef != nullptr)
 		{
-			continue;
-		}
+			const FGameplayTagContainer& SourceTags = GESpec.CapturedSourceTags.GetActorTags();
+			const FGameplayTagContainer& TargetTags = GESpec.CapturedTargetTags.GetActorTags();
 
-		if (ConditionalEffect.CanApply(GESpec.CapturedSourceTags.GetActorTags(), EffectLevel))
-		{
-			FGameplayEffectSpecHandle SpecHandle;
-
-			if (this->bOnApplicationCopyDataFromOriginalSpec)
+			if (ConditionalEffect.CanApply(EffectLevel, SourceTags, TargetTags))
 			{
-				SpecHandle = FGameplayEffectSpecHandle(new FGameplayEffectSpec());
+				FGameplayEffectSpecHandle SpecHandle;
 
-				SpecHandle.Data->InitializeFromLinkedSpec(GameplayEffectDef, GESpec);
-			}
-			else
-			{
-				SpecHandle = ConditionalEffect.CreateSpec(EffectContextHandle, EffectLevel);
-			}
+				if (this->bOnApplicationCopyDataFromOriginalSpec)
+				{
+					SpecHandle = FGameplayEffectSpecHandle(new FGameplayEffectSpec());
 
-			if (ensure(SpecHandle.IsValid()))
-			{
-				TargetEffectSpecs.Add(SpecHandle);
+					SpecHandle.Data->InitializeFromLinkedSpec(GameplayEffectDef, GESpec);
+				}
+				else
+				{
+					SpecHandle = ConditionalEffect.CreateSpec(EffectContextHandle, EffectLevel);
+				}
+
+				if (ensure(SpecHandle.IsValid()))
+				{
+					TargetEffectSpecs.Add(SpecHandle);
+				}
 			}
 		}
 	}
