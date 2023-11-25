@@ -19,6 +19,25 @@ bool UPF2CharacterInitiativeQueueComponent::IsEmpty()
 	return (this->CurrentCharacterSequence.Num() == 0);
 }
 
+int32 UPF2CharacterInitiativeQueueComponent::GetCharacterInitiative(
+	const TScriptInterface<IPF2CharacterInterface>& Character) const
+{
+	int32                   Result;
+	IPF2CharacterInterface* Pf2Character    = PF2InterfaceUtilities::FromScriptInterface(Character);
+	const int32*            FoundInitiative = CharactersByInitiatives.FindKey(Pf2Character);
+
+	if (FoundInitiative == nullptr)
+	{
+		Result = INDEX_NONE;
+	}
+	else
+	{
+		Result = *FoundInitiative;
+	}
+
+    return Result;
+}
+
 void UPF2CharacterInitiativeQueueComponent::SetCharacterInitiative(
 	const TScriptInterface<IPF2CharacterInterface>& Character,
 	const int32                                     Initiative)

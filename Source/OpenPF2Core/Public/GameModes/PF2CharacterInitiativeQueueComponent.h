@@ -88,6 +88,8 @@ public:
 	// =================================================================================================================
 	virtual bool IsEmpty() override;
 
+	virtual int32 GetCharacterInitiative(const TScriptInterface<IPF2CharacterInterface>& Character) const override;
+
 	virtual void SetCharacterInitiative(const TScriptInterface<IPF2CharacterInterface>& Character,
 	                                    const int32                                     Initiative) override;
 
