@@ -219,6 +219,9 @@ void UPF2CharacterInitiativeQueueComponent::RebuildCharacterSequence()
 
 void UPF2CharacterInitiativeQueueComponent::RemoveCharacterFromInitiativeMap(const IPF2CharacterInterface* Character)
 {
+	// If the character being removed is the character whose turn it is to act, we need to update which character is
+	// active so that we don't inadvertently affect the turns of other characters after the character's previous
+	// or new position.
 	if (this->PreviousCharacter == Character)
 	{
 		int32 NewPreviousCharacterIndex;
@@ -232,18 +235,17 @@ void UPF2CharacterInitiativeQueueComponent::RemoveCharacterFromInitiativeMap(con
 		}
 		else
 		{
-			// NOTE: Length will drop after the removal, but that's not important yet because we're just grabbing what
-			// currently occupies this slot.
+			// The length will drop after the removal, but that doesn't need to be taken into account yet. We just need
+			// to grab which character occupies the last slot before the length changes.
 			NewPreviousCharacterIndex = this->CurrentCharacterSequence.Num() - 1;
 		}
 
-		// We do not update PreviousCharacterIndex; it will get updated during the next call to
+		// We do not update PreviousCharacterIndex here; it will get updated during the call to
 		// RebuildCharacterSequence().
 		this->PreviousCharacter = this->CurrentCharacterSequence[NewPreviousCharacterIndex];
 	}
 
-	for (const TTuple<int, IPF2CharacterInterface*>& CharacterInitiativePair :
-		 TMultiMap<int32, IPF2CharacterInterface*>(this->CharactersByInitiatives))
+	for (const TTuple<int, IPF2CharacterInterface*>& CharacterInitiativePair : TMultiMap(this->CharactersByInitiatives))
 	{
 		if (CharacterInitiativePair.Value == Character)
 		{
