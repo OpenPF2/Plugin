@@ -116,7 +116,7 @@ void FPF2ArmorClassCalculationSpec::Define()
 									FGameplayAttributeData*             AcAttribute  = Attributes[this->AcModAttributeName];
 									const TSubclassOf<UGameplayEffect>& EffectBP     = this->LoadGE();
 
-									this->ApplyGameEffect(*AcAttribute, 0.0f, EffectBP);
+									this->InitializeAttributeAndApplyEffect(*AcAttribute, 0.0f, EffectBP);
 
 									TestEqual(
 										FString::Format(TEXT("{0}.BaseValue"), {this->AcModAttributeName}),

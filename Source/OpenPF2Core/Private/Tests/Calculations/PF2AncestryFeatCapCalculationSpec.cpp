@@ -81,7 +81,7 @@ void FPF2AncestryFeatCapCalculationSpec::Define()
 				FGameplayAttributeData*             CapAttribute = Attributes[this->AncestryFeatCapAttributeName];
 				const TSubclassOf<UGameplayEffect>& EffectBP     = this->LoadGE();
 
-				this->ApplyGameEffect(*CapAttribute, 0.0f, EffectBP, CharacterLevel);
+				this->InitializeAttributeAndApplyEffect(*CapAttribute, 0.0f, EffectBP, CharacterLevel);
 
 				TestEqual(
 					FString::Format(TEXT("{0}.BaseValue"), {this->AncestryFeatCapAttributeName}),

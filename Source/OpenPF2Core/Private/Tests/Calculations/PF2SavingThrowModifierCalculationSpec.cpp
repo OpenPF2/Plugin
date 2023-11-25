@@ -178,7 +178,7 @@ void FPF2SavingThrowModifierCalculationSpec::VerifySavingThrowModifier(const FSt
 	const TSubclassOf<UGameplayEffect>& EffectBP        = this->LoadGE();
 
 	this->ApplyUnreplicatedTag(FString::Format(TEXT("SavingThrow.{0}.{1}"), {SavingModAttributeFriendlyName, ProficiencyLevel}));
-	this->ApplyGameEffect(*AbModAttribute, AbModScore, EffectBP);
+	this->InitializeAttributeAndApplyEffect(*AbModAttribute, AbModScore, EffectBP);
 
 	TestEqual(
 		FString::Format(TEXT("{0}.BaseValue"), {SavingModAttributeName}),

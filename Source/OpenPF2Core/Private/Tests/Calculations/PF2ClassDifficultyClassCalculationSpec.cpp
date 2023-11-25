@@ -122,7 +122,7 @@ void FPF2ClassDifficultyClassCalculationSpec::Define()
 								FGameplayAttributeData*             ClassDcAttribute = Attributes[this->CdcModAttributeName];
 								const TSubclassOf<UGameplayEffect>& EffectBP         = this->LoadGE();
 
-								this->ApplyGameEffect(*ClassDcAttribute, 0.0f, EffectBP);
+								this->InitializeAttributeAndApplyEffect(*ClassDcAttribute, 0.0f, EffectBP);
 
 								TestEqual(
 									FString::Format(TEXT("{0}.BaseValue"), {this->CdcModAttributeName}),

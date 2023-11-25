@@ -68,7 +68,7 @@ void FKeyAbilityBoostSpec::Define()
 				}
 
 				this->ApplyUnreplicatedTag(TagName);
-				this->ApplyGameEffect(*KeyAbilityAttribute, 15.0f, EffectBP);
+				this->InitializeAttributeAndApplyEffect(*KeyAbilityAttribute, 15.0f, EffectBP);
 			});
 
 			It(FString::Format(TEXT("boosts '{0}'"), {KeyAbilityName}), [=, this]()

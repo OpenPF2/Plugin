@@ -92,15 +92,42 @@
 
 #endif
 
-typedef TMap<FString, FGameplayAttributeData*> FAttributeCapture;
+using FAttributeCapture = TMap<FString, FGameplayAttributeData*>;
 
-class OPENPF2CORE_API FPF2SpecBase : public FAutomationSpecBase {
+/**
+ * Base class that provides reusable, boilerplate logic for automation specs in OpenPF2.
+ */
+class OPENPF2CORE_API FPF2SpecBase : public FAutomationSpecBase
+{
 protected:
+	// =================================================================================================================
+	// Protected Fields
+	// =================================================================================================================
+	/**
+	 * A throwaway world for use in tests.
+	 */
 	UWorld* World;
+
+	/**
+	 * A simple pawn that has an ability system component, for use in ASC tests.
+	 */
 	APF2TestPawn* TestPawn;
+
+	/**
+	 * The ASC of the test pawn.
+	 */
 	UAbilitySystemComponent* PawnAbilityComponent;
 
 public:
+	// =================================================================================================================
+	// Public Constructors
+	// =================================================================================================================
+	/**
+	 * Constructor for FPF2SpecBase.
+	 *
+	 * @param InName
+	 *	The name of the test, for reporting in the session frontend.
+	 */
 	explicit FPF2SpecBase(const FString& InName) :
 		FAutomationSpecBase(InName, false),
 		World(nullptr),
@@ -110,8 +137,24 @@ public:
 	}
 
 protected:
+	// =================================================================================================================
+	// Protected Methods
+	// =================================================================================================================
 	virtual void Define() override = 0;
 
+	/**
+	 * Instantiates a blueprint for use in a C++ test.
+	 *
+	 * @tparam BlueprintType
+	 *	The concrete type of blueprint to load.
+	 *
+	 * @param FolderPath
+	 *	The path to the folder that contains the blueprint being loaded.
+	 * @param BlueprintName
+	 *	The name of the blueprint to load, as it appears in the Unreal editor.
+	 *
+	 * @return The loaded blueprint.
+	 */
 	template <typename BlueprintType>
 	static TSubclassOf<BlueprintType> LoadBlueprint(const FString FolderPath, const FString BlueprintName)
 	{
@@ -124,25 +167,134 @@ protected:
 		return ObjectClass.LoadSynchronous();
 	}
 
+	/**
+	 * Captures all attribute values of the provided character attribute set.
+	 *
+	 * @param AttributeSet
+	 *	The attribute set from which to capture values.
+	 *
+	 * @return
+	 *	A map from attribute machine names to attribute values.
+	 */
 	static FAttributeCapture CaptureAttributes(const UPF2CharacterAttributeSet* AttributeSet);
+
+	/**
+	 * Captures all ability attribute values of the provided character attribute set.
+	 *
+	 * @param AttributeSet
+	 *	The attribute set from which to capture values.
+	 *
+	 * @return
+	 *	A map from ability attribute machine names to attribute values.
+	 */
 	static FAttributeCapture CaptureAbilityAttributes(const UPF2CharacterAttributeSet* AttributeSet);
+
+	/**
+	 * Captures all ability modifier attribute values of the provided character attribute set.
+	 *
+	 * @param AttributeSet
+	 *	The attribute set from which to capture values.
+	 *
+	 * @return
+	 *	A map from ability modifier attribute machine names to attribute values.
+	 */
 	static FAttributeCapture CaptureAbilityModifierAttributes(const UPF2CharacterAttributeSet* AttributeSet);
-	static FAttributeCapture CaptureSavingThrowAttributes(const UPF2CharacterAttributeSet* AttributeSet);
+
+	/**
+	 * Captures all saving throw modifier attribute values of the provided character attribute set.
+	 *
+	 * @param AttributeSet
+	 *	The attribute set from which to capture values.
+	 *
+	 * @return
+	 *	A map from saving throw modifier attribute machine names to attribute values.
+	 */
+	static FAttributeCapture CaptureSavingThrowModifierAttributes(const UPF2CharacterAttributeSet* AttributeSet);
+
+	/**
+	 * Captures all skill modifier attribute values of the provided character attribute set.
+	 *
+	 * @param AttributeSet
+	 *	The attribute set from which to capture values.
+	 *
+	 * @return
+	 *	A map from skill modifier attribute machine names to attribute values.
+	 */
 	static FAttributeCapture CaptureSkillModifierAttributes(const UPF2CharacterAttributeSet* AttributeSet);
+
+	/**
+	 * Captures spell attribute values of the provided character attribute set.
+	 *
+	 * @param AttributeSet
+	 *	The attribute set from which to capture values.
+	 *
+	 * @return
+	 *	A map from spell attribute machine names to attribute values.
+	 */
 	static FAttributeCapture CaptureSpellAttributes(const UPF2CharacterAttributeSet* AttributeSet);
 
+	/**
+	 * Creates the throwaway world for use in tests.
+	 */
 	void SetupWorld();
+
+	/**
+	 * Begins simulation of the world, initializing components and actors and allowing them to settle.
+	 */
 	void BeginPlay() const;
+
+	/**
+	 * Tears down the throwaway world and forces garbage collection of it.
+	 */
 	void DestroyWorld() const;
 
+	/**
+	 * Initializes a simple pawn that has an ability system component, for use in ASC tests.
+	 */
 	void SetupPawn();
+
+	/**
+	 * Tears down the simple pawn that has an ability system component, for use in ASC tests.
+	 */
 	void DestroyPawn();
 
-	FActiveGameplayEffectHandle ApplyGameEffect(FGameplayAttributeData&             Attribute,
-	                                            float                               StartingValue,
-	                                            const TSubclassOf<UGameplayEffect>& EffectBP,
-	                                            const float                         CharacterLevel = 1.0f) const;
+	/**
+	 * Initializes an attribute with a starting value and then applies a Gameplay Effect (GE) that modifies it.
+	 *
+	 * @param Attribute
+	 *	A reference to the attribute.
+	 * @param StartingValue
+	 *	The initial value to which the attribute will be set.
+	 * @param EffectBP
+	 *	The GE blueprint to apply in order to affect the attribute.
+	 * @param CharacterLevel
+	 *	The level of the character, used to control the ability level.
+	 *
+	 * @return
+	 *	A handle to the active GE.
+	 */
+	FActiveGameplayEffectHandle InitializeAttributeAndApplyEffect(
+		FGameplayAttributeData&             Attribute,
+		float                               StartingValue,
+		const TSubclassOf<UGameplayEffect>& EffectBP,
+		const float                         CharacterLevel = 1.0f) const;
 
-	void ApplyUnreplicatedTag(const FString& TagName, const float CharacterLevel = 1.0f) const;
+	/**
+	 * Applies a "loose", unreplicated Gameplay Tag to the test pawn.
+	 *
+	 * The tag is "loose" in the sense that it is not being applied by an active Gameplay Effect on the ASC of the test
+	 * pawn.
+	 *
+	 * @param TagName
+	 *	The name of the tag to apply.
+	 */
+	void ApplyUnreplicatedTag(const FString& TagName) const;
+
+	/**
+	 * Removes a "loose", unreplicated Gameplay Tag from the test pawn.
+	 *
+	 * @param TagName
+	 *	The name of the tag to remove.
+	 */
 	void RemoveUnreplicatedTag(const FString& TagName) const;
 };

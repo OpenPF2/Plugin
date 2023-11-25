@@ -449,7 +449,7 @@ void FPF2AbilityModSpec::VerifyModifier(const FString& TargetAbilityAttributeNam
 		// Initialize modifier a known value.
 		*TargetModifierAttribute = 0.0f;
 
-		this->ApplyGameEffect(*TargetAbilityAttribute, AbilityValue, EffectBP);
+		this->InitializeAttributeAndApplyEffect(*TargetAbilityAttribute, AbilityValue, EffectBP);
 
 		TestEqual(
 			FString::Format(
@@ -508,7 +508,7 @@ void FPF2AbilityModSpec::VerifyCorrectAbilityAffected(const FString& TargetAbili
 		}
 
 		// This sets _only_ the target ability to 13, which should result in a modifier of +3
-		this->ApplyGameEffect(*TargetAbilityAttribute, 16.0f, EffectBP);
+		this->InitializeAttributeAndApplyEffect(*TargetAbilityAttribute, 16.0f, EffectBP);
 
 		for (const auto AttributePair : AbilityAttributes)
 		{
@@ -604,7 +604,7 @@ void FPF2AbilityModSpec::VerifyModifierRemoved(const FString& TargetAbilityAttri
 		const FGameplayAttributeData*    TargetModifierAttribute = Attributes[TargetModifierAttributeName];
 
 		const FActiveGameplayEffectHandle EffectHandle =
-			this->ApplyGameEffect(*TargetAbilityAttribute, 13.0f, EffectBP);
+			this->InitializeAttributeAndApplyEffect(*TargetAbilityAttribute, 13.0f, EffectBP);
 
 		// Sanity check test logic.
 		TestNotEqual("Captured at least one attribute", Attributes.Num(), 0);
@@ -612,7 +612,7 @@ void FPF2AbilityModSpec::VerifyModifierRemoved(const FString& TargetAbilityAttri
 		this->PawnAbilityComponent->RemoveActiveGameplayEffect(EffectHandle);
 
 		// Target Ability upon which modifier is based will not be reset because we set it manually in
-		// ApplyGameEffect().
+		// InitializeAttributeAndApplyEffect().
 		TestEqual(
 			TargetAbilityAttributeName + ".BaseValue",
 			TargetAbilityAttribute->GetBaseValue(),

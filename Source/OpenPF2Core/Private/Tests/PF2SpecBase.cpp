@@ -32,7 +32,7 @@ FAttributeCapture FPF2SpecBase::CaptureAttributes(const UPF2CharacterAttributeSe
 
 	Capture.Append(CaptureAbilityAttributes(AttributeSet));
 	Capture.Append(CaptureAbilityModifierAttributes(AttributeSet));
-	Capture.Append(CaptureSavingThrowAttributes(AttributeSet));
+	Capture.Append(CaptureSavingThrowModifierAttributes(AttributeSet));
 	Capture.Append(CaptureSkillModifierAttributes(AttributeSet));
 	Capture.Append(CaptureSpellAttributes(AttributeSet));
 
@@ -68,7 +68,7 @@ FAttributeCapture FPF2SpecBase::CaptureAbilityModifierAttributes(const UPF2Chara
 	return Capture;
 }
 
-FAttributeCapture FPF2SpecBase::CaptureSavingThrowAttributes(const UPF2CharacterAttributeSet* AttributeSet)
+FAttributeCapture FPF2SpecBase::CaptureSavingThrowModifierAttributes(const UPF2CharacterAttributeSet* AttributeSet)
 {
 	FAttributeCapture Capture =
 	{
@@ -162,10 +162,11 @@ void FPF2SpecBase::DestroyPawn()
 	this->TestPawn = nullptr;
 }
 
-FActiveGameplayEffectHandle FPF2SpecBase::ApplyGameEffect(FGameplayAttributeData&             Attribute,
-                                                          const float                         StartingValue,
-                                                          const TSubclassOf<UGameplayEffect>& EffectBP,
-                                                          const float                         CharacterLevel) const
+FActiveGameplayEffectHandle FPF2SpecBase::InitializeAttributeAndApplyEffect(
+	FGameplayAttributeData&             Attribute,
+	const float                         StartingValue,
+	const TSubclassOf<UGameplayEffect>& EffectBP,
+	const float                         CharacterLevel) const
 {
 	UGameplayEffect* GameplayEffect = EffectBP->GetDefaultObject<UGameplayEffect>();
 
@@ -180,7 +181,7 @@ FActiveGameplayEffectHandle FPF2SpecBase::ApplyGameEffect(FGameplayAttributeData
 	return EffectHandle;
 }
 
-void FPF2SpecBase::ApplyUnreplicatedTag(const FString& TagName, const float CharacterLevel) const
+void FPF2SpecBase::ApplyUnreplicatedTag(const FString& TagName) const
 {
 	this->PawnAbilityComponent->AddLooseGameplayTag(PF2GameplayAbilityUtilities::GetTag(TagName));
 }

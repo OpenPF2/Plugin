@@ -126,7 +126,7 @@ void FPF2SpellAttackRollCalculationsSpec::Define()
 								FGameplayAttributeData*             SpellAttackRollAttribute = Attributes[this->SpellAttackRollAttributeName];
 								const TSubclassOf<UGameplayEffect>& EffectBP                 = this->LoadGE();
 
-								this->ApplyGameEffect(*SpellAttackRollAttribute, 0.0f, EffectBP);
+								this->InitializeAttributeAndApplyEffect(*SpellAttackRollAttribute, 0.0f, EffectBP);
 
 								TestEqual(
 									FString::Format(TEXT("{0}.BaseValue"), {this->SpellAttackRollAttributeName}),

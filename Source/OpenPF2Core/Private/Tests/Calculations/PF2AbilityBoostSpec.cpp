@@ -777,7 +777,7 @@ void FPF2AbilityBoostSpec::VerifyBoostApplied(const FString& GameEffectName,
 		// Sanity check test logic.
 		TestNotEqual("Captured at least one ability attribute", Attributes.Num(), 0);
 
-		this->ApplyGameEffect(*TargetAttribute, StartingValue, EffectBP);
+		this->InitializeAttributeAndApplyEffect(*TargetAttribute, StartingValue, EffectBP);
 
 		TestEqual(
 			TargetAttributeName + ".BaseValue",
@@ -818,7 +818,7 @@ void FPF2AbilityBoostSpec::VerifyOtherBoostsUnaffected(const FString& GameEffect
 			CurrentAttribute = 10.0f;
 		}
 
-		this->ApplyGameEffect(*TargetAttribute, 10.0f, EffectBP);
+		this->InitializeAttributeAndApplyEffect(*TargetAttribute, 10.0f, EffectBP);
 
 		for (const auto AttributePair : Attributes)
 		{
@@ -882,7 +882,7 @@ void FPF2AbilityBoostSpec::VerifyBoostCounter(const FString& GameEffectName,
 
 		for (int AppliedCount = 0; AppliedCount < NumTimes; ++AppliedCount)
 		{
-			this->ApplyGameEffect(*TargetAttribute, 10.0f, EffectBP);
+			this->InitializeAttributeAndApplyEffect(*TargetAttribute, 10.0f, EffectBP);
 		}
 
 		TestEqual(
@@ -916,7 +916,7 @@ void FPF2AbilityBoostSpec::VerifyBoostRemoved(const FString& GameEffectName,
 		FGameplayAttributeData*          TargetAttribute = Attributes[TargetAttributeName];
 
 		const FActiveGameplayEffectHandle EffectHandle =
-			this->ApplyGameEffect(*TargetAttribute, StartingValue, EffectBP);
+			this->InitializeAttributeAndApplyEffect(*TargetAttribute, StartingValue, EffectBP);
 
 		// Sanity check test logic.
 		TestNotEqual("Captured at least one ability attribute", Attributes.Num(), 0);
