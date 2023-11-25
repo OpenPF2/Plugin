@@ -97,6 +97,78 @@ public:
 	virtual bool IsInitiativeSetForCharacter(const TScriptInterface<IPF2CharacterInterface>& Character) const = 0;
 
 	/**
+	 * Adjusts a character's initiative to occupy the specified initiative score or immediately above it.
+	 *
+	 * The adjustment proceeds as follows:
+	 * 1. If the target character already has the specified initiative score, no changes to initiative are made.
+	 * 2. If no character in the queue has the target initiative score, the initiative of the target character is set to
+	 *    the specified initiative score.
+	 * 3. If at least one character in the queue has the target initiative score:
+	 *    a. The target initiative score will be incremented by 1.
+	 *    b. If there is at least one character in the queue that has an initiative equal to the new initiative score:
+	 *        I. All initiative scores are scaled up by 10, to ensure gaps between the existing initiative scores.
+	 *       II. The target initiative score is set equal to: <Original passed-in value> * 10 + 1. So, if this method
+	 *           were invoked with an initiative score of 21, the new target initiative score would be set to 211 (21 *
+	 *           10 + 1).
+	 *
+	 * This ensures that the target character has an initiative score one point higher than the occupied initiative but
+	 * lower than any other characters who had a higher initiative score than the character occupying the target
+	 * initiative score.
+	 *
+	 * The initiative score must be greater than zero. If an initiative of zero is provided, an error is logged and no
+	 * changes to initiative score are made.
+	 *
+	 * If the character already has an initiative set, the character's initiative is changed to the specified value. If
+	 * the character already has an initiative equal to the given value, no changes to initiative score are made.
+	 *
+	 * @param Character
+	 *	The "target character" -- the character for which initiative is being set.
+	 * @param TargetInitiative
+	 *	The desired initiative value for the character. Must be greater than 0.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Mode of Play Rule Sets|Character Initiative Queues")
+	virtual void InsertCharacterAtOrAboveInitiative(
+		const TScriptInterface<IPF2CharacterInterface>& Character,
+		const int32                                     TargetInitiative) = 0;
+
+	/**
+	 * Adjusts a character's initiative to occupy the specified initiative score or immediately below it.
+	 *
+	 * The adjustment proceeds as follows:
+	 * 1. If the target character already has the specified initiative score, no changes to initiative are made.
+	 * 2. If no character in the queue has the target initiative score, the initiative of the target character is set to
+	 *    the specified initiative score.
+	 * 3. If at least one character in the queue has the target initiative score:
+	 *    a. The target initiative score will be decremented by 1.
+	 *    b. If there is at least one character in the queue that has an initiative equal to the new initiative score
+	 *       OR the target initiative score is now 0 (i.e., the original, passed-in initiative value was 1 and there was
+	 *       already a character with an initiative of 1):
+	 *        I. All initiative scores are scaled up by 10, to ensure gaps between the existing initiative scores.
+	 *       II. The target initiative score is set equal to: <Original passed-in value> * 10 - 1. So, if this method
+	 *           were invoked with an initiative score of 21, the new target initiative score would be set to
+	 *           209 (21 * 10 - 1).
+	 *
+	 * This ensures that the target character has an initiative score one point lower than the occupied initiative but
+	 * higher than any other characters who had a lower initiative score than the character occupying the target
+	 * initiative score.
+	 *
+	 * The initiative score must be greater than zero. If an initiative of zero is provided, an error is logged and no
+	 * changes to initiative score are made.
+	 *
+	 * If the character already has an initiative set, the character's initiative is changed to the specified value. If
+	 * the character already has an initiative equal to the given value, no changes to initiative score are made.
+	 *
+	 * @param Character
+	 *	The "target character" -- the character for which initiative is being set.
+	 * @param TargetInitiative
+	 *	The desired initiative value for the character. Must be greater than 0.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Mode of Play Rule Sets|Character Initiative Queues")
+	virtual void InsertCharacterAtOrBelowInitiative(
+		const TScriptInterface<IPF2CharacterInterface>& Character,
+		const int32                                     TargetInitiative) = 0;
+
+	/**
 	 * Clears any initiative value set for the specified character.
 	 *
 	 * If the character does not have any initiative set, this has no effect.

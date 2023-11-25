@@ -93,6 +93,38 @@ bool UPF2CharacterInitiativeQueueComponent::IsInitiativeSetForCharacter(
 	return this->CurrentCharacterSequence.Contains(Pf2Character);
 }
 
+void UPF2CharacterInitiativeQueueComponent::InsertCharacterAtOrAboveInitiative(
+	const TScriptInterface<IPF2CharacterInterface>& Character,
+	const int32                                     TargetInitiative)
+{
+	UE_LOG(
+		LogPf2CoreInitiative,
+		VeryVerbose,
+		TEXT("[%s] Attempting to insert character ('%s') at or above initiative ('%d')."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(Character->GetIdForLogs()),
+		TargetInitiative
+	);
+
+	this->InsertCharacterAtOrRelativeToInitiative(Character, TargetInitiative, 1);
+}
+
+void UPF2CharacterInitiativeQueueComponent::InsertCharacterAtOrBelowInitiative(
+	const TScriptInterface<IPF2CharacterInterface>& Character,
+	const int32                                     TargetInitiative)
+{
+	UE_LOG(
+		LogPf2CoreInitiative,
+		VeryVerbose,
+		TEXT("[%s] Inserting character ('%s') at or below initiative ('%d')."),
+		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+		*(Character->GetIdForLogs()),
+		TargetInitiative
+	);
+
+	this->InsertCharacterAtOrRelativeToInitiative(Character, TargetInitiative, -1);
+}
+
 void UPF2CharacterInitiativeQueueComponent::ClearInitiativeForCharacter(
 	const TScriptInterface<IPF2CharacterInterface>& Character)
 {
@@ -297,5 +329,86 @@ void UPF2CharacterInitiativeQueueComponent::RemoveCharacterFromInitiativeMap(con
 			this->CharactersByInitiatives.Remove(CharacterInitiativePair.Key, CharacterInitiativePair.Value);
 			break;
 		}
+	}
+}
+
+void UPF2CharacterInitiativeQueueComponent::InsertCharacterAtOrRelativeToInitiative(
+	const TScriptInterface<IPF2CharacterInterface>& Character,
+	const int32                                     TargetInitiative,
+	const int32                                     Offset)
+{
+	if (TargetInitiative <= 0)
+	{
+		UE_LOG(
+			LogPf2CoreInitiative,
+			Error,
+			TEXT("[%s] Initiative for character ('%s') must be greater than 0; attempted to shift it to '%d'."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(Character->GetIdForLogs()),
+			TargetInitiative
+		);
+	}
+    else if (this->GetCharacterInitiative(Character) == TargetInitiative)
+    {
+		// Step 1: If the target character already has the specified initiative score, no changes to initiative are
+		// made.
+    	UE_LOG(
+			LogPf2CoreInitiative,
+			Verbose,
+			TEXT("[%s] No need to adjust initiative of character ('%s'); their initiative is already equal to the target initiative ('%d')."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(Character->GetIdForLogs()),
+			TargetInitiative
+		);
+    }
+	else
+	{
+		int32 NewInitiative = TargetInitiative;
+
+		// Step 2: If no character in the queue has the target initiative score, set the initiative of the target
+		// character to the specified initiative score.
+		if (this->CharactersByInitiatives.Contains(TargetInitiative))
+		{
+			// Step 3: If at least one character in the queue has the target initiative score:
+			// Step 3a: Increment the target initiative score by the offset.
+			NewInitiative += Offset;
+
+			// Step 3b: If there is at least one character in the queue that has an initiative equal to the new
+			// initiative score OR we have the special case of a new initiative score equal to 0:
+			if ((NewInitiative == 0) || this->CharactersByInitiatives.Contains(NewInitiative))
+			{
+				// Step 3b I: All initiative scores are scaled up by 10, to ensure gaps between the existing initiative
+				// scores.
+				for (TTuple<int, IPF2CharacterInterface*>& Elem : this->CharactersByInitiatives)
+				{
+					Elem.Key *= 10;
+				}
+
+				// Step 3b II: Set the target initiative score to: <Original passed-in value> * 10 + Offset.
+				NewInitiative = TargetInitiative * 10 + Offset;
+
+				UE_LOG(
+					LogPf2CoreInitiative,
+					VeryVerbose,
+					TEXT("[%s] Scaled up all initiative scores to deconflict initiative for character ('%s') to new initiative score ('%d')."),
+					*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+					*(Character->GetIdForLogs()),
+					NewInitiative
+				);
+			}
+			else
+			{
+				UE_LOG(
+					LogPf2CoreInitiative,
+					VeryVerbose,
+					TEXT("[%s] Deconflicted initiative for character ('%s') to new initiative score ('%d')."),
+					*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+					*(Character->GetIdForLogs()),
+					NewInitiative
+				);
+			}
+		}
+
+		this->SetCharacterInitiative(Character, NewInitiative);
 	}
 }

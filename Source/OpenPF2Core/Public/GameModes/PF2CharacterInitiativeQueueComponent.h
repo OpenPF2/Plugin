@@ -95,6 +95,14 @@ public:
 
 	virtual bool IsInitiativeSetForCharacter(const TScriptInterface<IPF2CharacterInterface>& Character) const override;
 
+	virtual void InsertCharacterAtOrAboveInitiative(
+		const TScriptInterface<IPF2CharacterInterface>& Character,
+		const int32                                     TargetInitiative) override;
+
+	virtual void InsertCharacterAtOrBelowInitiative(
+		const TScriptInterface<IPF2CharacterInterface>& Character,
+		const int32                                     TargetInitiative) override;
+
 	virtual void ClearInitiativeForCharacter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
 
 	virtual void ClearInitiativeForAllCharacters() override;
@@ -173,4 +181,41 @@ protected:
 	 *	The character being removed from the map.
 	 */
 	void RemoveCharacterFromInitiativeMap(const IPF2CharacterInterface* Character);
+
+	/**
+	 * Adjusts a character's initiative to occupy the specified initiative score or an offset above or below it.
+	 *
+	 * The adjustment proceeds as follows:
+	 * 1. If the target character already has the specified initiative score, no changes to initiative are made.
+	 * 2. If no character in the queue has the target initiative score, the initiative of the target character is set to
+	 *    the specified initiative score.
+	 * 3. If at least one character in the queue has the target initiative score:
+	 *    a. The target initiative score will be incremented by the offset (the offset can be positive or negative).
+	 *    b. If there is at least one character in the queue that has an initiative equal to the new initiative score
+	 *       OR the target initiative score is now 0 (i.e., the original, passed-in initiative value was 1, the offset
+	 *       was -1, and there was already a character with an initiative of 1):
+	 *        I. All initiative scores are scaled up by 10, to ensure gaps between the existing initiative scores.
+	 *       II. The target initiative score is set equal to: <Original passed-in value> * 10 + Offset. So, if this
+	 *           method were invoked with an initiative score of 21 and offset of -1, the new target initiative score
+	 *           would be set to 209 (21 * 10 - 1).
+	 *
+	 * The initiative score must be greater than zero. If an initiative of zero is provided, an error is logged and no
+	 * changes to initiative score are made.
+	 *
+	 * If the character already has an initiative set, the character's initiative is changed to the new initiative
+	 * value. If the character already has an initiative equal to the given value, no changes to initiative score are
+	 * made.
+	 *
+	 * @param Character
+	 *	The "target character" -- the character for which initiative is being set.
+	 * @param TargetInitiative
+	 *	The desired initiative value for the character. Must be greater than 0.
+	 * @param Offset
+	 *	The amount to increment or decrement the initiative if the target initiative is occupied.
+	 */
+	void InsertCharacterAtOrRelativeToInitiative(
+		const TScriptInterface<IPF2CharacterInterface>& Character,
+		const int32                                     TargetInitiative,
+		const int32                                     Offset);
+
 };
