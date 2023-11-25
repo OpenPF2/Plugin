@@ -64,16 +64,20 @@ public:
 	/**
 	 * Sets the initiative of the specified character.
 	 *
-	 * If the character already has an initiative set, the character's initiative is changed to the specified value.
-	 *
 	 * From the Pathfinder 2E Core Rulebook, page 13, "Initiative":
 	 * "At the start of an encounter, all creatures involved roll for initiative to determine the order in which they
 	 * act. The higher the result of its roll, the earlier a creature gets to act."
 	 *
+	 * The initiative score must be greater than zero. If an initiative of zero is provided, an error is logged and no
+	 * changes to initiative score are made.
+	 *
+	 * If the character already has an initiative set, the character's initiative is changed to the specified value. If
+	 * the character already has an initiative equal to the given value, no changes to initiative score are made.
+	 *
 	 * @param Character
 	 *	The character for which initiative is being set.
 	 * @param Initiative
-	 *	The initiative value to use for the specified character.
+	 *	The initiative value to use for the specified character. Must be greater than 0.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Mode of Play Rule Sets|Character Initiative Queues")
 	virtual void SetCharacterInitiative(const TScriptInterface<IPF2CharacterInterface>& Character,

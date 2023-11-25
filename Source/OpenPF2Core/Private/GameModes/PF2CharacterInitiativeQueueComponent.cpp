@@ -42,22 +42,47 @@ void UPF2CharacterInitiativeQueueComponent::SetCharacterInitiative(
 	const TScriptInterface<IPF2CharacterInterface>& Character,
 	const int32                                     Initiative)
 {
-	IPF2CharacterInterface* Pf2Character = PF2InterfaceUtilities::FromScriptInterface(Character);
+	if (Initiative <= 0)
+	{
+		UE_LOG(
+			LogPf2CoreInitiative,
+			Error,
+			TEXT("[%s] Initiative for character ('%s') must be greater than 0; attempted to set it to '%d'."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(Character->GetIdForLogs()),
+			Initiative
+		);
+	}
+	else if (this->GetCharacterInitiative(Character) == Initiative)
+	{
+		UE_LOG(
+			LogPf2CoreInitiative,
+			Verbose,
+			TEXT("[%s] Initiative for character ('%s') is already set to desired value ('%d'); no update necessary."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			*(Character->GetIdForLogs()),
+			Initiative
+		);
+	}
+	else
+	{
+		IPF2CharacterInterface* Pf2Character = PF2InterfaceUtilities::FromScriptInterface(Character);
 
-	UE_LOG(
-		LogPf2CoreInitiative,
-		VeryVerbose,
-		TEXT("[%s] Initiative ('%d') set for character ('%s')."),
-		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
-		Initiative,
-		*(Character->GetIdForLogs())
-	);
+		UE_LOG(
+			LogPf2CoreInitiative,
+			VeryVerbose,
+			TEXT("[%s] Initiative ('%d') set for character ('%s')."),
+			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+			Initiative,
+			*(Character->GetIdForLogs())
+		);
 
-	// Ensure any existing initiative for this character is cleared.
-	this->RemoveCharacterFromInitiativeMap(Pf2Character);
+		// Ensure any existing initiative for this character is cleared.
+		this->RemoveCharacterFromInitiativeMap(Pf2Character);
 
-	this->CharactersByInitiatives.Add(Initiative, Pf2Character);
-	this->RebuildCharacterSequence();
+		this->CharactersByInitiatives.Add(Initiative, Pf2Character);
+		this->RebuildCharacterSequence();
+	}
 }
 
 bool UPF2CharacterInitiativeQueueComponent::IsInitiativeSetForCharacter(
