@@ -4,11 +4,15 @@
 
 #pragma once
 
+#include <Containers/Array.h>
+
 #include <Misc/AutomationTest.h>
 
 #include "Abilities/PF2CharacterAttributeSet.h"
 
 #include "Tests/PF2TestPawn.h"
+
+#include "Utilities/PF2ArrayUtilities.h"
 
 #define DEFINE_PF_SPEC_PRIVATE(TClass, PrettyName, TFlags, FileName, LineNumber) \
 	class TClass : public FPF2SpecBase \
@@ -297,4 +301,135 @@ protected:
 	 *	The name of the tag to remove.
 	 */
 	void RemoveUnreplicatedTag(const FString& TagName) const;
+
+	/**
+	 * Tests that each element of an array matches its corresponding element from expected values.
+	 *
+	 * This provides better output on failure than TestEqual().
+	 *
+	 * @tparam ElementType
+	 *	The type of elements in the array.
+	 *
+	 * @param What
+	 *	The name of the array being tested.
+	 * @param Actual
+	 *	The actual array.
+	 * @param Expected
+	 *	The expected elements of the array.
+	 */
+	template <typename ElementType>
+	void TestArrayEquals(const FString& What, const TArray<ElementType>& Actual, const TArray<ElementType>& Expected)
+	{
+		this->TestEqual(
+			FString::Format(TEXT("{0}.Num()"), {What}),
+			Actual.Num(),
+			Expected.Num()
+		);
+
+		for (auto It = Expected.CreateConstIterator(); It; ++It)
+		{
+			int               Index            = It.GetIndex();
+			const ElementType &ExpectedElement = *It,
+			                  &ActualElement   = Actual[Index];
+
+			this->TestEqual(
+				FString::Format(TEXT("{0}[{1}]"), {What, FString::FormatAsNumber(Index)}),
+				ActualElement,
+				ExpectedElement
+			);
+		}
+	}
+
+	/**
+	 * Tests that at least one element of an array does not match expected values.
+	 *
+	 * This provides better output on failure than TestEqual().
+	 *
+	 * @tparam ElementType
+	 *	The type of elements in the array.
+	 *
+	 * @param What
+	 *	The name of the array being tested.
+	 * @param Actual
+	 *	The actual array.
+	 * @param NotExpected
+	 *	A second array to which the actual array is not expected to be equal.
+	 */
+	template <typename ElementType>
+	void TestArrayNotEquals(const FString&             What,
+	                        const TArray<ElementType>& Actual,
+	                        const TArray<ElementType>& NotExpected)
+	{
+		bool bAtLeastOneMismatch = false;
+
+		if (Actual.Num() != NotExpected.Num())
+		{
+			bAtLeastOneMismatch = true;
+		}
+		else
+		{
+			for (auto It = NotExpected.CreateConstIterator(); It; ++It)
+			{
+				int               Index               = It.GetIndex();
+				const ElementType &NotExpectedElement = *It,
+				                  &ActualElement      = Actual[Index];
+
+				if (ActualElement != NotExpectedElement)
+				{
+					bAtLeastOneMismatch = true;
+					break;
+				}
+			}
+		}
+
+		if (!bAtLeastOneMismatch)
+		{
+			const FString &ActualString      = ArrayToString(Actual),
+			              &NotExpectedString = ArrayToString(NotExpected);
+
+			this->AddError(
+				FString::Printf(TEXT("Expected '%s' to not equal '%s'."), *ActualString, *NotExpectedString),
+				1
+			);
+		}
+	}
+
+	/**
+	 * Converts an array of 32-bit integers to a comma-delimited string.
+	 *
+	 * @tparam ElementType
+	 *	The type of elements in the array.
+	 *
+	 * @param Elements
+	 *	The array to convert into a string.
+	 *
+	 * @return
+	 *	A comma-delimited string containing the elements of the array.
+	 */
+	static FString ArrayToString(const TArray<int32>& Elements)
+	{
+		const TArray<FString>& StringElements =
+			PF2ArrayUtilities::Map<FString, int32>(Elements, [](const int32 Element) {
+				return FString::FromInt(Element);
+			});
+
+		return ArrayToString(StringElements);
+	}
+
+	/**
+	 * Converts an array of strings to a comma-delimited string.
+	 *
+	 * @tparam ElementType
+	 *	The type of elements in the array.
+	 *
+	 * @param Elements
+	 *	The array to convert into a string.
+	 *
+	 * @return
+	 *	A comma-delimited string containing the elements of the array.
+	 */
+	static FString ArrayToString(const TArray<FString>& Elements)
+	{
+		return FString::Printf(TEXT("{%s}"), *FString::Join(Elements, TEXT(",")));
+	}
 };
