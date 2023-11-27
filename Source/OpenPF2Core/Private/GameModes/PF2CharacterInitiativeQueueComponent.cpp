@@ -12,6 +12,7 @@
 
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
+#include "Utilities/PF2MapUtilities.h"
 
 bool UPF2CharacterInitiativeQueueComponent::IsEmpty()
 {
@@ -379,10 +380,21 @@ void UPF2CharacterInitiativeQueueComponent::InsertCharacterAtOrRelativeToInitiat
 			{
 				// Step 3b I: All initiative scores are scaled up by 10, to ensure gaps between the existing initiative
 				// scores.
-				for (TTuple<int, IPF2CharacterInterface*>& Elem : this->CharactersByInitiatives)
-				{
-					Elem.Key *= 10;
-				}
+				this->CharactersByInitiatives = PF2MapUtilities::Reduce(
+					this->CharactersByInitiatives,
+					TMultiMap<int, IPF2CharacterInterface*>(),
+					[this](
+						TMultiMap<int, IPF2CharacterInterface*>    ResultMap,
+						const TPair<int, IPF2CharacterInterface*>& Pair)
+					{
+						const int               Key   = Pair.Key;
+						IPF2CharacterInterface* Value = Pair.Value;
+
+						ResultMap.Add(Key * 10, Value);
+
+						return ResultMap;
+					}
+				);
 
 				// Step 3b II: Set the target initiative score to: <Original passed-in value> * 10 + Offset.
 				NewInitiative = TargetInitiative * 10 + Offset;
