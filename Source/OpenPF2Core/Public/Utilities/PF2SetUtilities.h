@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <Containers/Set.h>
+
 /**
  * Various utilities for functional programming with sets and similar structures.
  */
@@ -32,7 +34,7 @@ namespace PF2SetUtilities
 	 *	The set of values that resulted from applying the transformation to every value of the source set.
 	 */
 	template <typename Out, typename In, typename Func>
-	OPENPF2CORE_API TSet<Out> Map(const TSet<In> Elements, const Func Callable)
+	TSet<Out> Map(const TSet<In> Elements, const Func Callable)
 	{
 		TSet<Out> Result;
 
@@ -81,7 +83,7 @@ namespace PF2SetUtilities
 	 *	The result of reducing the values of the set.
 	 */
 	template <typename Out, typename In, typename Func>
-	OPENPF2CORE_API Out Reduce(const TSet<In> Elements, const Out StartingValue, const Func Callable)
+	Out Reduce(const TSet<In> Elements, const Out StartingValue, const Func Callable)
 	{
 		Out PreviousValue = StartingValue;
 
@@ -108,7 +110,7 @@ namespace PF2SetUtilities
 	 *	A new set containing all the values of the original set that were not null.
 	 */
 	template <typename T>
-	OPENPF2CORE_API TSet<T> Filter(const TSet<T> Elements)
+	TSet<T> Filter(const TSet<T> Elements)
 	{
 		return Filter<T>(
 			Elements,
@@ -140,7 +142,7 @@ namespace PF2SetUtilities
 	 *	A new set containing all the values of the original set for which the callable returned "true".
 	 */
 	template <typename T, typename Func>
-	OPENPF2CORE_API TSet<T> Filter(const TSet<T> Elements, const Func Callable)
+	TSet<T> Filter(const TSet<T> Elements, const Func Callable)
 	{
 		return Elements.FilterByPredicate(Callable);
 	}

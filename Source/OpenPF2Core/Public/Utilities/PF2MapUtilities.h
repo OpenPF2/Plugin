@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <Containers/Map.h>
+
 /**
  * Various utilities for functional programming with maps and similar structures.
  */
@@ -109,6 +111,11 @@ namespace PF2MapUtilities
 
 	/**
 	 * Inverts the keys and values of a map, so that for each pair the key becomes the value and vice-versa.
+	 *
+	 * @tparam Key
+	 *	The type of keys in the map. Must support hash codes.
+	 * @tparam Value
+	 *	The type of values in the map.
 	 *
 	 * @param InputMap
 	 *	The map to invert.
