@@ -231,7 +231,7 @@ void UPF2CharacterInitiativeQueueComponent::RebuildCharacterSequence()
 		PF2InterfaceUtilities::FromScriptInterfaces<IPF2CharacterInterface>(this->GetPlayerControlledCharacters());
 
 	this->CharactersByInitiatives.KeyStableSort(TGreater<int32>());
-	this->CharactersByInitiatives.GenerateKeyArray(Initiatives);
+	this->CharactersByInitiatives.GetKeys(Initiatives);
 
 	for (const int32 Initiative : Initiatives)
 	{
