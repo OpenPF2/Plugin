@@ -321,12 +321,12 @@ void UPF2CharacterInitiativeQueueComponent::RemoveCharacterFromInitiativeMap(con
 		this->PreviousCharacter = this->CurrentCharacterSequence[NewPreviousCharacterIndex];
 	}
 
-	for (const TTuple<int, IPF2CharacterInterface*>& CharacterInitiativePair : TMultiMap(this->CharactersByInitiatives))
+	for (auto It = this->CharactersByInitiatives.CreateIterator(); It; ++It)
 	{
-		if (CharacterInitiativePair.Value == Character)
+		if (It.Value() == Character)
 		{
 			// Remove existing initiative for this character.
-			this->CharactersByInitiatives.Remove(CharacterInitiativePair.Key, CharacterInitiativePair.Value);
+			It.RemoveCurrent();
 			break;
 		}
 	}
