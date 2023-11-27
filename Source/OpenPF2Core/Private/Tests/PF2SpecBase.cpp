@@ -8,6 +8,9 @@
 #include <Engine/Engine.h>
 
 #include "Abilities/PF2CharacterAttributeSet.h"
+
+#include "Tests/PF2TestCharacter.h"
+
 #include "Utilities/PF2GameplayAbilityUtilities.h"
 
 FAttributeCapture FPF2SpecBase::CaptureAttributes(const UPF2CharacterAttributeSet* AttributeSet)
@@ -160,6 +163,11 @@ void FPF2SpecBase::DestroyPawn()
 	}
 
 	this->TestPawn = nullptr;
+}
+
+IPF2CharacterInterface* FPF2SpecBase::SpawnCharacter() const
+{
+	return this->World->SpawnActor<APF2TestCharacter>();
 }
 
 FActiveGameplayEffectHandle FPF2SpecBase::InitializeAttributeAndApplyEffect(

@@ -6,6 +6,8 @@
 
 #include <Containers/Array.h>
 
+#include <Engine/World.h>
+
 #include <Misc/AutomationTest.h>
 
 #include "Abilities/PF2CharacterAttributeSet.h"
@@ -261,6 +263,34 @@ protected:
 	 * Tears down the simple pawn that has an ability system component, for use in ASC tests.
 	 */
 	void DestroyPawn();
+
+	/**
+	 * Spawns an actor component on the test pawn and returns it.
+	 *
+	 * @tparam ActorComponentType
+	 *	The type of actor component to instantiate.
+	 *
+	 * @return
+	 *	The new actor component instance.
+	 */
+	template<class ActorComponentType>
+	ActorComponentType* SpawnActorComponent()
+	{
+		ActorComponentType* Component = NewObject<ActorComponentType>(this->TestPawn);
+
+		this->TestPawn->AddInstanceComponent(Component);
+		Component->RegisterComponent();
+
+		return Component;
+	}
+
+	/**
+	 * Spawns a test character and returns it.
+	 *
+	 * @return
+	 *	The new character instance.
+	 */
+	IPF2CharacterInterface* SpawnCharacter() const;
 
 	/**
 	 * Initializes an attribute with a starting value and then applies a Gameplay Effect (GE) that modifies it.
