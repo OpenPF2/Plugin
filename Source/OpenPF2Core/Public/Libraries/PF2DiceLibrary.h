@@ -54,7 +54,7 @@ public:
 	* @return
 	 *	The sum of the dice roll(s).
 	 */
-	UFUNCTION(BlueprintPure, Category="OpenPF2|Dice")
+	UFUNCTION(BlueprintPure=false, Category="OpenPF2|Dice", DisplayName="Roll Dice (Roll Expression) and Sum")
 	static int32 RollStringSum(const FName RollExpression);
 
 	/**
@@ -68,7 +68,7 @@ public:
 	 * @return
 	 *	The sum of the dice roll(s).
 	 */
-	UFUNCTION(BlueprintPure, Category="OpenPF2|Dice")
+	UFUNCTION(BlueprintPure=false, Category="OpenPF2|Dice", DisplayName="Roll Dice and Sum")
 	static int32 RollSum(const int32 RollCount, const int32 DieSize);
 
 	/**
@@ -84,7 +84,7 @@ public:
 	* @return
 	 *	The result of each dice roll.
 	 */
-	UFUNCTION(BlueprintPure, Category="OpenPF2|Dice")
+	UFUNCTION(BlueprintPure=false, Category="OpenPF2|Dice", DisplayName="Roll Dice (Roll Expression)")
 	static TArray<int32> RollString(const FName RollExpression);
 
 	/**
@@ -98,7 +98,7 @@ public:
 	 * @return
 	 *	The result of each dice roll.
 	 */
-	UFUNCTION(BlueprintPure, Category="OpenPF2|Dice")
+	UFUNCTION(BlueprintPure=false, Category="OpenPF2|Dice", DisplayName="Roll Dice")
 	static TArray<int32> Roll(const int32 RollCount, const int32 DieSize);
 
 	/**
@@ -113,7 +113,7 @@ public:
 	 *	A roll expression for the next size up (for example, given "1d6" this would return "1d8"; given "2d4", this
 	 *	would return "2d6").
 	 */
-	UFUNCTION(BlueprintPure, Category="OpenPF2|Dice")
+	UFUNCTION(BlueprintPure=false, Category="OpenPF2|Dice", DisplayName="Next Die Size (Roll Expression)")
 	static FName NextSizeString(const FName RollExpression);
 
 	/**
@@ -125,7 +125,7 @@ public:
 	 * @return
 	 *	The number of sides on the die of the next size up.
 	 */
-	UFUNCTION(BlueprintPure, Category="OpenPF2|Dice")
+	UFUNCTION(BlueprintPure=false, Category="OpenPF2|Dice", DisplayName="Next Die Size")
 	static int32 NextSize(const int32 DieSize);
 
 	/**
@@ -143,7 +143,7 @@ public:
 	 * @return
 	 *	Whether the roll expression could be parsed or not.
 	 */
-	UFUNCTION(BlueprintPure, Category="OpenPF2|Dice")
+	UFUNCTION(BlueprintPure=false, Category="OpenPF2|Dice")
 	static UPARAM(DisplayName="Was Parsed") bool ParseRollExpression(const FName RollExpression,
 	                                                                 int32&      RollCount,
 	                                                                 int32&      DieSize);

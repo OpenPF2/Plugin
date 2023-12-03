@@ -113,7 +113,7 @@ public:
 	 *	An optional override on the size of each die to use in the attack roll. Defaults to 20, according to standard
 	 *	Pathfinder 2e rules.
 	 */
-	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Attack Stats")
 	static EPF2DegreeOfSuccess CalculateAttackRoll(const int32                  CharacterLevel,
 	                                               const FGameplayTagContainer& CharacterTags,
 	                                               const float                  AttackAbilityModifier,
@@ -259,7 +259,7 @@ public:
 	 * @param DamageAbilityModifier
 	 *	The modifier for the type of damage (e.g., Strength modifier or Strength modifier for thrown weapons).
 	 */
-	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Attack Stats")
 	static float CalculateDamageRoll(const FName DamageDie,
 	                                 const float DamageAbilityModifier);
 
