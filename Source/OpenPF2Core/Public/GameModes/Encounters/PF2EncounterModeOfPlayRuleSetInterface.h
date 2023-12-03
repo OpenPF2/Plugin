@@ -168,6 +168,46 @@ public:
 	virtual TScriptInterface<IPF2CharacterInterface> GetActiveCharacter() const = 0;
 
 	/**
+	 * Adjusts the initiative order of the specified character so they have a higher initiative score than another.
+	 *
+	 * A higher initiative score will enable the affected character to act before the specified character.
+	 *
+	 * The AffectedCharacter does not need to have an initiative set before this method is called. If the character
+	 * already had an initiative set, it will be modified to the new initiative. If the OtherCharacter does not have an
+	 * initiative set, an error is logged and no initiative change occurs.
+	 *
+	 * @param AffectedCharacter
+	 *	The character whose initiative order will be adjusted.
+	 * @param OtherCharacter
+	 *	The character before whom the character will be slotted in, based on initiative.
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintPure=false, Category="OpenPF2|Encounter Mode of Play Rule Sets|Turns")
+	virtual void MoveInitiativeHigherThanCharacter(
+		const TScriptInterface<IPF2CharacterInterface>& AffectedCharacter,
+		const TScriptInterface<IPF2CharacterInterface>& OtherCharacter
+	) const = 0;
+
+	/**
+	 * Adjusts the initiative order of the specified character so they have a lower initiative score than another.
+	 *
+	 * A lower initiative score will enable the affected character to act after the specified character.
+	 *
+	 * The AffectedCharacter does not need to have an initiative set before this method is called. If the character
+	 * already had an initiative set, it will be modified to the new initiative. If the OtherCharacter does not have an
+	 * initiative set, an error is logged and no initiative change occurs.
+	 *
+	 * @param AffectedCharacter
+	 *	The character whose initiative order will be adjusted.
+	 * @param OtherCharacter
+	 *	The character after whom the character will be slotted in, based on initiative.
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintPure=false, Category="OpenPF2|Encounter Mode of Play Rule Sets|Turns")
+	virtual void MoveInitiativeLowerThanCharacter(
+		const TScriptInterface<IPF2CharacterInterface>& AffectedCharacter,
+		const TScriptInterface<IPF2CharacterInterface>& OtherCharacter
+	) const = 0;
+
+	/**
 	 * Signals the start of the specified character's turn.
 	 *
 	 * @param Character

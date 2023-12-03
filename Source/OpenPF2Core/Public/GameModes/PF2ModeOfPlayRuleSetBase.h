@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <Delegates/IDelegateInstance.h>
+
 #include "PF2GameModeInterface.h"
 #include "PF2ModeOfPlayRuleSetInterface.h"
 #include "PF2PlayerControllerInterface.h"
@@ -24,7 +26,29 @@ class OPENPF2CORE_API APF2ModeOfPlayRuleSetBase : public AActor, public IPF2Mode
 {
 	GENERATED_BODY()
 
+protected:
+	/**
+	 * The root of tags that signify a character is dying.
+	 *
+	 * An MoPRS listens for a tag of this type to be added to or removed from a character in order to fire the
+	 * OnCharacterDying() and OnCharacterRecoveredFromDying().
+	 */
+	FGameplayTag DyingConditionTag;
+
+	/**
+	 * Map of handles for callback delegates on the dying condition tag.
+	 */
+	TMap<const TWeakObjectPtr<const AActor>, FDelegateHandle> DyingCallbackHandles;
+
 public:
+	// =================================================================================================================
+	// Public Constructor
+	// =================================================================================================================
+	/**
+	 * Default constructor for APF2ModeOfPlayRuleSetBase.
+	 */
+	explicit APF2ModeOfPlayRuleSetBase();
+
 	// =================================================================================================================
 	// Public Methods - IPF2ModeOfPlayRuleSetInterface Implementation
 	// =================================================================================================================
@@ -48,6 +72,32 @@ public:
 		const TScriptInterface<IPF2CharacterCommandInterface>& Command) override;
 
 protected:
+	// =================================================================================================================
+	// Native Events
+	// =================================================================================================================
+	/**
+	 * Notifies this MoPRS that a character it is tracking has acquired the dying condition.
+	 *
+	 * Subclasses can use this callback to react accordingly to a character that is no longer suitable for combat and
+	 * interaction. For example, an encounter MoPRS will use this as an opportunity to adjust the character's
+	 * initiative.
+	 *
+	 * @param Character
+	 *	The character who has just been knocked out.
+	 */
+	virtual void OnCharacterDying(const TScriptInterface<IPF2CharacterInterface>& Character);
+
+	/**
+	 * Notifies this MoPRS that a character it is tracking no longer has the dying condition.
+	 *
+	 * Subclasses can use this callback to react accordingly to a character that is once again suitable for combat and
+	 * interaction with other characters.
+	 *
+	 * @param Character
+	 *	The character who has just recovered.
+	 */
+	virtual void OnCharacterRecoveredFromDying(const TScriptInterface<IPF2CharacterInterface>& Character);
+
 	// =================================================================================================================
 	// Blueprint Implementable Events
 	// =================================================================================================================
@@ -99,6 +149,38 @@ protected:
 		meta=(DisplayName="On Character Added to Encounter")
 	)
 	void BP_OnCharacterAddedToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character);
+
+	/**
+	 * Callback to notify this rule set that a character it is tracking has acquired the dying condition.
+	 *
+	 * The rule set can choose to ignore this event if it's not applicable (e.g., this rule set is not for an
+	 * encounter).
+	 *
+	 * @param Character
+	 *	The character who has just been knocked out.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Mode of Play Rule Sets",
+		meta=(DisplayName="On Character Dying")
+	)
+	void BP_OnCharacterDying(const TScriptInterface<IPF2CharacterInterface>& Character);
+
+	/**
+	 * Callback to notify this rule set that a character it is tracking no longer has the dying condition.
+	 *
+	 * The rule set can choose to ignore this event if it's not applicable (e.g., this rule set is not for an
+	 * encounter).
+	 *
+	 * @param Character
+	 *	The character who has just recovered.
+	 */
+	UFUNCTION(
+		BlueprintImplementableEvent,
+		Category="OpenPF2|Mode of Play Rule Sets",
+		meta=(DisplayName="On Character Recovered from Dying")
+	)
+	void BP_OnCharacterRecoveredFromDying(const TScriptInterface<IPF2CharacterInterface>& Character);
 
 	/**
 	 * Callback to notify this rule set that a character should be removed from the current encounter.

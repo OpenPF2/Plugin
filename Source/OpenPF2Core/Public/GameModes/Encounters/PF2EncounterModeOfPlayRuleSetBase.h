@@ -96,6 +96,16 @@ public:
 
 	virtual TScriptInterface<IPF2CharacterInterface> GetActiveCharacter() const override;
 
+	virtual void MoveInitiativeHigherThanCharacter(
+		const TScriptInterface<IPF2CharacterInterface>& AffectedCharacter,
+		const TScriptInterface<IPF2CharacterInterface>& OtherCharacter
+	) const override;
+
+	virtual void MoveInitiativeLowerThanCharacter(
+		const TScriptInterface<IPF2CharacterInterface>& AffectedCharacter,
+		const TScriptInterface<IPF2CharacterInterface>& OtherCharacter
+	) const override;
+
 	virtual void StartTurnForCharacter(const TScriptInterface<IPF2CharacterInterface>& Character) override;
 
 	virtual void EndTurnForCharacter(const TScriptInterface<IPF2CharacterInterface>& Character) override;

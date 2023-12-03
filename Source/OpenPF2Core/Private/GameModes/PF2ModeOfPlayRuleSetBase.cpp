@@ -7,6 +7,7 @@
 
 #include <Engine/World.h>
 
+// ReSharper disable once CppUnusedIncludeDirective
 #include <GameFramework/GameModeBase.h>
 
 #include "Commands/PF2CharacterCommandInterface.h"
@@ -14,6 +15,11 @@
 
 #include "Libraries/PF2CharacterCommandLibrary.h"
 #include "Libraries/PF2CharacterLibrary.h"
+
+APF2ModeOfPlayRuleSetBase::APF2ModeOfPlayRuleSetBase()
+{
+	this->DyingConditionTag = PF2GameplayAbilityUtilities::GetTag(FName("Trait.Condition.Dying"));
+}
 
 void APF2ModeOfPlayRuleSetBase::OnModeOfPlayStart(const EPF2ModeOfPlayType ModeOfPlay)
 {
@@ -27,17 +33,94 @@ void APF2ModeOfPlayRuleSetBase::OnPlayableCharacterStarting(const TScriptInterfa
 
 void APF2ModeOfPlayRuleSetBase::OnCharacterAddedToEncounter(const TScriptInterface<IPF2CharacterInterface>& Character)
 {
+	const TWeakObjectPtr<const AActor> CharacterPtr = Character->ToActor();
+
+	if (this->DyingCallbackHandles.Contains(CharacterPtr))
+	{
+		UE_LOG(
+			LogPf2CoreEncounters,
+			Warning,
+			TEXT("OnCharacterAddedToEncounter() was invoked with character ('%s') that already had a 'Dying' callback registered."),
+			*(Character->GetIdForLogs())
+		);
+	}
+	else
+	{
+		const FDelegateHandle DyingCallbackHandle =
+			Character->GetAbilitySystemComponent()->RegisterGameplayTagEvent(
+				this->DyingConditionTag,
+				EGameplayTagEventType::NewOrRemoved
+			).AddLambda([this, Character](const FGameplayTag, const int32 NewCount)
+			{
+				if (NewCount == 0)
+				{
+					this->OnCharacterRecoveredFromDying(Character);
+				}
+				else
+				{
+					this->OnCharacterDying(Character);
+				}
+			});
+
+		this->DyingCallbackHandles.Add(CharacterPtr, DyingCallbackHandle);
+	}
+
 	this->BP_OnCharacterAddedToEncounter(Character);
 }
 
 void APF2ModeOfPlayRuleSetBase::OnCharacterRemovedFromEncounter(
 	const TScriptInterface<IPF2CharacterInterface>& Character)
 {
+	const TWeakObjectPtr<const AActor> CharacterPtr = Character->ToActor();
+
+	if (this->DyingCallbackHandles.Contains(CharacterPtr))
+	{
+		const FDelegateHandle DyingCallbackHandle = this->DyingCallbackHandles[CharacterPtr];
+
+		Character->GetAbilitySystemComponent()->UnregisterGameplayTagEvent(
+			DyingCallbackHandle,
+			this->DyingConditionTag,
+			EGameplayTagEventType::NewOrRemoved
+		);
+
+		this->DyingCallbackHandles.Remove(CharacterPtr);
+	}
+	else
+	{
+		UE_LOG(
+			LogPf2CoreEncounters,
+			Warning,
+			TEXT("OnCharacterRemovedFromEncounter() was invoked with character ('%s') that had no 'Dying' callback registered."),
+			*(Character->GetIdForLogs())
+		);
+	}
+
 	this->BP_OnCharacterRemovedFromEncounter(Character);
 }
 
 void APF2ModeOfPlayRuleSetBase::OnModeOfPlayEnd(const EPF2ModeOfPlayType ModeOfPlay)
 {
+	for (const auto& [CharacterPtr, EventDelegateHandle] : this->DyingCallbackHandles)
+	{
+		const AActor* CharacterActor = CharacterPtr.Get();
+
+		// Actor might have been garbage collected since they were originally added for tracking by this MoPRS.
+		if (CharacterActor != nullptr)
+		{
+			const IPF2CharacterInterface* Character = Cast<IPF2CharacterInterface>(CharacterActor);
+
+			check(Character != nullptr);
+
+			Character->GetAbilitySystemComponent()->UnregisterGameplayTagEvent(
+				EventDelegateHandle,
+				this->DyingConditionTag,
+				EGameplayTagEventType::NewOrRemoved
+			);
+		}
+	}
+
+	this->DyingCallbackHandles.Empty();
+
 	this->BP_OnModeOfPlayEnd(ModeOfPlay);
 }
 
@@ -107,6 +190,16 @@ void APF2ModeOfPlayRuleSetBase::AttemptToCancelCommand_Implementation(
 
 	// Default implementation -- remove the command from the character's command queue, if one exists.
 	CommandQueue->Remove(Command);
+}
+
+void APF2ModeOfPlayRuleSetBase::OnCharacterDying(const TScriptInterface<IPF2CharacterInterface>& Character)
+{
+	this->BP_OnCharacterDying(Character);
+}
+
+void APF2ModeOfPlayRuleSetBase::OnCharacterRecoveredFromDying(const TScriptInterface<IPF2CharacterInterface>& Character)
+{
+	this->BP_OnCharacterRecoveredFromDying(Character);
 }
 
 TScriptInterface<IPF2GameModeInterface> APF2ModeOfPlayRuleSetBase::GetGameMode() const

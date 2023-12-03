@@ -16,6 +16,7 @@
 #include "GameModes/Encounters/PF2CharacterInitiativeQueueComponent.h"
 
 #include "Utilities/PF2EnumUtilities.h"
+#include "Utilities/PF2LogUtilities.h"
 
 APF2EncounterModeOfPlayRuleSetBase::APF2EncounterModeOfPlayRuleSetBase()
 {
@@ -87,6 +88,106 @@ TArray<TScriptInterface<IPF2CharacterInterface>> APF2EncounterModeOfPlayRuleSetB
 TScriptInterface<IPF2CharacterInterface> APF2EncounterModeOfPlayRuleSetBase::GetActiveCharacter() const
 {
 	return this->ActiveCharacter;
+}
+
+void APF2EncounterModeOfPlayRuleSetBase::MoveInitiativeHigherThanCharacter(
+	const TScriptInterface<IPF2CharacterInterface>& AffectedCharacter,
+	const TScriptInterface<IPF2CharacterInterface>& OtherCharacter) const
+{
+	if (AffectedCharacter == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreInitiative,
+			Error,
+			TEXT("MoveInitiativeHigherThanCharacter(): Given a null 'affected' character.")
+		);
+	}
+	else if (OtherCharacter == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreInitiative,
+			Error,
+			TEXT("MoveInitiativeHigherThanCharacter(): Given a null 'other' character.")
+		);
+	}
+	else
+	{
+		const TScriptInterface<IPF2CharacterInitiativeQueueInterface> Initiatives = this->GetCharacterInitiativeQueue();
+		const int32 OtherInitiative = Initiatives->GetCharacterInitiative(OtherCharacter);
+
+		if (OtherInitiative == INDEX_NONE)
+		{
+			UE_LOG(
+				LogPf2CoreInitiative,
+				Error,
+				TEXT("MoveInitiativeHigherThanCharacter(): No initiative has been set for other character '%s'."),
+				*(OtherCharacter->GetIdForLogs())
+			);
+		}
+		else
+		{
+			UE_LOG(
+				LogPf2CoreInitiative,
+				VeryVerbose,
+				TEXT("[%s] Attempting to move character ('%s') before character ('%s') in initiative queue (higher initiative)."),
+				*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+				*(AffectedCharacter->GetIdForLogs()),
+				*(OtherCharacter->GetIdForLogs())
+			);
+
+			Initiatives->InsertCharacterAtOrAboveInitiative(AffectedCharacter, OtherInitiative);
+		}
+	}
+}
+
+void APF2EncounterModeOfPlayRuleSetBase::MoveInitiativeLowerThanCharacter(
+	const TScriptInterface<IPF2CharacterInterface>& AffectedCharacter,
+	const TScriptInterface<IPF2CharacterInterface>& OtherCharacter) const
+{
+	if (AffectedCharacter == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreInitiative,
+			Error,
+			TEXT("MoveInitiativeLowerThanCharacter(): Given a null 'affected' character.")
+		);
+	}
+	else if (OtherCharacter == nullptr)
+	{
+		UE_LOG(
+			LogPf2CoreInitiative,
+			Error,
+			TEXT("MoveInitiativeLowerThanCharacter(): Given a null 'other' character.")
+		);
+	}
+	else
+	{
+		const TScriptInterface<IPF2CharacterInitiativeQueueInterface> Initiatives = this->GetCharacterInitiativeQueue();
+		const int32 OtherInitiative = Initiatives->GetCharacterInitiative(OtherCharacter);
+
+		if (OtherInitiative == INDEX_NONE)
+		{
+			UE_LOG(
+				LogPf2CoreInitiative,
+				Error,
+				TEXT("MoveInitiativeLowerThanCharacter(): No initiative has been set for other character '%s'."),
+				*(OtherCharacter->GetIdForLogs())
+			);
+		}
+		else
+		{
+			UE_LOG(
+				LogPf2CoreInitiative,
+				VeryVerbose,
+				TEXT("[%s] Attempting to move character ('%s') after character ('%s') in initiative queue (lower initiative)."),
+				*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
+				*(AffectedCharacter->GetIdForLogs()),
+				*(OtherCharacter->GetIdForLogs())
+			);
+
+			Initiatives->InsertCharacterAtOrBelowInitiative(AffectedCharacter, OtherInitiative);
+		}
+	}
 }
 
 void APF2EncounterModeOfPlayRuleSetBase::StartTurnForCharacter(
