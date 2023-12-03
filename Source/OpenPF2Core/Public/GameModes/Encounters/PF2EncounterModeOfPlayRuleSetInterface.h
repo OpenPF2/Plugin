@@ -14,9 +14,9 @@
 
 #include <UObject/ScriptInterface.h>
 
-#include "PF2ModeOfPlayRuleSetInterface.h"
-
 #include "Commands/PF2CommandExecuteImmediatelyResult.h"
+
+#include "GameModes/PF2ModeOfPlayRuleSetInterface.h"
 
 #include "PF2EncounterModeOfPlayRuleSetInterface.generated.h"
 

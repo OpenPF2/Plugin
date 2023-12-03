@@ -5,8 +5,8 @@
 
 #include "Abilities/PF2AttackAttributeSet.h"
 
-#include "GameModes/PF2CharacterInitiativeQueueComponent.h"
-#include "GameModes/PF2CharacterInitiativeQueueInterface.h"
+#include "GameModes/Encounters/PF2CharacterInitiativeQueueComponent.h"
+#include "GameModes/Encounters/PF2CharacterInitiativeQueueInterface.h"
 
 #include "Tests/PF2SpecBase.h"
 

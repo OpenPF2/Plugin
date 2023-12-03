@@ -15,7 +15,8 @@
 #include <Components/ActorComponent.h>
 
 #include "PF2ActorComponentBase.h"
-#include "PF2CharacterInitiativeQueueInterface.h"
+
+#include "GameModes/Encounters/PF2CharacterInitiativeQueueInterface.h"
 
 #include "PF2CharacterInitiativeQueueComponent.generated.h"
 

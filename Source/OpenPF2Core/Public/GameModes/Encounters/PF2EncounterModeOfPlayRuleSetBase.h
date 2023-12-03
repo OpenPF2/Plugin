@@ -7,11 +7,11 @@
 
 #include <UObject/ScriptInterface.h>
 
-#include "PF2CharacterInitiativeQueueInterface.h"
-#include "PF2EncounterModeOfPlayRuleSetInterface.h"
-#include "PF2ModeOfPlayRuleSetBase.h"
-
 #include "Commands/PF2CommandExecuteImmediatelyResult.h"
+
+#include "GameModes/PF2ModeOfPlayRuleSetBase.h"
+#include "GameModes/Encounters/PF2CharacterInitiativeQueueInterface.h"
+#include "GameModes/Encounters/PF2EncounterModeOfPlayRuleSetInterface.h"
 
 #include "PF2EncounterModeOfPlayRuleSetBase.generated.h"
 
