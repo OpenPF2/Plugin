@@ -134,6 +134,8 @@ public:
 		const FGameplayTagContainer& Tags,
 		bool bExactMatch = true) const override;
 
+	virtual bool HasActiveAbilityWithTags(const FGameplayTagContainer& Tags) override;
+
 	virtual FGameplayTagContainer GetActiveGameplayTags() const override;
 
 	virtual bool ArePassiveGameplayEffectsActive() const override

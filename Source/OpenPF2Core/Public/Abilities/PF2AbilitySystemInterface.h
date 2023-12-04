@@ -138,6 +138,19 @@ public:
 		bool                         bExactMatch = true) const = 0;
 
 	/**
+	 * Checks if an ability having the specified tag(s) is active on the owning character.
+	 *
+	 * @param Tags
+	 *	The tag(s) for which to check an ability.
+	 *
+	 * @return
+	 *	true if at least one ability on this character has all of the specified tags and is active; or, false if either
+	 *	there is no ability on this character having the specified tags or all such abilities are inactive.
+	 */
+	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Actors|Ability System", meta=(AutoCreateRefTerm=Tags))
+	virtual bool HasActiveAbilityWithTags(const FGameplayTagContainer& Tags) = 0;
+
+	/**
 	 * Gets all of the tags that are active on this ASC as a result of active GEs and Gameplay Cues.
 	 *
 	 * @return

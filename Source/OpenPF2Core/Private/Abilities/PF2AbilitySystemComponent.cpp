@@ -147,6 +147,24 @@ TArray<TScriptInterface<IPF2InteractableAbilityInterface>> UPF2AbilitySystemComp
 		});
 }
 
+bool UPF2AbilitySystemComponent::HasActiveAbilityWithTags(const FGameplayTagContainer& Tags)
+{
+	bool bResult = false;
+
+	// We don't care if the matching ability is blocked; we only care if it's active.
+	for (const FGameplayAbilitySpec& AbilitySpec : this->FindAbilitySpecsByTags(Tags, false))
+	{
+		if (AbilitySpec.IsActive())
+		{
+			// We only need a single match to know if an ability with those tags in active.
+			bResult = true;
+			break;
+		}
+	}
+
+	return bResult;
+}
+
 FGameplayTagContainer UPF2AbilitySystemComponent::GetActiveGameplayTags() const
 {
 	FGameplayTagContainer Tags;
