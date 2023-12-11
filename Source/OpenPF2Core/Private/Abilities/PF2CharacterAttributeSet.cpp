@@ -50,6 +50,7 @@ UPF2CharacterAttributeSet::UPF2CharacterAttributeSet() :
 	RstPhysicalSlashing(0.0f),
 	RstEnergyAcid(0.0f),
 	RstEnergyCold(0.0f),
+	RstEnergyElectricity(0.0f),
 	RstEnergyFire(0.0f),
 	RstEnergySonic(0.0f),
 	RstEnergyPositive(0.0f),
@@ -131,6 +132,7 @@ void UPF2CharacterAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimePrope
 	DOREPLIFETIME(UPF2CharacterAttributeSet, RstPhysicalSlashing);
 	DOREPLIFETIME(UPF2CharacterAttributeSet, RstEnergyAcid);
 	DOREPLIFETIME(UPF2CharacterAttributeSet, RstEnergyCold);
+	DOREPLIFETIME(UPF2CharacterAttributeSet, RstEnergyElectricity);
 	DOREPLIFETIME(UPF2CharacterAttributeSet, RstEnergyFire);
 	DOREPLIFETIME(UPF2CharacterAttributeSet, RstEnergySonic);
 	DOREPLIFETIME(UPF2CharacterAttributeSet, RstEnergyPositive);
@@ -323,6 +325,11 @@ void UPF2CharacterAttributeSet::OnRep_RstEnergyAcid(const FGameplayAttributeData
 void UPF2CharacterAttributeSet::OnRep_RstEnergyCold(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2CharacterAttributeSet, RstEnergyCold, OldValue);
+}
+
+void UPF2CharacterAttributeSet::OnRep_RstEnergyElectricity(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UPF2CharacterAttributeSet, RstEnergyElectricity, OldValue);
 }
 
 void UPF2CharacterAttributeSet::OnRep_RstEnergyFire(const FGameplayAttributeData& OldValue)

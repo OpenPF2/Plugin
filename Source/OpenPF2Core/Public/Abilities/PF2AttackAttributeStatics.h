@@ -33,6 +33,7 @@ protected:
 
 		{ "DamageType.Energy.Acid",          "TmpDmgTypeEnergyAcid"          },
 		{ "DamageType.Energy.Cold",          "TmpDmgTypeEnergyCold"          },
+		{ "DamageType.Energy.Electricity",   "TmpDmgTypeEnergyElectricity"   },
 		{ "DamageType.Energy.Fire",          "TmpDmgTypeEnergyFire"          },
 		{ "DamageType.Energy.Sonic",         "TmpDmgTypeEnergySonic"         },
 		{ "DamageType.Energy.Positive",      "TmpDmgTypeEnergyPositive"      },
@@ -82,6 +83,7 @@ public:
 	DECLARE_ATTRIBUTE_CAPTUREDEF(TmpDmgTypePhysicalSlashing);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(TmpDmgTypeEnergyAcid);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(TmpDmgTypeEnergyCold);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(TmpDmgTypeEnergyElectricity);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(TmpDmgTypeEnergyFire);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(TmpDmgTypeEnergySonic);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(TmpDmgTypeEnergyPositive);

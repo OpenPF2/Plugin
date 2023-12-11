@@ -36,6 +36,7 @@ protected:
 
 		{ "DamageType.Energy.Acid",          "RstEnergyAcid"          },
 		{ "DamageType.Energy.Cold",          "RstEnergyCold"          },
+		{ "DamageType.Energy.Electricity",   "RstEnergyElectricity"   },
 		{ "DamageType.Energy.Fire",          "RstEnergyFire"          },
 		{ "DamageType.Energy.Sonic",         "RstEnergySonic"         },
 		{ "DamageType.Energy.Positive",      "RstEnergyPositive"      },
@@ -86,6 +87,7 @@ public:
 
 	DECLARE_ATTRIBUTE_CAPTUREDEF(RstEnergyAcid);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(RstEnergyCold);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(RstEnergyElectricity);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(RstEnergyFire);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(RstEnergySonic);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(RstEnergyPositive);

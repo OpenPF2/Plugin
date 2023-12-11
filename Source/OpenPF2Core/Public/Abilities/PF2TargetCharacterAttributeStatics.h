@@ -26,6 +26,7 @@ protected:
 
 		{ "TmpDmgTypeEnergyAcid",          "RstEnergyAcid"          },
 		{ "TmpDmgTypeEnergyCold",          "RstEnergyCold"          },
+		{ "TmpDmgTypeEnergyElectricity",   "RstEnergyElectricity"   },
 		{ "TmpDmgTypeEnergyFire",          "RstEnergyFire"          },
 		{ "TmpDmgTypeEnergySonic",         "RstEnergySonic"         },
 		{ "TmpDmgTypeEnergyPositive",      "RstEnergyPositive"      },

@@ -353,11 +353,20 @@ public:
 	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
 	 * "Cold damage freezes material by way of contact with chilling gases and ice. Electricity damage comes from the
 	 * discharge of powerful lightning and sparks."
-	 *
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstEnergyCold)
 	FGameplayAttributeData RstEnergyCold;
 	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, RstEnergyCold)
+
+	/**
+	 * The character's resistance to Electricity damage (DamageType.Energy.Electricity).
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Electricity comes from the discharge of powerful lightning and sparks."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category="Hit Points", ReplicatedUsing=OnRep_RstEnergyElectricity)
+	FGameplayAttributeData RstEnergyElectricity;
+	ATTRIBUTE_ACCESSORS(UPF2CharacterAttributeSet, RstEnergyElectricity)
 
 	/**
 	 * The character's resistance to Fire damage (DamageType.Energy.Fire).
@@ -896,6 +905,9 @@ public:
 
 	UFUNCTION()
 	virtual void OnRep_RstEnergyCold(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	virtual void OnRep_RstEnergyElectricity(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
 	virtual void OnRep_RstEnergyFire(const FGameplayAttributeData& OldValue);

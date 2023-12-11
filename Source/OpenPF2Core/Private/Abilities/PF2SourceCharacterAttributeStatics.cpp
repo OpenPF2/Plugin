@@ -32,6 +32,7 @@ FPF2SourceCharacterAttributeStatics::FPF2SourceCharacterAttributeStatics()
 
 	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstEnergyAcid, Source, true);
 	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstEnergyCold, Source, true);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstEnergyElectricity, Source, true);
 	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstEnergyFire, Source, true);
 	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstEnergySonic, Source, true);
 	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstEnergyPositive, Source, true);

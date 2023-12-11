@@ -58,6 +58,7 @@ FPF2TargetCharacterAttributeStatics::FPF2TargetCharacterAttributeStatics():
 
 	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstEnergyAcid, Target, false);
 	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstEnergyCold, Target, false);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstEnergyElectricity, Target, false);
 	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstEnergyFire, Target, false);
 	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstEnergySonic, Target, false);
 	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2CharacterAttributeSet, RstEnergyPositive, Target, false);

@@ -121,11 +121,20 @@ public:
 	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
 	 * "Cold damage freezes material by way of contact with chilling gases and ice. Electricity damage comes from the
 	 * discharge of powerful lightning and sparks."
-	 *
 	 */
 	UPROPERTY(BlueprintReadOnly, Category="Outgoing Damage")
 	FGameplayAttributeData TmpDmgTypeEnergyCold;
 	ATTRIBUTE_ACCESSORS(UPF2AttackAttributeSet, TmpDmgTypeEnergyCold)
+
+	/**
+	 * Temporary attribute for the Electricity damage (DamageType.Energy.Electricity) the current attack will inflict.
+	 *
+	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types":
+	 * "Electricity comes from the discharge of powerful lightning and sparks."
+	 */
+	UPROPERTY(BlueprintReadOnly, Category="Outgoing Damage")
+	FGameplayAttributeData TmpDmgTypeEnergyElectricity;
+	ATTRIBUTE_ACCESSORS(UPF2AttackAttributeSet, TmpDmgTypeEnergyElectricity)
 
 	/**
 	 * Temporary attribute for the Fire damage (DamageType.Energy.Fire) the current attack will inflict.
@@ -278,6 +287,7 @@ public:
 		TmpDmgTypePhysicalSlashing(0.0f),
 		TmpDmgTypeEnergyAcid(0.0f),
 		TmpDmgTypeEnergyCold(0.0f),
+		TmpDmgTypeEnergyElectricity(0.0f),
 		TmpDmgTypeEnergyFire(0.0f),
 		TmpDmgTypeEnergySonic(0.0f),
 		TmpDmgTypeEnergyPositive(0.0f),

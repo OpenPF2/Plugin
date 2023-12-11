@@ -55,6 +55,7 @@ FPF2AttackAttributeStatics::FPF2AttackAttributeStatics():
 	TmpDmgTypePhysicalSlashingProperty(nullptr),
 	TmpDmgTypeEnergyAcidProperty(nullptr),
 	TmpDmgTypeEnergyColdProperty(nullptr),
+	TmpDmgTypeEnergyElectricityProperty(nullptr),
 	TmpDmgTypeEnergyFireProperty(nullptr),
 	TmpDmgTypeEnergySonicProperty(nullptr),
 	TmpDmgTypeEnergyPositiveProperty(nullptr),
@@ -104,6 +105,7 @@ FPF2AttackAttributeStatics::FPF2AttackAttributeStatics():
 	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypePhysicalPiercing, Source, false);
 	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypePhysicalSlashing, Source, false);
 	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypeEnergyAcid, Source, false);
+	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypeEnergyElectricity, Source, false);
 	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypeEnergyCold, Source, false);
 	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypeEnergyFire, Source, false);
 	DEFINE_PF2_ATTRIBUTE_CAPTUREDEF(UPF2AttackAttributeSet, TmpDmgTypeEnergySonic, Source, false);

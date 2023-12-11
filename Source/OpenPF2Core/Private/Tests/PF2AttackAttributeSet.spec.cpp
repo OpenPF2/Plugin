@@ -43,6 +43,7 @@ void FPF2AttackAttributeSetSpec::Define()
 			TestEqual(TEXT("TmpDmgTypePhysicalSlashing"),    AttributeSet->GetTmpDmgTypePhysicalSlashing(),    0.0f);
 			TestEqual(TEXT("TmpDmgTypeEnergyAcid"),          AttributeSet->GetTmpDmgTypeEnergyAcid(),          0.0f);
 			TestEqual(TEXT("TmpDmgTypeEnergyCold"),          AttributeSet->GetTmpDmgTypeEnergyCold(),          0.0f);
+			TestEqual(TEXT("TmpDmgTypeEnergyElectricity"),   AttributeSet->GetTmpDmgTypeEnergyElectricity(),   0.0f);
 			TestEqual(TEXT("TmpDmgTypeEnergyFire"),          AttributeSet->GetTmpDmgTypeEnergyFire(),          0.0f);
 			TestEqual(TEXT("TmpDmgTypeEnergySonic"),         AttributeSet->GetTmpDmgTypeEnergySonic(),         0.0f);
 			TestEqual(TEXT("TmpDmgTypeEnergyPositive"),      AttributeSet->GetTmpDmgTypeEnergyPositive(),      0.0f);

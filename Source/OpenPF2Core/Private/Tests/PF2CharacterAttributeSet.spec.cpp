@@ -63,6 +63,7 @@ void FPF2CharacterAttributeSetSpec::Define()
 			TestEqual(TEXT("RstPhysicalSlashing"),                  AttributeSet->GetRstPhysicalSlashing(),         0.0f);
 			TestEqual(TEXT("RstEnergyAcid"),                        AttributeSet->GetRstEnergyAcid(),               0.0f);
 			TestEqual(TEXT("RstEnergyCold"),                        AttributeSet->GetRstEnergyCold(),               0.0f);
+			TestEqual(TEXT("RstEnergyElectricity"),                 AttributeSet->GetRstEnergyElectricity(),        0.0f);
 			TestEqual(TEXT("RstEnergyFire"),                        AttributeSet->GetRstEnergyFire(),               0.0f);
 			TestEqual(TEXT("RstEnergySonic"),                       AttributeSet->GetRstEnergySonic(),              0.0f);
 			TestEqual(TEXT("RstEnergyPositive"),                    AttributeSet->GetRstEnergyPositive(),           0.0f);

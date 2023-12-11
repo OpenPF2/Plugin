@@ -83,6 +83,7 @@ FPF2CharacterAttributeStaticsBase::FPF2CharacterAttributeStaticsBase():
 	RstPhysicalSlashingProperty(nullptr),
 	RstEnergyAcidProperty(nullptr),
 	RstEnergyColdProperty(nullptr),
+	RstEnergyElectricityProperty(nullptr),
 	RstEnergyFireProperty(nullptr),
 	RstEnergySonicProperty(nullptr),
 	RstEnergyPositiveProperty(nullptr),
