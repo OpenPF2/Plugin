@@ -9,6 +9,7 @@
 #include "Abilities/PF2AttributeSetMacros.h"
 
 #include "Utilities/PF2ArrayUtilities.h"
+#include "Utilities/PF2GameplayAbilityUtilities.h"
 
 TArray<const FGameplayEffectAttributeCaptureDefinition*> FPF2AttackAttributeStatics::GetAllDamageCaptures() const
 {
@@ -42,6 +43,22 @@ const FGameplayEffectAttributeCaptureDefinition* FPF2AttackAttributeStatics::Get
 	}
 
 	return Result;
+}
+
+FGameplayTag FPF2AttackAttributeStatics::GetDamageTypeForDamageAttribute(const FGameplayAttribute& Attribute) const
+{
+	FGameplayTag FoundTag;
+
+	for (const auto& Pair : this->DamageTypeToTransientDamageAttributeMap)
+	{
+		if (Pair.Value == Attribute.AttributeName)
+		{
+			FoundTag = PF2GameplayAbilityUtilities::GetTag(Pair.Key);
+			break;
+		}
+	}
+
+	return FoundTag;
 }
 
 FPF2AttackAttributeStatics::FPF2AttackAttributeStatics():

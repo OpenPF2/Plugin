@@ -138,6 +138,18 @@ public:
 	const FGameplayEffectAttributeCaptureDefinition* GetDamageCaptureForDamageType(
 		const FName& DamageTypeName) const;
 
+	/**
+	 * Gets the damage type tag that corresponds to the specified transient damage attribute.
+	 *
+	 * @param Attribute
+	 *	The attribute for which a damage type is desired.
+	 *
+	 * @return
+	 *	Either the tag for the type of damage that was provided; or, a gameplay tag that is not valid if there is no
+	 *	damage type that corresponds to the given attribute.
+	 */
+	FGameplayTag GetDamageTypeForDamageAttribute(const FGameplayAttribute& Attribute) const;
+
 protected:
 	// =================================================================================================================
 	// Protected Constructors
