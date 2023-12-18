@@ -28,6 +28,11 @@ class OPENPF2CORE_API UPF2ApplyDamageFromSourceExecution : public UGameplayEffec
 {
 	GENERATED_BODY()
 
+	/**
+	 * The gameplay tag for gameplay cues that activate upon damage being inflicted to the target.
+	 */
+	FGameplayTag InflictDamageCueTag;
+
 public:
 	// =================================================================================================================
 	// Constructors
@@ -42,4 +47,32 @@ public:
 	// =================================================================================================================
 	virtual void Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
 	                                    OUT FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const override;
+
+protected:
+	/**
+	 * Gets the gameplay tag for gameplay cues that activate upon damage being inflicted to the target.
+	 *
+	 * @return
+	 *	The gameplay tag for the damage cue.
+	 */
+	FORCEINLINE const FGameplayTag& GetInflictDamageCueTag() const
+	{
+		return this->InflictDamageCueTag;
+	}
+
+	/**
+	 * Populates parameters from a gameplay cue from the parameters of the current GE execution.
+	 *
+	 * @param [in] ExecutionParams
+	 *	The parameters passed to the current GE execution.
+	 *
+	 * @return
+	 *	The new Gameplay Cue parameters.
+	 */
+	FORCEINLINE FGameplayCueParameters PopulateGameplayCueParameters(
+		const FGameplayEffectCustomExecutionParameters& ExecutionParams) const
+	{
+		return FGameplayCueParameters(ExecutionParams.GetOwningSpec().GetEffectContext());
+	}
+
 };

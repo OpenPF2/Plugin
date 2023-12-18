@@ -17,6 +17,8 @@
 
 #include "Libraries/PF2AbilitySystemLibrary.h"
 
+#include "Utilities/PF2GameplayAbilityUtilities.h"
+
 UPF2ApplyDamageFromSourceExecution::UPF2ApplyDamageFromSourceExecution()
 {
 	const FPF2AttackAttributeStatics          AttackCaptures = FPF2AttackAttributeStatics::GetInstance();
@@ -28,15 +30,22 @@ UPF2ApplyDamageFromSourceExecution::UPF2ApplyDamageFromSourceExecution()
 	{
 		this->RelevantAttributesToCapture.Add(*Capture);
 	}
+
+	// Cache the tag to avoid lookup overhead.
+	this->InflictDamageCueTag = PF2GameplayAbilityUtilities::GetTag(
+		FName("GameplayCue.Character.InflictDamage")
+	);
 }
 
 void UPF2ApplyDamageFromSourceExecution::Execute_Implementation(
 	const FGameplayEffectCustomExecutionParameters& ExecutionParams,
 	FGameplayEffectCustomExecutionOutput&           OutExecutionOutput) const
 {
+	UAbilitySystemComponent*                  TargetAsc             = ExecutionParams.GetTargetAbilitySystemComponent();
 	const FPF2AttackAttributeStatics          AttackCaptures        = FPF2AttackAttributeStatics::GetInstance();
 	const FPF2TargetCharacterAttributeStatics TargetCaptures        = FPF2TargetCharacterAttributeStatics::GetInstance();
 	float                                     AttackDegreeOfSuccess = 0.0f;
+	bool                                      bHaveAnyDamage        = false;
 
 	const FAggregatorEvaluateParameters EvaluationParameters =
 		UPF2AbilitySystemLibrary::BuildEvaluationParameters(ExecutionParams);
@@ -102,6 +111,8 @@ void UPF2ApplyDamageFromSourceExecution::Execute_Implementation(
 
 		if (EffectiveDamage > 0)
 		{
+			FGameplayCueParameters CueParams = PopulateGameplayCueParameters(ExecutionParams);
+
 			// Apply: Damage, less resistance.
 			OutExecutionOutput.AddOutputModifier(
 				FGameplayModifierEvaluatedData(
@@ -110,6 +121,38 @@ void UPF2ApplyDamageFromSourceExecution::Execute_Implementation(
 					EffectiveDamage
 				)
 			);
+
+			bHaveAnyDamage = true;
+
+			// For now, pass the damage type along as a source tag. These feels like a hack, but saves us from having to
+			// define a custom parameter object and/or context object to pass along inside the parameter object.
+			//
+			// An alternative would be to pass the damage type along in the OriginalTag field, but the intent of that
+			// field appears to be to capture what gameplay tag was emitted by a GE to locate the cue. The
+			// MatchedTagName field, meanwhile, appears to be for holding the name of the tag that the selected cue has.
+			CueParams.AggregatedSourceTags.AddTag(
+				AttackCaptures.GetDamageTypeForDamageAttribute(Capture->AttributeToCapture)
+			);
+
+			CueParams.RawMagnitude = EffectiveDamage;
+
+			TargetAsc->ExecuteGameplayCue(
+				this->InflictDamageCueTag,
+				CueParams
+			);
 		}
+	}
+
+	if (!bHaveAnyDamage)
+	{
+		// Fire off a cue for a miss (no damage), so that the player can see a zero.
+		FGameplayCueParameters CueParams = PopulateGameplayCueParameters(ExecutionParams);
+
+		CueParams.RawMagnitude = 0;
+
+		TargetAsc->ExecuteGameplayCue(
+			this->InflictDamageCueTag,
+			CueParams
+		);
 	}
 }
