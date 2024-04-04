@@ -37,18 +37,18 @@
  * @param FallbackReturnValue
  *	The value to return if the ability is non-instanced.
  */
-#define PF2_ENSURE_ABILITY_IS_INSTANTIATED_OR_RETURN(Ability, FunctionName, FallbackReturnValue)						\
-{																														\
-	if (!ensure(Ability->IsInstantiated()))																				\
-	{																													\
-	    UE_LOG(																											\
-			LogPf2CoreAbilities,																						\
-			Error,																										\
-			TEXT("%s: " #FunctionName " cannot be called on a non-instanced ability. Check the instancing policy."),	\
-			*Ability->GetPathName()																						\
-		);																												\
-		return FallbackReturnValue;																						\
-	}																													\
+#define PF2_ENSURE_ABILITY_IS_INSTANTIATED_OR_RETURN(Ability, FunctionName, FallbackReturnValue)                     \
+{                                                                                                                    \
+	if (!ensure(Ability->IsInstantiated()))                                                                          \
+	{                                                                                                                \
+		UE_LOG(                                                                                                      \
+			LogPf2CoreAbilities,                                                                                     \
+			Error,                                                                                                   \
+			TEXT("%s: " #FunctionName " cannot be called on a non-instanced ability. Check the instancing policy."), \
+			*Ability->GetPathName()                                                                                  \
+		);                                                                                                           \
+		return FallbackReturnValue;                                                                                  \
+	}                                                                                                                \
 }
 
 // =====================================================================================================================

@@ -53,9 +53,9 @@ public:
 	 * The given weapon instance must be a data asset that implements IPF2WeaponInterface.
 	 *
 	 * This method is necessary because actors cannot be passed parameters through a constructor at spawn time.
-     *
-     * @param OwningActor
-     *	The actor who owns or possesses this weapon.
+	 *
+	 * @param OwningActor
+	 *	The actor who owns or possesses this weapon.
 	 * @param Weapon
 	 *	The weapon that the new instance will wrap.
 	 *

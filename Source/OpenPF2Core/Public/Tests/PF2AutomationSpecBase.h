@@ -130,7 +130,9 @@ public:
 		/**
 		 * Gets the unique hash for this handle.
 		 *
-		 * @param SpecHandle - The handle to hash.
+		 * @param SpecHandle
+		 *	The handle to hash.
+		 *
 		 * @return The hash value.
 		 */
 		friend static uint32 GetTypeHash(const FSpecBlockHandle& SpecHandle)
@@ -153,13 +155,14 @@ public:
 		// Public Instance Methods
 		// =============================================================================================================
 		/**
-         * Equality operator for comparing this handle to another handle.
-         *
-         * @param Other
-         *	The handle to compare against.
-         * @return
-         *	true if the handles are equal; or, false otherwise.
-         */
+		 * Equality operator for comparing this handle to another handle.
+		 *
+		 * @param Other
+		 *	The handle to compare against.
+		 *
+		 * @return
+		 *	true if the handles are equal; or, false otherwise.
+		 */
 		bool operator==(const FSpecBlockHandle& Other) const
 		{
 			return (this->Handle == Other.Handle);
@@ -170,6 +173,7 @@ public:
 		 *
 		 * @param Other
 		 *	The handle to compare against.
+		 *
 		 * @return
 		 *	true if the handles are not equal; or, false otherwise.
 		 */
@@ -375,10 +379,9 @@ private:
 		explicit TNoOpSpecLet() :
 			TSpecLet<VariableType>(
 				TGeneratorRedefineFunc<VariableType>([](const TSpecVariablePtr<VariableType>&)
-					{
-						return VariableType();
-					}
-				),
+				{
+					return VariableType();
+				}),
 				TSpecVariablePtr<VariableType>()
 			)
 		{
@@ -923,8 +926,8 @@ private:
 		FString Id;
 
 		/**
-	     * The human-readable description of the test case this block performs.
-	     */
+		 * The human-readable description of the test case this block performs.
+		 */
 		FString Description;
 
 		/**
@@ -1404,7 +1407,7 @@ protected:
 	 */
 	FORCEINLINE void xIt(const FString& InDescription, const TFunction<void()>& DoWork)
 	{
-	    // Disabled.
+		// Disabled.
 	}
 
 	/**
@@ -1441,7 +1444,7 @@ protected:
 	 */
 	FORCEINLINE void xIt(const FString& InDescription, const EAsyncExecution Execution, const TFunction<void()>& DoWork)
 	{
-	    // Disabled.
+		// Disabled.
 	}
 
 	/**
@@ -1488,7 +1491,7 @@ protected:
 	                     const FTimespan&         Timeout,
 	                     const TFunction<void()>& DoWork)
 	{
-	    // Disabled.
+		// Disabled.
 	}
 
 	/**
@@ -1522,7 +1525,7 @@ protected:
 	 */
 	FORCEINLINE void xLatentIt(const FString& InDescription, const TFunction<void(const FDoneDelegate&)>& DoWork)
 	{
-	    // Disabled.
+		// Disabled.
 	}
 
 	/**
@@ -1564,7 +1567,7 @@ protected:
 	                           const FTimespan&                             Timeout,
 	                           const TFunction<void(const FDoneDelegate&)>& DoWork)
 	{
-	    // Disabled.
+		// Disabled.
 	}
 
 	/**
@@ -1606,7 +1609,7 @@ protected:
 	                           const EAsyncExecution                        Execution,
 	                           const TFunction<void(const FDoneDelegate&)>& DoWork)
 	{
-	    // Disabled.
+		// Disabled.
 	}
 
 	/**
@@ -1654,7 +1657,7 @@ protected:
 	                           const FTimespan&                             Timeout,
 	                           const TFunction<void(const FDoneDelegate&)>& DoWork)
 	{
-	    // Disabled.
+		// Disabled.
 	}
 
 	/**

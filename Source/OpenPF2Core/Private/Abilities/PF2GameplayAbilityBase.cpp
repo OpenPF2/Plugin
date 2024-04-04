@@ -219,7 +219,7 @@ TArray<FActiveGameplayEffectHandle> UPF2GameplayAbilityBase::ApplyEffectContaine
 		for (const FGameplayEffectSpecHandle& SpecHandle : SpecsToApply)
 		{
 			AppliedEffects.Add(
-				ApplyGameplayEffectSpecToOwner(
+				this->ApplyGameplayEffectSpecToOwner(
 					this->CurrentSpecHandle,
 					this->CurrentActorInfo,
 					this->CurrentActivationInfo,
@@ -252,7 +252,7 @@ TArray<FActiveGameplayEffectHandle> UPF2GameplayAbilityBase::ApplyEffectContaine
 		for (const FGameplayEffectSpecHandle& SpecHandle : SpecsToApply)
 		{
 			AppliedEffects.Append(
-				ApplyGameplayEffectSpecToTarget(
+				this->ApplyGameplayEffectSpecToTarget(
 					this->CurrentSpecHandle,
 					this->CurrentActorInfo,
 					this->CurrentActivationInfo,

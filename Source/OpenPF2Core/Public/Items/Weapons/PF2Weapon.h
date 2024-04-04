@@ -241,15 +241,15 @@ public:
 	virtual FPF2GameplayEffectContainer GetTargetGameplayEffects() const override;
 	virtual APF2EffectCauseWrapper* ToEffectCauser(AActor* OwningActor) override;
 
-    virtual void OnSourceGameplayEffectsContainerSpecGenerated(
-	    const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
-	    const UGameplayAbility*                                      ActivatedAbility,
-	    FPF2GameplayEffectContainerSpec&                             ContainerSpec) override;
+	virtual void OnSourceGameplayEffectsContainerSpecGenerated(
+		const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
+		const UGameplayAbility*                                      ActivatedAbility,
+		FPF2GameplayEffectContainerSpec&                             ContainerSpec) override;
 
-    virtual void OnTargetGameplayEffectsContainerSpecGenerated(
-	    const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
-	    const UGameplayAbility*                                      ActivatedAbility,
-	    FPF2GameplayEffectContainerSpec&                             ContainerSpec) override;
+	virtual void OnTargetGameplayEffectsContainerSpecGenerated(
+		const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
+		const UGameplayAbility*                                      ActivatedAbility,
+		FPF2GameplayEffectContainerSpec&                             ContainerSpec) override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2ItemInterface Implementation
@@ -285,7 +285,7 @@ protected:
 	UFUNCTION(BlueprintNativeEvent, DisplayName="On Source Gameplay Effects Container Spec Generated")
 	void BP_OnSourceGameplayEffectsContainerSpecGenerated(
 		const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
-	    const UGameplayAbility*                                      ActivatedAbility,
+		const UGameplayAbility*                                      ActivatedAbility,
 		const FPF2GameplayEffectContainerSpec&                       ContainerSpec,
 		FPF2GameplayEffectContainerSpec&                             ModifiedContainerSpec);
 
@@ -307,7 +307,7 @@ protected:
 	UFUNCTION(BlueprintNativeEvent, DisplayName="On Target Gameplay Effects Container Spec Generated")
 	void BP_OnTargetGameplayEffectsContainerSpecGenerated(
 		const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
-	    const UGameplayAbility*                                      ActivatedAbility,
+		const UGameplayAbility*                                      ActivatedAbility,
 		const FPF2GameplayEffectContainerSpec&                       ContainerSpec,
 		FPF2GameplayEffectContainerSpec&                             ModifiedContainerSpec);
 };

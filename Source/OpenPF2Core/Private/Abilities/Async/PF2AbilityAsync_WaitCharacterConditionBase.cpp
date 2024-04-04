@@ -153,7 +153,7 @@ void UPF2AbilityAsync_WaitCharacterConditionBase::NotifyIfCriterionSatisfied(con
 	ensure(Asc != nullptr);
 
 	if (((this->CriterionToSatisfy == TagRemoved) && (NewCount == 0) && (Asc->GetTagCount(this->ConditionParentTag) == 0)) ||
-		((this->CriterionToSatisfy == TagAdded) && (NewCount >= 1)))
+	    ((this->CriterionToSatisfy == TagAdded) && (NewCount >= 1)))
 	{
 		this->OnTagCriterionSatisfied(ConditionTag);
 

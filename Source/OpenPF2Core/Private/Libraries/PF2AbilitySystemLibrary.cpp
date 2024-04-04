@@ -385,7 +385,7 @@ EPF2TargetSelectionType UPF2AbilitySystemLibrary::GetTargetSelectionType(
 
 FPF2GameplayEffectContainerSpec UPF2AbilitySystemLibrary::AddGameplayEffectSpecToEffectContainerSpec(
 	const FPF2GameplayEffectContainerSpec& ContainerSpec,
-	const FGameplayEffectSpecHandle& GameplayEffectSpec)
+	const FGameplayEffectSpecHandle&       GameplayEffectSpec)
 {
 	FPF2GameplayEffectContainerSpec NewSpec = ContainerSpec;
 
@@ -396,7 +396,7 @@ FPF2GameplayEffectContainerSpec UPF2AbilitySystemLibrary::AddGameplayEffectSpecT
 
 FPF2GameplayEffectContainerSpec UPF2AbilitySystemLibrary::AddHitTargetsToEffectContainerSpec(
 	const FPF2GameplayEffectContainerSpec& ContainerSpec,
-	const TArray<FHitResult>& HitResults)
+	const TArray<FHitResult>&              HitResults)
 {
 	FPF2GameplayEffectContainerSpec NewSpec = ContainerSpec;
 
@@ -407,7 +407,7 @@ FPF2GameplayEffectContainerSpec UPF2AbilitySystemLibrary::AddHitTargetsToEffectC
 
 FPF2GameplayEffectContainerSpec UPF2AbilitySystemLibrary::AddActorTargetsToEffectContainerSpec(
 	const FPF2GameplayEffectContainerSpec& ContainerSpec,
-	const TArray<AActor*>& TargetActors)
+	const TArray<AActor*>&                 TargetActors)
 {
 	FPF2GameplayEffectContainerSpec NewSpec = ContainerSpec;
 

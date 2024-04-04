@@ -411,7 +411,7 @@ protected:
 		this->CommandQueue           = ComponentFactory.CreateCommandQueue(this);
 		this->OwnerTracker           = ComponentFactory.CreateOwnerTracker(this);
 		this->AttributeSet           = ComponentFactory.CreateAttributeSet(this);
-		this->AttackAttributeSet	 = ComponentFactory.CreateAttackAttributeSet(this);
+		this->AttackAttributeSet     = ComponentFactory.CreateAttackAttributeSet(this);
 
 		for (const TTuple<FString, FName>& EffectInfo : PF2CharacterConstants::GeCoreCharacterBlueprintPaths)
 		{

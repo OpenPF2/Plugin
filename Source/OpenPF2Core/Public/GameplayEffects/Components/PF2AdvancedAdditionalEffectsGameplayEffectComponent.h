@@ -90,12 +90,12 @@ public:
 	 * This evaluates the conditions of "OnApplication" GEs and applies all conditional GEs for which conditions have
 	 * been met.
 	 *
-     * @param ActiveGEContainer
-     *	The GE container of the target ASC. This holds all of the GEs that are currently active on the target.
-     * @param GESpec
-     *	The specification for the GE instance that has been applied.
-     * @param PredictionKey
-     *	The prediction key being used for the GE application and activation.
+	 * @param ActiveGEContainer
+	 *	The GE container of the target ASC. This holds all of the GEs that are currently active on the target.
+	 * @param GESpec
+	 *	The specification for the GE instance that has been applied.
+	 * @param PredictionKey
+	 *	The prediction key being used for the GE application and activation.
 	 */
 	virtual void OnGameplayEffectApplied(FActiveGameplayEffectsContainer& ActiveGEContainer,
 	                                     FGameplayEffectSpec&             GESpec,

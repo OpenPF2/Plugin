@@ -194,7 +194,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
 	virtual void OnSourceGameplayEffectsContainerSpecGenerated(
 		const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
-	    const UGameplayAbility*                                      ActivatedAbility,
+		const UGameplayAbility*                                      ActivatedAbility,
 		FPF2GameplayEffectContainerSpec&                             ContainerSpec) = 0;
 
 	/**
@@ -214,6 +214,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Items|Weapons")
 	virtual void OnTargetGameplayEffectsContainerSpecGenerated(
 		const TScriptInterface<IPF2CharacterAbilitySystemInterface>& SourceAbilitySystemComponent,
-	    const UGameplayAbility*                                      ActivatedAbility,
+		const UGameplayAbility*                                      ActivatedAbility,
 		FPF2GameplayEffectContainerSpec&                             ContainerSpec) = 0;
 };

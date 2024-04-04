@@ -25,8 +25,8 @@ EDataValidationResult UPF2AdvancedAdditionalEffectsGameplayEffectComponent::IsDa
 	const UGameplayEffect*      OwningGE = this->GetOwner();
 
 	if ((OwningGE->DurationPolicy != EGameplayEffectDurationType::Instant) &&
-		(OwningGE->Period.Value > 0.0f) &&
-		(this->OnApplicationGameplayEffects.Num() > 0))
+	    (OwningGE->Period.Value > 0.0f) &&
+	    (this->OnApplicationGameplayEffects.Num() > 0))
 	{
 		Context.AddWarning(
 			LOCTEXT(

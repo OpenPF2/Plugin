@@ -1,4 +1,4 @@
-// Copyright 2021-2023 Guy Elsmore-Paddock. All Rights Reserved.
+// Copyright 2021-2024 Guy Elsmore-Paddock. All Rights Reserved.
 // Adapted from content that is Copyright Epic Games, Inc. (Action RPG Sample).
 // Licensed only for use with Unreal Engine.
 
@@ -247,7 +247,7 @@ bool UPF2AbilityTask_PlayMontageAndWaitForEvent::StopPlayingMontage() const
 	// Check if the montage is still playing
 	// The ability would have been interrupted, in which case we should automatically stop the montage
 	if ((Asc != nullptr) && this->HasAbility() && (Asc->GetAnimatingAbility() == this->Ability) &&
-		(Asc->GetCurrentMontage() == this->MontageToPlay))
+	    (Asc->GetCurrentMontage() == this->MontageToPlay))
 	{
 		// Unbind delegates so they don't get called as well
 		FAnimMontageInstance* MontageInstance = AnimInstance->GetActiveInstanceForMontage(this->MontageToPlay);

@@ -282,7 +282,7 @@ void UPF2RollWeaponAttackExecution::Execute_Implementation(
 	AActor*                    EffectCauser = Spec.GetEffectContext().GetEffectCauser();
 
 	if (const TScriptInterface<IPF2WeaponInterface> Weapon = IPF2WeaponInterface::EffectCauserToWeapon(EffectCauser);
-		Weapon == nullptr)
+	    Weapon == nullptr)
 	{
 		// "An unarmed attack uses your body rather than a manufactured weapon. An unarmed attack isn’t a weapon, though
 		// it’s categorized with weapons for weapon groups, and it might have weapon traits."
