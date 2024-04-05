@@ -98,13 +98,13 @@ protected:
 	 *	The slot being affected.
 	 * @param Item
 	 *	The item being equipped or unequipped into the slot.
-	 *
-	 * @return
+	 * @param [out] TargetSlots
 	 *	A list of slots that should be affected by the item.
 	 */
-	static TArray<const UPF2EquipableItemSlot*> GetTargetSlotsForSlotAndItem(
+	static void GetTargetSlotsForSlotAndItem(
 		const UPF2EquipableItemSlot*               Slot,
-		const TScriptInterface<IPF2ItemInterface>& Item);
+		const TScriptInterface<IPF2ItemInterface>& Item,
+		TArray<const UPF2EquipableItemSlot*>&      TargetSlots);
 
 	// =================================================================================================================
 	// Protected Fields

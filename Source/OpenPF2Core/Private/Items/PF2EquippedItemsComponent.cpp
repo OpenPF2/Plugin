@@ -17,14 +17,13 @@
 
 #define LOCTEXT_NAMESPACE "PF2EquipableItemSlot"
 
-TArray<const UPF2EquipableItemSlot*> UPF2EquippedItemsComponent::GetTargetSlotsForSlotAndItem(
-	const UPF2EquipableItemSlot*               Slot,
-	const TScriptInterface<IPF2ItemInterface>& Item)
+void UPF2EquippedItemsComponent::GetTargetSlotsForSlotAndItem(const UPF2EquipableItemSlot*               Slot,
+                                                              const TScriptInterface<IPF2ItemInterface>& Item,
+                                                              TArray<const UPF2EquipableItemSlot*>&      TargetSlots)
 {
-	TArray<const UPF2EquipableItemSlot*>              TargetSlots;
 	const TArray<TSubclassOf<UPF2EquipableItemSlot>>& LinkedSlots = Slot->GetLinkedSlots();
 
-	TargetSlots.Reserve(1 + LinkedSlots.Num());
+	TargetSlots.Empty(1 + LinkedSlots.Num());
 	TargetSlots.Add(Slot);
 
 	if (Item->ShouldBeEquippedInAllLinkedSlots() && !LinkedSlots.IsEmpty())
@@ -39,8 +38,6 @@ TArray<const UPF2EquipableItemSlot*> UPF2EquippedItemsComponent::GetTargetSlotsF
 			)
 		);
 	}
-
-	return TargetSlots;
 }
 
 UPF2EquippedItemsComponent::UPF2EquippedItemsComponent() : Events(nullptr)
@@ -169,7 +166,9 @@ void UPF2EquippedItemsComponent::GetAllSlotsThatAcceptType(const TSubclassOf<UDa
 void UPF2EquippedItemsComponent::EquipItemInSlot(const UPF2EquipableItemSlot*               Slot,
                                                  const TScriptInterface<IPF2ItemInterface>& Item)
 {
-	TArray<const UPF2EquipableItemSlot*> TargetSlots = GetTargetSlotsForSlotAndItem(Slot, Item);
+	TArray<const UPF2EquipableItemSlot*> TargetSlots;
+
+	this->GetTargetSlotsForSlotAndItem(Slot, Item, TargetSlots);
 
 	for (const auto& CurrentSlot : TargetSlots)
 	{
@@ -194,11 +193,16 @@ void UPF2EquippedItemsComponent::UnequipItemInSlot(const UPF2EquipableItemSlot* 
 
 		if (CurrentSlotType == Slot->GetClass())
 		{
-			const UPF2EquipableItemSlot* CurrentSlot = Cast<UPF2EquipableItemSlot>(CurrentItemType.GetDefaultObject());
+			const UPF2EquipableItemSlot* CurrentSlot =
+				Cast<UPF2EquipableItemSlot>(CurrentItemType.GetDefaultObject());
+
+			TArray<const UPF2EquipableItemSlot*> TargetSlots;
+
+			this->GetTargetSlotsForSlotAndItem(CurrentSlot, CurrentItemType, TargetSlots);
 
 			// Update both the target slot and any linked slots, if the item is multi-slot and the slot has linked
 			// slots.
-			for (const auto& TargetSlot : GetTargetSlotsForSlotAndItem(CurrentSlot, CurrentItemType))
+			for (const auto& TargetSlot : TargetSlots)
 			{
 				this->UnequipItemInSpecificSlot(TargetSlot);
 			}
