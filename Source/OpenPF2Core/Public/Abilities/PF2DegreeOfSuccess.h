@@ -42,7 +42,7 @@ enum class EPF2DegreeOfSuccess : uint8
 	None,
 
 	/**
-	 * The check result was equal to or lower than the DC by 10 or more.
+	 * The check result was less than the DC by 10 or more.
 	 *
 	 * From the Pathfinder 2E Core Rulebook, Chapter 9, page 445, "Step 4: Determine the Degree of Success and Effect":
 	* "[...] if you fail a check by 10 or more, that’s a critical failure"
