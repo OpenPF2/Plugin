@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2023, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2023-2024, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -137,8 +137,6 @@ void UPF2InventoryComponent::Native_OnInventoryItemsLoaded(const TArray<IPF2Item
 	TArray<IPF2ItemInterface*>        RemovedItems,
 	                                  AddedItems;
 
-	// BUGBUG: By the time we're here, this should definitely be an OpenPF2 item, but UE will sometimes replicate
-	// entries in this->InventoryItems as NULL.
 	PF2ArrayUtilities::CapturePtrDeltasWithCast(OldInventory, NewInventory, RemovedItems, AddedItems);
 
 	// We execute this logic even if we have no registered listeners because we still need to do internal bookkeeping
