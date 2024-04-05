@@ -600,7 +600,7 @@ void UPF2CharacterAttributeSet::EmitGameplayEvent(const FGameplayTag&        Eve
 	TScriptInterface<IPF2CharacterInterface> Instigator;
 	AActor*                                  DamageSource  = nullptr;
 
-	UPF2AbilitySystemLibrary::DetermineDamageInstigatorAndSource(SourceEffectSpec, Instigator, DamageSource);
+	UPF2AbilitySystemLibrary::DetermineInstigatorAndDamageSource(SourceEffectSpec, Instigator, DamageSource);
 
 	EventPayload.EventTag       = EventTag;
 	EventPayload.EventMagnitude = EventMagnitude;
@@ -648,7 +648,7 @@ void UPF2CharacterAttributeSet::Native_OnDamageIncomingChanged(const FGameplayEf
 
 			const FHitResult HitResult = UAbilitySystemBlueprintLibrary::EffectContextGetHitResult(EffectContext);
 
-			UPF2AbilitySystemLibrary::DetermineDamageInstigatorAndSource(SourceEffectSpec, Instigator, DamageSource);
+			UPF2AbilitySystemLibrary::DetermineInstigatorAndDamageSource(SourceEffectSpec, Instigator, DamageSource);
 
 			UE_LOG(
 				LogPf2CoreStats,

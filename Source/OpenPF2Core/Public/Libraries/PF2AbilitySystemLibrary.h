@@ -145,7 +145,7 @@ public:
 	 *	The actor that directly inflicted the damage, such as a weapon or projectile.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Gameplay Abilities")
-	static void DetermineDamageInstigatorAndSource(const FGameplayEffectSpec&                EffectSpec,
+	static void DetermineInstigatorAndDamageSource(const FGameplayEffectSpec&                EffectSpec,
 	                                               TScriptInterface<IPF2CharacterInterface>& Instigator,
 	                                               AActor*&                                  DamageSource);
 

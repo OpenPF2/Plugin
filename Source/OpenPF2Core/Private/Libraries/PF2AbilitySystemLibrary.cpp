@@ -55,7 +55,7 @@ const UGameplayAbility* UPF2AbilitySystemLibrary::GetAbilityInstanceFromGameplay
 	return Result;
 }
 
-void UPF2AbilitySystemLibrary::DetermineDamageInstigatorAndSource(
+void UPF2AbilitySystemLibrary::DetermineInstigatorAndDamageSource(
 	const FGameplayEffectSpec&                EffectSpec,
 	TScriptInterface<IPF2CharacterInterface>& Instigator,
 	AActor*&                                  DamageSource)
