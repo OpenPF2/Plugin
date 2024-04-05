@@ -55,7 +55,7 @@ protected:
 	// Protected Static Methods
 	// =================================================================================================================
 	/**
-	 * Attempts an an attack from the source character to the target character.
+	 * Attempts an attack from the source character to the target character.
 	 *
 	 * An attack roll is performed to determine if the attack against the target is successful. If it is successful, a
 	 * damage roll is performed to determine how much damage is inflicted. The degree of success for the attack roll
