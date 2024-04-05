@@ -63,7 +63,7 @@ EPF2DegreeOfSuccess UPF2AttackStatLibrary::CalculateAttackRoll(const int32      
 	//
 	// Source: Pathfinder 2E Core Rulebook, Chapter 6, page 278, "Attack Rolls".
 	AttackRoll = DiceRoll + AttackAbilityModifier + WeaponProficiencyBonus + MultipleAttackPenalty;
-	Result     = DetermineCheckDegreeOfSuccess(AttackRoll, TargetArmorClass);
+	Result     = DetermineDegreeOfSuccessForCheck(AttackRoll, TargetArmorClass);
 
 	// If you rolled a 20 on the die (a “natural 20”), your result is one degree of success better than it would be by
 	// numbers alone."
@@ -101,7 +101,7 @@ EPF2DegreeOfSuccess UPF2AttackStatLibrary::CalculateFlatCheck(const float Diffic
 	EPF2DegreeOfSuccess Result;
 
 	DieRoll = UPF2DiceLibrary::RollSum(1, 20);
-	Result  = DetermineCheckDegreeOfSuccess(DieRoll, DifficultyClass);
+	Result  = DetermineDegreeOfSuccessForCheck(DieRoll, DifficultyClass);
 
 	// "If you rolled a 20 on the die (a 'natural 20'), your result is one degree of success better than it would be by
 	// numbers alone. If you roll a 1 on the d20 (a 'natural 1'), your result is one degree worse. This means that a
@@ -274,7 +274,7 @@ bool UPF2AttackStatLibrary::IsWithinRange(const float WeaponRangeIncrementCentim
 	return bInRange;
 }
 
-EPF2DegreeOfSuccess UPF2AttackStatLibrary::DetermineCheckDegreeOfSuccess(const float Value, const float DifficultyClass)
+EPF2DegreeOfSuccess UPF2AttackStatLibrary::DetermineDegreeOfSuccessForCheck(const float Value, const float DifficultyClass)
 {
 	EPF2DegreeOfSuccess Result;
 

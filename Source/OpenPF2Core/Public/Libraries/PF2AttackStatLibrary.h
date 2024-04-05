@@ -218,7 +218,7 @@ public:
 	 *	The calculated result of the check.
 	 */
 	UFUNCTION(BlueprintPure, Category="OpenPF2|Attack Stats")
-	static EPF2DegreeOfSuccess DetermineCheckDegreeOfSuccess(const float Value, const float DifficultyClass);
+	static EPF2DegreeOfSuccess DetermineDegreeOfSuccessForCheck(const float Value, const float DifficultyClass);
 
 	/**
 	 * Upgrades a check result to one degree of success better, up to a maximum of "critical success".
