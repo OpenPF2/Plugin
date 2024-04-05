@@ -33,7 +33,7 @@ UPF2SimpleDamageExecution::UPF2SimpleDamageExecution() :
 
 void UPF2SimpleDamageExecution::Execute_Implementation(
 	const FGameplayEffectCustomExecutionParameters& ExecutionParams,
-	OUT FGameplayEffectCustomExecutionOutput&       OutExecutionOutput) const
+	FGameplayEffectCustomExecutionOutput&           OutExecutionOutput) const
 {
 	const FGameplayEffectSpec& Spec           = ExecutionParams.GetOwningSpec();
 	float                      IncomingDamage = 0.0f,

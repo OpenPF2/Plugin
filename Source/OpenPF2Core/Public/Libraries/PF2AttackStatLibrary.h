@@ -161,7 +161,7 @@ public:
 	 * numbers alone. If you roll a 1 on the d20 (a 'natural 1'), your result is one degree worse. This means that a
 	 * natural 20 usually results in a critical success and natural 1 usually results in a critical failure."
 	 *
-	 * @param [in] DifficultyClass
+	 * @param DifficultyClass
 	 *	The difficulty class to check the value against.
 	 *
 	 * @return

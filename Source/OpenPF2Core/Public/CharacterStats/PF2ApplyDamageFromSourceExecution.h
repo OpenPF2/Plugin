@@ -45,8 +45,9 @@ public:
 	// =================================================================================================================
 	// Public Methods - UGameplayEffectExecutionCalculation Implementation
 	// =================================================================================================================
-	virtual void Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
-	                                    OUT FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const override;
+	virtual void Execute_Implementation(
+		const FGameplayEffectCustomExecutionParameters& ExecutionParams,
+		FGameplayEffectCustomExecutionOutput&           OutExecutionOutput) const override;
 
 protected:
 	/**
@@ -63,7 +64,7 @@ protected:
 	/**
 	 * Populates parameters from a gameplay cue from the parameters of the current GE execution.
 	 *
-	 * @param [in] ExecutionParams
+	 * @param ExecutionParams
 	 *	The parameters passed to the current GE execution.
 	 *
 	 * @return
