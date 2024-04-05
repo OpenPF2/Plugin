@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2023, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2023-2024, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -399,7 +399,7 @@ void UPF2EquippedItemsComponent::Native_OnItemUnequipped(const UPF2EquipableItem
 	UE_LOG(
 		LogPf2CoreInventory,
 		Verbose,
-		TEXT("[%s] Item ('%s') unequipped into slot ('%s') for character ('%s')."),
+		TEXT("[%s] Item ('%s') unequipped from slot ('%s') for character ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
 		*(UnequippedItem->GetIdForLogs()),
 		*(Slot->GetIdForLogs()),
