@@ -138,7 +138,7 @@ void FPF2CharacterInitiativeQueueComponentSpec::Define()
 
 			Describe("when initiative is fetched for characters in the queue", [this]
 			{
-				It("returns the expected initiative of each character", [this]
+				It("returns the initiative set for each character", [this]
 				{
 					TestEqual(
 						"GetCharacterInitiative(Character1)",
@@ -194,7 +194,7 @@ void FPF2CharacterInitiativeQueueComponentSpec::Define()
 
 			Describe("when initiative is fetched for characters in the queue", [this]
 			{
-				It("returns the expected initiative of each character", [this]
+				It("returns the initiative set for each character", [this]
 				{
 					TestEqual(
 						"GetCharacterInitiative(Character1)",
