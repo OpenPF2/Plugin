@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2024, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -29,9 +29,9 @@ public:
 	 * In development builds, an assertion error is raised if more than one component matches the given interface type.
 	 * In shipping builds, only the first matching component is returned.
 	 *
-	 * @param [in]  Actor
+	 * @param [in] Actor
 	 *	The actor for which a component is desired.
-	 * @param [in]  Interface
+	 * @param [in] Interface
 	*	The type of interface to locate.
 	 * @param [out] bWasFound
 	 *	A reference to an output variable to receive the status of whether the component was found.

@@ -71,13 +71,13 @@ protected:
 	 * your target! Roll the weapon or unarmed attack’s damage die and add the relevant modifiers, bonuses, and
 	 * penalties to determine the amount of damage you deal."
 	 *
-	 * @param ExecutionParams
+	 * @param [in] ExecutionParams
 	 *	The context of the gameplay effect calculation that is being executed.
-	 * @param Weapon
+	 * @param [in] Weapon
 	 *	The weapon with which the attack is being attempted.
-	 * @param SourceAscIntf
+	 * @param [in] SourceAscIntf
 	 *	The Ability System Component of the character attempting the attack.
-	 * @param TargetAscIntf
+	 * @param [in] TargetAscIntf
 	 *	The Ability System Component of the character receiving the attack.
 	 * @param [out] OutExecutionOutput
 	 *	A reference to the output of the execution. Modifiers will be added to this struct to perform updates to

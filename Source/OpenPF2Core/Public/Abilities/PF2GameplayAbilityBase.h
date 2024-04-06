@@ -96,9 +96,9 @@ protected:
 	 * This automatically invokes callbacks on the weapon to give it a chance to add any additional GEs that require
 	 * values to be set on "Transient Aggregators" (a.k.a., "Temporary Variables" in the Editor UI).
 	 *
-	 * @param Weapon
+	 * @param [in] Weapon
 	 *	The weapon for which gameplay effect containers will be processed into a ready-to-execute GE spec.
-	 * @param Level
+	 * @param [in] Level
 	 *	The character level to pass into each gameplay effect during processing.
 	 * @param [out] SourceEffectsSpec
 	 *	The GE container spec created from the source GE container of the given weapon. This spec is ready to apply to

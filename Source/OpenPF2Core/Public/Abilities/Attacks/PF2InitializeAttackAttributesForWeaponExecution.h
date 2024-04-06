@@ -35,9 +35,9 @@ protected:
 	 * Attributes related to the attack degree of success and damage amounts are zeroed-out, while the damage roll count
 	 * and damage roll die size are set to the specified values.
 	 *
-	 * @param WeaponRollCount
+	 * @param [in] WeaponRollCount
 	 *	The number of dice to roll for damage with the weapon the source has equipped.
-	 * @param WeaponDieSize
+	 * @param [in] WeaponDieSize
 	 *	The size die to roll for damage with the weapon the source has equipped.
 	 * @param [out] OutExecutionOutput
 	 *	A reference to the output of the execution. Modifiers will be added to this struct to perform updates to

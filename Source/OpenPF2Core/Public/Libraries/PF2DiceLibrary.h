@@ -144,7 +144,7 @@ public:
 	/**
 	 * Parses the string description of a roll into distinct roll count and die size components.
 	 *
-	 * @param RollExpression
+	 * @param [in] RollExpression
 	 *	The description of the roll, in "CdS" format, where "C" represents the count or number of dice to roll, and "S"
 	 *	represents the number of sides of each die (the die size). For example, "1d6" represents a single roll of a
 	 *	six-sided die, while "2d4" represents rolling two dice having four sides each.

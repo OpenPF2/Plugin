@@ -94,9 +94,9 @@ protected:
 	/**
 	 * Gets all the slots that are affected when the provided item is equipped or unequipped in the specified slot.
 	 *
-	 * @param Slot
+	 * @param [in] Slot
 	 *	The slot being affected.
-	 * @param Item
+	 * @param [in] Item
 	 *	The item being equipped or unequipped into the slot.
 	 * @param [out] TargetSlots
 	 *	A list of slots that should be affected by the item.

@@ -273,11 +273,11 @@ protected:
 	 * This is an opportunity for the weapon to dynamically generate additional gameplay effect specifications that
 	 * affect the character making an attack.
 	 *
-	 * @param SourceAbilitySystemComponent
+	 * @param [in] SourceAbilitySystemComponent
 	 *	The source ASC for the GEs (i.e., the character performing the attack).
-	 * @param ActivatedAbility
+	 * @param [in] ActivatedAbility
 	 *	The active ability (the ability that has generated the GE container spec).
-	 * @param ContainerSpec
+	 * @param [in] ContainerSpec
 	 *	The GE container specification that was generated.
 	 * @param [out] ModifiedContainerSpec
 	 *	The modified GE container specification.
@@ -295,11 +295,11 @@ protected:
 	 * This is an opportunity for the weapon to dynamically generate additional gameplay effect specifications and/or to
 	 * populate set-by-caller temporary variables for additional damage effects (e.g., from runes).
 	 *
-	 * @param SourceAbilitySystemComponent
+	 * @param [in] SourceAbilitySystemComponent
 	 *	The source ASC for the GEs (i.e., the character performing the attack).
-	 * @param ActivatedAbility
+	 * @param [in] ActivatedAbility
 	 *	The active ability (the ability that has generated the GE container spec).
-	 * @param ContainerSpec
+	 * @param [in] ContainerSpec
 	 *	The GE container specification that was generated.
 	 * @param [out] ModifiedContainerSpec
 	 *	The modified GE container specification.
