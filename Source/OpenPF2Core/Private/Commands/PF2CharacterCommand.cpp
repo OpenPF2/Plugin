@@ -43,7 +43,7 @@ void APF2CharacterCommand::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(APF2CharacterCommand, OwningCharacter);
+	DOREPLIFETIME(APF2CharacterCommand, OwningCharacterActor);
 	DOREPLIFETIME(APF2CharacterCommand, AbilitySpecHandle);
 	DOREPLIFETIME(APF2CharacterCommand, AbilityPayload);
 	DOREPLIFETIME(APF2CharacterCommand, QueuePositionPreference);
@@ -51,10 +51,10 @@ void APF2CharacterCommand::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 
 TScriptInterface<IPF2CharacterInterface> APF2CharacterCommand::GetOwningCharacter() const
 {
-	check(this->OwningCharacter);
-	check(this->OwningCharacter->Implements<UPF2CharacterInterface>());
+	check(this->OwningCharacterActor);
+	check(this->OwningCharacterActor->Implements<UPF2CharacterInterface>());
 
-	return TScriptInterface<IPF2CharacterInterface>(this->OwningCharacter);
+	return TScriptInterface<IPF2CharacterInterface>(this->OwningCharacterActor);
 }
 
 UTexture2D* APF2CharacterCommand::GetCommandIcon() const
@@ -262,12 +262,12 @@ bool APF2CharacterCommand::AttemptQueue()
 	return bWasQueued;
 }
 
-void APF2CharacterCommand::FinalizeConstruction(AActor*                          InOwningCharacter,
+void APF2CharacterCommand::FinalizeConstruction(AActor*                          InOwningCharacterActor,
                                                 const FGameplayAbilitySpecHandle InAbilitySpecHandle,
                                                 const FGameplayEventData&        InAbilityPayload,
                                                 const EPF2CommandQueuePosition   InQueuePositionPreference)
 {
-	this->OwningCharacter         = InOwningCharacter;
+	this->OwningCharacterActor    = InOwningCharacterActor;
 	this->AbilitySpecHandle       = InAbilitySpecHandle;
 	this->AbilityPayload          = InAbilityPayload;
 	this->QueuePositionPreference = InQueuePositionPreference;

@@ -51,7 +51,7 @@ protected:
 	 * The character who would be issued this command.
 	 */
 	UPROPERTY(Replicated)
-	AActor* OwningCharacter;
+	AActor* OwningCharacterActor;
 
 	/**
 	 * The handle of the ability that this command will trigger when it is executed.
@@ -91,7 +91,7 @@ public:
 	/**
 	 * Creates a new APF2CharacterCommand for the given character and ability specification.
 	 *
-	 * @param InCharacter
+	 * @param InOwningCharacter
 	 *	The character who would be issued the command.
 	 * @param InAbilitySpecHandle
 	 *	The handle of the ability that the command will trigger when it is executed.
@@ -102,30 +102,36 @@ public:
 	 * @return
 	 *	The new command.
 	 */
-	UFUNCTION(BlueprintPure, Category="OpenPF2|Character Commands", meta=(DisplayName="Create Character Command"))
-	static TScriptInterface<IPF2CharacterCommandInterface> Create(
-		UPARAM(DisplayName="Character")
-		const TScriptInterface<IPF2CharacterInterface> InCharacter,
+	UFUNCTION(
+		BlueprintPure,
+		Category="OpenPF2|Character Commands",
+		meta=(
+			AutoCreateRefTerm="InAbilityPayload",
+			DisplayName="Create Character Command"
+		)
+	)
+	static FORCEINLINE TScriptInterface<IPF2CharacterCommandInterface> Create(
+		UPARAM(DisplayName="Owning Character")
+		const TScriptInterface<IPF2CharacterInterface> InOwningCharacter,
 
 		UPARAM(DisplayName="Ability Spec Handle")
 		const FGameplayAbilitySpecHandle InAbilitySpecHandle,
 
 		UPARAM(DisplayName="Ability Payload")
-		// ReSharper disable once CppPassValueParameterByConstReference
-		const FGameplayEventData InAbilityPayload=FGameplayEventData(),
+		const FGameplayEventData& InAbilityPayload = FGameplayEventData(),
 
 		UPARAM(DisplayName="Queue Position Preference")
-		const EPF2CommandQueuePosition InQueuePositionPreference=EPF2CommandQueuePosition::EndOfQueue)
+		const EPF2CommandQueuePosition InQueuePositionPreference = EPF2CommandQueuePosition::EndOfQueue)
 	{
 		return PF2InterfaceUtilities::ToScriptInterface(
-			Create(InCharacter->ToActor(), InAbilitySpecHandle, InAbilityPayload, InQueuePositionPreference)
+			Create(InOwningCharacter->ToActor(), InAbilitySpecHandle, InAbilityPayload, InQueuePositionPreference)
 		);
 	}
 
 	/**
 	 * Creates a new APF2CharacterCommand for the given character and ability handle.
 	 *
-	 * @param Character
+	 * @param OwningCharacter
 	 *	The character who would be issued the command.
 	 * @param AbilitySpecHandle
 	 *	The handle of the ability that the command will trigger when it is executed.
@@ -133,16 +139,16 @@ public:
 	 * @return
 	 *	The new command.
 	 */
-	FORCEINLINE static IPF2CharacterCommandInterface* Create(IPF2CharacterInterface*          Character,
+	FORCEINLINE static IPF2CharacterCommandInterface* Create(IPF2CharacterInterface*          OwningCharacter,
 	                                                         const FGameplayAbilitySpecHandle AbilitySpecHandle)
 	{
-		return Create(Character->ToActor(), AbilitySpecHandle);
+		return Create(OwningCharacter->ToActor(), AbilitySpecHandle);
 	}
 
 	/**
 	 * Creates a new APF2CharacterCommand for the given character, ability handle, and ability payload.
 	 *
-	 * @param Character
+	 * @param OwningCharacter
 	 *	The character who would be issued the command.
 	 * @param AbilitySpecHandle
 	 *	The handle of the ability that the command will trigger when it is executed.
@@ -155,12 +161,12 @@ public:
 	 *	The new command.
 	 */
 	FORCEINLINE static IPF2CharacterCommandInterface* Create(
-		IPF2CharacterInterface*          Character,
+		IPF2CharacterInterface*          OwningCharacter,
 		const FGameplayAbilitySpecHandle AbilitySpecHandle,
 		const FGameplayEventData&        AbilityPayload,
 		const EPF2CommandQueuePosition   QueuePositionPreference = EPF2CommandQueuePosition::EndOfQueue)
 	{
-		return Create(Character->ToActor(), AbilitySpecHandle, AbilityPayload, QueuePositionPreference);
+		return Create(OwningCharacter->ToActor(), AbilitySpecHandle, AbilityPayload, QueuePositionPreference);
 	}
 
 	/**
@@ -194,7 +200,7 @@ protected:
 	// Protected Constructors
 	// =================================================================================================================
 	explicit APF2CharacterCommand() :
-		OwningCharacter(nullptr),
+		OwningCharacterActor(nullptr),
 		QueuePositionPreference(EPF2CommandQueuePosition::EndOfQueue),
 		CachedAbility(nullptr)
 	{
@@ -308,7 +314,7 @@ protected:
 	 *
 	 * This can only be called during spawning and must not be called after the command has already been spawned.
 	 *
-	 * @param InOwningCharacter
+	 * @param InOwningCharacterActor
 	 *	The character who would be issued this command.
 	 * @param InAbilitySpecHandle
 	 *	The handle of the ability that this command will trigger when it is executed.
@@ -317,7 +323,7 @@ protected:
 	 * @param InQueuePositionPreference
 	 *	The preference for where in a command queue this command should be placed, if this command gets queued.
 	 */
-	void FinalizeConstruction(AActor*                          InOwningCharacter,
+	void FinalizeConstruction(AActor*                          InOwningCharacterActor,
 	                          const FGameplayAbilitySpecHandle InAbilitySpecHandle,
 	                          const FGameplayEventData&        InAbilityPayload,
 	                          const EPF2CommandQueuePosition   InQueuePositionPreference);
