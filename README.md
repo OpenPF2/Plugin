@@ -49,7 +49,7 @@ Unlike other RPG frameworks on the Unreal Marketplace, OpenPF2 is:
 
 ## Compatibility
 
-This plug-in is compatible with Unreal Engine 5.2.
+This plug-in is compatible with Unreal Engine 5.3.
 
 ## Current Status
 
