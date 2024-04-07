@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2022-2023, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2022-2024, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -36,6 +36,24 @@ class UPF2InteractableAbilityBase :
 
 protected:
 	// =================================================================================================================
+	// Protected Constants
+	// =================================================================================================================
+	/**
+	 * The name of the gameplay tag that is applied to abilities any player can activate.
+	 */
+	static inline FName CommonAbilityTagName = FName(TEXT("Trait.Ability.Common"));
+
+	// =================================================================================================================
+	// Protected Static Fields
+	// =================================================================================================================
+	/**
+	 * The gameplay tag that applies to "common" abilities, which is the default for interactable abilities.
+	 *
+	 * This is cached for performance.
+	 */
+	inline static FGameplayTag CommonAbilityTag = FGameplayTag();
+
+	// =================================================================================================================
 	// Protected Fields
 	// =================================================================================================================
 	/**
@@ -57,6 +75,14 @@ protected:
 	FText Description;
 
 public:
+	// =================================================================================================================
+	// Public Constructors
+	// =================================================================================================================
+	/**
+	 * Default constructor for UPF2InteractableAbilityBase.
+	 */
+	explicit UPF2InteractableAbilityBase();
+
 	// =================================================================================================================
 	// Public Methods - IPF2LogIdentifiableInterface Implementation
 	// =================================================================================================================

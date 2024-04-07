@@ -9,6 +9,34 @@
 
 #include "Utilities/PF2InterfaceUtilities.h"
 
+UPF2InteractableAbilityBase::UPF2InteractableAbilityBase(): Icon(nullptr)
+{
+	if (!CommonAbilityTag.IsValid())
+	{
+		// Rather than crashing the game/engine, we soften this to a log error so that a game designer can still
+		// correct the error by possibly loading/defining tags.
+		const FGameplayTag Tag = FGameplayTag::RequestGameplayTag(CommonAbilityTagName, false);
+
+		if (Tag.IsValid())
+		{
+			CommonAbilityTag = Tag;
+		}
+		else
+		{
+			UE_LOG(
+				LogPf2CoreAbilities,
+				Error,
+				TEXT("The common ability tag '%s' is missing."),
+				*(CommonAbilityTagName.ToString())
+			);
+		}
+	}
+
+	// Default to "Trait.Ability.Common" on interactable abilities. Game designers can remove this tag on abilities that
+	// have a pre-req and/or are rare.
+	this->AbilityTags.AddTag(CommonAbilityTag);
+}
+
 FString UPF2InteractableAbilityBase::GetIdForLogs() const
 {
 	return FString::Format(
