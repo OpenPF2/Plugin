@@ -62,10 +62,16 @@ except as allowed under the MPL or UE EULA.
 The following optional content in this project is subject to the Creative
 Commons Attribution 3.0 Unported (CC BY 3.0) license:
 
+- T_MeleeAttack_Sword: "Sword" by Suncheli Project from NounProject.com
+https://thenounproject.com/icon/sword-4992493/
 - T_MeleeAttack_Unarmed: "Fist" by Cuputo from NounProject.com
 https://thenounproject.com/icon/fist-4145413/
 - T_Move: "foot" by Aleksandr Vector from NounProject.com
 https://thenounproject.com/icon/foot-1009059/
+- T_RangedAttack_Generic: "Target" by Juraj Sedlák from NounProject.com
+https://thenounproject.com/icon/target-983378/
+- T_RangedAttack_Gun: "Gun" by Viet EDC from NounProject.com
+https://thenounproject.com/icon/gun-1036548/
 
 Depending on the needs of your project, you may wish to license these materials
 through a commercial, royalty-free license from the Noun Project or replace
