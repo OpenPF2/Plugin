@@ -1,20 +1,27 @@
 ﻿OpenPF2 for Unreal Engine License Terms
 =======================================
-Different portions of material in this project are governed by three different
-licenses:
+Different portions of this project are governed by different licenses:
   - Content and game logic sourced from Pathfinder 2nd Edition is licensed under
-    the Open Game License (OGL) v. 1.0a.
-    
+    the Open Game License (OGL) v. 1.0a. (See below for definitions of how this
+    applies to this project).
+
   - Select portions of code have been provided by Epic Games, Inc. for use only
     with Unreal Engine. Such code is clearly denoted by a file header that reads
     "Adapted from content that is Copyright Epic Games, Inc." Code contained in
     files that bear such a notice may only be used in derivative works that are
     part of a larger, Unreal-Engine-based project according to the terms of the
     Unreal® Engine End User License Agreement For Publishing (UE EULA). All
-    other use is prohibited.
+    other use is prohibited. If you are using this project with Unreal-based
+    games, you are set!
+
+  - Some optional content is licensed under the Creative Commons Attribution
+    3.0 Unported (CC BY 3.0) license
+    (https://creativecommons.org/licenses/by/3.0/). The complete list of assets
+    subject to this license is provided later in this file.
 
   - All other source code and logic is licensed and may be freely redistributed
-    under the Mozilla Public License, v. 2.0.
+    under the Mozilla Public License, v. 2.0, even outside Unreal-based
+    projects.
 
 For the purposes of the OGL, the following definitions apply:
 - "Product Identity": Except for material designated as Open Game Content (see
@@ -23,6 +30,9 @@ For the purposes of the OGL, the following definitions apply:
   1.0a, Section 1(e). (Elements that: 1) have previously been designated as Open
   Game Content; 2) are exclusively derived from previous Open Game Content; OR
   3) that are in the public domain; are not included in this declaration.)
+
+  This definition enables such "Product Identity" content under the OGL to be
+  licensed for your use in a manner compatible with the MPL.
 
 - "Open Game Content": All game mechanics and content licensed from third
   parties as "Open Game Content" under the Open Game License version 1.0a shall
@@ -44,12 +54,20 @@ For the purposes of the OGL, the following definitions apply:
     what portion of the material is Open Game Content.
 
 No portion of this work other than the material designated as Open Game Content
-may be reproduced in any form without written permission from the authors, 
+may be reproduced in any form without written permission from the authors,
 except as allowed under the MPL or UE EULA.
 
-Portions of code in this project were adapted from the "Real-Time Strategy 
-Plugin for Unreal Engine 4" by Nick Pruehs (https://github.com/npruehs/ue4-rts),
-provided under the MIT License. Copyright (c) 2017 Nick Pruehs.
+================================================================================
+
+The following optional content in this project is subject to the Creative
+Commons Attribution 3.0 Unported (CC BY 3.0) license:
+
+- T_MeleeAttack_Unarmed: "Fist" by Cuputo from NounProject.com
+https://thenounproject.com/icon/fist-4145413/
+
+Depending on the needs of your project, you may wish to license these materials
+through a commercial, royalty-free license from the Noun Project or replace
+them with your own materials to avoid this additional licensing burden.
 
 ================================================================================
 Mozilla Public License Version 2.0
@@ -425,6 +443,15 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
 
   This Source Code Form is "Incompatible With Secondary Licenses", as
   defined by the Mozilla Public License, v. 2.0.
+
+===============================================================================
+
+Portions of code in this project were adapted from the "Real-Time Strategy
+Plugin for Unreal Engine 4" by Nick Pruehs (https://github.com/npruehs/ue4-rts),
+provided under the MIT License. Copyright (c) 2017 Nick Pruehs.
+
+This code has been combined with other code in this project and the derivative
+work has been re-licensed under the MPL.
 
 ================================================================================
 Open Game License, Version 1.0a
