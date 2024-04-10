@@ -64,6 +64,8 @@ Commons Attribution 3.0 Unported (CC BY 3.0) license:
 
 - T_MeleeAttack_Unarmed: "Fist" by Cuputo from NounProject.com
 https://thenounproject.com/icon/fist-4145413/
+- T_Move: "foot" by Aleksandr Vector from NounProject.com
+https://thenounproject.com/icon/foot-1009059/
 
 Depending on the needs of your project, you may wish to license these materials
 through a commercial, royalty-free license from the Noun Project or replace
