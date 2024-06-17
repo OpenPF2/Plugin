@@ -11,7 +11,8 @@
 
 #include <Engine/World.h>
 
-#include "Tests/PF2AutomationSpecBase.h"
+#include "EnhancedAutomationSpecBase.h"
+
 #include "Tests/PF2TestPawn.h"
 
 #include "Utilities/PF2ArrayUtilities.h"
@@ -35,9 +36,9 @@
 						  "All AutomationTests must have exactly 1 filter type specified.  See AutomationTest.h."); \
 		} \
 		virtual uint32 GetTestFlags() const override { return TFlags; } \
-        using FPF2AutomationSpecBase::GetTestSourceFileName; \
+        using FEnhancedAutomationSpecBase::GetTestSourceFileName; \
 		virtual FString GetTestSourceFileName() const override { return FileName; } \
-        using FPF2AutomationSpecBase::GetTestSourceFileLine; \
+        using FEnhancedAutomationSpecBase::GetTestSourceFileLine; \
 		virtual int32 GetTestSourceFileLine() const override { return LineNumber; } \
 		virtual FString GetTestSourceFileName(const FString&) const override { return GetTestSourceFileName(); } \
 		virtual int32 GetTestSourceFileLine(const FString&) const override { return GetTestSourceFileLine(); } \
@@ -63,9 +64,9 @@
 						  "All AutomationTests must have exactly 1 filter type specified.  See AutomationTest.h."); \
 		} \
 		virtual uint32 GetTestFlags() const override { return TFlags; } \
-		using FPF2AutomationSpecBase::GetTestSourceFileName; \
+		using FEnhancedAutomationSpecBase::GetTestSourceFileName; \
 		virtual FString GetTestSourceFileName() const override { return FileName; } \
-		using FPF2AutomationSpecBase::GetTestSourceFileLine; \
+		using FEnhancedAutomationSpecBase::GetTestSourceFileLine; \
 		virtual int32 GetTestSourceFileLine() const override { return LineNumber; } \
 	\
 	protected: \
@@ -117,7 +118,7 @@ using FAttributeCapture = TMap<FString, FGameplayAttributeData*>;
 /**
  * Base class that provides reusable, boilerplate logic for automation specs in OpenPF2.
  */
-class OPENPF2CORE_API FPF2SpecBase : public FPF2AutomationSpecBase
+class OPENPF2TESTS_API FPF2SpecBase : public FEnhancedAutomationSpecBase
 {
 protected:
 	// =================================================================================================================
@@ -184,7 +185,7 @@ protected:
 	// =================================================================================================================
 	// Protected Methods - FFP2AutomationSpecBase Overrides
 	// =================================================================================================================
-	virtual void Define() override = 0;
+	virtual void Define() override;
 
 	// =================================================================================================================
 	// Protected Methods
