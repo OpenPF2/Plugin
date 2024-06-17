@@ -18,6 +18,7 @@ public class OpenPF2Core : ModuleRules
 			new[]
 			{
 				"Core",
+				"CoreUObject",
 				"AIModule",
 				"GameplayAbilities",
 				"GameplayTags",
@@ -29,7 +30,6 @@ public class OpenPF2Core : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new[]
 			{
-				"CoreUObject",
 				"Engine",
 				"GameplayAbilities",
 				"Slate",
