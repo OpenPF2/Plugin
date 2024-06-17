@@ -15,6 +15,8 @@ public class OpenPF2BlueprintNodes : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new[]
 			{
+				"Core",
+				"CoreUObject",
 				"OpenPF2Core",
 			}
 		);
@@ -23,8 +25,6 @@ public class OpenPF2BlueprintNodes : ModuleRules
 			new[]
 			{
 				"BlueprintGraph",
-				"Core",
-				"CoreUObject",
 				"Engine",
 				"GraphEditor",
 				"KismetCompiler",
