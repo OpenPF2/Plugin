@@ -5,6 +5,8 @@
 
 #include "CharacterStats/AbilityModifiers/PF2AbilityModifierCalculationBase.h"
 
+#include "OpenPF2Core.h"
+
 #include "CharacterStats/PF2CharacterAttributeSet.h"
 
 #include "Libraries/PF2CharacterStatLibrary.h"

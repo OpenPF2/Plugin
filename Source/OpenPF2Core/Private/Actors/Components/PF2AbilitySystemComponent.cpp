@@ -7,6 +7,7 @@
 
 #include <UObject/ConstructorHelpers.h>
 
+#include "OpenPF2Core.h"
 #include "PF2CharacterConstants.h"
 #include "PF2CharacterInterface.h"
 

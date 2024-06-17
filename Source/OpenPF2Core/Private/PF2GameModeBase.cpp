@@ -8,10 +8,9 @@
 
 #include "PF2GameModeBase.h"
 
-#include <EngineUtils.h>
-
 #include <GameFramework/Character.h>
 
+#include "OpenPF2Core.h"
 #include "PF2CharacterInterface.h"
 #include "PF2GameStateInterface.h"
 #include "PF2PartyInterface.h"

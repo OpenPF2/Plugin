@@ -8,10 +8,9 @@
 
 #include "PF2PlayerControllerBase.h"
 
-#include <AIController.h>
-
 #include <GameFramework/PlayerState.h>
 
+#include "OpenPF2Core.h"
 #include "PF2CharacterInterface.h"
 #include "PF2GameModeInterface.h"
 #include "PF2PartyInterface.h"

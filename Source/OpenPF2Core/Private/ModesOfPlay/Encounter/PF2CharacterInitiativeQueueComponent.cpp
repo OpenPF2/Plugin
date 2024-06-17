@@ -5,6 +5,7 @@
 
 #include "ModesOfPlay/Encounter/PF2CharacterInitiativeQueueComponent.h"
 
+#include "OpenPF2Core.h"
 #include "PF2CharacterInterface.h"
 #include "PF2PlayerControllerInterface.h"
 

@@ -7,6 +7,8 @@
 
 #include <GameplayEffectAttributeCaptureDefinition.h>
 
+#include "OpenPF2Core.h"
+
 /**
  * Base struct for singleton containers of attribute capture definitions.
  *

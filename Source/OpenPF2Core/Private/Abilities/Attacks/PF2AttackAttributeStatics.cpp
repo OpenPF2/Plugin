@@ -5,6 +5,8 @@
 
 #include "Abilities/Attacks/PF2AttackAttributeStatics.h"
 
+#include "OpenPF2Core.h"
+
 #include "Abilities/Attacks/PF2AttackAttributeSet.h"
 
 #include "CharacterStats/PF2AttributeSetMacros.h"

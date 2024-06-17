@@ -5,6 +5,8 @@
 
 #include "CharacterStats/PF2TargetCharacterAttributeStatics.h"
 
+#include "OpenPF2Core.h"
+
 const FGameplayEffectAttributeCaptureDefinition* FPF2TargetCharacterAttributeStatics::GetResistanceCaptureForDamageAttribute(
 	const FName& DamageAttributeName) const
 {

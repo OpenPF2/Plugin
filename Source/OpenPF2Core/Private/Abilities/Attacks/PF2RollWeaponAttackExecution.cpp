@@ -12,6 +12,7 @@
 
 #include "Abilities/Attacks/PF2RollWeaponAttackExecution.h"
 
+#include "OpenPF2Core.h"
 #include "PF2CharacterInterface.h"
 
 #include "Abilities/Attacks/PF2AttackAttributeStatics.h"

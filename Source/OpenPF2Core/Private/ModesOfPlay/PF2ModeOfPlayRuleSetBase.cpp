@@ -10,6 +10,8 @@
 // ReSharper disable once CppUnusedIncludeDirective
 #include <GameFramework/GameModeBase.h>
 
+#include "OpenPF2Core.h"
+
 #include "Commands/PF2CharacterCommandInterface.h"
 #include "Commands/PF2CommandQueueInterface.h"
 

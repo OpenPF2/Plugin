@@ -9,10 +9,11 @@
 
 #include <Net/UnrealNetwork.h>
 
+#include "OpenPF2Core.h"
+
 #include "Items/PF2EquipableItemSlot.h"
 
 #include "Utilities/PF2ArrayUtilities.h"
-#include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
 
 #define LOCTEXT_NAMESPACE "PF2EquipableItemSlot"

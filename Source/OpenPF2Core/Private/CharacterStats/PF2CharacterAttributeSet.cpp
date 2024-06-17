@@ -19,6 +19,7 @@
 
 #include <Net/UnrealNetwork.h>
 
+#include "OpenPF2Core.h"
 #include "PF2CharacterInterface.h"
 
 #include "Libraries/PF2AbilitySystemLibrary.h"
