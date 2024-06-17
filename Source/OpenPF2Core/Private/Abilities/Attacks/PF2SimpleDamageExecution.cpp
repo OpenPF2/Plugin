@@ -12,6 +12,8 @@
 
 #include "Abilities/Attacks/PF2SimpleDamageExecution.h"
 
+#include "OpenPF2Core.h"
+
 #include "CharacterStats/PF2TargetCharacterAttributeStatics.h"
 
 #include "Libraries/PF2AbilitySystemLibrary.h"

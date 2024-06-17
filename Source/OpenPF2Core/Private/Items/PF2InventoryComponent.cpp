@@ -13,6 +13,8 @@
 
 #include <UObject/WeakInterfacePtr.h>
 
+#include "OpenPF2Core.h"
+
 #include "Items/PF2ItemInterface.h"
 
 #include "Utilities/PF2ArrayUtilities.h"

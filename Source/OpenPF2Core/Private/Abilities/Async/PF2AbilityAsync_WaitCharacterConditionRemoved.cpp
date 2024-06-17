@@ -5,6 +5,7 @@
 
 #include "Abilities/Async/PF2AbilityAsync_WaitCharacterConditionRemoved.h"
 
+#include "OpenPF2Core.h"
 #include "PF2CharacterInterface.h"
 
 UPF2AbilityAsync_WaitCharacterConditionRemoved* UPF2AbilityAsync_WaitCharacterConditionRemoved::WaitConditionRemovedFromCharacter(

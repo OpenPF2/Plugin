@@ -5,7 +5,9 @@
 
 #include "CharacterStats/PF2CharacterAttributeStaticsBase.h"
 
-#include "GameplayEffectTypes.h"
+#include <GameplayEffectTypes.h>
+
+#include "OpenPF2Core.h"
 
 #include "Utilities/PF2ArrayUtilities.h"
 

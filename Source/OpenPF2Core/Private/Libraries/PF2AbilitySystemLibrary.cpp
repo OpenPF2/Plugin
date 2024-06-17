@@ -7,6 +7,7 @@
 
 #include <AbilitySystemGlobals.h>
 
+#include "OpenPF2Core.h"
 #include "PF2CharacterInterface.h"
 
 #include "Abilities/PF2EffectCauseWrapper.h"

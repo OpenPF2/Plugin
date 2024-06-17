@@ -18,8 +18,6 @@
 
 #include "GameplayEffects/PF2GameplayEffectContainerSpec.h"
 
-#include "Utilities/PF2InterfaceUtilities.h"
-
 #include "PF2AbilitySystemLibrary.generated.h"
 
 // =====================================================================================================================

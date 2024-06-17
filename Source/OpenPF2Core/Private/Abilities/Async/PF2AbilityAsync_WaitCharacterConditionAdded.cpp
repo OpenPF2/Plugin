@@ -5,6 +5,7 @@
 
 #include "Abilities/Async/PF2AbilityAsync_WaitCharacterConditionAdded.h"
 
+#include "OpenPF2Core.h"
 #include "PF2CharacterInterface.h"
 
 #include "Libraries/PF2TagLibrary.h"

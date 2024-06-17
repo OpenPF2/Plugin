@@ -5,6 +5,8 @@
 
 #include "Libraries/PF2TagLibrary.h"
 
+#include "OpenPF2Core.h"
+
 FGameplayTag UPF2TagLibrary::FindChildTag(const FGameplayTagContainer& AllTags,
                                           const FGameplayTag&          ParentTag,
                                           bool&                        bMatchFound)
