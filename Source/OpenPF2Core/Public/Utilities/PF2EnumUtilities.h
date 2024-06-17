@@ -1,4 +1,4 @@
-﻿// OpenPF2 for UE Game Logic, Copyright 2021-2023, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 for UE Game Logic, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -25,7 +25,7 @@ namespace PF2EnumUtilities
 	 *	The enum value.
 	 */
 	template<typename T, typename E>
-	OPENPF2CORE_API E EnumValueOf(const T UnderlyingValue, const E DefaultValue)
+	E EnumValueOf(const T UnderlyingValue, const E DefaultValue)
 	{
 		E Result = DefaultValue;
 
@@ -49,7 +49,7 @@ namespace PF2EnumUtilities
 	 *	The key/name that corresponds to the value in the enumerated type.
 	 */
 	template<typename E>
-	OPENPF2CORE_API FName ToName(const E EnumValue)
+	FName ToName(const E EnumValue)
 	{
 		const FName Name = StaticEnum<E>()->GetNameByValue(static_cast<__underlying_type(E)>(EnumValue));
 
@@ -70,7 +70,7 @@ namespace PF2EnumUtilities
 	 *	The key/name that corresponds to the value in the enumerated type.
 	 */
 	template<typename E>
-	OPENPF2CORE_API FString ToString(const E EnumValue)
+	FString ToString(const E EnumValue)
 	{
 		FString Name = StaticEnum<E>()->GetNameStringByValue(static_cast<__underlying_type(E)>(EnumValue));
 

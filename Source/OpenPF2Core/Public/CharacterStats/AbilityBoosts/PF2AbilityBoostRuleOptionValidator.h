@@ -24,7 +24,7 @@
  * GA activation (for boosts granted "at the same time").
  */
 UCLASS(BlueprintType)
-class UPF2AbilityBoostRuleOptionValidator final : public UObject
+class OPENPF2CORE_API UPF2AbilityBoostRuleOptionValidator final : public UObject
 {
 	GENERATED_BODY()
 

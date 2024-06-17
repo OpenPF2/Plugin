@@ -18,7 +18,7 @@
  * Function library for interacting with actors in OpenPF2.
  */
 UCLASS()
-class UPF2ActorLibrary final : public UBlueprintFunctionLibrary
+class OPENPF2CORE_API UPF2ActorLibrary final : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 

@@ -34,7 +34,7 @@ class UAbilitySystemComponent;
  * Function library for automatic conversions that improve Game Designer quality of life when working with OpenPF2.
  */
 UCLASS()
-class UPF2ConversionsLibrary final : public UBlueprintFunctionLibrary
+class OPENPF2CORE_API UPF2ConversionsLibrary final : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 

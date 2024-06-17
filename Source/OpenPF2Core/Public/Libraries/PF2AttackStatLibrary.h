@@ -24,7 +24,7 @@
  * Function library for standard OpenPF2 attack statistic and distance calculations.
  */
 UCLASS()
-class UPF2AttackStatLibrary final : public UBlueprintFunctionLibrary
+class OPENPF2CORE_API UPF2AttackStatLibrary final : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 
