@@ -14,6 +14,8 @@
 
 #include <AbilitySystemComponent.h>
 
+#include "OpenPF2Core.h"
+
 #include "Abilities/Attacks/PF2AttackAttributeStatics.h"
 
 #include "Items/Weapons/PF2WeaponInterface.h"

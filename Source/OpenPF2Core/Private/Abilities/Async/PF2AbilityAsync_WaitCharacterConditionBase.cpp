@@ -6,6 +6,7 @@
 #include <AbilitySystemComponent.h>
 #include <GameplayTagsManager.h>
 
+#include "OpenPF2Core.h"
 #include "Abilities/Async/PF2AbilityAsync_WaitConditionBase.h"
 
 void UPF2AbilityAsync_WaitCharacterConditionBase::Activate()

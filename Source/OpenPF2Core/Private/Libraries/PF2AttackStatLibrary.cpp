@@ -12,6 +12,8 @@
 
 #include "Libraries/PF2AttackStatLibrary.h"
 
+#include "OpenPF2Core.h"
+
 #include "CharacterStats/PF2TemlCalculation.h"
 
 #include "Libraries/PF2DiceLibrary.h"

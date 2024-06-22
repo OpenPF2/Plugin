@@ -12,6 +12,8 @@
 
 #include "CharacterStats/PF2ArmorClassCalculation.h"
 
+#include "OpenPF2Core.h"
+
 #include "CharacterStats/PF2TargetCharacterAttributeStatics.h"
 #include "CharacterStats/PF2TemlCalculation.h"
 

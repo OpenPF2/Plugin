@@ -12,12 +12,11 @@ public class OpenPF2Core : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
 
-		PrivatePCHHeaderFile = "Public/OpenPF2Core.h";
-
 		PublicDependencyModuleNames.AddRange(
 			new[]
 			{
 				"Core",
+				"CoreUObject",
 				"AIModule",
 				"GameplayAbilities",
 				"GameplayTags",
@@ -29,7 +28,6 @@ public class OpenPF2Core : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new[]
 			{
-				"CoreUObject",
 				"Engine",
 				"GameplayAbilities",
 				"Slate",

@@ -7,6 +7,7 @@
 
 #include <Net/UnrealNetwork.h>
 
+#include "OpenPF2Core.h"
 #include "PF2CharacterInterface.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"

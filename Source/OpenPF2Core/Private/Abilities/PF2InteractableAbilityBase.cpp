@@ -5,9 +5,9 @@
 
 #include "Abilities/PF2InteractableAbilityBase.h"
 
-#include "Abilities/PF2EffectCauseWrapper.h"
+#include "OpenPF2Core.h"
 
-#include "Utilities/PF2InterfaceUtilities.h"
+#include "Abilities/PF2EffectCauseWrapper.h"
 
 UPF2InteractableAbilityBase::UPF2InteractableAbilityBase(): Icon(nullptr)
 {

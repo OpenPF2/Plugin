@@ -26,7 +26,7 @@ class UWorld;
  * Function library for interacting with OpenPF2 characters and character controllers.
  */
 UCLASS()
-class UPF2CharacterLibrary final : public UBlueprintFunctionLibrary
+class OPENPF2CORE_API UPF2CharacterLibrary final : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 

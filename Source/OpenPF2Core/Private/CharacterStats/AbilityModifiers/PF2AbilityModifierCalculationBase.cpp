@@ -5,6 +5,8 @@
 
 #include "CharacterStats/AbilityModifiers/PF2AbilityModifierCalculationBase.h"
 
+#include "OpenPF2Core.h"
+
 #include "CharacterStats/PF2CharacterAttributeSet.h"
 
 #include "Libraries/PF2CharacterStatLibrary.h"
@@ -14,9 +16,7 @@ float UPF2AbilityModifierCalculationBase::DoCalculation(
 	const FGameplayAttribute   AbilityAttribute,
 	const float                AbilityScore) const
 {
-	float AbilityModifier;
-
-	AbilityModifier = UPF2CharacterStatLibrary::CalculateAbilityModifier(AbilityScore);
+	const float AbilityModifier = UPF2CharacterStatLibrary::CalculateAbilityModifier(AbilityScore);
 
 	UE_LOG(
 		LogPf2CoreStats,

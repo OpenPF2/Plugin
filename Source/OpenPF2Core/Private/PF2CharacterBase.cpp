@@ -13,6 +13,7 @@
 
 #include <UObject/ConstructorHelpers.h>
 
+#include "OpenPF2Core.h"
 #include "PF2PlayerStateInterface.h"
 
 #include "Abilities/Attacks/PF2AttackAttributeSet.h"

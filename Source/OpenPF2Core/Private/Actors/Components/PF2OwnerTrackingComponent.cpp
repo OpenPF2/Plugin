@@ -15,7 +15,7 @@
 
 #include <Net/UnrealNetwork.h>
 
-#include "PF2CharacterInterface.h"
+#include "OpenPF2Core.h"
 #include "PF2PartyInterface.h"
 #include "PF2PlayerControllerInterface.h"
 #include "PF2PlayerStateInterface.h"

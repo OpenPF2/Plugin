@@ -18,6 +18,8 @@ public class OpenPF2EditorSupport : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new[]
 			{
+				"Core",
+				"CoreUObject",
 				"OpenPF2Core",
 				"OpenPF2BlueprintNodes",
 			}
@@ -27,8 +29,6 @@ public class OpenPF2EditorSupport : ModuleRules
 			new[]
 			{
 				"BlueprintGraph",
-				"Core",
-				"CoreUObject",
 				"DetailCustomizations",
 				"Engine",
 				"GraphEditor",

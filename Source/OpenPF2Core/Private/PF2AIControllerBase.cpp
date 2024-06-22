@@ -8,8 +8,6 @@
 
 #include "PF2AIControllerBase.h"
 
-#include "Commands/PF2CharacterCommand.h"
-
 FString APF2AIControllerBase::GetIdForLogs() const
 {
 	return this->GetName();

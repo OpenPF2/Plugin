@@ -21,6 +21,11 @@
 			"LoadingPhase": "Default"
 		},
 		{
+			"Name": "OpenPF2Tests",
+			"Type": "UncookedOnly",
+			"LoadingPhase": "Default"
+		},
+		{
 			"Name": "OpenPF2BlueprintNodes",
 			"Type": "UncookedOnly",
 			"LoadingPhase": "PreDefault"
@@ -38,6 +43,10 @@
 		},
 		{
 			"Name": "GameplayAbilities",
+			"Enabled": true
+		},
+		{
+			"Name": "EnhancedAutomationSpecs",
 			"Enabled": true
 		}
 	]

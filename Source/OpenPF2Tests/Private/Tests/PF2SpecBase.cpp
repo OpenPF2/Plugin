@@ -21,12 +21,16 @@
 #include "Utilities/PF2InterfaceUtilities.h"
 
 FPF2SpecBase::FPF2SpecBase(const FString& InName) :
-	FPF2AutomationSpecBase(InName, false),
+	FEnhancedAutomationSpecBase(InName, false),
 	World(nullptr),
 	TestPawn(nullptr),
 	TestPawnAsc(nullptr),
 	TestCharacter(nullptr),
 	TestCharacterAsc(nullptr)
+{
+}
+
+void FPF2SpecBase::Define()
 {
 }
 
