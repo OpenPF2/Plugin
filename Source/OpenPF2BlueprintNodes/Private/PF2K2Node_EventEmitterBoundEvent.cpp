@@ -1,4 +1,4 @@
-// OpenPF2 for UE Game Logic, Copyright 2023, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 for UE Game Logic, Copyright 2023-2024, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Adapted from "BlueprintGraph/Classes/K2Node_ComponentBoundEvent.cpp" and
 // "Editor/UnrealEd/Private/Kismet2/Kismet2.cpp" (Unreal Engine 5.1), which are Copyright Epic Games, Inc. Licensed only
@@ -14,7 +14,7 @@
 
 #include <Logging/MessageLog.h>
 
-#include "OpenPF2Core.h"
+#include "OpenPF2GameFramework.h"
 #include "PF2EventEmitterDelegateBinding.h"
 #include "PF2EventEmitterInterface.h"
 

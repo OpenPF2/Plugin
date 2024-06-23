@@ -158,9 +158,9 @@ For example, if a weapon has a range of 60 feet, then its range in OpenPF2 is
 
 1. Check-out the project into the `Plugins/` folder of your larger UE5 project.
    Ensure that the folder into which you check-out the project is named 
-   `OpenPF2Core`.
+   `OpenPF2`.
 2. Modify the `*.uproject` file of your larger UE5 project to ensure that both
-   the `OpenPF2Core` and `GameplayAbilities` plug-ins are enabled, like so:
+   the `OpenPF2` and `GameplayAbilities` plug-ins are enabled, like so:
    ```json
    "Plugins": [
      {
@@ -168,22 +168,22 @@ For example, if a weapon has a range of 60 feet, then its range in OpenPF2 is
        "Enabled": true
      },
      {
-       "Name": "OpenPF2Core",
+       "Name": "OpenPF2",
        "Enabled": true
      }
    ]
    ```
 3. Re-generate Visual Studio/Rider project files.
-4. Edit the `*.Build.cs` file and add `"OpenPF2Core"` to the `PrivateDependencyModuleNames` section:
+4. Edit the `*.Build.cs` file and add `"OpenPF2"` to the `PrivateDependencyModuleNames` section:
    ```C#
    PrivateDependencyModuleNames.AddRange(new string[]
    {
-       "OpenPF2Core",
+       "OpenPF2GameFramework",
    });
    ```
 5. Compile your project.
 6. Copy the `Config/Tags/` folder from the plug-in into your project's `Config` folder.
-   _Even in UE 5.1, this is still required. The engine
+   _Even in UE 5.1+, this is still required. The engine
    [does not automatically scan or package config files provided by plugins](https://docs.unrealengine.com/5.1/en-US/plugins-in-unreal-engine/#pluginsinprojects)._
 
 ## Licensing

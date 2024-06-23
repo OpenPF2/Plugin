@@ -21,7 +21,7 @@ public class OpenPF2Tests : ModuleRules
 				"GameplayAbilities",
 				"GameplayTags",
 				"EnhancedAutomationSpecFramework",
-				"OpenPF2Core",
+				"OpenPF2GameFramework",
 			}
 		);
 	}

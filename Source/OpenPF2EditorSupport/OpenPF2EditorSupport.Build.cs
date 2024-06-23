@@ -20,7 +20,7 @@ public class OpenPF2EditorSupport : ModuleRules
 			{
 				"Core",
 				"CoreUObject",
-				"OpenPF2Core",
+				"OpenPF2GameFramework",
 				"OpenPF2BlueprintNodes",
 			}
 		);

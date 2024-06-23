@@ -17,7 +17,7 @@ public class OpenPF2BlueprintNodes : ModuleRules
 			{
 				"Core",
 				"CoreUObject",
-				"OpenPF2Core",
+				"OpenPF2GameFramework",
 			}
 		);
 
