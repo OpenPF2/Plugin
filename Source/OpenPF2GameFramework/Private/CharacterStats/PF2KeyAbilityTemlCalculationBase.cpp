@@ -100,7 +100,7 @@ float UPF2KeyAbilityTemlCalculationBase::CalculateBaseMagnitude_Implementation(c
 	            AbilityScore       = this->BaseValue + ProficiencyBonus + KeyAbilityModifier;
 
 	UE_LOG(
-		LogPf2,
+		LogPf2Stats,
 		VeryVerbose,
 		TEXT("Calculated key ability score ('%s'): %f + %f + %f = %f"),
 		*(this->StatGameplayTagPrefix),

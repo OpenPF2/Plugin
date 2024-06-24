@@ -19,7 +19,7 @@ float UPF2AbilityBoostCalculationBase::DoCalculation(
 	const float Boost = UPF2CharacterStatLibrary::CalculateAbilityBoostAmount(AbilityScore);
 
 	UE_LOG(
-		LogPf2,
+		LogPf2Stats,
 		VeryVerbose,
 		TEXT("Calculated MMC boost for ability score attribute ('%s'): %f + %f = %f"),
 		*(AbilityAttribute.GetName()),

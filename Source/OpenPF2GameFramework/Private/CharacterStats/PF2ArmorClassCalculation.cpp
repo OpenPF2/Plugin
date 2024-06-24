@@ -42,7 +42,7 @@ float UPF2ArmorClassCalculation::CalculateBaseMagnitude_Implementation(const FGa
 	            AbilityScore              = 10.0f + DexterityModifier + ArmorTypeProficiencyBonus;
 
 	UE_LOG(
-		LogPf2,
+		LogPf2Stats,
 		VeryVerbose,
 		TEXT("Calculated armor class score: 10 + %f + %f = %f"),
 		DexterityModifier,
@@ -79,7 +79,7 @@ float UPF2ArmorClassCalculation::CalculateArmorTypeProficiencyBonus(const FGamep
 	const float ProficiencyBonus = FPF2TemlCalculation(ArmorTypeProficiencyPrefix, Spec).GetValue();
 
 	UE_LOG(
-		LogPf2,
+		LogPf2Stats,
 		VeryVerbose,
 		TEXT("Calculated armor proficiency bonus ('%s'): %f"),
 		*(ArmorType),
