@@ -10,7 +10,7 @@
 BEGIN_DEFINE_PF_SPEC(FPF2ArmorClassCalculationSpec,
                      "OpenPF2.ArmorClassCalculations",
                      EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
-	const FString BlueprintPath         = TEXT("/OpenPF2Core/OpenPF2/Core/CharacterStats");
+	const FString BlueprintPath         = TEXT("/OpenPF2/OpenPF2/Core/CharacterStats");
 	const FString ClassDcGameEffectCalc = TEXT("GE_CalcArmorClass");
 
 	const FString DexterityAbModAttributeName = TEXT("AbDexterityModifier");
