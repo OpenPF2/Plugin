@@ -15,7 +15,7 @@ OPENPF2GAMEFRAMEWORK_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2BlueprintNodes, Log, 
 /**
  * Log category for logic evaluated by the OpenPF2 core code.
  */
-OPENPF2GAMEFRAMEWORK_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2, Log, VeryVerbose);
+OPENPF2GAMEFRAMEWORK_API DECLARE_LOG_CATEGORY_EXTERN(LogPf2Core, Log, VeryVerbose);
 
 /**
  * Log category for logic evaluated by OpenPF2 code that executes abilities and actions.

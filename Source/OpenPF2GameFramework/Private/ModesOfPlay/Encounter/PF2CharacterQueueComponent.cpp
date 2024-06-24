@@ -283,7 +283,7 @@ void UPF2CharacterQueueComponent::Native_OnCharactersChanged()
 		}
 
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			VeryVerbose,
 			TEXT("[%s] Character queue changed ('%s') - %d elements."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
@@ -296,7 +296,7 @@ void UPF2CharacterQueueComponent::Native_OnCharactersChanged()
 	else
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			Verbose,
 			TEXT("[%s] Character queue changed ('%s')."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
@@ -312,7 +312,7 @@ void UPF2CharacterQueueComponent::Native_OnCharacterAdded(
 	const FPF2CharacterAddedOrRemovedDelegate CharacterAddedDelegate = this->GetEvents()->OnCharacterAdded;
 
 	UE_LOG(
-		LogPf2,
+		LogPf2Core,
 		Verbose,
 		TEXT("[%s] Character ('%s') added to queue ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
@@ -335,7 +335,7 @@ void UPF2CharacterQueueComponent::Native_OnCharacterRemoved(
 	const FPF2CharacterAddedOrRemovedDelegate CharacterRemovedDelegate = this->GetEvents()->OnCharacterRemoved;
 
 	UE_LOG(
-		LogPf2,
+		LogPf2Core,
 		Verbose,
 		TEXT("[%s] Character ('%s') removed from queue ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
@@ -373,7 +373,7 @@ void UPF2CharacterQueueComponent::Native_OnControlledCharacterChanged(
 		this->GetEvents()->OnControlledCharacterChanged;
 
 	UE_LOG(
-		LogPf2,
+		LogPf2Core,
 		Verbose,
 		TEXT("[%s] Active character in queue ('%s') has changed (was '%s'; now '%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),

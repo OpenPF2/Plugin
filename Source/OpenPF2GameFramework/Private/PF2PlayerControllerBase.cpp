@@ -72,7 +72,7 @@ void APF2PlayerControllerBase::SetPawn(APawn* InPawn)
 	const IPF2CharacterInterface* NewCharacterIntf = Cast<IPF2CharacterInterface>(InPawn);
 
 	UE_LOG(
-		LogPf2,
+		LogPf2Core,
 		VeryVerbose,
 		TEXT("[%s] Player controller ('%s') has taken possession of pawn ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
@@ -139,7 +139,7 @@ void APF2PlayerControllerBase::ClearTargetSelection()
 void APF2PlayerControllerBase::Native_OnModeOfPlayChanged(const EPF2ModeOfPlayType NewMode)
 {
 	UE_LOG(
-		LogPf2,
+		LogPf2Core,
 		VeryVerbose,
 		TEXT("[%s] Player controller ('%s') has been notified of a change in mode of play to '%s'."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
@@ -179,7 +179,7 @@ void APF2PlayerControllerBase::GiveCharacter(const TScriptInterface<IPF2Characte
 	if (ThisPartyIndex == OtherPartyIndex)
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			Verbose,
 			TEXT("[%s] Player controller ('%s') has been granted the ability to control a character ('%s')."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
@@ -192,7 +192,7 @@ void APF2PlayerControllerBase::GiveCharacter(const TScriptInterface<IPF2Characte
 	else
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			Error,
 			TEXT("The given character ('%s') is affiliated with a different party ('%i') than the player ('%i')."),
 			*(GivenCharacter->GetIdForLogs()),
@@ -205,7 +205,7 @@ void APF2PlayerControllerBase::GiveCharacter(const TScriptInterface<IPF2Characte
 void APF2PlayerControllerBase::ReleaseCharacter(const TScriptInterface<IPF2CharacterInterface>& ReleasedCharacter)
 {
 	UE_LOG(
-		LogPf2,
+		LogPf2Core,
 		Verbose,
 		TEXT("[%s] Player controller ('%s') can no longer control a character ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
@@ -470,7 +470,7 @@ void APF2PlayerControllerBase::Native_OnPlayerStateAvailable(
 	}
 
 	UE_LOG(
-		LogPf2,
+		LogPf2Core,
 		VeryVerbose,
 		TEXT("[%s] Player controller ('%s') has made player state ('%s') available for character ('%s')."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld())),

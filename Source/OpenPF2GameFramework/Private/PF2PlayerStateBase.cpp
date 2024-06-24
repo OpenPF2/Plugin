@@ -66,7 +66,7 @@ TScriptInterface<IPF2PlayerControllerInterface> APF2PlayerStateBase::GetPlayerCo
 		if (GameState == nullptr)
 		{
 			UE_LOG(
-				LogPf2,
+				LogPf2Core,
 				Error,
 				TEXT("No game state is available for player ('%s')."),
 				*(this->GetIdForLogs())
@@ -82,7 +82,7 @@ TScriptInterface<IPF2PlayerControllerInterface> APF2PlayerStateBase::GetPlayerCo
 			if (PlayerControllerIntf == nullptr)
 			{
 				UE_LOG(
-					LogPf2,
+					LogPf2Core,
 					Error,
 					TEXT("Player ('%s') does not have an OpenPF2-compatible player controller (given '%s' as a player controller)."),
 					*(this->GetIdForLogs()),
@@ -144,7 +144,7 @@ void APF2PlayerStateBase::Native_OnPartyChanged(
 	    (NewParty.GetInterface() == nullptr))
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			Verbose,
 			TEXT("Player ('%s') removed from party ('%s')."),
 			*(this->GetIdForLogs()),
@@ -155,7 +155,7 @@ void APF2PlayerStateBase::Native_OnPartyChanged(
 	if (NewParty.GetInterface() != nullptr)
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			Verbose,
 			TEXT("Player ('%s') added to party ('%s')."),
 			*(this->GetIdForLogs()),

@@ -189,7 +189,7 @@ void APF2ModeOfPlayRuleSetBase::RegisterTagCallback(
 	if ((OnTagAdded == nullptr) && (OnTagRemoved == nullptr))
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			Error,
 			TEXT("RegisterTagCallback() was invoked null pointers for both callbacks for tag ('%s'), so nothing was bound."),
 			*(Tag.ToString())
@@ -218,7 +218,7 @@ void APF2ModeOfPlayRuleSetBase::RegisterTagCallback(
 			if (CallbacksForCharacter.Contains(Tag))
 			{
 				UE_LOG(
-					LogPf2,
+					LogPf2Core,
 					Error,
 					TEXT("RegisterTagCallback() was invoked with character ('%s') that already has a condition callback registered for tag ('%s')."),
 					*(CharacterIntf->GetIdForLogs()),
@@ -301,7 +301,7 @@ void APF2ModeOfPlayRuleSetBase::UnregisterTagCallback(
 			else
 			{
 				UE_LOG(
-					LogPf2,
+					LogPf2Core,
 					Error,
 					TEXT("UnregisterTagCallback() was invoked with character ('%s') that had no callbacks registered for tag ('%s')."),
 					*(Character->GetIdForLogs()),
@@ -312,7 +312,7 @@ void APF2ModeOfPlayRuleSetBase::UnregisterTagCallback(
 		else
 		{
 			UE_LOG(
-				LogPf2,
+				LogPf2Core,
 				Error,
 				TEXT("UnregisterTagCallback() was invoked with character ('%s') that had no callbacks registered."),
 				*(Character->GetIdForLogs())

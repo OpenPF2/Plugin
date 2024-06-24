@@ -35,7 +35,7 @@ void APF2GameStateBase::SetModeOfPlay(const EPF2ModeOfPlayType                  
 	if (this->HasAuthority())
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			Verbose,
 			TEXT("Transitioning from current mode of play (%s) to new mode (%s)."),
 			*PF2EnumUtilities::ToString(this->ModeOfPlay),
@@ -53,7 +53,7 @@ void APF2GameStateBase::SetModeOfPlay(const EPF2ModeOfPlayType                  
 void APF2GameStateBase::OnRep_ModeOfPlay()
 {
 	UE_LOG(
-		LogPf2,
+		LogPf2Core,
 		VeryVerbose,
 		TEXT("[%s] Mode of play has been replicated."),
 		*(PF2LogUtilities::GetHostNetId(this->GetWorld()))

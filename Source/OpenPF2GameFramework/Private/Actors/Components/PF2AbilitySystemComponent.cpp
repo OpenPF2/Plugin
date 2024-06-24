@@ -446,7 +446,7 @@ void UPF2AbilitySystemComponent::AddDynamicTag(const FGameplayTag Tag)
 	this->InvokeAndReapplyAllPassiveGEs([this, Tag]
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			VeryVerbose,
 			TEXT("Adding a dynamic tag ('%s') to ASC on character ('%s')."),
 			*(Tag.ToString()),
@@ -462,7 +462,7 @@ void UPF2AbilitySystemComponent::AppendDynamicTags(const FGameplayTagContainer T
 	this->InvokeAndReapplyAllPassiveGEs([this, Tags]
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			VeryVerbose,
 			TEXT("Adding dynamic tags ('%s') to ASC on character ('%s')."),
 			*(Tags.ToString()),
@@ -478,7 +478,7 @@ void UPF2AbilitySystemComponent::SetDynamicTags(const FGameplayTagContainer Tags
 	this->InvokeAndReapplyAllPassiveGEs([this, Tags]
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			VeryVerbose,
 			TEXT("Setting all dynamic tags ('%s') in ASC on character ('%s')."),
 			*(Tags.ToString()),
@@ -494,7 +494,7 @@ void UPF2AbilitySystemComponent::RemoveDynamicTag(const FGameplayTag Tag)
 	this->InvokeAndReapplyAllPassiveGEs([this, Tag]
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			VeryVerbose,
 			TEXT("Removing a dynamic tag ('%s') from ASC on character ('%s')."),
 			*(Tag.ToString()),
@@ -510,7 +510,7 @@ void UPF2AbilitySystemComponent::RemoveDynamicTags(const FGameplayTagContainer T
 	this->InvokeAndReapplyAllPassiveGEs([this, Tags]
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			VeryVerbose,
 			TEXT("Removing dynamic tags ('%s') from ASC on character ('%s')."),
 			*(Tags.ToString()),
@@ -526,7 +526,7 @@ void UPF2AbilitySystemComponent::RemoveAllDynamicTags()
 	this->InvokeAndReapplyAllPassiveGEs([this]
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			VeryVerbose,
 			TEXT("Removing all dynamic tags from ASC on character ('%s')."),
 			*(GetNameSafe(this->GetOwnerActor()))
@@ -661,7 +661,7 @@ void UPF2AbilitySystemComponent::ApplyAbilityBoost(const EPF2CharacterAbilitySco
 		);
 
 	UE_LOG(
-		LogPf2,
+		LogPf2Core,
 		VeryVerbose,
 		TEXT("Applying a boost to ability ('%s') through ASC for character ('%s') via GE ('%s')."),
 		*(PF2EnumUtilities::ToString(TargetAbilityScore)),

@@ -53,7 +53,7 @@ public:
 	 *	The verbosity level at which to log.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Utility|Logging", DisplayName="Log to OpenPF2 Core")
-	static void LogToOpenPf2(
+	static void LogToOpenPf2Core(
 		const FText                                          Text,
 		const TScriptInterface<IPF2LogIdentifiableInterface> Subject,
 		const EPF2LogVerbosityLevel                          Verbosity = VeryVerbose);

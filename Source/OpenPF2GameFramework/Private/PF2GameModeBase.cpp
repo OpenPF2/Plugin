@@ -69,7 +69,7 @@ void APF2GameModeBase::TransferCharacterOwnership(
 	if (OwnerTracker.GetInterface() == nullptr)
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			Warning,
 			TEXT("Character ('%s') lacks an owner tracking component, so it will not be able to respond properly to ownership changes."),
 			*(NewController->GetIdForLogs())
@@ -93,7 +93,7 @@ void APF2GameModeBase::TransferCharacterOwnership(
 	if (NewController.GetInterface() == nullptr)
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			Verbose,
 			TEXT("Character ('%s') is now no longer owned by any character."),
 			*(Character->GetIdForLogs())
@@ -102,7 +102,7 @@ void APF2GameModeBase::TransferCharacterOwnership(
 	else
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			Verbose,
 			TEXT("Player controller ('%s') now owns character ('%s')."),
 			*(NewController->GetIdForLogs()),
@@ -329,7 +329,7 @@ void APF2GameModeBase::HandleStartingNewPlayer_Implementation(APlayerController*
 			if (CharacterIntf == nullptr)
 			{
 				UE_LOG(
-					LogPf2,
+					LogPf2Core,
 					Error,
 					TEXT("Unable to notify player controller (%s) nor pawn that character (%s) is starting. Neither the character nor player controller are compatible with OpenPF2."),
 					*(GetNameSafe(NewPlayer)),
@@ -339,7 +339,7 @@ void APF2GameModeBase::HandleStartingNewPlayer_Implementation(APlayerController*
 			else
 			{
 				UE_LOG(
-					LogPf2,
+					LogPf2Core,
 					Error,
 					TEXT("Unable to notify player controller (%s) that character (%s) is starting. The player controller is not compatible with OpenPF2. The pawn will be notified."),
 					*(GetNameSafe(NewPlayer)),
@@ -368,7 +368,7 @@ TScriptInterface<IPF2ModeOfPlayRuleSetInterface> APF2GameModeBase::GetModeOfPlay
 	if (Pf2GameState == nullptr)
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			Error,
 			TEXT("Mode of Play Rule Set (MoPRS) support is not enabled because the current game state is not compatible with OpenPF2.")
 		);
@@ -411,7 +411,7 @@ TScriptInterface<IPF2PartyInterface> APF2GameModeBase::SpawnParty(const TSubclas
 	else
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			Error,
 			TEXT("Party Type must implement IPF2PartyInterface.")
 		);
@@ -430,7 +430,7 @@ void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeO
 	if (Pf2GameState.GetInterface() == nullptr)
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			Error,
 			TEXT("Cannot transition to new mode of play (%s) because current game state is not compatible with OpenPF2."),
 			*PF2EnumUtilities::ToString(NewModeOfPlay)
@@ -452,7 +452,7 @@ void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeO
 			// This typically should not happen. If it does, then the game designer is missing a rule set mapping. By
 			// default, we'll allow the transition since we have no rule set to veto it.
 			UE_LOG(
-				LogPf2,
+				LogPf2Core,
 				Warning,
 				TEXT("There is no loaded rule set, so a requested transition from the current mode of play (%s) to a new mode of play (%s) has automatically been allowed."),
 				*PF2EnumUtilities::ToString(OldModeOfPlay),
@@ -464,7 +464,7 @@ void APF2GameModeBase::AttemptModeOfPlaySwitch(const EPF2ModeOfPlayType NewModeO
 		else if (!IPF2ModeOfPlayRuleSetInterface::Execute_CanTransitionTo(OldRuleSet.GetObject(), Pf2GameState, NewModeOfPlay))
 		{
 			UE_LOG(
-				LogPf2,
+				LogPf2Core,
 				Warning,
 				TEXT("Refusing to transition from current mode of play (%s) to new mode (%s) because loaded rule set does not allow the transition."),
 				*PF2EnumUtilities::ToString(Pf2GameState->GetModeOfPlay()),
@@ -493,7 +493,7 @@ void APF2GameModeBase::ForceSwitchModeOfPlay(const EPF2ModeOfPlayType NewModeOfP
 	if (Pf2GameState.GetInterface() == nullptr)
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			Error,
 			TEXT("Cannot transition to new mode of play (%s) because current game state is not compatible with OpenPF2."),
 			*PF2EnumUtilities::ToString(NewModeOfPlay)

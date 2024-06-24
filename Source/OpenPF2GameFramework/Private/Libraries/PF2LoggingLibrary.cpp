@@ -93,7 +93,7 @@
 // =====================================================================================================================
 // Normal Implementations
 // =====================================================================================================================
-OPENPF2_IMPLEMENT_LOGGING_LIBRARY_METHOD(Pf2)
+OPENPF2_IMPLEMENT_LOGGING_LIBRARY_METHOD(Pf2Core)
 OPENPF2_IMPLEMENT_LOGGING_LIBRARY_METHOD(Pf2Abilities)
 OPENPF2_IMPLEMENT_LOGGING_LIBRARY_METHOD(Pf2Encounters)
 OPENPF2_IMPLEMENT_LOGGING_LIBRARY_METHOD(Pf2Initiative)

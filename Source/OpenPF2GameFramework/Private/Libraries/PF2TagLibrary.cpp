@@ -26,7 +26,7 @@ FGameplayTag UPF2TagLibrary::FindChildTag(const FGameplayTagContainer& AllTags,
 		if (AllChildren.Num() > 1)
 		{
 			UE_LOG(
-				LogPf2,
+				LogPf2Core,
 				Warning,
 				TEXT("More than one child tag ('%s') matched parent tag ('%s')."),
 				*(AllChildren.ToStringSimple()),

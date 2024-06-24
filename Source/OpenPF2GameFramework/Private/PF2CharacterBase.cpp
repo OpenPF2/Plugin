@@ -154,7 +154,7 @@ TScriptInterface<IPF2PlayerControllerInterface> APF2CharacterBase::GetPlayerCont
 		const TScriptInterface<IPF2OwnerTrackingInterface> OwnerTrackingComponent = this->GetOwnerTrackingComponent();
 
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			VeryVerbose,
 			TEXT("[%s] Attempting to identify owner of character ('%s') using owner tracking component."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),
@@ -178,7 +178,7 @@ TScriptInterface<IPF2PlayerControllerInterface> APF2CharacterBase::GetPlayerCont
 	if (PlayerController.GetInterface() == nullptr)
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			Warning,
 			TEXT("[%s] Either this character ('%s') is only controllable by a remote client, or the character does not have an OpenPF2-compatible player controller."),
 			*(PF2LogUtilities::GetHostNetId(this->GetWorld())),

@@ -27,7 +27,7 @@ IMPLEMENT_MODULE(FOpenPF2GameFrameworkModule, OpenPF2Core)
 // Logging Definitions
 // =====================================================================================================================
 DEFINE_LOG_CATEGORY(LogPf2BlueprintNodes);
-DEFINE_LOG_CATEGORY(LogPf2);
+DEFINE_LOG_CATEGORY(LogPf2Core);
 DEFINE_LOG_CATEGORY(LogPf2Abilities);
 DEFINE_LOG_CATEGORY(LogPf2Encounters);
 DEFINE_LOG_CATEGORY(LogPf2Initiative);

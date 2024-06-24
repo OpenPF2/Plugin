@@ -97,7 +97,7 @@ void UPF2OwnerTrackingComponent::SetParty(const TScriptInterface<IPF2PartyInterf
 		else
 		{
 			UE_LOG(
-				LogPf2,
+				LogPf2Core,
 				Error,
 				TEXT("Owner tracker ('%s') cannot be affiliated with a party ('%i') that differs from that of the party ('%i') of its owning player ('%s')."),
 				*(this->GetIdForLogs()),

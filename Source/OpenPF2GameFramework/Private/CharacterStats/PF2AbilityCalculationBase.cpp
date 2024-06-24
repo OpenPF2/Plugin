@@ -19,7 +19,7 @@ float UPF2AbilityCalculationBase::CalculateBaseMagnitude_Implementation(const FG
 	if (CapturedAttributeCount == 0)
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			Error,
 			TEXT("No attributes were captured for calculation; exactly 1 was expected.")
 		);
@@ -31,7 +31,7 @@ float UPF2AbilityCalculationBase::CalculateBaseMagnitude_Implementation(const FG
 	else
 	{
 		UE_LOG(
-			LogPf2,
+			LogPf2Core,
 			Error,
 			TEXT("Multiple attributes (%d) were captured for calculation, when exactly 1 was expected."),
 			CapturedAttributeCount
