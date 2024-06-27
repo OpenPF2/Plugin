@@ -13,12 +13,12 @@ public class OpenPF2EditorSupport : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
 
-		PrivatePCHHeaderFile = "Public/OpenPF2EditorSupport.h";
-
 		PublicDependencyModuleNames.AddRange(
 			new[]
 			{
-				"OpenPF2Core",
+				"Core",
+				"CoreUObject",
+				"OpenPF2GameFramework",
 				"OpenPF2BlueprintNodes",
 			}
 		);
@@ -27,8 +27,6 @@ public class OpenPF2EditorSupport : ModuleRules
 			new[]
 			{
 				"BlueprintGraph",
-				"Core",
-				"CoreUObject",
 				"DetailCustomizations",
 				"Engine",
 				"GraphEditor",
