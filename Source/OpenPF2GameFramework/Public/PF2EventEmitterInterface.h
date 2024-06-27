@@ -12,8 +12,8 @@
 // =====================================================================================================================
 // Normal Declarations - Types
 // =====================================================================================================================
-UINTERFACE(BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
-class OPENPF2GAMEFRAMEWORK_API UPF2EventEmitterInterface : public UInterface
+UINTERFACE(MinimalAPI, BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
+class UPF2EventEmitterInterface : public UInterface
 {
 	GENERATED_BODY()
 };

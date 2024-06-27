@@ -16,8 +16,8 @@
 
 #include "PF2ModeOfPlayRuleSetInterface.generated.h"
 
-UINTERFACE(BlueprintType)
-class OPENPF2GAMEFRAMEWORK_API UPF2ModeOfPlayRuleSetInterface : public UInterface
+UINTERFACE(MinimalAPI, BlueprintType)
+class UPF2ModeOfPlayRuleSetInterface : public UInterface
 {
 	GENERATED_BODY()
 };
