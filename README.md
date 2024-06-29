@@ -156,10 +156,12 @@ For example, if a weapon has a range of 60 feet, then its range in OpenPF2 is
 
 ## Installation
 
-1. Check-out the project into the `Plugins/` folder of your larger UE5 project.
-   Ensure that the folder into which you check-out the project is named 
+1. Check out the project into the `Plugins/` folder of your larger UE5 project.
+   Ensure that the folder into which you check out the project is named 
    `OpenPF2`.
-2. Modify the `*.uproject` file of your larger UE5 project to ensure that both
+2. Check out the https://github.com/OpenPF2/EnhancedUnrealSpecs project into 
+   `Plugins/EnhancedAutomationSpecs`.
+3. Modify the `*.uproject` file of your larger UE5 project to ensure that both
    the `OpenPF2` and `GameplayAbilities` plug-ins are enabled, like so:
    ```json
    "Plugins": [
@@ -173,16 +175,27 @@ For example, if a weapon has a range of 60 feet, then its range in OpenPF2 is
      }
    ]
    ```
-3. Re-generate Visual Studio/Rider project files.
-4. Edit the `*.Build.cs` file and add `"OpenPF2"` to the `PrivateDependencyModuleNames` section:
+4. (Optionally) If you would like to write tests that use the Enhanced Automation Spec framework, you can make your
+   project depend directly on the `EnhancedAutomationSpecs` plugin by adding this to the `*.uproject` file of your
+   larger UE5 project:
+   ```json
+   "Plugins": [
+     {
+       "Name": "EnhancedAutomationSpecs",
+       "Enabled": true
+     }
+   ]
+   ```
+5. Re-generate Visual Studio/Rider project files.
+6. Edit the `*.Build.cs` file and add `"OpenPF2"` to the `PrivateDependencyModuleNames` section:
    ```C#
    PrivateDependencyModuleNames.AddRange(new string[]
    {
        "OpenPF2GameFramework",
    });
    ```
-5. Compile your project.
-6. Copy the `Config/Tags/` folder from the plug-in into your project's `Config` folder.
+7. Compile your project.
+8. Copy the `Config/Tags/` folder from the plug-in into your project's `Config` folder.
    _Even in UE 5.1+, this is still required. The engine
    [does not automatically scan or package config files provided by plugins](https://docs.unrealengine.com/5.1/en-US/plugins-in-unreal-engine/#pluginsinprojects)._
 
