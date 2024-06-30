@@ -45,6 +45,7 @@ UPF2EquippedItemsComponent::UPF2EquippedItemsComponent() : Events(nullptr)
 {
 }
 
+#if WITH_EDITOR
 EDataValidationResult UPF2EquippedItemsComponent::IsDataValid(FDataValidationContext& Context) const
 {
 	EDataValidationResult Result =
@@ -55,6 +56,7 @@ EDataValidationResult UPF2EquippedItemsComponent::IsDataValid(FDataValidationCon
 
 	return Result;
 }
+#endif
 
 void UPF2EquippedItemsComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -234,6 +236,7 @@ void UPF2EquippedItemsComponent::UnequipItemInSpecificSlot(const UPF2EquipableIt
 	}
 }
 
+#if WITH_EDITOR
 EDataValidationResult UPF2EquippedItemsComponent::ValidateSlots(FDataValidationContext& Context) const
 {
 	EDataValidationResult                      Result = EDataValidationResult::Valid;
@@ -343,6 +346,7 @@ EDataValidationResult UPF2EquippedItemsComponent::ValidateEquippedItems(FDataVal
 
 	return Result;
 }
+#endif
 
 void UPF2EquippedItemsComponent::OnRep_EquippedItems(const TArray<FPF2EquippedItem>& PreviouslyEquippedItems)
 {

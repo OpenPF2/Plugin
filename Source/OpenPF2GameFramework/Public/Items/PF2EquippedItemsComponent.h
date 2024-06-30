@@ -214,7 +214,7 @@ protected:
 	 */
 	virtual void UnequipItemInSpecificSlot(const UPF2EquipableItemSlot* Slot);
 
-	#if WITH_EDITOR
+#if WITH_EDITOR
 	/**
 	 * Validates that the SupportedSlots property contains valid data from the editor.
 	 *
@@ -242,7 +242,7 @@ protected:
 	 *	Whether the equipped items are valid.
 	 */
 	EDataValidationResult ValidateEquippedItems(FDataValidationContext& Context) const;
-	#endif
+#endif
 
 	// =================================================================================================================
 	// Protected Replication Callbacks
