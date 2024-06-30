@@ -65,6 +65,7 @@ EDataValidationResult UPF2EquipableItemSlot::IsDataValid(FDataValidationContext&
 
 	return Result;
 }
+#endif
 
 FString UPF2EquipableItemSlot::GetIdForLogs() const
 {
@@ -77,6 +78,5 @@ FString UPF2EquipableItemSlot::GetIdForLogs() const
 		}
 	);
 }
-#endif
 
 #undef LOCTEXT_NAMESPACE
