@@ -34,9 +34,9 @@ extract_current_copyrights() {
 	if [[ -s "$filename" ]]; then
 		local first_line="$(sed '1s/^\xEF\xBB\xBF//' "$filename" | head -n 1)"
 
-		if [[ "$first_line" =~ ^\/\/.*Copyright\ ([0-9]{4})(-([0-9]{4}))? ]]; then
-			local start_year="${BASH_REMATCH[1]}"
-			local end_year="${BASH_REMATCH[3]}"
+		if [[ "$first_line" =~ ^(\/\/|\;).*Copyright\ ([0-9]{4})(-([0-9]{4}))? ]]; then
+			local start_year="${BASH_REMATCH[2]}"
+			local end_year="${BASH_REMATCH[4]}"
 
 			if [[ -z "$end_year" ]]; then
 				echo "$start_year"
@@ -90,7 +90,7 @@ process_file() {
 }
 
 # Get the list of modified files in the feature branch relative to main
-modified_files=$(git diff --name-only main...HEAD | grep -E "\.(h|hpp|c|cpp|cc|cxx)$")
+modified_files=$(git diff --name-only main...HEAD | grep -E "\.(h|hpp|c|cpp|cc|cxx|ini)$")
 
 # Update copyright lines of all changed files.
 for filename in $modified_files; do

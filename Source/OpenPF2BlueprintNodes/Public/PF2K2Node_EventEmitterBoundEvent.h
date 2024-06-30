@@ -1,4 +1,4 @@
-// OpenPF2 for UE Game Logic, Copyright 2023, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 Game Framework for Unreal Engine, Copyright 2023-2024, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Adapted from "BlueprintGraph/Classes/K2Node_ComponentBoundEvent.h" (Unreal Engine 5.1), which is Copyright
 // Epic Games, Inc. Licensed only for use with Unreal Engine.
