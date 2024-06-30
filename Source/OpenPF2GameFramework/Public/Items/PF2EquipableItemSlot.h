@@ -16,7 +16,7 @@ class IPF2ItemInterface;
  * arms; multiple ring slots for each finger; and a slot for a cloak.
  */
 UCLASS(Abstract, BlueprintType, Blueprintable)
-class UPF2EquipableItemSlot : public UDataAsset, public IPF2LogIdentifiableInterface
+class OPENPF2GAMEFRAMEWORK_API UPF2EquipableItemSlot : public UDataAsset, public IPF2LogIdentifiableInterface
 {
 	GENERATED_BODY()
 
