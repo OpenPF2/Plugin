@@ -1,4 +1,4 @@
-// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2026, Guy Elsmore-Paddock. All Rights Reserved.
 // 
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //	- Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -18,6 +18,7 @@
 // Weapon Groups
 // =====================================================================================================================
 // From the Pathfinder 2E Core Rulebook, pages 280-282; Tables 6-6, 6-7, and 6-8.
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagWeaponGroups)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagWeaponGroupAxe)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagWeaponGroupBomb)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagWeaponGroupBow)

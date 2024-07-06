@@ -1,4 +1,4 @@
-// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2026, Guy Elsmore-Paddock. All Rights Reserved.
 // 
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //	- Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -18,7 +18,9 @@
 // Default Currency Units
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, Chapter 6, page 271.
-OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCurrencyUnitCoinsCopperPiece)
-OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCurrencyUnitCoinsSilverPiece)
-OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCurrencyUnitCoinsGoldPiece)
-OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCurrencyUnitCoinsPlatinumPiece)
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCurrencyUnits)
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCurrencyUnitCoins)
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCurrencyUnitCoinCopperPiece)
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCurrencyUnitCoinSilverPiece)
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCurrencyUnitCoinGoldPiece)
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCurrencyUnitCoinPlatinumPiece)

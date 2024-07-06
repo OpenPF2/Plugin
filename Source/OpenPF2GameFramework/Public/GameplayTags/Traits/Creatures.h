@@ -1,4 +1,4 @@
-//  OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+//  OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 //  Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //	- Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -18,6 +18,7 @@
 // Creature Traits
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, Glossary, pages 628-638.
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTraitCreatures)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTraitCreatureElf)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTraitCreatureHalfElf)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTraitCreatureHalfOrc)

@@ -1,4 +1,4 @@
-﻿//  OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+//  OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 //  Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //	- Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -18,6 +18,8 @@
 // Creature Alignment - The indicator of the character's morality and personality.
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, page 29, Table 1-2: The Nine Alignments.
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCreatureAlignments)
+
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCreatureAlignmentLawful)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCreatureAlignmentLawfulGood)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCreatureAlignmentLawfulNeutral)

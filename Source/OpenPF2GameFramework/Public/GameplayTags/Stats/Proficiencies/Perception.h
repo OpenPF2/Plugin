@@ -1,4 +1,4 @@
-﻿//  OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+//  OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 //  Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //	- Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -23,8 +23,9 @@
 //	- Pathfinder 2E Core Rulebook, Chapter 1: "Introduction", page 27, "Character Sheet".
 //	- Pathfinder 2E Core Rulebook, Chapter 3: "Classes", page 69, "Initial Proficiencies".
 //	- Pathfinder 2E Core Rulebook, Appendix, page 624, "Perception".
-OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagPerceptionUntrained)
-OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagPerceptionTrained)
-OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagPerceptionExpert)
-OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagPerceptionMaster)
-OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagPerceptionLegendary)
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagProficiencyPerception)
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagProficiencyPerceptionUntrained)
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagProficiencyPerceptionTrained)
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagProficiencyPerceptionExpert)
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagProficiencyPerceptionMaster)
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagProficiencyPerceptionLegendary)

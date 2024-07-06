@@ -1,4 +1,4 @@
-﻿# OpenPF2 for Unreal Engine
+# OpenPF2 for Unreal Engine
 
 <img src="./Logo.png#gh-light-mode-only" title="OpenPF2 Logo" alt="Tabletop made of four arrows pointing toward the center of the table, with the tagline 'Just add story.'" width="512">
 
@@ -256,3 +256,19 @@ Want to explore a custom license? Here are a few ways to get in touch with us:
 Paizo and Pathfinder are trademarks of Paizo Inc. Nothing in this project is
 officially sanctioned or endorsed by Paizo Publishing.
 </small>
+
+## Native gameplay tags
+
+OpenPF2 registers its gameplay tags in C++. Ordinary tags use the `PF2` root. Gameplay cues use
+`GameplayCue.PF2`, and ability trigger tags use `TriggerTagCategory.PF2`, preserving Unreal's editor filters.
+Proficiency tags belong under `PF2.Proficiency`; equipped armor belongs under `PF2.Equipped.Armor`.
+Encounter state uses `PF2.Encounter.CharacterState`, and ability event listeners use
+`PF2.GameplayAbility.WaitForEvent`.
+
+Native constants retain the `Pf2Tag` prefix. Category constants may use plural names while their serialized
+category segment is singular. Declarations and definitions must use the same exported symbol.
+
+`Config/DefaultGameplayTags.ini` retains redirects for projects with assets saved under the former names.
+Keep these redirects available while loading and resaving old content. A project can remove its own copied
+redirects after every package has been migrated and a fresh process has verified the saved values without redirects.
+Author shared assets in UE 5.3 so they remain usable throughout the supported UE 5.3–5.8 range.

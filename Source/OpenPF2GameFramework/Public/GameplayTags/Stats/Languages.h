@@ -1,4 +1,4 @@
-// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2026, Guy Elsmore-Paddock. All Rights Reserved.
 // 
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //	- Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -15,9 +15,15 @@
 #include <NativeGameplayTags.h>
 
 // =====================================================================================================================
+// Languages - How characters communicate through hearing, speaking, writing, and reading.
+// =====================================================================================================================
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagLanguages)
+
+// =====================================================================================================================
 // Common Languages - Languages regularly encountered in most places, even among those who aren’t native speakers.
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, page 65, Table 2-1: Common Languages.
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagLanguagesCommon)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagLanguageCommonCommon)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagLanguageCommonDraconic)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagLanguageCommonDwarven)
@@ -35,6 +41,7 @@ OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagLanguageCommonUnde
 // interested in the associated cultures.
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, page 65, Table 2-2: Uncommon Languages.
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagLanguagesUncommon)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagLanguageUncommonAbyssal)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagLanguageUncommonAklo)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagLanguageUncommonAquan)
@@ -54,4 +61,5 @@ OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagLanguageUncommonTe
 // teaching the language to non-druids.
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, page 65, Table 2-3: Secret Languages.
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagLanguagesSecret)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagLanguageSecretDruidic)
