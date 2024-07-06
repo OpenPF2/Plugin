@@ -12,6 +12,7 @@
 //
 // @todo Deprecate and replace with a simpler system in https://github.com/OpenPF2/Plugin/issues/61.
 // =====================================================================================================================
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagGameplayEffectWeightGroups)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagGameplayEffectWeightGroup00_InitializeBaseStats)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagGameplayEffectWeightGroup05_PostInitializeBaseStats)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagGameplayEffectWeightGroup10_ManagedEffects)

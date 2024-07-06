@@ -8,9 +8,16 @@
 #include <NativeGameplayTags.h>
 
 // =====================================================================================================================
+// Tags that trigger Gameplay Abilities that can be used at any time.
+// =====================================================================================================================
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTriggerTagCategoryAnytime)
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTriggerTagCategoryAnytimeAbilityBoost)
+
+// =====================================================================================================================
 // Tags that trigger Encounter-related Gameplay Abilities.
 // =====================================================================================================================
-OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTriggerTagCategoryEncountersEnterEncounter)
-OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTriggerTagCategoryEncountersStartTurn)
-OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTriggerTagCategoryEncountersEndTurn)
-OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTriggerTagCategoryEncountersLeaveEncounter)
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTriggerTagCategoryEncounters)
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTriggerTagCategoryEncounterEnterEncounter)
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTriggerTagCategoryEncounterStartTurn)
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTriggerTagCategoryEncounterEndTurn)
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTriggerTagCategoryEncounterLeaveEncounter)

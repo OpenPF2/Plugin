@@ -19,6 +19,8 @@
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, Conditions Appendix, pages 618-623.
 
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTraitConditions)
+
 // === Blinded
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTraitConditionBlinded)
 

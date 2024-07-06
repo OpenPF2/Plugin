@@ -8,8 +8,9 @@
 #include <NativeGameplayTags.h>
 
 // =====================================================================================================================
-// Parameters passed in to "Set by caller" GEs
+// Parameters passed into "Set by caller" GEs.
 // =====================================================================================================================
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagGameplayEffectParameters)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagGameplayEffectParameterDamage)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagGameplayEffectParameterResistance)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagGameplayEffectParameterHealing)

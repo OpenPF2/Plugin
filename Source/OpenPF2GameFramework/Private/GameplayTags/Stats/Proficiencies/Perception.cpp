@@ -22,31 +22,37 @@
 //	- Pathfinder 2E Core Rulebook, Chapter 3: "Classes", page 69, "Initial Proficiencies".
 //	- Pathfinder 2E Core Rulebook, Appendix, page 624, "Perception".
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagPerceptionUntrained,
-	"Perception.Untrained",
+	Pf2TagProficiencyPerception,
+	"PF2.Proficiency.Perception",
+	"Character proficiency ranks for Perception (how alert they are)."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyPerceptionUntrained,
+	"PF2.Proficiency.Perception.Untrained",
 	"Character is Untrained in Perception."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagPerceptionTrained,
-	"Perception.Trained",
+	Pf2TagProficiencyPerceptionTrained,
+	"PF2.Proficiency.Perception.Trained",
 	"Character is Trained in Perception."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagPerceptionExpert,
-	"Perception.Expert",
+	Pf2TagProficiencyPerceptionExpert,
+	"PF2.Proficiency.Perception.Expert",
 	"Character is Expert in Perception."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagPerceptionMaster,
-	"Perception.Master",
+	Pf2TagProficiencyPerceptionMaster,
+	"PF2.Proficiency.Perception.Master",
 	"Character is Master in Perception."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagPerceptionLegendary,
-	"Perception.Legendary",
+	Pf2TagProficiencyPerceptionLegendary,
+	"PF2.Proficiency.Perception.Legendary",
 	"Character is Legendary in Perception."
 )

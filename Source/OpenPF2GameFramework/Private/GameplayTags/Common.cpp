@@ -1,4 +1,4 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 Game Framework for Unreal Engine, Copyright 2024, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //	- Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -10,44 +10,44 @@
 // file other than the material designated as Open Game Content may be reproduced in any form without written
 // permission.
 
-#include "GameplayTags/Stats/Proficiencies/SpellDc.h"
+#include "GameplayTags/Common.h"
 
 // =====================================================================================================================
-// Proficiency Ranks for Spell DC (Difficulty Class) and spellcasting (Spell DC).
+// Top-level tag category definitions.
 // =====================================================================================================================
-// Source: Pathfinder 2E Core Rulebook, Appendix, page 627, "Spell DC".
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagProficiencySpellDc,
-	"PF2.Proficiency.SpellDc",
-	"Character proficiency ranks for Spell DC (Difficulty Class) and spellcasting."
+	Pf2TagRoot,
+	"PF2",
+	"Gameplay tags provided by the OpenPF2 Game Framework."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagProficiencySpellDcUntrained,
-	"PF2.Proficiency.SpellDc.Untrained",
-	"Character is Untrained in spellcasting."
+	Pf2TagEncounters,
+	"PF2.Encounter",
+	"Tags used by abilities during encounters."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagProficiencySpellDcTrained,
-	"PF2.Proficiency.SpellDc.Trained",
-	"Character is Trained in spellcasting."
+	Pf2TagGameplayAbilities,
+	"PF2.GameplayAbility",
+	"Tags that apply to Gameplay Abilities in OpenPF2."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagProficiencySpellDcExpert,
-	"PF2.Proficiency.SpellDc.Expert",
-	"Character is Expert in spellcasting."
+	Pf2TagGameplayEffects,
+	"PF2.GameplayEffect",
+	"Tags that apply to Gameplay Effects in OpenPF2."
+)
+
+// Source: Pathfinder 2E Core Rulebook, Appendix, page 635.
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencies,
+	"PF2.Proficiency",
+	"Measures of a character’s aptitude at specific tasks or qualities."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagProficiencySpellDcMaster,
-	"PF2.Proficiency.SpellDc.Master",
-	"Character is Master in spellcasting."
-)
-
-UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagProficiencySpellDcLegendary,
-	"PF2.Proficiency.SpellDc.Legendary",
-	"Character is Legendary in spellcasting."
+	Pf2TagTriggerTagCategoryRoot,
+	"TriggerTagCategory.PF2",
+	"Tags that trigger Gameplay Abilities in OpenPF2."
 )

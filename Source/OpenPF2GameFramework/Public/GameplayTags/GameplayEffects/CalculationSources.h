@@ -12,4 +12,5 @@
 //
 // These should not be used on weapons, characters, or other objects that appear in the world.
 // =====================================================================================================================
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagGameplayEffectCalculationSources)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagGameplayEffectCalculationSourceInitiative)

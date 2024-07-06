@@ -18,6 +18,7 @@
 // Creature Traits
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, Glossary, pages 628-638.
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTraitCreatures)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTraitCreatureElf)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTraitCreatureHalfElf)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTraitCreatureHalfOrc)

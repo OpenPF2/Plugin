@@ -23,558 +23,666 @@
 
 // === Acrobatics
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillAcrobaticsUntrained,
-	"Skill.Acrobatics.Untrained",
+	Pf2TagProficiencySkillAcrobatics,
+	"PF2.Proficiency.Skill.Acrobatics",
+	"Character proficiency ranks for Acrobatics."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencySkillAcrobaticsUntrained,
+	"PF2.Proficiency.Skill.Acrobatics.Untrained",
 	"Character is Untrained in Acrobatics."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillAcrobaticsTrained,
-	"Skill.Acrobatics.Trained",
+	Pf2TagProficiencySkillAcrobaticsTrained,
+	"PF2.Proficiency.Skill.Acrobatics.Trained",
 	"Character is Trained in Acrobatics."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillAcrobaticsExpert,
-	"Skill.Acrobatics.Expert",
+	Pf2TagProficiencySkillAcrobaticsExpert,
+	"PF2.Proficiency.Skill.Acrobatics.Expert",
 	"Character is Expert in Acrobatics."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillAcrobaticsMaster,
-	"Skill.Acrobatics.Master",
+	Pf2TagProficiencySkillAcrobaticsMaster,
+	"PF2.Proficiency.Skill.Acrobatics.Master",
 	"Character is Master in Acrobatics."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillAcrobaticsLegendary,
-	"Skill.Acrobatics.Legendary",
+	Pf2TagProficiencySkillAcrobaticsLegendary,
+	"PF2.Proficiency.Skill.Acrobatics.Legendary",
 	"Character is Legendary in Acrobatics."
 )
 
 // === Arcana
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillArcanaUntrained,
-	"Skill.Arcana.Untrained",
+	Pf2TagProficiencySkillArcana,
+	"PF2.Proficiency.Skill.Arcana",
+	"Character proficiency ranks for Arcana."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencySkillArcanaUntrained,
+	"PF2.Proficiency.Skill.Arcana.Untrained",
 	"Character is Untrained in Arcana."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillArcanaTrained,
-	"Skill.Arcana.Trained",
+	Pf2TagProficiencySkillArcanaTrained,
+	"PF2.Proficiency.Skill.Arcana.Trained",
 	"Character is Trained in Arcana."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillArcanaExpert,
-	"Skill.Arcana.Expert",
+	Pf2TagProficiencySkillArcanaExpert,
+	"PF2.Proficiency.Skill.Arcana.Expert",
 	"Character is Expert in Arcana."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillArcanaMaster,
-	"Skill.Arcana.Master",
+	Pf2TagProficiencySkillArcanaMaster,
+	"PF2.Proficiency.Skill.Arcana.Master",
 	"Character is Master in Arcana."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillArcanaLegendary,
-	"Skill.Arcana.Legendary",
+	Pf2TagProficiencySkillArcanaLegendary,
+	"PF2.Proficiency.Skill.Arcana.Legendary",
 	"Character is Legendary in Arcana."
 )
 
 // === Athletics
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillAthleticsUntrained,
-	"Skill.Athletics.Untrained",
+	Pf2TagProficiencySkillAthletics,
+	"PF2.Proficiency.Skill.Athletics",
+	"Character proficiency ranks for Athletics."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencySkillAthleticsUntrained,
+	"PF2.Proficiency.Skill.Athletics.Untrained",
 	"Character is Untrained in Athletics."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillAthleticsTrained,
-	"Skill.Athletics.Trained",
+	Pf2TagProficiencySkillAthleticsTrained,
+	"PF2.Proficiency.Skill.Athletics.Trained",
 	"Character is Trained in Athletics."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillAthleticsExpert,
-	"Skill.Athletics.Expert",
+	Pf2TagProficiencySkillAthleticsExpert,
+	"PF2.Proficiency.Skill.Athletics.Expert",
 	"Character is Expert in Athletics."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillAthleticsMaster,
-	"Skill.Athletics.Master",
+	Pf2TagProficiencySkillAthleticsMaster,
+	"PF2.Proficiency.Skill.Athletics.Master",
 	"Character is Master in Athletics."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillAthleticsLegendary,
-	"Skill.Athletics.Legendary",
+	Pf2TagProficiencySkillAthleticsLegendary,
+	"PF2.Proficiency.Skill.Athletics.Legendary",
 	"Character is Legendary in Athletics."
 )
 
 // === Crafting
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillCraftingUntrained,
-	"Skill.Crafting.Untrained",
+	Pf2TagProficiencySkillCrafting,
+	"PF2.Proficiency.Skill.Crafting",
+	"Character proficiency ranks for Crafting."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencySkillCraftingUntrained,
+	"PF2.Proficiency.Skill.Crafting.Untrained",
 	"Character is Untrained in Crafting."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillCraftingTrained,
-	"Skill.Crafting.Trained",
+	Pf2TagProficiencySkillCraftingTrained,
+	"PF2.Proficiency.Skill.Crafting.Trained",
 	"Character is Trained in Crafting."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillCraftingExpert,
-	"Skill.Crafting.Expert",
+	Pf2TagProficiencySkillCraftingExpert,
+	"PF2.Proficiency.Skill.Crafting.Expert",
 	"Character is Expert in Crafting."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillCraftingMaster,
-	"Skill.Crafting.Master",
+	Pf2TagProficiencySkillCraftingMaster,
+	"PF2.Proficiency.Skill.Crafting.Master",
 	"Character is Master in Crafting."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillCraftingLegendary,
-	"Skill.Crafting.Legendary",
+	Pf2TagProficiencySkillCraftingLegendary,
+	"PF2.Proficiency.Skill.Crafting.Legendary",
 	"Character is Legendary in Crafting."
 )
 
 // === Deception
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillDeceptionUntrained,
-	"Skill.Deception.Untrained",
+	Pf2TagProficiencySkillDeception,
+	"PF2.Proficiency.Skill.Deception",
+	"Character proficiency ranks for Deception."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencySkillDeceptionUntrained,
+	"PF2.Proficiency.Skill.Deception.Untrained",
 	"Character is Untrained in Deception."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillDeceptionTrained,
-	"Skill.Deception.Trained",
+	Pf2TagProficiencySkillDeceptionTrained,
+	"PF2.Proficiency.Skill.Deception.Trained",
 	"Character is Trained in Deception."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillDeceptionExpert,
-	"Skill.Deception.Expert",
+	Pf2TagProficiencySkillDeceptionExpert,
+	"PF2.Proficiency.Skill.Deception.Expert",
 	"Character is Expert in Deception."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillDeceptionMaster,
-	"Skill.Deception.Master",
+	Pf2TagProficiencySkillDeceptionMaster,
+	"PF2.Proficiency.Skill.Deception.Master",
 	"Character is Master in Deception."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillDeceptionLegendary,
-	"Skill.Deception.Legendary",
+	Pf2TagProficiencySkillDeceptionLegendary,
+	"PF2.Proficiency.Skill.Deception.Legendary",
 	"Character is Legendary in Deception."
 )
 
 // === Diplomacy
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillDiplomacyUntrained,
-	"Skill.Diplomacy.Untrained",
+	Pf2TagProficiencySkillDiplomacy,
+	"PF2.Proficiency.Skill.Diplomacy",
+	"Character proficiency ranks for Diplomacy."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencySkillDiplomacyUntrained,
+	"PF2.Proficiency.Skill.Diplomacy.Untrained",
 	"Character is Untrained in Diplomacy."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillDiplomacyTrained,
-	"Skill.Diplomacy.Trained",
+	Pf2TagProficiencySkillDiplomacyTrained,
+	"PF2.Proficiency.Skill.Diplomacy.Trained",
 	"Character is Trained in Diplomacy."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillDiplomacyExpert,
-	"Skill.Diplomacy.Expert",
+	Pf2TagProficiencySkillDiplomacyExpert,
+	"PF2.Proficiency.Skill.Diplomacy.Expert",
 	"Character is Expert in Diplomacy."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillDiplomacyMaster,
-	"Skill.Diplomacy.Master",
+	Pf2TagProficiencySkillDiplomacyMaster,
+	"PF2.Proficiency.Skill.Diplomacy.Master",
 	"Character is Master in Diplomacy."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillDiplomacyLegendary,
-	"Skill.Diplomacy.Legendary",
+	Pf2TagProficiencySkillDiplomacyLegendary,
+	"PF2.Proficiency.Skill.Diplomacy.Legendary",
 	"Character is Legendary in Diplomacy."
 )
 
 // === Intimidation
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillIntimidationUntrained,
-	"Skill.Intimidation.Untrained",
+	Pf2TagProficiencySkillIntimidation,
+	"PF2.Proficiency.Skill.Intimidation",
+	"Character proficiency ranks for Intimidation."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencySkillIntimidationUntrained,
+	"PF2.Proficiency.Skill.Intimidation.Untrained",
 	"Character is Untrained in Intimidation."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillIntimidationTrained,
-	"Skill.Intimidation.Trained",
+	Pf2TagProficiencySkillIntimidationTrained,
+	"PF2.Proficiency.Skill.Intimidation.Trained",
 	"Character is Trained in Intimidation."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillIntimidationExpert,
-	"Skill.Intimidation.Expert",
+	Pf2TagProficiencySkillIntimidationExpert,
+	"PF2.Proficiency.Skill.Intimidation.Expert",
 	"Character is Expert in Intimidation."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillIntimidationMaster,
-	"Skill.Intimidation.Master",
+	Pf2TagProficiencySkillIntimidationMaster,
+	"PF2.Proficiency.Skill.Intimidation.Master",
 	"Character is Master in Intimidation."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillIntimidationLegendary,
-	"Skill.Intimidation.Legendary",
+	Pf2TagProficiencySkillIntimidationLegendary,
+	"PF2.Proficiency.Skill.Intimidation.Legendary",
 	"Character is Legendary in Intimidation."
 )
 
 // === Lore1
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillLore1Untrained,
-	"Skill.Lore1.Untrained",
-	"Character is Untrained in Lore1."
+	Pf2TagProficiencySkillLore1,
+	"PF2.Proficiency.Skill.Lore1",
+	"Character proficiency ranks for first lore specialization."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillLore1Trained,
-	"Skill.Lore1.Trained",
-	"Character is Trained in Lore1."
+	Pf2TagProficiencySkillLore1Untrained,
+	"PF2.Proficiency.Skill.Lore1.Untrained",
+	"Character is Untrained in first lore specialization."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillLore1Expert,
-	"Skill.Lore1.Expert",
-	"Character is Expert in Lore1."
+	Pf2TagProficiencySkillLore1Trained,
+	"PF2.Proficiency.Skill.Lore1.Trained",
+	"Character is Trained in first lore specialization."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillLore1Master,
-	"Skill.Lore1.Master",
-	"Character is Master in Lore1."
+	Pf2TagProficiencySkillLore1Expert,
+	"PF2.Proficiency.Skill.Lore1.Expert",
+	"Character is Expert in first lore specialization."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillLore1Legendary,
-	"Skill.Lore1.Legendary",
-	"Character is Legendary in Lore1."
+	Pf2TagProficiencySkillLore1Master,
+	"PF2.Proficiency.Skill.Lore1.Master",
+	"Character is Master in first lore specialization."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencySkillLore1Legendary,
+	"PF2.Proficiency.Skill.Lore1.Legendary",
+	"Character is Legendary in first lore specialization."
 )
 
 // === Lore2
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillLore2Untrained,
-	"Skill.Lore2.Untrained",
-	"Character is Untrained in Lore2."
+	Pf2TagProficiencySkillLore2,
+	"PF2.Proficiency.Skill.Lore2",
+	"Character proficiency ranks for second lore specialization."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillLore2Trained,
-	"Skill.Lore2.Trained",
-	"Character is Trained in Lore2."
+	Pf2TagProficiencySkillLore2Untrained,
+	"PF2.Proficiency.Skill.Lore2.Untrained",
+	"Character is Untrained in second lore specialization."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillLore2Expert,
-	"Skill.Lore2.Expert",
-	"Character is Expert in Lore2."
+	Pf2TagProficiencySkillLore2Trained,
+	"PF2.Proficiency.Skill.Lore2.Trained",
+	"Character is Trained in second lore specialization."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillLore2Master,
-	"Skill.Lore2.Master",
-	"Character is Master in Lore2."
+	Pf2TagProficiencySkillLore2Expert,
+	"PF2.Proficiency.Skill.Lore2.Expert",
+	"Character is Expert in second lore specialization."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillLore2Legendary,
-	"Skill.Lore2.Legendary",
-	"Character is Legendary in Lore2."
+	Pf2TagProficiencySkillLore2Master,
+	"PF2.Proficiency.Skill.Lore2.Master",
+	"Character is Master in second lore specialization."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencySkillLore2Legendary,
+	"PF2.Proficiency.Skill.Lore2.Legendary",
+	"Character is Legendary in second lore specialization."
 )
 
 // === Medicine
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillMedicineUntrained,
-	"Skill.Medicine.Untrained",
+	Pf2TagProficiencySkillMedicine,
+	"PF2.Proficiency.Skill.Medicine",
+	"Character proficiency ranks for Medicine."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencySkillMedicineUntrained,
+	"PF2.Proficiency.Skill.Medicine.Untrained",
 	"Character is Untrained in Medicine."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillMedicineTrained,
-	"Skill.Medicine.Trained",
+	Pf2TagProficiencySkillMedicineTrained,
+	"PF2.Proficiency.Skill.Medicine.Trained",
 	"Character is Trained in Medicine."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillMedicineExpert,
-	"Skill.Medicine.Expert",
+	Pf2TagProficiencySkillMedicineExpert,
+	"PF2.Proficiency.Skill.Medicine.Expert",
 	"Character is Expert in Medicine."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillMedicineMaster,
-	"Skill.Medicine.Master",
+	Pf2TagProficiencySkillMedicineMaster,
+	"PF2.Proficiency.Skill.Medicine.Master",
 	"Character is Master in Medicine."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillMedicineLegendary,
-	"Skill.Medicine.Legendary",
+	Pf2TagProficiencySkillMedicineLegendary,
+	"PF2.Proficiency.Skill.Medicine.Legendary",
 	"Character is Legendary in Medicine."
 )
 
 // === Nature
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillNatureUntrained,
-	"Skill.Nature.Untrained",
+	Pf2TagProficiencySkillNature,
+	"PF2.Proficiency.Skill.Nature",
+	"Character proficiency ranks for Nature."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencySkillNatureUntrained,
+	"PF2.Proficiency.Skill.Nature.Untrained",
 	"Character is Untrained in Nature."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillNatureTrained,
-	"Skill.Nature.Trained",
+	Pf2TagProficiencySkillNatureTrained,
+	"PF2.Proficiency.Skill.Nature.Trained",
 	"Character is Trained in Nature."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillNatureExpert,
-	"Skill.Nature.Expert",
+	Pf2TagProficiencySkillNatureExpert,
+	"PF2.Proficiency.Skill.Nature.Expert",
 	"Character is Expert in Nature."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillNatureMaster,
-	"Skill.Nature.Master",
+	Pf2TagProficiencySkillNatureMaster,
+	"PF2.Proficiency.Skill.Nature.Master",
 	"Character is Master in Nature."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillNatureLegendary,
-	"Skill.Nature.Legendary",
+	Pf2TagProficiencySkillNatureLegendary,
+	"PF2.Proficiency.Skill.Nature.Legendary",
 	"Character is Legendary in Nature."
 )
 
 // === Occultism
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillOccultismUntrained,
-	"Skill.Occultism.Untrained",
+	Pf2TagProficiencySkillOccultism,
+	"PF2.Proficiency.Skill.Occultism",
+	"Character proficiency ranks for Occultism."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencySkillOccultismUntrained,
+	"PF2.Proficiency.Skill.Occultism.Untrained",
 	"Character is Untrained in Occultism."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillOccultismTrained,
-	"Skill.Occultism.Trained",
+	Pf2TagProficiencySkillOccultismTrained,
+	"PF2.Proficiency.Skill.Occultism.Trained",
 	"Character is Trained in Occultism."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillOccultismExpert,
-	"Skill.Occultism.Expert",
+	Pf2TagProficiencySkillOccultismExpert,
+	"PF2.Proficiency.Skill.Occultism.Expert",
 	"Character is Expert in Occultism."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillOccultismMaster,
-	"Skill.Occultism.Master",
+	Pf2TagProficiencySkillOccultismMaster,
+	"PF2.Proficiency.Skill.Occultism.Master",
 	"Character is Master in Occultism."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillOccultismLegendary,
-	"Skill.Occultism.Legendary",
+	Pf2TagProficiencySkillOccultismLegendary,
+	"PF2.Proficiency.Skill.Occultism.Legendary",
 	"Character is Legendary in Occultism."
 )
 
 // === Performance
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillPerformanceUntrained,
-	"Skill.Performance.Untrained",
+	Pf2TagProficiencySkillPerformance,
+	"PF2.Proficiency.Skill.Performance",
+	"Character proficiency ranks for Performance."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencySkillPerformanceUntrained,
+	"PF2.Proficiency.Skill.Performance.Untrained",
 	"Character is Untrained in Performance."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillPerformanceTrained,
-	"Skill.Performance.Trained",
+	Pf2TagProficiencySkillPerformanceTrained,
+	"PF2.Proficiency.Skill.Performance.Trained",
 	"Character is Trained in Performance."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillPerformanceExpert,
-	"Skill.Performance.Expert",
+	Pf2TagProficiencySkillPerformanceExpert,
+	"PF2.Proficiency.Skill.Performance.Expert",
 	"Character is Expert in Performance."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillPerformanceMaster,
-	"Skill.Performance.Master",
+	Pf2TagProficiencySkillPerformanceMaster,
+	"PF2.Proficiency.Skill.Performance.Master",
 	"Character is Master in Performance."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillPerformanceLegendary,
-	"Skill.Performance.Legendary",
+	Pf2TagProficiencySkillPerformanceLegendary,
+	"PF2.Proficiency.Skill.Performance.Legendary",
 	"Character is Legendary in Performance."
 )
 
 // === Religion
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillReligionUntrained,
-	"Skill.Religion.Untrained",
+	Pf2TagProficiencySkillReligion,
+	"PF2.Proficiency.Skill.Religion",
+	"Character proficiency ranks for Religion."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencySkillReligionUntrained,
+	"PF2.Proficiency.Skill.Religion.Untrained",
 	"Character is Untrained in Religion."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillReligionTrained,
-	"Skill.Religion.Trained",
+	Pf2TagProficiencySkillReligionTrained,
+	"PF2.Proficiency.Skill.Religion.Trained",
 	"Character is Trained in Religion."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillReligionExpert,
-	"Skill.Religion.Expert",
+	Pf2TagProficiencySkillReligionExpert,
+	"PF2.Proficiency.Skill.Religion.Expert",
 	"Character is Expert in Religion."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillReligionMaster,
-	"Skill.Religion.Master",
+	Pf2TagProficiencySkillReligionMaster,
+	"PF2.Proficiency.Skill.Religion.Master",
 	"Character is Master in Religion."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillReligionLegendary,
-	"Skill.Religion.Legendary",
+	Pf2TagProficiencySkillReligionLegendary,
+	"PF2.Proficiency.Skill.Religion.Legendary",
 	"Character is Legendary in Religion."
 )
 
 // === Society
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillSocietyUntrained,
-	"Skill.Society.Untrained",
+	Pf2TagProficiencySkillSociety,
+	"PF2.Proficiency.Skill.Society",
+	"Character proficiency ranks for Society."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencySkillSocietyUntrained,
+	"PF2.Proficiency.Skill.Society.Untrained",
 	"Character is Untrained in Society."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillSocietyTrained,
-	"Skill.Society.Trained",
+	Pf2TagProficiencySkillSocietyTrained,
+	"PF2.Proficiency.Skill.Society.Trained",
 	"Character is Trained in Society."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillSocietyExpert,
-	"Skill.Society.Expert",
+	Pf2TagProficiencySkillSocietyExpert,
+	"PF2.Proficiency.Skill.Society.Expert",
 	"Character is Expert in Society."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillSocietyMaster,
-	"Skill.Society.Master",
+	Pf2TagProficiencySkillSocietyMaster,
+	"PF2.Proficiency.Skill.Society.Master",
 	"Character is Master in Society."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillSocietyLegendary,
-	"Skill.Society.Legendary",
+	Pf2TagProficiencySkillSocietyLegendary,
+	"PF2.Proficiency.Skill.Society.Legendary",
 	"Character is Legendary in Society."
 )
 
 // === Stealth
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillStealthUntrained,
-	"Skill.Stealth.Untrained",
+	Pf2TagProficiencySkillStealth,
+	"PF2.Proficiency.Skill.Stealth",
+	"Character proficiency ranks for Stealth."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencySkillStealthUntrained,
+	"PF2.Proficiency.Skill.Stealth.Untrained",
 	"Character is Untrained in Stealth."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillStealthTrained,
-	"Skill.Stealth.Trained",
+	Pf2TagProficiencySkillStealthTrained,
+	"PF2.Proficiency.Skill.Stealth.Trained",
 	"Character is Trained in Stealth."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillStealthExpert,
-	"Skill.Stealth.Expert",
+	Pf2TagProficiencySkillStealthExpert,
+	"PF2.Proficiency.Skill.Stealth.Expert",
 	"Character is Expert in Stealth."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillStealthMaster,
-	"Skill.Stealth.Master",
+	Pf2TagProficiencySkillStealthMaster,
+	"PF2.Proficiency.Skill.Stealth.Master",
 	"Character is Master in Stealth."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillStealthLegendary,
-	"Skill.Stealth.Legendary",
+	Pf2TagProficiencySkillStealthLegendary,
+	"PF2.Proficiency.Skill.Stealth.Legendary",
 	"Character is Legendary in Stealth."
 )
 
 // === Survival
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillSurvivalUntrained,
-	"Skill.Survival.Untrained",
+	Pf2TagProficiencySkillSurvival,
+	"PF2.Proficiency.Skill.Survival",
+	"Character proficiency ranks for Survival."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencySkillSurvivalUntrained,
+	"PF2.Proficiency.Skill.Survival.Untrained",
 	"Character is Untrained in Survival."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillSurvivalTrained,
-	"Skill.Survival.Trained",
+	Pf2TagProficiencySkillSurvivalTrained,
+	"PF2.Proficiency.Skill.Survival.Trained",
 	"Character is Trained in Survival."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillSurvivalExpert,
-	"Skill.Survival.Expert",
+	Pf2TagProficiencySkillSurvivalExpert,
+	"PF2.Proficiency.Skill.Survival.Expert",
 	"Character is Expert in Survival."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillSurvivalMaster,
-	"Skill.Survival.Master",
+	Pf2TagProficiencySkillSurvivalMaster,
+	"PF2.Proficiency.Skill.Survival.Master",
 	"Character is Master in Survival."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillSurvivalLegendary,
-	"Skill.Survival.Legendary",
+	Pf2TagProficiencySkillSurvivalLegendary,
+	"PF2.Proficiency.Skill.Survival.Legendary",
 	"Character is Legendary in Survival."
 )
 
 // === Thievery
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillThieveryUntrained,
-	"Skill.Thievery.Untrained",
+	Pf2TagProficiencySkillThievery,
+	"PF2.Proficiency.Skill.Thievery",
+	"Character proficiency ranks for Thievery."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencySkillThieveryUntrained,
+	"PF2.Proficiency.Skill.Thievery.Untrained",
 	"Character is Untrained in Thievery."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillThieveryTrained,
-	"Skill.Thievery.Trained",
+	Pf2TagProficiencySkillThieveryTrained,
+	"PF2.Proficiency.Skill.Thievery.Trained",
 	"Character is Trained in Thievery."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillThieveryExpert,
-	"Skill.Thievery.Expert",
+	Pf2TagProficiencySkillThieveryExpert,
+	"PF2.Proficiency.Skill.Thievery.Expert",
 	"Character is Expert in Thievery."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillThieveryMaster,
-	"Skill.Thievery.Master",
+	Pf2TagProficiencySkillThieveryMaster,
+	"PF2.Proficiency.Skill.Thievery.Master",
 	"Character is Master in Thievery."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSkillThieveryLegendary,
-	"Skill.Thievery.Legendary",
+	Pf2TagProficiencySkillThieveryLegendary,
+	"PF2.Proficiency.Skill.Thievery.Legendary",
 	"Character is Legendary in Thievery."
 )

@@ -13,6 +13,21 @@
 #include "GameplayTags/Stats/Proficiencies/Weapons.h"
 
 // =====================================================================================================================
+// Proficiency Ranks for Weapons
+// =====================================================================================================================
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeapon,
+	"PF2.Proficiency.Weapon",
+	"Character proficiency ranks for weapons."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponCategory,
+	"PF2.Proficiency.Weapon.Category",
+	"Character proficiency ranks for broad categories of weapons."
+)
+
+// =====================================================================================================================
 // Proficiency Ranks for Unarmed Attacks
 // =====================================================================================================================
 // Weapon type mentioned in Pathfinder 2E Core Rulebook under:
@@ -29,32 +44,38 @@
 //	- Chapter 3, page 191, "Attacks" for "Sorcerer"
 //	- Chapter 3, page 203, "Attacks" for "Wizard"
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryUnarmedUntrained,
-	"WeaponProficiency.Category.Unarmed.Untrained",
+	Pf2TagProficiencyWeaponCategoryUnarmed,
+	"PF2.Proficiency.Weapon.Category.Unarmed",
+	"Character proficiency ranks for Unarmed attacks."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponCategoryUnarmedUntrained,
+	"PF2.Proficiency.Weapon.Category.Unarmed.Untrained",
 	"Character is Untrained with Unarmed attacks."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryUnarmedTrained,
-	"WeaponProficiency.Category.Unarmed.Trained",
+	Pf2TagProficiencyWeaponCategoryUnarmedTrained,
+	"PF2.Proficiency.Weapon.Category.Unarmed.Trained",
 	"Character is Trained with Unarmed attacks."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryUnarmedExpert,
-	"WeaponProficiency.Category.Unarmed.Expert",
+	Pf2TagProficiencyWeaponCategoryUnarmedExpert,
+	"PF2.Proficiency.Weapon.Category.Unarmed.Expert",
 	"Character is Expert with Unarmed attacks."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryUnarmedMaster,
-	"WeaponProficiency.Category.Unarmed.Master",
+	Pf2TagProficiencyWeaponCategoryUnarmedMaster,
+	"PF2.Proficiency.Weapon.Category.Unarmed.Master",
 	"Character is Master with Unarmed attacks."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryUnarmedLegendary,
-	"WeaponProficiency.Category.Unarmed.Legendary",
+	Pf2TagProficiencyWeaponCategoryUnarmedLegendary,
+	"PF2.Proficiency.Weapon.Category.Unarmed.Legendary",
 	"Character is Legendary with Unarmed attacks."
 )
 
@@ -74,32 +95,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 //	- Chapter 3, page 179, "Attacks" for "Rogue"
 //	- Chapter 3, page 191, "Attacks" for "Sorcerer"
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategorySimpleUntrained,
-	"WeaponProficiency.Category.Simple.Untrained",
+	Pf2TagProficiencyWeaponCategorySimple,
+	"PF2.Proficiency.Weapon.Category.Simple",
+	"Character proficiency ranks for Simple weapons."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponCategorySimpleUntrained,
+	"PF2.Proficiency.Weapon.Category.Simple.Untrained",
 	"Character is Untrained with Simple weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategorySimpleTrained,
-	"WeaponProficiency.Category.Simple.Trained",
+	Pf2TagProficiencyWeaponCategorySimpleTrained,
+	"PF2.Proficiency.Weapon.Category.Simple.Trained",
 	"Character is Trained with Simple weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategorySimpleExpert,
-	"WeaponProficiency.Category.Simple.Expert",
+	Pf2TagProficiencyWeaponCategorySimpleExpert,
+	"PF2.Proficiency.Weapon.Category.Simple.Expert",
 	"Character is Expert with Simple weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategorySimpleMaster,
-	"WeaponProficiency.Category.Simple.Master",
+	Pf2TagProficiencyWeaponCategorySimpleMaster,
+	"PF2.Proficiency.Weapon.Category.Simple.Master",
 	"Character is Master with Simple weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategorySimpleLegendary,
-	"WeaponProficiency.Category.Simple.Legendary",
+	Pf2TagProficiencyWeaponCategorySimpleLegendary,
+	"PF2.Proficiency.Weapon.Category.Simple.Legendary",
 	"Character is Legendary with Simple weapons."
 )
 
@@ -109,32 +136,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // Weapon type mentioned in Pathfinder 2E Core Rulebook under:
 //	- Chapter 3, page 141, "Attacks" for "Fighter"
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedUntrained,
-	"WeaponProficiency.Category.Advanced.Untrained",
+	Pf2TagProficiencyWeaponCategoryAdvanced,
+	"PF2.Proficiency.Weapon.Category.Advanced",
+	"Character proficiency ranks for Advanced weapons."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponCategoryAdvancedUntrained,
+	"PF2.Proficiency.Weapon.Category.Advanced.Untrained",
 	"Character is Untrained with Advanced weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedTrained,
-	"WeaponProficiency.Category.Advanced.Trained",
+	Pf2TagProficiencyWeaponCategoryAdvancedTrained,
+	"PF2.Proficiency.Weapon.Category.Advanced.Trained",
 	"Character is Trained with Advanced weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedExpert,
-	"WeaponProficiency.Category.Advanced.Expert",
+	Pf2TagProficiencyWeaponCategoryAdvancedExpert,
+	"PF2.Proficiency.Weapon.Category.Advanced.Expert",
 	"Character is Expert with Advanced weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedMaster,
-	"WeaponProficiency.Category.Advanced.Master",
+	Pf2TagProficiencyWeaponCategoryAdvancedMaster,
+	"PF2.Proficiency.Weapon.Category.Advanced.Master",
 	"Character is Master with Advanced weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedLegendary,
-	"WeaponProficiency.Category.Advanced.Legendary",
+	Pf2TagProficiencyWeaponCategoryAdvancedLegendary,
+	"PF2.Proficiency.Weapon.Category.Advanced.Legendary",
 	"Character is Legendary with Advanced weapons."
 )
 
@@ -144,32 +177,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // From the Pathfinder 2E Core Rulebook, Chapter 2, page 36, "Dwarven Weapon Familiarity":
 // "For the purpose of determining your proficiency, [...] advanced dwarf weapons are martial weapons."
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedDwarfUntrained,
-	"WeaponProficiency.Category.AdvancedDwarf.Untrained",
+	Pf2TagProficiencyWeaponCategoryAdvancedDwarf,
+	"PF2.Proficiency.Weapon.Category.AdvancedDwarf",
+	"Character proficiency ranks for Advanced Dwarf weapons."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponCategoryAdvancedDwarfUntrained,
+	"PF2.Proficiency.Weapon.Category.AdvancedDwarf.Untrained",
 	"Character is Untrained with Advanced Dwarf weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedDwarfTrained,
-	"WeaponProficiency.Category.AdvancedDwarf.Trained",
+	Pf2TagProficiencyWeaponCategoryAdvancedDwarfTrained,
+	"PF2.Proficiency.Weapon.Category.AdvancedDwarf.Trained",
 	"Character is Trained with Advanced Dwarf weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedDwarfExpert,
-	"WeaponProficiency.Category.AdvancedDwarf.Expert",
+	Pf2TagProficiencyWeaponCategoryAdvancedDwarfExpert,
+	"PF2.Proficiency.Weapon.Category.AdvancedDwarf.Expert",
 	"Character is Expert with Advanced Dwarf weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedDwarfMaster,
-	"WeaponProficiency.Category.AdvancedDwarf.Master",
+	Pf2TagProficiencyWeaponCategoryAdvancedDwarfMaster,
+	"PF2.Proficiency.Weapon.Category.AdvancedDwarf.Master",
 	"Character is Master with Advanced Dwarf weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedDwarfLegendary,
-	"WeaponProficiency.Category.AdvancedDwarf.Legendary",
+	Pf2TagProficiencyWeaponCategoryAdvancedDwarfLegendary,
+	"PF2.Proficiency.Weapon.Category.AdvancedDwarf.Legendary",
 	"Character is Legendary with Advanced Dwarf weapons."
 )
 
@@ -179,32 +218,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // From the Pathfinder 2E Core Rulebook, Chapter 2, page 40, "Elven Weapon Familiarity":
 // "For the purpose of determining your proficiency, [...] advanced elf weapons are martial weapons."
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedElfUntrained,
-	"WeaponProficiency.Category.AdvancedElf.Untrained",
+	Pf2TagProficiencyWeaponCategoryAdvancedElf,
+	"PF2.Proficiency.Weapon.Category.AdvancedElf",
+	"Character proficiency ranks for Advanced Elf weapons."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponCategoryAdvancedElfUntrained,
+	"PF2.Proficiency.Weapon.Category.AdvancedElf.Untrained",
 	"Character is Untrained with Advanced Elf weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedElfTrained,
-	"WeaponProficiency.Category.AdvancedElf.Trained",
+	Pf2TagProficiencyWeaponCategoryAdvancedElfTrained,
+	"PF2.Proficiency.Weapon.Category.AdvancedElf.Trained",
 	"Character is Trained with Advanced Elf weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedElfExpert,
-	"WeaponProficiency.Category.AdvancedElf.Expert",
+	Pf2TagProficiencyWeaponCategoryAdvancedElfExpert,
+	"PF2.Proficiency.Weapon.Category.AdvancedElf.Expert",
 	"Character is Expert with Advanced Elf weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedElfMaster,
-	"WeaponProficiency.Category.AdvancedElf.Master",
+	Pf2TagProficiencyWeaponCategoryAdvancedElfMaster,
+	"PF2.Proficiency.Weapon.Category.AdvancedElf.Master",
 	"Character is Master with Advanced Elf weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedElfLegendary,
-	"WeaponProficiency.Category.AdvancedElf.Legendary",
+	Pf2TagProficiencyWeaponCategoryAdvancedElfLegendary,
+	"PF2.Proficiency.Weapon.Category.AdvancedElf.Legendary",
 	"Character is Legendary with Advanced Elf weapons."
 )
 
@@ -214,32 +259,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // From the Pathfinder 2E Core Rulebook, Chapter 2, page 44, "Gnome Weapon Familiarity":
 // "For the purpose of determining your proficiency, [...] advanced gnome weapons are martial weapons."
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedGnomeUntrained,
-	"WeaponProficiency.Category.AdvancedGnome.Untrained",
+	Pf2TagProficiencyWeaponCategoryAdvancedGnome,
+	"PF2.Proficiency.Weapon.Category.AdvancedGnome",
+	"Character proficiency ranks for Advanced Gnome weapons."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponCategoryAdvancedGnomeUntrained,
+	"PF2.Proficiency.Weapon.Category.AdvancedGnome.Untrained",
 	"Character is Untrained with Advanced Gnome weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedGnomeTrained,
-	"WeaponProficiency.Category.AdvancedGnome.Trained",
+	Pf2TagProficiencyWeaponCategoryAdvancedGnomeTrained,
+	"PF2.Proficiency.Weapon.Category.AdvancedGnome.Trained",
 	"Character is Trained with Advanced Gnome weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedGnomeExpert,
-	"WeaponProficiency.Category.AdvancedGnome.Expert",
+	Pf2TagProficiencyWeaponCategoryAdvancedGnomeExpert,
+	"PF2.Proficiency.Weapon.Category.AdvancedGnome.Expert",
 	"Character is Expert with Advanced Gnome weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedGnomeMaster,
-	"WeaponProficiency.Category.AdvancedGnome.Master",
+	Pf2TagProficiencyWeaponCategoryAdvancedGnomeMaster,
+	"PF2.Proficiency.Weapon.Category.AdvancedGnome.Master",
 	"Character is Master with Advanced Gnome weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedGnomeLegendary,
-	"WeaponProficiency.Category.AdvancedGnome.Legendary",
+	Pf2TagProficiencyWeaponCategoryAdvancedGnomeLegendary,
+	"PF2.Proficiency.Weapon.Category.AdvancedGnome.Legendary",
 	"Character is Legendary with Advanced Gnome weapons."
 )
 
@@ -249,32 +300,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // From the Pathfinder 2E Core Rulebook, Chapter 2, page 48, "Goblin Weapon Familiarity":
 // "For the purpose of determining your proficiency, [...] advanced goblin weapons are martial weapons."
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedGoblinUntrained,
-	"WeaponProficiency.Category.AdvancedGoblin.Untrained",
+	Pf2TagProficiencyWeaponCategoryAdvancedGoblin,
+	"PF2.Proficiency.Weapon.Category.AdvancedGoblin",
+	"Character proficiency ranks for Advanced Goblin weapons."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponCategoryAdvancedGoblinUntrained,
+	"PF2.Proficiency.Weapon.Category.AdvancedGoblin.Untrained",
 	"Character is Untrained with Advanced Goblin weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedGoblinTrained,
-	"WeaponProficiency.Category.AdvancedGoblin.Trained",
+	Pf2TagProficiencyWeaponCategoryAdvancedGoblinTrained,
+	"PF2.Proficiency.Weapon.Category.AdvancedGoblin.Trained",
 	"Character is Trained with Advanced Goblin weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedGoblinExpert,
-	"WeaponProficiency.Category.AdvancedGoblin.Expert",
+	Pf2TagProficiencyWeaponCategoryAdvancedGoblinExpert,
+	"PF2.Proficiency.Weapon.Category.AdvancedGoblin.Expert",
 	"Character is Expert with Advanced Goblin weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedGoblinMaster,
-	"WeaponProficiency.Category.AdvancedGoblin.Master",
+	Pf2TagProficiencyWeaponCategoryAdvancedGoblinMaster,
+	"PF2.Proficiency.Weapon.Category.AdvancedGoblin.Master",
 	"Character is Master with Advanced Goblin weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedGoblinLegendary,
-	"WeaponProficiency.Category.AdvancedGoblin.Legendary",
+	Pf2TagProficiencyWeaponCategoryAdvancedGoblinLegendary,
+	"PF2.Proficiency.Weapon.Category.AdvancedGoblin.Legendary",
 	"Character is Legendary with Advanced Goblin weapons."
 )
 
@@ -284,32 +341,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // From the Pathfinder 2E Core Rulebook, Chapter 2, page 52, "Halfling Weapon Familiarity":
 // "For the purpose of determining your proficiency, [...] advanced halfling weapons are martial weapons."
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedHalflingUntrained,
-	"WeaponProficiency.Category.AdvancedHalfling.Untrained",
+	Pf2TagProficiencyWeaponCategoryAdvancedHalfling,
+	"PF2.Proficiency.Weapon.Category.AdvancedHalfling",
+	"Character proficiency ranks for Advanced Halfling weapons."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponCategoryAdvancedHalflingUntrained,
+	"PF2.Proficiency.Weapon.Category.AdvancedHalfling.Untrained",
 	"Character is Untrained with Advanced Halfling weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedHalflingTrained,
-	"WeaponProficiency.Category.AdvancedHalfling.Trained",
+	Pf2TagProficiencyWeaponCategoryAdvancedHalflingTrained,
+	"PF2.Proficiency.Weapon.Category.AdvancedHalfling.Trained",
 	"Character is Trained with Advanced Halfling weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedHalflingExpert,
-	"WeaponProficiency.Category.AdvancedHalfling.Expert",
+	Pf2TagProficiencyWeaponCategoryAdvancedHalflingExpert,
+	"PF2.Proficiency.Weapon.Category.AdvancedHalfling.Expert",
 	"Character is Expert with Advanced Halfling weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedHalflingMaster,
-	"WeaponProficiency.Category.AdvancedHalfling.Master",
+	Pf2TagProficiencyWeaponCategoryAdvancedHalflingMaster,
+	"PF2.Proficiency.Weapon.Category.AdvancedHalfling.Master",
 	"Character is Master with Advanced Halfling weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryAdvancedHalflingLegendary,
-	"WeaponProficiency.Category.AdvancedHalfling.Legendary",
+	Pf2TagProficiencyWeaponCategoryAdvancedHalflingLegendary,
+	"PF2.Proficiency.Weapon.Category.AdvancedHalfling.Legendary",
 	"Character is Legendary with Advanced Halfling weapons."
 )
 
@@ -322,32 +385,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 //	- Chapter 3, page 141, "Attacks" for "Fighter"
 //	- Chapter 3, page 167, "Attacks" for "Ranger"
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialUntrained,
-	"WeaponProficiency.Category.Martial.Untrained",
+	Pf2TagProficiencyWeaponCategoryMartial,
+	"PF2.Proficiency.Weapon.Category.Martial",
+	"Character proficiency ranks for Martial weapons."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponCategoryMartialUntrained,
+	"PF2.Proficiency.Weapon.Category.Martial.Untrained",
 	"Character is Untrained with Martial weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialTrained,
-	"WeaponProficiency.Category.Martial.Trained",
+	Pf2TagProficiencyWeaponCategoryMartialTrained,
+	"PF2.Proficiency.Weapon.Category.Martial.Trained",
 	"Character is Trained with Martial weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialExpert,
-	"WeaponProficiency.Category.Martial.Expert",
+	Pf2TagProficiencyWeaponCategoryMartialExpert,
+	"PF2.Proficiency.Weapon.Category.Martial.Expert",
 	"Character is Expert with Martial weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialMaster,
-	"WeaponProficiency.Category.Martial.Master",
+	Pf2TagProficiencyWeaponCategoryMartialMaster,
+	"PF2.Proficiency.Weapon.Category.Martial.Master",
 	"Character is Master with Martial weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialLegendary,
-	"WeaponProficiency.Category.Martial.Legendary",
+	Pf2TagProficiencyWeaponCategoryMartialLegendary,
+	"PF2.Proficiency.Weapon.Category.Martial.Legendary",
 	"Character is Legendary with Martial weapons."
 )
 
@@ -357,32 +426,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // From the Pathfinder 2E Core Rulebook, Chapter 2, page 36, "Dwarven Weapon Familiarity":
 // "For the purpose of determining your proficiency, martial dwarf weapons are simple weapons..."
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialDwarfUntrained,
-	"WeaponProficiency.Category.MartialDwarf.Untrained",
+	Pf2TagProficiencyWeaponCategoryMartialDwarf,
+	"PF2.Proficiency.Weapon.Category.MartialDwarf",
+	"Character proficiency ranks for Martial Dwarf weapons."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponCategoryMartialDwarfUntrained,
+	"PF2.Proficiency.Weapon.Category.MartialDwarf.Untrained",
 	"Character is Untrained with Martial Dwarf weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialDwarfTrained,
-	"WeaponProficiency.Category.MartialDwarf.Trained",
+	Pf2TagProficiencyWeaponCategoryMartialDwarfTrained,
+	"PF2.Proficiency.Weapon.Category.MartialDwarf.Trained",
 	"Character is Trained with Martial Dwarf weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialDwarfExpert,
-	"WeaponProficiency.Category.MartialDwarf.Expert",
+	Pf2TagProficiencyWeaponCategoryMartialDwarfExpert,
+	"PF2.Proficiency.Weapon.Category.MartialDwarf.Expert",
 	"Character is Expert with Martial Dwarf weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialDwarfMaster,
-	"WeaponProficiency.Category.MartialDwarf.Master",
+	Pf2TagProficiencyWeaponCategoryMartialDwarfMaster,
+	"PF2.Proficiency.Weapon.Category.MartialDwarf.Master",
 	"Character is Master with Martial Dwarf weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialDwarfLegendary,
-	"WeaponProficiency.Category.MartialDwarf.Legendary",
+	Pf2TagProficiencyWeaponCategoryMartialDwarfLegendary,
+	"PF2.Proficiency.Weapon.Category.MartialDwarf.Legendary",
 	"Character is Legendary with Martial Dwarf weapons."
 )
 
@@ -392,32 +467,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // From the Pathfinder 2E Core Rulebook, Chapter 2, page 40, "Elven Weapon Familiarity":
 // "For the purpose of determining your proficiency, martial elf weapons are simple weapons..."
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialElfUntrained,
-	"WeaponProficiency.Category.MartialElf.Untrained",
+	Pf2TagProficiencyWeaponCategoryMartialElf,
+	"PF2.Proficiency.Weapon.Category.MartialElf",
+	"Character proficiency ranks for Martial Elf weapons."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponCategoryMartialElfUntrained,
+	"PF2.Proficiency.Weapon.Category.MartialElf.Untrained",
 	"Character is Untrained with Martial Elf weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialElfTrained,
-	"WeaponProficiency.Category.MartialElf.Trained",
+	Pf2TagProficiencyWeaponCategoryMartialElfTrained,
+	"PF2.Proficiency.Weapon.Category.MartialElf.Trained",
 	"Character is Trained with Martial Elf weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialElfExpert,
-	"WeaponProficiency.Category.MartialElf.Expert",
+	Pf2TagProficiencyWeaponCategoryMartialElfExpert,
+	"PF2.Proficiency.Weapon.Category.MartialElf.Expert",
 	"Character is Expert with Martial Elf weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialElfMaster,
-	"WeaponProficiency.Category.MartialElf.Master",
+	Pf2TagProficiencyWeaponCategoryMartialElfMaster,
+	"PF2.Proficiency.Weapon.Category.MartialElf.Master",
 	"Character is Master with Martial Elf weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialElfLegendary,
-	"WeaponProficiency.Category.MartialElf.Legendary",
+	Pf2TagProficiencyWeaponCategoryMartialElfLegendary,
+	"PF2.Proficiency.Weapon.Category.MartialElf.Legendary",
 	"Character is Legendary with Martial Elf weapons."
 )
 
@@ -427,32 +508,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // From the Pathfinder 2E Core Rulebook, Chapter 2, page 44, "Gnome Weapon Familiarity":
 // "For the purpose of determining your proficiency, martial gnome weapons are simple weapons..."
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialGnomeUntrained,
-	"WeaponProficiency.Category.MartialGnome.Untrained",
+	Pf2TagProficiencyWeaponCategoryMartialGnome,
+	"PF2.Proficiency.Weapon.Category.MartialGnome",
+	"Character proficiency ranks for Martial Gnome weapons."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponCategoryMartialGnomeUntrained,
+	"PF2.Proficiency.Weapon.Category.MartialGnome.Untrained",
 	"Character is Untrained with Martial Gnome weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialGnomeTrained,
-	"WeaponProficiency.Category.MartialGnome.Trained",
+	Pf2TagProficiencyWeaponCategoryMartialGnomeTrained,
+	"PF2.Proficiency.Weapon.Category.MartialGnome.Trained",
 	"Character is Trained with Martial Gnome weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialGnomeExpert,
-	"WeaponProficiency.Category.MartialGnome.Expert",
+	Pf2TagProficiencyWeaponCategoryMartialGnomeExpert,
+	"PF2.Proficiency.Weapon.Category.MartialGnome.Expert",
 	"Character is Expert with Martial Gnome weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialGnomeMaster,
-	"WeaponProficiency.Category.MartialGnome.Master",
+	Pf2TagProficiencyWeaponCategoryMartialGnomeMaster,
+	"PF2.Proficiency.Weapon.Category.MartialGnome.Master",
 	"Character is Master with Martial Gnome weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialGnomeLegendary,
-	"WeaponProficiency.Category.MartialGnome.Legendary",
+	Pf2TagProficiencyWeaponCategoryMartialGnomeLegendary,
+	"PF2.Proficiency.Weapon.Category.MartialGnome.Legendary",
 	"Character is Legendary with Martial Gnome weapons."
 )
 
@@ -462,32 +549,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // From the Pathfinder 2E Core Rulebook, Chapter 2, page 48, "Goblin Weapon Familiarity":
 // "For the purpose of determining your proficiency, martial goblin weapons are simple weapons..."
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialGoblinUntrained,
-	"WeaponProficiency.Category.MartialGoblin.Untrained",
+	Pf2TagProficiencyWeaponCategoryMartialGoblin,
+	"PF2.Proficiency.Weapon.Category.MartialGoblin",
+	"Character proficiency ranks for Martial Goblin weapons."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponCategoryMartialGoblinUntrained,
+	"PF2.Proficiency.Weapon.Category.MartialGoblin.Untrained",
 	"Character is Untrained with Martial Goblin weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialGoblinTrained,
-	"WeaponProficiency.Category.MartialGoblin.Trained",
+	Pf2TagProficiencyWeaponCategoryMartialGoblinTrained,
+	"PF2.Proficiency.Weapon.Category.MartialGoblin.Trained",
 	"Character is Trained with Martial Goblin weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialGoblinExpert,
-	"WeaponProficiency.Category.MartialGoblin.Expert",
+	Pf2TagProficiencyWeaponCategoryMartialGoblinExpert,
+	"PF2.Proficiency.Weapon.Category.MartialGoblin.Expert",
 	"Character is Expert with Martial Goblin weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialGoblinMaster,
-	"WeaponProficiency.Category.MartialGoblin.Master",
+	Pf2TagProficiencyWeaponCategoryMartialGoblinMaster,
+	"PF2.Proficiency.Weapon.Category.MartialGoblin.Master",
 	"Character is Master with Martial Goblin weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialGoblinLegendary,
-	"WeaponProficiency.Category.MartialGoblin.Legendary",
+	Pf2TagProficiencyWeaponCategoryMartialGoblinLegendary,
+	"PF2.Proficiency.Weapon.Category.MartialGoblin.Legendary",
 	"Character is Legendary with Martial Goblin weapons."
 )
 
@@ -497,32 +590,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // From the Pathfinder 2E Core Rulebook, Chapter 2, page 52, "Halfling Weapon Familiarity":
 // "For the purpose of determining your proficiency, martial halfling weapons are simple weapons..."
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialHalflingUntrained,
-	"WeaponProficiency.Category.MartialHalfling.Untrained",
+	Pf2TagProficiencyWeaponCategoryMartialHalfling,
+	"PF2.Proficiency.Weapon.Category.MartialHalfling",
+	"Character proficiency ranks for Martial Halfling weapons."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponCategoryMartialHalflingUntrained,
+	"PF2.Proficiency.Weapon.Category.MartialHalfling.Untrained",
 	"Character is Untrained with Martial Halfling weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialHalflingTrained,
-	"WeaponProficiency.Category.MartialHalfling.Trained",
+	Pf2TagProficiencyWeaponCategoryMartialHalflingTrained,
+	"PF2.Proficiency.Weapon.Category.MartialHalfling.Trained",
 	"Character is Trained with Martial Halfling weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialHalflingExpert,
-	"WeaponProficiency.Category.MartialHalfling.Expert",
+	Pf2TagProficiencyWeaponCategoryMartialHalflingExpert,
+	"PF2.Proficiency.Weapon.Category.MartialHalfling.Expert",
 	"Character is Expert with Martial Halfling weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialHalflingMaster,
-	"WeaponProficiency.Category.MartialHalfling.Master",
+	Pf2TagProficiencyWeaponCategoryMartialHalflingMaster,
+	"PF2.Proficiency.Weapon.Category.MartialHalfling.Master",
 	"Character is Master with Martial Halfling weapons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCategoryMartialHalflingLegendary,
-	"WeaponProficiency.Category.MartialHalfling.Legendary",
+	Pf2TagProficiencyWeaponCategoryMartialHalflingLegendary,
+	"PF2.Proficiency.Weapon.Category.MartialHalfling.Legendary",
 	"Character is Legendary with Martial Halfling weapons."
 )
 
@@ -532,32 +631,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // Weapon type mentioned in Pathfinder 2E Core Rulebook under:
 //	- Chapter 3, page 71, "Attacks" for "Alchemist"
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyAlchemicalBombUntrained,
-	"WeaponProficiency.AlchemicalBomb.Untrained",
+	Pf2TagProficiencyWeaponAlchemicalBomb,
+	"PF2.Proficiency.Weapon.AlchemicalBomb",
+	"Character proficiency ranks for Alchemical Bombs."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponAlchemicalBombUntrained,
+	"PF2.Proficiency.Weapon.AlchemicalBomb.Untrained",
 	"Character is Untrained with Alchemical Bombs."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyAlchemicalBombTrained,
-	"WeaponProficiency.AlchemicalBomb.Trained",
+	Pf2TagProficiencyWeaponAlchemicalBombTrained,
+	"PF2.Proficiency.Weapon.AlchemicalBomb.Trained",
 	"Character is Trained with Alchemical Bombs."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyAlchemicalBombExpert,
-	"WeaponProficiency.AlchemicalBomb.Expert",
+	Pf2TagProficiencyWeaponAlchemicalBombExpert,
+	"PF2.Proficiency.Weapon.AlchemicalBomb.Expert",
 	"Character is Expert with Alchemical Bombs."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyAlchemicalBombMaster,
-	"WeaponProficiency.AlchemicalBomb.Master",
+	Pf2TagProficiencyWeaponAlchemicalBombMaster,
+	"PF2.Proficiency.Weapon.AlchemicalBomb.Master",
 	"Character is Master with Alchemical Bombs."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyAlchemicalBombLegendary,
-	"WeaponProficiency.AlchemicalBomb.Legendary",
+	Pf2TagProficiencyWeaponAlchemicalBombLegendary,
+	"PF2.Proficiency.Weapon.AlchemicalBomb.Legendary",
 	"Character is Legendary with Alchemical Bombs."
 )
 
@@ -566,32 +671,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // =====================================================================================================================
 // Weapon mentioned in Pathfinder 2E Core Rulebook, Chapter 2, page 36, "Dwarven Weapon Familiarity".
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyBattleAxeUntrained,
-	"WeaponProficiency.BattleAxe.Untrained",
+	Pf2TagProficiencyWeaponBattleAxe,
+	"PF2.Proficiency.Weapon.BattleAxe",
+	"Character proficiency ranks for Battle Axes."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponBattleAxeUntrained,
+	"PF2.Proficiency.Weapon.BattleAxe.Untrained",
 	"Character is Untrained with Battle Axes."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyBattleAxeTrained,
-	"WeaponProficiency.BattleAxe.Trained",
+	Pf2TagProficiencyWeaponBattleAxeTrained,
+	"PF2.Proficiency.Weapon.BattleAxe.Trained",
 	"Character is Trained with Battle Axes."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyBattleAxeExpert,
-	"WeaponProficiency.BattleAxe.Expert",
+	Pf2TagProficiencyWeaponBattleAxeExpert,
+	"PF2.Proficiency.Weapon.BattleAxe.Expert",
 	"Character is Expert with Battle Axes."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyBattleAxeMaster,
-	"WeaponProficiency.BattleAxe.Master",
+	Pf2TagProficiencyWeaponBattleAxeMaster,
+	"PF2.Proficiency.Weapon.BattleAxe.Master",
 	"Character is Master with Battle Axes."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyBattleAxeLegendary,
-	"WeaponProficiency.BattleAxe.Legendary",
+	Pf2TagProficiencyWeaponBattleAxeLegendary,
+	"PF2.Proficiency.Weapon.BattleAxe.Legendary",
 	"Character is Legendary with Battle Axes."
 )
 
@@ -601,32 +712,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // Weapon mentioned in Pathfinder 2E Core Rulebook, under:
 //	- Chapter 3, page 203, "Attacks" for "Wizard"
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyClubUntrained,
-	"WeaponProficiency.Club.Untrained",
+	Pf2TagProficiencyWeaponClub,
+	"PF2.Proficiency.Weapon.Club",
+	"Character proficiency ranks for Clubs."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponClubUntrained,
+	"PF2.Proficiency.Weapon.Club.Untrained",
 	"Character is Untrained with Clubs."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyClubTrained,
-	"WeaponProficiency.Club.Trained",
+	Pf2TagProficiencyWeaponClubTrained,
+	"PF2.Proficiency.Weapon.Club.Trained",
 	"Character is Trained with Clubs."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyClubExpert,
-	"WeaponProficiency.Club.Expert",
+	Pf2TagProficiencyWeaponClubExpert,
+	"PF2.Proficiency.Weapon.Club.Expert",
 	"Character is Expert with Clubs."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyClubMaster,
-	"WeaponProficiency.Club.Master",
+	Pf2TagProficiencyWeaponClubMaster,
+	"PF2.Proficiency.Weapon.Club.Master",
 	"Character is Master with Clubs."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyClubLegendary,
-	"WeaponProficiency.Club.Legendary",
+	Pf2TagProficiencyWeaponClubLegendary,
+	"PF2.Proficiency.Weapon.Club.Legendary",
 	"Character is Legendary with Clubs."
 )
 
@@ -635,32 +752,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // =====================================================================================================================
 // Weapon mentioned in Pathfinder 2E Core Rulebook, Chapter 2, page 40, "Elven Weapon Familiarity".
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCompositeLongbowUntrained,
-	"WeaponProficiency.CompositeLongbow.Untrained",
+	Pf2TagProficiencyWeaponCompositeLongbow,
+	"PF2.Proficiency.Weapon.CompositeLongbow",
+	"Character proficiency ranks for Composite Longbows."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponCompositeLongbowUntrained,
+	"PF2.Proficiency.Weapon.CompositeLongbow.Untrained",
 	"Character is Untrained with Composite Longbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCompositeLongbowTrained,
-	"WeaponProficiency.CompositeLongbow.Trained",
+	Pf2TagProficiencyWeaponCompositeLongbowTrained,
+	"PF2.Proficiency.Weapon.CompositeLongbow.Trained",
 	"Character is Trained with Composite Longbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCompositeLongbowExpert,
-	"WeaponProficiency.CompositeLongbow.Expert",
+	Pf2TagProficiencyWeaponCompositeLongbowExpert,
+	"PF2.Proficiency.Weapon.CompositeLongbow.Expert",
 	"Character is Expert with Composite Longbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCompositeLongbowMaster,
-	"WeaponProficiency.CompositeLongbow.Master",
+	Pf2TagProficiencyWeaponCompositeLongbowMaster,
+	"PF2.Proficiency.Weapon.CompositeLongbow.Master",
 	"Character is Master with Composite Longbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCompositeLongbowLegendary,
-	"WeaponProficiency.CompositeLongbow.Legendary",
+	Pf2TagProficiencyWeaponCompositeLongbowLegendary,
+	"PF2.Proficiency.Weapon.CompositeLongbow.Legendary",
 	"Character is Legendary with Composite Longbows."
 )
 
@@ -669,32 +792,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // =====================================================================================================================
 // Weapon mentioned in Pathfinder 2E Core Rulebook, Chapter 2, page 40, "Elven Weapon Familiarity".
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCompositeShortbowUntrained,
-	"WeaponProficiency.CompositeShortbow.Untrained",
+	Pf2TagProficiencyWeaponCompositeShortbow,
+	"PF2.Proficiency.Weapon.CompositeShortbow",
+	"Character proficiency ranks for Composite Shortbows."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponCompositeShortbowUntrained,
+	"PF2.Proficiency.Weapon.CompositeShortbow.Untrained",
 	"Character is Untrained with Composite Shortbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCompositeShortbowTrained,
-	"WeaponProficiency.CompositeShortbow.Trained",
+	Pf2TagProficiencyWeaponCompositeShortbowTrained,
+	"PF2.Proficiency.Weapon.CompositeShortbow.Trained",
 	"Character is Trained with Composite Shortbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCompositeShortbowExpert,
-	"WeaponProficiency.CompositeShortbow.Expert",
+	Pf2TagProficiencyWeaponCompositeShortbowExpert,
+	"PF2.Proficiency.Weapon.CompositeShortbow.Expert",
 	"Character is Expert with Composite Shortbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCompositeShortbowMaster,
-	"WeaponProficiency.CompositeShortbow.Master",
+	Pf2TagProficiencyWeaponCompositeShortbowMaster,
+	"PF2.Proficiency.Weapon.CompositeShortbow.Master",
 	"Character is Master with Composite Shortbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCompositeShortbowLegendary,
-	"WeaponProficiency.CompositeShortbow.Legendary",
+	Pf2TagProficiencyWeaponCompositeShortbowLegendary,
+	"PF2.Proficiency.Weapon.CompositeShortbow.Legendary",
 	"Character is Legendary with Composite Shortbows."
 )
 
@@ -704,32 +833,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // Weapon mentioned in Pathfinder 2E Core Rulebook, under:
 //	- Chapter 3, page 203, "Attacks" for "Wizard"
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCrossbowUntrained,
-	"WeaponProficiency.Crossbow.Untrained",
+	Pf2TagProficiencyWeaponCrossbow,
+	"PF2.Proficiency.Weapon.Crossbow",
+	"Character proficiency ranks for Crossbows."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponCrossbowUntrained,
+	"PF2.Proficiency.Weapon.Crossbow.Untrained",
 	"Character is Untrained with Crossbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCrossbowTrained,
-	"WeaponProficiency.Crossbow.Trained",
+	Pf2TagProficiencyWeaponCrossbowTrained,
+	"PF2.Proficiency.Weapon.Crossbow.Trained",
 	"Character is Trained with Crossbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCrossbowExpert,
-	"WeaponProficiency.Crossbow.Expert",
+	Pf2TagProficiencyWeaponCrossbowExpert,
+	"PF2.Proficiency.Weapon.Crossbow.Expert",
 	"Character is Expert with Crossbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCrossbowMaster,
-	"WeaponProficiency.Crossbow.Master",
+	Pf2TagProficiencyWeaponCrossbowMaster,
+	"PF2.Proficiency.Weapon.Crossbow.Master",
 	"Character is Master with Crossbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyCrossbowLegendary,
-	"WeaponProficiency.Crossbow.Legendary",
+	Pf2TagProficiencyWeaponCrossbowLegendary,
+	"PF2.Proficiency.Weapon.Crossbow.Legendary",
 	"Character is Legendary with Crossbows."
 )
 
@@ -739,32 +874,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // Weapon mentioned in Pathfinder 2E Core Rulebook, under:
 //	- Chapter 3, page 203, "Attacks" for "Wizard"
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyDaggerUntrained,
-	"WeaponProficiency.Dagger.Untrained",
+	Pf2TagProficiencyWeaponDagger,
+	"PF2.Proficiency.Weapon.Dagger",
+	"Character proficiency ranks for Daggers."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponDaggerUntrained,
+	"PF2.Proficiency.Weapon.Dagger.Untrained",
 	"Character is Untrained with Daggers."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyDaggerTrained,
-	"WeaponProficiency.Dagger.Trained",
+	Pf2TagProficiencyWeaponDaggerTrained,
+	"PF2.Proficiency.Weapon.Dagger.Trained",
 	"Character is Trained with Daggers."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyDaggerExpert,
-	"WeaponProficiency.Dagger.Expert",
+	Pf2TagProficiencyWeaponDaggerExpert,
+	"PF2.Proficiency.Weapon.Dagger.Expert",
 	"Character is Expert with Daggers."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyDaggerMaster,
-	"WeaponProficiency.Dagger.Master",
+	Pf2TagProficiencyWeaponDaggerMaster,
+	"PF2.Proficiency.Weapon.Dagger.Master",
 	"Character is Master with Daggers."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyDaggerLegendary,
-	"WeaponProficiency.Dagger.Legendary",
+	Pf2TagProficiencyWeaponDaggerLegendary,
+	"PF2.Proficiency.Weapon.Dagger.Legendary",
 	"Character is Legendary with Daggers."
 )
 
@@ -773,32 +914,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // =====================================================================================================================
 // Weapon mentioned in Pathfinder 2E Core Rulebook, Chapter 2, page 48, "Goblin Weapon Familiarity".
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyDogslicerUntrained,
-	"WeaponProficiency.Dogslicer.Untrained",
+	Pf2TagProficiencyWeaponDogslicer,
+	"PF2.Proficiency.Weapon.Dogslicer",
+	"Character proficiency ranks for Dogslicers."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponDogslicerUntrained,
+	"PF2.Proficiency.Weapon.Dogslicer.Untrained",
 	"Character is Untrained with Dogslicers."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyDogslicerTrained,
-	"WeaponProficiency.Dogslicer.Trained",
+	Pf2TagProficiencyWeaponDogslicerTrained,
+	"PF2.Proficiency.Weapon.Dogslicer.Trained",
 	"Character is Trained with Dogslicers."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyDogslicerExpert,
-	"WeaponProficiency.Dogslicer.Expert",
+	Pf2TagProficiencyWeaponDogslicerExpert,
+	"PF2.Proficiency.Weapon.Dogslicer.Expert",
 	"Character is Expert with Dogslicers."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyDogslicerMaster,
-	"WeaponProficiency.Dogslicer.Master",
+	Pf2TagProficiencyWeaponDogslicerMaster,
+	"PF2.Proficiency.Weapon.Dogslicer.Master",
 	"Character is Master with Dogslicers."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyDogslicerLegendary,
-	"WeaponProficiency.Dogslicer.Legendary",
+	Pf2TagProficiencyWeaponDogslicerLegendary,
+	"PF2.Proficiency.Weapon.Dogslicer.Legendary",
 	"Character is Legendary with Dogslicers."
 )
 
@@ -807,32 +954,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // =====================================================================================================================
 // Weapon mentioned in Pathfinder 2E Core Rulebook, Chapter 2, page 58, "Orc Weapon Familiarity".
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyFalchionUntrained,
-	"WeaponProficiency.Falchion.Untrained",
+	Pf2TagProficiencyWeaponFalchion,
+	"PF2.Proficiency.Weapon.Falchion",
+	"Character proficiency ranks for Falchions."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponFalchionUntrained,
+	"PF2.Proficiency.Weapon.Falchion.Untrained",
 	"Character is Untrained with Falchions."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyFalchionTrained,
-	"WeaponProficiency.Falchion.Trained",
+	Pf2TagProficiencyWeaponFalchionTrained,
+	"PF2.Proficiency.Weapon.Falchion.Trained",
 	"Character is Trained with Falchions."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyFalchionExpert,
-	"WeaponProficiency.Falchion.Expert",
+	Pf2TagProficiencyWeaponFalchionExpert,
+	"PF2.Proficiency.Weapon.Falchion.Expert",
 	"Character is Expert with Falchions."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyFalchionMaster,
-	"WeaponProficiency.Falchion.Master",
+	Pf2TagProficiencyWeaponFalchionMaster,
+	"PF2.Proficiency.Weapon.Falchion.Master",
 	"Character is Master with Falchions."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyFalchionLegendary,
-	"WeaponProficiency.Falchion.Legendary",
+	Pf2TagProficiencyWeaponFalchionLegendary,
+	"PF2.Proficiency.Weapon.Falchion.Legendary",
 	"Character is Legendary with Falchions."
 )
 
@@ -841,32 +994,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // =====================================================================================================================
 // Weapon mentioned in Pathfinder 2E Core Rulebook, Chapter 2, page 44, "Gnome Weapon Familiarity".
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyGlaiveUntrained,
-	"WeaponProficiency.Glaive.Untrained",
+	Pf2TagProficiencyWeaponGlaive,
+	"PF2.Proficiency.Weapon.Glaive",
+	"Character proficiency ranks for Glaives."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponGlaiveUntrained,
+	"PF2.Proficiency.Weapon.Glaive.Untrained",
 	"Character is Untrained with Glaives."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyGlaiveTrained,
-	"WeaponProficiency.Glaive.Trained",
+	Pf2TagProficiencyWeaponGlaiveTrained,
+	"PF2.Proficiency.Weapon.Glaive.Trained",
 	"Character is Trained with Glaives."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyGlaiveExpert,
-	"WeaponProficiency.Glaive.Expert",
+	Pf2TagProficiencyWeaponGlaiveExpert,
+	"PF2.Proficiency.Weapon.Glaive.Expert",
 	"Character is Expert with Glaives."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyGlaiveMaster,
-	"WeaponProficiency.Glaive.Master",
+	Pf2TagProficiencyWeaponGlaiveMaster,
+	"PF2.Proficiency.Weapon.Glaive.Master",
 	"Character is Master with Glaives."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyGlaiveLegendary,
-	"WeaponProficiency.Glaive.Legendary",
+	Pf2TagProficiencyWeaponGlaiveLegendary,
+	"PF2.Proficiency.Weapon.Glaive.Legendary",
 	"Character is Legendary with Glaives."
 )
 
@@ -875,32 +1034,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // =====================================================================================================================
 // Weapon mentioned in Pathfinder 2E Core Rulebook, Chapter 2, page 58, "Orc Weapon Familiarity".
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyGreataxeUntrained,
-	"WeaponProficiency.Greataxe.Untrained",
+	Pf2TagProficiencyWeaponGreataxe,
+	"PF2.Proficiency.Weapon.Greataxe",
+	"Character proficiency ranks for Greataxes."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponGreataxeUntrained,
+	"PF2.Proficiency.Weapon.Greataxe.Untrained",
 	"Character is Untrained with Greataxes."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyGreataxeTrained,
-	"WeaponProficiency.Greataxe.Trained",
+	Pf2TagProficiencyWeaponGreataxeTrained,
+	"PF2.Proficiency.Weapon.Greataxe.Trained",
 	"Character is Trained with Greataxes."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyGreataxeExpert,
-	"WeaponProficiency.Greataxe.Expert",
+	Pf2TagProficiencyWeaponGreataxeExpert,
+	"PF2.Proficiency.Weapon.Greataxe.Expert",
 	"Character is Expert with Greataxes."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyGreataxeMaster,
-	"WeaponProficiency.Greataxe.Master",
+	Pf2TagProficiencyWeaponGreataxeMaster,
+	"PF2.Proficiency.Weapon.Greataxe.Master",
 	"Character is Master with Greataxes."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyGreataxeLegendary,
-	"WeaponProficiency.Greataxe.Legendary",
+	Pf2TagProficiencyWeaponGreataxeLegendary,
+	"PF2.Proficiency.Weapon.Greataxe.Legendary",
 	"Character is Legendary with Greataxes."
 )
 
@@ -909,32 +1074,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // =====================================================================================================================
 // Weapon mentioned in Pathfinder 2E Core Rulebook, Chapter 2, page 52, "Halfling Weapon Familiarity".
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyHalflingSlingStaffUntrained,
-	"WeaponProficiency.HalflingSlingStaff.Untrained",
+	Pf2TagProficiencyWeaponHalflingSlingStaff,
+	"PF2.Proficiency.Weapon.HalflingSlingStaff",
+	"Character proficiency ranks for Halfling Sling Staves."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponHalflingSlingStaffUntrained,
+	"PF2.Proficiency.Weapon.HalflingSlingStaff.Untrained",
 	"Character is Untrained with Halfling Sling Staves."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyHalflingSlingStaffTrained,
-	"WeaponProficiency.HalflingSlingStaff.Trained",
+	Pf2TagProficiencyWeaponHalflingSlingStaffTrained,
+	"PF2.Proficiency.Weapon.HalflingSlingStaff.Trained",
 	"Character is Trained with Halfling Sling Staves."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyHalflingSlingStaffExpert,
-	"WeaponProficiency.HalflingSlingStaff.Expert",
+	Pf2TagProficiencyWeaponHalflingSlingStaffExpert,
+	"PF2.Proficiency.Weapon.HalflingSlingStaff.Expert",
 	"Character is Expert with Halfling Sling Staves."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyHalflingSlingStaffMaster,
-	"WeaponProficiency.HalflingSlingStaff.Master",
+	Pf2TagProficiencyWeaponHalflingSlingStaffMaster,
+	"PF2.Proficiency.Weapon.HalflingSlingStaff.Master",
 	"Character is Master with Halfling Sling Staves."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyHalflingSlingStaffLegendary,
-	"WeaponProficiency.HalflingSlingStaff.Legendary",
+	Pf2TagProficiencyWeaponHalflingSlingStaffLegendary,
+	"PF2.Proficiency.Weapon.HalflingSlingStaff.Legendary",
 	"Character is Legendary with Halfling Sling Staves."
 )
 
@@ -944,32 +1115,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // Weapon mentioned in Pathfinder 2E Core Rulebook, under:
 //	- Chapter 3, page 203, "Attacks" for "Wizard"
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyHeavyCrossbowUntrained,
-	"WeaponProficiency.HeavyCrossbow.Untrained",
+	Pf2TagProficiencyWeaponHeavyCrossbow,
+	"PF2.Proficiency.Weapon.HeavyCrossbow",
+	"Character proficiency ranks for Heavy Crossbows."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponHeavyCrossbowUntrained,
+	"PF2.Proficiency.Weapon.HeavyCrossbow.Untrained",
 	"Character is Untrained with Heavy Crossbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyHeavyCrossbowTrained,
-	"WeaponProficiency.HeavyCrossbow.Trained",
+	Pf2TagProficiencyWeaponHeavyCrossbowTrained,
+	"PF2.Proficiency.Weapon.HeavyCrossbow.Trained",
 	"Character is Trained with Heavy Crossbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyHeavyCrossbowExpert,
-	"WeaponProficiency.HeavyCrossbow.Expert",
+	Pf2TagProficiencyWeaponHeavyCrossbowExpert,
+	"PF2.Proficiency.Weapon.HeavyCrossbow.Expert",
 	"Character is Expert with Heavy Crossbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyHeavyCrossbowMaster,
-	"WeaponProficiency.HeavyCrossbow.Master",
+	Pf2TagProficiencyWeaponHeavyCrossbowMaster,
+	"PF2.Proficiency.Weapon.HeavyCrossbow.Master",
 	"Character is Master with Heavy Crossbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyHeavyCrossbowLegendary,
-	"WeaponProficiency.HeavyCrossbow.Legendary",
+	Pf2TagProficiencyWeaponHeavyCrossbowLegendary,
+	"PF2.Proficiency.Weapon.HeavyCrossbow.Legendary",
 	"Character is Legendary with Heavy Crossbows."
 )
 
@@ -978,32 +1155,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // =====================================================================================================================
 // Weapon mentioned in Pathfinder 2E Core Rulebook, Chapter 2, page 48, "Goblin Weapon Familiarity".
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyHorsechopperUntrained,
-	"WeaponProficiency.Horsechopper.Untrained",
+	Pf2TagProficiencyWeaponHorsechopper,
+	"PF2.Proficiency.Weapon.Horsechopper",
+	"Character proficiency ranks for Horsechoppers."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponHorsechopperUntrained,
+	"PF2.Proficiency.Weapon.Horsechopper.Untrained",
 	"Character is Untrained with Horsechoppers."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyHorsechopperTrained,
-	"WeaponProficiency.Horsechopper.Trained",
+	Pf2TagProficiencyWeaponHorsechopperTrained,
+	"PF2.Proficiency.Weapon.Horsechopper.Trained",
 	"Character is Trained with Horsechoppers."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyHorsechopperExpert,
-	"WeaponProficiency.Horsechopper.Expert",
+	Pf2TagProficiencyWeaponHorsechopperExpert,
+	"PF2.Proficiency.Weapon.Horsechopper.Expert",
 	"Character is Expert with Horsechoppers."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyHorsechopperMaster,
-	"WeaponProficiency.Horsechopper.Master",
+	Pf2TagProficiencyWeaponHorsechopperMaster,
+	"PF2.Proficiency.Weapon.Horsechopper.Master",
 	"Character is Master with Horsechoppers."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyHorsechopperLegendary,
-	"WeaponProficiency.Horsechopper.Legendary",
+	Pf2TagProficiencyWeaponHorsechopperLegendary,
+	"PF2.Proficiency.Weapon.Horsechopper.Legendary",
 	"Character is Legendary with Horsechoppers."
 )
 
@@ -1012,32 +1195,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // =====================================================================================================================
 // Weapon mentioned in Pathfinder 2E Core Rulebook, Chapter 2, page 44, "Gnome Weapon Familiarity".
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyKukriUntrained,
-	"WeaponProficiency.Kukri.Untrained",
+	Pf2TagProficiencyWeaponKukri,
+	"PF2.Proficiency.Weapon.Kukri",
+	"Character proficiency ranks for Kukris."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponKukriUntrained,
+	"PF2.Proficiency.Weapon.Kukri.Untrained",
 	"Character is Untrained with Kukris."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyKukriTrained,
-	"WeaponProficiency.Kukri.Trained",
+	Pf2TagProficiencyWeaponKukriTrained,
+	"PF2.Proficiency.Weapon.Kukri.Trained",
 	"Character is Trained with Kukris."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyKukriExpert,
-	"WeaponProficiency.Kukri.Expert",
+	Pf2TagProficiencyWeaponKukriExpert,
+	"PF2.Proficiency.Weapon.Kukri.Expert",
 	"Character is Expert with Kukris."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyKukriMaster,
-	"WeaponProficiency.Kukri.Master",
+	Pf2TagProficiencyWeaponKukriMaster,
+	"PF2.Proficiency.Weapon.Kukri.Master",
 	"Character is Master with Kukris."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyKukriLegendary,
-	"WeaponProficiency.Kukri.Legendary",
+	Pf2TagProficiencyWeaponKukriLegendary,
+	"PF2.Proficiency.Weapon.Kukri.Legendary",
 	"Character is Legendary with Kukris."
 )
 
@@ -1046,32 +1235,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // =====================================================================================================================
 // Weapon mentioned in Pathfinder 2E Core Rulebook, Chapter 2, page 40, "Elven Weapon Familiarity".
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyLongbowUntrained,
-	"WeaponProficiency.Longbow.Untrained",
+	Pf2TagProficiencyWeaponLongbow,
+	"PF2.Proficiency.Weapon.Longbow",
+	"Character proficiency ranks for Longbows."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponLongbowUntrained,
+	"PF2.Proficiency.Weapon.Longbow.Untrained",
 	"Character is Untrained with Longbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyLongbowTrained,
-	"WeaponProficiency.Longbow.Trained",
+	Pf2TagProficiencyWeaponLongbowTrained,
+	"PF2.Proficiency.Weapon.Longbow.Trained",
 	"Character is Trained with Longbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyLongbowExpert,
-	"WeaponProficiency.Longbow.Expert",
+	Pf2TagProficiencyWeaponLongbowExpert,
+	"PF2.Proficiency.Weapon.Longbow.Expert",
 	"Character is Expert with Longbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyLongbowMaster,
-	"WeaponProficiency.Longbow.Master",
+	Pf2TagProficiencyWeaponLongbowMaster,
+	"PF2.Proficiency.Weapon.Longbow.Master",
 	"Character is Master with Longbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyLongbowLegendary,
-	"WeaponProficiency.Longbow.Legendary",
+	Pf2TagProficiencyWeaponLongbowLegendary,
+	"PF2.Proficiency.Weapon.Longbow.Legendary",
 	"Character is Legendary with Longbows."
 )
 
@@ -1082,32 +1277,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 //	- Chapter 2, page 40, "Elven Weapon Familiarity"
 //	- Chapter 3, page 95, "Attacks" for "Bard"
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyLongswordUntrained,
-	"WeaponProficiency.Longsword.Untrained",
+	Pf2TagProficiencyWeaponLongsword,
+	"PF2.Proficiency.Weapon.Longsword",
+	"Character proficiency ranks for Longswords."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponLongswordUntrained,
+	"PF2.Proficiency.Weapon.Longsword.Untrained",
 	"Character is Untrained with Longswords."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyLongswordTrained,
-	"WeaponProficiency.Longsword.Trained",
+	Pf2TagProficiencyWeaponLongswordTrained,
+	"PF2.Proficiency.Weapon.Longsword.Trained",
 	"Character is Trained with Longswords."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyLongswordExpert,
-	"WeaponProficiency.Longsword.Expert",
+	Pf2TagProficiencyWeaponLongswordExpert,
+	"PF2.Proficiency.Weapon.Longsword.Expert",
 	"Character is Expert with Longswords."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyLongswordMaster,
-	"WeaponProficiency.Longsword.Master",
+	Pf2TagProficiencyWeaponLongswordMaster,
+	"PF2.Proficiency.Weapon.Longsword.Master",
 	"Character is Master with Longswords."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyLongswordLegendary,
-	"WeaponProficiency.Longsword.Legendary",
+	Pf2TagProficiencyWeaponLongswordLegendary,
+	"PF2.Proficiency.Weapon.Longsword.Legendary",
 	"Character is Legendary with Longswords."
 )
 
@@ -1116,32 +1317,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // =====================================================================================================================
 // Weapon mentioned in Pathfinder 2E Core Rulebook, Chapter 2, page 36, "Dwarven Weapon Familiarity".
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyPickUntrained,
-	"WeaponProficiency.Pick.Untrained",
+	Pf2TagProficiencyWeaponPick,
+	"PF2.Proficiency.Weapon.Pick",
+	"Character proficiency ranks for Picks."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponPickUntrained,
+	"PF2.Proficiency.Weapon.Pick.Untrained",
 	"Character is Untrained with Picks."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyPickTrained,
-	"WeaponProficiency.Pick.Trained",
+	Pf2TagProficiencyWeaponPickTrained,
+	"PF2.Proficiency.Weapon.Pick.Trained",
 	"Character is Trained with Picks."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyPickExpert,
-	"WeaponProficiency.Pick.Expert",
+	Pf2TagProficiencyWeaponPickExpert,
+	"PF2.Proficiency.Weapon.Pick.Expert",
 	"Character is Expert with Picks."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyPickMaster,
-	"WeaponProficiency.Pick.Master",
+	Pf2TagProficiencyWeaponPickMaster,
+	"PF2.Proficiency.Weapon.Pick.Master",
 	"Character is Master with Picks."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyPickLegendary,
-	"WeaponProficiency.Pick.Legendary",
+	Pf2TagProficiencyWeaponPickLegendary,
+	"PF2.Proficiency.Weapon.Pick.Legendary",
 	"Character is Legendary with Picks."
 )
 
@@ -1153,32 +1360,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 //	- Chapter 3, page 95, "Attacks" for "Bard"
 //	- Chapter 3, page 179, "Attacks" for "Rogue"
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyRapierUntrained,
-	"WeaponProficiency.Rapier.Untrained",
+	Pf2TagProficiencyWeaponRapier,
+	"PF2.Proficiency.Weapon.Rapier",
+	"Character proficiency ranks for Rapiers."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponRapierUntrained,
+	"PF2.Proficiency.Weapon.Rapier.Untrained",
 	"Character is Untrained with Rapiers."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyRapierTrained,
-	"WeaponProficiency.Rapier.Trained",
+	Pf2TagProficiencyWeaponRapierTrained,
+	"PF2.Proficiency.Weapon.Rapier.Trained",
 	"Character is Trained with Rapiers."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyRapierExpert,
-	"WeaponProficiency.Rapier.Expert",
+	Pf2TagProficiencyWeaponRapierExpert,
+	"PF2.Proficiency.Weapon.Rapier.Expert",
 	"Character is Expert with Rapiers."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyRapierMaster,
-	"WeaponProficiency.Rapier.Master",
+	Pf2TagProficiencyWeaponRapierMaster,
+	"PF2.Proficiency.Weapon.Rapier.Master",
 	"Character is Master with Rapiers."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyRapierLegendary,
-	"WeaponProficiency.Rapier.Legendary",
+	Pf2TagProficiencyWeaponRapierLegendary,
+	"PF2.Proficiency.Weapon.Rapier.Legendary",
 	"Character is Legendary with Rapiers."
 )
 
@@ -1189,32 +1402,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 //	- Chapter 3, page 95, "Attacks" for "Bard"
 //	- Chapter 3, page 179, "Attacks" for "Rogue"
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencySapUntrained,
-	"WeaponProficiency.Sap.Untrained",
+	Pf2TagProficiencyWeaponSap,
+	"PF2.Proficiency.Weapon.Sap",
+	"Character proficiency ranks for Saps."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponSapUntrained,
+	"PF2.Proficiency.Weapon.Sap.Untrained",
 	"Character is Untrained with Saps."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencySapTrained,
-	"WeaponProficiency.Sap.Trained",
+	Pf2TagProficiencyWeaponSapTrained,
+	"PF2.Proficiency.Weapon.Sap.Trained",
 	"Character is Trained with Saps."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencySapExpert,
-	"WeaponProficiency.Sap.Expert",
+	Pf2TagProficiencyWeaponSapExpert,
+	"PF2.Proficiency.Weapon.Sap.Expert",
 	"Character is Expert with Saps."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencySapMaster,
-	"WeaponProficiency.Sap.Master",
+	Pf2TagProficiencyWeaponSapMaster,
+	"PF2.Proficiency.Weapon.Sap.Master",
 	"Character is Master with Saps."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencySapLegendary,
-	"WeaponProficiency.Sap.Legendary",
+	Pf2TagProficiencyWeaponSapLegendary,
+	"PF2.Proficiency.Weapon.Sap.Legendary",
 	"Character is Legendary with Saps."
 )
 
@@ -1226,32 +1445,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 //	- Chapter 3, page 95, "Attacks" for "Bard"
 //	- Chapter 3, page 179, "Attacks" for "Rogue"
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyShortbowUntrained,
-	"WeaponProficiency.Shortbow.Untrained",
+	Pf2TagProficiencyWeaponShortbow,
+	"PF2.Proficiency.Weapon.Shortbow",
+	"Character proficiency ranks for Shortbows."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponShortbowUntrained,
+	"PF2.Proficiency.Weapon.Shortbow.Untrained",
 	"Character is Untrained with Shortbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyShortbowTrained,
-	"WeaponProficiency.Shortbow.Trained",
+	Pf2TagProficiencyWeaponShortbowTrained,
+	"PF2.Proficiency.Weapon.Shortbow.Trained",
 	"Character is Trained with Shortbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyShortbowExpert,
-	"WeaponProficiency.Shortbow.Expert",
+	Pf2TagProficiencyWeaponShortbowExpert,
+	"PF2.Proficiency.Weapon.Shortbow.Expert",
 	"Character is Expert with Shortbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyShortbowMaster,
-	"WeaponProficiency.Shortbow.Master",
+	Pf2TagProficiencyWeaponShortbowMaster,
+	"PF2.Proficiency.Weapon.Shortbow.Master",
 	"Character is Master with Shortbows."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyShortbowLegendary,
-	"WeaponProficiency.Shortbow.Legendary",
+	Pf2TagProficiencyWeaponShortbowLegendary,
+	"PF2.Proficiency.Weapon.Shortbow.Legendary",
 	"Character is Legendary with Shortbows."
 )
 
@@ -1263,32 +1488,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 //	- Chapter 3, page 95, "Attacks" for "Bard"
 //	- Chapter 3, page 179, "Attacks" for "Rogue"
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyShortswordUntrained,
-	"WeaponProficiency.Shortsword.Untrained",
+	Pf2TagProficiencyWeaponShortsword,
+	"PF2.Proficiency.Weapon.Shortsword",
+	"Character proficiency ranks for Shortswords."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponShortswordUntrained,
+	"PF2.Proficiency.Weapon.Shortsword.Untrained",
 	"Character is Untrained with Shortswords."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyShortswordTrained,
-	"WeaponProficiency.Shortsword.Trained",
+	Pf2TagProficiencyWeaponShortswordTrained,
+	"PF2.Proficiency.Weapon.Shortsword.Trained",
 	"Character is Trained with Shortswords."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyShortswordExpert,
-	"WeaponProficiency.Shortsword.Expert",
+	Pf2TagProficiencyWeaponShortswordExpert,
+	"PF2.Proficiency.Weapon.Shortsword.Expert",
 	"Character is Expert with Shortswords."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyShortswordMaster,
-	"WeaponProficiency.Shortsword.Master",
+	Pf2TagProficiencyWeaponShortswordMaster,
+	"PF2.Proficiency.Weapon.Shortsword.Master",
 	"Character is Master with Shortswords."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyShortswordLegendary,
-	"WeaponProficiency.Shortsword.Legendary",
+	Pf2TagProficiencyWeaponShortswordLegendary,
+	"PF2.Proficiency.Weapon.Shortsword.Legendary",
 	"Character is Legendary with Shortswords."
 )
 
@@ -1297,32 +1528,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // =====================================================================================================================
 // Weapon mentioned in Pathfinder 2E Core Rulebook, Chapter 2, page 52, "Halfling Weapon Familiarity".
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencySlingUntrained,
-	"WeaponProficiency.Sling.Untrained",
+	Pf2TagProficiencyWeaponSling,
+	"PF2.Proficiency.Weapon.Sling",
+	"Character proficiency ranks for Slings."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponSlingUntrained,
+	"PF2.Proficiency.Weapon.Sling.Untrained",
 	"Character is Untrained with Slings."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencySlingTrained,
-	"WeaponProficiency.Sling.Trained",
+	Pf2TagProficiencyWeaponSlingTrained,
+	"PF2.Proficiency.Weapon.Sling.Trained",
 	"Character is Trained with Slings."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencySlingExpert,
-	"WeaponProficiency.Sling.Expert",
+	Pf2TagProficiencyWeaponSlingExpert,
+	"PF2.Proficiency.Weapon.Sling.Expert",
 	"Character is Expert with Slings."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencySlingMaster,
-	"WeaponProficiency.Sling.Master",
+	Pf2TagProficiencyWeaponSlingMaster,
+	"PF2.Proficiency.Weapon.Sling.Master",
 	"Character is Master with Slings."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencySlingLegendary,
-	"WeaponProficiency.Sling.Legendary",
+	Pf2TagProficiencyWeaponSlingLegendary,
+	"PF2.Proficiency.Weapon.Sling.Legendary",
 	"Character is Legendary with Slings."
 )
 
@@ -1332,32 +1569,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // Weapon mentioned in Pathfinder 2E Core Rulebook, under:
 //	- Chapter 3, page 203, "Attacks" for "Wizard"
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyStaffUntrained,
-	"WeaponProficiency.Staff.Untrained",
+	Pf2TagProficiencyWeaponStaff,
+	"PF2.Proficiency.Weapon.Staff",
+	"Character proficiency ranks for Staves."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponStaffUntrained,
+	"PF2.Proficiency.Weapon.Staff.Untrained",
 	"Character is Untrained with Staves."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyStaffTrained,
-	"WeaponProficiency.Staff.Trained",
+	Pf2TagProficiencyWeaponStaffTrained,
+	"PF2.Proficiency.Weapon.Staff.Trained",
 	"Character is Trained with Staves."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyStaffExpert,
-	"WeaponProficiency.Staff.Expert",
+	Pf2TagProficiencyWeaponStaffExpert,
+	"PF2.Proficiency.Weapon.Staff.Expert",
 	"Character is Expert with Staves."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyStaffMaster,
-	"WeaponProficiency.Staff.Master",
+	Pf2TagProficiencyWeaponStaffMaster,
+	"PF2.Proficiency.Weapon.Staff.Master",
 	"Character is Master with Staves."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyStaffLegendary,
-	"WeaponProficiency.Staff.Legendary",
+	Pf2TagProficiencyWeaponStaffLegendary,
+	"PF2.Proficiency.Weapon.Staff.Legendary",
 	"Character is Legendary with Staves."
 )
 
@@ -1366,32 +1609,38 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // =====================================================================================================================
 // Weapon mentioned in Pathfinder 2E Core Rulebook, Chapter 2, page 36, "Dwarven Weapon Familiarity".
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyWarhammerUntrained,
-	"WeaponProficiency.Warhammer.Untrained",
+	Pf2TagProficiencyWeaponWarhammer,
+	"PF2.Proficiency.Weapon.Warhammer",
+	"Character proficiency ranks for Warhammers."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponWarhammerUntrained,
+	"PF2.Proficiency.Weapon.Warhammer.Untrained",
 	"Character is Untrained with Warhammers."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyWarhammerTrained,
-	"WeaponProficiency.Warhammer.Trained",
+	Pf2TagProficiencyWeaponWarhammerTrained,
+	"PF2.Proficiency.Weapon.Warhammer.Trained",
 	"Character is Trained with Warhammers."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyWarhammerExpert,
-	"WeaponProficiency.Warhammer.Expert",
+	Pf2TagProficiencyWeaponWarhammerExpert,
+	"PF2.Proficiency.Weapon.Warhammer.Expert",
 	"Character is Expert with Warhammers."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyWarhammerMaster,
-	"WeaponProficiency.Warhammer.Master",
+	Pf2TagProficiencyWeaponWarhammerMaster,
+	"PF2.Proficiency.Weapon.Warhammer.Master",
 	"Character is Master with Warhammers."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyWarhammerLegendary,
-	"WeaponProficiency.Warhammer.Legendary",
+	Pf2TagProficiencyWeaponWarhammerLegendary,
+	"PF2.Proficiency.Weapon.Warhammer.Legendary",
 	"Character is Legendary with Warhammers."
 )
 
@@ -1401,31 +1650,37 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // Weapon mentioned in Pathfinder 2E Core Rulebook, under:
 //	- Chapter 3, page 95, "Attacks" for "Bard"
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyWhipUntrained,
-	"WeaponProficiency.Whip.Untrained",
+	Pf2TagProficiencyWeaponWhip,
+	"PF2.Proficiency.Weapon.Whip",
+	"Character proficiency ranks for Whips."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyWeaponWhipUntrained,
+	"PF2.Proficiency.Weapon.Whip.Untrained",
 	"Character is Untrained with Whips."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyWhipTrained,
-	"WeaponProficiency.Whip.Trained",
+	Pf2TagProficiencyWeaponWhipTrained,
+	"PF2.Proficiency.Weapon.Whip.Trained",
 	"Character is Trained with Whips."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyWhipExpert,
-	"WeaponProficiency.Whip.Expert",
+	Pf2TagProficiencyWeaponWhipExpert,
+	"PF2.Proficiency.Weapon.Whip.Expert",
 	"Character is Expert with Whips."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyWhipMaster,
-	"WeaponProficiency.Whip.Master",
+	Pf2TagProficiencyWeaponWhipMaster,
+	"PF2.Proficiency.Weapon.Whip.Master",
 	"Character is Master with Whips."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagWeaponProficiencyWhipLegendary,
-	"WeaponProficiency.Whip.Legendary",
+	Pf2TagProficiencyWeaponWhipLegendary,
+	"PF2.Proficiency.Weapon.Whip.Legendary",
 	"Character is Legendary with Whips."
 )

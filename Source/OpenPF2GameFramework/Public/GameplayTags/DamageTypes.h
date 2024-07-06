@@ -18,6 +18,7 @@
 // Damage types
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, Chapter 9, page 452, "Damage Types".
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagDamageTypes)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagDamageTypePhysical)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagDamageTypePhysicalBludgeoning)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagDamageTypePhysicalPiercing)

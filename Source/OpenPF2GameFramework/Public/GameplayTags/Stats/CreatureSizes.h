@@ -18,6 +18,7 @@
 // Creature Size - The approximate physical amount of space a creature occupies.
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, page 474, Table 9-1: Size and Reach.
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCreatureSizes)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCreatureSizeTiny)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCreatureSizeSmall)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCreatureSizeMedium)

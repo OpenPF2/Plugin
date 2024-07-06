@@ -13,35 +13,41 @@
 #include "GameplayTags/Stats/Proficiencies/SpellAttacks.h"
 
 // =====================================================================================================================
-// Proficiency Ranks for Spell Attacks (Spell Attack Roll).
+// Proficiency Ranks for spell attacks (Spell Attack Roll).
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, Appendix, page 627, "Spell Attack Roll".
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSpellAttackUntrained,
-	"SpellAttack.Untrained",
+	Pf2TagProficiencySpellAttack,
+	"PF2.Proficiency.SpellAttack",
+	"Character proficiency ranks for spell attacks (Spell Attack Roll)."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencySpellAttackUntrained,
+	"PF2.Proficiency.SpellAttack.Untrained",
 	"Character is Untrained in spell attacks."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSpellAttackTrained,
-	"SpellAttack.Trained",
+	Pf2TagProficiencySpellAttackTrained,
+	"PF2.Proficiency.SpellAttack.Trained",
 	"Character is Trained in spell attacks."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSpellAttackExpert,
-	"SpellAttack.Expert",
+	Pf2TagProficiencySpellAttackExpert,
+	"PF2.Proficiency.SpellAttack.Expert",
 	"Character is Expert in spell attacks."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSpellAttackMaster,
-	"SpellAttack.Master",
+	Pf2TagProficiencySpellAttackMaster,
+	"PF2.Proficiency.SpellAttack.Master",
 	"Character is Master in spell attacks."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSpellAttackLegendary,
-	"SpellAttack.Legendary",
+	Pf2TagProficiencySpellAttackLegendary,
+	"PF2.Proficiency.SpellAttack.Legendary",
 	"Character is Legendary in spell attacks."
 )

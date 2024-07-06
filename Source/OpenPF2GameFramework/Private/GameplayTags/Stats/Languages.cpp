@@ -15,72 +15,87 @@
 #include "GameplayTags/Stats/Languages.h"
 
 // =====================================================================================================================
+// Languages - How characters communicate through hearing, speaking, writing, and reading.
+// =====================================================================================================================
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagLanguages,
+	"PF2.Language",
+	"How characters communicate through hearing, speaking, writing, and reading."
+)
+
+// =====================================================================================================================
 // Common Languages - Languages regularly encountered in most places, even among those who aren’t native speakers.
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, page 65, Table 2-1: Common Languages.
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagLanguagesCommon,
+	"PF2.Language.Common",
+	"Languages regularly encountered in most places, even among those who aren’t native speakers."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageCommonCommon,
-	"Language.Common.Common",
+	"PF2.Language.Common.Common",
 	"Language spoken by humans, dwarves, elves, halflings, and other common ancestries."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageCommonDraconic,
-	"Language.Common.Draconic",
+	"PF2.Language.Common.Draconic",
 	"Language spoken by dragons, reptilian humanoids."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageCommonDwarven,
-	"Language.Common.Dwarven",
+	"PF2.Language.Common.Dwarven",
 	"Language spoken by dwarves."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageCommonElven,
-	"Language.Common.Elven",
+	"PF2.Language.Common.Elven",
 	"Language spoken by elves, half-elves."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageCommonGnomish,
-	"Language.Common.Gnomish",
+	"PF2.Language.Common.Gnomish",
 	"Language spoken by gnomes."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageCommonGoblin,
-	"Language.Common.Goblin",
+	"PF2.Language.Common.Goblin",
 	"Language spoken by goblins, hobgoblins, bugbears."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageCommonHalfling,
-	"Language.Common.Halfling",
+	"PF2.Language.Common.Halfling",
 	"Language spoken by halflings."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageCommonJotun,
-	"Language.Common.Jotun",
+	"PF2.Language.Common.Jotun",
 	"Language spoken by giants, ogres, trolls, ettins, cyclopes."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageCommonOrcish,
-	"Language.Common.Orcish",
+	"PF2.Language.Common.Orcish",
 	"Language spoken by orcs, half-orcs."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageCommonSylvan,
-	"Language.Common.Sylvan",
+	"PF2.Language.Common.Sylvan",
 	"Language spoken by fey, centaurs, plant creatures."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageCommonUndercommon,
-	"Language.Common.Undercommon",
+	"PF2.Language.Common.Undercommon",
 	"Language spoken by drow, duergars, xulgaths."
 )
 
@@ -90,80 +105,91 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, page 65, Table 2-2: Uncommon Languages.
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagLanguagesUncommon,
+	"PF2.Language.Uncommon",
+	"Languages most frequently spoken by native speakers, but also by certain scholars and others interested in the associated cultures."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageUncommonAbyssal,
-	"Language.Uncommon.Abyssal",
+	"PF2.Language.Uncommon.Abyssal",
 	"Language spoken by demons."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageUncommonAklo,
-	"Language.Uncommon.Aklo",
+	"PF2.Language.Uncommon.Aklo",
 	"Language spoken by deros, evil fey, otherworldly monsters."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageUncommonAquan,
-	"Language.Uncommon.Aquan",
+	"PF2.Language.Uncommon.Aquan",
 	"Language spoken by aquatic creatures, water elemental creatures."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageUncommonAuran,
-	"Language.Uncommon.Auran",
+	"PF2.Language.Uncommon.Auran",
 	"Language spoken by air elemental creatures, flying creatures."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageUncommonCelestial,
-	"Language.Uncommon.Celestial",
+	"PF2.Language.Uncommon.Celestial",
 	"Language spoken by angels."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageUncommonGnoll,
-	"Language.Uncommon.Gnoll",
+	"PF2.Language.Uncommon.Gnoll",
 	"Language spoken by gnolls."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageUncommonIgnan,
-	"Language.Uncommon.Ignan",
+	"PF2.Language.Uncommon.Ignan",
 	"Language spoken by fire elemental creatures."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageUncommonInfernal,
-	"Language.Uncommon.Infernal",
+	"PF2.Language.Uncommon.Infernal",
 	"Language spoken by devils."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageUncommonNecril,
-	"Language.Uncommon.Necril",
+	"PF2.Language.Uncommon.Necril",
 	"Language spoken by ghouls, intelligent undead."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageUncommonShadowtongue,
-	"Language.Uncommon.Shadowtongue",
+	"PF2.Language.Uncommon.Shadowtongue",
 	"Language spoken by nidalese, Shadow Plane creatures."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageUncommonTerran,
-	"Language.Uncommon.Terran",
+	"PF2.Language.Uncommon.Terran",
 	"Language spoken by earth elemental creatures."
 )
 
 // =====================================================================================================================
 // Secret Languages (e.g., "Druidic")
 //
-// Druidic is a secret language, and is available only to characters who are druids. In fact, druids are prohibited from
-// teaching the language to non-druids.
+// Languages available only to certain characters from certain backgrounds or in certain situations.
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, page 65, Table 2-3: Secret Languages.
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagLanguagesSecret,
+	"PF2.Language.Secret",
+	"Languages available only to certain characters from certain backgrounds or in certain situations."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagLanguageSecretDruidic,
-	"Language.Secret.Druidic",
-	"Language spoken by druids."
+	"PF2.Language.Secret.Druidic",
+	"A secret language available only to characters who are druids that is prohibited from being taught to non-druids."
 )

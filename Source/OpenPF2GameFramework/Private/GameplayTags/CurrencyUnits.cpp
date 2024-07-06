@@ -17,25 +17,37 @@
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, Chapter 6, page 271.
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagCurrencyUnitCoinsCopperPiece,
-	"CurrencyUnit.Coins.CopperPiece",
+	Pf2TagCurrencyUnits,
+	"PF2.CurrencyUnit",
+	"Standard units of payment for goods."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagCurrencyUnitCoins,
+	"PF2.CurrencyUnit.Coin",
+	"Standard coin increments when paying for goods."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagCurrencyUnitCoinCopperPiece,
+	"PF2.CurrencyUnit.Coin.CopperPiece",
 	"A unit of currency worth 1/10 of a silver piece."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagCurrencyUnitCoinsSilverPiece,
-	"CurrencyUnit.Coins.SilverPiece",
+	Pf2TagCurrencyUnitCoinSilverPiece,
+	"PF2.CurrencyUnit.Coin.SilverPiece",
 	"The standard unit of currency for commoners and beginning adventurers. Each is a standard weight of silver and is typically accepted by any merchant or kingdom no matter where it was minted."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagCurrencyUnitCoinsGoldPiece,
-	"CurrencyUnit.Coins.GoldPiece",
+	Pf2TagCurrencyUnitCoinGoldPiece,
+	"PF2.CurrencyUnit.Coin.GoldPiece",
 	"A unit of currency often used for purchasing magic items and other expensive items. 1 gold piece is worth 10 silver pieces and 100 copper pieces."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagCurrencyUnitCoinsPlatinumPiece,
-	"CurrencyUnit.Coins.PlatinumPiece",
+	Pf2TagCurrencyUnitCoinPlatinumPiece,
+	"PF2.CurrencyUnit.Coin.PlatinumPiece",
 	"A unit of current used by nobles to demonstrate their wealth, for the purchase of very expensive items, or simply as a way to easily transport large sums of currency. A platinum piece is worth 10 gold pieces, 100 silver pieces, and 1,000 copper pieces."
 )

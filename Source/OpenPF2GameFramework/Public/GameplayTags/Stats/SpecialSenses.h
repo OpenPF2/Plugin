@@ -21,6 +21,7 @@
 // concealed conditions [...] when it comes to situations that foil average vision."
 //
 // Source: Pathfinder 2E Core Rulebook, page 465, "Special Senses".
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagSpecialSenses)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagSpecialSenseDarkvision)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagSpecialSenseGreaterDarkvision)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagSpecialSenseLowLightVision)

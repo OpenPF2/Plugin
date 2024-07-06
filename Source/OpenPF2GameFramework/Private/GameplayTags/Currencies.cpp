@@ -17,7 +17,13 @@
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, Chapter 6, page 271.
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagCurrencies,
+	"PF2.Currency",
+	"Types of money used to pay for goods in lieu of bartering."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagCurrencyCoins,
-	"Currency.Coins",
+	"PF2.Currency.Coins",
 	"The most common currency in OpenPF2."
 )

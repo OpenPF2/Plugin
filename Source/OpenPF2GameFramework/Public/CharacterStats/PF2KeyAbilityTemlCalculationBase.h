@@ -137,7 +137,7 @@ protected:
 	 *
 	 * @param SourceTags
 	 *	The tags on the character. A tag in this list should indicate the character's Key Ability (e.g.
-	 *	"KeyAbility.Strength").
+	 *	"PF2.KeyAbility.Strength").
 	 *
 	 * @return
 	 *	Either a capture definition that has a valid source attribute that can be used to capture the Key Ability

@@ -22,31 +22,37 @@
 //	- Pathfinder 2E Core Rulebook, Chapter 3: "Classes", page 69, "Initial Proficiencies".
 //	- Pathfinder 2E Core Rulebook, Appendix, page 624, "Class DC".
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagClassDcUntrained,
-	"ClassDc.Untrained",
+	Pf2TagProficiencyClassDc,
+	"PF2.Proficiency.ClassDc",
+	"Character proficiency ranks for Class Difficulty Class (Class DC)."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencyClassDcUntrained,
+	"PF2.Proficiency.ClassDc.Untrained",
 	"Character is Untrained in Class Difficulty Class (Class DC)."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagClassDcTrained,
-	"ClassDc.Trained",
+	Pf2TagProficiencyClassDcTrained,
+	"PF2.Proficiency.ClassDc.Trained",
 	"Character is Trained in Class Difficulty Class (Class DC)."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagClassDcExpert,
-	"ClassDc.Expert",
+	Pf2TagProficiencyClassDcExpert,
+	"PF2.Proficiency.ClassDc.Expert",
 	"Character is Expert in Class Difficulty Class (Class DC)."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagClassDcMaster,
-	"ClassDc.Master",
+	Pf2TagProficiencyClassDcMaster,
+	"PF2.Proficiency.ClassDc.Master",
 	"Character is Master in Class Difficulty Class (Class DC)."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagClassDcLegendary,
-	"ClassDc.Legendary",
+	Pf2TagProficiencyClassDcLegendary,
+	"PF2.Proficiency.ClassDc.Legendary",
 	"Character is Legendary in Class Difficulty Class (Class DC)."
 )

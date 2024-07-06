@@ -18,6 +18,7 @@
 // Weapon Groups
 // =====================================================================================================================
 // From the Pathfinder 2E Core Rulebook, pages 280-282; Tables 6-6, 6-7, and 6-8.
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagWeaponGroups)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagWeaponGroupAxe)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagWeaponGroupBomb)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagWeaponGroupBow)

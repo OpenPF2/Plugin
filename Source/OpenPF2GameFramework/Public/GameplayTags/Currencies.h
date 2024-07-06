@@ -18,4 +18,5 @@
 // Default Currency - "Coins"
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, Chapter 6, page 271.
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCurrencies)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCurrencyCoins)

@@ -16,9 +16,44 @@
 // Creature Size - The approximate physical amount of space a creature occupies.
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, page 474, Table 9-1: Size and Reach.
-UE_DEFINE_GAMEPLAY_TAG(Pf2TagCreatureSizeTiny, "CreatureSize.Tiny")
-UE_DEFINE_GAMEPLAY_TAG(Pf2TagCreatureSizeSmall, "CreatureSize.Small")
-UE_DEFINE_GAMEPLAY_TAG(Pf2TagCreatureSizeMedium, "CreatureSize.Medium")
-UE_DEFINE_GAMEPLAY_TAG(Pf2TagCreatureSizeLarge, "CreatureSize.Large")
-UE_DEFINE_GAMEPLAY_TAG(Pf2TagCreatureSizeHuge, "CreatureSize.Huge")
-UE_DEFINE_GAMEPLAY_TAG(Pf2TagCreatureSizeGargantuan, "CreatureSize.Gargantuan")
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagCreatureSizes,
+	"PF2.CreatureSize",
+	"The approximate physical amount of space a creature occupies."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagCreatureSizeTiny,
+	"PF2.CreatureSize.Tiny",
+	"The creature or character occupies less than 1.5 meters of space."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagCreatureSizeSmall,
+	"PF2.CreatureSize.Small",
+	"The creature or character occupies 1.5 meters of space and is slightly smaller than medium size."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagCreatureSizeMedium,
+	"PF2.CreatureSize.Medium",
+	"The creature or character occupies 1.5 meters of space and is slightly larger than small size."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagCreatureSizeLarge,
+	"PF2.CreatureSize.Large",
+	"The creature or character occupies 3.0 meters of space."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagCreatureSizeHuge,
+	"PF2.CreatureSize.Huge",
+	"The creature or character occupies 4.5 meters of space."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagCreatureSizeGargantuan,
+	"PF2.CreatureSize.Gargantuan",
+	"The creature or character occupies 6.0 or more meters of space."
+)

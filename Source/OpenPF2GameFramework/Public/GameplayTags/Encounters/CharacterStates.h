@@ -10,6 +10,7 @@
 // =====================================================================================================================
 // Tags that apply to characters during encounters.
 // =====================================================================================================================
-OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagEncounterCharacterTurnActive)
-OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagEncounterCharacterPointsRefreshFrozen)
-OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagEncounterCharacterCooldownNextTurn)
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagEncounterCharacterStates)
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagEncounterCharacterStateTurnActive)
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagEncounterCharacterStatePointsRefreshFrozen)
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagEncounterCharacterStateCooldownNextTurn)

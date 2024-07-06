@@ -20,39 +20,45 @@
 //	- Pathfinder 2E Core Rulebook, Chapter 3: "Classes", pages 72-232 ("Key Ability" sections in each class entry).
 //
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagKeyAbilities,
+	"PF2.KeyAbility",
+	"The most important ability of a particular character/creature."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagKeyAbilityStrength,
-	"KeyAbility.Strength",
-	"Character's key ability is Strength"
+	"PF2.KeyAbility.Strength",
+	"Character's key ability is Strength."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagKeyAbilityDexterity,
-	"KeyAbility.Dexterity",
-	"Character's key ability is Dexterity"
+	"PF2.KeyAbility.Dexterity",
+	"Character's key ability is Dexterity."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagKeyAbilityConstitution,
-	"KeyAbility.Constitution",
-	"Character's key ability is Constitution"
+	"PF2.KeyAbility.Constitution",
+	"Character's key ability is Constitution."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagKeyAbilityIntelligence,
-	"KeyAbility.Intelligence",
-	"Character's key ability is Intelligence"
+	"PF2.KeyAbility.Intelligence",
+	"Character's key ability is Intelligence."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagKeyAbilityWisdom,
-	"KeyAbility.Wisdom",
-	"Character's key ability is Wisdom"
+	"PF2.KeyAbility.Wisdom",
+	"Character's key ability is Wisdom."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagKeyAbilityCharisma,
-	"KeyAbility.Charisma",
-	"Character's key ability is Charisma"
+	"PF2.KeyAbility.Charisma",
+	"Character's key ability is Charisma."
 )
 
 // =====================================================================================================================
@@ -68,37 +74,43 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 //	- Pathfinder 2E Core Rulebook, Chapter 3: "Classes", pages 72-232 ("Key Ability" sections in each class entry).
 //
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagSpellcastingAbilities,
+	"PF2.SpellcastingAbility",
+	"The key ability of a character/creature that can cast spells."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagSpellcastingAbilityStrength,
-	"SpellcastingAbility.Strength",
-	"Character's spellcasting ability is Strength"
+	"PF2.SpellcastingAbility.Strength",
+	"Character's spellcasting ability is Strength."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagSpellcastingAbilityDexterity,
-	"SpellcastingAbility.Dexterity",
-	"Character's spellcasting ability is Dexterity"
+	"PF2.SpellcastingAbility.Dexterity",
+	"Character's spellcasting ability is Dexterity."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagSpellcastingAbilityConstitution,
-	"SpellcastingAbility.Constitution",
-	"Character's spellcasting ability is Constitution"
+	"PF2.SpellcastingAbility.Constitution",
+	"Character's spellcasting ability is Constitution."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagSpellcastingAbilityIntelligence,
-	"SpellcastingAbility.Intelligence",
-	"Character's spellcasting ability is Intelligence"
+	"PF2.SpellcastingAbility.Intelligence",
+	"Character's spellcasting ability is Intelligence."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagSpellcastingAbilityWisdom,
-	"SpellcastingAbility.Wisdom",
-	"Character's spellcasting ability is Wisdom"
+	"PF2.SpellcastingAbility.Wisdom",
+	"Character's spellcasting ability is Wisdom."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagSpellcastingAbilityCharisma,
-	"SpellcastingAbility.Charisma",
-	"Character's spellcasting ability is Charisma"
+	"PF2.SpellcastingAbility.Charisma",
+	"Character's spellcasting ability is Charisma."
 )

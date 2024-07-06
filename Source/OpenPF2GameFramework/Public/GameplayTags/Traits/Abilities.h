@@ -18,6 +18,7 @@
 // Ability Traits
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, Glossary, pages 628-638.
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTraitAbilities)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTraitAbilityAlchemist)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTraitAbilityAttack)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTraitAbilityBarbarian)

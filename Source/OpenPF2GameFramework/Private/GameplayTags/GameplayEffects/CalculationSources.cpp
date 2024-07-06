@@ -6,12 +6,18 @@
 #include "GameplayTags/GameplayEffects/CalculationSources.h"
 
 // =====================================================================================================================
-// "Source" Tags passed in from Blueprints to calculate stats.
+// "Source" tags passed in from Blueprints to calculate stats.
 //
 // These should not be used on weapons, characters, or other objects that appear in the world.
 // =====================================================================================================================
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagGameplayEffectCalculationSource,
+	"PF2.GameplayEffect.CalculationSource",
+	"'Source' tags passed in from Blueprints to calculate stats."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagGameplayEffectCalculationSourceInitiative,
-	"GameplayEffect.CalculationSource.Initiative",
+	"PF2.GameplayEffect.CalculationSource.Initiative",
 	"Source tag passed in when a character's initiative in an encounter is being determined."
 )

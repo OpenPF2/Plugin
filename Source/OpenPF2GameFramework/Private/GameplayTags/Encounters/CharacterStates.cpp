@@ -9,19 +9,25 @@
 // Tags that apply to characters during encounters.
 // =====================================================================================================================
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagEncounterCharacterTurnActive,
-	"Encounter.Character.TurnActive",
+	Pf2TagEncounterCharacterStates,
+	"PF2.Encounter.CharacterState",
+	"Tags that convey the state of a character during encounters."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagEncounterCharacterStateTurnActive,
+	"PF2.Encounter.CharacterState.TurnActive",
 	"Tag applied to a character whose turn is active."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagEncounterCharacterPointsRefreshFrozen,
-	"Encounter.Character.PointsRefreshFrozen",
+	Pf2TagEncounterCharacterStatePointsRefreshFrozen,
+	"PF2.Encounter.CharacterState.PointsRefreshFrozen",
 	"Tag applied to a character who cannot presently accrue action points."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagEncounterCharacterCooldownNextTurn,
-	"Encounter.Character.Cooldown.NextTurn",
+	Pf2TagEncounterCharacterStateCooldownNextTurn,
+	"PF2.Encounter.CharacterState.Cooldown.NextTurn",
 	"Tag applied to a character who is currently on a cooldown waiting for their next turn to start."
 )

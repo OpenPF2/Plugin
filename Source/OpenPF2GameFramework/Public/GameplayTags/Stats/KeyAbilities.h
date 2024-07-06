@@ -20,6 +20,7 @@
 // Sources:
 //	- Pathfinder 2E Core Rulebook, Chapter 3: "Classes", page 68, "Key Ability".
 //	- Pathfinder 2E Core Rulebook, Chapter 3: "Classes", pages 72-232 ("Key Ability" sections in each class entry).
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagKeyAbilities)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagKeyAbilityStrength)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagKeyAbilityDexterity)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagKeyAbilityConstitution)
@@ -38,6 +39,7 @@ OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagKeyAbilityCharisma
 // Sources:
 //	- Pathfinder 2E Core Rulebook, Chapter 3: "Classes", page 68, "Key Ability".
 //	- Pathfinder 2E Core Rulebook, Chapter 3: "Classes", pages 72-232 ("Key Ability" sections in each class entry).
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagSpellcastingAbilities)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagSpellcastingAbilityStrength)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagSpellcastingAbilityDexterity)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagSpellcastingAbilityConstitution)

@@ -10,5 +10,6 @@
 // =====================================================================================================================
 // Tags that identify additional metadata that has been passed along for an ability activation.
 // =====================================================================================================================
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagGameplayAbilityActivationMetadata)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagGameplayAbilityActivationMetadataHasTargetCharacter)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagGameplayAbilityActivationMetadataHasTargetLocation)

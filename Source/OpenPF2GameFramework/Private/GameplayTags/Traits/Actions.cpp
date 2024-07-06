@@ -13,59 +13,65 @@
 #include "GameplayTags/Traits/Actions.h"
 
 // =====================================================================================================================
-// Action Traits
+// Action Traits - Keywords that convey information about rules elements that interact with actions.
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, Glossary, pages 628-638.
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagTraitActions,
+	"PF2.Trait.Action",
+	"Keywords that convey information about rules elements that interact with actions."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagTraitActionAuditory,
-	"Trait.Action.Auditory",
+	"PF2.Trait.Action.Auditory",
 	"Auditory actions rely on sound. An action with the auditory trait can be successful only if the creature using the action can speak or otherwise produce the required sounds."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagTraitActionConcentrate,
-	"Trait.Action.Concentrate",
+	"PF2.Trait.Action.Concentrate",
 	"An action with this trait requires a degree of mental concentration and discipline."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagTraitActionFlourish,
-	"Trait.Action.Flourish",
+	"PF2.Trait.Action.Flourish",
 	"Flourish actions are actions that require too much exertion to perform a large number in a row. You can use only 1 action with the flourish trait per turn."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagTraitActionManipulate,
-	"Trait.Action.Manipulate",
+	"PF2.Trait.Action.Manipulate",
 	"You must physically manipulate an item or make gestures to use an action with this trait. Creatures without a suitable appendage can't perform actions with this trait. Manipulate actions often trigger reactions."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagTraitActionMetamagic,
-	"Trait.Action.Metamagic",
+	"PF2.Trait.Action.Metamagic",
 	"Actions with the metamagic trait, usually from metamagic feats, tweak the properties of your spells. You must use a metamagic action directly before Casting the Spell you want to alter. If you use any action (including free actions and reactions) other than Cast a Spell directly after, you waste the benefits of the metamagic action. Any additional effects added by a metamagic action are part of the spell's effect, not of the metamagic action itself."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagTraitActionMove,
-	"Trait.Action.Move",
+	"PF2.Trait.Action.Move",
 	"An action with this trait involves moving from one space to another."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagTraitActionOpen,
-	"Trait.Action.Open",
+	"PF2.Trait.Action.Open",
 	"These maneuvers work only as the first salvo on your turn. You can use an open only if you haven't used an action with the attack or open trait yet this turn."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagTraitActionPress,
-	"Trait.Action.Press",
+	"PF2.Trait.Action.Press",
 	"Actions with this trait allow you to follow up earlier attacks. An action with the press trait can be used only if you are currently affected by a multiple attack penalty. Some actions with the press trait also grant an effect on a failure. The effects that are added on a failure don't apply on a critical failure. If your press action succeeds, you can choose to apply the failure effect instead. (For example, you may wish to do this when an attack deals no damage due to resistance.) Because a press action requires a multiple attack penalty, you can't use one when it's not your turn, even if you use the Ready activity."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagTraitActionStance,
-	"Trait.Action.Stance",
+	"PF2.Trait.Action.Stance",
 	"A stance is a general combat strategy that you enter by using an action with the stance trait, and that you remain in for some time. A stance lasts until you get knocked out, until its requirements (if any) are violated, until the encounter ends, or until you enter a new stance, whichever comes first. After you use an action with the stance trait, you can't use another one for 1 round. You can enter or be in a stance only in encounter mode."
 )

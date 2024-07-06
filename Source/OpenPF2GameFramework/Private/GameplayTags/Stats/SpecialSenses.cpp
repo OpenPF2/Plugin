@@ -20,31 +20,37 @@
 //
 // Source: Pathfinder 2E Core Rulebook, page 465, "Special Senses".
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagSpecialSenses,
+	"PF2.SpecialSense",
+	"Senses that grant greater awareness to either ignore or reduce the effects of the undetected, hidden, or concealed conditions when it comes to situations that foil average vision."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagSpecialSenseDarkvision,
-	"SpecialSense.Darkvision",
+	"PF2.SpecialSense.Darkvision",
 	"A creature with darkvision can see perfectly well in areas of darkness and dim light, though such vision is in black and white only. Some forms of magical darkness, such as a 4th-level darkness spell, block normal darkvision."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagSpecialSenseGreaterDarkvision,
-	"SpecialSense.GreaterDarkvision",
+	"PF2.SpecialSense.GreaterDarkvision",
 	"A creature with greater darkvision can see perfectly well in areas of darkness and dim light, though such vision is in black and white only. Some forms of magical darkness, such as a 4th-level darkness spell, block normal darkvision. A creature with greater darkvision, however, can see through even these forms of magical darkness."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagSpecialSenseLowLightVision,
-	"SpecialSense.LowLightVision",
+	"PF2.SpecialSense.LowLightVision",
 	"A creature with low-light vision can see in dim light as though it were bright light, so it ignores the concealed condition due to dim light."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagSpecialSenseScent,
-	"SpecialSense.Scent",
+	"PF2.SpecialSense.Scent",
 	"Scent involves sensing creatures or objects by smell, and is usually a vague sense. The range is listed in the ability, and it functions only if the creature or object being detected emits an aroma (for instance, incorporeal creatures usually do not exude an aroma)."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagSpecialSenseTremorsense,
-	"SpecialSense.Tremorsense",
+	"PF2.SpecialSense.Tremorsense",
 	"Tremorsense allows a creature to feel the vibrations through a solid surface caused by movement. It is usually an imprecise sense with a limited range (listed in the ability). Tremorsense functions only if the detecting creature is on the same surface as the subject, and only if the subject is moving along (or burrowing through) the surface."
 )

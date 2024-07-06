@@ -22,93 +22,110 @@
 
 // === Fortitude
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSavingThrowFortitudeUntrained,
-	"SavingThrow.Fortitude.Untrained",
+	Pf2TagProficiencySavingThrowFortitude,
+	"PF2.Proficiency.SavingThrow.Fortitude",
+	"Character proficiency ranks for Fortitude saving throws."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencySavingThrowFortitudeUntrained,
+	"PF2.Proficiency.SavingThrow.Fortitude.Untrained",
 	"Character is Untrained in Fortitude."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSavingThrowFortitudeTrained,
-	"SavingThrow.Fortitude.Trained",
+	Pf2TagProficiencySavingThrowFortitudeTrained,
+	"PF2.Proficiency.SavingThrow.Fortitude.Trained",
 	"Character is Trained in Fortitude."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSavingThrowFortitudeExpert,
-	"SavingThrow.Fortitude.Expert",
+	Pf2TagProficiencySavingThrowFortitudeExpert,
+	"PF2.Proficiency.SavingThrow.Fortitude.Expert",
 	"Character is Expert in Fortitude."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSavingThrowFortitudeMaster,
-	"SavingThrow.Fortitude.Master",
+	Pf2TagProficiencySavingThrowFortitudeMaster,
+	"PF2.Proficiency.SavingThrow.Fortitude.Master",
 	"Character is Master in Fortitude."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSavingThrowFortitudeLegendary,
-	"SavingThrow.Fortitude.Legendary",
+	Pf2TagProficiencySavingThrowFortitudeLegendary,
+	"PF2.Proficiency.SavingThrow.Fortitude.Legendary",
 	"Character is Legendary in Fortitude."
 )
 
 // === Reflex
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSavingThrowReflexUntrained,
-	"SavingThrow.Reflex.Untrained",
+	Pf2TagProficiencySavingThrowReflex,
+	"PF2.Proficiency.SavingThrow.Reflex",
+	"Character proficiency ranks for Reflex saving throws."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencySavingThrowReflexUntrained,
+	"PF2.Proficiency.SavingThrow.Reflex.Untrained",
 	"Character is Untrained in Reflex."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSavingThrowReflexTrained,
-	"SavingThrow.Reflex.Trained",
+	Pf2TagProficiencySavingThrowReflexTrained,
+	"PF2.Proficiency.SavingThrow.Reflex.Trained",
 	"Character is Trained in Reflex."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSavingThrowReflexExpert,
-	"SavingThrow.Reflex.Expert",
+	Pf2TagProficiencySavingThrowReflexExpert,
+	"PF2.Proficiency.SavingThrow.Reflex.Expert",
 	"Character is Expert in Reflex."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSavingThrowReflexMaster,
-	"SavingThrow.Reflex.Master",
+	Pf2TagProficiencySavingThrowReflexMaster,
+	"PF2.Proficiency.SavingThrow.Reflex.Master",
 	"Character is Master in Reflex."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSavingThrowReflexLegendary,
-	"SavingThrow.Reflex.Legendary",
+	Pf2TagProficiencySavingThrowReflexLegendary,
+	"PF2.Proficiency.SavingThrow.Reflex.Legendary",
 	"Character is Legendary in Reflex."
 )
 
 // === Will
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSavingThrowWillUntrained,
-	"SavingThrow.Will.Untrained",
+	Pf2TagProficiencySavingThrowWill,
+	"PF2.Proficiency.SavingThrow.Will",
+	"Character proficiency ranks for Will saving throws."
+)
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagProficiencySavingThrowWillUntrained,
+	"PF2.Proficiency.SavingThrow.Will.Untrained",
 	"Character is Untrained in Will."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSavingThrowWillTrained,
-	"SavingThrow.Will.Trained",
+	Pf2TagProficiencySavingThrowWillTrained,
+	"PF2.Proficiency.SavingThrow.Will.Trained",
 	"Character is Trained in Will."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSavingThrowWillExpert,
-	"SavingThrow.Will.Expert",
+	Pf2TagProficiencySavingThrowWillExpert,
+	"PF2.Proficiency.SavingThrow.Will.Expert",
 	"Character is Expert in Will."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSavingThrowWillMaster,
-	"SavingThrow.Will.Master",
+	Pf2TagProficiencySavingThrowWillMaster,
+	"PF2.Proficiency.SavingThrow.Will.Master",
 	"Character is Master in Will."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
-	Pf2TagSavingThrowWillLegendary,
-	"SavingThrow.Will.Legendary",
+	Pf2TagProficiencySavingThrowWillLegendary,
+	"PF2.Proficiency.SavingThrow.Will.Legendary",
 	"Character is Legendary in Will."
 )

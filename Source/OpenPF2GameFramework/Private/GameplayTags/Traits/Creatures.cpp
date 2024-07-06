@@ -13,41 +13,47 @@
 #include "GameplayTags/Traits/Creatures.h"
 
 // =====================================================================================================================
-// Creature Traits
+// Creature Traits - Keywords that convey information about rules elements that interact with creatures.
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, Glossary, pages 628-638.
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagTraitCreatures,
+	"PF2.Trait.Creature",
+	"Keywords that convey information about rules elements that interact with creatures."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagTraitCreatureElf,
-	"Trait.Creature.Elf",
+	"PF2.Trait.Creature.Elf",
 	"A creature with this trait is a member of the elf ancestry. Elves are mysterious people with rich traditions of magic and scholarship who typically have low-light vision. An ability with this trait can be used or selected only by elves. A weapon with this trait is created and used by elves."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagTraitCreatureHalfElf,
-	"Trait.Creature.HalfElf",
+	"PF2.Trait.Creature.HalfElf",
 	"A creature with this trait is part human and part elf. An ability with this trait can be used or selected only by half-elves."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagTraitCreatureHalfOrc,
-	"Trait.Creature.HalfOrc",
+	"PF2.Trait.Creature.HalfOrc",
 	"A creature with this trait is part human and part orc. An ability with this trait can be used or selected only by half-orcs."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagTraitCreatureHuman,
-	"Trait.Creature.Human",
+	"PF2.Trait.Creature.Human",
 	"A creature with this trait is a member of the human ancestry. Humans are a diverse array of people known for their adaptability. An ability with this trait can be used or selected only by humans."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagTraitCreatureHumanoid,
-	"Trait.Creature.Humanoid",
+	"PF2.Trait.Creature.Humanoid",
 	"Humanoid creatures reason and act much like humans. They typically stand upright and have two arms and two legs."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagTraitCreatureOrc,
-	"Trait.Creature.Orc",
+	"PF2.Trait.Creature.Orc",
 	"A creature with this trait is a member of the orc ancestry. These green-skinned people tend to have darkvision. An ability with this trait can be used or selected only by orcs. An item with this trait is created and used by orcs."
 )

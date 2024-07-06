@@ -16,18 +16,24 @@
 // Weapon Groups
 // =====================================================================================================================
 // From the Pathfinder 2E Core Rulebook, pages 280-282; Tables 6-6, 6-7, and 6-8.
-UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupAxe,      "WeaponGroup.Axe")
-UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupBomb,     "WeaponGroup.Bomb")
-UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupBow,      "WeaponGroup.Bow")
-UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupBrawling, "WeaponGroup.Brawling")
-UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupClub,     "WeaponGroup.Club")
-UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupDart,     "WeaponGroup.Dart")
-UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupFlail,    "WeaponGroup.Flail")
-UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupHammer,   "WeaponGroup.Hammer")
-UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupKnife,    "WeaponGroup.Knife")
-UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupPick,     "WeaponGroup.Pick")
-UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupPolearm,  "WeaponGroup.Polearm")
-UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupShield,   "WeaponGroup.Shield")
-UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupSling,    "WeaponGroup.Sling")
-UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupSpear,    "WeaponGroup.Spear")
-UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupSword,    "WeaponGroup.Sword")
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagWeapons,
+	"PF2.WeaponGroup",
+	"The broad categories of weapons by shape and type of attack (ranged vs. melee)."
+)
+
+UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupAxe,      "PF2.WeaponGroup.Axe")
+UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupBomb,     "PF2.WeaponGroup.Bomb")
+UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupBow,      "PF2.WeaponGroup.Bow")
+UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupBrawling, "PF2.WeaponGroup.Brawling")
+UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupClub,     "PF2.WeaponGroup.Club")
+UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupDart,     "PF2.WeaponGroup.Dart")
+UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupFlail,    "PF2.WeaponGroup.Flail")
+UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupHammer,   "PF2.WeaponGroup.Hammer")
+UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupKnife,    "PF2.WeaponGroup.Knife")
+UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupPick,     "PF2.WeaponGroup.Pick")
+UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupPolearm,  "PF2.WeaponGroup.Polearm")
+UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupShield,   "PF2.WeaponGroup.Shield")
+UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupSling,    "PF2.WeaponGroup.Sling")
+UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupSpear,    "PF2.WeaponGroup.Spear")
+UE_DEFINE_GAMEPLAY_TAG(Pf2TagWeaponGroupSword,    "PF2.WeaponGroup.Sword")

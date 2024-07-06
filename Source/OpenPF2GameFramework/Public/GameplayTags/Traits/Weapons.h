@@ -18,6 +18,7 @@
 // Weapon Traits
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, "Weapon Traits", pages 282-283.
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTraitWeapons)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTraitWeaponAgile)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTraitWeaponAttachedToShield)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagTraitWeaponBackstabber)

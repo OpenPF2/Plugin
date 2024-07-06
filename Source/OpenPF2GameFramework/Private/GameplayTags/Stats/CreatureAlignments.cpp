@@ -17,73 +17,79 @@
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, page 29, Table 1-2: The Nine Alignments.
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagCreatureAlignments,
+	"PF2.CreatureAlignment",
+	"Indicators of a character's morality and personality."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagCreatureAlignmentLawful,
-	"CreatureAlignment.Lawful",
+	"PF2.CreatureAlignment.Lawful",
 	"Character values consistency, stability, and predictability over flexibility"
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagCreatureAlignmentLawfulGood,
-	"CreatureAlignment.Lawful.Good",
+	"PF2.CreatureAlignment.Lawful.Good",
 	"Character values consistency, stability, and predictability over flexibility; considers others above themselves and works selflessly to assist others."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagCreatureAlignmentLawfulNeutral,
-	"CreatureAlignment.Lawful.Neutral",
+	"PF2.CreatureAlignment.Lawful.Neutral",
 	"Character values consistency, stability, and predictability over flexibility; doesn't consider others more or less importantly than themselves."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagCreatureAlignmentLawfulEvil,
-	"CreatureAlignment.Lawful.Evil",
+	"PF2.CreatureAlignment.Lawful.Evil",
 	"Character values consistency, stability, and predictability over flexibility; is willing to victimize or harm others for selfish gain."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagCreatureAlignmentNeutral,
-	"CreatureAlignment.Neutral",
+	"PF2.CreatureAlignment.Neutral",
 	"Character obeys law or code of conduct in many situations, but is flexible."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagCreatureAlignmentNeutralGood,
-	"CreatureAlignment.Neutral.Good",
+	"PF2.CreatureAlignment.Neutral.Good",
 	"Character obeys law or code of conduct in many situations, but is flexible; considers others above themselves and works selflessly to assist others."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagCreatureAlignmentNeutralNeutral,
-	"CreatureAlignment.Neutral.Neutral",
+	"PF2.CreatureAlignment.Neutral.Neutral",
 	"Character obeys law or code of conduct in many situations, but is flexible; doesn't consider others more or less importantly than themselves."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagCreatureAlignmentNeutralEvil,
-	"CreatureAlignment.Neutral.Evil",
+	"PF2.CreatureAlignment.Neutral.Evil",
 	"Character obeys law or code of conduct in many situations, but is flexible; is willing to victimize or harm others for selfish gain."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagCreatureAlignmentChaotic,
-	"CreatureAlignment.Chaotic",
+	"PF2.CreatureAlignment.Chaotic",
 	"Character values flexibility, creativity, and spontaneity over consistency."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagCreatureAlignmentChaoticGood,
-	"CreatureAlignment.Chaotic.Good",
+	"PF2.CreatureAlignment.Chaotic.Good",
 	"Character values flexibility, creativity, and spontaneity over consistency; considers others above themselves and works selflessly to assist others."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagCreatureAlignmentChaoticNeutral,
-	"CreatureAlignment.Chaotic.Neutral",
+	"PF2.CreatureAlignment.Chaotic.Neutral",
 	"Character values flexibility, creativity, and spontaneity over consistency; doesn't consider others more or less importantly than themselves."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagCreatureAlignmentChaoticEvil,
-	"CreatureAlignment.Chaotic.Evil",
+	"PF2.CreatureAlignment.Chaotic.Evil",
 	"Character values flexibility, creativity, and spontaneity over consistency; is willing to victimize or harm others for selfish gain."
 )

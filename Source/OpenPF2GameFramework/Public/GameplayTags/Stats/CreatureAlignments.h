@@ -18,6 +18,8 @@
 // Creature Alignment - The indicator of the character's morality and personality.
 // =====================================================================================================================
 // Source: Pathfinder 2E Core Rulebook, page 29, Table 1-2: The Nine Alignments.
+OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCreatureAlignments)
+
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCreatureAlignmentLawful)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCreatureAlignmentLawfulGood)
 OPENPF2GAMEFRAMEWORK_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pf2TagCreatureAlignmentLawfulNeutral)

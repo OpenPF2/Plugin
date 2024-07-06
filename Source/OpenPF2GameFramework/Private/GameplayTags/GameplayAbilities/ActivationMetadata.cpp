@@ -9,13 +9,19 @@
 // Tags that identify additional metadata that has been passed along for an ability activation.
 // =====================================================================================================================
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagGameplayAbilityActivationMetadata,
+	"PF2.GameplayAbility.ActivationMetadata",
+	"Tags that identify additional metadata that has been passed along for an ability activation."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagGameplayAbilityActivationMetadataHasTargetCharacter,
-	"GameplayAbility.Activation.Metadata.HasTarget.Character",
+	"PF2.GameplayAbility.ActivationMetadata.HasTarget.Character",
 	"Tag that a Gameplay Ability activation includes a target character (for healing or attack) chosen by the player."
 )
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
 	Pf2TagGameplayAbilityActivationMetadataHasTargetLocation,
-	"GameplayAbility.Activation.Metadata.HasTarget.Location",
+	"PF2.GameplayAbility.ActivationMetadata.HasTarget.Location",
 	"Tag that a Gameplay Ability activation includes a target map location chosen by the player."
 )
