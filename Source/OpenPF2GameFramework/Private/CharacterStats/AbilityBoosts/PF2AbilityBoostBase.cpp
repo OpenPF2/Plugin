@@ -12,6 +12,7 @@
 #include "CharacterStats/AbilityBoosts/PF2AbilityBoostRuleOptionValidator.h"
 #include "CharacterStats/AbilityBoosts/PF2GameplayAbilityTargetData_BoostAbility.h"
 
+#include "GameplayTags/Encounters/AbilityTriggers.h"
 #include "GameplayTags/GameplayAbilities/AbilityTypes.h"
 
 #include "Libraries/PF2TagLibrary.h"
@@ -21,7 +22,7 @@ UPF2AbilityBoostBase::UPF2AbilityBoostBase()
 	FAbilityTriggerData TriggerData;
 
 	TriggerData.TriggerSource = EGameplayAbilityTriggerSource::GameplayEvent;
-	TriggerData.TriggerTag    = Pf2TagGameplayAbilityTypeAbilityBoost;
+	TriggerData.TriggerTag    = Pf2TagTriggerTagCategoryAnytimeAbilityBoost;
 
 	this->AbilityTriggers.Add(TriggerData);
 

@@ -9,6 +9,21 @@
 // in the UI.
 
 // =====================================================================================================================
+// Tags that trigger Gameplay Abilities that can be used at any time.
+// =====================================================================================================================
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagTriggerTagCategoryAnytime,
+	"TriggerTagCategory.PF2.Anytime",
+	"Tags that trigger Gameplay Abilities that can be used at any time."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagTriggerTagCategoryAnytimeAbilityBoost,
+	"TriggerTagCategory.PF2.Anytime.AbilityBoost",
+	"Tag to trigger ."
+)
+
+// =====================================================================================================================
 // Tags that trigger Encounter-related Gameplay Abilities.
 // =====================================================================================================================
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(
