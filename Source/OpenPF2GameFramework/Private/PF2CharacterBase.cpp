@@ -24,6 +24,7 @@
 
 #include "Commands/PF2CommandQueueComponent.h"
 
+#include "GameplayTags/Encounters/AbilityTriggers.h"
 #include "GameplayTags/GameplayAbilities/AbilityTypes.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
@@ -468,7 +469,7 @@ void APF2CharacterBase::ActivateAbilityBoost(
 	Asc->TriggerAbilityFromGameplayEvent(
 		BoostSpec->Handle,
 		Asc->AbilityActorInfo.Get(),
-		Pf2TagGameplayAbilityTypeAbilityBoost,
+		Pf2TagTriggerTagCategoryAnytimeAbilityBoost,
 		&BoostEventInfo,
 		*Asc
 	);
