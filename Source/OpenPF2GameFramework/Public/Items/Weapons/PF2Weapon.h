@@ -1,4 +1,4 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -64,19 +64,19 @@ protected:
 	 * will typically define only one root tag here. However, ancestry-specific weapons that are affected by a weapon
 	 * familiarity feat will define at least two. The highest-granted proficiency wins.
 	 *
-	 * For example, a gnome martial weapon would have root gameplay tags of both "WeaponProficiency.Category.Martial"
-	 * and "WeaponProficiency.Category.MartialGnome". This would allow a character to have proficiency with the weapon
+	 * For example, a gnome martial weapon would have root gameplay tags of both "PF2.Proficiency.Weapon.Category.Martial"
+	 * and "PF2.Proficiency.Weapon.Category.MartialGnome". This would allow a character to have proficiency with the weapon
 	 * under the following scenarios:
 	 *	- A Gnome with the "Gnome Weapon Familiarity" feat who is proficient with simple weapons, granting them both a
-	 *	  "WeaponProficiency.Category.Simple.*" and "WeaponProficiency.Category.MartialGnome.*" gameplay tag, since the
+	 *	  "PF2.Proficiency.Weapon.Category.Simple.*" and "PF2.Proficiency.Weapon.Category.MartialGnome.*" gameplay tag, since the
 	 *	  feat allows gnome martial weapons to be treated as simple weapons.
 	 *	- Any character without the "Gnome Weapon Familiarity" feat who is proficient with martial weapons, since the
-	 *	  proficiency grants them a "WeaponProficiency.Category.Martial.*" gameplay tag.
+	 *	  proficiency grants them a "PF2.Proficiency.Weapon.Category.Martial.*" gameplay tag.
 	 */
 	UPROPERTY(
 		EditDefaultsOnly,
 		BlueprintReadOnly,
-		meta=(Categories="WeaponProficiency"),
+		meta=(Categories="PF2.Proficiency.Weapon"),
 		Category="OpenPF2 - Weapon Statistics"
 	)
 	FGameplayTagContainer ProficiencyTagPrefixes;
@@ -113,7 +113,7 @@ protected:
 	UPROPERTY(
 		EditDefaultsOnly,
 		BlueprintReadOnly,
-		meta=(Categories="DamageType"),
+		meta=(Categories="PF2.DamageType"),
 		Category="OpenPF2 - Weapon Statistics"
 	)
 	FGameplayTag DamageType;
@@ -175,7 +175,7 @@ protected:
 	UPROPERTY(
 		EditDefaultsOnly,
 		BlueprintReadOnly,
-		meta=(Categories="WeaponGroup"),
+		meta=(Categories="PF2.WeaponGroup"),
 		Category="OpenPF2 - Weapon Statistics"
 	)
 	FGameplayTag Group;
@@ -190,7 +190,7 @@ protected:
 	UPROPERTY(
 		EditDefaultsOnly,
 		BlueprintReadOnly,
-		meta=(Categories="Trait.Weapon"),
+		meta=(Categories="PF2.Trait.Weapon"),
 		Category="OpenPF2 - Weapon Statistics"
 	)
 	FGameplayTagContainer Traits;

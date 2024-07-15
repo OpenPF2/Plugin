@@ -1,7 +1,11 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2023-2026, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 Game Framework for Unreal Engine, Copyright 2023-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+#include "GameplayTags/Stats/CreatureAlignments.h"
+#include "GameplayTags/Stats/CreatureSizes.h"
+#include "GameplayTags/Traits/Conditions.h"
 
 #include "Libraries/PF2TagLibrary.h"
 
@@ -16,26 +20,26 @@ DEFINE_PF_SPEC(FPF2TagLibrarySpec,
 
 void FPF2TagLibrarySpec::Define()
 {
-	static const TArray<FName> TagNames = {
-		"CreatureSize.Medium",
-		"Trait.Condition.Dying.4",
-		"Trait.Condition.Wounded.3",
-		"Trait.Condition.Wounded.2",
-		"CreatureAlignment.Chaotic.Good"
+	static const TArray<FGameplayTag> Tags = {
+		Pf2TagCreatureSizeMedium,
+		Pf2TagTraitConditionDying4,
+		Pf2TagTraitConditionWounded3,
+		Pf2TagTraitConditionWounded2,
+		Pf2TagCreatureAlignmentChaoticGood,
 	};
 
-	static const FGameplayTag DoomedTag        = FGameplayTag::RequestGameplayTag("Trait.Condition.Doomed"),
-	                          DyingParentTag   = FGameplayTag::RequestGameplayTag("Trait.Condition.Dying"),
-	                          WoundedParentTag = FGameplayTag::RequestGameplayTag("Trait.Condition.Wounded"),
-	                          ConditionTag     = FGameplayTag::RequestGameplayTag("Trait.Condition"),
-	                          Dying4Tag        = FGameplayTag::RequestGameplayTag("Trait.Condition.Dying.4"),
-	                          Wounded3Tag      = FGameplayTag::RequestGameplayTag("Trait.Condition.Wounded.3");
+	static const FGameplayTag DoomedTag        = Pf2TagTraitConditionDoomed,
+	                          DyingParentTag   = Pf2TagTraitConditionDying,
+	                          WoundedParentTag = Pf2TagTraitConditionWounded,
+	                          ConditionTag     = Pf2TagTraitConditions,
+	                          Dying4Tag        = Pf2TagTraitConditionDying4,
+	                          Wounded3Tag      = Pf2TagTraitConditionWounded3;
 
 	static FGameplayTagContainer TagList;
 
-	for (const FName& TagName : TagNames)
+	for (const FGameplayTag& Tag : Tags)
 	{
-		TagList.AddTag(FGameplayTag::RequestGameplayTag(TagName));
+		TagList.AddTag(Tag);
 	}
 
 	Describe(TEXT("AddDefaultAbilityTag"), [=, this]
@@ -99,7 +103,9 @@ void FPF2TagLibrarySpec::Define()
 				FGameplayTag Result;
 
 				AddExpectedError(
-					TEXT("More than one child tag \\('Trait\\.Condition\\.Wounded\\.3, Trait\\.Condition\\.Wounded\\.2'\\) matched parent tag \\('Trait\\.Condition\\.Wounded'\\)\\."),
+					TEXT("More than one child tag \\('PF2\\.Trait\\.Condition\\.Wounded\\.3, "
+					"PF2\\.Trait\\.Condition\\.Wounded\\.2'\\) matched parent tag "
+					"\\('PF2\\.Trait\\.Condition\\.Wounded'\\)\\."),
 					EAutomationExpectedErrorFlags::Exact,
 					1
 				);
@@ -132,7 +138,9 @@ void FPF2TagLibrarySpec::Define()
 				int8 Result;
 
 				AddExpectedError(
-					TEXT("More than one child tag \\('Trait\\.Condition\\.Dying\\.4, Trait\\.Condition\\.Wounded\\.3, Trait\\.Condition\\.Wounded.2'\\) matched parent tag \\('Trait\\.Condition'\\)\\."),
+					TEXT("More than one child tag \\('PF2\\.Trait\\.Condition\\.Dying\\.4, "
+					"PF2\\.Trait\\.Condition\\.Wounded\\.3, PF2\\.Trait\\.Condition\\.Wounded.2'\\) matched parent tag "
+					"\\('PF2\\.Trait\\.Condition'\\)\\."),
 					EAutomationExpectedErrorFlags::Exact,
 					1
 				);
@@ -160,7 +168,9 @@ void FPF2TagLibrarySpec::Define()
 				int8 Result;
 
 				AddExpectedError(
-					TEXT("More than one child tag \\('Trait\\.Condition\\.Wounded\\.3, Trait\\.Condition\\.Wounded\\.2'\\) matched parent tag \\('Trait\\.Condition\\.Wounded'\\)\\."),
+					TEXT("More than one child tag \\('PF2\\.Trait\\.Condition\\.Wounded\\.3, "
+					"PF2\\.Trait\\.Condition\\.Wounded\\.2'\\) matched parent tag "
+					"\\('PF2\\.Trait\\.Condition\\.Wounded'\\)\\."),
 					EAutomationExpectedErrorFlags::Exact,
 					1
 				);

@@ -57,7 +57,7 @@ void FKeyAbilityBoostSpec::Define()
 				const UPF2CharacterAttributeSet*    AttributeSet         = this->TestPawnAsc->GetSet<UPF2CharacterAttributeSet>();
 				FAttributeCapture                   Attributes           = CaptureAbilityAttributes(AttributeSet);
 				FGameplayAttributeData*             KeyAbilityAttribute  = Attributes[KeyAbilityAttributeName];
-				const FString                       TagName              = FString::Format(TEXT("KeyAbility.{0}"), {KeyAbilityName});
+				const FString                       TagName              = TEXT("PF2.KeyAbility.") + KeyAbilityName;
 				const TSubclassOf<UGameplayEffect>& EffectBP             = this->LoadGE();
 
 				// Start all attributes from a known value.

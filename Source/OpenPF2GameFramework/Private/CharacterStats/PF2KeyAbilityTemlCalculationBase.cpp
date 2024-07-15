@@ -24,7 +24,7 @@
 UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase() :
 	UPF2KeyAbilityTemlCalculationBase(
 		TEXT(""),
-		TEXT("KeyAbility")
+		TEXT("PF2.KeyAbility")
 	)
 {
 }
