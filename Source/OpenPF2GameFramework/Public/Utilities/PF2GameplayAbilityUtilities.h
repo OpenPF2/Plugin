@@ -121,7 +121,9 @@ namespace PF2GameplayAbilityUtilities
 	 * @return
 	 *	The capture definition for the specified attribute.
 	 */
-	OPENPF2GAMEFRAMEWORK_API FGameplayEffectAttributeCaptureDefinition BuildSourceCaptureFor(const FGameplayAttribute& Attribute);
+	OPENPF2GAMEFRAMEWORK_API FGameplayEffectAttributeCaptureDefinition BuildSourceCaptureFor(
+		const FGameplayAttribute& Attribute
+	);
 
 	/**
 	 * Gets the name of the default weight group into which the given GE should be placed.
@@ -168,7 +170,9 @@ namespace PF2GameplayAbilityUtilities
 	 * @return
 	 *	A pointer to the Ability System Component for the actor described by the given info.
 	 */
-	OPENPF2GAMEFRAMEWORK_API UAbilitySystemComponent* GetAbilitySystemComponent(const FGameplayAbilityActorInfo* ActorInfo);
+	OPENPF2GAMEFRAMEWORK_API UAbilitySystemComponent* GetAbilitySystemComponent(
+		const FGameplayAbilityActorInfo* ActorInfo
+	);
 
 	/**
 	 * Gets the OpenPF2 character attribute set of the given actor.
@@ -182,7 +186,8 @@ namespace PF2GameplayAbilityUtilities
 	 *	A pointer to the OpenPF2 attribute set.
 	 */
 	OPENPF2GAMEFRAMEWORK_API const UPF2CharacterAttributeSet* GetCharacterAttributeSet(
-		const FGameplayAbilityActorInfo* ActorInfo);
+		const FGameplayAbilityActorInfo* ActorInfo
+	);
 
 	/**
 	 * Determines which OpenPF2 character an activated GE has targeted.
