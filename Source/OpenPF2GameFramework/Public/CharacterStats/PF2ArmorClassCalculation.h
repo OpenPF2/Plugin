@@ -79,7 +79,7 @@ protected:
 	 *
 	 * @param SourceTags
 	 *	The tags on the character. A tag in this list should indicate the character's equipped armor (e.g.
-	 *	"Armor.Equipped.Unarmored", "Armor.Equipped.Light", etc.).
+	 *	"PF2.Equipped.Armor.Unarmored", "PF2.Equipped.Armor.Light", etc.).
 	 *
 	 * @return
 	 *	The name of the armor type ("Unarmored", "Light", "Medium", or "Heavy").

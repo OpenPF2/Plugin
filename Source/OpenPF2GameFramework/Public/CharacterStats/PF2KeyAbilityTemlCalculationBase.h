@@ -44,11 +44,11 @@ public:
 	 * boost.
 	 *
 	 * @param StatGameplayTagPrefix
-	 *	The tag prefix to use for checking a character's training in the stat. For example, "ClassDc", "SpellAttack",
-	 *	or "SpellDc".
+	 *	The tag prefix to use for checking a character's training in the stat. For example, "PF2.Proficiency.ClassDc",
+	 *	"PF2.Proficiency.SpellAttack", or "PF2.Proficiency.SpellDc".
 	 * @param KeyAbilityGameplayTagPrefix
-	 *	The tag prefix to use to determine the key ability for this stat.  For the Class DC, this is "KeyAbility". For
-	 *	Spell Attack and Spell DC, this is "SpellcastingAbility".
+	 *	The tag prefix to use to determine the key ability for this stat.  For the Class DC, this is "PF2.KeyAbility".
+	 *	For Spell Attack and Spell DC, this is "PF2.SpellcastingAbility".
 	 * @param BaseValue
 	 *	The base value for this stat. For DC stats, this is usually "10". For other stats (e.g. Spell Attack Roll),
 	 *	this is 0.
@@ -114,7 +114,8 @@ protected:
 	 * This is used to ensure we can retrieve the modifier for the specified ability later in the calculation phase.
 	 *
 	 * @param KeyAbilityTagName
-	 *	The name of the gameplay tag that a character must have for the ability to be considered "key".
+	 *	The name of the gameplay tag that a character must have for the ability to be considered "key". For example,
+	 *	"PF2.KeyAbility.Strength" or "PF2.SpellcastingAbility.Intelligence".
 	 * @param Attribute
 	 *	The definition of the attribute to capture.
 	 */

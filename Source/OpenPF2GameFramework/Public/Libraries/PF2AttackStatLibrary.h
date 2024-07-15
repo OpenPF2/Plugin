@@ -39,8 +39,8 @@ protected:
 	/**
 	 * The maximum level for a character's "dying" condition trait.
 	 *
-	 * This level actually signifies that the character is dead. It is therefore synonymous with "Trait.Condition.Dead",
-	 * which is an OpenPF2 extension to "Dying 4" ("Trait.Condition.Dying.4") from the Core Rulebook.
+	 * This level actually signifies that the character is dead. It is therefore synonymous with "PF2.Trait.Condition.Dead",
+	 * which is an OpenPF2 extension to "Dying 4" ("PF2.Trait.Condition.Dying.4") from the Core Rulebook.
 	 */
 	static constexpr uint8 MaxDyingConditionLevel = 4;
 

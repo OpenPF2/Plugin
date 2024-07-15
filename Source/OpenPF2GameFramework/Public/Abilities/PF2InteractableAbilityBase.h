@@ -36,24 +36,6 @@ class UPF2InteractableAbilityBase :
 
 protected:
 	// =================================================================================================================
-	// Protected Constants
-	// =================================================================================================================
-	/**
-	 * The name of the gameplay tag that is applied to abilities any player can activate.
-	 */
-	static inline FName CommonAbilityTagName = FName(TEXT("Trait.Ability.Common"));
-
-	// =================================================================================================================
-	// Protected Static Fields
-	// =================================================================================================================
-	/**
-	 * The gameplay tag that applies to "common" abilities, which is the default for interactable abilities.
-	 *
-	 * This is cached for performance.
-	 */
-	inline static FGameplayTag CommonAbilityTag = FGameplayTag();
-
-	// =================================================================================================================
 	// Protected Fields
 	// =================================================================================================================
 	/**

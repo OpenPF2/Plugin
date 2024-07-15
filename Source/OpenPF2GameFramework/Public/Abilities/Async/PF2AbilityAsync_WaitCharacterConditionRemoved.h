@@ -49,8 +49,8 @@ public:
 	 * removed, and it will broadcast again on future removals unless "Only trigger once" is "false". If the character
 	 * does not have the specified condition when this task is started, the event will be broadcast immediately.
 	 *
-	 * The task does not broadcast on changes to the level of a condition (e.g., going from "Trait.Condition.Dying.1" to
-	 * "Trait.Condition.Dying.2"), only on a removal of the condition entirely.
+	 * The task does not broadcast on changes to the level of a condition (e.g., going from "PF2.Trait.Condition.Dying.1" to
+	 * "PF2.Trait.Condition.Dying.2"), only on a removal of the condition entirely.
 	 *
 	 * If "Fire Immediately If Already Satisfied" is "true" and the target character does not have the specified
 	 * condition, the "On Condition Removed" event will be broadcast immediately.
@@ -58,7 +58,7 @@ public:
 	 * @param Character
 	 *	The character for which condition levels are being monitored.
 	 * @param ConditionParentTag
-	 *	The tag immediately above the tag that contains the integer condition level (e.g., "Trait.Condition.Dying").
+	 *	The tag immediately above the tag that contains the integer condition level (e.g., "PF2.Trait.Condition.Dying").
 	 * @param bFireImmediatelyIfAlreadySatisfied
 	 *	Whether to evaluate the tag criterion upon starting this task and then fire the callback if has been satisfied.
 	 * @param bOnlyTriggerOnce

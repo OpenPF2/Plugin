@@ -17,6 +17,8 @@
 #include "CharacterStats/PF2TargetCharacterAttributeStatics.h"
 #include "CharacterStats/PF2TemlCalculation.h"
 
+#include "GameplayTags/Stats/Equipment.h"
+
 #include "Libraries/PF2AbilitySystemLibrary.h"
 
 #include "Utilities/PF2GameplayAbilityUtilities.h"
@@ -74,7 +76,7 @@ float UPF2ArmorClassCalculation::CalculateArmorTypeProficiencyBonus(const FGamep
 {
 	const FGameplayTagContainer* SourceTags                 = Spec.CapturedSourceTags.GetAggregatedTags();
 	const FString                ArmorType                  = DetermineArmorType(SourceTags),
-	                             ArmorTypeProficiencyPrefix = "Armor.Category." + ArmorType;
+	                             ArmorTypeProficiencyPrefix = TEXT("PF2.Proficiency.Armor.Category.") + ArmorType;
 
 	const float ProficiencyBonus = FPF2TemlCalculation(ArmorTypeProficiencyPrefix, Spec).GetValue();
 
@@ -92,22 +94,22 @@ float UPF2ArmorClassCalculation::CalculateArmorTypeProficiencyBonus(const FGamep
 FString UPF2ArmorClassCalculation::DetermineArmorType(const FGameplayTagContainer* SourceTags) const
 {
 	// Default to no armor.
-	FString ArmorType = "Unarmored";
+	FString ArmorType = TEXT("Unarmored");
 
 	// Bypass additional checks if the character has no armor equipped, to avoid checking every armor type.
-	if (PF2GameplayAbilityUtilities::HasTag(SourceTags, FName("Armor.Equipped")))
+	if (SourceTags->HasTag(Pf2TagEquippedArmor))
 	{
-		if (PF2GameplayAbilityUtilities::HasTag(SourceTags, FName("Armor.Equipped.Heavy")))
+		if (SourceTags->HasTag(Pf2TagEquippedArmorHeavy))
 		{
-			ArmorType = "Heavy";
+			ArmorType = TEXT("Heavy");
 		}
-		else if (PF2GameplayAbilityUtilities::HasTag(SourceTags, FName("Armor.Equipped.Medium")))
+		else if (SourceTags->HasTag(Pf2TagEquippedArmorMedium))
 		{
-			ArmorType = "Medium";
+			ArmorType = TEXT("Medium");
 		}
-		else if (PF2GameplayAbilityUtilities::HasTag(SourceTags, FName("Armor.Equipped.Light")))
+		else if (SourceTags->HasTag(Pf2TagEquippedArmorLight))
 		{
-			ArmorType = "Light";
+			ArmorType = TEXT("Light");
 		}
 	}
 

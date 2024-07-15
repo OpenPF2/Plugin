@@ -6,6 +6,6 @@
 #include "CharacterStats/PF2ClassDifficultyClassCalculation.h"
 
 UPF2ClassDifficultyClassCalculation::UPF2ClassDifficultyClassCalculation() :
-	UPF2KeyAbilityTemlCalculationBase(TEXT("ClassDc"), TEXT("KeyAbility"), 10.0f)
+	UPF2KeyAbilityTemlCalculationBase(TEXT("PF2.Proficiency.ClassDc"), TEXT("PF2.KeyAbility"), 10.0f)
 {
 }

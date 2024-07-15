@@ -79,7 +79,7 @@ void FPF2SpellDifficultyClassCalculationsSpec::Define()
 		{
 			BeforeEach([=, this]()
 			{
-				this->ApplyUnreplicatedTag(FString::Format(TEXT("SpellcastingAbility.{0}"), {SpellAbilityName}));
+				this->ApplyUnreplicatedTag(TEXT("PF2.SpellcastingAbility.") + SpellAbilityName);
 			});
 
 			for (auto& BoostedAbility : this->AllAbilityModifierAttributes)
@@ -108,7 +108,9 @@ void FPF2SpellDifficultyClassCalculationsSpec::Define()
 
 							BeforeEach([=, this]()
 							{
-								this->ApplyUnreplicatedTag(FString::Format(TEXT("SpellDc.{0}"), {ProficiencyLevel}));
+								this->ApplyUnreplicatedTag(
+									TEXT("PF2.Proficiency.SpellDc.") + ProficiencyLevel
+								);
 							});
 
 							if (SpellAbilityName == BoostedAbilityName)

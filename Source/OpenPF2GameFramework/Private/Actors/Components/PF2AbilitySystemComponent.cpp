@@ -13,13 +13,12 @@
 
 #include "Abilities/PF2InteractableAbilityInterface.h"
 
+#include "GameplayTags/GameplayAbilities/AbilityTypes.h"
+
 #include "Utilities/PF2ArrayUtilities.h"
 #include "Utilities/PF2EnumUtilities.h"
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
-
-const FName UPF2AbilitySystemComponent::DefaultMovementAbilityTagName   = FName(TEXT("GameplayAbility.Type.DefaultMovement"));
-const FName UPF2AbilitySystemComponent::DefaultFaceTargetAbilityTagName = FName(TEXT("GameplayAbility.Type.DefaultFaceTarget"));
 
 UPF2AbilitySystemComponent::UPF2AbilitySystemComponent() : Events(nullptr), bAreAbilitiesAvailable(false)
 {
@@ -624,7 +623,7 @@ TArray<TScriptInterface<IPF2AbilityBoostInterface>> UPF2AbilitySystemComponent::
 	TArray<FGameplayAbilitySpec*>                       MatchingGameplayAbilitySpecs;
 
 	this->GetActivatableGameplayAbilitySpecsByAllMatchingTags(
-		FGameplayTagContainer(PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.Type.AbilityBoost"))),
+		FGameplayTagContainer(Pf2TagGameplayAbilityTypeAbilityBoost),
 		MatchingGameplayAbilitySpecs,
 		false
 	);
@@ -683,8 +682,7 @@ bool UPF2AbilitySystemComponent::HasDefaultMovementAbility() const
 
 FGameplayAbilitySpecHandle UPF2AbilitySystemComponent::FindDefaultMovementAbilityHandle(bool& bOutMatchFound) const
 {
-	const FGameplayTag          MovementTag = PF2GameplayAbilityUtilities::GetTag(DefaultMovementAbilityTagName);
-	const FGameplayTagContainer SearchTags  = FGameplayTagContainer(MovementTag);
+	const FGameplayTagContainer SearchTags  = FGameplayTagContainer(Pf2TagGameplayAbilityTypeDefaultMovement);
 
 	return this->FindAbilityHandleByTags(SearchTags, bOutMatchFound, false);
 }
@@ -700,8 +698,7 @@ bool UPF2AbilitySystemComponent::HasDefaultFaceTargetAbility() const
 
 FGameplayAbilitySpecHandle UPF2AbilitySystemComponent::FindDefaultFaceTargetAbilityHandle(bool& bOutMatchFound) const
 {
-	const FGameplayTag          FacingTag  = PF2GameplayAbilityUtilities::GetTag(DefaultFaceTargetAbilityTagName);
-	const FGameplayTagContainer SearchTags = FGameplayTagContainer(FacingTag);
+	const FGameplayTagContainer SearchTags = FGameplayTagContainer(Pf2TagGameplayAbilityTypeDefaultFaceTarget);
 
 	return this->FindAbilityHandleByTags(SearchTags, bOutMatchFound, false);
 }

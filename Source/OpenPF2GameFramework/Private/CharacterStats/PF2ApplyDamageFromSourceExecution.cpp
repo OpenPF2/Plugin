@@ -18,6 +18,8 @@
 
 #include "CharacterStats/PF2TargetCharacterAttributeStatics.h"
 
+#include "GameplayTags/GameplayCues.h"
+
 #include "Libraries/PF2AbilitySystemLibrary.h"
 
 #include "Utilities/PF2GameplayAbilityUtilities.h"
@@ -33,11 +35,6 @@ UPF2ApplyDamageFromSourceExecution::UPF2ApplyDamageFromSourceExecution()
 	{
 		this->RelevantAttributesToCapture.Add(*Capture);
 	}
-
-	// Cache the tag to avoid lookup overhead.
-	this->InflictDamageCueTag = PF2GameplayAbilityUtilities::GetTag(
-		FName("GameplayCue.Character.InflictDamage")
-	);
 }
 
 void UPF2ApplyDamageFromSourceExecution::Execute_Implementation(
@@ -139,10 +136,7 @@ void UPF2ApplyDamageFromSourceExecution::Execute_Implementation(
 
 			CueParams.RawMagnitude = EffectiveDamage;
 
-			TargetAsc->ExecuteGameplayCue(
-				this->InflictDamageCueTag,
-				CueParams
-			);
+			TargetAsc->ExecuteGameplayCue(Pf2TagGameplayCueCharacterInflictDamage, CueParams);
 		}
 	}
 
@@ -153,9 +147,6 @@ void UPF2ApplyDamageFromSourceExecution::Execute_Implementation(
 
 		CueParams.RawMagnitude = 0;
 
-		TargetAsc->ExecuteGameplayCue(
-			this->InflictDamageCueTag,
-			CueParams
-		);
+		TargetAsc->ExecuteGameplayCue(Pf2TagGameplayCueCharacterInflictDamage, CueParams);
 	}
 }

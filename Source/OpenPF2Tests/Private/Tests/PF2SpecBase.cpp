@@ -192,19 +192,15 @@ FActiveGameplayEffectHandle FPF2SpecBase::ApplyGameplayEffectToTestCharacter(
 
 FGameplayEffectSpecHandle FPF2SpecBase::BuildEffectSpec(
 	const TSubclassOf<UGameplayEffect>& EffectClass,
-	const TMap<FName, float>&           SetByCallerMagnitudesMap) const
+	const TMap<FGameplayTag, float>&    SetByCallerMagnitudesMap) const
 {
-	FGameplayEffectSpecHandle EffectSpec;
-
-	EffectSpec = this->TestCharacterAsc->MakeOutgoingSpec(EffectClass, 1.0, FGameplayEffectContextHandle());
+	FGameplayEffectSpecHandle EffectSpec =
+		this->TestCharacterAsc->MakeOutgoingSpec(EffectClass, 1.0, FGameplayEffectContextHandle());
 
 	for (const auto& [ParameterTag, ParameterValue] : SetByCallerMagnitudesMap)
 	{
-		EffectSpec = UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(
-			EffectSpec,
-			FGameplayTag::RequestGameplayTag(ParameterTag),
-			ParameterValue
-		);
+		EffectSpec =
+			UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(EffectSpec, ParameterTag, ParameterValue);
 	}
 
 	return EffectSpec;

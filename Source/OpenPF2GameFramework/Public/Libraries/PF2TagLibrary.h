@@ -48,8 +48,8 @@ public:
 	/**
 	 * Finds the condition trait tag having the specified parent tag and parses the condition level into an integer.
 	 *
-	 * For example, given a container with the following tags and a parent tag of "Condition.Dying", this would parse
-	 * and return a value of "3":
+	 * For example, given a container with the following tags and a parent tag of "PF2.Trait.Condition.Dying", this
+	 * would parse and return a value of "3":
 	 * - CreatureSize.Medium
 	 * - CreatureAlignment.Neutral.Good
 	 * - KeyAbility.Intelligence
@@ -80,7 +80,7 @@ public:
 	/**
 	 * Parses the condition level suffix from a condition trait tag into an integer.
 	 *
-	 * For example, this parses tags like "Trait.Condition.Dying.4" and "Trait.Condition.Wounded.3" into the values
+	 * For example, this parses tags like "PF2.Trait.Condition.Dying.4" and "PF2.Trait.Condition.Wounded.3" into the values
 	 * "4" and "3", respectively.
 	 *
 	 * @param Tag
