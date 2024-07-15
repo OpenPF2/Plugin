@@ -39,7 +39,7 @@ FPF2TemlCalculation::FPF2TemlCalculation(const FGameplayTag TagPrefix,
 	// option.
 	if (CharacterTags->HasTag(TagPrefix))
 	{
-		const FString TagPrefixString = TagPrefix.GetTagName().GetPlainNameString();
+		const FString TagPrefixString = TagPrefix.ToString();
 
 		// "When attempting a check that involves something you have some training in, you will also add your
 		// proficiency bonus. This bonus depends on your proficiency rank: untrained, trained, expert, master, or
