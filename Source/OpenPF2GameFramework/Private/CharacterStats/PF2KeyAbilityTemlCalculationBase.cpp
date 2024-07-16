@@ -18,6 +18,7 @@
 #include "CharacterStats/PF2TemlCalculation.h"
 
 #include "Libraries/PF2AbilitySystemLibrary.h"
+#include "Libraries/PF2TagLibrary.h"
 
 #include "Utilities/PF2GameplayAbilityUtilities.h"
 
@@ -144,9 +145,7 @@ FGameplayEffectAttributeCaptureDefinition UPF2KeyAbilityTemlCalculationBase::Det
 
 	for (auto PairIterator = this->KeyAbilityCaptureDefinitions.CreateConstIterator(); PairIterator; ++PairIterator)
 	{
-		const FString TagName = PairIterator.Key();
-
-		if (PF2GameplayAbilityUtilities::HasTag(SourceTags, TagName))
+		if (const FString TagName = PairIterator.Key(); UPF2TagLibrary::ContainerHasTag(*SourceTags, TagName))
 		{
 			KeyAbilityCaptureDefinition = PairIterator.Value();
 			break;
