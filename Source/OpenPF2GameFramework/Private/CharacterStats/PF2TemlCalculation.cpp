@@ -12,6 +12,8 @@
 
 #include "CharacterStats/PF2TemlCalculation.h"
 
+#include "Libraries/PF2TagLibrary.h"
+
 #include "Utilities/PF2GameplayAbilityUtilities.h"
 
 FPF2TemlCalculation::FPF2TemlCalculation(const FString& TagPrefix, const FGameplayEffectSpec& Spec) :
@@ -50,22 +52,22 @@ FPF2TemlCalculation::FPF2TemlCalculation(const FGameplayTag TagPrefix,
 		//
 		// Source: Pathfinder 2E Core Rulebook, page 444, "Step 1: Roll D20 and Identify The Modifiers, Bonuses, and
 		// Penalties That Apply".
-		if (PF2GameplayAbilityUtilities::HasTag(CharacterTags, TagPrefixString + ".Legendary"))
+		if (UPF2TagLibrary::ContainerHasTag(*CharacterTags, TagPrefixString + ".Legendary"))
 		{
 			// Legendary -> Your level + 8
 			ProficiencyBonus = CharacterLevel + 8;
 		}
-		else if (PF2GameplayAbilityUtilities::HasTag(CharacterTags, TagPrefixString + ".Master"))
+		else if (UPF2TagLibrary::ContainerHasTag(*CharacterTags, TagPrefixString + ".Master"))
 		{
 			// Master -> Your level + 6
 			ProficiencyBonus = CharacterLevel + 6;
 		}
-		else if (PF2GameplayAbilityUtilities::HasTag(CharacterTags, TagPrefixString + ".Expert"))
+		else if (UPF2TagLibrary::ContainerHasTag(*CharacterTags, TagPrefixString + ".Expert"))
 		{
 			// Expert -> Your level + 4
 			ProficiencyBonus = CharacterLevel + 4;
 		}
-		else if (PF2GameplayAbilityUtilities::HasTag(CharacterTags, TagPrefixString + ".Trained"))
+		else if (UPF2TagLibrary::ContainerHasTag(*CharacterTags, TagPrefixString + ".Trained"))
 		{
 			// Trained -> Your level + 2
 			ProficiencyBonus = CharacterLevel + 2;

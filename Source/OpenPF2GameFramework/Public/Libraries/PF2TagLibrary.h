@@ -1,4 +1,4 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2023-2026, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 Game Framework for Unreal Engine, Copyright 2023-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -41,6 +41,43 @@ public:
 	[[nodiscard]] static FGameplayTagContainer AddDefaultAbilityTag(
 		const FGameplayTagContainer& DefaultTags,
 		const FGameplayTag& Tag);
+
+	/**
+	 * Checks if a tag with the given name or prefix is present in the given container.
+	 *
+	 * @param Tags
+	 *	The list of tags in which to search.
+	 * @param TagNameOrPrefix
+	 *	The name of the tag or the prefix; as an FName.
+	 *
+	 * @return
+	 *	- TRUE if given a tag name, and a tag with the specified name is present in the tag list.
+	 *	- TRUE if given a tag prefix, and there is a tag present in the tag list that starts with that prefix.
+	 *	- FALSE, otherwise.
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta=(AutoCreateRefTerm="ParentTag"), Category="OpenPF2|Gameplay Tags")
+	static FORCEINLINE bool ContainerHasTag(const FGameplayTagContainer& Tags, const FName& TagNameOrPrefix)
+	{
+		return Tags.HasTag(FGameplayTag::RequestGameplayTag(TagNameOrPrefix));
+	}
+
+	/**
+	 * Checks if a tag with the given name or prefix is present in the given container.
+	 *
+	 * @param Tags
+	 *	The list of tags in which to search.
+	 * @param TagNameOrPrefix
+	 *	The name of the tag or the prefix; as a string.
+	 *
+	 * @return
+	 *	- TRUE if given a tag name, and a tag with the specified name is present in the tag list.
+	 *	- TRUE if given a tag prefix, and there is a tag present in the tag list that starts with that prefix.
+	 *	- FALSE, otherwise.
+	 */
+	static FORCEINLINE bool ContainerHasTag(const FGameplayTagContainer& Tags, const FString& TagNameOrPrefix)
+	{
+		return Tags.HasTag(FGameplayTag::RequestGameplayTag(FName(TagNameOrPrefix)));
+	}
 
 	/**
 	 * Locates the tag within the specified tag container that is a child of another tag.

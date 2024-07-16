@@ -1,4 +1,4 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2026, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -7,7 +7,6 @@
 
 #include <GameplayEffect.h>
 #include <GameplayEffectTypes.h>
-#include <GameplayTagContainer.h>
 
 #include "PF2CharacterConstants.h"
 
@@ -26,60 +25,6 @@ class UPF2CharacterAttributeSet;
  */
 namespace PF2GameplayAbilityUtilities
 {
-	/**
-	 * Checks if a tag with the given name or prefix is present.
-	 *
-	 * @param Tags
-	 *	The list of tags in which to search.
-	 * @param TagNameOrPrefix
-	 *	The name of the tag or the prefix; as an FName.
-	 *
-	 * @return
-	 *	- TRUE if given a tag name, and a tag with the specified name is present in the tag list.
-	 *	- TRUE if given a tag prefix, and there is a tag present in the tag list that starts with that prefix.
-	 *	- FALSE, otherwise.
-	 */
-	FORCEINLINE OPENPF2GAMEFRAMEWORK_API bool HasTag(const FGameplayTagContainer& Tags, const FName TagNameOrPrefix)
-	{
-		return Tags.HasTag(GetTag(TagNameOrPrefix));
-	}
-
-	/**
-	 * Checks if a tag with the given name or prefix is present.
-	 *
-	 * @param Tags
-	 *	The list of tags in which to search.
-	 * @param TagNameOrPrefix
-	 *	The name of the tag or the prefix; as an FName.
-	 *
-	 * @return
-	 *	- TRUE if given a tag name, and a tag with the specified name is present in the tag list.
-	 *	- TRUE if given a tag prefix, and there is a tag present in the tag list that starts with that prefix.
-	 *	- FALSE, otherwise.
-	 */
-	FORCEINLINE OPENPF2GAMEFRAMEWORK_API bool HasTag(const FGameplayTagContainer* Tags, const FName TagNameOrPrefix)
-	{
-		return Tags->HasTag(GetTag(TagNameOrPrefix));
-	}
-
-	/**
-	 * Checks if a tag with the given name or prefix is present.
-	 *
-	 * @param Tags
-	 *	The list of tags in which to search.
-	 * @param TagNameOrPrefix
-	 *	The name of the tag or the prefix; as a string.
-	 *
-	 * @return
-	 *	- TRUE if given a tag name, and a tag with the specified name is present in the tag list.
-	 *	- TRUE if given a tag prefix, and there is a tag present in the tag list that starts with that prefix.
-	 *	- FALSE, otherwise.
-	 */
-	FORCEINLINE OPENPF2GAMEFRAMEWORK_API bool HasTag(const FGameplayTagContainer* Tags, const FString& TagNameOrPrefix)
-	{
-		return Tags->HasTag(GetTag(TagNameOrPrefix));
-	}
-
 	/**
 	 * Creates an attribute capture definition for the specified Gameplay Attribute.
 	 *
