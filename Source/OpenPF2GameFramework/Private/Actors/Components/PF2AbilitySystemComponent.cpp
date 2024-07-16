@@ -429,7 +429,7 @@ bool UPF2AbilitySystemComponent::DeactivatePassiveGameplayEffects(const FName We
 
 		Query.EffectTagQuery =
 			FGameplayTagQuery::MakeQuery_MatchAnyTags(
-				FGameplayTagContainer(PF2GameplayAbilityUtilities::GetTag(WeightGroup))
+				FGameplayTagContainer(FGameplayTag::RequestGameplayTag(WeightGroup))
 			);
 
 		NumRemoved = this->RemoveActiveEffects(Query);
@@ -785,7 +785,7 @@ void UPF2AbilitySystemComponent::ActivatePassiveGameplayEffect(
 	// Ensure that the GE spec is tagged with its weight no matter how the weight was set (either through API or through
 	// a tag in the InheritableGameplayEffectTags field on the GE definition class itself). Without this, only the tag
 	// from the GE definition spec would pass through.
-	GameplayEffectSpec->AddDynamicAssetTag(PF2GameplayAbilityUtilities::GetTag(WeightGroup));
+	GameplayEffectSpec->AddDynamicAssetTag(FGameplayTag::RequestGameplayTag(WeightGroup));
 
 	// Special case: If the GE being activated is our "dummy" GE for dynamic tags, apply tags to it.
 	//

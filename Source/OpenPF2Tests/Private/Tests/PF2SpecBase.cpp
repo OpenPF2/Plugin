@@ -343,12 +343,12 @@ FActiveGameplayEffectHandle FPF2SpecBase::InitializeAttributeAndApplyEffect(
 
 void FPF2SpecBase::ApplyUnreplicatedTag(const FString& TagName) const
 {
-	this->TestPawnAsc->AddLooseGameplayTag(PF2GameplayAbilityUtilities::GetTag(TagName));
+	this->TestPawnAsc->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName(TagName)));
 }
 
 void FPF2SpecBase::RemoveUnreplicatedTag(const FString& TagName) const
 {
-	this->TestPawnAsc->RemoveLooseGameplayTag(PF2GameplayAbilityUtilities::GetTag(TagName));
+	this->TestPawnAsc->RemoveLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName(TagName)));
 }
 
 void FPF2SpecBase::TestCharacterHasCondition(const TScriptInterface<IPF2CharacterInterface>& Character,

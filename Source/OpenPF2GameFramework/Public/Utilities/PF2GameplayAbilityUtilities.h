@@ -27,38 +27,6 @@ class UPF2CharacterAttributeSet;
 namespace PF2GameplayAbilityUtilities
 {
 	/**
-	 * Gets the specified tag out of the tags known to the project.
-	 *
-	 * The tag must already exist in one of the INI files under Config/Tags; otherwise, this will trigger an error.
-	 *
-	 * @param TagName
-	 *	The name of the tag, as an FName.
-	 *
-	 * @return
-	 *	The desired tag.
-	 */
-	FORCEINLINE OPENPF2GAMEFRAMEWORK_API FGameplayTag GetTag(const FName& TagName)
-	{
-		return FGameplayTag::RequestGameplayTag(TagName);
-	}
-
-	/**
-	 * Gets the specified tag out of the tags known to the project.
-	 *
-	 * The tag must already exist in one of the INI files under Config/Tags; otherwise, this will trigger an error.
-	 *
-	 * @param TagName
-	 *	The name of the tag, as a string.
-	 *
-	 * @return
-	 *	The desired tag.
-	 */
-	FORCEINLINE OPENPF2GAMEFRAMEWORK_API FGameplayTag GetTag(const FString& TagName)
-	{
-		return GetTag(FName(TagName));
-	}
-
-	/**
 	 * Checks if a tag with the given name or prefix is present.
 	 *
 	 * @param Tags
