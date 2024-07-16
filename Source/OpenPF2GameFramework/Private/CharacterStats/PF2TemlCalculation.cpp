@@ -41,8 +41,6 @@ FPF2TemlCalculation::FPF2TemlCalculation(const FGameplayTag TagPrefix,
 	// option.
 	if (CharacterTags->HasTag(TagPrefix))
 	{
-		const FString TagPrefixString = TagPrefix.ToString();
-
 		// "When attempting a check that involves something you have some training in, you will also add your
 		// proficiency bonus. This bonus depends on your proficiency rank: untrained, trained, expert, master, or
 		// legendary. If you’re untrained, your bonus is +0—you must rely on raw talent and any bonuses from the
@@ -52,22 +50,22 @@ FPF2TemlCalculation::FPF2TemlCalculation(const FGameplayTag TagPrefix,
 		//
 		// Source: Pathfinder 2E Core Rulebook, page 444, "Step 1: Roll D20 and Identify The Modifiers, Bonuses, and
 		// Penalties That Apply".
-		if (UPF2TagLibrary::ContainerHasTag(*CharacterTags, TagPrefixString + ".Legendary"))
+		if (CharacterTags->HasTag(UPF2TagLibrary::RequestCombinedTagByString(TagPrefix, TEXT("Legendary"))))
 		{
 			// Legendary -> Your level + 8
 			ProficiencyBonus = CharacterLevel + 8;
 		}
-		else if (UPF2TagLibrary::ContainerHasTag(*CharacterTags, TagPrefixString + ".Master"))
+		else if (CharacterTags->HasTag(UPF2TagLibrary::RequestCombinedTagByString(TagPrefix, TEXT("Master"))))
 		{
 			// Master -> Your level + 6
 			ProficiencyBonus = CharacterLevel + 6;
 		}
-		else if (UPF2TagLibrary::ContainerHasTag(*CharacterTags, TagPrefixString + ".Expert"))
+		else if (CharacterTags->HasTag(UPF2TagLibrary::RequestCombinedTagByString(TagPrefix, TEXT("Expert"))))
 		{
 			// Expert -> Your level + 4
 			ProficiencyBonus = CharacterLevel + 4;
 		}
-		else if (UPF2TagLibrary::ContainerHasTag(*CharacterTags, TagPrefixString + ".Trained"))
+		else if (CharacterTags->HasTag(UPF2TagLibrary::RequestCombinedTagByString(TagPrefix, TEXT("Trained"))))
 		{
 			// Trained -> Your level + 2
 			ProficiencyBonus = CharacterLevel + 2;

@@ -131,4 +131,174 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta=(AutoCreateRefTerm="ParentTag"), Category="OpenPF2|Gameplay Tags")
 	static uint8 ParseConditionLevel(const FGameplayTag& Tag,
 	                                 const FGameplayTag& ParentTag);
+
+	/**
+	 * Combines a tag with the name of a tag that is defined within/underneath it, and returns the resulting tag.
+	 *
+	 * For example, given a parent tag of "PF2.Trait.Condition" and a child tag fragment of "Dying.2", this returns the
+	 * tag "PF2.Trait.Condition.Dying.2".
+	 *
+	 * The combined tag must be a valid tag that has been defined either in Gameplay Tags INI files or in static tags.
+	 *
+	 * @tparam T
+	 *	The type of text or string being used to represent the name of the child fragment.
+	 *
+	 * @param ParentTag
+	 *	The parent/prefix tag under which the target tag is defined.
+	 * @param ChildTagFragment
+	 *	The name or fragment of the tag under the parent tag.
+	 *
+	 * @return
+	 *	The gameplay tag that corresponds to the combination of the give child tag under the given parent tag.
+	 */
+	template<typename T>
+	FORCEINLINE static FGameplayTag RequestCombinedTag(const FGameplayTag& ParentTag, const T& ChildTagFragment)
+	{
+		return RequestCombinedTag(ParentTag.GetTagName(), ChildTagFragment);
+	}
+
+	/**
+	 * Concatenates the names of two tags together and returns the resulting tag.
+	 *
+	 * For example, given a parent tag of "PF2.Trait.Condition" and a child tag fragment of "Dying.2", this returns the
+	 * tag "PF2.Trait.Condition.Dying.2".
+	 *
+	 * The combined tag must be a valid tag that has been defined either in Gameplay Tags INI files or in static tags.
+	 *
+	 * @tparam P
+	 *	The type of text or string being used to represent the name of the parent tag.
+	 * @tparam C
+	 *	The type of text or string being used to represent the name of the child fragment.
+	 *
+	 * @param ParentTagName
+	 *	The name of the parent/prefix tag under which the target tag is defined.
+	 * @param ChildTagFragment
+	 *	The name of the desired tag under the parent tag.
+	 *
+	 * @return
+	 *	The gameplay tag that corresponds to the combination of the give child tag under the given parent tag.
+	 */
+	template<typename P, typename C>
+	static FGameplayTag RequestCombinedTag(const P& ParentTagName, const C& ChildTagFragment)
+	{
+		FNameBuilder TagNameBuilder;
+
+		TagNameBuilder << ParentTagName;
+		TagNameBuilder << TEXT(".");
+		TagNameBuilder << ChildTagFragment;
+
+		return FGameplayTag::RequestGameplayTag(FName(TagNameBuilder.ToString()));
+	}
+
+	/**
+	 * Combines a tag with the name of a tag that is defined within/underneath it, and returns the resulting tag.
+	 *
+	 * For example, given a parent tag of "PF2.Trait.Condition" and a child tag fragment of "Dying.2", this returns the
+	 * tag "PF2.Trait.Condition.Dying.2".
+	 *
+	 * The combined tag must be a valid tag that has been defined either in Gameplay Tags INI files or in static tags.
+	 *
+	 * @param ParentTag
+	 *	The parent/prefix tag under which the target tag is defined.
+	 * @param ChildTagFragment
+	 *	The name of the desired tag under the parent tag.
+	 *
+	 * @return
+	 *	The gameplay tag that corresponds to the combination of the give child tag under the given parent tag.
+	 */
+	UFUNCTION(
+		BlueprintCallable,
+		BlueprintPure,
+		meta=(AutoCreateRefTerm="ParentTag,ChildTagFragment"),
+		Category="OpenPF2|Gameplay Tags"
+	)
+	static FORCEINLINE FGameplayTag RequestCombinedTagByName(const FGameplayTag& ParentTag,
+		                                                     const FName& ChildTagFragment)
+	{
+		return RequestCombinedTag(ParentTag, ChildTagFragment);
+	}
+
+	/**
+	 * Combines a tag with the name of a tag that is defined within/underneath it, and returns the resulting tag.
+	 *
+	 * For example, given a parent tag of "PF2.Trait.Condition" and a child tag fragment of "Dying.2", this returns the
+	 * tag "PF2.Trait.Condition.Dying.2".
+	 *
+	 * The combined tag must be a valid tag that has been defined either in Gameplay Tags INI files or in static tags.
+	 *
+	 * @param ParentTag
+	 *	The parent/prefix tag under which the target tag is defined.
+	 * @param ChildTagFragment
+	 *	The name of the desired tag under the parent tag.
+	 *
+	 * @return
+	 *	The gameplay tag that corresponds to the combination of the give child tag under the given parent tag.
+	 */
+	UFUNCTION(
+		BlueprintCallable,
+		BlueprintPure,
+		meta=(AutoCreateRefTerm="ParentTag,ChildTagFragment"),
+		Category="OpenPF2|Gameplay Tags"
+	)
+	static FORCEINLINE FGameplayTag RequestCombinedTagByString(const FGameplayTag& ParentTag,
+		                                                       const FString& ChildTagFragment)
+	{
+		return RequestCombinedTag(ParentTag, ChildTagFragment);
+	}
+
+	/**
+	 * Concatenates the names of two tags together and returns the resulting tag.
+	 *
+	 * For example, given a parent tag of "PF2.Trait.Condition" and a child tag fragment of "Dying.2", this returns the
+	 * tag "PF2.Trait.Condition.Dying.2".
+	 *
+	 * The combined tag must be a valid tag that has been defined either in Gameplay Tags INI files or in static tags.
+	 *
+	 * @param ParentTagName
+	 *	The name of the parent/prefix tag under which the target tag is defined.
+	 * @param ChildTagFragment
+	 *	The name of the desired tag under the parent tag.
+	 *
+	 * @return
+	 *	The gameplay tag that corresponds to the combination of the give child tag under the given parent tag.
+	 */
+	UFUNCTION(
+		BlueprintCallable,
+		BlueprintPure,
+		meta=(AutoCreateRefTerm="ParentTagName,ChildTagFragment"),
+		Category="OpenPF2|Gameplay Tags"
+	)
+	static FORCEINLINE FGameplayTag RequestCombinedTagFromNames(const FName& ParentTagName,
+		                                                        const FName& ChildTagFragment)
+	{
+		return RequestCombinedTag(ParentTagName, ChildTagFragment);
+	}
+
+	/**
+	 * Concatenates the names of two tags together and returns the resulting tag.
+	 *
+	 * For example, given a parent tag of "PF2.Trait.Condition" and a child tag fragment of "Dying.2", this returns the
+	 * tag "PF2.Trait.Condition.Dying.2".
+	 *
+	 * The combined tag must be a valid tag that has been defined either in Gameplay Tags INI files or in static tags.
+	 *
+	 * @param ParentTagName
+	 *	The name of the parent/prefix tag under which the target tag is defined.
+	 * @param ChildTagFragment
+	 *	The name of the desired tag under the parent tag.
+	 *
+	 * @return
+	 *	The gameplay tag that corresponds to the combination of the give child tag under the given parent tag.
+	 */
+	UFUNCTION(
+		BlueprintCallable,
+		BlueprintPure,
+		meta=(AutoCreateRefTerm="ParentTagName,ChildTagFragment"),
+		Category="OpenPF2|Gameplay Tags"
+	)
+	static FORCEINLINE FGameplayTag RequestCombinedTagFromStrings(const FString& ParentTagName,
+		                                                          const FString& ChildTagFragment)
+	{
+		return RequestCombinedTag(ParentTagName, ChildTagFragment);
+	}
 };
