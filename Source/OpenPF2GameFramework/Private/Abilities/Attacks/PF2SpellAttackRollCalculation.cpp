@@ -5,7 +5,10 @@
 
 #include "Abilities/Attacks/PF2SpellAttackRollCalculation.h"
 
+#include "GameplayTags/Stats/KeyAbilities.h"
+#include "GameplayTags/Stats/Proficiencies/SpellAttacks.h"
+
 UPF2SpellAttackRollCalculation::UPF2SpellAttackRollCalculation() :
-	UPF2KeyAbilityTemlCalculationBase(TEXT("PF2.Proficiency.SpellAttack"), TEXT("PF2.SpellcastingAbility"))
+	UPF2KeyAbilityTemlCalculationBase(Pf2TagProficiencySpellAttack, Pf2TagSpellcastingAbilities)
 {
 }
