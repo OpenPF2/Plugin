@@ -13,6 +13,8 @@
 
 #include "CharacterStats/PF2CharacterAbilitySystemInterface.h"
 
+#include "GameplayTags/GameplayEffects/WeightGroups.h"
+
 /**
  * Utility logic for working with Gameplay Abilities.
  */
@@ -32,10 +34,10 @@ namespace PF2GameplayAbilityUtilities
 	FName GetWeightGroupOfGameplayEffect(const TSubclassOf<UGameplayEffect> GameplayEffect, const FName DefaultWeight)
 	{
 		FName                  WeightGroup;
-		const FGameplayTag     WeightTagParent = GetTag(FName(TEXT("GameplayEffect.WeightGroup")));
+		const FGameplayTag     WeightTagParent = Pf2TagGameplayEffectWeightGroups;
 		const UGameplayEffect* Effect          = GameplayEffect.GetDefaultObject();
 
-		const FGameplayTagContainer WeightTags = Effect->GetAssetTags().Filter(FGameplayTagContainer(WeightTagParent));
+		const FGameplayTagContainer WeightTags = Effect->GetAssetTags().Filter(WeightTagParent.GetSingleTagContainer());
 
 		if (WeightTags.IsEmpty())
 		{

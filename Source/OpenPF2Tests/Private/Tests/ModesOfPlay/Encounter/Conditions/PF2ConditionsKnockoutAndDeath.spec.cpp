@@ -5,6 +5,9 @@
 
 #include "Abilities/PF2DegreeOfSuccess.h"
 
+#include "GameplayTags/Traits/Conditions.h"
+#include "GameplayTags/Traits/Effects.h"
+
 #include "Libraries/PF2AttackStatLibrary.h"
 
 #include "ModesOfPlay/Encounter/PF2EncounterModeOfPlayRuleSetBase.h"
@@ -273,34 +276,25 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 					);
 				});
 
-				It("does not apply the 'Trait_Condition_Unconscious' gameplay tag to the character", [=, this]
+				It("does not apply the 'PF2_Trait_Condition_Unconscious' gameplay tag to the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Unconscious"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionUnconscious);
 				});
 
-				Describe("when the character does not have any 'Trait_Condition_Wounded' tags", [=, this]
+				Describe("when the character does not have any 'PF2_Trait_Condition_Wounded' tags", [=, this]
 				{
-					It("does not apply any 'Trait_Condition_Dying' gameplay tags to the character", [=, this]
+					It("does not apply any 'PF2_Trait_Condition_Dying' gameplay tags to the character", [=, this]
 					{
-						TestCharacterNotHaveCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-						);
+						TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 					});
 
 					It("does not kill the character", [=, this]
 					{
-						TestCharacterNotHaveCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dead"))
-						);
+						TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDead);
 					});
 				});
 
-				Describe("when the character has the 'Trait_Condition_Wounded_1' tag", [=, this]
+				Describe("when the character has the 'PF2_Trait_Condition_Wounded_1' tag", [=, this]
 				{
 					REDEFINE_LET(
 						EffectSpecsAppliedToTargetBeforeAttack,
@@ -309,24 +303,18 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 						{ return TArray{ *Wounded1GeSpec }; }
 					);
 
-					It("does not apply any 'Trait_Condition_Dying' gameplay tags to the character", [=, this]
+					It("does not apply any 'PF2_Trait_Condition_Dying' gameplay tags to the character", [=, this]
 					{
-						TestCharacterNotHaveCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-						);
+						TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 					});
 
 					It("does not kill the character", [=, this]
 					{
-						TestCharacterNotHaveCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dead"))
-						);
+						TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDead);
 					});
 				});
 
-				Describe("when the character has the 'Trait_Condition_Wounded_2' tag", [=, this]
+				Describe("when the character has the 'PF2_Trait_Condition_Wounded_2' tag", [=, this]
 				{
 					REDEFINE_LET(
 						EffectSpecsAppliedToTargetBeforeAttack,
@@ -335,24 +323,18 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 						{ return TArray{ *Wounded2GeSpec }; }
 					);
 
-					It("does not apply any 'Trait_Condition_Dying' gameplay tags to the character", [=, this]
+					It("does not apply any 'PF2_Trait_Condition_Dying' gameplay tags to the character", [=, this]
 					{
-						TestCharacterNotHaveCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-						);
+						TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 					});
 
 					It("does not kill the character", [=, this]
 					{
-						TestCharacterNotHaveCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dead"))
-						);
+						TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDead);
 					});
 				});
 
-				Describe("when the character has the 'Trait_Condition_Wounded_3' tag", [=, this]
+				Describe("when the character has the 'PF2_Trait_Condition_Wounded_3' tag", [=, this]
 				{
 					REDEFINE_LET(
 						EffectSpecsAppliedToTargetBeforeAttack,
@@ -361,24 +343,18 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 						{ return TArray{ *Wounded3GeSpec }; }
 					);
 
-					It("does not apply any 'Trait_Condition_Dying' gameplay tags to the character", [=, this]
+					It("does not apply any 'PF2_Trait_Condition_Dying' gameplay tags to the character", [=, this]
 					{
-						TestCharacterNotHaveCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-						);
+						TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 					});
 
 					It("does not kill the character", [=, this]
 					{
-						TestCharacterNotHaveCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dead"))
-						);
+						TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDead);
 					});
 				});
 
-				Describe("when the character has the 'Trait_Condition_Wounded_4' tag", [=, this]
+				Describe("when the character has the 'PF2_Trait_Condition_Wounded_4' tag", [=, this]
 				{
 					REDEFINE_LET(
 						EffectSpecsAppliedToTargetBeforeAttack,
@@ -387,20 +363,14 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 						{ return TArray{ *Wounded4GeSpec }; }
 					);
 
-					It("does not apply any 'Trait_Condition_Dying' gameplay tags to the character", [=, this]
+					It("does not apply any 'PF2_Trait_Condition_Dying' gameplay tags to the character", [=, this]
 					{
-						TestCharacterNotHaveCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-						);
+						TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 					});
 
 					It("does not kill the character", [=, this]
 					{
-						TestCharacterNotHaveCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dead"))
-						);
+						TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDead);
 					});
 				});
 			});
@@ -427,34 +397,25 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 					);
 				});
 
-				It("does not apply the 'Trait_Condition_Unconscious' gameplay tag to the character", [=, this]
+				It("does not apply the 'PF2_Trait_Condition_Unconscious' gameplay tag to the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Unconscious"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionUnconscious);
 				});
 
-				Describe("when the character does not have any 'Trait_Condition_Wounded' tags", [=, this]
+				Describe("when the character does not have any 'PF2_Trait_Condition_Wounded' tags", [=, this]
 				{
-					It("does not apply any 'Trait_Condition_Dying' gameplay tags to the character", [=, this]
+					It("does not apply any 'PF2_Trait_Condition_Dying' gameplay tags to the character", [=, this]
 					{
-						TestCharacterNotHaveCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-						);
+						TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 					});
 
 					It("does not kill the character", [=, this]
 					{
-						TestCharacterNotHaveCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dead"))
-						);
+						TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDead);
 					});
 				});
 
-				Describe("when the character has the 'Trait_Condition_Wounded_1' tag", [=, this]
+				Describe("when the character has the 'PF2_Trait_Condition_Wounded_1' tag", [=, this]
 				{
 					REDEFINE_LET(
 						EffectSpecsAppliedToTargetBeforeAttack,
@@ -463,24 +424,18 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 						{ return TArray{ *Wounded1GeSpec }; }
 					);
 
-					It("does not apply any 'Trait_Condition_Dying' gameplay tags to the character", [=, this]
+					It("does not apply any 'PF2_Trait_Condition_Dying' gameplay tags to the character", [=, this]
 					{
-						TestCharacterNotHaveCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-						);
+						TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 					});
 
 					It("does not kill the character", [=, this]
 					{
-						TestCharacterNotHaveCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dead"))
-						);
+						TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDead);
 					});
 				});
 
-				Describe("when the character has the 'Trait_Condition_Wounded_2' tag", [=, this]
+				Describe("when the character has the 'PF2_Trait_Condition_Wounded_2' tag", [=, this]
 				{
 					REDEFINE_LET(
 						EffectSpecsAppliedToTargetBeforeAttack,
@@ -489,24 +444,18 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 						{ return TArray{ *Wounded2GeSpec }; }
 					);
 
-					It("does not apply any 'Trait_Condition_Dying' gameplay tags to the character", [=, this]
+					It("does not apply any 'PF2_Trait_Condition_Dying' gameplay tags to the character", [=, this]
 					{
-						TestCharacterNotHaveCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-						);
+						TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 					});
 
 					It("does not kill the character", [=, this]
 					{
-						TestCharacterNotHaveCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dead"))
-						);
+						TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDead);
 					});
 				});
 
-				Describe("when the character has the 'Trait_Condition_Wounded_3' tag", [=, this]
+				Describe("when the character has the 'PF2_Trait_Condition_Wounded_3' tag", [=, this]
 				{
 					REDEFINE_LET(
 						EffectSpecsAppliedToTargetBeforeAttack,
@@ -515,24 +464,18 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 						{ return TArray{ *Wounded3GeSpec }; }
 					);
 
-					It("does not apply any 'Trait_Condition_Dying' gameplay tags to the character", [=, this]
+					It("does not apply any 'PF2_Trait_Condition_Dying' gameplay tags to the character", [=, this]
 					{
-						TestCharacterNotHaveCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-						);
+						TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 					});
 
 					It("does not kill the character", [=, this]
 					{
-						TestCharacterNotHaveCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dead"))
-						);
+						TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDead);
 					});
 				});
 
-				Describe("when the character has the 'Trait_Condition_Wounded_4' tag", [=, this]
+				Describe("when the character has the 'PF2_Trait_Condition_Wounded_4' tag", [=, this]
 				{
 					REDEFINE_LET(
 						EffectSpecsAppliedToTargetBeforeAttack,
@@ -541,20 +484,14 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 						{ return TArray{ *Wounded4GeSpec }; }
 					);
 
-					It("does not apply any 'Trait_Condition_Dying' gameplay tags to the character", [=, this]
+					It("does not apply any 'PF2_Trait_Condition_Dying' gameplay tags to the character", [=, this]
 					{
-						TestCharacterNotHaveCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-						);
+						TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 					});
 
 					It("does not kill the character", [=, this]
 					{
-						TestCharacterNotHaveCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dead"))
-						);
+						TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDead);
 					});
 				});
 			});
@@ -566,7 +503,7 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 				TagsAppliedToAbilityBeforeAttack,
 				FGameplayTagContainer,
 				[this],
-				{return FGameplayTagContainer(FGameplayTag::RequestGameplayTag("Trait.Effect.Nonlethal")); }
+				{return FGameplayTagContainer(Pf2TagTraitEffectNonlethal); }
 			);
 
 			It("has no effect on the initiative position of the character", [=, this]
@@ -582,20 +519,14 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 				);
 			});
 
-			It("does not apply the 'Trait_Condition_Unconscious' gameplay tag to the character", [=, this]
+			It("does not apply the 'PF2_Trait_Condition_Unconscious' gameplay tag to the character", [=, this]
 			{
-				TestCharacterNotHaveCondition(
-					this->TestCharacter,
-					FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Unconscious"))
-				);
+				TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionUnconscious);
 			});
 
-			It("does not apply any 'Trait_Condition_Dying' gameplay tag to the character", [=, this]
+			It("does not apply any 'PF2_Trait_Condition_Dying' gameplay tag to the character", [=, this]
 			{
-				TestCharacterNotHaveCondition(
-					this->TestCharacter,
-					FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-				);
+				TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 			});
 		});
 	});
@@ -651,27 +582,20 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 					);
 				});
 
-				It("applies the 'Trait_Condition_Unconscious' gameplay tag to the character", [=, this]
+				It("applies the 'PF2_Trait_Condition_Unconscious' gameplay tag to the character", [=, this]
 				{
-					TestCharacterHasCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Unconscious"))
-					);
+					TestCharacterHasCondition(this->TestCharacter, Pf2TagTraitConditionUnconscious);
 				});
 
-				Describe("when the character does not have any 'Trait_Condition_Wounded' tags", [=, this]
+				Describe("when the character does not have any 'PF2_Trait_Condition_Wounded' tags", [=, this]
 				{
-					It("applies the 'Trait_Condition_Dying_1' gameplay tag to the character", [=, this]
+					It("applies the 'PF2_Trait_Condition_Dying_1' gameplay tag to the character", [=, this]
 					{
-						TestCharacterHasConditionLevel(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying")),
-							1
-						);
+						TestCharacterHasConditionLevel(this->TestCharacter, Pf2TagTraitConditionDying, 1);
 					});
 				});
 
-				Describe("when the character has the 'Trait_Condition_Wounded_1' tag", [=, this]
+				Describe("when the character has the 'PF2_Trait_Condition_Wounded_1' tag", [=, this]
 				{
 					REDEFINE_LET(
 						EffectSpecsAppliedToTargetBeforeAttack,
@@ -680,17 +604,13 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 						{ return TArray{ *Wounded1GeSpec }; }
 					);
 
-					It("applies the 'Trait_Condition_Dying_2' gameplay tag to the character", [=, this]
+					It("applies the 'PF2_Trait_Condition_Dying_2' gameplay tag to the character", [=, this]
 					{
-						TestCharacterHasConditionLevel(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying")),
-							2
-						);
+						TestCharacterHasConditionLevel(this->TestCharacter, Pf2TagTraitConditionDying, 2);
 					});
 				});
 
-				Describe("when the character has the 'Trait_Condition_Wounded_2' tag", [=, this]
+				Describe("when the character has the 'PF2_Trait_Condition_Wounded_2' tag", [=, this]
 				{
 					REDEFINE_LET(
 						EffectSpecsAppliedToTargetBeforeAttack,
@@ -699,17 +619,13 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 						{ return TArray{ *Wounded2GeSpec }; }
 					);
 
-					It("applies the 'Trait_Condition_Dying_3' gameplay tag to the character", [=, this]
+					It("applies the 'PF2_Trait_Condition_Dying_3' gameplay tag to the character", [=, this]
 					{
-						TestCharacterHasConditionLevel(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying")),
-							3
-						);
+						TestCharacterHasConditionLevel(this->TestCharacter, Pf2TagTraitConditionDying, 3);
 					});
 				});
 
-				Describe("when the character has the 'Trait_Condition_Wounded_3' tag", [=, this]
+				Describe("when the character has the 'PF2_Trait_Condition_Wounded_3' tag", [=, this]
 				{
 					REDEFINE_LET(
 						EffectSpecsAppliedToTargetBeforeAttack,
@@ -720,14 +636,11 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 
 					It("kills the character", [=, this]
 					{
-						TestCharacterHasCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dead"))
-						);
+						TestCharacterHasCondition(this->TestCharacter, Pf2TagTraitConditionDead);
 					});
 				});
 
-				Describe("when the character has the 'Trait_Condition_Wounded_4' tag", [=, this]
+				Describe("when the character has the 'PF2_Trait_Condition_Wounded_4' tag", [=, this]
 				{
 					REDEFINE_LET(
 						EffectSpecsAppliedToTargetBeforeAttack,
@@ -738,10 +651,7 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 
 					It("kills the character", [=, this]
 					{
-						TestCharacterHasCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dead"))
-						);
+						TestCharacterHasCondition(this->TestCharacter, Pf2TagTraitConditionDead);
 					});
 				});
 			});
@@ -768,27 +678,20 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 					);
 				});
 
-				It("applies the 'Trait_Condition_Unconscious' gameplay tag to the character", [=, this]
+				It("applies the 'PF2_Trait_Condition_Unconscious' gameplay tag to the character", [=, this]
 				{
-					TestCharacterHasCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Unconscious"))
-					);
+					TestCharacterHasCondition(this->TestCharacter, Pf2TagTraitConditionUnconscious);
 				});
 
-				Describe("when the character does not have any 'Trait_Condition_Wounded' tags", [=, this]
+				Describe("when the character does not have any 'PF2_Trait_Condition_Wounded' tags", [=, this]
 				{
-					It("applies the 'Trait_Condition_Dying_2' gameplay tag to the character", [=, this]
+					It("applies the 'PF2_Trait_Condition_Dying_2' gameplay tag to the character", [=, this]
 					{
-						TestCharacterHasConditionLevel(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying")),
-							2
-						);
+						TestCharacterHasConditionLevel(this->TestCharacter, Pf2TagTraitConditionDying, 2);
 					});
 				});
 
-				Describe("when the character has the 'Trait_Condition_Wounded_1' tag", [=, this]
+				Describe("when the character has the 'PF2_Trait_Condition_Wounded_1' tag", [=, this]
 				{
 					REDEFINE_LET(
 						EffectSpecsAppliedToTargetBeforeAttack,
@@ -797,17 +700,13 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 						{ return TArray{ *Wounded1GeSpec }; }
 					);
 
-					It("applies the 'Trait_Condition_Dying_3' gameplay tag to the character", [=, this]
+					It("applies the 'PF2_Trait_Condition_Dying_3' gameplay tag to the character", [=, this]
 					{
-						TestCharacterHasConditionLevel(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying")),
-							3
-						);
+						TestCharacterHasConditionLevel(this->TestCharacter, Pf2TagTraitConditionDying, 3);
 					});
 				});
 
-				Describe("when the character has the 'Trait_Condition_Wounded_2' tag", [=, this]
+				Describe("when the character has the 'PF2_Trait_Condition_Wounded_2' tag", [=, this]
 				{
 					REDEFINE_LET(
 						EffectSpecsAppliedToTargetBeforeAttack,
@@ -818,14 +717,11 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 
 					It("kills the character", [=, this]
 					{
-						TestCharacterHasCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dead"))
-						);
+						TestCharacterHasCondition(this->TestCharacter, Pf2TagTraitConditionDead);
 					});
 				});
 
-				Describe("when the character has the 'Trait_Condition_Wounded_3' tag", [=, this]
+				Describe("when the character has the 'PF2_Trait_Condition_Wounded_3' tag", [=, this]
 				{
 					REDEFINE_LET(
 						EffectSpecsAppliedToTargetBeforeAttack,
@@ -836,14 +732,11 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 
 					It("kills the character", [=, this]
 					{
-						TestCharacterHasCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dead"))
-						);
+						TestCharacterHasCondition(this->TestCharacter, Pf2TagTraitConditionDead);
 					});
 				});
 
-				Describe("when the character has the 'Trait_Condition_Wounded_4' tag", [=, this]
+				Describe("when the character has the 'PF2_Trait_Condition_Wounded_4' tag", [=, this]
 				{
 					REDEFINE_LET(
 						EffectSpecsAppliedToTargetBeforeAttack,
@@ -854,10 +747,7 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 
 					It("kills the character", [=, this]
 					{
-						TestCharacterHasCondition(
-							this->TestCharacter,
-							FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dead"))
-						);
+						TestCharacterHasCondition(this->TestCharacter, Pf2TagTraitConditionDead);
 					});
 				});
 			});
@@ -869,7 +759,7 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 				TagsAppliedToAbilityBeforeAttack,
 				FGameplayTagContainer,
 				[this],
-				{return FGameplayTagContainer(FGameplayTag::RequestGameplayTag("Trait.Effect.Nonlethal")); }
+				{return FGameplayTagContainer(Pf2TagTraitEffectNonlethal); }
 			);
 
 			It("moves the initiative position of the character directly before the turn in which they were reduced to 0 HP", [=, this]
@@ -885,20 +775,14 @@ void FPF2ConditionsKnockoutAndDeath::Define()
 				);
 			});
 
-			It("applies the 'Trait_Condition_Unconscious' gameplay tag to the character", [=, this]
+			It("applies the 'PF2_Trait_Condition_Unconscious' gameplay tag to the character", [=, this]
 			{
-				TestCharacterHasCondition(
-					this->TestCharacter,
-					FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Unconscious"))
-				);
+				TestCharacterHasCondition(this->TestCharacter, Pf2TagTraitConditionUnconscious);
 			});
 
-			It("does not apply any 'Trait_Condition_Dying' gameplay tag to the character", [=, this]
+			It("does not apply any 'PF2_Trait_Condition_Dying' gameplay tag to the character", [=, this]
 			{
-				TestCharacterNotHaveCondition(
-					this->TestCharacter,
-					FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-				);
+				TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 			});
 		});
 	});
@@ -926,7 +810,7 @@ void FPF2ConditionsKnockoutAndDeath::ApplyDamageToTestCharacter(
 			Attacker,
 			AttackAbility,
 			{
-				{"GameplayEffect.Parameter.Damage", DamageAmount},
+				{"PF2.GameplayEffect.Parameter.Damage", DamageAmount},
 			}
 		);
 

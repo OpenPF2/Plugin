@@ -31,28 +31,28 @@ protected:
 	 * Map from each damage type tag to the attribute that tracks a character's resistance to that damage type.
 	 */
 	inline static const TMap<FName, FName> DamageTypeToResistanceAttributeMap = {
-		{ "DamageType.Physical.Bludgeoning", "RstPhysicalBludgeoning" },
-		{ "DamageType.Physical.Piercing",    "RstPhysicalPiercing"    },
-		{ "DamageType.Physical.Slashing",    "RstPhysicalSlashing"    },
+		{ "PF2.DamageType.Physical.Bludgeoning", "RstPhysicalBludgeoning" },
+		{ "PF2.DamageType.Physical.Piercing",    "RstPhysicalPiercing"    },
+		{ "PF2.DamageType.Physical.Slashing",    "RstPhysicalSlashing"    },
 
-		{ "DamageType.Energy.Acid",          "RstEnergyAcid"          },
-		{ "DamageType.Energy.Cold",          "RstEnergyCold"          },
-		{ "DamageType.Energy.Electricity",   "RstEnergyElectricity"   },
-		{ "DamageType.Energy.Fire",          "RstEnergyFire"          },
-		{ "DamageType.Energy.Sonic",         "RstEnergySonic"         },
-		{ "DamageType.Energy.Positive",      "RstEnergyPositive"      },
-		{ "DamageType.Energy.Negative",      "RstEnergyNegative"      },
-		{ "DamageType.Energy.Force",         "RstEnergyForce"         },
+		{ "PF2.DamageType.Energy.Acid",          "RstEnergyAcid"          },
+		{ "PF2.DamageType.Energy.Cold",          "RstEnergyCold"          },
+		{ "PF2.DamageType.Energy.Electricity",   "RstEnergyElectricity"   },
+		{ "PF2.DamageType.Energy.Fire",          "RstEnergyFire"          },
+		{ "PF2.DamageType.Energy.Sonic",         "RstEnergySonic"         },
+		{ "PF2.DamageType.Energy.Positive",      "RstEnergyPositive"      },
+		{ "PF2.DamageType.Energy.Negative",      "RstEnergyNegative"      },
+		{ "PF2.DamageType.Energy.Force",         "RstEnergyForce"         },
 
-		{ "DamageType.Alignment.Chaotic",    "RstAlignmentChaotic"    },
-		{ "DamageType.Alignment.Evil",       "RstAlignmentEvil"       },
-		{ "DamageType.Alignment.Good",       "RstAlignmentGood"       },
-		{ "DamageType.Alignment.Lawful",     "RstAlignmentLawful"     },
+		{ "PF2.DamageType.Alignment.Chaotic",    "RstAlignmentChaotic"    },
+		{ "PF2.DamageType.Alignment.Evil",       "RstAlignmentEvil"       },
+		{ "PF2.DamageType.Alignment.Good",       "RstAlignmentGood"       },
+		{ "PF2.DamageType.Alignment.Lawful",     "RstAlignmentLawful"     },
 
-		{ "DamageType.Mental",               "RstMental"              },
-		{ "DamageType.Poison",               "RstPoison"              },
-		{ "DamageType.Bleed",                "RstBleed"               },
-		{ "DamageType.Precision",            "RstPrecision"           },
+		{ "PF2.DamageType.Mental",               "RstMental"              },
+		{ "PF2.DamageType.Poison",               "RstPoison"              },
+		{ "PF2.DamageType.Bleed",                "RstBleed"               },
+		{ "PF2.DamageType.Precision",            "RstPrecision"           },
 	};
 
 public:

@@ -192,19 +192,15 @@ FActiveGameplayEffectHandle FPF2SpecBase::ApplyGameplayEffectToTestCharacter(
 
 FGameplayEffectSpecHandle FPF2SpecBase::BuildEffectSpec(
 	const TSubclassOf<UGameplayEffect>& EffectClass,
-	const TMap<FName, float>&           SetByCallerMagnitudesMap) const
+	const TMap<FGameplayTag, float>&    SetByCallerMagnitudesMap) const
 {
-	FGameplayEffectSpecHandle EffectSpec;
-
-	EffectSpec = this->TestCharacterAsc->MakeOutgoingSpec(EffectClass, 1.0, FGameplayEffectContextHandle());
+	FGameplayEffectSpecHandle EffectSpec =
+		this->TestCharacterAsc->MakeOutgoingSpec(EffectClass, 1.0, FGameplayEffectContextHandle());
 
 	for (const auto& [ParameterTag, ParameterValue] : SetByCallerMagnitudesMap)
 	{
-		EffectSpec = UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(
-			EffectSpec,
-			FGameplayTag::RequestGameplayTag(ParameterTag),
-			ParameterValue
-		);
+		EffectSpec =
+			UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(EffectSpec, ParameterTag, ParameterValue);
 	}
 
 	return EffectSpec;
@@ -347,12 +343,12 @@ FActiveGameplayEffectHandle FPF2SpecBase::InitializeAttributeAndApplyEffect(
 
 void FPF2SpecBase::ApplyUnreplicatedTag(const FString& TagName) const
 {
-	this->TestPawnAsc->AddLooseGameplayTag(PF2GameplayAbilityUtilities::GetTag(TagName));
+	this->TestPawnAsc->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName(TagName)));
 }
 
 void FPF2SpecBase::RemoveUnreplicatedTag(const FString& TagName) const
 {
-	this->TestPawnAsc->RemoveLooseGameplayTag(PF2GameplayAbilityUtilities::GetTag(TagName));
+	this->TestPawnAsc->RemoveLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName(TagName)));
 }
 
 void FPF2SpecBase::TestCharacterHasCondition(const TScriptInterface<IPF2CharacterInterface>& Character,

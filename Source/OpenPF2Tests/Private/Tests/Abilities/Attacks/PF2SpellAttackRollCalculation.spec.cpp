@@ -79,7 +79,7 @@ void FPF2SpellAttackRollCalculationsSpec::Define()
 		{
 			BeforeEach([=, this]()
 			{
-				this->ApplyUnreplicatedTag(FString::Format(TEXT("SpellcastingAbility.{0}"), {SpellAbilityName}));
+				this->ApplyUnreplicatedTag(TEXT("PF2.SpellcastingAbility.") + SpellAbilityName);
 			});
 
 			for (auto& BoostedAbility : this->AllAbilityModifierAttributes)
@@ -108,7 +108,7 @@ void FPF2SpellAttackRollCalculationsSpec::Define()
 
 							BeforeEach([=, this]()
 							{
-								this->ApplyUnreplicatedTag(FString::Format(TEXT("SpellAttack.{0}"), {ProficiencyLevel}));
+								this->ApplyUnreplicatedTag(TEXT("PF2.Proficiency.SpellAttack.") + ProficiencyLevel);
 							});
 
 							if (SpellAbilityName == BoostedAbilityName)
