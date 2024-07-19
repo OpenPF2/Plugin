@@ -37,7 +37,7 @@ namespace PF2GameplayAbilityUtilities
 		const FGameplayTag     WeightTagParent = Pf2TagGameplayEffectWeightGroups;
 		const UGameplayEffect* Effect          = GameplayEffect.GetDefaultObject();
 
-		const FGameplayTagContainer WeightTags = Effect->GetAssetTags().Filter(FGameplayTagContainer(WeightTagParent));
+		const FGameplayTagContainer WeightTags = Effect->GetAssetTags().Filter(WeightTagParent.GetSingleTagContainer());
 
 		if (WeightTags.IsEmpty())
 		{
