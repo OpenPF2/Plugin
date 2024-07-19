@@ -17,6 +17,8 @@
 #include "CharacterStats/PF2CharacterAttributeSet.h"
 #include "CharacterStats/PF2TemlCalculation.h"
 
+#include "GameplayTags/Stats/KeyAbilities.h"
+
 #include "Libraries/PF2AbilitySystemLibrary.h"
 #include "Libraries/PF2TagLibrary.h"
 
@@ -24,62 +26,56 @@
 
 UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase() :
 	UPF2KeyAbilityTemlCalculationBase(
-		TEXT(""),
-		TEXT("PF2.KeyAbility")
+		FGameplayTag(),
+		Pf2TagKeyAbilities
 	)
 {
 }
 
-UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase(
-	const FString& StatGameplayTagPrefix,
-	const FString& KeyAbilityGameplayTagPrefix,
-	const float    BaseValue) :
-	StatGameplayTagPrefix(StatGameplayTagPrefix),
+UPF2KeyAbilityTemlCalculationBase::UPF2KeyAbilityTemlCalculationBase(const FGameplayTag& StatPrefixTag,
+                                                                     const FGameplayTag& KeyAbilityPrefixTag,
+                                                                     const float         BaseValue) :
+	StatPrefixTag(StatPrefixTag),
 	BaseValue(BaseValue)
 {
 	this->DefineKeyAbilityCapture(
-		KeyAbilityGameplayTagPrefix + ".Strength",
+		UPF2TagLibrary::RequestCombinedTagByString(KeyAbilityPrefixTag, TEXT("Strength")),
 		UPF2CharacterAttributeSet::GetAbStrengthModifierAttribute()
 	);
 
 	this->DefineKeyAbilityCapture(
-		KeyAbilityGameplayTagPrefix + ".Dexterity",
+		UPF2TagLibrary::RequestCombinedTagByString(KeyAbilityPrefixTag, TEXT("Dexterity")),
 		UPF2CharacterAttributeSet::GetAbDexterityModifierAttribute()
 	);
 
 	this->DefineKeyAbilityCapture(
-		KeyAbilityGameplayTagPrefix + ".Constitution",
+		UPF2TagLibrary::RequestCombinedTagByString(KeyAbilityPrefixTag, TEXT("Constitution")),
 		UPF2CharacterAttributeSet::GetAbConstitutionModifierAttribute()
 	);
 
 	this->DefineKeyAbilityCapture(
-		KeyAbilityGameplayTagPrefix + ".Intelligence",
+		UPF2TagLibrary::RequestCombinedTagByString(KeyAbilityPrefixTag, TEXT("Intelligence")),
 		UPF2CharacterAttributeSet::GetAbIntelligenceModifierAttribute()
 	);
 
 	this->DefineKeyAbilityCapture(
-		KeyAbilityGameplayTagPrefix + ".Wisdom",
+		UPF2TagLibrary::RequestCombinedTagByString(KeyAbilityPrefixTag, TEXT("Wisdom")),
 		UPF2CharacterAttributeSet::GetAbWisdomModifierAttribute()
 	);
 
 	this->DefineKeyAbilityCapture(
-		KeyAbilityGameplayTagPrefix + ".Charisma",
+		UPF2TagLibrary::RequestCombinedTagByString(KeyAbilityPrefixTag, TEXT("Charisma")),
 		UPF2CharacterAttributeSet::GetAbCharismaModifierAttribute()
 	);
 }
 
-void UPF2KeyAbilityTemlCalculationBase::DefineKeyAbilityCapture(
-	const FString&            KeyAbilityTagName,
-	const FGameplayAttribute& Attribute)
+void UPF2KeyAbilityTemlCalculationBase::DefineKeyAbilityCapture(const FGameplayTag&       KeyAbilityTag,
+                                                                const FGameplayAttribute& Attribute)
 {
 	const FGameplayEffectAttributeCaptureDefinition CaptureDefinition =
 		PF2GameplayAbilityUtilities::BuildSourceCaptureFor(Attribute);
 
-	this->KeyAbilityCaptureDefinitions.Add(
-		KeyAbilityTagName,
-		CaptureDefinition
-	);
-
+	this->KeyAbilityCaptureDefinitions.Add(KeyAbilityTag, CaptureDefinition);
 	this->RelevantAttributesToCapture.Add(CaptureDefinition);
 }
 
@@ -96,7 +92,7 @@ float UPF2KeyAbilityTemlCalculationBase::CalculateBaseMagnitude_Implementation(c
 	// Spell DC = 10 + your spellcasting ability modifier + proficiency bonus + other bonuses + penalties"
 	//
 	// Source: Pathfinder 2E Core Rulebook, page 298, "Spell Attack Roll and Spell DC".
-	const float ProficiencyBonus   = FPF2TemlCalculation(this->StatGameplayTagPrefix, Spec).GetValue(),
+	const float ProficiencyBonus   = FPF2TemlCalculation(this->StatPrefixTag, Spec).GetValue(),
 	            KeyAbilityModifier = this->CalculateKeyAbilityModifier(Spec),
 	            AbilityScore       = this->BaseValue + ProficiencyBonus + KeyAbilityModifier;
 
@@ -104,7 +100,7 @@ float UPF2KeyAbilityTemlCalculationBase::CalculateBaseMagnitude_Implementation(c
 		LogPf2Stats,
 		VeryVerbose,
 		TEXT("Calculated key ability score ('%s'): %f + %f + %f = %f"),
-		*(this->StatGameplayTagPrefix),
+		*(this->StatPrefixTag.ToString()),
 		this->BaseValue,
 		ProficiencyBonus,
 		KeyAbilityModifier,
@@ -119,6 +115,7 @@ float UPF2KeyAbilityTemlCalculationBase::CalculateKeyAbilityModifier(const FGame
 	float                        KeyAbilityModifier = 0.0f;
 	const FGameplayTagContainer* SourceTags         = Spec.CapturedSourceTags.GetAggregatedTags();
 
+	// ReSharper disable once CppTooWideScopeInitStatement
 	const FGameplayEffectAttributeCaptureDefinition KeyAbilityCaptureDefinition =
 		this->DetermineKeyAbility(SourceTags);
 
@@ -145,7 +142,7 @@ FGameplayEffectAttributeCaptureDefinition UPF2KeyAbilityTemlCalculationBase::Det
 
 	for (auto PairIterator = this->KeyAbilityCaptureDefinitions.CreateConstIterator(); PairIterator; ++PairIterator)
 	{
-		if (const FString TagName = PairIterator.Key(); UPF2TagLibrary::ContainerHasTag(*SourceTags, TagName))
+		if (const FGameplayTag Tag = PairIterator.Key(); SourceTags->HasTag(Tag))
 		{
 			KeyAbilityCaptureDefinition = PairIterator.Value();
 			break;

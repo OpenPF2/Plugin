@@ -43,10 +43,10 @@ public:
 	 * proficiency bonus, and TEML tags on the character that have the specified prefix determine the magnitude of the
 	 * boost.
 	 *
-	 * @param StatGameplayTagPrefix
+	 * @param StatPrefixTag
 	 *	The tag prefix to use for checking a character's training in the stat. For example, "PF2.Proficiency.ClassDc",
 	 *	"PF2.Proficiency.SpellAttack", or "PF2.Proficiency.SpellDc".
-	 * @param KeyAbilityGameplayTagPrefix
+	 * @param KeyAbilityPrefixTag
 	 *	The tag prefix to use to determine the key ability for this stat.  For the Class DC, this is "PF2.KeyAbility".
 	 *	For Spell Attack and Spell DC, this is "PF2.SpellcastingAbility".
 	 * @param BaseValue
@@ -54,9 +54,9 @@ public:
 	 *	this is 0.
 	 */
 	explicit UPF2KeyAbilityTemlCalculationBase(
-		const FString& StatGameplayTagPrefix,
-		const FString& KeyAbilityGameplayTagPrefix,
-		const float    BaseValue = 0.0f);
+		const FGameplayTag& StatPrefixTag,
+		const FGameplayTag& KeyAbilityPrefixTag,
+		const float         BaseValue = 0.0f);
 
 	// =================================================================================================================
 	// Public Methods - UGameplayModMagnitudeCalculation Implementation
@@ -70,7 +70,7 @@ protected:
 	/**
 	 * The tag prefix to use for checking a character's training in this stat.
 	 */
-	FString StatGameplayTagPrefix;
+	FGameplayTag StatPrefixTag;
 
 	/**
 	 * The base value for this stat.
@@ -82,28 +82,10 @@ protected:
 	/**
 	 * Map from Key Ability tag names to capture definitions.
 	 *
-	 * Each key in the map is a gameplay tag, which corresponds to a key character ability; and the value is the
+	 * Each key in the map is a gameplay tag that corresponds to a key character ability, while the value is the
 	 * definition for capturing the modifier of that ability.
 	 */
-	TMap<FString, FGameplayEffectAttributeCaptureDefinition> KeyAbilityCaptureDefinitions;
-
-	/**
-	 * The name of the gameplay tag that indicates the character's Key Ability.
-	 *
-	 * From the Pathfinder 2E Core Rulebook, page 67:
-	 * "This is the ability score that a member of your class cares about the most. Many of your most useful and
-	 * powerful abilities are tied to this ability in some way.
-	 *
-	 * For instance, this is the ability score you’ll use to determine the Difficulty Class (DC) associated with your
-	 * character’s class features and feats. This is called your class DC. If your character is a member of a
-	 * spellcasting class, this Key Ability is used to calculate spell DCs and similar values.
-	 *
-	 * Most classes are associated with one Key Ability score, but some allow you to choose from two options. For
-	 * instance, if you’re a fighter, you can choose either Strength or Dexterity as your Key Ability. A fighter who
-	 * chooses Strength will excel in hand-to-hand combat, while those who choose Dexterity prefer ranged or finesse
-	 * weapons."
-	 */
-	FString KeyAbilityGameplayTag;
+	TMap<FGameplayTag, FGameplayEffectAttributeCaptureDefinition> KeyAbilityCaptureDefinitions;
 
 	// =================================================================================================================
 	// Protected Methods
@@ -113,13 +95,13 @@ protected:
 	 *
 	 * This is used to ensure we can retrieve the modifier for the specified ability later in the calculation phase.
 	 *
-	 * @param KeyAbilityTagName
-	 *	The name of the gameplay tag that a character must have for the ability to be considered "key". For example,
+	 * @param KeyAbilityTag
+	 *	The gameplay tag that a character must have for the ability to be considered "key". For example,
 	 *	"PF2.KeyAbility.Strength" or "PF2.SpellcastingAbility.Intelligence".
 	 * @param Attribute
 	 *	The definition of the attribute to capture.
 	 */
-	void DefineKeyAbilityCapture(const FString& KeyAbilityTagName, const FGameplayAttribute& Attribute);
+	void DefineKeyAbilityCapture(const FGameplayTag& KeyAbilityTag, const FGameplayAttribute& Attribute);
 
 	/**
 	 * Calculates the Key Ability modifier for the character.
