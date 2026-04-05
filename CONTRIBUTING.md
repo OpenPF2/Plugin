@@ -60,6 +60,37 @@ When touching gameplay code:
 - Use existing ability-system wrappers and interfaces instead of bypassing them.
 - Treat passive gameplay effects, dynamic tags, and attribute sets as project-level architecture.
 
+### What "Architectural Concerns" Means Here
+
+In OpenPF2, GAS, replication, and authority flow are part of the gameplay architecture, not just implementation details hidden inside a class.
+
+That means a small local change can still have system-wide effects if it changes:
+
+- when abilities initialize
+- who is allowed to mutate gameplay state
+- what must replicate
+- what clients can infer locally
+- how passive gameplay effects, tags, and queued commands stay in sync
+- how Blueprint-facing events and interfaces behave in multiplayer
+
+In practice:
+
+- Do not "simplify" authority checks unless you have verified the client/server behavior.
+- Do not move ASC initialization, refresh, or passive-effect activation casually.
+- Do not update replicated gameplay state in whatever layer is convenient, and do not treat replicated gameplay fields as ordinary local state.
+- Do not bypass existing interfaces or wrappers for one-off convenience.
+- When changing gameplay code, think in terms of lifecycle, ownership, replication, and server/client behavior first.
+- When a change affects ownership, replication timing, ability initialization, or multiplayer event flow, treat it as a design-level change and test it accordingly.
+
+Examples from the current codebase:
+
+- `APF2CharacterBase` ability initialization: `InitializeOrRefreshAbilities()` is triggered from both possession-time and controller-replication paths. Removing one because it looks redundant would change whether the server, the client, or both reinitialize the ASC actor info at the right time.
+- `APF2CharacterBase::CharacterLevel`: this is replicated gameplay state, not just a local field. Treating level as ordinary local state would risk desynchronizing level-dependent abilities, effects, and UI.
+- Lazy interface events objects in `APF2CharacterBase` and `UPF2CommandQueueComponent`: these are created on demand because constructor-time creation caused multiplayer bugs through shared CDO state. A seemingly cleaner refactor back to constructor allocation would break network behavior.
+- `UPF2CommandQueueComponent` queue mutations: the replicated queue and its event broadcasts are part of one behavior. Bypassing the component to manipulate the underlying array directly could change what remote clients observe and when they observe it.
+
+If a change feels local in code but alters who owns the truth, when clients learn it, or how GAS state is applied, it is architectural in this project.
+
 ## When Adding New Code
 
 ### Repository Layout
