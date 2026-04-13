@@ -16,6 +16,8 @@
 
 #include "Items/Weapons/PF2WeaponInterface.h"
 
+#include "Utilities/PF2InterfaceUtilities.h"
+
 bool UPF2AbilitySystemLibrary::WasEventTriggeredByAbility(const FGameplayEventData& EventData)
 {
 	const FGameplayEffectContextHandle ContextHandle = EventData.ContextHandle;

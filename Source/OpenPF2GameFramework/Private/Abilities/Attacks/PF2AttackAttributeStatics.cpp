@@ -56,7 +56,7 @@ FGameplayTag FPF2AttackAttributeStatics::GetDamageTypeForDamageAttribute(const F
 	{
 		if (Pair.Value == Attribute.AttributeName)
 		{
-			FoundTag = PF2GameplayAbilityUtilities::GetTag(Pair.Key);
+			FoundTag = FGameplayTag::RequestGameplayTag(Pair.Key);
 			break;
 		}
 	}

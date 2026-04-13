@@ -77,7 +77,7 @@ void FPF2ArmorClassCalculationSpec::Define()
 				{
 					BeforeEach([=, this]()
 					{
-						this->ApplyUnreplicatedTag(FString::Format(TEXT("Armor.Equipped.{0}"), {ArmorClassEquipped}));
+						this->ApplyUnreplicatedTag(TEXT("PF2.Equipped.Armor.") + ArmorClassEquipped);
 					});
 
 					for (auto& ArmorClassProficient : this->ArmorClasses)
@@ -95,7 +95,7 @@ void FPF2ArmorClassCalculationSpec::Define()
 								{
 									this->ApplyUnreplicatedTag(
 										FString::Format(
-											TEXT("Armor.Category.{0}.{1}"),
+											TEXT("PF2.Proficiency.Armor.Category.{0}.{1}"),
 											{ArmorClassProficient, ProficiencyLevel}
 										)
 									);

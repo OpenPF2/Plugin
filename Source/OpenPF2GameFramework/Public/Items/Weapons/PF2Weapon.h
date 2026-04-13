@@ -190,7 +190,7 @@ protected:
 	UPROPERTY(
 		EditDefaultsOnly,
 		BlueprintReadOnly,
-		meta=(Categories="Trait.Weapon"),
+		meta=(Categories="PF2.Trait.Weapon"),
 		Category="OpenPF2 - Weapon Statistics"
 	)
 	FGameplayTagContainer Traits;

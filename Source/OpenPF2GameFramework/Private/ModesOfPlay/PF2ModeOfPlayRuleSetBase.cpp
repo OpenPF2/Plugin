@@ -15,17 +15,12 @@
 #include "Commands/PF2CharacterCommandInterface.h"
 #include "Commands/PF2CommandQueueInterface.h"
 
+#include "GameplayTags/Traits/Conditions.h"
+
 #include "Libraries/PF2CharacterCommandLibrary.h"
 #include "Libraries/PF2CharacterLibrary.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
-
-APF2ModeOfPlayRuleSetBase::APF2ModeOfPlayRuleSetBase()
-{
-	this->DyingConditionTag       = PF2GameplayAbilityUtilities::GetTag(DyingConditionTagName);
-	this->DeadConditionTag        = PF2GameplayAbilityUtilities::GetTag(DeadConditionTagName);
-	this->UnconsciousConditionTag = PF2GameplayAbilityUtilities::GetTag(UnconsciousConditionTagName);
-}
 
 void APF2ModeOfPlayRuleSetBase::OnModeOfPlayStart(const EPF2ModeOfPlayType ModeOfPlay)
 {
@@ -52,23 +47,28 @@ void APF2ModeOfPlayRuleSetBase::OnCharacterAddedToEncounter(const TScriptInterfa
 	}
 	else
 	{
+		// The MoPRS listens for a tag of this type to be added to or removed from a character in order to fire the
+		// OnCharacterUnconscious() and OnCharacterConscious(), respectively.
 		this->RegisterTagCallback(
 			CharacterPtr,
-			this->UnconsciousConditionTag,
+			Pf2TagTraitConditionUnconscious,
 			&APF2ModeOfPlayRuleSetBase::Native_OnCharacterUnconscious,
 			&APF2ModeOfPlayRuleSetBase::Native_OnCharacterConscious
 		);
 
+		// The MoPRS listens for a tag of this type to be added to or removed from a character in order to fire the
+		// Native_OnCharacterDying() and Native_OnCharacterRecoveredFromDying(), respectively.
 		this->RegisterTagCallback(
 			CharacterPtr,
-			this->DyingConditionTag,
+			Pf2TagTraitConditionDying,
 			&APF2ModeOfPlayRuleSetBase::Native_OnCharacterDying,
 			&APF2ModeOfPlayRuleSetBase::Native_OnCharacterRecoveredFromDying
 		);
 
+		// The MoPRS listens for a tag of this type to be added to a character in order to fire OnCharacterDead().
 		this->RegisterTagCallback(
 			CharacterPtr,
-			this->DeadConditionTag,
+			Pf2TagTraitConditionDead,
 			&APF2ModeOfPlayRuleSetBase::Native_OnCharacterDead,
 			nullptr
 		);

@@ -5,7 +5,10 @@
 
 #include "CharacterStats/PF2ClassDifficultyClassCalculation.h"
 
+#include "GameplayTags/Stats/KeyAbilities.h"
+#include "GameplayTags/Stats/Proficiencies/ClassDc.h"
+
 UPF2ClassDifficultyClassCalculation::UPF2ClassDifficultyClassCalculation() :
-	UPF2KeyAbilityTemlCalculationBase(TEXT("ClassDc"), TEXT("KeyAbility"), 10.0f)
+	UPF2KeyAbilityTemlCalculationBase(Pf2TagProficiencyClassDc, Pf2TagKeyAbilities, 10.0f)
 {
 }

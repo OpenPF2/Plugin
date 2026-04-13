@@ -27,28 +27,28 @@ protected:
 	 * Map from each damage type tag to the transient attack attribute for that damage type.
 	 */
 	inline static const TMap<FName, FName> DamageTypeToTransientDamageAttributeMap = {
-		{ "DamageType.Physical.Bludgeoning", "TmpDmgTypePhysicalBludgeoning" },
-		{ "DamageType.Physical.Piercing",    "TmpDmgTypePhysicalPiercing"    },
-		{ "DamageType.Physical.Slashing",    "TmpDmgTypePhysicalSlashing"    },
+		{ "PF2.DamageType.Physical.Bludgeoning", "TmpDmgTypePhysicalBludgeoning" },
+		{ "PF2.DamageType.Physical.Piercing",    "TmpDmgTypePhysicalPiercing"    },
+		{ "PF2.DamageType.Physical.Slashing",    "TmpDmgTypePhysicalSlashing"    },
 
-		{ "DamageType.Energy.Acid",          "TmpDmgTypeEnergyAcid"          },
-		{ "DamageType.Energy.Cold",          "TmpDmgTypeEnergyCold"          },
-		{ "DamageType.Energy.Electricity",   "TmpDmgTypeEnergyElectricity"   },
-		{ "DamageType.Energy.Fire",          "TmpDmgTypeEnergyFire"          },
-		{ "DamageType.Energy.Sonic",         "TmpDmgTypeEnergySonic"         },
-		{ "DamageType.Energy.Positive",      "TmpDmgTypeEnergyPositive"      },
-		{ "DamageType.Energy.Negative",      "TmpDmgTypeEnergyNegative"      },
-		{ "DamageType.Energy.Force",         "TmpDmgTypeEnergyForce"         },
+		{ "PF2.DamageType.Energy.Acid",          "TmpDmgTypeEnergyAcid"          },
+		{ "PF2.DamageType.Energy.Cold",          "TmpDmgTypeEnergyCold"          },
+		{ "PF2.DamageType.Energy.Electricity",   "TmpDmgTypeEnergyElectricity"   },
+		{ "PF2.DamageType.Energy.Fire",          "TmpDmgTypeEnergyFire"          },
+		{ "PF2.DamageType.Energy.Sonic",         "TmpDmgTypeEnergySonic"         },
+		{ "PF2.DamageType.Energy.Positive",      "TmpDmgTypeEnergyPositive"      },
+		{ "PF2.DamageType.Energy.Negative",      "TmpDmgTypeEnergyNegative"      },
+		{ "PF2.DamageType.Energy.Force",         "TmpDmgTypeEnergyForce"         },
 
-		{ "DamageType.Alignment.Chaotic",    "TmpDmgTypeAlignmentChaotic"    },
-		{ "DamageType.Alignment.Evil",       "TmpDmgTypeAlignmentEvil"       },
-		{ "DamageType.Alignment.Good",       "TmpDmgTypeAlignmentGood"       },
-		{ "DamageType.Alignment.Lawful",     "TmpDmgTypeAlignmentLawful"     },
+		{ "PF2.DamageType.Alignment.Chaotic",    "TmpDmgTypeAlignmentChaotic"    },
+		{ "PF2.DamageType.Alignment.Evil",       "TmpDmgTypeAlignmentEvil"       },
+		{ "PF2.DamageType.Alignment.Good",       "TmpDmgTypeAlignmentGood"       },
+		{ "PF2.DamageType.Alignment.Lawful",     "TmpDmgTypeAlignmentLawful"     },
 
-		{ "DamageType.Mental",               "TmpDmgTypeMental"              },
-		{ "DamageType.Poison",               "TmpDmgTypePoison"              },
-		{ "DamageType.Bleed",                "TmpDmgTypeBleed"               },
-		{ "DamageType.Precision",            "TmpDmgTypePrecision"           },
+		{ "PF2.DamageType.Mental",               "TmpDmgTypeMental"              },
+		{ "PF2.DamageType.Poison",               "TmpDmgTypePoison"              },
+		{ "PF2.DamageType.Bleed",                "TmpDmgTypeBleed"               },
+		{ "PF2.DamageType.Precision",            "TmpDmgTypePrecision"           },
 	};
 
 public:

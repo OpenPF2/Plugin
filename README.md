@@ -195,9 +195,6 @@ For example, if a weapon has a range of 60 feet, then its range in OpenPF2 is
    });
    ```
 7. Compile your project.
-8. Copy the `Config/Tags/` folder from the plug-in into your project's `Config` folder.
-   _Even in UE 5.1+, this is still required. The engine
-   [does not automatically scan or package config files provided by plugins](https://docs.unrealengine.com/5.1/en-US/plugins-in-unreal-engine/#pluginsinprojects)._
 
 ## Licensing
 

@@ -7,7 +7,6 @@
 
 #include <GameplayEffect.h>
 #include <GameplayEffectTypes.h>
-#include <GameplayTagContainer.h>
 
 #include "PF2CharacterConstants.h"
 
@@ -27,74 +26,6 @@ class UPF2CharacterAttributeSet;
 namespace PF2GameplayAbilityUtilities
 {
 	/**
-	 * Gets the specified tag out of the tags known to the project.
-	 *
-	 * The tag must already exist in one of the INI files under Config/Tags; otherwise, this will trigger an error.
-	 *
-	 * @param TagName
-	 *	The name of the tag, as an FName.
-	 *
-	 * @return
-	 *	The desired tag.
-	 */
-	FORCEINLINE OPENPF2GAMEFRAMEWORK_API FGameplayTag GetTag(const FName& TagName)
-	{
-		return FGameplayTag::RequestGameplayTag(TagName);
-	}
-
-	/**
-	 * Gets the specified tag out of the tags known to the project.
-	 *
-	 * The tag must already exist in one of the INI files under Config/Tags; otherwise, this will trigger an error.
-	 *
-	 * @param TagName
-	 *	The name of the tag, as a string.
-	 *
-	 * @return
-	 *	The desired tag.
-	 */
-	FORCEINLINE OPENPF2GAMEFRAMEWORK_API FGameplayTag GetTag(const FString& TagName)
-	{
-		return GetTag(FName(TagName));
-	}
-
-	/**
-	 * Checks if a tag with the given name or prefix is present.
-	 *
-	 * @param Tags
-	 *	The list of tags in which to search.
-	 * @param TagNameOrPrefix
-	 *	The name of the tag or the prefix; as an FName.
-	 *
-	 * @return
-	 *	- TRUE if given a tag name, and a tag with the specified name is present in the tag list.
-	 *	- TRUE if given a tag prefix, and there is a tag present in the tag list that starts with that prefix.
-	 *	- FALSE, otherwise.
-	 */
-	FORCEINLINE OPENPF2GAMEFRAMEWORK_API bool HasTag(const FGameplayTagContainer* Tags, const FName TagNameOrPrefix)
-	{
-		return Tags->HasTag(GetTag(TagNameOrPrefix));
-	}
-
-	/**
-	 * Checks if a tag with the given name or prefix is present.
-	 *
-	 * @param Tags
-	 *	The list of tags in which to search.
-	 * @param TagNameOrPrefix
-	 *	The name of the tag or the prefix; as a string.
-	 *
-	 * @return
-	 *	- TRUE if given a tag name, and a tag with the specified name is present in the tag list.
-	 *	- TRUE if given a tag prefix, and there is a tag present in the tag list that starts with that prefix.
-	 *	- FALSE, otherwise.
-	 */
-	FORCEINLINE OPENPF2GAMEFRAMEWORK_API bool HasTag(const FGameplayTagContainer* Tags, const FString& TagNameOrPrefix)
-	{
-		return Tags->HasTag(GetTag(TagNameOrPrefix));
-	}
-
-	/**
 	 * Creates an attribute capture definition for the specified Gameplay Attribute.
 	 *
 	 * @param Attribute
@@ -103,7 +34,9 @@ namespace PF2GameplayAbilityUtilities
 	 * @return
 	 *	The capture definition for the specified attribute.
 	 */
-	OPENPF2GAMEFRAMEWORK_API FGameplayEffectAttributeCaptureDefinition BuildSourceCaptureFor(const FGameplayAttribute& Attribute);
+	OPENPF2GAMEFRAMEWORK_API FGameplayEffectAttributeCaptureDefinition BuildSourceCaptureFor(
+		const FGameplayAttribute& Attribute
+	);
 
 	/**
 	 * Gets the name of the default weight group into which the given GE should be placed.
@@ -150,7 +83,9 @@ namespace PF2GameplayAbilityUtilities
 	 * @return
 	 *	A pointer to the Ability System Component for the actor described by the given info.
 	 */
-	OPENPF2GAMEFRAMEWORK_API UAbilitySystemComponent* GetAbilitySystemComponent(const FGameplayAbilityActorInfo* ActorInfo);
+	OPENPF2GAMEFRAMEWORK_API UAbilitySystemComponent* GetAbilitySystemComponent(
+		const FGameplayAbilityActorInfo* ActorInfo
+	);
 
 	/**
 	 * Gets the OpenPF2 character attribute set of the given actor.
@@ -164,7 +99,8 @@ namespace PF2GameplayAbilityUtilities
 	 *	A pointer to the OpenPF2 attribute set.
 	 */
 	OPENPF2GAMEFRAMEWORK_API const UPF2CharacterAttributeSet* GetCharacterAttributeSet(
-		const FGameplayAbilityActorInfo* ActorInfo);
+		const FGameplayAbilityActorInfo* ActorInfo
+	);
 
 	/**
 	 * Determines which OpenPF2 character an activated GE has targeted.

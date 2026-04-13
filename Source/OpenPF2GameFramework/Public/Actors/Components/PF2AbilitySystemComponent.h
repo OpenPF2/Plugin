@@ -31,23 +31,6 @@ class OPENPF2GAMEFRAMEWORK_API UPF2AbilitySystemComponent :
 
 protected:
 	// =================================================================================================================
-	// Protected Constants
-	// =================================================================================================================
-	/**
-	 * The name of the tag that designates an ability the default movement ability.
-	 *
-	 * This ability is used to move a character to a location, such as within range of another actor/character.
-	 */
-	static const FName DefaultMovementAbilityTagName;
-
-	/**
-	 * The name of the tag that designates an ability the default "face target" ability.
-	 *
-	 * This ability is used to rotate a character to face another actor/character.
-	 */
-	static const FName DefaultFaceTargetAbilityTagName;
-
-	// =================================================================================================================
 	// Protected Fields
 	// =================================================================================================================
 	/**

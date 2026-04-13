@@ -5,7 +5,10 @@
 
 #include "CharacterStats/PF2SpellDifficultyClassCalculation.h"
 
+#include "GameplayTags/Stats/KeyAbilities.h"
+#include "GameplayTags/Stats/Proficiencies/SpellDc.h"
+
 UPF2SpellDifficultyClassCalculation::UPF2SpellDifficultyClassCalculation() :
-	UPF2KeyAbilityTemlCalculationBase(TEXT("SpellDc"), TEXT("SpellcastingAbility"), 10.0f)
+	UPF2KeyAbilityTemlCalculationBase(Pf2TagProficiencySpellDc, Pf2TagSpellcastingAbilities, 10.0f)
 {
 }

@@ -341,14 +341,14 @@ protected:
 	 * @param EffectClass
 	 *	The type of GE for which a spec is desired.
 	 * @param SetByCallerMagnitudesMap
-	 *	An optional map of set-by-caller-magnitudes/parameters to parameters, to pass into the GE.
+	 *	An optional map of set-by-caller-magnitudes/parameters to parameter values, to pass into the GE.
 	 *
 	 * @return
 	 *	The server-side handle of the GE specification.
 	 */
 	FGameplayEffectSpecHandle BuildEffectSpec(
 		const TSubclassOf<UGameplayEffect>& EffectClass,
-		const TMap<FName, float>&           SetByCallerMagnitudesMap = {}) const;
+		const TMap<FGameplayTag, float>&    SetByCallerMagnitudesMap = {}) const;
 
 	/**
 	 * Builds a Gameplay Effect (GE) specification for the given GE type, instigated by the given ability and character.
@@ -516,7 +516,7 @@ protected:
 	 * @param Character
 	 *	The character to test.
 	 * @param ConditionTag
-	 *	The parent condition level tag (e.g., "Trait.Condition.Dying", "Trait.Condition.Wounded", etc.).
+	 *	The parent condition level tag (e.g., "PF2.Trait.Condition.Dying", "PF2.Trait.Condition.Wounded", etc.).
 	 */
 	void TestCharacterHasCondition(
 		const TScriptInterface<IPF2CharacterInterface>& Character,
@@ -534,7 +534,7 @@ protected:
 	 * @param AbilitySystemComponent
 	 *	The ASC to test.
 	 * @param ConditionTag
-	 *	The parent condition level tag (e.g., "Trait.Condition.Dying", "Trait.Condition.Wounded", etc.).
+	 *	The parent condition level tag (e.g., "PF2.Trait.Condition.Dying", "PF2.Trait.Condition.Wounded", etc.).
 	 */
 	void TestAscHasCondition(
 		const FString&                 WhatAsc,
@@ -550,7 +550,7 @@ protected:
 	 * @param Character
 	 *	The character to test.
 	 * @param ConditionTag
-	 *	The parent condition level tag (e.g., "Trait.Condition.Dying", "Trait.Condition.Wounded", etc.).
+	 *	The parent condition level tag (e.g., "PF2.Trait.Condition.Dying", "PF2.Trait.Condition.Wounded", etc.).
 	 */
 	void TestCharacterNotHaveCondition(
 		const TScriptInterface<IPF2CharacterInterface>& Character,
@@ -567,7 +567,7 @@ protected:
 	 * @param AbilitySystemComponent
 	 *	The ASC to test.
 	 * @param ConditionTag
-	 *	The parent condition level tag (e.g., "Trait.Condition.Dying", "Trait.Condition.Wounded", etc.).
+	 *	The parent condition level tag (e.g., "PF2.Trait.Condition.Dying", "PF2.Trait.Condition.Wounded", etc.).
 	 */
 	void TestAscNotHaveCondition(
 		const FString&                 WhatAsc,
@@ -580,7 +580,7 @@ protected:
 	 * @param Character
 	 *	The character to test.
 	 * @param ParentTag
-	 *	The parent condition level tag (e.g., "Trait.Condition.Dying", "Trait.Condition.Wounded", etc.).
+	 *	The parent condition level tag (e.g., "PF2.Trait.Condition.Dying", "PF2.Trait.Condition.Wounded", etc.).
 	 * @param ExpectedLevel
 	 *	The condition level expected for the tag.
 	 */
@@ -597,7 +597,7 @@ protected:
 	 * @param AbilitySystemComponent
 	 *	The ASC to test.
 	 * @param ParentTag
-	 *	The parent condition level tag (e.g., "Trait.Condition.Dying", "Trait.Condition.Wounded", etc.).
+	 *	The parent condition level tag (e.g., "PF2.Trait.Condition.Dying", "PF2.Trait.Condition.Wounded", etc.).
 	 * @param ExpectedLevel
 	 *	The condition level expected for the tag.
 	 */

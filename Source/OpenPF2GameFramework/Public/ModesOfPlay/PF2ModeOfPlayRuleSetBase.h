@@ -28,63 +28,14 @@ class OPENPF2GAMEFRAMEWORK_API APF2ModeOfPlayRuleSetBase : public AActor, public
 
 protected:
 	// =================================================================================================================
-	// Protected Constants
-	// =================================================================================================================
-	/**
-	 * The name of the root of tags that indicate that a character is in the process of dying.
-	 */
-	inline static const FName DyingConditionTagName = FName("Trait.Condition.Dying");
-
-	/**
-	 * The name of the tag that indicates a character is dead. This is equivalent to Trait.Condition.Dying.4.
-	 */
-	inline static const FName DeadConditionTagName = FName("Trait.Condition.Dead");
-
-	/**
-	 * The name of the tag that indicates a character is no longer conscious.
-	 */
-	inline static const FName UnconsciousConditionTagName = FName("Trait.Condition.Unconscious");
-
-	// =================================================================================================================
 	// Protected Fields
 	// =================================================================================================================
-	/**
-	 * The root of tags that signify a character is dying.
-	 *
-	 * An MoPRS listens for a tag of this type to be added to or removed from a character in order to fire the
-	 * Native_OnCharacterDying() and Native_OnCharacterRecoveredFromDying(), respectively.
-	 */
-	FGameplayTag DyingConditionTag;
-
-	/**
-	 * The tag that signifies a character is dead.
-	 *
-	 * An MoPRS listens for a tag of this type to be added to a character in order to fire OnCharacterDead().
-	 */
-	FGameplayTag DeadConditionTag;
-
-	/**
-	 * The tag that signifies a character is unconscious.
-	 *
-	 * An MoPRS listens for a tag of this type to be added to or removed from a character in order to fire the
-	 * OnCharacterUnconscious() and OnCharacterConscious(), respectively.
-	 */
-	FGameplayTag UnconsciousConditionTag;
-
 	/**
 	 * Map of handles for callback delegates on condition tags.
 	 */
 	TMap<const TWeakObjectPtr<AActor>, TMap<FGameplayTag, FDelegateHandle>> ConditionCallbackHandles;
 
 public:
-	// =================================================================================================================
-	// Public Constructor
-	// =================================================================================================================
-	/**
-	 * Default constructor for APF2ModeOfPlayRuleSetBase.
-	 */
-	explicit APF2ModeOfPlayRuleSetBase();
-
 	// =================================================================================================================
 	// Public Methods - IPF2ModeOfPlayRuleSetInterface Implementation
 	// =================================================================================================================

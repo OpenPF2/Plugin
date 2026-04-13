@@ -10,19 +10,22 @@
 #include "CharacterStats/AbilityBoosts/PF2AbilityBoostRuleOptionValidator.h"
 #include "CharacterStats/AbilityBoosts/PF2GameplayAbilityTargetData_BoostAbility.h"
 
+#include "GameplayTags/Encounters/AbilityTriggers.h"
+#include "GameplayTags/GameplayAbilities/AbilityTypes.h"
+
 UPF2AbilityBoostBase::UPF2AbilityBoostBase()
 {
 	FAbilityTriggerData TriggerData;
 
 	TriggerData.TriggerSource = EGameplayAbilityTriggerSource::GameplayEvent;
-	TriggerData.TriggerTag    = GetTriggerTag();
+	TriggerData.TriggerTag    = Pf2TagTriggerTagCategoryAnytimeAbilityBoost;
 
 	this->AbilityTriggers.Add(TriggerData);
 
 	// We don't maintain any local state.
 	this->InstancingPolicy = EGameplayAbilityInstancingPolicy::NonInstanced;
 
-	this->AbilityTags.AddTag(PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.Type.AbilityBoost")));
+	this->AbilityTags.AddTag(Pf2TagGameplayAbilityTypeAbilityBoost);
 }
 
 bool UPF2AbilityBoostBase::CheckCost(
