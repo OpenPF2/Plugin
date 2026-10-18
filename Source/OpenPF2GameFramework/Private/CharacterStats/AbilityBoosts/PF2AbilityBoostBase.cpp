@@ -10,6 +10,8 @@
 #include "CharacterStats/AbilityBoosts/PF2AbilityBoostRuleOptionValidator.h"
 #include "CharacterStats/AbilityBoosts/PF2GameplayAbilityTargetData_BoostAbility.h"
 
+#include "Libraries/PF2TagLibrary.h"
+
 UPF2AbilityBoostBase::UPF2AbilityBoostBase()
 {
 	FAbilityTriggerData TriggerData;
@@ -19,10 +21,12 @@ UPF2AbilityBoostBase::UPF2AbilityBoostBase()
 
 	this->AbilityTriggers.Add(TriggerData);
 
-	// We don't maintain any local state.
-	this->InstancingPolicy = EGameplayAbilityInstancingPolicy::NonInstanced;
+	// We don't maintain any local state, but UE deprecated NonInstanced because it leads to confusing corner cases.
+	this->InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 
-	this->AbilityTags.AddTag(PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.Type.AbilityBoost")));
+	this->SetAssetTags(UPF2TagLibrary::AddDefaultAbilityTag(
+		this->GetAssetTags(),
+		PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.Type.AbilityBoost"))));
 }
 
 bool UPF2AbilityBoostBase::CheckCost(

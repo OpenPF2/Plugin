@@ -95,8 +95,8 @@ void UPF2MapLibrary::GenericMap_Invert(const void* InputMapAddr,
 
 	for (FScriptMapHelper::FIterator InputMapIt = InputMapHelper.CreateIterator(); InputMapIt; ++InputMapIt)
 	{
-		const uint8* InputMapKeyPtr   = InputMapHelper.GetKeyPtr(*InputMapIt);
-		const uint8* InputMapValuePtr = InputMapHelper.GetValuePtr(*InputMapIt);
+		const uint8* InputMapKeyPtr   = InputMapHelper.GetKeyPtr(InputMapIt.GetInternalIndex());
+		const uint8* InputMapValuePtr = InputMapHelper.GetValuePtr(InputMapIt.GetInternalIndex());
 
 		// Search for a _key_ in the output map that has a hash equal to that of the _value_ from the input map.
 		if (OutputMapHelper.FindValueFromHash(InputMapValuePtr))
