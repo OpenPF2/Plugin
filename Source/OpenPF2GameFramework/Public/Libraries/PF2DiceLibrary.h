@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include <Internationalization/Regex.h>
-
 #include <Kismet/BlueprintFunctionLibrary.h>
 
 #include <Math/RandomStream.h>
@@ -32,14 +30,6 @@ class OPENPF2GAMEFRAMEWORK_API UPF2DiceLibrary final : public UBlueprintFunction
 	GENERATED_BODY()
 
 protected:
-	// =================================================================================================================
-	// Protected Constants
-	// =================================================================================================================
-	/**
-	 * Regular expression pattern used to parse dice rolling expressions.
-	 */
-	static const FRegexPattern DiceRollPattern;
-
 	// =================================================================================================================
 	// Protected Static Fields
 	// =================================================================================================================

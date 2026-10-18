@@ -5,9 +5,9 @@
 
 #include "Libraries/PF2DiceLibrary.h"
 
-#include "Utilities/PF2ArrayUtilities.h"
+#include <Internationalization/Regex.h>
 
-const FRegexPattern UPF2DiceLibrary::DiceRollPattern = FRegexPattern(TEXT("^(\\d{1,})d(\\d{1,})$"));
+#include "Utilities/PF2ArrayUtilities.h"
 
 // NAME_None forces the RNG to initialize itself with a random seed.
 FRandomStream UPF2DiceLibrary::DiceRng = FRandomStream(NAME_None);
@@ -108,6 +108,9 @@ int32 UPF2DiceLibrary::NextSize(const int32 DieSize)
 
 bool UPF2DiceLibrary::ParseRollExpression(const FName RollExpression, int32& RollCount, int32& DieSize)
 {
+	// Regex patterns require the engine's internationalization system to have initialized.
+	static const FRegexPattern DiceRollPattern(TEXT("^(\\d{1,})d(\\d{1,})$"));
+
 	bool          bResult;
 	FRegexMatcher ExpressionMatcher = FRegexMatcher(DiceRollPattern, RollExpression.ToString().ToLower());
 
