@@ -9,10 +9,10 @@
 
 #include "Utilities/PF2GameplayAbilityUtilities.h"
 
-BEGIN_DEFINE_PF_SPEC(FPF2TagLibrarySpec,
-                     "OpenPF2.Libraries.Tag",
-                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags_ApplicationContextMask)
-END_DEFINE_PF_SPEC(FPF2TagLibrarySpec)
+// Exercise the compact spec macro alongside suites that use BEGIN_DEFINE_PF_SPEC.
+DEFINE_PF_SPEC(FPF2TagLibrarySpec,
+               "OpenPF2.Libraries.Tag",
+               EAutomationTestFlags::ProductFilter | EAutomationTestFlags_ApplicationContextMask)
 
 void FPF2TagLibrarySpec::Define()
 {

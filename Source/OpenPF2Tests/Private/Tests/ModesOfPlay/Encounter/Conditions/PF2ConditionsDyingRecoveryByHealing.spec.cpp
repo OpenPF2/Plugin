@@ -12,7 +12,7 @@
 
 BEGIN_DEFINE_PF_SPEC(FPF2ConditionsDyingRecoveryByHealing,
                      "OpenPF2.Conditions.DyingRecoveryByHealing",
-                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags_ApplicationContextMask)
 	UPF2CharacterAttributeSet* TestCharacterAttributeSet;
 	TSubclassOf<UGameplayEffect> HealEffect;
 

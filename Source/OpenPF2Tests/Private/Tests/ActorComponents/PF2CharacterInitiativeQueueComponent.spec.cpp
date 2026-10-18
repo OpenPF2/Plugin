@@ -12,7 +12,7 @@
 
 BEGIN_DEFINE_PF_SPEC(FPF2CharacterInitiativeQueueComponentSpec,
                      "OpenPF2.CharacterInitiativeQueueComponent",
-                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags_ApplicationContextMask)
 	IPF2CharacterInitiativeQueueInterface* Component;
 END_DEFINE_PF_SPEC(FPF2CharacterInitiativeQueueComponentSpec)
 

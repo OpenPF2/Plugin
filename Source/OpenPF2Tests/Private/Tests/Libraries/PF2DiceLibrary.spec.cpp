@@ -9,7 +9,7 @@
 
 BEGIN_DEFINE_PF_SPEC(FPF2DiceLibrarySpec,
                      "OpenPF2.Libraries.Dice",
-                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags_ApplicationContextMask)
 END_DEFINE_PF_SPEC(FPF2DiceLibrarySpec)
 
 void FPF2DiceLibrarySpec::Define()

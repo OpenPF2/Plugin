@@ -173,7 +173,7 @@ FGameplayAbilitySpecHandle FPF2SpecBase::GrantCharacterAbility(
 	}
 
 	AbilitySpec = FGameplayAbilitySpec(AbilityInstance);
-	AbilitySpec.DynamicAbilityTags.AppendTags(DynamicAbilityTags);
+	AbilitySpec.GetDynamicSpecSourceTags().AppendTags(DynamicAbilityTags);
 
 	return CharacterAsc->GiveAbility(AbilitySpec);
 }

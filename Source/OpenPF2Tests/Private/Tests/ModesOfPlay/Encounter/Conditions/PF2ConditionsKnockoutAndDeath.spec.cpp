@@ -15,7 +15,7 @@
 
 BEGIN_DEFINE_PF_SPEC(FPF2ConditionsKnockoutAndDeath,
                      "OpenPF2.Conditions.KnockoutAndDeath",
-                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags_ApplicationContextMask)
 	UPF2CharacterAttributeSet* TestCharacterAttributeSet;
 
 	/**

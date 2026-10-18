@@ -12,7 +12,7 @@
 
 BEGIN_DEFINE_PF_SPEC(FPF2AbilityBoostRuleOptionValidatorSpec,
                      "OpenPF2.AbilityBoostRuleOptionValidator",
-                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags_ApplicationContextMask)
 	END_DEFINE_PF_SPEC(FPF2AbilityBoostRuleOptionValidatorSpec)
 
 void FPF2AbilityBoostRuleOptionValidatorSpec::Define()
