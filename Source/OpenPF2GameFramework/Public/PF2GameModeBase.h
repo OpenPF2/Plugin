@@ -9,6 +9,9 @@
 #pragma once
 
 #include <GameFramework/GameModeBase.h>
+// This include is required by the call to GetGameState() in GetGameStateIntf().
+// ReSharper disable once CppUnusedIncludeDirective
+#include <GameFramework/GameStateBase.h>
 
 #include <UObject/ScriptInterface.h>
 

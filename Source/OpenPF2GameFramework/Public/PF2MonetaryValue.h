@@ -49,7 +49,7 @@ struct FPF2MonetaryValue
 	FPF2MonetaryValue(const float Amount, const FGameplayTag MonetaryUnit) : Amount(Amount), MonetaryUnit(MonetaryUnit)
 	{
 		checkf(
-			PF2GameplayAbilityUtilities::HasTag(&MonetaryUnit.GetSingleTagContainer(), FName("CurrencyUnit")),
+			PF2GameplayAbilityUtilities::HasTag(MonetaryUnit.GetSingleTagContainer(), FName("CurrencyUnit")),
 			TEXT("Monetary unit must be a CurrencyUnit tag.")
 		);
 	}

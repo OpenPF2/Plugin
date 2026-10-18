@@ -77,7 +77,7 @@ struct FPF2MapPairIterator
 		check(this->HasPair());
 
 		{
-			const uint8*     MapRelativeKeyPtr = this->MapHelper->GetKeyPtr(**this->Iterator);
+			const uint8*     MapRelativeKeyPtr = this->MapHelper->GetKeyPtr(this->Iterator->GetInternalIndex());
 			const FProperty* KeyProperty       = this->MapHelper->GetKeyProperty();
 
 			KeyProperty->CopyCompleteValueFromScriptVM(OutKeyPtr, MapRelativeKeyPtr);
@@ -99,7 +99,7 @@ struct FPF2MapPairIterator
 		check(this->HasPair());
 
 		{
-			const uint8*     MapRelativeValuePtr = this->MapHelper->GetValuePtr(**this->Iterator);
+			const uint8*     MapRelativeValuePtr = this->MapHelper->GetValuePtr(this->Iterator->GetInternalIndex());
 			const FProperty* ValueProperty       = this->MapHelper->GetValueProperty();
 
 			ValueProperty->CopyCompleteValueFromScriptVM(OutValuePtr, MapRelativeValuePtr);

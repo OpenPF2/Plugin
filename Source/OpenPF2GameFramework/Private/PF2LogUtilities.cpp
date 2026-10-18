@@ -18,7 +18,7 @@ namespace PF2LogUtilities
 			{
 				case NM_Client:
 					// GPlayInEditorID 0 is always the server, so 1 will be first client.
-					NetPrefix = FString::Printf(TEXT("CLNT %d"), static_cast<int>(GPlayInEditorID));
+					NetPrefix = FString::Printf(TEXT("CLNT %d"), UE::GetPlayInEditorID());
 					break;
 
 				case NM_DedicatedServer:

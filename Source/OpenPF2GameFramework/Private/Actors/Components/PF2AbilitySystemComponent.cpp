@@ -142,8 +142,8 @@ TArray<TScriptInterface<IPF2InteractableAbilityInterface>> UPF2AbilitySystemComp
 			{
 				const UGameplayAbility* Ability = AbilityIntf->ToGameplayAbility();
 
-				if ((bExactMatch && Ability->AbilityTags.HasAll(Tags)) ||
-					(!bExactMatch && Ability->AbilityTags.HasAny(Tags)))
+				if (const FGameplayTagContainer& AbilityTags = Ability->GetAssetTags();
+					(bExactMatch && AbilityTags.HasAll(Tags)) || (!bExactMatch && AbilityTags.HasAny(Tags)))
 				{
 					Abilities.Add(AbilityIntf);
 				}

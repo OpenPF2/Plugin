@@ -38,7 +38,7 @@ struct FPF2GameplayEffectContainerSpec;
 // Normal Declarations - Types
 // =====================================================================================================================
 UINTERFACE(BlueprintType, meta=(CannotImplementInterfaceInBlueprint))
-class UPF2WeaponInterface : public UInterface
+class UPF2WeaponInterface : public UPF2ItemInterface
 {
 	GENERATED_BODY()
 };

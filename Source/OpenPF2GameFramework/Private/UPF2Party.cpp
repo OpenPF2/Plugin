@@ -23,9 +23,10 @@
 
 APF2Party::APF2Party() : Events(nullptr), PartyIndex(-1)
 {
-	this->bReplicates        = true;
-	this->bAlwaysRelevant    = true;
-	this->NetUpdateFrequency = 1.0f;
+	this->bReplicates     = true;
+	this->bAlwaysRelevant = true;
+
+	this->SetNetUpdateFrequency(1.0f);
 }
 
 void APF2Party::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
