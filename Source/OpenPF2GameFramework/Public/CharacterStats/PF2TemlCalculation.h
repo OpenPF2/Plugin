@@ -76,5 +76,8 @@ public:
 	 * @return
 	 *	The amount that the character's proficiency in a stat contributes to the modifier for the stat.
 	 */
-	float GetValue() const;
+	FORCEINLINE float GetValue() const
+	{
+		return this->Value;
+	}
 };
