@@ -27,7 +27,8 @@ public:
 	/**
 	 * Returns a copy of the default ability tags with the given tag included.
 	 *
-	 * Pass the result to SetAssetTags from the derived ability constructor. The input container is unchanged.
+	 * Assign the result to AbilityTags on UE 5.3-5.4, or pass it to SetAssetTags on UE 5.5-5.8, from the derived
+	 * ability constructor. The input container is unchanged.
 	 *
 	 * @param DefaultTags
 	 *	The ability's existing default tags.

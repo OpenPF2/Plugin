@@ -5,6 +5,8 @@
 
 #include "CharacterStats/AbilityBoosts/PF2AbilityBoostBase.h"
 
+#include <Misc/EngineVersionComparison.h>
+
 #include "CharacterStats/PF2CharacterAbilitySystemInterface.h"
 #include "CharacterStats/PF2CharacterAttributeSet.h"
 #include "CharacterStats/AbilityBoosts/PF2AbilityBoostRuleOptionValidator.h"
@@ -24,9 +26,12 @@ UPF2AbilityBoostBase::UPF2AbilityBoostBase()
 	// We don't maintain any local state, but UE deprecated NonInstanced because it leads to confusing corner cases.
 	this->InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 
-	this->SetAssetTags(UPF2TagLibrary::AddDefaultAbilityTag(
-		this->GetAssetTags(),
-		PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.Type.AbilityBoost"))));
+	const FGameplayTag AbilityBoostTag = PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.Type.AbilityBoost"));
+#if UE_VERSION_OLDER_THAN(5, 5, 0)
+	this->AbilityTags = UPF2TagLibrary::AddDefaultAbilityTag(this->AbilityTags, AbilityBoostTag);
+#else
+	this->SetAssetTags(UPF2TagLibrary::AddDefaultAbilityTag(this->GetAssetTags(), AbilityBoostTag));
+#endif
 }
 
 bool UPF2AbilityBoostBase::CheckCost(

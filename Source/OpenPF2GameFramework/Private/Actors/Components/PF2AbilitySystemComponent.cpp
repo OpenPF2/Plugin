@@ -5,6 +5,8 @@
 
 #include "Actors/Components/PF2AbilitySystemComponent.h"
 
+#include <Misc/EngineVersionComparison.h>
+
 #include <UObject/ConstructorHelpers.h>
 
 #include "OpenPF2GameFramework.h"
@@ -142,8 +144,12 @@ TArray<TScriptInterface<IPF2InteractableAbilityInterface>> UPF2AbilitySystemComp
 			{
 				const UGameplayAbility* Ability = AbilityIntf->ToGameplayAbility();
 
-				if (const FGameplayTagContainer& AbilityTags = Ability->GetAssetTags();
-					(bExactMatch && AbilityTags.HasAll(Tags)) || (!bExactMatch && AbilityTags.HasAny(Tags)))
+#if UE_VERSION_OLDER_THAN(5, 5, 0)
+				const FGameplayTagContainer& AbilityTags = Ability->AbilityTags;
+#else
+				const FGameplayTagContainer& AbilityTags = Ability->GetAssetTags();
+#endif
+				if ((bExactMatch && AbilityTags.HasAll(Tags)) || (!bExactMatch && AbilityTags.HasAny(Tags)))
 				{
 					Abilities.Add(AbilityIntf);
 				}

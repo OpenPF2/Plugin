@@ -5,6 +5,8 @@
 
 #include "Abilities/PF2InteractableAbilityBase.h"
 
+#include <Misc/EngineVersionComparison.h>
+
 #include "OpenPF2GameFramework.h"
 
 #include "Abilities/PF2EffectCauseWrapper.h"
@@ -34,7 +36,11 @@ UPF2InteractableAbilityBase::UPF2InteractableAbilityBase(): Icon(nullptr)
 
 	// Default to "Trait.Ability.Common" on interactable abilities. Game designers can remove this tag on abilities
 	// that have a pre-req and/or are rare.
+#if UE_VERSION_OLDER_THAN(5, 5, 0)
+	this->AbilityTags = UPF2TagLibrary::AddDefaultAbilityTag(this->AbilityTags, CommonAbilityTag);
+#else
 	this->SetAssetTags(UPF2TagLibrary::AddDefaultAbilityTag(this->GetAssetTags(), CommonAbilityTag));
+#endif
 }
 
 FString UPF2InteractableAbilityBase::GetIdForLogs() const
