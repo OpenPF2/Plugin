@@ -21,7 +21,7 @@ void FOpenPF2GameFrameworkModule::ShutdownModule()
 
 #undef LOCTEXT_NAMESPACE
 
-IMPLEMENT_MODULE(FOpenPF2GameFrameworkModule, OpenPF2Core)
+IMPLEMENT_MODULE(FOpenPF2GameFrameworkModule, OpenPF2GameFramework)
 
 // =====================================================================================================================
 // Logging Definitions
