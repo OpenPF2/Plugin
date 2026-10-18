@@ -64,7 +64,7 @@ private:
 	 * This is not replicated. It gets repopulated when the InventoryItems field replicates.
 	 */
 	UPROPERTY()
-	TArray<IPF2ItemInterface*> InventoryItemsLoaded;
+	TArray<TScriptInterface<IPF2ItemInterface>> InventoryItemsLoaded;
 
 public:
 	// =================================================================================================================
