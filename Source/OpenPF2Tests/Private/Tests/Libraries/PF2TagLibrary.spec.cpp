@@ -11,7 +11,7 @@
 
 BEGIN_DEFINE_PF_SPEC(FPF2TagLibrarySpec,
                      "OpenPF2.Libraries.Tag",
-                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags_ApplicationContextMask)
 END_DEFINE_PF_SPEC(FPF2TagLibrarySpec)
 
 void FPF2TagLibrarySpec::Define()
@@ -37,6 +37,32 @@ void FPF2TagLibrarySpec::Define()
 	{
 		TagList.AddTag(FGameplayTag::RequestGameplayTag(TagName));
 	}
+
+	Describe(TEXT("AddDefaultAbilityTag"), [=, this]
+	{
+		/** Preserve the original defaults while returning both the existing tag and the requested new tag. */
+		It(TEXT("returns combined tags without changing the input container"), [=, this]
+		{
+			const FGameplayTagContainer DefaultTags(DoomedTag);
+			const FGameplayTagContainer UpdatedTags = UPF2TagLibrary::AddDefaultAbilityTag(DefaultTags, Dying4Tag);
+
+			TestTrue("Existing tag is preserved", UpdatedTags.HasTagExact(DoomedTag));
+			TestTrue("Requested tag is included", UpdatedTags.HasTagExact(Dying4Tag));
+			TestEqual("Combined tag count", UpdatedTags.Num(), 2);
+			TestEqual("Original tag count", DefaultTags.Num(), 1);
+			TestFalse("Original defaults remain unchanged", DefaultTags.HasTagExact(Dying4Tag));
+		});
+
+		/** Repeatedly adding an existing default tag must leave exactly one entry. */
+		It(TEXT("does not duplicate an existing default tag"), [=, this]
+		{
+			const FGameplayTagContainer DefaultTags(DoomedTag);
+			const FGameplayTagContainer UpdatedTags = UPF2TagLibrary::AddDefaultAbilityTag(DefaultTags, DoomedTag);
+
+			TestTrue("Existing tag is preserved", UpdatedTags.HasTagExact(DoomedTag));
+			TestEqual("Unique tag count", UpdatedTags.Num(), 1);
+		});
+	});
 
 	Describe(TEXT("FindChildTag"), [=, this]
 	{

@@ -7,6 +7,16 @@
 
 #include "OpenPF2GameFramework.h"
 
+FGameplayTagContainer UPF2TagLibrary::AddDefaultAbilityTag(
+	const FGameplayTagContainer& DefaultTags,
+	const FGameplayTag& Tag)
+{
+	FGameplayTagContainer UpdatedTags(DefaultTags);
+
+	UpdatedTags.AddTag(Tag);
+	return UpdatedTags;
+}
+
 FGameplayTag UPF2TagLibrary::FindChildTag(const FGameplayTagContainer& AllTags,
                                           const FGameplayTag&          ParentTag,
                                           bool&                        bMatchFound)

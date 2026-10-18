@@ -25,6 +25,23 @@ class OPENPF2GAMEFRAMEWORK_API UPF2TagLibrary final : public UBlueprintFunctionL
 
 public:
 	/**
+	 * Returns a copy of the default ability tags with the given tag included.
+	 *
+	 * Pass the result to SetAssetTags from the derived ability constructor. The input container is unchanged.
+	 *
+	 * @param DefaultTags
+	 *	The ability's existing default tags.
+	 * @param Tag
+	 *	The tag to include in the returned container.
+	 *
+	 * @return
+	 *	The combined default tags, without duplicate entries.
+	 */
+	[[nodiscard]] static FGameplayTagContainer AddDefaultAbilityTag(
+		const FGameplayTagContainer& DefaultTags,
+		const FGameplayTag& Tag);
+
+	/**
 	 * Locates the tag within the specified tag container that is a child of another tag.
 	 *
 	 * If there are multiple tags in the container that are children or grandchildren of the given tag, only the first

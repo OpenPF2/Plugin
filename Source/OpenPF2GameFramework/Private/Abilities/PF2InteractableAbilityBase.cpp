@@ -9,15 +9,15 @@
 
 #include "Abilities/PF2EffectCauseWrapper.h"
 
+#include "Libraries/PF2TagLibrary.h"
+
 UPF2InteractableAbilityBase::UPF2InteractableAbilityBase(): Icon(nullptr)
 {
 	if (!CommonAbilityTag.IsValid())
 	{
 		// Rather than crashing the game/engine, we soften this to a log error so that a game designer can still
 		// correct the error by possibly loading/defining tags.
-		const FGameplayTag Tag = FGameplayTag::RequestGameplayTag(CommonAbilityTagName, false);
-
-		if (Tag.IsValid())
+		if (const FGameplayTag Tag = FGameplayTag::RequestGameplayTag(CommonAbilityTagName, false); Tag.IsValid())
 		{
 			CommonAbilityTag = Tag;
 		}
@@ -32,9 +32,9 @@ UPF2InteractableAbilityBase::UPF2InteractableAbilityBase(): Icon(nullptr)
 		}
 	}
 
-	// Default to "Trait.Ability.Common" on interactable abilities. Game designers can remove this tag on abilities that
-	// have a pre-req and/or are rare.
-	this->AbilityTags.AddTag(CommonAbilityTag);
+	// Default to "Trait.Ability.Common" on interactable abilities. Game designers can remove this tag on abilities
+	// that have a pre-req and/or are rare.
+	this->SetAssetTags(UPF2TagLibrary::AddDefaultAbilityTag(this->GetAssetTags(), CommonAbilityTag));
 }
 
 FString UPF2InteractableAbilityBase::GetIdForLogs() const
