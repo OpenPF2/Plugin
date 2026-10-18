@@ -9,7 +9,7 @@
 
 BEGIN_DEFINE_PF_SPEC(FPF2SavingThrowModifierCalculationSpec,
                      "OpenPF2.SavingThrowModifierCalculations",
-                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags_ApplicationContextMask)
+                     EAutomationTestFlags::ProductFilter | EnhancedAutomationApplicationContextMask)
 	const FString BlueprintPath             = TEXT("/OpenPF2/OpenPF2/Core/CharacterStats");
 	const FString SavingThrowGameEffectCalc = TEXT("GE_CalcSavingThrowModifiers");
 

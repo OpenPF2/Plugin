@@ -5,6 +5,8 @@
 
 #include "Tests/PF2SpecBase.h"
 
+#include <Misc/EngineVersionComparison.h>
+
 #include <AbilitySystemBlueprintLibrary.h>
 
 #include <Engine/Engine.h>
@@ -173,7 +175,11 @@ FGameplayAbilitySpecHandle FPF2SpecBase::GrantCharacterAbility(
 	}
 
 	AbilitySpec = FGameplayAbilitySpec(AbilityInstance);
+#if UE_VERSION_OLDER_THAN(5, 5, 0)
+	AbilitySpec.DynamicAbilityTags.AppendTags(DynamicAbilityTags);
+#else
 	AbilitySpec.GetDynamicSpecSourceTags().AppendTags(DynamicAbilityTags);
+#endif
 
 	return CharacterAsc->GiveAbility(AbilitySpec);
 }

@@ -9,7 +9,7 @@
 
 BEGIN_DEFINE_PF_SPEC(FPF2AttackAttributeSetSpec,
                      "OpenPF2.AttackAttributeSet",
-                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags_ApplicationContextMask)
+                     EAutomationTestFlags::ProductFilter | EnhancedAutomationApplicationContextMask)
 	END_DEFINE_PF_SPEC(FPF2AttackAttributeSetSpec)
 
 void FPF2AttackAttributeSetSpec::Define()

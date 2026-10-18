@@ -9,7 +9,7 @@
 
 BEGIN_DEFINE_PF_SPEC(FPF2CharacterAttributeSetSpec,
                      "OpenPF2.CharacterAttributeSet",
-                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags_ApplicationContextMask)
+                     EAutomationTestFlags::ProductFilter | EnhancedAutomationApplicationContextMask)
 	END_DEFINE_PF_SPEC(FPF2CharacterAttributeSetSpec)
 
 void FPF2CharacterAttributeSetSpec::Define()

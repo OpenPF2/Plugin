@@ -13,7 +13,7 @@
 
 BEGIN_DEFINE_PF_SPEC(FPF2ConditionsDyingRecoveryByCheck,
                      "OpenPF2.Conditions.DyingRecoveryByCheck",
-                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags_ApplicationContextMask)
+                     EAutomationTestFlags::ProductFilter | EnhancedAutomationApplicationContextMask)
 	UPF2CharacterAttributeSet* TestCharacterAttributeSet;
 END_DEFINE_PF_SPEC(FPF2ConditionsDyingRecoveryByCheck)
 

@@ -12,7 +12,7 @@
 // Exercise the compact spec macro alongside suites that use BEGIN_DEFINE_PF_SPEC.
 DEFINE_PF_SPEC(FPF2TagLibrarySpec,
                "OpenPF2.Libraries.Tag",
-               EAutomationTestFlags::ProductFilter | EAutomationTestFlags_ApplicationContextMask)
+               EAutomationTestFlags::ProductFilter | EnhancedAutomationApplicationContextMask)
 
 void FPF2TagLibrarySpec::Define()
 {

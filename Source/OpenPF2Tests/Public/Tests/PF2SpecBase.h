@@ -1,4 +1,4 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -26,16 +26,16 @@
 	public: \
 		TClass(const FString& InName) : FPF2SpecBase(InName) \
 		{ \
-			static_assert(!!((TFlags)&EAutomationTestFlags_ApplicationContextMask), "AutomationTest has no application flag.  It shouldn't run.  See AutomationTest.h."); \
-			static_assert((((TFlags)&EAutomationTestFlags_FilterMask) == EAutomationTestFlags::SmokeFilter) || \
-						  (((TFlags)&EAutomationTestFlags_FilterMask) == EAutomationTestFlags::EngineFilter) || \
-						  (((TFlags)&EAutomationTestFlags_FilterMask) == EAutomationTestFlags::ProductFilter) || \
-						  (((TFlags)&EAutomationTestFlags_FilterMask) == EAutomationTestFlags::PerfFilter) || \
-						  (((TFlags)&EAutomationTestFlags_FilterMask) == EAutomationTestFlags::StressFilter) || \
-						  (((TFlags)&EAutomationTestFlags_FilterMask) == EAutomationTestFlags::NegativeFilter), \
+			static_assert(!!((TFlags)&EnhancedAutomationApplicationContextMask), "AutomationTest has no application flag.  It shouldn't run.  See AutomationTest.h."); \
+			static_assert((((TFlags)&EnhancedAutomationFilterMask) == EAutomationTestFlags::SmokeFilter) || \
+						  (((TFlags)&EnhancedAutomationFilterMask) == EAutomationTestFlags::EngineFilter) || \
+						  (((TFlags)&EnhancedAutomationFilterMask) == EAutomationTestFlags::ProductFilter) || \
+						  (((TFlags)&EnhancedAutomationFilterMask) == EAutomationTestFlags::PerfFilter) || \
+						  (((TFlags)&EnhancedAutomationFilterMask) == EAutomationTestFlags::StressFilter) || \
+						  (((TFlags)&EnhancedAutomationFilterMask) == EAutomationTestFlags::NegativeFilter), \
 						  "All AutomationTests must have exactly 1 filter type specified.  See AutomationTest.h."); \
 		} \
-		virtual EAutomationTestFlags GetTestFlags() const override { return TFlags; } \
+		virtual FEnhancedAutomationTestFlags GetTestFlags() const override { return TFlags; } \
         using FEnhancedAutomationSpecBase::GetTestSourceFileName; \
 		virtual FString GetTestSourceFileName() const override { return FileName; } \
         using FEnhancedAutomationSpecBase::GetTestSourceFileLine; \
@@ -55,20 +55,20 @@
 		TClass(const FString& InName) : FPF2SpecBase(InName) \
 		{ \
 			static_assert( \
-				!!((TFlags) & EAutomationTestFlags_ApplicationContextMask), \
+				!!((TFlags) & EnhancedAutomationApplicationContextMask), \
 				"AutomationTest has no application flag.  It shouldn't run.  See AutomationTest.h."); \
 			\
 			static_assert(\
-				!!(((TFlags) & EAutomationTestFlags_FilterMask) == EAutomationTestFlags::SmokeFilter) || \
-				!!(((TFlags) & EAutomationTestFlags_FilterMask) == EAutomationTestFlags::EngineFilter) || \
-				!!(((TFlags) & EAutomationTestFlags_FilterMask) == EAutomationTestFlags::ProductFilter) || \
-				!!(((TFlags) & EAutomationTestFlags_FilterMask) == EAutomationTestFlags::PerfFilter) || \
-				!!(((TFlags) & EAutomationTestFlags_FilterMask) == EAutomationTestFlags::StressFilter) || \
-				!!(((TFlags) & EAutomationTestFlags_FilterMask) == EAutomationTestFlags::NegativeFilter), \
+				!!(((TFlags) & EnhancedAutomationFilterMask) == EAutomationTestFlags::SmokeFilter) || \
+				!!(((TFlags) & EnhancedAutomationFilterMask) == EAutomationTestFlags::EngineFilter) || \
+				!!(((TFlags) & EnhancedAutomationFilterMask) == EAutomationTestFlags::ProductFilter) || \
+				!!(((TFlags) & EnhancedAutomationFilterMask) == EAutomationTestFlags::PerfFilter) || \
+				!!(((TFlags) & EnhancedAutomationFilterMask) == EAutomationTestFlags::StressFilter) || \
+				!!(((TFlags) & EnhancedAutomationFilterMask) == EAutomationTestFlags::NegativeFilter), \
 				"All AutomationTests must have exactly 1 filter type specified.  See AutomationTest.h." \
 			); \
 		} \
-		virtual EAutomationTestFlags GetTestFlags() const override { return TFlags; } \
+		virtual FEnhancedAutomationTestFlags GetTestFlags() const override { return TFlags; } \
 		using FEnhancedAutomationSpecBase::GetTestSourceFileName; \
 		virtual FString GetTestSourceFileName() const override { return FileName; } \
 		using FEnhancedAutomationSpecBase::GetTestSourceFileLine; \

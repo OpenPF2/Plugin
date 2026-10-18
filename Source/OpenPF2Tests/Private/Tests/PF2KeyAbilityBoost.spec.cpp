@@ -11,7 +11,7 @@
 
 BEGIN_DEFINE_PF_SPEC(FKeyAbilityBoostSpec,
                      "OpenPF2.KeyAbilityBoosts",
-                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags_ApplicationContextMask)
+                     EAutomationTestFlags::ProductFilter | EnhancedAutomationApplicationContextMask)
 	const FString BlueprintPath                 = TEXT("/OpenPF2/OpenPF2/Core/CharacterStats");
 	const FString KeyAbilityBoostGameEffectCalc = TEXT("GE_CalcKeyAbilityBoost");
 

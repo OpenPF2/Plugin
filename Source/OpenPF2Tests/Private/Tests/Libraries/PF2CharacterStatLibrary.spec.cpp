@@ -9,7 +9,7 @@
 
 BEGIN_DEFINE_PF_SPEC(FPF2CharacterStatLibrarySpec,
                      "OpenPF2.Libraries.CharacterStat",
-                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags_ApplicationContextMask)
+                     EAutomationTestFlags::ProductFilter | EnhancedAutomationApplicationContextMask)
 END_DEFINE_PF_SPEC(FPF2CharacterStatLibrarySpec)
 
 void FPF2CharacterStatLibrarySpec::Define()

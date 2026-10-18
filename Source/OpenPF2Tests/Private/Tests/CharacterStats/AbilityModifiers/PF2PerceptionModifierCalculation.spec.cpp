@@ -9,7 +9,7 @@
 
 BEGIN_DEFINE_PF_SPEC(FPF2PerceptionModifierCalculationSpec,
                      "OpenPF2.PerceptionModifierCalculations",
-                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags_ApplicationContextMask)
+                     EAutomationTestFlags::ProductFilter | EnhancedAutomationApplicationContextMask)
 	const FString BlueprintPath            = TEXT("/OpenPF2/OpenPF2/Core/CharacterStats");
 	const FString PerceptionGameEffectCalc = TEXT("GE_CalcPerceptionModifier");
 
