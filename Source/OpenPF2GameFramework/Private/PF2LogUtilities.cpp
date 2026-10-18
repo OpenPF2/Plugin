@@ -5,6 +5,8 @@
 
 #include "Utilities/PF2LogUtilities.h"
 
+#include <Misc/EngineVersionComparison.h>
+
 namespace PF2LogUtilities
 {
 	FString GetHostNetId(const UWorld* World)
@@ -18,7 +20,11 @@ namespace PF2LogUtilities
 			{
 				case NM_Client:
 					// GPlayInEditorID 0 is always the server, so 1 will be first client.
+#if UE_VERSION_OLDER_THAN(5, 5, 0)
+					NetPrefix = FString::Printf(TEXT("CLNT %d"), static_cast<int32>(GPlayInEditorID));
+#else
 					NetPrefix = FString::Printf(TEXT("CLNT %d"), UE::GetPlayInEditorID());
+#endif
 					break;
 
 				case NM_DedicatedServer:

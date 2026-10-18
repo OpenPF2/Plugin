@@ -11,6 +11,8 @@
 
 #include <Kismet/GameplayStatics.h>
 
+#include <Misc/EngineVersionComparison.h>
+
 #include <Net/UnrealNetwork.h>
 
 #include "PF2CharacterInterface.h"
@@ -26,7 +28,11 @@ APF2Party::APF2Party() : Events(nullptr), PartyIndex(-1)
 	this->bReplicates     = true;
 	this->bAlwaysRelevant = true;
 
+#if UE_VERSION_OLDER_THAN(5, 5, 0)
+	this->NetUpdateFrequency = 1.0f;
+#else
 	this->SetNetUpdateFrequency(1.0f);
+#endif
 }
 
 void APF2Party::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
