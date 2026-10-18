@@ -3,6 +3,8 @@
 
 #include "Actors/Components/PF2RootCollisionDelegateComponent.h"
 
+#include <Misc/EngineVersionComparison.h>
+
 #include <Algo/Copy.h>
 
 #include <Components/SkeletalMeshComponent.h>
@@ -280,7 +282,11 @@ bool UPF2RootCollisionDelegateComponent::MoveComponentImpl(const FVector&      D
 					// Remove any pending overlaps after this point, we are not going as far as we swept.
 					if (FirstNonInitialOverlapIdx != INDEX_NONE)
 					{
+#if UE_VERSION_OLDER_THAN(5, 4, 0)
+						PendingOverlaps.SetNum(FirstNonInitialOverlapIdx, false);
+#else
 						PendingOverlaps.SetNum(FirstNonInitialOverlapIdx, EAllowShrinking::No);
+#endif
 					}
 				}
 			}

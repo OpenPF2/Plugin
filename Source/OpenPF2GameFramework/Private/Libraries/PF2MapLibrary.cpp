@@ -7,6 +7,8 @@
 
 #include "Libraries/PF2MapLibrary.h"
 
+#include <Misc/EngineVersionComparison.h>
+
 #include <UObject/ScriptMacros.h>
 
 #include "OpenPF2GameFramework.h"
@@ -95,8 +97,13 @@ void UPF2MapLibrary::GenericMap_Invert(const void* InputMapAddr,
 
 	for (FScriptMapHelper::FIterator InputMapIt = InputMapHelper.CreateIterator(); InputMapIt; ++InputMapIt)
 	{
-		const uint8* InputMapKeyPtr   = InputMapHelper.GetKeyPtr(InputMapIt.GetInternalIndex());
-		const uint8* InputMapValuePtr = InputMapHelper.GetValuePtr(InputMapIt.GetInternalIndex());
+#if UE_VERSION_OLDER_THAN(5, 4, 0)
+		const int32 InputMapIndex = *InputMapIt;
+#else
+		const int32 InputMapIndex = InputMapIt.GetInternalIndex();
+#endif
+		const uint8* InputMapKeyPtr   = InputMapHelper.GetKeyPtr(InputMapIndex);
+		const uint8* InputMapValuePtr = InputMapHelper.GetValuePtr(InputMapIndex);
 
 		// Search for a _key_ in the output map that has a hash equal to that of the _value_ from the input map.
 		if (OutputMapHelper.FindValueFromHash(InputMapValuePtr))
