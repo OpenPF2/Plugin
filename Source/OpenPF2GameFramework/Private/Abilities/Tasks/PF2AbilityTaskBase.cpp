@@ -5,6 +5,8 @@
 
 #include "Abilities/Tasks/PF2AbilityTaskBase.h"
 
+#include <AbilitySystemComponent.h>
+
 #include "Abilities/PF2InteractableAbilityInterface.h"
 
 #include "Actors/Components/PF2AbilitySystemInterface.h"

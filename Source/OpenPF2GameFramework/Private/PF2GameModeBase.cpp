@@ -9,6 +9,7 @@
 #include "PF2GameModeBase.h"
 
 #include <GameFramework/Character.h>
+#include <GameFramework/PlayerState.h>
 
 #include "OpenPF2GameFramework.h"
 #include "PF2CharacterInterface.h"

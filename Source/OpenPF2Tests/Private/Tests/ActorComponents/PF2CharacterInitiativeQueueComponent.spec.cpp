@@ -6,6 +6,8 @@
 #include "ModesOfPlay/Encounter/PF2CharacterInitiativeQueueComponent.h"
 #include "ModesOfPlay/Encounter/PF2CharacterInitiativeQueueInterface.h"
 
+#include "PF2CharacterInterface.h"
+
 #include "Tests/PF2SpecBase.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
