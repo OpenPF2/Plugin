@@ -52,6 +52,15 @@ UPF2AbilitySystemComponent::UPF2AbilitySystemComponent() : Events(nullptr), bAre
 	}
 }
 
+UPF2AbilitySystemComponent::~UPF2AbilitySystemComponent()
+{
+#if !UE_VERSION_OLDER_THAN(5, 8, 0) && UE_VERSION_OLDER_THAN(5, 9, 0)
+	// UE 5.8 logs Owner->GetFullName() while deleting pending effects in the container destructor.
+	// The outer actor may already have been purged, so detach this dying component before that cleanup.
+	this->ActiveGameplayEffects.Owner = nullptr;
+#endif
+}
+
 UObject* UPF2AbilitySystemComponent::GetGenericEventsObject() const
 {
 	return this->GetEvents();

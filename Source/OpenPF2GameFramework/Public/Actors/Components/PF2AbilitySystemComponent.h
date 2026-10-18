@@ -116,6 +116,11 @@ public:
 	// =================================================================================================================
 	explicit UPF2AbilitySystemComponent();
 
+	/**
+	 * Detaches the dying component from UE 5.8's pending-effect cleanup diagnostics.
+	 */
+	virtual ~UPF2AbilitySystemComponent() override;
+
 	// =================================================================================================================
 	// Public Methods - IPF2EventEmitterInterface Implementation
 	// =================================================================================================================
