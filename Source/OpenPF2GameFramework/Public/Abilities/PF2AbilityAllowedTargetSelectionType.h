@@ -7,6 +7,8 @@
 
 #include <UObject/ObjectMacros.h>
 
+#include "PF2AbilityAllowedTargetSelectionType.generated.h"
+
 /**
  * An enumeration of the type of selection that a player is allowed to make when invoking a particular ability.
  */

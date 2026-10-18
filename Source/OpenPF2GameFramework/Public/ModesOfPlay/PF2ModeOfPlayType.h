@@ -12,6 +12,10 @@
 
 #pragma once
 
+#include <UObject/ObjectMacros.h>
+
+#include "PF2ModeOfPlayType.generated.h"
+
 /**
  * An enumeration of the different play modes in OpenPF2.
  *
