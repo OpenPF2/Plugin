@@ -2,6 +2,8 @@
 
 This repository enforces strict, opinionated conventions for C++ formatting. For matters not specified here, match the nearest equivalent file. Resolve competing conventions using the process below. This document captures the conventions used repeatedly across the plugin's runtime, editor, Blueprint-node, and test modules.
 
+The shared Unreal guidance and skill installation instructions are maintained in the [Unreal Best Practices repository](https://github.com/GuyPaddock/skill-unreal-best-practices). This guide documents the conventions specific to OpenPF2.
+
 ## Scope
 
 This guide is focused on:
