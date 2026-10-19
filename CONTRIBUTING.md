@@ -1,6 +1,6 @@
 # Contributing to OpenPF2
 
-This repository enforces strict, opinionated conventions for C++ formatting. When adding or changing code, prefer matching the surrounding file over introducing a new pattern. This document captures the conventions used repeatedly across the plugin's runtime, editor, Blueprint-node, and test modules.
+This repository enforces strict, opinionated conventions for C++ formatting. For matters not specified here, match the nearest equivalent file. Resolve competing conventions using the process below. This document captures the conventions used repeatedly across the plugin's runtime, editor, Blueprint-node, and test modules.
 
 ## Scope
 
@@ -42,9 +42,13 @@ Your contributions must be licensed under the same license as the existing file 
 
 ### Maintaining Consistency
 
-Most contributions will modify existing files. In that case, local consistency matters more than abstract purity.
+Most contributions will modify existing files. Preserve unrelated code and follow the resolved conventions for the work in scope.
 
-- Keep the existing local style, even if another file differs slightly.
+- Follow established local conventions for matters not specified by this guide.
+- Ask the user about unresolved conflicts with project instructions, the Unreal Best Practices skill, formatter
+  behavior, or established local conventions before making the affected edit. Continue independent work when possible.
+- Honor prior resolutions for the same conflict and scope. Preserve public APIs, framework-required contracts, and
+  supported engine/compiler constraints rather than breaking them to satisfy a style preference.
 - Do not reformat unrelated code.
 - Preserve section banners and comment structure.
 - Preserve public API shape unless the change explicitly requires an API break.
@@ -167,6 +171,8 @@ Follow Unreal naming conventions and the project's existing prefixes:
 - `UPF2...`, `APF2...`, `FPF2...`, `EPF2...`, `IPF2...`, `TPF2...` for project types
 - `b` prefix for booleans such as `bAreAbilitiesInitialized`
 - Descriptive PascalCase names for constants, pin names, and similar identifiers
+- Method names that describe actions and type names that describe responsibilities
+- Descriptive Boolean predicate names, retaining Unreal's `b` prefix and the project's established prefixes
 - `FPF2...Spec` for automation spec classes
 - `.spec.cpp` for spec file suffixes
 
@@ -174,14 +180,34 @@ Prefer descriptive names over abbreviations unless the abbreviation is already e
 
 ### Formatting
 
-The existing codebase is mechanically consistent. Match it.
+Apply the resolved rules below. Use surrounding code for matters these rules leave unspecified.
 
-- Use tabs for indentation in C++ files.
-- Put opening braces on the next line for functions, classes, structs, namespaces, and control-flow statements.
+- Use tabs for indentation in C++ files, displayed at width four.
+- Prefer lines of 120 characters or fewer. Allow longer lines when materially clearer or when a literal cannot be wrapped cleanly.
+- Put opening braces on the next line for functions, classes, structs, namespaces, control-flow statements, and lambdas.
+- Allow readable short lambdas on one line when they fit the 120-character soft limit. Keep longer lambdas multiline.
+- Give every control-statement body braces, including single-statement `if`, `else`, `for`, `while`, and `do` bodies.
 - Keep pointer and reference symbols attached to the type: `UObject* Object`, `const FString& Name`.
 - Use spaces inside control-flow parentheses only as already shown in nearby code.
-- Align multi-line parameter lists and initializer lists when the surrounding file does that.
-- Prefer one declaration per line unless local alignment materially improves readability.
+- Match established constructor-initializer alignment, subject to the conflict-resolution process above.
+- For consecutive same-type variables declared together, write the type once and put each variable on its own aligned line.
+- Start a new declaration when the type changes. Keep separate declarations when long or complex initializers make grouping harder to read.
+- Preserve each variable's actual type and qualification; pointer/reference declarators may need a symbol on each variable.
+- Use explicit `nullptr` comparisons for object-pointer checks.
+- Group related assignments and calls into short logical paragraphs. Prefer a blank line between setup assignments and calls unless they form one tight responsibility.
+- Align assignment operators when doing so improves scanning without awkward wrapping.
+- Keep short, simple value-choice ternaries on one line. Wrap them when aligning branches makes differences easier to compare, such as mirrored coordinates, visibility, or alignment choices.
+
+#### Wrapping
+
+- Break at higher syntactic boundaries before splitting nested expressions: assignments, argument lists, conditional headers, or chained calls.
+- In compound conditions, parenthesize operands containing binary expressions when this clarifies grouping. Avoid redundant parentheses around standalone comparisons, unary expressions, or calls.
+- Keep a wrapped declaration's return type and function name on the first line where practical. Put each parameter on its own following line, indented one additional level, and vertically align parameter names.
+- Put the closing parenthesis on its own line aligned with the declaration start. For a wrapped standalone call, put arguments on following lines and the closing parenthesis on its own line aligned with the call's start.
+- Wrap long Unreal annotations across lines. Omit spaces around `=` within metadata: `meta=(...)`, `Category="..."`, and `DisplayName="..."`.
+- Prefer an `if` initializer when its variable is used only by that conditional. Keep the header on one line when it fits.
+- If the header must wrap, put the initializer on its own line inside the parentheses and the condition on the next line with four additional spaces of leading indent.
+- Hoist initialization when the value is reused afterward or the wrapped header reads awkwardly, preserving supported compiler and engine constraints.
 
 Examples from the codebase:
 
@@ -197,12 +223,30 @@ void APF2CharacterBase::OnRep_Controller()
 ```cpp
 explicit FPF2CharacterAbilityBoostSelection(
 	const TSubclassOf<UPF2AbilityBoostBase>    BoostGameplayAbility,
-	const TSet<EPF2CharacterAbilityScoreType>& SelectedAbilities) :
+	const TSet<EPF2CharacterAbilityScoreType>& SelectedAbilities
+) :
 		BoostGameplayAbility(BoostGameplayAbility),
 		SelectedAbilities(SelectedAbilities)
 {
 }
 ```
+
+### Class and Method Organization
+
+- Declare nested types before fields, then fields before methods. Within each field or method group, use `public`, `protected`, `private` order.
+- Within each visibility level's methods, put overrides before other methods. Group overrides by parent type in header-only subsections and order them according to the parent hierarchy.
+- Implement methods in header declaration order. Put a true getter before its setter in both declarations and definitions.
+- Use dedicated `Forward Declarations (to minimize header dependencies)` and `Delegates` sections when applicable.
+- In C++ source sections, put content directly after the heading without a blank line. Keep section headings in headers rather than mirroring them in implementation files; this does not change Markdown heading spacing.
+
+### Local Initialization and Method Shape
+
+- Prefer local declarations near the top of their block, with the scoped `if` initializer exception above.
+- Initialize at declaration unless initialization is materially expensive or the correct value depends on intervening work.
+- Prefer `const` for unchanged locals and parameters. Top-level `const` on by-value parameters may be omitted in header declarations; prefer it in definitions unless intentionally moving from the parameter.
+- Name significant behavioral, layout, and policy constants. Document what the value means and why it matters. Obvious literals such as zero, one, and straightforward geometry fractions need no extraction unless a name improves clarity.
+- Prefer short methods with one or two responsibilities. Extract smaller units when this improves readability, isolation, or testability without obscuring control flow.
+- Prefer one entry and one exit when readable. Use early returns for exceptional validation, clear guards, and cheap no-op cases when they avoid less readable nesting.
 
 ### Includes and Forward Declarations
 
@@ -210,8 +254,8 @@ Header hygiene is a strong convention in this repository.
 
 - Prefer forward declarations in headers whenever a full definition is not required.
 - Include generated headers last in the include list.
-- Group includes with blank lines between logical categories.
-- Use engine includes with angle brackets and project includes with quotes, matching existing files.
+- Group includes by directory, separated by blank lines. Order engine groups before project groups and keep generated headers last.
+- Use angle brackets for engine headers and quotes for project headers.
 - Do not include large headers transitively "just in case."
 
 Common pattern:
@@ -226,6 +270,7 @@ Common pattern:
 The project favors explicit API surfaces and interface-based composition.
 
 - Prefer interfaces for system boundaries and replaceable gameplay components.
+- Prefer a minimal reflected interface wrapper using `UINTERFACE(MinimalAPI, ...)` when sufficient, and put the module API macro on the native `I...` interface exposing callable methods. Retain stronger exports where the API contract requires them.
 - Keep reflected fields annotated with meaningful `UPROPERTY` and `UFUNCTION` metadata.
 - Use `BlueprintCallable`, `BlueprintAssignable`, `BlueprintReadOnly`, and category metadata consistently when exposing behavior to Blueprint.
 - Use `Transient`, replication, clamp, and editor metadata when the property semantics require it.
@@ -269,9 +314,13 @@ Reasons this style works well in this codebase:
 
 This codebase is thoroughly documented. New public APIs should be too.
 
-- Use Doxygen-style block comments for classes, structs, delegates, methods, template parameters, and important fields.
-- Document intent and gameplay meaning, not only mechanics.
-- Include `@param`, `@return`, and `@tparam` sections when the existing file uses them.
+- Use Doxygen-style block comments for classes, structs, delegates, methods, template parameters, and all member fields, including private state and nested-type fields.
+- Document every enum value, not just its enum type.
+- Do not duplicate inherited override documentation unless behavior differs meaningfully or project-specific context is needed.
+- Lead each documented type, field, method, event, and enum value with one or two sentences explaining what it
+  represents or why a caller uses it. Establish its role before describing execution order, storage, restrictions,
+  or side effects. Apply the same rule to Blueprint descriptions and tooltips.
+- Include `@param`, `@return`, and `@tparam` sections when applicable to explain the callable or template contract.
 - Use inline comments sparingly and only when they explain non-obvious behavior, engine quirks, multiplayer caveats, or design constraints.
 - Preserve helpful comments such as `BUGBUG:` notes when they still apply.
 
@@ -300,6 +349,16 @@ Utility code in this repository is intentionally straightforward.
 - Favor immutable-style helper functions that return new values rather than mutating inputs unless mutation is the natural Unreal pattern.
 - Reserve containers before filling them when the size is known.
 - Prefer descriptive lambda parameter names such as `PreviousValue` and `CurrentValue` when implementing reducer-style helpers.
+
+## Blueprint Authoring
+
+- When authoring Blueprint graphs, use Blueprint Assist if installed for the project's engine and available in the editor.
+- Select and format only nodes added or changed by the task. Do not format the entire graph or expand formatting
+  to unrelated connected nodes. Preserve unrelated node positions, comments, and authored comment groups.
+- If selection-scoped formatting cannot be guaranteed, or Blueprint Assist is unavailable, arrange affected nodes
+  manually. This guidance does not authorize installing the plugin or making unrelated asset changes.
+- Preserve pin defaults and logical terminal connections during layout-only changes. Compile affected Blueprints,
+  inspect their layout, and exercise the relevant behavior before accepting the result.
 
 ## Tests
 
@@ -342,7 +401,7 @@ That keeps short scan-friendly lists compact while still letting explanatory bul
 
 ## When in Doubt
 
-- Copy the pattern used by the nearest equivalent file in the same module.
+- Use the nearest equivalent file for unspecified matters; ask about unresolved conflicts and honor prior resolutions as described above.
 - Prefer explicitness over cleverness.
 - Prefer stable gameplay behavior over micro-optimizations.
 - Ask in review whether a new pattern should become a project-wide convention before spreading it.
