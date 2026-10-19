@@ -45,7 +45,7 @@ Your contributions must be licensed under the same license as the existing file 
 Most contributions will modify existing files. Preserve unrelated code and follow the resolved conventions for the work in scope.
 
 - Follow established local conventions for matters not specified by this guide.
-- Ask the user about unresolved conflicts with project instructions, the Unreal Best Practices skill, formatter
+- Ask the user about unresolved conflicts with project instructions, the [Unreal Best Practices skill](https://github.com/GuyPaddock/skill-unreal-best-practices/blob/43183ae96dbb15276cd7be1413fc41af8b387c37/SKILL.md), formatter
   behavior, or established local conventions before making the affected edit. Continue independent work when possible.
 - Honor prior resolutions for the same conflict and scope. Preserve public APIs, framework-required contracts, and
   supported engine/compiler constraints rather than breaking them to satisfy a style preference.
