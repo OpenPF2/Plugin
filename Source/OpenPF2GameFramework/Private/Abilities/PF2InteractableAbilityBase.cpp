@@ -1,13 +1,17 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2022-2024, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2022-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "Abilities/PF2InteractableAbilityBase.h"
 
+#include <Misc/EngineVersionComparison.h>
+
 #include "OpenPF2GameFramework.h"
 
 #include "Abilities/PF2EffectCauseWrapper.h"
+
+#include "Libraries/PF2TagLibrary.h"
 
 UPF2InteractableAbilityBase::UPF2InteractableAbilityBase(): Icon(nullptr)
 {
@@ -15,9 +19,7 @@ UPF2InteractableAbilityBase::UPF2InteractableAbilityBase(): Icon(nullptr)
 	{
 		// Rather than crashing the game/engine, we soften this to a log error so that a game designer can still
 		// correct the error by possibly loading/defining tags.
-		const FGameplayTag Tag = FGameplayTag::RequestGameplayTag(CommonAbilityTagName, false);
-
-		if (Tag.IsValid())
+		if (const FGameplayTag Tag = FGameplayTag::RequestGameplayTag(CommonAbilityTagName, false); Tag.IsValid())
 		{
 			CommonAbilityTag = Tag;
 		}
@@ -32,9 +34,13 @@ UPF2InteractableAbilityBase::UPF2InteractableAbilityBase(): Icon(nullptr)
 		}
 	}
 
-	// Default to "Trait.Ability.Common" on interactable abilities. Game designers can remove this tag on abilities that
-	// have a pre-req and/or are rare.
-	this->AbilityTags.AddTag(CommonAbilityTag);
+	// Default to "Trait.Ability.Common" on interactable abilities. Game designers can remove this tag on abilities
+	// that have a pre-req and/or are rare.
+#if UE_VERSION_OLDER_THAN(5, 5, 0)
+	this->AbilityTags = UPF2TagLibrary::AddDefaultAbilityTag(this->AbilityTags, CommonAbilityTag);
+#else
+	this->SetAssetTags(UPF2TagLibrary::AddDefaultAbilityTag(this->GetAssetTags(), CommonAbilityTag));
+#endif
 }
 
 FString UPF2InteractableAbilityBase::GetIdForLogs() const

@@ -1,9 +1,11 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2022-2024, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2022-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "Utilities/PF2LogUtilities.h"
+
+#include <Misc/EngineVersionComparison.h>
 
 namespace PF2LogUtilities
 {
@@ -18,7 +20,11 @@ namespace PF2LogUtilities
 			{
 				case NM_Client:
 					// GPlayInEditorID 0 is always the server, so 1 will be first client.
-					NetPrefix = FString::Printf(TEXT("CLNT %d"), static_cast<int>(GPlayInEditorID));
+#if UE_VERSION_OLDER_THAN(5, 5, 0)
+					NetPrefix = FString::Printf(TEXT("CLNT %d"), static_cast<int32>(GPlayInEditorID));
+#else
+					NetPrefix = FString::Printf(TEXT("CLNT %d"), UE::GetPlayInEditorID());
+#endif
 					break;
 
 				case NM_DedicatedServer:

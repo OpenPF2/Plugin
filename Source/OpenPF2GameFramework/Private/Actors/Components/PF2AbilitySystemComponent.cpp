@@ -1,9 +1,11 @@
-// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "Actors/Components/PF2AbilitySystemComponent.h"
+
+#include <Misc/EngineVersionComparison.h>
 
 #include <UObject/ConstructorHelpers.h>
 
@@ -48,6 +50,15 @@ UPF2AbilitySystemComponent::UPF2AbilitySystemComponent() : Events(nullptr), bAre
 		// Allow boost effects to be looked-up by ability name later.
 		this->AbilityBoostEffects.Add(Ability, BoostGeFinder.Object);
 	}
+}
+
+UPF2AbilitySystemComponent::~UPF2AbilitySystemComponent()
+{
+#if !UE_VERSION_OLDER_THAN(5, 8, 0) && UE_VERSION_OLDER_THAN(5, 9, 0)
+	// UE 5.8 logs Owner->GetFullName() while deleting pending effects in the container destructor.
+	// The outer actor may already have been purged, so detach this dying component before that cleanup.
+	this->ActiveGameplayEffects.Owner = nullptr;
+#endif
 }
 
 UObject* UPF2AbilitySystemComponent::GetGenericEventsObject() const
@@ -142,8 +153,12 @@ TArray<TScriptInterface<IPF2InteractableAbilityInterface>> UPF2AbilitySystemComp
 			{
 				const UGameplayAbility* Ability = AbilityIntf->ToGameplayAbility();
 
-				if ((bExactMatch && Ability->AbilityTags.HasAll(Tags)) ||
-					(!bExactMatch && Ability->AbilityTags.HasAny(Tags)))
+#if UE_VERSION_OLDER_THAN(5, 5, 0)
+				const FGameplayTagContainer& AbilityTags = Ability->AbilityTags;
+#else
+				const FGameplayTagContainer& AbilityTags = Ability->GetAssetTags();
+#endif
+				if ((bExactMatch && AbilityTags.HasAll(Tags)) || (!bExactMatch && AbilityTags.HasAny(Tags)))
 				{
 					Abilities.Add(AbilityIntf);
 				}

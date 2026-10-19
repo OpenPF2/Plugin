@@ -1,4 +1,4 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2023-2024, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2023-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -58,7 +58,7 @@ UPF2InventoryInterfaceEvents* UPF2InventoryComponent::GetEvents() const
 
 TArray<TScriptInterface<IPF2ItemInterface>> UPF2InventoryComponent::GetContents() const
 {
-	return PF2InterfaceUtilities::ToScriptInterfaces(this->InventoryItemsLoaded);
+	return this->InventoryItemsLoaded;
 }
 
 void UPF2InventoryComponent::AddItem(const TScriptInterface<IPF2ItemInterface>& ItemToAdd)
@@ -135,9 +135,10 @@ void UPF2InventoryComponent::OnRep_InventoryItemIds()
 
 void UPF2InventoryComponent::Native_OnInventoryItemsLoaded(const TArray<IPF2ItemInterface*>& NewInventory)
 {
-	const TArray<IPF2ItemInterface*>& OldInventory = this->InventoryItemsLoaded;
-	TArray<IPF2ItemInterface*>        RemovedItems,
-	                                  AddedItems;
+	const TArray<IPF2ItemInterface*> OldInventory =
+		PF2InterfaceUtilities::FromScriptInterfaces(this->InventoryItemsLoaded);
+	TArray<IPF2ItemInterface*>       RemovedItems,
+	                                 AddedItems;
 
 	PF2ArrayUtilities::CapturePtrDeltasWithCast(OldInventory, NewInventory, RemovedItems, AddedItems);
 
@@ -161,19 +162,19 @@ void UPF2InventoryComponent::Native_OnInventoryItemsLoaded(const TArray<IPF2Item
 
 void UPF2InventoryComponent::Native_OnInventoryChanged()
 {
-	const FPF2InventoryComponentInventoryChangedDelegate InventoryChangedDelegate = this->GetEvents()->OnInventoryChanged;
-
-	if (InventoryChangedDelegate.IsBound())
+	if (const FPF2InventoryComponentInventoryChangedDelegate InventoryChangedDelegate = this->GetEvents()->OnInventoryChanged;
+		InventoryChangedDelegate.IsBound())
 	{
 		TArray<TScriptInterface<IPF2ItemInterface>> InventoryItems;
 
-		for (IPF2ItemInterface* Item : this->InventoryItemsLoaded)
+		// ReSharper disable once CppTemplateArgumentsCanBeDeduced
+		for (TScriptInterface<IPF2ItemInterface> Item : this->InventoryItemsLoaded)
 		{
 			// BUGBUG: By the time we're here, this should definitely be an OpenPF2 item, but UE will sometimes
 			// replicate entries in this->InventoryItems as NULL.
 			if (Item != nullptr)
 			{
-				InventoryItems.Add(PF2InterfaceUtilities::ToScriptInterface(Item));
+				InventoryItems.Add(Item);
 			}
 		}
 

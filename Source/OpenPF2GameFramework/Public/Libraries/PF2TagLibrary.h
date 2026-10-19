@@ -1,4 +1,4 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2023-2024, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2023-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -24,6 +24,24 @@ class OPENPF2GAMEFRAMEWORK_API UPF2TagLibrary final : public UBlueprintFunctionL
 	GENERATED_BODY()
 
 public:
+	/**
+	 * Returns a copy of the default ability tags with the given tag included.
+	 *
+	 * Assign the result to AbilityTags on UE 5.3-5.4, or pass it to SetAssetTags on UE 5.5-5.8, from the derived
+	 * ability constructor. The input container is unchanged.
+	 *
+	 * @param DefaultTags
+	 *	The ability's existing default tags.
+	 * @param Tag
+	 *	The tag to include in the returned container.
+	 *
+	 * @return
+	 *	The combined default tags, without duplicate entries.
+	 */
+	[[nodiscard]] static FGameplayTagContainer AddDefaultAbilityTag(
+		const FGameplayTagContainer& DefaultTags,
+		const FGameplayTag& Tag);
+
 	/**
 	 * Locates the tag within the specified tag container that is a child of another tag.
 	 *

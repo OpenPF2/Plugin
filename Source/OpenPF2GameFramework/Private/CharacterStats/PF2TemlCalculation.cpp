@@ -1,4 +1,4 @@
-// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
 //   - Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
@@ -78,9 +78,4 @@ FPF2TemlCalculation::FPF2TemlCalculation(const FGameplayTag TagPrefix,
 	}
 
 	this->Value = ProficiencyBonus;
-}
-
-FORCEINLINE float FPF2TemlCalculation::GetValue() const
-{
-	return this->Value;
 }

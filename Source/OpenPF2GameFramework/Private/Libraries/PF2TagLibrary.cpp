@@ -1,4 +1,4 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2023-2024, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2023-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -6,6 +6,16 @@
 #include "Libraries/PF2TagLibrary.h"
 
 #include "OpenPF2GameFramework.h"
+
+FGameplayTagContainer UPF2TagLibrary::AddDefaultAbilityTag(
+	const FGameplayTagContainer& DefaultTags,
+	const FGameplayTag& Tag)
+{
+	FGameplayTagContainer UpdatedTags(DefaultTags);
+
+	UpdatedTags.AddTag(Tag);
+	return UpdatedTags;
+}
 
 FGameplayTag UPF2TagLibrary::FindChildTag(const FGameplayTagContainer& AllTags,
                                           const FGameplayTag&          ParentTag,

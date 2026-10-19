@@ -1,4 +1,4 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2024, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2024-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -12,7 +12,7 @@
 
 BEGIN_DEFINE_PF_SPEC(FPF2ConditionsDyingRecoveryByHealing,
                      "OpenPF2.Conditions.DyingRecoveryByHealing",
-                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+                     EAutomationTestFlags::ProductFilter | EnhancedAutomationApplicationContextMask)
 	UPF2CharacterAttributeSet* TestCharacterAttributeSet;
 	TSubclassOf<UGameplayEffect> HealEffect;
 

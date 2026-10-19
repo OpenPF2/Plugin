@@ -1,4 +1,4 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2023-2024, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2023-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -6,6 +6,8 @@
 // ReSharper disable CppRedundantQualifier
 
 #include "Libraries/PF2MapLibrary.h"
+
+#include <Misc/EngineVersionComparison.h>
 
 #include <UObject/ScriptMacros.h>
 
@@ -95,8 +97,13 @@ void UPF2MapLibrary::GenericMap_Invert(const void* InputMapAddr,
 
 	for (FScriptMapHelper::FIterator InputMapIt = InputMapHelper.CreateIterator(); InputMapIt; ++InputMapIt)
 	{
-		const uint8* InputMapKeyPtr   = InputMapHelper.GetKeyPtr(*InputMapIt);
-		const uint8* InputMapValuePtr = InputMapHelper.GetValuePtr(*InputMapIt);
+#if UE_VERSION_OLDER_THAN(5, 4, 0)
+		const int32 InputMapIndex = *InputMapIt;
+#else
+		const int32 InputMapIndex = InputMapIt.GetInternalIndex();
+#endif
+		const uint8* InputMapKeyPtr   = InputMapHelper.GetKeyPtr(InputMapIndex);
+		const uint8* InputMapValuePtr = InputMapHelper.GetValuePtr(InputMapIndex);
 
 		// Search for a _key_ in the output map that has a hash equal to that of the _value_ from the input map.
 		if (OutputMapHelper.FindValueFromHash(InputMapValuePtr))

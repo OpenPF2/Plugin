@@ -49,7 +49,14 @@ Unlike other RPG frameworks on the Unreal Marketplace, OpenPF2 is:
 
 ## Compatibility
 
-This plug-in is compatible with Unreal Engine 5.3.
+This plug-in targets Unreal Engine 5.3 through 5.8. Win64 validation uses OpenPF2Playground with UE 5.3.2, 5.4.4,
+5.5.4, 5.6.1, 5.7.4, and 5.8.3. The Playground compatibility guide records build settings, test results, packaging,
+runtime checks, and remaining warnings. Other platforms and patch releases require separate validation.
+Playground's offscreen validation uses D3D11 on UE 5.3.2 and D3D12 on the other listed patches.
+
+Use the matching EnhancedUnrealSpecs dependency revision for automation tests. Its shared automation-flag aliases
+support the integer flags before UE 5.5 and the scoped enum in later engines. Author shared assets in UE 5.3 so older
+supported engines can still read them.
 
 ## Current Status
 

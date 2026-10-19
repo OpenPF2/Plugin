@@ -1,9 +1,11 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2023-2024, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2023-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #pragma once
+
+#include <Misc/EngineVersionComparison.h>
 
 #include "PF2MapPairIterator.generated.h"
 
@@ -77,7 +79,12 @@ struct FPF2MapPairIterator
 		check(this->HasPair());
 
 		{
-			const uint8*     MapRelativeKeyPtr = this->MapHelper->GetKeyPtr(**this->Iterator);
+#if UE_VERSION_OLDER_THAN(5, 4, 0)
+			const int32 MapIndex = **this->Iterator;
+#else
+			const int32 MapIndex = this->Iterator->GetInternalIndex();
+#endif
+			const uint8*     MapRelativeKeyPtr = this->MapHelper->GetKeyPtr(MapIndex);
 			const FProperty* KeyProperty       = this->MapHelper->GetKeyProperty();
 
 			KeyProperty->CopyCompleteValueFromScriptVM(OutKeyPtr, MapRelativeKeyPtr);
@@ -99,7 +106,12 @@ struct FPF2MapPairIterator
 		check(this->HasPair());
 
 		{
-			const uint8*     MapRelativeValuePtr = this->MapHelper->GetValuePtr(**this->Iterator);
+#if UE_VERSION_OLDER_THAN(5, 4, 0)
+			const int32 MapIndex = **this->Iterator;
+#else
+			const int32 MapIndex = this->Iterator->GetInternalIndex();
+#endif
+			const uint8*     MapRelativeValuePtr = this->MapHelper->GetValuePtr(MapIndex);
 			const FProperty* ValueProperty       = this->MapHelper->GetValueProperty();
 
 			ValueProperty->CopyCompleteValueFromScriptVM(OutValuePtr, MapRelativeValuePtr);

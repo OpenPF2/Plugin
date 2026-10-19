@@ -1,14 +1,18 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "CharacterStats/AbilityBoosts/PF2AbilityBoostBase.h"
 
+#include <Misc/EngineVersionComparison.h>
+
 #include "CharacterStats/PF2CharacterAbilitySystemInterface.h"
 #include "CharacterStats/PF2CharacterAttributeSet.h"
 #include "CharacterStats/AbilityBoosts/PF2AbilityBoostRuleOptionValidator.h"
 #include "CharacterStats/AbilityBoosts/PF2GameplayAbilityTargetData_BoostAbility.h"
+
+#include "Libraries/PF2TagLibrary.h"
 
 UPF2AbilityBoostBase::UPF2AbilityBoostBase()
 {
@@ -19,10 +23,15 @@ UPF2AbilityBoostBase::UPF2AbilityBoostBase()
 
 	this->AbilityTriggers.Add(TriggerData);
 
-	// We don't maintain any local state.
-	this->InstancingPolicy = EGameplayAbilityInstancingPolicy::NonInstanced;
+	// We don't maintain any local state, but UE deprecated NonInstanced because it leads to confusing corner cases.
+	this->InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 
-	this->AbilityTags.AddTag(PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.Type.AbilityBoost")));
+	const FGameplayTag AbilityBoostTag = PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.Type.AbilityBoost"));
+#if UE_VERSION_OLDER_THAN(5, 5, 0)
+	this->AbilityTags = UPF2TagLibrary::AddDefaultAbilityTag(this->AbilityTags, AbilityBoostTag);
+#else
+	this->SetAssetTags(UPF2TagLibrary::AddDefaultAbilityTag(this->GetAssetTags(), AbilityBoostTag));
+#endif
 }
 
 bool UPF2AbilityBoostBase::CheckCost(

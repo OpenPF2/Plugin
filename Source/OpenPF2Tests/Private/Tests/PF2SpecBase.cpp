@@ -1,9 +1,11 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "Tests/PF2SpecBase.h"
+
+#include <Misc/EngineVersionComparison.h>
 
 #include <AbilitySystemBlueprintLibrary.h>
 
@@ -173,7 +175,11 @@ FGameplayAbilitySpecHandle FPF2SpecBase::GrantCharacterAbility(
 	}
 
 	AbilitySpec = FGameplayAbilitySpec(AbilityInstance);
+#if UE_VERSION_OLDER_THAN(5, 5, 0)
 	AbilitySpec.DynamicAbilityTags.AppendTags(DynamicAbilityTags);
+#else
+	AbilitySpec.GetDynamicSpecSourceTags().AppendTags(DynamicAbilityTags);
+#endif
 
 	return CharacterAsc->GiveAbility(AbilitySpec);
 }
