@@ -16,20 +16,20 @@
 
 #include "CharacterStats/PF2TargetCharacterAttributeStatics.h"
 
+#include "GameplayTags/GameplayEffects/SetByCallerParameters.h"
+
 #include "Libraries/PF2AbilitySystemLibrary.h"
 
 #include "Utilities/PF2GameplayAbilityUtilities.h"
 
-UPF2SimpleDamageExecution::UPF2SimpleDamageExecution() :
-	DamageParameterTag(FGameplayTag::RequestGameplayTag(this->DamageParameterTagName)),
-	ResistanceParameterTag(FGameplayTag::RequestGameplayTag(this->ResistanceParameterTagName))
+UPF2SimpleDamageExecution::UPF2SimpleDamageExecution()
 {
 #if WITH_EDITORONLY_DATA
 	// Expose the damage parameter tag and resistance parameter tag for use in calculations in the editor.
 	// The ValidTransientAggregatorIdentifiers property only exists for use in the editor. It does NOT exist at run-time
 	// nor in Shipping builds.
-	this->ValidTransientAggregatorIdentifiers.AddTag(this->DamageParameterTag);
-	this->ValidTransientAggregatorIdentifiers.AddTag(this->ResistanceParameterTag);
+	this->ValidTransientAggregatorIdentifiers.AddTag(Pf2TagGameplayEffectParameterDamage);
+	this->ValidTransientAggregatorIdentifiers.AddTag(Pf2TagGameplayEffectParameterResistance);
 #endif
 }
 
@@ -46,13 +46,13 @@ void UPF2SimpleDamageExecution::Execute_Implementation(
 		UPF2AbilitySystemLibrary::BuildEvaluationParameters(Spec);
 
 	ExecutionParams.AttemptCalculateTransientAggregatorMagnitude(
-		this->DamageParameterTag,
+		Pf2TagGameplayEffectParameterDamage,
 		EvaluationParameters,
 		IncomingDamage
 	);
 
 	ExecutionParams.AttemptCalculateTransientAggregatorMagnitude(
-		this->ResistanceParameterTag,
+		Pf2TagGameplayEffectParameterResistance,
 		EvaluationParameters,
 		Resistance
 	);

@@ -75,7 +75,7 @@ void FPF2ClassDifficultyClassCalculationSpec::Define()
 		{
 			BeforeEach([=, this]()
 			{
-				this->ApplyUnreplicatedTag(FString::Format(TEXT("KeyAbility.{0}"), {KeyAbilityName}));
+				this->ApplyUnreplicatedTag(TEXT("PF2.KeyAbility.") + KeyAbilityName);
 			});
 
 			for (auto& BoostedAbility : this->AbilityModifierAttributes)
@@ -104,7 +104,7 @@ void FPF2ClassDifficultyClassCalculationSpec::Define()
 
 							BeforeEach([=, this]()
 							{
-								this->ApplyUnreplicatedTag(FString::Format(TEXT("ClassDc.{0}"), {ProficiencyLevel}));
+								this->ApplyUnreplicatedTag(TEXT("PF2.Proficiency.ClassDc.") + ProficiencyLevel);
 							});
 
 							if (KeyAbilityName == BoostedAbilityName)

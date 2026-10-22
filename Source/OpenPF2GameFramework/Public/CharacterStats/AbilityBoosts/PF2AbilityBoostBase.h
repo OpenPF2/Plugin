@@ -60,11 +60,6 @@ protected:
 public:
 	UPF2AbilityBoostBase();
 
-	FORCEINLINE static FGameplayTag GetTriggerTag()
-	{
-		return PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.Type.AbilityBoost"));
-	};
-
 	// =================================================================================================================
 	// Public Methods - UGameplayAbility Implementation
 	// =================================================================================================================

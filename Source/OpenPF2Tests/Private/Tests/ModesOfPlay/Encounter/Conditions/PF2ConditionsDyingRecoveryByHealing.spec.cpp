@@ -8,6 +8,9 @@
 
 #include "CharacterStats/PF2CharacterAttributeSet.h"
 
+#include "GameplayTags/GameplayEffects/SetByCallerParameters.h"
+#include "GameplayTags/Traits/Conditions.h"
+
 #include "Tests/PF2SpecBase.h"
 
 BEGIN_DEFINE_PF_SPEC(FPF2ConditionsDyingRecoveryByHealing,
@@ -133,7 +136,7 @@ void FPF2ConditionsDyingRecoveryByHealing::Define()
 		this->DestroyWorld();
 	});
 
-	Describe("when a character has a 'Trait_Condition_Dying_1' gameplay tag", [=, this]
+	Describe("when a character has a 'PF2_Trait_Condition_Dying_1' gameplay tag", [=, this]
 	{
 		REDEFINE_LET(
 			GameplayEffectsToApplyBeforeTest,
@@ -144,35 +147,25 @@ void FPF2ConditionsDyingRecoveryByHealing::Define()
 
 		Describe("when the character receives healing", [=, this]
 		{
-			Describe("when the character does not have any 'Trait_Condition_Wounded' tags", [=, this]
+			Describe("when the character does not have any 'PF2_Trait_Condition_Wounded' tags", [=, this]
 			{
-				It("removes the 'Trait_Condition_Dying_1' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Dying_1' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 				});
 
-				It("applies the 'Trait_Condition_Wounded_1' gameplay tag to the character", [=, this]
+				It("applies the 'PF2_Trait_Condition_Wounded_1' gameplay tag to the character", [=, this]
 				{
-					TestCharacterHasConditionLevel(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Wounded")),
-						1
-					);
+					TestCharacterHasConditionLevel(this->TestCharacter, Pf2TagTraitConditionWounded, 1);
 				});
 
-				It("removes the 'Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Unconscious"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionUnconscious);
 				});
 			});
 
-			Describe("when the character has the 'Trait_Condition_Wounded_1' tag", [=, this]
+			Describe("when the character has the 'PF2_Trait_Condition_Wounded_1' tag", [=, this]
 			{
 				REDEFINE_LET(
 					GameplayEffectsToApplyBeforeTest,
@@ -181,33 +174,23 @@ void FPF2ConditionsDyingRecoveryByHealing::Define()
 					{ return PF2ArrayUtilities::Concatenate(**Previous, TArray({ BP_Wounded1_Effect })); }
 				);
 
-				It("removes the 'Trait_Condition_Dying_1' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Dying_1' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 				});
 
-				It("applies the 'Trait_Condition_Wounded_2' gameplay tag to the character", [=, this]
+				It("applies the 'PF2_Trait_Condition_Wounded_2' gameplay tag to the character", [=, this]
 				{
-					TestCharacterHasConditionLevel(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Wounded")),
-						2
-					);
+					TestCharacterHasConditionLevel(this->TestCharacter, Pf2TagTraitConditionWounded, 2);
 				});
 
-				It("removes the 'Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Unconscious"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionUnconscious);
 				});
 			});
 
-			Describe("when the character has the 'Trait_Condition_Wounded_2' tag", [=, this]
+			Describe("when the character has the 'PF2_Trait_Condition_Wounded_2' tag", [=, this]
 			{
 				REDEFINE_LET(
 					GameplayEffectsToApplyBeforeTest,
@@ -216,33 +199,23 @@ void FPF2ConditionsDyingRecoveryByHealing::Define()
 					{ return PF2ArrayUtilities::Concatenate(**Previous, TArray({ BP_Wounded2_Effect })); }
 				);
 
-				It("removes the 'Trait_Condition_Dying_1' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Dying_1' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 				});
 
-				It("applies the 'Trait_Condition_Wounded_3' gameplay tag to the character", [=, this]
+				It("applies the 'PF2_Trait_Condition_Wounded_3' gameplay tag to the character", [=, this]
 				{
-					TestCharacterHasConditionLevel(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Wounded")),
-						3
-					);
+					TestCharacterHasConditionLevel(this->TestCharacter, Pf2TagTraitConditionWounded, 3);
 				});
 
-				It("removes the 'Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Unconscious"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionUnconscious);
 				});
 			});
 
-			Describe("when the character has the 'Trait_Condition_Wounded_3' tag", [=, this]
+			Describe("when the character has the 'PF2_Trait_Condition_Wounded_3' tag", [=, this]
 			{
 				REDEFINE_LET(
 					GameplayEffectsToApplyBeforeTest,
@@ -251,33 +224,23 @@ void FPF2ConditionsDyingRecoveryByHealing::Define()
 					{ return PF2ArrayUtilities::Concatenate(**Previous, TArray({ BP_Wounded3_Effect })); }
 				);
 
-				It("removes the 'Trait_Condition_Dying_1' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Dying_1' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 				});
 
-				It("applies the 'Trait_Condition_Wounded_4' gameplay tag to the character", [=, this]
+				It("applies the 'PF2_Trait_Condition_Wounded_4' gameplay tag to the character", [=, this]
 				{
-					TestCharacterHasConditionLevel(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Wounded")),
-						4
-					);
+					TestCharacterHasConditionLevel(this->TestCharacter, Pf2TagTraitConditionWounded, 4);
 				});
 
-				It("removes the 'Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Unconscious"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionUnconscious);
 				});
 			});
 
-			Describe("when the character has the 'Trait_Condition_Wounded_4' tag", [=, this]
+			Describe("when the character has the 'PF2_Trait_Condition_Wounded_4' tag", [=, this]
 			{
 				REDEFINE_LET(
 					GameplayEffectsToApplyBeforeTest,
@@ -286,35 +249,25 @@ void FPF2ConditionsDyingRecoveryByHealing::Define()
 					{ return PF2ArrayUtilities::Concatenate(**Previous, TArray({ BP_Wounded4_Effect })); }
 				);
 
-				It("removes the 'Trait_Condition_Dying_1' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Dying_1' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 				});
 
-				It("retains the 'Trait_Condition_Wounded_4' gameplay tag on the character", [=, this]
+				It("retains the 'PF2_Trait_Condition_Wounded_4' gameplay tag on the character", [=, this]
 				{
-					TestCharacterHasConditionLevel(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Wounded")),
-						4
-					);
+					TestCharacterHasConditionLevel(this->TestCharacter, Pf2TagTraitConditionWounded, 4);
 				});
 
-				It("removes the 'Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Unconscious"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionUnconscious);
 				});
 			});
 		});
 	});
 
-	Describe("when a character has a 'Trait_Condition_Dying_2' gameplay tag", [=, this]
+	Describe("when a character has a 'PF2_Trait_Condition_Dying_2' gameplay tag", [=, this]
 	{
 		REDEFINE_LET(
 			GameplayEffectsToApplyBeforeTest,
@@ -325,35 +278,25 @@ void FPF2ConditionsDyingRecoveryByHealing::Define()
 
 		Describe("when the character receives healing", [=, this]
 		{
-			Describe("when the character does not have any 'Trait_Condition_Wounded' tags", [=, this]
+			Describe("when the character does not have any 'PF2_Trait_Condition_Wounded' tags", [=, this]
 			{
-				It("removes the 'Trait_Condition_Dying_2' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Dying_2' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 				});
 
-				It("applies the 'Trait_Condition_Wounded_1' gameplay tag to the character", [=, this]
+				It("applies the 'PF2_Trait_Condition_Wounded_1' gameplay tag to the character", [=, this]
 				{
-					TestCharacterHasConditionLevel(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Wounded")),
-						1
-					);
+					TestCharacterHasConditionLevel(this->TestCharacter, Pf2TagTraitConditionWounded, 1);
 				});
 
-				It("removes the 'Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Unconscious"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionUnconscious);
 				});
 			});
 
-			Describe("when the character has the 'Trait_Condition_Wounded_1' tag", [=, this]
+			Describe("when the character has the 'PF2_Trait_Condition_Wounded_1' tag", [=, this]
 			{
 				REDEFINE_LET(
 					GameplayEffectsToApplyBeforeTest,
@@ -362,33 +305,23 @@ void FPF2ConditionsDyingRecoveryByHealing::Define()
 					{ return PF2ArrayUtilities::Concatenate(**Previous, TArray({ BP_Wounded1_Effect })); }
 				);
 
-				It("removes the 'Trait_Condition_Dying_2' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Dying_2' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 				});
 
-				It("applies the 'Trait_Condition_Wounded_2' gameplay tag to the character", [=, this]
+				It("applies the 'PF2_Trait_Condition_Wounded_2' gameplay tag to the character", [=, this]
 				{
-					TestCharacterHasConditionLevel(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Wounded")),
-						2
-					);
+					TestCharacterHasConditionLevel(this->TestCharacter, Pf2TagTraitConditionWounded, 2);
 				});
 
-				It("removes the 'Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Unconscious"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionUnconscious);
 				});
 			});
 
-			Describe("when the character has the 'Trait_Condition_Wounded_2' tag", [=, this]
+			Describe("when the character has the 'PF2_Trait_Condition_Wounded_2' tag", [=, this]
 			{
 				REDEFINE_LET(
 					GameplayEffectsToApplyBeforeTest,
@@ -397,33 +330,23 @@ void FPF2ConditionsDyingRecoveryByHealing::Define()
 					{ return PF2ArrayUtilities::Concatenate(**Previous, TArray({ BP_Wounded2_Effect })); }
 				);
 
-				It("removes the 'Trait_Condition_Dying_2' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Dying_2' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 				});
 
-				It("applies the 'Trait_Condition_Wounded_3' gameplay tag to the character", [=, this]
+				It("applies the 'PF2_Trait_Condition_Wounded_3' gameplay tag to the character", [=, this]
 				{
-					TestCharacterHasConditionLevel(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Wounded")),
-						3
-					);
+					TestCharacterHasConditionLevel(this->TestCharacter, Pf2TagTraitConditionWounded, 3);
 				});
 
-				It("removes the 'Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Unconscious"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionUnconscious);
 				});
 			});
 
-			Describe("when the character has the 'Trait_Condition_Wounded_3' tag", [=, this]
+			Describe("when the character has the 'PF2_Trait_Condition_Wounded_3' tag", [=, this]
 			{
 				REDEFINE_LET(
 					GameplayEffectsToApplyBeforeTest,
@@ -432,33 +355,23 @@ void FPF2ConditionsDyingRecoveryByHealing::Define()
 					{ return PF2ArrayUtilities::Concatenate(**Previous, TArray({ BP_Wounded3_Effect })); }
 				);
 
-				It("removes the 'Trait_Condition_Dying_2' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Dying_2' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 				});
 
-				It("applies the 'Trait_Condition_Wounded_4' gameplay tag to the character", [=, this]
+				It("applies the 'PF2_Trait_Condition_Wounded_4' gameplay tag to the character", [=, this]
 				{
-					TestCharacterHasConditionLevel(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Wounded")),
-						4
-					);
+					TestCharacterHasConditionLevel(this->TestCharacter, Pf2TagTraitConditionWounded, 4);
 				});
 
-				It("removes the 'Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Unconscious"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionUnconscious);
 				});
 			});
 
-			Describe("when the character has the 'Trait_Condition_Wounded_4' tag", [=, this]
+			Describe("when the character has the 'PF2_Trait_Condition_Wounded_4' tag", [=, this]
 			{
 				REDEFINE_LET(
 					GameplayEffectsToApplyBeforeTest,
@@ -467,35 +380,25 @@ void FPF2ConditionsDyingRecoveryByHealing::Define()
 					{ return PF2ArrayUtilities::Concatenate(**Previous, TArray({ BP_Wounded4_Effect })); }
 				);
 
-				It("removes the 'Trait_Condition_Dying_2' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Dying_2' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 				});
 
-				It("retains the 'Trait_Condition_Wounded_4' gameplay tag on the character", [=, this]
+				It("retains the 'PF2_Trait_Condition_Wounded_4' gameplay tag on the character", [=, this]
 				{
-					TestCharacterHasConditionLevel(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Wounded")),
-						4
-					);
+					TestCharacterHasConditionLevel(this->TestCharacter, Pf2TagTraitConditionWounded, 4);
 				});
 
-				It("removes the 'Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Unconscious"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionUnconscious);
 				});
 			});
 		});
 	});
 
-	Describe("when a character has a 'Trait_Condition_Dying_3' gameplay tag (DC: 10 + 3 = 13)", [=, this]
+	Describe("when a character has a 'PF2_Trait_Condition_Dying_3' gameplay tag (DC: 10 + 3 = 13)", [=, this]
 	{
 		REDEFINE_LET(
 			GameplayEffectsToApplyBeforeTest,
@@ -506,35 +409,25 @@ void FPF2ConditionsDyingRecoveryByHealing::Define()
 
 		Describe("when the character receives healing", [=, this]
 		{
-			Describe("when the character does not have any 'Trait_Condition_Wounded' tags", [=, this]
+			Describe("when the character does not have any 'PF2_Trait_Condition_Wounded' tags", [=, this]
 			{
-				It("removes the 'Trait_Condition_Dying_3' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Dying_3' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 				});
 
-				It("applies the 'Trait_Condition_Wounded_1' gameplay tag to the character", [=, this]
+				It("applies the 'PF2_Trait_Condition_Wounded_1' gameplay tag to the character", [=, this]
 				{
-					TestCharacterHasConditionLevel(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Wounded")),
-						1
-					);
+					TestCharacterHasConditionLevel(this->TestCharacter, Pf2TagTraitConditionWounded, 1);
 				});
 
-				It("removes the 'Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Unconscious"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionUnconscious);
 				});
 			});
 
-			Describe("when the character has the 'Trait_Condition_Wounded_1' tag", [=, this]
+			Describe("when the character has the 'PF2_Trait_Condition_Wounded_1' tag", [=, this]
 			{
 				REDEFINE_LET(
 					GameplayEffectsToApplyBeforeTest,
@@ -543,33 +436,23 @@ void FPF2ConditionsDyingRecoveryByHealing::Define()
 					{ return PF2ArrayUtilities::Concatenate(**Previous, TArray({ BP_Wounded1_Effect })); }
 				);
 
-				It("removes the 'Trait_Condition_Dying_3' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Dying_3' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 				});
 
-				It("applies the 'Trait_Condition_Wounded_2' gameplay tag to the character", [=, this]
+				It("applies the 'PF2_Trait_Condition_Wounded_2' gameplay tag to the character", [=, this]
 				{
-					TestCharacterHasConditionLevel(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Wounded")),
-						2
-					);
+					TestCharacterHasConditionLevel(this->TestCharacter, Pf2TagTraitConditionWounded, 2);
 				});
 
-				It("removes the 'Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Unconscious"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionUnconscious);
 				});
 			});
 
-			Describe("when the character has the 'Trait_Condition_Wounded_2' tag", [=, this]
+			Describe("when the character has the 'PF2_Trait_Condition_Wounded_2' tag", [=, this]
 			{
 				REDEFINE_LET(
 					GameplayEffectsToApplyBeforeTest,
@@ -578,33 +461,23 @@ void FPF2ConditionsDyingRecoveryByHealing::Define()
 					{ return PF2ArrayUtilities::Concatenate(**Previous, TArray({ BP_Wounded2_Effect })); }
 				);
 
-				It("removes the 'Trait_Condition_Dying_3' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Dying_3' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 				});
 
-				It("applies the 'Trait_Condition_Wounded_3' gameplay tag to the character", [=, this]
+				It("applies the 'PF2_Trait_Condition_Wounded_3' gameplay tag to the character", [=, this]
 				{
-					TestCharacterHasConditionLevel(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Wounded")),
-						3
-					);
+					TestCharacterHasConditionLevel(this->TestCharacter, Pf2TagTraitConditionWounded, 3);
 				});
 
-				It("removes the 'Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Unconscious"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionUnconscious);
 				});
 			});
 
-			Describe("when the character has the 'Trait_Condition_Wounded_3' tag", [=, this]
+			Describe("when the character has the 'PF2_Trait_Condition_Wounded_3' tag", [=, this]
 			{
 				REDEFINE_LET(
 					GameplayEffectsToApplyBeforeTest,
@@ -613,33 +486,23 @@ void FPF2ConditionsDyingRecoveryByHealing::Define()
 					{ return PF2ArrayUtilities::Concatenate(**Previous, TArray({ BP_Wounded3_Effect })); }
 				);
 
-				It("removes the 'Trait_Condition_Dying_3' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Dying_3' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 				});
 
-				It("applies the 'Trait_Condition_Wounded_4' gameplay tag to the character", [=, this]
+				It("applies the 'PF2_Trait_Condition_Wounded_4' gameplay tag to the character", [=, this]
 				{
-					TestCharacterHasConditionLevel(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Wounded")),
-						4
-					);
+					TestCharacterHasConditionLevel(this->TestCharacter, Pf2TagTraitConditionWounded, 4);
 				});
 
-				It("removes the 'Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Unconscious"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionUnconscious);
 				});
 			});
 
-			Describe("when the character has the 'Trait_Condition_Wounded_4' tag", [=, this]
+			Describe("when the character has the 'PF2_Trait_Condition_Wounded_4' tag", [=, this]
 			{
 				REDEFINE_LET(
 					GameplayEffectsToApplyBeforeTest,
@@ -648,35 +511,25 @@ void FPF2ConditionsDyingRecoveryByHealing::Define()
 					{ return PF2ArrayUtilities::Concatenate(**Previous, TArray({ BP_Wounded4_Effect })); }
 				);
 
-				It("removes the 'Trait_Condition_Dying_3' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Dying_3' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionDying);
 				});
 
-				It("retains the 'Trait_Condition_Wounded_4' gameplay tag on the character", [=, this]
+				It("retains the 'PF2_Trait_Condition_Wounded_4' gameplay tag on the character", [=, this]
 				{
-					TestCharacterHasConditionLevel(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Wounded")),
-						4
-					);
+					TestCharacterHasConditionLevel(this->TestCharacter, Pf2TagTraitConditionWounded, 4);
 				});
 
-				It("removes the 'Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
+				It("removes the 'PF2_Trait_Condition_Unconscious' gameplay tag from the character", [=, this]
 				{
-					TestCharacterNotHaveCondition(
-						this->TestCharacter,
-						FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Unconscious"))
-					);
+					TestCharacterNotHaveCondition(this->TestCharacter, Pf2TagTraitConditionUnconscious);
 				});
 			});
 		});
 	});
 
-	Describe("when a character has a 'Trait_Condition_Dying_4' gameplay tag (DC: 10 + 4 = 14)", [=, this]
+	Describe("when a character has a 'PF2_Trait_Condition_Dying_4' gameplay tag (DC: 10 + 4 = 14)", [=, this]
 	{
 		REDEFINE_LET(
 			GameplayEffectsToApplyBeforeTest,
@@ -689,16 +542,8 @@ void FPF2ConditionsDyingRecoveryByHealing::Define()
 		{
 			It("has no effect because the character is already dead", [=, this]
 			{
-				TestCharacterHasConditionLevel(
-					this->TestCharacter,
-					FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dying")),
-					4
-				);
-
-				TestCharacterHasCondition(
-					this->TestCharacter,
-					FGameplayTag::RequestGameplayTag(TEXT("Trait.Condition.Dead"))
-				);
+				TestCharacterHasConditionLevel(this->TestCharacter, Pf2TagTraitConditionDying, 4);
+				TestCharacterHasCondition(this->TestCharacter, Pf2TagTraitConditionDead);
 			});
 		});
 	});
@@ -706,13 +551,11 @@ void FPF2ConditionsDyingRecoveryByHealing::Define()
 
 void FPF2ConditionsDyingRecoveryByHealing::HealTestCharacter(const float HealingAmount) const
 {
-	FGameplayEffectSpecHandle EffectSpecHandle;
-
-	EffectSpecHandle =
+	const FGameplayEffectSpecHandle EffectSpecHandle =
 		this->BuildEffectSpec(
 			this->HealEffect,
 			{
-				{"GameplayEffect.Parameter.Healing", HealingAmount},
+				{Pf2TagGameplayEffectParameterHealing, HealingAmount},
 			}
 		);
 

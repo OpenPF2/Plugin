@@ -22,6 +22,8 @@
 #include "OpenPF2GameFramework.h"
 #include "PF2CharacterInterface.h"
 
+#include "GameplayTags/GameplayAbilities/WaitForEvents.h"
+
 #include "Libraries/PF2AbilitySystemLibrary.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
@@ -100,9 +102,6 @@ UPF2CharacterAttributeSet::UPF2CharacterAttributeSet() :
 	EncMaxReactionPoints(0.0f),
 	TmpDamageIncoming(0.0f)
 {
-	// Cache the tags to avoid lookup overhead.
-	this->DamageReceivedEventTag   = PF2GameplayAbilityUtilities::GetTag(DamageReceivedEventTagName);
-	this->HitPointsChangedEventTag = PF2GameplayAbilityUtilities::GetTag(HitPointsChangedEventTagName);
 }
 
 void UPF2CharacterAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -671,7 +670,7 @@ void UPF2CharacterAttributeSet::Native_OnDamageIncomingChanged(const FGameplayEf
 
 		// Enable condition check GAs to react to incoming damage.
 		this->EmitGameplayEvent(
-			DamageReceivedEventTag,
+			Pf2TagGameplayAbilityWaitForEventDamageReceived,
 			LocalDamage,
 			TargetCharacter,
 			SourceEffectSpec
@@ -726,7 +725,7 @@ void UPF2CharacterAttributeSet::Native_OnHitPointsChanged(const FGameplayEffectS
 		}
 
 		this->EmitGameplayEvent(
-			HitPointsChangedEventTag,
+			Pf2TagGameplayAbilityWaitForEventHitPointsChanged,
 			ValueDelta,
 			TargetCharacter,
 			SourceEffectSpec

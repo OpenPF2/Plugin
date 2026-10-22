@@ -7,6 +7,8 @@
 
 #include "GameplayTagContainer.h"
 
+#include "GameplayTags/CurrencyUnits.h"
+
 #include "Utilities/PF2GameplayAbilityUtilities.h"
 
 #include "PF2MonetaryValue.generated.h"
@@ -49,7 +51,7 @@ struct FPF2MonetaryValue
 	FPF2MonetaryValue(const float Amount, const FGameplayTag MonetaryUnit) : Amount(Amount), MonetaryUnit(MonetaryUnit)
 	{
 		checkf(
-			PF2GameplayAbilityUtilities::HasTag(&MonetaryUnit.GetSingleTagContainer(), FName("CurrencyUnit")),
+			MonetaryUnit.MatchesTag(Pf2TagCurrencyUnits),
 			TEXT("Monetary unit must be a CurrencyUnit tag.")
 		);
 	}

@@ -172,7 +172,7 @@ protected:
 	 * Each value is a gameplay effect and the key is the weight group of that GE (sorted alphanumerically). The weight
 	 * controls the order that all GEs are applied. Lower weights are applied earlier than higher weights.
 	 *
-	 * The names of each group are exposed as tags in the "GameplayEffect.WeightGroup" tag list so that they can be
+	 * The names of each group are exposed as tags in the "PF2.GameplayEffect.WeightGroup" tag list so that they can be
 	 * applied to GEs by game designers to control the default group that a GE gets added to. A GE can also be
 	 * explicitly added to a group via the AddPassiveGameplayEffectWithWeight() method on the Character ASC.
 	 */

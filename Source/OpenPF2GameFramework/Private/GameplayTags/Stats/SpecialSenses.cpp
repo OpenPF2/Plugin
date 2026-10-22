@@ -1,0 +1,56 @@
+// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+// 
+// Content from Pathfinder 2nd Edition is licensed under the Open Game License (OGL) v1.0a, subject to the following:
+//	- Open Game License v 1.0a, Copyright 2000, Wizards of the Coast, Inc.
+//	- System Reference Document, Copyright 2000, Wizards of the Coast, Inc.
+//	- Pathfinder Core Rulebook (Second Edition), Copyright 2019, Paizo Inc.
+// 
+// Except for material designated as Product Identity, the game mechanics and logic in this file are Open Game Content,
+// as defined in the Open Game License version 1.0a, Section 1(d) (see accompanying LICENSE.TXT). No portion of this
+// file other than the material designated as Open Game Content may be reproduced in any form without written
+// permission.
+
+#include "GameplayTags/Stats/SpecialSenses.h"
+
+// =====================================================================================================================
+// Special Senses
+// =====================================================================================================================
+// "[Senses that] grant greater awareness [...] to either ignore or reduce the effects of the undetected, hidden, or
+// concealed conditions [...] when it comes to situations that foil average vision."
+//
+// Source: Pathfinder 2E Core Rulebook, page 465, "Special Senses".
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagSpecialSenses,
+	"PF2.SpecialSense",
+	"Senses that grant greater awareness to either ignore or reduce the effects of the undetected, hidden, or concealed conditions when it comes to situations that foil average vision."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagSpecialSenseDarkvision,
+	"PF2.SpecialSense.Darkvision",
+	"A creature with darkvision can see perfectly well in areas of darkness and dim light, though such vision is in black and white only. Some forms of magical darkness, such as a 4th-level darkness spell, block normal darkvision."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagSpecialSenseGreaterDarkvision,
+	"PF2.SpecialSense.GreaterDarkvision",
+	"A creature with greater darkvision can see perfectly well in areas of darkness and dim light, though such vision is in black and white only. Some forms of magical darkness, such as a 4th-level darkness spell, block normal darkvision. A creature with greater darkvision, however, can see through even these forms of magical darkness."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagSpecialSenseLowLightVision,
+	"PF2.SpecialSense.LowLightVision",
+	"A creature with low-light vision can see in dim light as though it were bright light, so it ignores the concealed condition due to dim light."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagSpecialSenseScent,
+	"PF2.SpecialSense.Scent",
+	"Scent involves sensing creatures or objects by smell, and is usually a vague sense. The range is listed in the ability, and it functions only if the creature or object being detected emits an aroma (for instance, incorporeal creatures usually do not exude an aroma)."
+)
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	Pf2TagSpecialSenseTremorsense,
+	"PF2.SpecialSense.Tremorsense",
+	"Tremorsense allows a creature to feel the vibrations through a solid surface caused by movement. It is usually an imprecise sense with a limited range (listed in the ability). Tremorsense functions only if the detecting creature is on the same surface as the subject, and only if the subject is moving along (or burrowing through) the surface."
+)

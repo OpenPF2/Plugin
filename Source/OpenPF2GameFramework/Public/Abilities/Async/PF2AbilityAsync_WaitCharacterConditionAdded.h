@@ -57,7 +57,7 @@ public:
 	 * @param Character
 	 *	The character for which condition levels are being monitored.
 	 * @param ConditionParentTag
-	 *	The tag immediately above the tag that contains the integer condition level (e.g., "Trait.Condition.Dying").
+	 *	The tag immediately above the tag that contains the integer condition level (e.g., "PF2.Trait.Condition.Dying").
 	 * @param bFireImmediatelyIfAlreadySatisfied
 	 *	Whether to evaluate the tag criterion upon starting this task and then fire the callback if has been satisfied.
 	 * @param bOnlyTriggerOnce
