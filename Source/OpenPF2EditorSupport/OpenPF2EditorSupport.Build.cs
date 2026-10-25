@@ -29,6 +29,8 @@ public class OpenPF2EditorSupport : ModuleRules
 				"DetailCustomizations",
 				"Engine",
 				"GraphEditor",
+				"GameplayTags",
+				"Json",
 				"Kismet",
 				"KismetCompiler",
 				"PropertyEditor",
