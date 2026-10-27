@@ -16,7 +16,7 @@ namespace PF2CharacterConstants
 	 * Weight groups are evaluated in the order that their names are sorted. Placing different GEs in different groups
 	 * allows game designers to control the order that GEs are applied to an OpenPF2 character.
 	 *
-	 * For consistency, each name in this list must exactly match a tag in the "GameplayEffect.WeightGroup" group. This
+	 * For consistency, each name in this list must exactly match a tag in the "PF2.GameplayEffect.WeightGroup" group. This
 	 * ensures that game designers have the same options for placing a GE in a weight group as exists in backend code.
 	 */
 	namespace GeWeightGroups
@@ -24,40 +24,40 @@ namespace PF2CharacterConstants
 		/**
 		 * The weight group used for GEs that initialize base stats.
 		 */
-		static const FName InitializeBaseStats = FName(TEXT("GameplayEffect.WeightGroup.00_InitializeBaseStats"));
+		static const FName InitializeBaseStats = FName(TEXT("PF2.GameplayEffect.WeightGroup.00_InitializeBaseStats"));
 
 		/**
 		 * The weight group used for GEs provided by the game designer that have to run right after base stats.
 		 */
 		static const FName PostInitializeBaseStats =
-			FName(TEXT("GameplayEffect.WeightGroup.05_PostInitializeBaseStats"));
+			FName(TEXT("PF2.GameplayEffect.WeightGroup.05_PostInitializeBaseStats"));
 
 		/**
 		 * The weight group used for GEs generated from other values on this character (managed by ASC logic).
 		 */
-		static const FName ManagedEffects = FName(TEXT("GameplayEffect.WeightGroup.10_ManagedEffects"));
+		static const FName ManagedEffects = FName(TEXT("PF2.GameplayEffect.WeightGroup.10_ManagedEffects"));
 
 		/**
 		 * The default weight group for custom, passive GEs from a game designer; applied before ability boosts.
 		 */
-		static const FName PreAbilityBoosts = FName(TEXT("GameplayEffect.WeightGroup.15_PreAbilityBoosts"));
+		static const FName PreAbilityBoosts = FName(TEXT("PF2.GameplayEffect.WeightGroup.15_PreAbilityBoosts"));
 
 		/**
 		 * The weight group used for ability boosts selected by the player or a game designer.
 		 */
-		static const FName AbilityBoosts = FName(TEXT("GameplayEffect.WeightGroup.20_AbilityBoosts"));
+		static const FName AbilityBoosts = FName(TEXT("PF2.GameplayEffect.WeightGroup.20_AbilityBoosts"));
 
 		/**
 		 * The weight group used for custom GEs provided by the game designer that must run before the last group of
 		 * stats GEs.
 		 */
-		static const FName PreFinalizeStats = FName(TEXT("GameplayEffect.WeightGroup.25_PreFinalizeStats"));
+		static const FName PreFinalizeStats = FName(TEXT("PF2.GameplayEffect.WeightGroup.25_PreFinalizeStats"));
 
 		/**
 		 * The weight group used for GEs that need to run last because they heavily depend on the results of earlier
 		 * GEs.
 		 */
-		static const FName FinalizeStats = FName(TEXT("GameplayEffect.WeightGroup.30_FinalizeStats"));
+		static const FName FinalizeStats = FName(TEXT("PF2.GameplayEffect.WeightGroup.30_FinalizeStats"));
 	}
 
 	/**

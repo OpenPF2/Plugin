@@ -1,4 +1,4 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -26,16 +26,16 @@
 	public: \
 		TClass(const FString& InName) : FPF2SpecBase(InName) \
 		{ \
-			static_assert((TFlags)&EAutomationTestFlags::ApplicationContextMask, "AutomationTest has no application flag.  It shouldn't run.  See AutomationTest.h."); \
-			static_assert((((TFlags)&EAutomationTestFlags::FilterMask) == EAutomationTestFlags::SmokeFilter) || \
-						  (((TFlags)&EAutomationTestFlags::FilterMask) == EAutomationTestFlags::EngineFilter) || \
-						  (((TFlags)&EAutomationTestFlags::FilterMask) == EAutomationTestFlags::ProductFilter) || \
-						  (((TFlags)&EAutomationTestFlags::FilterMask) == EAutomationTestFlags::PerfFilter) || \
-						  (((TFlags)&EAutomationTestFlags::FilterMask) == EAutomationTestFlags::StressFilter) || \
-						  (((TFlags)&EAutomationTestFlags::FilterMask) == EAutomationTestFlags::NegativeFilter), \
+			static_assert(!!((TFlags)&EnhancedAutomationApplicationContextMask), "AutomationTest has no application flag.  It shouldn't run.  See AutomationTest.h."); \
+			static_assert((((TFlags)&EnhancedAutomationFilterMask) == EAutomationTestFlags::SmokeFilter) || \
+						  (((TFlags)&EnhancedAutomationFilterMask) == EAutomationTestFlags::EngineFilter) || \
+						  (((TFlags)&EnhancedAutomationFilterMask) == EAutomationTestFlags::ProductFilter) || \
+						  (((TFlags)&EnhancedAutomationFilterMask) == EAutomationTestFlags::PerfFilter) || \
+						  (((TFlags)&EnhancedAutomationFilterMask) == EAutomationTestFlags::StressFilter) || \
+						  (((TFlags)&EnhancedAutomationFilterMask) == EAutomationTestFlags::NegativeFilter), \
 						  "All AutomationTests must have exactly 1 filter type specified.  See AutomationTest.h."); \
 		} \
-		virtual uint32 GetTestFlags() const override { return TFlags; } \
+		virtual FEnhancedAutomationTestFlags GetTestFlags() const override { return TFlags; } \
         using FEnhancedAutomationSpecBase::GetTestSourceFileName; \
 		virtual FString GetTestSourceFileName() const override { return FileName; } \
         using FEnhancedAutomationSpecBase::GetTestSourceFileLine; \
@@ -54,16 +54,21 @@
 	public: \
 		TClass(const FString& InName) : FPF2SpecBase(InName) \
 		{ \
-			static_assert((TFlags)&EAutomationTestFlags::ApplicationContextMask, "AutomationTest has no application flag.  It shouldn't run.  See AutomationTest.h."); \
-			static_assert((((TFlags)&EAutomationTestFlags::FilterMask) == EAutomationTestFlags::SmokeFilter) || \
-						  (((TFlags)&EAutomationTestFlags::FilterMask) == EAutomationTestFlags::EngineFilter) || \
-						  (((TFlags)&EAutomationTestFlags::FilterMask) == EAutomationTestFlags::ProductFilter) || \
-						  (((TFlags)&EAutomationTestFlags::FilterMask) == EAutomationTestFlags::PerfFilter) || \
-						  (((TFlags)&EAutomationTestFlags::FilterMask) == EAutomationTestFlags::StressFilter) || \
-						  (((TFlags)&EAutomationTestFlags::FilterMask) == EAutomationTestFlags::NegativeFilter), \
-						  "All AutomationTests must have exactly 1 filter type specified.  See AutomationTest.h."); \
+			static_assert( \
+				!!((TFlags) & EnhancedAutomationApplicationContextMask), \
+				"AutomationTest has no application flag.  It shouldn't run.  See AutomationTest.h."); \
+			\
+			static_assert(\
+				!!(((TFlags) & EnhancedAutomationFilterMask) == EAutomationTestFlags::SmokeFilter) || \
+				!!(((TFlags) & EnhancedAutomationFilterMask) == EAutomationTestFlags::EngineFilter) || \
+				!!(((TFlags) & EnhancedAutomationFilterMask) == EAutomationTestFlags::ProductFilter) || \
+				!!(((TFlags) & EnhancedAutomationFilterMask) == EAutomationTestFlags::PerfFilter) || \
+				!!(((TFlags) & EnhancedAutomationFilterMask) == EAutomationTestFlags::StressFilter) || \
+				!!(((TFlags) & EnhancedAutomationFilterMask) == EAutomationTestFlags::NegativeFilter), \
+				"All AutomationTests must have exactly 1 filter type specified.  See AutomationTest.h." \
+			); \
 		} \
-		virtual uint32 GetTestFlags() const override { return TFlags; } \
+		virtual FEnhancedAutomationTestFlags GetTestFlags() const override { return TFlags; } \
 		using FEnhancedAutomationSpecBase::GetTestSourceFileName; \
 		virtual FString GetTestSourceFileName() const override { return FileName; } \
 		using FEnhancedAutomationSpecBase::GetTestSourceFileLine; \
@@ -341,14 +346,14 @@ protected:
 	 * @param EffectClass
 	 *	The type of GE for which a spec is desired.
 	 * @param SetByCallerMagnitudesMap
-	 *	An optional map of set-by-caller-magnitudes/parameters to parameters, to pass into the GE.
+	 *	An optional map of set-by-caller-magnitudes/parameters to parameter values, to pass into the GE.
 	 *
 	 * @return
 	 *	The server-side handle of the GE specification.
 	 */
 	FGameplayEffectSpecHandle BuildEffectSpec(
 		const TSubclassOf<UGameplayEffect>& EffectClass,
-		const TMap<FName, float>&           SetByCallerMagnitudesMap = {}) const;
+		const TMap<FGameplayTag, float>&    SetByCallerMagnitudesMap = {}) const;
 
 	/**
 	 * Builds a Gameplay Effect (GE) specification for the given GE type, instigated by the given ability and character.
@@ -516,7 +521,7 @@ protected:
 	 * @param Character
 	 *	The character to test.
 	 * @param ConditionTag
-	 *	The parent condition level tag (e.g., "Trait.Condition.Dying", "Trait.Condition.Wounded", etc.).
+	 *	The parent condition level tag (e.g., "PF2.Trait.Condition.Dying", "PF2.Trait.Condition.Wounded", etc.).
 	 */
 	void TestCharacterHasCondition(
 		const TScriptInterface<IPF2CharacterInterface>& Character,
@@ -534,7 +539,7 @@ protected:
 	 * @param AbilitySystemComponent
 	 *	The ASC to test.
 	 * @param ConditionTag
-	 *	The parent condition level tag (e.g., "Trait.Condition.Dying", "Trait.Condition.Wounded", etc.).
+	 *	The parent condition level tag (e.g., "PF2.Trait.Condition.Dying", "PF2.Trait.Condition.Wounded", etc.).
 	 */
 	void TestAscHasCondition(
 		const FString&                 WhatAsc,
@@ -550,7 +555,7 @@ protected:
 	 * @param Character
 	 *	The character to test.
 	 * @param ConditionTag
-	 *	The parent condition level tag (e.g., "Trait.Condition.Dying", "Trait.Condition.Wounded", etc.).
+	 *	The parent condition level tag (e.g., "PF2.Trait.Condition.Dying", "PF2.Trait.Condition.Wounded", etc.).
 	 */
 	void TestCharacterNotHaveCondition(
 		const TScriptInterface<IPF2CharacterInterface>& Character,
@@ -567,7 +572,7 @@ protected:
 	 * @param AbilitySystemComponent
 	 *	The ASC to test.
 	 * @param ConditionTag
-	 *	The parent condition level tag (e.g., "Trait.Condition.Dying", "Trait.Condition.Wounded", etc.).
+	 *	The parent condition level tag (e.g., "PF2.Trait.Condition.Dying", "PF2.Trait.Condition.Wounded", etc.).
 	 */
 	void TestAscNotHaveCondition(
 		const FString&                 WhatAsc,
@@ -580,7 +585,7 @@ protected:
 	 * @param Character
 	 *	The character to test.
 	 * @param ParentTag
-	 *	The parent condition level tag (e.g., "Trait.Condition.Dying", "Trait.Condition.Wounded", etc.).
+	 *	The parent condition level tag (e.g., "PF2.Trait.Condition.Dying", "PF2.Trait.Condition.Wounded", etc.).
 	 * @param ExpectedLevel
 	 *	The condition level expected for the tag.
 	 */
@@ -597,7 +602,7 @@ protected:
 	 * @param AbilitySystemComponent
 	 *	The ASC to test.
 	 * @param ParentTag
-	 *	The parent condition level tag (e.g., "Trait.Condition.Dying", "Trait.Condition.Wounded", etc.).
+	 *	The parent condition level tag (e.g., "PF2.Trait.Condition.Dying", "PF2.Trait.Condition.Wounded", etc.).
 	 * @param ExpectedLevel
 	 *	The condition level expected for the tag.
 	 */

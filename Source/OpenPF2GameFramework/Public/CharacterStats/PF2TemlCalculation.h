@@ -1,4 +1,4 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -12,8 +12,8 @@
  * A single TEML proficiency calculation for a character attribute.
  *
  * TEML proficiency in an attribute is represented by a tag under a unique prefix for that attribute. For example, a
- * character with the "SavingThrow.Reflex.Trained" and "Perception.Master" tags has a "Trained" proficiency in reflex
- * saving throws and "Master" proficiency in Perception, with the "SavingThrow.Reflex" and "Perception" tag prefixes,
+ * character with the "PF2.Proficiency.SavingThrow.Reflex.Trained" and "PF2.Proficiency.Perception.Master" tags has a "Trained" proficiency in reflex
+ * saving throws and "Master" proficiency in Perception, with the "PF2.Proficiency.SavingThrow.Reflex" and "PF2.Proficiency.Perception" tag prefixes,
  * respectively.
  */
 class OPENPF2GAMEFRAMEWORK_API FPF2TemlCalculation
@@ -76,5 +76,8 @@ public:
 	 * @return
 	 *	The amount that the character's proficiency in a stat contributes to the modifier for the stat.
 	 */
-	float GetValue() const;
+	FORCEINLINE float GetValue() const
+	{
+		return this->Value;
+	}
 };

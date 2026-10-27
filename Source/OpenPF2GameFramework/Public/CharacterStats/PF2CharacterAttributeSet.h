@@ -1055,32 +1055,6 @@ public:
 
 protected:
 	// =================================================================================================================
-	// Protected Constants
-	// =================================================================================================================
-	/**
-	 * The name of the gameplay tag for events to notify passive condition check GAs about incoming damage.
-	 */
-	inline static const FName DamageReceivedEventTagName = TEXT("GameplayAbility.GameplayEvent.DamageReceived");
-
-	/**
-	 * The name of the gameplay tag for events to notify passive condition check GAs about changes in hit points.
-	 */
-	inline static const FName HitPointsChangedEventTagName = TEXT("GameplayAbility.GameplayEvent.HitPointsChanged");
-
-	// =================================================================================================================
-	// Protected Fields
-	// =================================================================================================================
-	/**
-	 * The gameplay tag for events to notify passive condition check GAs about changes in hit points.
-	 */
-	FGameplayTag DamageReceivedEventTag;
-
-	/**
-	 * The gameplay tag for events to notify passive condition check GAs about changes in hit points.
-	 */
-	FGameplayTag HitPointsChangedEventTag;
-
-	// =================================================================================================================
 	// Protected Methods
 	// =================================================================================================================
 	/**

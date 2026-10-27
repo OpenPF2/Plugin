@@ -40,7 +40,7 @@ protected:
 	// Protected Fields
 	// =================================================================================================================
 	/**
-	 * The tag immediately above the tag that contains the integer condition level (e.g., "Trait.Condition.Dying").
+	 * The tag immediately above the tag that contains the integer condition level (e.g., "PF2.Trait.Condition.Dying").
 	 */
 	FGameplayTag ConditionParentTag;
 

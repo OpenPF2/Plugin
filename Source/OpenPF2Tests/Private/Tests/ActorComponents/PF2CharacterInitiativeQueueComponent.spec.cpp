@@ -1,4 +1,4 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2023-2024, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2023-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -6,13 +6,15 @@
 #include "ModesOfPlay/Encounter/PF2CharacterInitiativeQueueComponent.h"
 #include "ModesOfPlay/Encounter/PF2CharacterInitiativeQueueInterface.h"
 
+#include "PF2CharacterInterface.h"
+
 #include "Tests/PF2SpecBase.h"
 
 #include "Utilities/PF2InterfaceUtilities.h"
 
 BEGIN_DEFINE_PF_SPEC(FPF2CharacterInitiativeQueueComponentSpec,
                      "OpenPF2.CharacterInitiativeQueueComponent",
-                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+                     EAutomationTestFlags::ProductFilter | EnhancedAutomationApplicationContextMask)
 	IPF2CharacterInitiativeQueueInterface* Component;
 END_DEFINE_PF_SPEC(FPF2CharacterInitiativeQueueComponentSpec)
 

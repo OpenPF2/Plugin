@@ -1,4 +1,4 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2023-2024, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 Game Framework for Unreal Engine, Copyright 2023-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -6,6 +6,18 @@
 #include "Libraries/PF2TagLibrary.h"
 
 #include "OpenPF2GameFramework.h"
+
+#include "Utilities/PF2GameplayAbilityUtilities.h"
+
+FGameplayTagContainer UPF2TagLibrary::AddDefaultAbilityTag(
+	const FGameplayTagContainer& DefaultTags,
+	const FGameplayTag& Tag)
+{
+	FGameplayTagContainer UpdatedTags(DefaultTags);
+
+	UpdatedTags.AddTag(Tag);
+	return UpdatedTags;
+}
 
 FGameplayTag UPF2TagLibrary::FindChildTag(const FGameplayTagContainer& AllTags,
                                           const FGameplayTag&          ParentTag,
@@ -58,8 +70,8 @@ uint8 UPF2TagLibrary::ParseConditionLevel(const FGameplayTag& Tag, const FGamepl
 
 	if (Tag.RequestDirectParent().MatchesTagExact(ParentTag))
 	{
-		// If ParentTag is "Condition.Dying" and the tag is "Condition.Dying.3", then starting at ParentTag.Len() + 1
-		// in the tag should give us "3".
+		// If ParentTag is "PF2.Trait.Condition.Dying" and the tag is "PF2.Trait.Condition.Dying.3", then starting at
+		// ParentTag.Len() + 1 in the tag should give us "3".
 		const FString ParentTagString = ParentTag.ToString(),
 		              SuffixString    = Tag.ToString().Mid(ParentTagString.Len() + 1);
 

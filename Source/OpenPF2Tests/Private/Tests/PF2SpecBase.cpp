@@ -1,9 +1,11 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "Tests/PF2SpecBase.h"
+
+#include <Misc/EngineVersionComparison.h>
 
 #include <AbilitySystemBlueprintLibrary.h>
 
@@ -173,7 +175,11 @@ FGameplayAbilitySpecHandle FPF2SpecBase::GrantCharacterAbility(
 	}
 
 	AbilitySpec = FGameplayAbilitySpec(AbilityInstance);
+#if UE_VERSION_OLDER_THAN(5, 5, 0)
 	AbilitySpec.DynamicAbilityTags.AppendTags(DynamicAbilityTags);
+#else
+	AbilitySpec.GetDynamicSpecSourceTags().AppendTags(DynamicAbilityTags);
+#endif
 
 	return CharacterAsc->GiveAbility(AbilitySpec);
 }
@@ -192,19 +198,15 @@ FActiveGameplayEffectHandle FPF2SpecBase::ApplyGameplayEffectToTestCharacter(
 
 FGameplayEffectSpecHandle FPF2SpecBase::BuildEffectSpec(
 	const TSubclassOf<UGameplayEffect>& EffectClass,
-	const TMap<FName, float>&           SetByCallerMagnitudesMap) const
+	const TMap<FGameplayTag, float>&    SetByCallerMagnitudesMap) const
 {
-	FGameplayEffectSpecHandle EffectSpec;
-
-	EffectSpec = this->TestCharacterAsc->MakeOutgoingSpec(EffectClass, 1.0, FGameplayEffectContextHandle());
+	FGameplayEffectSpecHandle EffectSpec =
+		this->TestCharacterAsc->MakeOutgoingSpec(EffectClass, 1.0, FGameplayEffectContextHandle());
 
 	for (const auto& [ParameterTag, ParameterValue] : SetByCallerMagnitudesMap)
 	{
-		EffectSpec = UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(
-			EffectSpec,
-			FGameplayTag::RequestGameplayTag(ParameterTag),
-			ParameterValue
-		);
+		EffectSpec =
+			UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(EffectSpec, ParameterTag, ParameterValue);
 	}
 
 	return EffectSpec;
@@ -347,12 +349,12 @@ FActiveGameplayEffectHandle FPF2SpecBase::InitializeAttributeAndApplyEffect(
 
 void FPF2SpecBase::ApplyUnreplicatedTag(const FString& TagName) const
 {
-	this->TestPawnAsc->AddLooseGameplayTag(PF2GameplayAbilityUtilities::GetTag(TagName));
+	this->TestPawnAsc->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName(TagName)));
 }
 
 void FPF2SpecBase::RemoveUnreplicatedTag(const FString& TagName) const
 {
-	this->TestPawnAsc->RemoveLooseGameplayTag(PF2GameplayAbilityUtilities::GetTag(TagName));
+	this->TestPawnAsc->RemoveLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName(TagName)));
 }
 
 void FPF2SpecBase::TestCharacterHasCondition(const TScriptInterface<IPF2CharacterInterface>& Character,

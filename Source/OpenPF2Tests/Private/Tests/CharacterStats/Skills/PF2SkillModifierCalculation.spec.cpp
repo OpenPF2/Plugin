@@ -1,4 +1,4 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -9,7 +9,7 @@
 
 BEGIN_DEFINE_PF_SPEC(FPF2SkillModifierCalculationSpec,
                      "OpenPF2.SkillModifierCalculations",
-                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+                     EAutomationTestFlags::ProductFilter | EnhancedAutomationApplicationContextMask)
 	const FString BlueprintPath       = TEXT("/OpenPF2/OpenPF2/Core/CharacterStats/Skills");
 	const FString SkillGameEffectCalc = TEXT("GE_CalcSkillModifiers");
 
@@ -403,7 +403,10 @@ void FPF2SkillModifierCalculationSpec::VerifySkillModifier(const FString& AbModA
 	const FGameplayAttributeData*       SkillAttribute = Attributes[SkillModAttributeName];
 	const TSubclassOf<UGameplayEffect>& EffectBP       = this->LoadGE();
 
-	this->ApplyUnreplicatedTag(FString::Format(TEXT("Skill.{0}.{1}"), {SkillModAttributeFriendlyName, ProficiencyLevel}));
+	this->ApplyUnreplicatedTag(
+		FString::Format(TEXT("PF2.Proficiency.Skill.{0}.{1}"), {SkillModAttributeFriendlyName, ProficiencyLevel})
+	);
+
 	this->InitializeAttributeAndApplyEffect(*AbModAttribute, AbModScore, EffectBP);
 
 	TestEqual(

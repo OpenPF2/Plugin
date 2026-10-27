@@ -1,4 +1,4 @@
-﻿# OpenPF2 for Unreal Engine
+# OpenPF2 for Unreal Engine
 
 <img src="./Logo.png#gh-light-mode-only" title="OpenPF2 Logo" alt="Tabletop made of four arrows pointing toward the center of the table, with the tagline 'Just add story.'" width="512">
 
@@ -49,7 +49,14 @@ Unlike other RPG frameworks on the Unreal Marketplace, OpenPF2 is:
 
 ## Compatibility
 
-This plug-in is compatible with Unreal Engine 5.3.
+This plug-in targets Unreal Engine 5.3 through 5.8. Win64 validation uses OpenPF2Playground with UE 5.3.2, 5.4.4,
+5.5.4, 5.6.1, 5.7.4, and 5.8.3. The Playground compatibility guide records build settings, test results, packaging,
+runtime checks, and remaining warnings. Other platforms and patch releases require separate validation.
+Playground's offscreen validation uses D3D11 on UE 5.3.2 and D3D12 on the other listed patches.
+
+Use the matching EnhancedUnrealSpecs dependency revision for automation tests. Its shared automation-flag aliases
+support the integer flags before UE 5.5 and the scoped enum in later engines. Author shared assets in UE 5.3 so older
+supported engines can still read them.
 
 ## Current Status
 
@@ -195,9 +202,6 @@ For example, if a weapon has a range of 60 feet, then its range in OpenPF2 is
    });
    ```
 7. Compile your project.
-8. Copy the `Config/Tags/` folder from the plug-in into your project's `Config` folder.
-   _Even in UE 5.1+, this is still required. The engine
-   [does not automatically scan or package config files provided by plugins](https://docs.unrealengine.com/5.1/en-US/plugins-in-unreal-engine/#pluginsinprojects)._
 
 ## Licensing
 
@@ -249,3 +253,19 @@ Want to explore a custom license? Here are a few ways to get in touch with us:
 Paizo and Pathfinder are trademarks of Paizo Inc. Nothing in this project is
 officially sanctioned or endorsed by Paizo Publishing.
 </small>
+
+## Native gameplay tags
+
+OpenPF2 registers its gameplay tags in C++. Ordinary tags use the `PF2` root. Gameplay cues use
+`GameplayCue.PF2`, and ability trigger tags use `TriggerTagCategory.PF2`, preserving Unreal's editor filters.
+Proficiency tags belong under `PF2.Proficiency`; equipped armor belongs under `PF2.Equipped.Armor`.
+Encounter state uses `PF2.Encounter.CharacterState`, and ability event listeners use
+`PF2.GameplayAbility.WaitForEvent`.
+
+Native constants retain the `Pf2Tag` prefix. Category constants may use plural names while their serialized
+category segment is singular. Declarations and definitions must use the same exported symbol.
+
+`Config/DefaultGameplayTags.ini` retains redirects for projects with assets saved under the former names.
+Keep these redirects available while loading and resaving old content. A project can remove its own copied
+redirects after every package has been migrated and a fresh process has verified the saved values without redirects.
+Author shared assets in UE 5.3 so they remain usable throughout the supported UE 5.3–5.8 range.

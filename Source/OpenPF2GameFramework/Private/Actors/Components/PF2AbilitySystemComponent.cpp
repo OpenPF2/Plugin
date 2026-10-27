@@ -1,9 +1,11 @@
-// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "Actors/Components/PF2AbilitySystemComponent.h"
+
+#include <Misc/EngineVersionComparison.h>
 
 #include <UObject/ConstructorHelpers.h>
 
@@ -13,13 +15,12 @@
 
 #include "Abilities/PF2InteractableAbilityInterface.h"
 
+#include "GameplayTags/GameplayAbilities/AbilityTypes.h"
+
 #include "Utilities/PF2ArrayUtilities.h"
 #include "Utilities/PF2EnumUtilities.h"
 #include "Utilities/PF2InterfaceUtilities.h"
 #include "Utilities/PF2LogUtilities.h"
-
-const FName UPF2AbilitySystemComponent::DefaultMovementAbilityTagName   = FName(TEXT("GameplayAbility.Type.DefaultMovement"));
-const FName UPF2AbilitySystemComponent::DefaultFaceTargetAbilityTagName = FName(TEXT("GameplayAbility.Type.DefaultFaceTarget"));
 
 UPF2AbilitySystemComponent::UPF2AbilitySystemComponent() : Events(nullptr), bAreAbilitiesAvailable(false)
 {
@@ -48,6 +49,15 @@ UPF2AbilitySystemComponent::UPF2AbilitySystemComponent() : Events(nullptr), bAre
 		// Allow boost effects to be looked-up by ability name later.
 		this->AbilityBoostEffects.Add(Ability, BoostGeFinder.Object);
 	}
+}
+
+UPF2AbilitySystemComponent::~UPF2AbilitySystemComponent()
+{
+#if !UE_VERSION_OLDER_THAN(5, 8, 0) && UE_VERSION_OLDER_THAN(5, 9, 0)
+	// UE 5.8 logs Owner->GetFullName() while deleting pending effects in the container destructor.
+	// The outer actor may already have been purged, so detach this dying component before that cleanup.
+	this->ActiveGameplayEffects.Owner = nullptr;
+#endif
 }
 
 UObject* UPF2AbilitySystemComponent::GetGenericEventsObject() const
@@ -142,8 +152,12 @@ TArray<TScriptInterface<IPF2InteractableAbilityInterface>> UPF2AbilitySystemComp
 			{
 				const UGameplayAbility* Ability = AbilityIntf->ToGameplayAbility();
 
-				if ((bExactMatch && Ability->AbilityTags.HasAll(Tags)) ||
-					(!bExactMatch && Ability->AbilityTags.HasAny(Tags)))
+#if UE_VERSION_OLDER_THAN(5, 5, 0)
+				const FGameplayTagContainer& AbilityTags = Ability->AbilityTags;
+#else
+				const FGameplayTagContainer& AbilityTags = Ability->GetAssetTags();
+#endif
+				if ((bExactMatch && AbilityTags.HasAll(Tags)) || (!bExactMatch && AbilityTags.HasAny(Tags)))
 				{
 					Abilities.Add(AbilityIntf);
 				}
@@ -430,7 +444,7 @@ bool UPF2AbilitySystemComponent::DeactivatePassiveGameplayEffects(const FName We
 
 		Query.EffectTagQuery =
 			FGameplayTagQuery::MakeQuery_MatchAnyTags(
-				FGameplayTagContainer(PF2GameplayAbilityUtilities::GetTag(WeightGroup))
+				FGameplayTagContainer(FGameplayTag::RequestGameplayTag(WeightGroup))
 			);
 
 		NumRemoved = this->RemoveActiveEffects(Query);
@@ -624,7 +638,7 @@ TArray<TScriptInterface<IPF2AbilityBoostInterface>> UPF2AbilitySystemComponent::
 	TArray<FGameplayAbilitySpec*>                       MatchingGameplayAbilitySpecs;
 
 	this->GetActivatableGameplayAbilitySpecsByAllMatchingTags(
-		FGameplayTagContainer(PF2GameplayAbilityUtilities::GetTag(FName("GameplayAbility.Type.AbilityBoost"))),
+		FGameplayTagContainer(Pf2TagGameplayAbilityTypeAbilityBoost),
 		MatchingGameplayAbilitySpecs,
 		false
 	);
@@ -683,8 +697,7 @@ bool UPF2AbilitySystemComponent::HasDefaultMovementAbility() const
 
 FGameplayAbilitySpecHandle UPF2AbilitySystemComponent::FindDefaultMovementAbilityHandle(bool& bOutMatchFound) const
 {
-	const FGameplayTag          MovementTag = PF2GameplayAbilityUtilities::GetTag(DefaultMovementAbilityTagName);
-	const FGameplayTagContainer SearchTags  = FGameplayTagContainer(MovementTag);
+	const FGameplayTagContainer SearchTags  = FGameplayTagContainer(Pf2TagGameplayAbilityTypeDefaultMovement);
 
 	return this->FindAbilityHandleByTags(SearchTags, bOutMatchFound, false);
 }
@@ -700,8 +713,7 @@ bool UPF2AbilitySystemComponent::HasDefaultFaceTargetAbility() const
 
 FGameplayAbilitySpecHandle UPF2AbilitySystemComponent::FindDefaultFaceTargetAbilityHandle(bool& bOutMatchFound) const
 {
-	const FGameplayTag          FacingTag  = PF2GameplayAbilityUtilities::GetTag(DefaultFaceTargetAbilityTagName);
-	const FGameplayTagContainer SearchTags = FGameplayTagContainer(FacingTag);
+	const FGameplayTagContainer SearchTags = FGameplayTagContainer(Pf2TagGameplayAbilityTypeDefaultFaceTarget);
 
 	return this->FindAbilityHandleByTags(SearchTags, bOutMatchFound, false);
 }
@@ -788,7 +800,7 @@ void UPF2AbilitySystemComponent::ActivatePassiveGameplayEffect(
 	// Ensure that the GE spec is tagged with its weight no matter how the weight was set (either through API or through
 	// a tag in the InheritableGameplayEffectTags field on the GE definition class itself). Without this, only the tag
 	// from the GE definition spec would pass through.
-	GameplayEffectSpec->AddDynamicAssetTag(PF2GameplayAbilityUtilities::GetTag(WeightGroup));
+	GameplayEffectSpec->AddDynamicAssetTag(FGameplayTag::RequestGameplayTag(WeightGroup));
 
 	// Special case: If the GE being activated is our "dummy" GE for dynamic tags, apply tags to it.
 	//

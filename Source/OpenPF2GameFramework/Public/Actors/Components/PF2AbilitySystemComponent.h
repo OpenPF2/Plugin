@@ -1,4 +1,4 @@
-// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -30,23 +30,6 @@ class OPENPF2GAMEFRAMEWORK_API UPF2AbilitySystemComponent :
 	GENERATED_BODY()
 
 protected:
-	// =================================================================================================================
-	// Protected Constants
-	// =================================================================================================================
-	/**
-	 * The name of the tag that designates an ability the default movement ability.
-	 *
-	 * This ability is used to move a character to a location, such as within range of another actor/character.
-	 */
-	static const FName DefaultMovementAbilityTagName;
-
-	/**
-	 * The name of the tag that designates an ability the default "face target" ability.
-	 *
-	 * This ability is used to rotate a character to face another actor/character.
-	 */
-	static const FName DefaultFaceTargetAbilityTagName;
-
 	// =================================================================================================================
 	// Protected Fields
 	// =================================================================================================================
@@ -115,6 +98,11 @@ public:
 	// Public Constructors
 	// =================================================================================================================
 	explicit UPF2AbilitySystemComponent();
+
+	/**
+	 * Detaches the dying component from UE 5.8's pending-effect cleanup diagnostics.
+	 */
+	virtual ~UPF2AbilitySystemComponent() override;
 
 	// =================================================================================================================
 	// Public Methods - IPF2EventEmitterInterface Implementation

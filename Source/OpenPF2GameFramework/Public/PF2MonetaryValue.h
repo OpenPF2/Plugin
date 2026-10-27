@@ -1,4 +1,4 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -6,6 +6,8 @@
 #pragma once
 
 #include "GameplayTagContainer.h"
+
+#include "GameplayTags/CurrencyUnits.h"
 
 #include "Utilities/PF2GameplayAbilityUtilities.h"
 
@@ -28,7 +30,7 @@ struct FPF2MonetaryValue
 	/**
 	 * The unit of currency that this value is relative to.
 	 */
-	UPROPERTY(EditAnywhere, meta=(Categories="CurrencyUnit"))
+	UPROPERTY(EditAnywhere, meta=(Categories="PF2.CurrencyUnit"))
 	FGameplayTag MonetaryUnit;
 
 	/**
@@ -49,7 +51,7 @@ struct FPF2MonetaryValue
 	FPF2MonetaryValue(const float Amount, const FGameplayTag MonetaryUnit) : Amount(Amount), MonetaryUnit(MonetaryUnit)
 	{
 		checkf(
-			PF2GameplayAbilityUtilities::HasTag(&MonetaryUnit.GetSingleTagContainer(), FName("CurrencyUnit")),
+			MonetaryUnit.MatchesTag(Pf2TagCurrencyUnits),
 			TEXT("Monetary unit must be a CurrencyUnit tag.")
 		);
 	}

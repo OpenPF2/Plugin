@@ -172,7 +172,7 @@ protected:
 	 * Each value is a gameplay effect and the key is the weight group of that GE (sorted alphanumerically). The weight
 	 * controls the order that all GEs are applied. Lower weights are applied earlier than higher weights.
 	 *
-	 * The names of each group are exposed as tags in the "GameplayEffect.WeightGroup" tag list so that they can be
+	 * The names of each group are exposed as tags in the "PF2.GameplayEffect.WeightGroup" tag list so that they can be
 	 * applied to GEs by game designers to control the default group that a GE gets added to. A GE can also be
 	 * explicitly added to a group via the AddPassiveGameplayEffectWithWeight() method on the Character ASC.
 	 */
@@ -269,7 +269,7 @@ protected:
 	 * alignment is a complicated subject, and even acts that might be considered good can be used for nefarious
 	 * purposes, and vice versa."
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(Categories="CreatureAlignment"), Category="OpenPF2 - Character")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(Categories="PF2.CreatureAlignment"), Category="OpenPF2 - Character")
 	FGameplayTag Alignment;
 
 	/**
@@ -277,7 +277,7 @@ protected:
 	 *
 	 * Languages granted by ancestry do not need to be duplicated here.
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(Categories="Language"), Category="OpenPF2 - Character")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(Categories="PF2.Language"), Category="OpenPF2 - Character")
 	FGameplayTagContainer AdditionalLanguages;
 
 	/**
@@ -290,10 +290,10 @@ protected:
 	 * Proficiency ranks manually applied by a game designer or player to this character's skills.
 	 *
 	 * Higher proficiencies override lower proficiencies, so if a character is, for example, "Master" in "Survival"
-	 * skill, you only need to select "Skill.Survival.Master", and do not need to also select the lower proficiency tags
-	 * of "Skill.Survival.Trained" and "Skill.Survival.Untrained".
+	 * skill, you only need to select "PF2.Proficiency.Skill.Survival.Master", and do not need to also select the lower proficiency tags
+	 * of "PF2.Proficiency.Skill.Survival.Trained" and "PF2.Proficiency.Skill.Survival.Untrained".
 	 */
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(Categories="Skill"), Category="OpenPF2 - Skills")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta=(Categories="PF2.Proficiency.Skill"), Category="OpenPF2 - Skills")
 	FGameplayTagContainer AdditionalSkillProficiencies;
 
 	/**

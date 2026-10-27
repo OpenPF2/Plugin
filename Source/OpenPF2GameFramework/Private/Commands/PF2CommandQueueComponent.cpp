@@ -1,9 +1,11 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2022-2024, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2022-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 #include "Commands/PF2CommandQueueComponent.h"
+
+#include <Misc/EngineVersionComparison.h>
 
 #include <Net/UnrealNetwork.h>
 
@@ -136,7 +138,11 @@ void UPF2CommandQueueComponent::EnqueueAt(const TScriptInterface<IPF2CharacterCo
 	// Now, if necessary, drop the last command.
 	if ((this->SizeLimit != CommandLimitNone) && (this->Queue.Num() == this->SizeLimit))
 	{
+#if UE_VERSION_OLDER_THAN(5, 4, 0)
 		AInfo* RemovedElement = this->Queue.Pop(false);
+#else
+		AInfo* RemovedElement = this->Queue.Pop(EAllowShrinking::No);
+#endif
 
 		UE_LOG(
 			LogPf2Abilities,
@@ -176,7 +182,11 @@ void UPF2CommandQueueComponent::PopNext(TScriptInterface<IPF2CharacterCommandInt
 			*(this->GetIdForLogs())
 		);
 
+#if UE_VERSION_OLDER_THAN(5, 4, 0)
 		this->Queue.RemoveAt(0, 1, false);
+#else
+		this->Queue.RemoveAt(0, 1, EAllowShrinking::No);
+#endif
 
 		this->Native_OnCommandRemoved(NextCommand);
 		this->Native_OnCommandsChanged();
@@ -199,7 +209,11 @@ void UPF2CommandQueueComponent::DropNext()
 			*(this->GetIdForLogs())
 		);
 
+#if UE_VERSION_OLDER_THAN(5, 4, 0)
 		this->Queue.RemoveAt(0, 1, false);
+#else
+		this->Queue.RemoveAt(0, 1, EAllowShrinking::No);
+#endif
 
 		this->Native_OnCommandRemoved(NextCommand);
 		this->Native_OnCommandsChanged();

@@ -1,4 +1,4 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -9,7 +9,7 @@
 
 BEGIN_DEFINE_PF_SPEC(FPF2ArmorClassCalculationSpec,
                      "OpenPF2.ArmorClassCalculations",
-                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+                     EAutomationTestFlags::ProductFilter | EnhancedAutomationApplicationContextMask)
 	const FString BlueprintPath         = TEXT("/OpenPF2/OpenPF2/Core/CharacterStats");
 	const FString ClassDcGameEffectCalc = TEXT("GE_CalcArmorClass");
 
@@ -77,7 +77,7 @@ void FPF2ArmorClassCalculationSpec::Define()
 				{
 					BeforeEach([=, this]()
 					{
-						this->ApplyUnreplicatedTag(FString::Format(TEXT("Armor.Equipped.{0}"), {ArmorClassEquipped}));
+						this->ApplyUnreplicatedTag(TEXT("PF2.Equipped.Armor.") + ArmorClassEquipped);
 					});
 
 					for (auto& ArmorClassProficient : this->ArmorClasses)
@@ -95,7 +95,7 @@ void FPF2ArmorClassCalculationSpec::Define()
 								{
 									this->ApplyUnreplicatedTag(
 										FString::Format(
-											TEXT("Armor.Category.{0}.{1}"),
+											TEXT("PF2.Proficiency.Armor.Category.{0}.{1}"),
 											{ArmorClassProficient, ProficiencyLevel}
 										)
 									);

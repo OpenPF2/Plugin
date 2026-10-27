@@ -1,4 +1,4 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2022-2024, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2022-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -10,6 +10,8 @@
 #include <GameFramework/PlayerState.h>
 
 #include <Kismet/GameplayStatics.h>
+
+#include <Misc/EngineVersionComparison.h>
 
 #include <Net/UnrealNetwork.h>
 
@@ -23,9 +25,14 @@
 
 APF2Party::APF2Party() : Events(nullptr), PartyIndex(-1)
 {
-	this->bReplicates        = true;
-	this->bAlwaysRelevant    = true;
+	this->bReplicates     = true;
+	this->bAlwaysRelevant = true;
+
+#if UE_VERSION_OLDER_THAN(5, 5, 0)
 	this->NetUpdateFrequency = 1.0f;
+#else
+	this->SetNetUpdateFrequency(1.0f);
+#endif
 }
 
 void APF2Party::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

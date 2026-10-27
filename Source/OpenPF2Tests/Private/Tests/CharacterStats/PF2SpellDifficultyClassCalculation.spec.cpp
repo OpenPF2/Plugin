@@ -1,4 +1,4 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2026, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -9,7 +9,7 @@
 
 BEGIN_DEFINE_PF_SPEC(FPF2SpellDifficultyClassCalculationsSpec,
                      "OpenPF2.SpellDifficultyClassCalculations",
-                     EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+                     EAutomationTestFlags::ProductFilter | EnhancedAutomationApplicationContextMask)
 	const FString BlueprintPath                      = TEXT("/OpenPF2/OpenPF2/Core/CharacterStats");
 	const FString SpellDifficultyClassGameEffectCalc = TEXT("GE_CalcSpellDifficultyClass");
 
@@ -79,7 +79,7 @@ void FPF2SpellDifficultyClassCalculationsSpec::Define()
 		{
 			BeforeEach([=, this]()
 			{
-				this->ApplyUnreplicatedTag(FString::Format(TEXT("SpellcastingAbility.{0}"), {SpellAbilityName}));
+				this->ApplyUnreplicatedTag(TEXT("PF2.SpellcastingAbility.") + SpellAbilityName);
 			});
 
 			for (auto& BoostedAbility : this->AllAbilityModifierAttributes)
@@ -108,7 +108,9 @@ void FPF2SpellDifficultyClassCalculationsSpec::Define()
 
 							BeforeEach([=, this]()
 							{
-								this->ApplyUnreplicatedTag(FString::Format(TEXT("SpellDc.{0}"), {ProficiencyLevel}));
+								this->ApplyUnreplicatedTag(
+									TEXT("PF2.Proficiency.SpellDc.") + ProficiencyLevel
+								);
 							});
 
 							if (SpellAbilityName == BoostedAbilityName)

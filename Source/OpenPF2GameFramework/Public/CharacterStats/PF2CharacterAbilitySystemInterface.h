@@ -1,4 +1,4 @@
-﻿// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
+// OpenPF2 Game Framework for Unreal Engine, Copyright 2021-2024, Guy Elsmore-Paddock. All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
 // distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -117,7 +117,7 @@ public:
 	 * This ability is used to move a character to a location, such as within range of another actor/character.
 	 *
 	 * @return
-	 *	- true if this ASC has a granted ability having the "GameplayAbility.Type.DefaultMovement" tag.
+	 *	- true if this ASC has a granted ability having the "PF2.GameplayAbility.Type.DefaultMovement" tag.
 	 *	- false if this ASC does not have any granted ability with the default movement tag.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Character Ability System")
@@ -128,7 +128,7 @@ public:
 	 *
 	 * This ability is used to move a character to a location, such as within range of another actor/character.
 	 *
-	 * If this ASC has multiple abilities with the "GameplayAbility.Type.DefaultMovement" tag, the first encountered
+	 * If this ASC has multiple abilities with the "PF2.GameplayAbility.Type.DefaultMovement" tag, the first encountered
 	 * ability will be returned.
 	 *
 	 * @param bOutMatchFound
@@ -148,7 +148,7 @@ public:
 	 * This ability is used to rotate a character to face another actor/character.
 	 *
 	 * @return
-	 *	- true if this ASC has a granted ability having the "GameplayAbility.Type.DefaultFaceTarget" tag.
+	 *	- true if this ASC has a granted ability having the "PF2.GameplayAbility.Type.DefaultFaceTarget" tag.
 	 *	- false if this ASC does not have any granted ability with the default "face target" tag.
 	 */
 	UFUNCTION(BlueprintCallable, Category="OpenPF2|Components|Characters|Character Ability System")
@@ -159,7 +159,7 @@ public:
 	 *
 	 * This ability is used to rotate a character to face another actor/character.
 	 *
-	 * If this ASC has multiple abilities with the "GameplayAbility.Type.DefaultFaceTarget" tag, the first encountered
+	 * If this ASC has multiple abilities with the "PF2.GameplayAbility.Type.DefaultFaceTarget" tag, the first encountered
 	 * ability will be returned.
 	 *
 	 * @param bOutMatchFound
